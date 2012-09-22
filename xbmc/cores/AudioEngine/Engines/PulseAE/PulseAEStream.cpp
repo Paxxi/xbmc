@@ -271,6 +271,9 @@ unsigned int CPulseAEStream::GetSpace()
   unsigned int size = pa_stream_writable_size(m_Stream);
   pa_threaded_mainloop_unlock(m_MainLoop);
 
+  if(size > m_cacheSize)
+    m_cacheSize = size;
+
   return size;
 }
 
@@ -320,7 +323,7 @@ double CPulseAEStream::GetCacheTime()
   if (!m_Initialized)
     return 0.0;
 
-  return (double)(m_cacheSize - GetSpace()) / (double)m_sampleRate;
+  return (double)(m_cacheSize - GetSpace()) / (double)(m_sampleRate * m_frameSize);
 }
 
 double CPulseAEStream::GetCacheTotal()
@@ -328,7 +331,7 @@ double CPulseAEStream::GetCacheTotal()
   if (!m_Initialized)
     return 0.0;
 
-  return (double)m_cacheSize / (double)m_sampleRate;
+  return (double)m_cacheSize / (double)(m_sampleRate * m_frameSize);
 }
 
 bool CPulseAEStream::IsPaused()

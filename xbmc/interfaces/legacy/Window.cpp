@@ -54,18 +54,19 @@ namespace XBMCAddon
 
     public:
       inline ProxyExistingWindowInterceptor(CGUIWindow* window) :
-        cguiwindow(window) { }
+        cguiwindow(window) { TRACE; }
 
       virtual CGUIWindow* get();
     };
 
-    CGUIWindow* ProxyExistingWindowInterceptor::get() { return cguiwindow; }
+    CGUIWindow* ProxyExistingWindowInterceptor::get() { TRACE; return cguiwindow; }
 
     Window::Window(const char* classname) throw (WindowException): 
-      AddonCallback(classname), windowCleared(false), window(NULL), iWindowId(-1),
+      AddonCallback(classname), window(NULL), iWindowId(-1),
       iOldWindowId(0), iCurrentControlId(3000), bModal(false), m_actionEvent(true),
       canPulse(true), existingWindow(false), destroyAfterDeInit(false)
     {
+      TRACE;
       CSingleLock lock(g_graphicsContext);
     }
 
@@ -73,10 +74,11 @@ namespace XBMCAddon
      * This just creates a default window.
      */
     Window::Window(int existingWindowId) throw (WindowException) : 
-      AddonCallback("Window"), windowCleared(false), window(NULL), iWindowId(-1),
+      AddonCallback("Window"), window(NULL), iWindowId(-1),
       iOldWindowId(0), iCurrentControlId(3000), bModal(false), m_actionEvent(true),
       canPulse(false), existingWindow(true), destroyAfterDeInit(false)
     {
+      TRACE;
       CSingleLock lock(g_graphicsContext);
 
       if (existingWindowId == -1)
@@ -101,59 +103,87 @@ namespace XBMCAddon
 
     Window::~Window()
     {
+      TRACE;
+
       deallocating();
-
-      CSingleLock lock(g_graphicsContext);
-
-      // no callbacks are possible any longer
-      //   - this will be handled by the parent constructor
-
-      // first change to an existing window
-      if (!existingWindow)
-      {
-        if (ACTIVE_WINDOW == iWindowId && !g_application.m_bStop)
-        {
-          if(g_windowManager.GetWindow(iOldWindowId))
-          {
-            g_windowManager.ActivateWindow(iOldWindowId);
-          }
-          // old window does not exist anymore, switch to home
-          else g_windowManager.ActivateWindow(WINDOW_HOME);
-        }
-
-        if (window)
-        {
-          if (g_windowManager.IsWindowVisible(ref(window)->GetID()))
-          {
-            destroyAfterDeInit = true;
-            close();
-          }
-          else
-            g_windowManager.Delete(ref(window)->GetID());
-
-        }
-      }
     }
 
     void Window::deallocating()
     {
-      // if the window has not been unhooked, then unhook it.
-      {
-        Synchronize lock(*this);
-        if (window && !windowCleared)
-        {
-          window->clear();
-          windowCleared = true;
-        }
-      }
+      TRACE;
 
       AddonCallback::deallocating();
+
+      // if !window then we've been here already
+      if (window)
+      {
+        CSingleLock lock(g_graphicsContext);
+
+        // no callbacks are possible any longer
+        //   - this will be handled by the parent constructor
+
+        // first change to an existing window
+        if (!existingWindow)
+        {
+          if (ACTIVE_WINDOW == iWindowId && !g_application.m_bStop)
+          {
+            if(g_windowManager.GetWindow(iOldWindowId))
+            {
+              g_windowManager.ActivateWindow(iOldWindowId);
+            }
+            // old window does not exist anymore, switch to home
+            else g_windowManager.ActivateWindow(WINDOW_HOME);
+          }
+
+        }
+        else
+        {
+          // BUG:
+          // This is an existing window, so no resources are free'd.  Note that
+          // THIS WILL FAIL for any controls newly created by python - they will
+          // remain after the script ends.  Ideally this would be remedied by
+          // a flag in Control that specifies that it was python created - any python
+          // created controls could then be removed + free'd from the window.
+          // how this works with controlgroups though could be a bit tricky.
+        }
+
+        // and free our list of controls
+        std::vector<AddonClass::Ref<Control> >::iterator it = vecControls.begin();
+        while (it != vecControls.end())
+        {
+          AddonClass::Ref<Control> pControl = *it;
+          // initialize control to zero
+          pControl->pGUIControl = NULL;
+          pControl->iControlId = 0;
+          pControl->iParentId = 0;
+          ++it;
+        }
+
+        if (!existingWindow)
+        {
+          if (window)
+          {
+            if (g_windowManager.IsWindowVisible(ref(window)->GetID()))
+            {
+              destroyAfterDeInit = true;
+              close();
+            }
+            else
+              g_windowManager.Delete(ref(window)->GetID());
+          }
+        }
+
+        vecControls.clear();
+
+        window->clear();
+        window = NULL;
+      }
     }
 
     void Window::setWindow(InterceptorBase* _window) 
     { 
+      TRACE;
       window = _window; 
-      windowCleared = false; 
       iWindowId = _window->get()->GetID(); 
 
       if (!existingWindow)
@@ -342,7 +372,7 @@ namespace XBMCAddon
     void Window::WaitForActionEvent()
     {
       TRACE;
-      DelayedCallGuard dcguard(languageHook);
+      // DO NOT MAKE THIS A DELAYED CALL!!!!
       if (languageHook)
         languageHook->waitForEvent(m_actionEvent);
       m_actionEvent.Reset();
@@ -369,14 +399,18 @@ namespace XBMCAddon
 
     bool Window::OnBack(int actionID)
     {
+      // we are always a Python window ... keep that in mind when reviewing the old code
       return true;
     }
 
     void Window::OnDeinitWindow(int nextWindowID /*= 0*/)
     {
+      // NOTE!: This handle child classes correctly. XML windows will call
+      // the OnDeinitWindow from CGUIMediaWindow while non-XML classes will
+      // call the OnDeinitWindow on CGUIWindow
       ref(window)->OnDeinitWindow(nextWindowID);
       if (destroyAfterDeInit)
-        g_windowManager.Delete(ref(window)->GetID());
+        g_windowManager.Delete(window->get()->GetID());
     }
 
     void Window::onAction(Action* action)
@@ -604,7 +638,8 @@ namespace XBMCAddon
       TRACE;
       bModal = false;
 
-      PulseActionEvent();
+      if (!existingWindow)
+        PulseActionEvent();
 
       std::vector<CStdString> params;
       CApplicationMessenger::Get().ActivateWindow(iOldWindowId, params, false);
@@ -634,7 +669,11 @@ namespace XBMCAddon
 //            Window_Close(self, NULL);
 //            break;
 //          }
-          WaitForActionEvent();
+          languageHook->makePendingCalls(); // MakePendingCalls
+          {
+            DelayedCallGuard dcguard(languageHook);            
+            WaitForActionEvent();
+          }
         }
       }
     }

@@ -50,7 +50,7 @@ using namespace std;
 using namespace TagLib;
 using namespace MUSIC_INFO;
 
-CTagLoaderTagLib::CTagLoaderTagLib(const std::string& strFileName) : m_tagLibVFSStream(strFileName, true)
+CTagLoaderTagLib::CTagLoaderTagLib()
 {
 }
 
@@ -77,6 +77,13 @@ bool CTagLoaderTagLib::Load(const string& strFileName, CMusicInfoTag& tag, Embed
   if (strExtension.IsEmpty())
     return false;
 
+  TagLibVFSStream*           stream = new TagLibVFSStream(strFileName, true);
+  if (!stream)
+  {
+    CLog::Log(LOGERROR, "could not create TagLib VFS stream for: %s", strFileName.c_str());
+    return false;
+  }
+  
   TagLib::File*              file = NULL;
   TagLib::APE::File*         apeFile = NULL;
   TagLib::ASF::File*         asfFile = NULL;
@@ -94,47 +101,47 @@ bool CTagLoaderTagLib::Load(const string& strFileName, CMusicInfoTag& tag, Embed
   TagLib::XM::File*          xmFile = NULL;
 
   if (strExtension == "ape")
-    file = apeFile = new APE::File(&m_tagLibVFSStream);
+    file = apeFile = new APE::File(stream);
   else if (strExtension == "asf" || strExtension == "wmv" || strExtension == "wma")
-    file = asfFile = new ASF::File(&m_tagLibVFSStream);
+    file = asfFile = new ASF::File(stream);
   else if (strExtension == "flac")
-    file = flacFile = new FLAC::File(&m_tagLibVFSStream, ID3v2::FrameFactory::instance());
+    file = flacFile = new FLAC::File(stream, ID3v2::FrameFactory::instance());
   else if (strExtension == "it")
-    file = itFile = new IT::File(&m_tagLibVFSStream);
+    file = itFile = new IT::File(stream);
   else if (strExtension == "mod" || strExtension == "module" || strExtension == "nst" || strExtension == "wow")
-    file = modFile = new Mod::File(&m_tagLibVFSStream);
+    file = modFile = new Mod::File(stream);
   else if (strExtension == "mp4" || strExtension == "m4a" || 
            strExtension == "m4r" || strExtension == "m4b" || 
            strExtension == "m4p" || strExtension == "3g2")
-    file = mp4File = new MP4::File(&m_tagLibVFSStream);
+    file = mp4File = new MP4::File(stream);
   else if (strExtension == "mpc")
-    file = mpcFile = new MPC::File(&m_tagLibVFSStream);
+    file = mpcFile = new MPC::File(stream);
   else if (strExtension == "mp3" || strExtension == "aac")
-    file = mpegFile = new MPEG::File(&m_tagLibVFSStream, ID3v2::FrameFactory::instance());
+    file = mpegFile = new MPEG::File(stream, ID3v2::FrameFactory::instance());
   else if (strExtension == "s3m")
-    file = s3mFile = new S3M::File(&m_tagLibVFSStream);
+    file = s3mFile = new S3M::File(stream);
   else if (strExtension == "tta")
-    file = ttaFile = new TrueAudio::File(&m_tagLibVFSStream, ID3v2::FrameFactory::instance());
+    file = ttaFile = new TrueAudio::File(stream, ID3v2::FrameFactory::instance());
   else if (strExtension == "wv")
-    file = wvFile = new WavPack::File(&m_tagLibVFSStream);
+    file = wvFile = new WavPack::File(stream);
   else if (strExtension == "xm")
-    file = xmFile = new XM::File(&m_tagLibVFSStream);
+    file = xmFile = new XM::File(stream);
   else if (strExtension == "ogg")
-    file = oggVorbisFile = new Ogg::Vorbis::File(&m_tagLibVFSStream);
+    file = oggVorbisFile = new Ogg::Vorbis::File(stream);
   else if (strExtension == "oga") // Leave this madness until last - oga container can have Vorbis or FLAC
   {
-    file = oggFlacFile = new Ogg::FLAC::File(&m_tagLibVFSStream);
+    file = oggFlacFile = new Ogg::FLAC::File(stream);
     if (!file || !file->isValid())
     {
       delete file;
-      file = oggVorbisFile = new Ogg::Vorbis::File(&m_tagLibVFSStream);
+      file = oggVorbisFile = new Ogg::Vorbis::File(stream);
     }
   }
 
   if (!file || !file->isOpen())
   {
-    if (file)
-      delete file;
+    delete file;
+    delete stream;
     CLog::Log(LOGDEBUG, "file could not be opened for tag reading");
     return false;
   }
@@ -198,7 +205,8 @@ bool CTagLoaderTagLib::Load(const string& strFileName, CMusicInfoTag& tag, Embed
   tag.SetURL(strFileName);
 
   delete file;
-
+  delete stream;
+  
   return true;
 }
 
@@ -295,9 +303,9 @@ bool CTagLoaderTagLib::ParseID3v2Tag(ID3v2::Tag *id3v2, EmbeddedArt *art, CMusic
         else if (frame->description() == "MusicBrainz Album Id")        tag.SetMusicBrainzAlbumID(stringList.front().toCString());
         else if (frame->description() == "MusicBrainz Album Artist Id") tag.SetMusicBrainzAlbumArtistID(stringList.front().toCString());
         else if (frame->description() == "replaygain_track_gain")       tag.SetReplayGainTrackGain((int)(atof(stringList.front().toCString()) * 100 + 0.5));
-        else if (frame->description() == "replaygain_album_gain")       tag.SetReplayGainTrackGain((int)(atof(stringList.front().toCString()) * 100 + 0.5));
-        else if (frame->description() == "replaygain_track_peak")       tag.SetReplayGainTrackGain((int)atof(stringList.front().toCString()));
-        else if (frame->description() == "replaygain_album_peak")       tag.SetReplayGainTrackGain((int)atof(stringList.front().toCString()));
+        else if (frame->description() == "replaygain_album_gain")       tag.SetReplayGainAlbumGain((int)(atof(stringList.front().toCString()) * 100 + 0.5));
+        else if (frame->description() == "replaygain_track_peak")       tag.SetReplayGainTrackPeak((float)atof(stringList.front().toCString()));
+        else if (frame->description() == "replaygain_album_peak")       tag.SetReplayGainAlbumPeak((float)atof(stringList.front().toCString()));
         else
           CLog::Log(LOGDEBUG, "unrecognized user text tag detected: TXXX:%s", frame->description().toCString());
       }
@@ -388,9 +396,9 @@ bool CTagLoaderTagLib::ParseAPETag(APE::Tag *ape, EmbeddedArt *art, CMusicInfoTa
     else if (it->first == "COMPILATION")               tag.SetCompilation(it->second.toString().toInt() == 1);
     else if (it->first == "LYRICS")                    tag.SetLyrics(it->second.toString().toCString());
     else if (it->first == "REPLAYGAIN_TRACK_GAIN")     tag.SetReplayGainTrackGain((int)(atof(it->second.toString().toCString()) * 100 + 0.5));
-    else if (it->first == "REPLAYGAIN_ALBUM_GAIN")     tag.SetReplayGainTrackGain((int)(atof(it->second.toString().toCString()) * 100 + 0.5));
-    else if (it->first == "REPLAYGAIN_TRACK_PEAK")     tag.SetReplayGainTrackGain((int)atof(it->second.toString().toCString()));
-    else if (it->first == "REPLAYGAIN_ALBUM_PEAK")     tag.SetReplayGainTrackGain((int)atof(it->second.toString().toCString()));
+    else if (it->first == "REPLAYGAIN_ALBUM_GAIN")     tag.SetReplayGainAlbumGain((int)(atof(it->second.toString().toCString()) * 100 + 0.5));
+    else if (it->first == "REPLAYGAIN_TRACK_PEAK")     tag.SetReplayGainTrackPeak((float)atof(it->second.toString().toCString()));
+    else if (it->first == "REPLAYGAIN_ALBUM_PEAK")     tag.SetReplayGainAlbumPeak((float)atof(it->second.toString().toCString()));
     else if (it->first == "MUSICBRAINZ_ARTISTID")      tag.SetMusicBrainzArtistID(it->second.toString().toCString());
     else if (it->first == "MUSICBRAINZ_ALBUMARTISTID") tag.SetMusicBrainzAlbumArtistID(it->second.toString().toCString());
     else if (it->first == "MUSICBRAINZ_ALBUMID")       tag.SetMusicBrainzAlbumID(it->second.toString().toCString());
@@ -423,9 +431,9 @@ bool CTagLoaderTagLib::ParseXiphComment(Ogg::XiphComment *xiph, EmbeddedArt *art
     else if (it->first == "COMPILATION")               tag.SetCompilation(it->second.front().toInt() == 1);
     else if (it->first == "LYRICS")                    tag.SetLyrics(it->second.front().toCString());
     else if (it->first == "REPLAYGAIN_TRACK_GAIN")     tag.SetReplayGainTrackGain((int)(atof(it->second.front().toCString()) * 100 + 0.5));
-    else if (it->first == "REPLAYGAIN_ALBUM_GAIN")     tag.SetReplayGainTrackGain((int)(atof(it->second.front().toCString()) * 100 + 0.5));
-    else if (it->first == "REPLAYGAIN_TRACK_PEAK")     tag.SetReplayGainTrackGain((int)atof(it->second.front().toCString()));
-    else if (it->first == "REPLAYGAIN_ALBUM_PEAK")     tag.SetReplayGainTrackGain((int)atof(it->second.front().toCString()));
+    else if (it->first == "REPLAYGAIN_ALBUM_GAIN")     tag.SetReplayGainAlbumGain((int)(atof(it->second.front().toCString()) * 100 + 0.5));
+    else if (it->first == "REPLAYGAIN_TRACK_PEAK")     tag.SetReplayGainTrackPeak((float)atof(it->second.front().toCString()));
+    else if (it->first == "REPLAYGAIN_ALBUM_PEAK")     tag.SetReplayGainAlbumPeak((float)atof(it->second.front().toCString()));
     else if (it->first == "MUSICBRAINZ_ARTISTID")      tag.SetMusicBrainzArtistID(it->second.front().toCString());
     else if (it->first == "MUSICBRAINZ_ALBUMARTISTID") tag.SetMusicBrainzAlbumArtistID(it->second.front().toCString());
     else if (it->first == "MUSICBRAINZ_ALBUMID")       tag.SetMusicBrainzAlbumID(it->second.front().toCString());

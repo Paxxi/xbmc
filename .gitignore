@@ -123,6 +123,7 @@ config.log
 /addons/visualization.waveform/Waveform_win32.vis
 /addons/visualization.itunes/iTunes.mvis
 /addons/script.module.pil/
+/addons/pvr.*
 
 # /xbmc/android
 /xbmc/android/Makefile
@@ -1290,3 +1291,5 @@ xbmc/visualizations/EGLHelpers/Makefile
 /addons/library.xbmc.gui/libXBMC_gui.lib
 /addons/library.xbmc.pvr/libXBMC_pvr.dll
 /addons/library.xbmc.pvr/libXBMC_pvr.lib
+
+/pvr-addons
