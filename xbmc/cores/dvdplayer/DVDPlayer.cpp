@@ -605,31 +605,16 @@ retry:
   &&  !m_pInputStream->IsStreamType(DVDSTREAM_TYPE_HTSP))
   {
     // find any available external subtitles
-    std::vector<CStdString> filenames;
+    CUtil::SubFileList filenames;
     CUtil::ScanForExternalSubtitles( m_filename, filenames );
 
     // find any upnp subtitles
     CStdString key("upnp:subtitle:1");
     for(unsigned s = 1; m_item.HasProperty(key); key.Format("upnp:subtitle:%u", ++s))
-      filenames.push_back(m_item.GetProperty(key).asString());
+      filenames.push_back(CStdString(m_item.GetProperty(key).asString()));
 
-    for(unsigned int i=0;i<filenames.size();i++)
-    {
-      // if vobsub subtitle:
-      if (URIUtils::GetExtension(filenames[i]) == ".idx")
-      {
-        CStdString strSubFile;
-        if ( CUtil::FindVobSubPair( filenames, filenames[i], strSubFile ) )
-          AddSubtitleFile(filenames[i], strSubFile);
-      }
-      else
-      {
-        if ( !CUtil::IsVobSub(filenames, filenames[i] ) )
-        {
-          AddSubtitleFile(filenames[i]);
-        }
-      }
-    } // end loop over all subtitle files
+    for (CUtil::SubFileList::iterator it = filenames.begin(); it != filenames.end(); ++it)
+      AddSubtitleFile(it->filename, it->vobsubFilename);
 
     g_settings.m_currentVideoSettings.m_SubtitleCached = true;
   }
@@ -3741,8 +3726,12 @@ int CDVDPlayer::AddSubtitleFile(const std::string& filename, const std::string& 
   std::string vobsubfile = subfilename;
   if(ext == ".idx")
   {
-    if (vobsubfile.empty())
-      vobsubfile = URIUtils::ReplaceExtension(filename, ".sub");
+    if (vobsubfile.empty()) {
+      // find corresponding .sub (e.g. in case of manually selected .idx sub)
+      vobsubfile = CUtil::GetVobSubSubFromIdx(filename);
+      if (vobsubfile.empty())
+        return -1;
+    }
 
     CDVDDemuxVobsub v;
     if(!v.Open(filename, vobsubfile))
@@ -3755,9 +3744,10 @@ int CDVDPlayer::AddSubtitleFile(const std::string& filename, const std::string& 
   }
   if(ext == ".sub")
   {
-    CStdString strReplace(URIUtils::ReplaceExtension(filename,".idx"));
-    if (XFILE::CFile::Exists(strReplace))
-      return -1;
+    // if this looks like vobsub file (i.e. .idx found), add it as such
+    std::string vobsubidx = CUtil::GetVobSubIdxFromSub(filename);
+    if (!vobsubidx.empty())
+      return AddSubtitleFile(vobsubidx, filename, flags);
   }
   SelectionStream s;
   s.source   = m_SelectionStreams.Source(STREAM_SOURCE_TEXT, filename);
