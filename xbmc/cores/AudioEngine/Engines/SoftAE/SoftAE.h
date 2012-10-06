@@ -120,12 +120,15 @@ private:
   bool SetupEncoder(AEAudioFormat &format);
   void Deinitialize();
 
+  inline void GetDeviceFriendlyName(std::string &device);
+
   IAESink *GetSink(AEAudioFormat &desiredFormat, bool passthrough, std::string &device);
   void StopAllSounds();
 
   enum AEStdChLayout m_stdChLayout;
   std::string m_device;
   std::string m_passthroughDevice;
+  std::string m_deviceFriendlyName;
   bool m_audiophile;
   bool m_stereoUpmix;
 
@@ -152,12 +155,14 @@ private:
   AESinkInfoList            m_sinkInfoList;
   IAESink                  *m_sink;
   AEAudioFormat             m_sinkFormat;
-  float                     m_sinkFormatSampleRateMul;
-  float                     m_sinkFormatFrameSizeMul;
+  double                    m_sinkFormatSampleRateMul;
+  double                    m_sinkFormatFrameSizeMul;
   unsigned int              m_sinkBlockSize;
   bool                      m_sinkHandlesVolume;
   AEAudioFormat             m_encoderFormat;
-  float                     m_encoderFrameSizeMul;
+  double                    m_encoderFrameSizeMul;
+  double                    m_encoderInitSampleRateMul;
+  double                    m_encoderInitFrameSizeMul;
   unsigned int              m_bytesPerSample;
   CAEConvert::AEConvertFrFn m_convertFn;
 

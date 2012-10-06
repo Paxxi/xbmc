@@ -708,6 +708,7 @@
     <ClCompile Include="..\..\xbmc\interfaces\http-api\XBMChttp.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\info\InfoBool.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\info\SkinVariable.cpp" />
+    <ClCompile Include="..\..\xbmc\interfaces\json-rpc\AddonsOperations.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\json-rpc\ApplicationOperations.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\json-rpc\AudioLibrary.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\json-rpc\FileItemHandler.cpp" />
@@ -755,6 +756,13 @@
     <ClCompile Include="..\..\xbmc\interfaces\python\generated\AddonModuleXbmcvfs.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\python\LanguageHook.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\python\swig.cpp" />
+    <ClCompile Include="..\..\xbmc\interfaces\python\test\TestSwig.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug (DirectX)|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug (OpenGL)|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release (DirectX)|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release (OpenGL)|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\interfaces\python\XBPython.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\python\XBPyThread.cpp" />
     <ClCompile Include="..\..\xbmc\LangInfo.cpp" />
@@ -788,7 +796,6 @@
     <ClCompile Include="..\..\xbmc\music\MusicDbUrl.cpp" />
     <ClCompile Include="..\..\xbmc\music\MusicInfoLoader.cpp" />
     <ClCompile Include="..\..\xbmc\music\Song.cpp" />
-    <ClCompile Include="..\..\xbmc\music\tags\Id3Tag.cpp" />
     <ClCompile Include="..\..\xbmc\music\tags\MusicInfoTag.cpp" />
     <ClCompile Include="..\..\xbmc\music\tags\MusicInfoTagLoaderASAP.cpp" />
     <ClCompile Include="..\..\xbmc\music\tags\MusicInfoTagLoaderCDDA.cpp" />
@@ -857,6 +864,7 @@
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralHID.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralNIC.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralNyxboard.cpp" />
+    <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralImon.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralTuner.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\dialogs\GUIDialogPeripheralManager.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\dialogs\GUIDialogPeripheralSettings.cpp" />
@@ -1058,6 +1066,7 @@
     <ClInclude Include="..\..\xbmc\interfaces\python\XBPython.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\XBPyThread.h" />
     <ClInclude Include="..\..\xbmc\music\MusicDbUrl.h" />
+    <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTagLoaderWav.h" />
     <ClInclude Include="..\..\xbmc\music\tags\TagLibVFSStream.h" />
     <ClInclude Include="..\..\xbmc\music\tags\TagLoaderTagLib.h" />
     <ClInclude Include="..\..\xbmc\network\httprequesthandler\HTTPImageHandler.h" />
@@ -1181,15 +1190,18 @@
     <ClInclude Include="..\..\xbmc\filesystem\ZipFile.h" />
     <ClInclude Include="..\..\xbmc\filesystem\ZipManager.h" />
     <ClInclude Include="..\..\xbmc\network\windows\ZeroconfBrowserWIN.h" />
+    <ClInclude Include="..\..\xbmc\peripherals\devices\PeripheralImon.h" />
     <ClInclude Include="..\..\xbmc\system_gl.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug (DirectX)|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Testsuite|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release (DirectX)|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\interfaces\json-rpc\AddonsOperations.h" />
     <ClCompile Include="..\..\xbmc\ThumbLoader.cpp" />
     <ClCompile Include="..\..\xbmc\ThumbnailCache.cpp" />
     <ClCompile Include="..\..\xbmc\URL.cpp" />
     <ClCompile Include="..\..\xbmc\Util.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\Screenshot.cpp" />
     <ClCompile Include="..\..\xbmc\utils\AlarmClock.cpp" />
     <ClCompile Include="..\..\xbmc\utils\AliasShortcutUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Archive.cpp" />
@@ -1653,6 +1665,7 @@
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Video\DVDVideoCodecLibMpeg2.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Video\DVDVideoPPFFmpeg.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Video\DXVA.cpp" />
+    <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\DVDOverlayCodec.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\DVDOverlayCodecCC.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\DVDOverlayCodecFFmpeg.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\DVDOverlayCodecSSA.cpp" />
@@ -2169,9 +2182,6 @@
     <ClInclude Include="..\..\xbmc\music\MusicDatabase.h" />
     <ClInclude Include="..\..\xbmc\music\MusicInfoLoader.h" />
     <ClInclude Include="..\..\xbmc\music\Song.h" />
-    <ClInclude Include="..\..\xbmc\music\tags\DllLibid3tag.h" />
-    <ClInclude Include="..\..\xbmc\music\tags\Id3Tag.h" />
-    <ClInclude Include="..\..\xbmc\music\tags\id3v1genre.h" />
     <ClInclude Include="..\..\xbmc\music\tags\ImusicInfoTagLoader.h" />
     <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTag.h" />
     <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTagLoaderASAP.h" />
@@ -2183,7 +2193,6 @@
     <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTagLoaderShn.h" />
     <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTagLoaderSPC.h" />
     <ClInclude Include="..\..\xbmc\music\tags\MusicInfoTagLoaderYM.h" />
-    <ClInclude Include="..\..\xbmc\music\tags\Tag.h" />
     <ClInclude Include="..\..\xbmc\music\windows\GUIWindowMusicBase.h" />
     <ClInclude Include="..\..\xbmc\music\windows\GUIWindowMusicNav.h" />
     <ClInclude Include="..\..\xbmc\music\windows\GUIWindowMusicPlaylist.h" />
@@ -2347,6 +2356,7 @@
     <ClInclude Include="..\..\xbmc\ThumbnailCache.h" />
     <ClInclude Include="..\..\xbmc\URL.h" />
     <ClInclude Include="..\..\xbmc\Util.h" />
+    <ClInclude Include="..\..\xbmc\utils\Screenshot.h" />
     <ClInclude Include="..\..\xbmc\utils\AlarmClock.h" />
     <ClInclude Include="..\..\xbmc\utils\AliasShortcutUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\Archive.h" />
@@ -2747,10 +2757,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\lib\win32\pcre\libpcre\libpcre.vcxproj">
       <Project>{d8097c41-605d-4917-8957-9df7f44a18cd}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\libapetag\libapetag.vcxproj">
-      <Project>{bdd2cb99-93c5-4a70-acbf-396ffb961ad3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\..\lib\libhts\Win32\libhts_2010.vcxproj">

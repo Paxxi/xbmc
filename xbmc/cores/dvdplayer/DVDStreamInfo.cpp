@@ -59,6 +59,7 @@ void CDVDStreamInfo::Clear()
   profile  = 0;
   ptsinvalid = false;
   forced_aspect = false;
+  bitsperpixel = 0;
 
   channels   = 0;
   samplerate = 0;
@@ -96,6 +97,7 @@ bool CDVDStreamInfo::Equal(const CDVDStreamInfo& right, bool withextradata)
   ||  profile  != right.profile
   ||  ptsinvalid != right.ptsinvalid
   ||  forced_aspect != right.forced_aspect
+  ||  bitsperpixel != right.bitsperpixel
   ||  vfr      != right.vfr) return false;
 
   // AUDIO
@@ -152,6 +154,7 @@ void CDVDStreamInfo::Assign(const CDVDStreamInfo& right, bool withextradata)
   ptsinvalid = right.ptsinvalid;
   forced_aspect = right.forced_aspect;
   orientation = right.orientation;
+  bitsperpixel = right.bitsperpixel;
 
   // AUDIO
   channels      = right.channels;
@@ -171,6 +174,8 @@ void CDVDStreamInfo::Assign(const CDemuxStream& right, bool withextradata)
   codec = right.codec;
   type = right.type;
   codec_tag = right.codec_fourcc;
+  profile   = right.profile;
+  level     = right.level;
 
   if( withextradata && right.ExtraSize )
   {
@@ -197,11 +202,10 @@ void CDVDStreamInfo::Assign(const CDemuxStream& right, bool withextradata)
     width     = stream->iWidth;
     aspect    = stream->fAspect;
     vfr       = stream->bVFR;
-    level     = stream->iLevel;
-    profile   = stream->iProfile;
     ptsinvalid = stream->bPTSInvalid;
     forced_aspect = stream->bForcedAspect;
     orientation = stream->iOrientation;
+    bitsperpixel = stream->iBitsPerPixel;
   }
   else if(  right.type == STREAM_SUBTITLE )
   {

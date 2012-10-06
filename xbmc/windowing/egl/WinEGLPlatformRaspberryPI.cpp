@@ -66,29 +66,16 @@ CWinEGLPlatformRaspberryPI::CWinEGLPlatformRaspberryPI()
   m_context                 = EGL_NO_CONTEXT;
   m_display                 = EGL_NO_DISPLAY;
 
-  m_desktopRes.iScreen      = 0;
-  m_desktopRes.iWidth       = 1280;
-  m_desktopRes.iHeight      = 720;
-  m_desktopRes.fRefreshRate = 60.0f;
-  m_desktopRes.bFullScreen  = true;
-  m_desktopRes.iSubtitles   = (int)(0.965 * 720);
-  m_desktopRes.dwFlags      = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN;
-  m_desktopRes.fPixelRatio  = 1.0f;
-  m_desktopRes.strMode      = "720p 16:9";
-  m_sdMode                  = false;
-
   m_dispman_element         = DISPMANX_NO_HANDLE;
   m_dispman_element2        = DISPMANX_NO_HANDLE;
   m_dispman_display         = DISPMANX_NO_HANDLE;
 
-  m_DllBcmHost.Load();
-
-  // get current display settings state
-  memset(&m_tv_state, 0, sizeof(TV_GET_STATE_RESP_T));
-  m_DllBcmHost.vc_tv_get_state(&m_tv_state);
+  m_fixedMode               = false;
 
   m_nativeWindow = (EGL_DISPMANX_WINDOW_T *)malloc(sizeof(EGL_DISPMANX_WINDOW_T));
   memset(m_nativeWindow, 0x0, sizeof(EGL_DISPMANX_WINDOW_T));
+
+  m_initDesktopRes          = true;
 }
 
 CWinEGLPlatformRaspberryPI::~CWinEGLPlatformRaspberryPI()
@@ -113,7 +100,7 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
 
   for (size_t i = 0; i < m_res.size(); i++)
   {
-    if(m_res[i].iWidth == res.iWidth && m_res[i].iHeight == res.iHeight && m_res[i].fRefreshRate == res.fRefreshRate)
+    if(m_res[i].iScreenWidth == res.iScreenWidth && m_res[i].iScreenHeight == res.iScreenHeight && m_res[i].fRefreshRate == res.fRefreshRate)
     {
       int score = 0;
 
@@ -129,10 +116,7 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
     }
   }
 
-  if(m_res.size() < 2)
-    bFound = false;
-
-  if(bFound && !m_sdMode)
+  if(bFound && !m_fixedMode)
   {
     sem_init(&m_tv_synced, 0, 0);
     m_DllBcmHost.vc_tv_register_callback(CallbackTvServiceCallback, this);
@@ -154,6 +138,8 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
     }
     m_DllBcmHost.vc_tv_unregister_callback(CallbackTvServiceCallback);
     sem_destroy(&m_tv_synced);
+
+    m_desktopRes = resSearch; 
   }
 
   m_dispman_display = m_DllBcmHost.vc_dispmanx_display_open(0);
@@ -166,8 +152,8 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
 
   dst_rect.x      = 0;
   dst_rect.y      = 0;
-  dst_rect.width  = res.iWidth;
-  dst_rect.height = res.iHeight;
+  dst_rect.width  = res.iScreenWidth;
+  dst_rect.height = res.iScreenHeight;
 
   src_rect.x      = 0;
   src_rect.y      = 0;
@@ -192,8 +178,8 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
   if(bFound && (resSearch.dwFlags & D3DPRESENTFLAG_MODE3DSBS))
   {
     // right side
-    dst_rect.x = res.iWidth;
-    dst_rect.width >>= dst_rect.width - dst_rect.x;
+    dst_rect.x = res.iScreenWidth;
+    dst_rect.width = res.iScreenWidth;
 
     m_dispman_element2 = m_DllBcmHost.vc_dispmanx_element_add(dispman_update,
       m_dispman_display,
@@ -210,7 +196,7 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
 
     // left side - fall through
     dst_rect.x = 0;
-    dst_rect.width = res.iWidth - dst_rect.x;
+    dst_rect.width = res.iScreenWidth;
   }
 
   m_dispman_element = m_DllBcmHost.vc_dispmanx_element_add(dispman_update,
@@ -241,49 +227,86 @@ bool CWinEGLPlatformRaspberryPI::SetDisplayResolution(RESOLUTION_INFO& res)
 
 bool CWinEGLPlatformRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
 {
-  return true;
+  const int max_width = 1280, max_height = 720;
+  float ar = (float)width/(float)height;
+  // bigger than maximum, so need to clamp
+  if (width > max_width || height > max_height) {
+    // wider than max, so clamp width first
+    if (ar > (float)max_width/(float)max_height)
+    {
+      width = max_width;
+      height = (float)max_width / ar + 0.5f;
+    // taller than max, so clamp height first
+    } else {
+      height = max_height;
+      width = (float)max_height * ar + 0.5f;
+    }
+    return true;
+  }
+  return false;
 }
 
 bool CWinEGLPlatformRaspberryPI::ProbeDisplayResolutions(std::vector<RESOLUTION_INFO> &resolutions)
 {
   resolutions.clear();
+  m_res.clear();
   
+  m_fixedMode               = false;
+
+  /* read initial desktop resolution before probe resolutions.
+   * probing will replace the desktop resolution when it finds the same one.
+   * we raplace it because probing will generate more detailed 
+   * resolution flags we don't get with vc_tv_get_state.
+   */
+
+  if(m_initDesktopRes)
+  {
+    TV_GET_STATE_RESP_T tv_state;
+
+    // get current display settings state
+    memset(&tv_state, 0, sizeof(TV_GET_STATE_RESP_T));
+    m_DllBcmHost.vc_tv_get_state(&tv_state);
+
+    m_desktopRes.iScreen      = 0;
+    m_desktopRes.bFullScreen  = true;
+    m_desktopRes.iSubtitles   = (int)(0.965 * tv_state.height);
+    m_desktopRes.iWidth       = tv_state.width;
+    m_desktopRes.iHeight      = tv_state.height;
+    m_desktopRes.iScreenWidth = tv_state.width;
+    m_desktopRes.iScreenHeight= tv_state.height;
+    m_desktopRes.dwFlags      = tv_state.scan_mode ? D3DPRESENTFLAG_INTERLACED : D3DPRESENTFLAG_PROGRESSIVE;
+    m_desktopRes.fRefreshRate = (float)tv_state.frame_rate;
+    m_desktopRes.strMode.Format("%dx%d", tv_state.width, tv_state.height);
+    if((float)tv_state.frame_rate > 1)
+    {
+        m_desktopRes.strMode.Format("%s @ %.2f%s - Full Screen", m_desktopRes.strMode, (float)tv_state.frame_rate, 
+            m_desktopRes.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
+    }
+    m_initDesktopRes = false;
+
+    CLog::Log(LOGDEBUG, "EGL initial desktop resolution %s\n", m_desktopRes.strMode.c_str());
+  }
+
   GetSupportedModes(HDMI_RES_GROUP_CEA, resolutions);
   GetSupportedModes(HDMI_RES_GROUP_DMT, resolutions);
   GetSupportedModes(HDMI_RES_GROUP_CEA_3D, resolutions);
 
   if(resolutions.size() == 0)
   {
-    m_sdMode = true;
-
     TV_GET_STATE_RESP_T tv;
     m_DllBcmHost.vc_tv_get_state(&tv);
 
     RESOLUTION_INFO res;
-    CLog::Log(LOGDEBUG, "EGL probe resolution %dx%d@%d %s:%x\n",
-       tv.width, tv.height, tv.frame_rate, tv.scan_mode?"I":"");
+    CLog::Log(LOGDEBUG, "EGL probe resolution %dx%d@%f %s:%x\n",
+        m_desktopRes.iWidth, m_desktopRes.iHeight, m_desktopRes.fRefreshRate,
+        m_desktopRes.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "p");
 
-    res.iScreen       = 0;
-    res.bFullScreen   = true;
-    res.iSubtitles    = (int)(0.965 * tv.height);
-    res.dwFlags       = tv.scan_mode ? D3DPRESENTFLAG_INTERLACED : D3DPRESENTFLAG_PROGRESSIVE;
-    res.fRefreshRate  = (float)tv.frame_rate;
-    res.fPixelRatio   = 1.0f;
-    res.iWidth        = tv.width;
-    res.iHeight       = tv.height;
-    //res.iScreenWidth  = tv.width;
-    //res.iScreenHeight = tv.height;
-    res.strMode.Format("%dx%d", tv.width, tv.height);
-    if((float)tv.frame_rate > 1)
-    {
-        res.strMode.Format("%s @ %.2f%s - Full Screen", res.strMode, (float)tv.frame_rate, 
-            res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
-    }
-
-    resolutions.push_back(res);
-    m_desktopRes = res;
-    m_res.push_back(res);
+    m_res.push_back(m_desktopRes);
+    resolutions.push_back(m_desktopRes);
   }
+
+  if(resolutions.size() < 2)
+    m_fixedMode = true;
 
   return true;
 }
@@ -293,6 +316,8 @@ EGLNativeWindowType CWinEGLPlatformRaspberryPI::InitWindowSystem(EGLNativeDispla
   m_nativeDisplay = nativeDisplay;
   m_width         = width;
   m_height        = height;
+
+  m_DllBcmHost.Load();
 
   return getNativeWindow();
 }
@@ -687,8 +712,8 @@ void CWinEGLPlatformRaspberryPI::GetSupportedModes(HDMI_RES_GROUP_T group, std::
       res.fPixelRatio   = 1.0f;
       res.iWidth        = width;
       res.iHeight       = tv->height;
-      //res.iScreenWidth  = width;
-      //res.iScreenHeight = tv->height;
+      res.iScreenWidth  = width;
+      res.iScreenHeight = tv->height;
       res.strMode.Format("%dx%d", width, tv->height);
       if((float)tv->frame_rate > 1)
       {
@@ -698,9 +723,15 @@ void CWinEGLPlatformRaspberryPI::GetSupportedModes(HDMI_RES_GROUP_T group, std::
 
       resolutions.push_back(res);
 
-      if(m_tv_state.width == width && m_tv_state.height == tv->height && 
-         m_tv_state.scan_mode == tv->scan_mode && m_tv_state.frame_rate == tv->frame_rate)
+      /* replace initial desktop resolution with probed hdmi resolution */
+      if(m_desktopRes.iWidth == res.iWidth && m_desktopRes.iHeight == res.iHeight &&
+          m_desktopRes.iScreenWidth == res.iScreenWidth && m_desktopRes.iScreenHeight == res.iScreenHeight &&
+          m_desktopRes.fRefreshRate == res.fRefreshRate)
+      {
         m_desktopRes = res;
+        CLog::Log(LOGDEBUG, "EGL desktop replacement resolution %dx%d@%d %s%s:%x\n", 
+            width, tv->height, tv->frame_rate, tv->native ? "N" : "", tv->scan_mode ? "I" : "", tv->code);
+      }
 
       m_res.push_back(res);
     }

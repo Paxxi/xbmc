@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([xbmc], [11.9.6], [http://trac.xbmc.org])
+AC_INIT([xbmc], [11.9.7], [http://trac.xbmc.org])
 AC_CONFIG_HEADERS([xbmc/config.h])
 AH_TOP([#pragma once])
 m4_include([m4/ax_python_devel.m4])
@@ -668,10 +668,6 @@ case $use_platform in
      use_texturepacker_native=yes
      use_arch="arm"
      use_cpu=arm1176jzf-s
-     use_armv5te="yes"
-     use_armv6t2="no"
-     use_armv6="yes"
-     use_armvfp="yes"
      use_hardcoded_tables="yes"
      use_alsa="no"
      USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
@@ -1590,6 +1586,12 @@ fi
 echo "Checking for SWIG installation"
 AC_PATH_PROG(SWIG_EXE, swig, "none")
 if test "$SWIG_EXE" = "none"; then
+  AC_PATH_PROG(SWIG20_EXE, swig2.0, "none")
+  if test "$SWIG20_EXE" != "none" ; then
+    SWIG_EXE=$SWIG20_EXE
+  fi
+fi
+if test "$SWIG_EXE" = "none"; then
   AC_MSG_ERROR($missing_program)
 fi
 final_message="$final_message\n  SWIG Available:\tYes"
@@ -2314,7 +2316,6 @@ OUTPUT_FILES="Makefile \
     lib/cmyth/Makefile \
     lib/libhdhomerun/Makefile \
     lib/libsquish/Makefile \
-    lib/libid3tag/Makefile \
     lib/cximage-6.0/Makefile \
     lib/addons/script.module.pil/Makefile \
     lib/libUPnP/Makefile \
@@ -2348,7 +2349,8 @@ OUTPUT_FILES="$OUTPUT_FILES addons/skin.touched/media/Makefile"
 fi
 
 OUTPUT_FILES="$OUTPUT_FILES \
-  xbmc/interfaces/python/Makefile"
+  xbmc/interfaces/python/Makefile \
+  xbmc/interfaces/python/test/Makefile"
 
 # Line below is used so we can use AM_INIT_AUTOMAKE. The corresponding
 # .dummy.am does nothing.
@@ -2549,10 +2551,6 @@ XB_CONFIG_MODULE([lib/ffmpeg], [
       `if test "$use_arch" != "no"; then echo --arch=$use_arch; fi`\
       `if test "$use_cpu" != "no"; then echo --cpu=$use_cpu; fi`\
       `if test "$use_neon" = "yes"; then echo --enable-neon; else echo --disable-neon; fi`\
-      `if test "$use_armv5te" = "yes"; then echo --enable-armv5te; else echo --disable-armv5te; fi`\
-      `if test "$use_armv6t2" = "yes"; then echo --enable-armv6t2; else echo --disable-armv6t2; fi`\
-      `if test "$use_armv6" = "yes"; then echo --enable-armv6; else echo --disable-armv6; fi`\
-      `if test "$use_armvfp" = "yes"; then echo --enable-armvfp; else echo --disable-armvfp; fi`\
       --target-os=$ffmpeg_target_os \
       --disable-muxers \
       --enable-muxer=spdif \
@@ -2634,20 +2632,6 @@ XB_CONFIG_MODULE([lib/libdvd/libdvdnav], [
     --cc="$CC"
 ], [0])
 
-XB_CONFIG_MODULE([lib/libid3tag/libid3tag],[
-  ./configure \
-    CC="$CC" \
-    CXX="$CXX" \
-    CFLAGS="$CFLAGS" \ 
-    CXXFLAGS="$CXXFLAGS" \
-    --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
-    --host=$host_alias \
-    --build=$build_alias \
-    --target=$target_alias \      
-    --disable-static \
-    --with-pic
-], [0])
-
 XB_CONFIG_MODULE([xbmc/visualizations/XBMCProjectM/libprojectM],[
   set -x
   rm -f CMakeCache.txt &&                              \
@@ -2708,15 +2692,6 @@ XB_CONFIG_MODULE([xbmc/screensavers/rsxs-0.9/], [
     sed -i.back "s;\(STDBOOL_H = \)stdbool.h;\1;" lib/Makefile
   fi
 ], [$DISABLE_RSXS])
-
-XB_CONFIG_MODULE([lib/libapetag], [
-  ./configure \
-    `if test "$host_vendor" = "apple"; then echo --disable-shared; fi` \
-    --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
-    --host=$host_alias \
-    --build=$build_alias \
-    --target=$target_alias CFLAGS="$CFLAGS" CC="$CC" CXX="$CXX"
-], [0])
 
 XB_CONFIG_MODULE([lib/cpluff], [
   ./configure --disable-nls \

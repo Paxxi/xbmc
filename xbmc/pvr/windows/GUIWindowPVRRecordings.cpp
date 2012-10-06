@@ -67,13 +67,13 @@ CStdString CGUIWindowPVRRecordings::GetResumeString(const CFileItem& item)
   {
 
     // First try to find the resume position on the back-end, if that fails use video database
-    CPVRRecording recording = *item.GetPVRRecordingInfoTag();
-    int positionInSeconds = g_PVRManager.GetRecordingLastPlayedPosition(recording);
+    int positionInSeconds = item.GetPVRRecordingInfoTag()->GetLastPlayedPosition();
     // If the back-end does report a saved position then make sure there is a corresponding resume bookmark
     if (positionInSeconds > 0)
     {
       CBookmark bookmark;
       bookmark.timeInSeconds = positionInSeconds;
+      bookmark.totalTimeInSeconds = (double)item.GetPVRRecordingInfoTag()->GetDuration();
       CVideoDatabase db;
       if (db.Open())
       {
@@ -221,7 +221,7 @@ void CGUIWindowPVRRecordings::UpdateData(bool bUpdateSelectedFile /* = true */)
 
 void CGUIWindowPVRRecordings::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  if (msg == ObservableMessageRecordings || msg == ObservableMessageTimers || msg == ObservableMessageCurrentItem)
+  if (msg == ObservableMessageTimers || msg == ObservableMessageCurrentItem)
   {
     if (IsVisible())
       SetInvalid();
@@ -231,7 +231,7 @@ void CGUIWindowPVRRecordings::Notify(const Observable &obs, const ObservableMess
   else if (msg == ObservableMessageRecordings || msg == ObservableMessageTimersReset)
   {
     if (IsVisible())
-      UpdateData(false);
+      UpdateData();
     else
       m_bUpdateRequired = true;
   }

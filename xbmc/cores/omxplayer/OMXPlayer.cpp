@@ -53,7 +53,6 @@
 #include "utils/LangCodeExpander.h"
 #include "guilib/LocalizeStrings.h"
 
-#include "BitstreamConverter.h"
 #include "storage/MediaManager.h"
 #include "GUIUserMessages.h"
 #include "utils/StreamUtils.h"
@@ -590,8 +589,8 @@ retry:
   if (m_pInputStream && ( m_pInputStream->IsStreamType(DVDSTREAM_TYPE_DVD)
                        || m_pInputStream->IsStreamType(DVDSTREAM_TYPE_BLURAY) ) )
   {
-    CLog::Log(LOGINFO, "COMXPlayer::OpenInputStream - DVD/BD not supported");
-    return false;
+    CLog::Log(LOGINFO, "COMXPlayer::OpenInputStream - DVD/BD not supported - Will try...");
+    // return false;
   }
 
   // find any available external subtitles for non dvd files
@@ -899,30 +898,6 @@ bool COMXPlayer::IsBetterStream(COMXCurrentStream& current, CDemuxStream* stream
     if(current.type == STREAM_SUBTITLE && stream->iPhysicalId == m_dvd.iSelectedSPUStream)
       return true;
     if(current.type == STREAM_VIDEO    && current.id < 0)
-      return true;
-  }
-  else if (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER))
-  {
-    if(stream->source == current.source &&
-       stream->iId    == current.id)
-      return false;
-
-    if(stream->disabled)
-      return false;
-
-    if(stream->type != current.type)
-      return false;
-
-    if(current.type == STREAM_AUDIO    && stream->iPhysicalId == m_dvd.iSelectedAudioStream)
-      return true;
-
-    if(current.type == STREAM_SUBTITLE && stream->iPhysicalId == m_dvd.iSelectedSPUStream)
-      return true;
-
-    if(current.type == STREAM_TELETEXT)
-      return true;
-
-    if(current.id < 0)
       return true;
   }
   else
@@ -1361,7 +1336,8 @@ void COMXPlayer::ProcessPacket(CDemuxStream* pStream, DemuxPacket* pPacket)
 
 void COMXPlayer::ProcessAudioData(CDemuxStream* pStream, DemuxPacket* pPacket)
 {
-  if (m_CurrentAudio.stream != (void*)pStream)
+  if (m_CurrentAudio.stream != (void*)pStream
+  ||  m_CurrentAudio.changes != pStream->changes)
   {
     /* check so that dmuxer hints or extra data hasn't changed */
     /* if they have, reopen stream */
@@ -1408,7 +1384,8 @@ void COMXPlayer::ProcessAudioData(CDemuxStream* pStream, DemuxPacket* pPacket)
 
 void COMXPlayer::ProcessVideoData(CDemuxStream* pStream, DemuxPacket* pPacket)
 {
-  if (m_CurrentVideo.stream != (void*)pStream)
+  if (m_CurrentVideo.stream != (void*)pStream
+  ||  m_CurrentVideo.changes != pStream->changes)
   {
     /* check so that dmuxer hints or extra data hasn't changed */
     /* if they have reopen stream */
@@ -1440,7 +1417,8 @@ void COMXPlayer::ProcessVideoData(CDemuxStream* pStream, DemuxPacket* pPacket)
 
 void COMXPlayer::ProcessSubData(CDemuxStream* pStream, DemuxPacket* pPacket)
 {
-  if (m_CurrentSubtitle.stream != (void*)pStream)
+  if (m_CurrentSubtitle.stream != (void*)pStream
+  ||  m_CurrentSubtitle.changes != pStream->changes)
   {
     /* check so that dmuxer hints or extra data hasn't changed */
     /* if they have reopen stream */
@@ -2015,11 +1993,6 @@ void COMXPlayer::OnExit()
       delete m_pSubtitleDemuxer;
     }
     m_pSubtitleDemuxer = NULL;
-
-    if (m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER) && g_PVRManager.IsPlayingRecording())
-    {
-      g_PVRManager.UpdateCurrentLastPlayedPosition(m_State.time / 1000);
-    }
 
     // destroy the inputstream
     if (m_pInputStream)

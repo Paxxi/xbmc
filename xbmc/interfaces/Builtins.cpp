@@ -20,6 +20,7 @@
 
 #include "system.h"
 #include "utils/AlarmClock.h"
+#include "utils/Screenshot.h"
 #include "Application.h"
 #include "ApplicationMessenger.h"
 #include "Autorun.h"
@@ -213,6 +214,8 @@ const BUILT_IN commands[] = {
 #endif
   { "VideoLibrary.Search",        false,  "Brings up a search dialog which will search the library" },
   { "ToggleDebug",                false,  "Enables/disables debug mode" },
+  { "StartPVRManager",            false,  "(Re)Starts the PVR manager" },
+  { "StopPVRManager",             false,  "Stops the PVR manager" },
 };
 
 bool CBuiltins::HasCommand(const CStdString& execString)
@@ -321,7 +324,7 @@ int CBuiltins::Execute(const CStdString& execString)
   }
   else if (execute.Equals("takescreenshot"))
   {
-    CUtil::TakeScreenshot();
+    CScreenShot::TakeScreenshot();
   }
   else if (execute.Equals("activatewindow") || execute.Equals("replacewindow"))
   {
@@ -527,7 +530,9 @@ int CBuiltins::Execute(const CStdString& execString)
             cmd.Format("ActivateWindow(Pictures,plugin://%s,return)",params[0]);
         }
         if (addon->Type() == ADDON_SCRIPT)
-          cmd.Format("RunScript(%s)",params[0]);
+          // Pass the script name (params[0]) and all the parameters
+          // (params[1] ... params[x]) separated by a comma to RunScript
+          cmd.Format("RunScript(%s)", StringUtils::JoinString(params, ","));
 
         return Execute(cmd);
       }
@@ -1619,6 +1624,14 @@ int CBuiltins::Execute(const CStdString& execString)
     bool debug = g_guiSettings.GetBool("debug.showloginfo");
     g_guiSettings.SetBool("debug.showloginfo", !debug);
     g_advancedSettings.SetDebugMode(!debug);
+  }
+  else if (execute.Equals("startpvrmanager"))
+  {
+    g_application.StartPVRManager();
+  }
+  else if (execute.Equals("stoppvrmanager"))
+  {
+    g_application.StopPVRManager();
   }
   else
     return -1;

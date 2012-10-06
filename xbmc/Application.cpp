@@ -25,6 +25,7 @@
 #include "utils/Variant.h"
 #include "utils/Splash.h"
 #include "LangInfo.h"
+#include "utils/Screenshot.h"
 #include "Util.h"
 #include "URL.h"
 #include "guilib/TextureManager.h"
@@ -176,6 +177,7 @@
 #include "peripherals/Peripherals.h"
 #include "peripherals/dialogs/GUIDialogPeripheralManager.h"
 #include "peripherals/dialogs/GUIDialogPeripheralSettings.h"
+#include "peripherals/devices/PeripheralImon.h"
 
 // Windows includes
 #include "guilib/GUIWindowManager.h"
@@ -890,7 +892,7 @@ bool CApplication::CreateGUI()
     return false;
 
   int iResolution = g_graphicsContext.GetVideoResolution();
-  CLog::Log(LOGINFO, "GUI format %ix%i %s",
+  CLog::Log(LOGINFO, "GUI format %ix%i, Display %s",
             g_settings.m_ResInfo[iResolution].iWidth,
             g_settings.m_ResInfo[iResolution].iHeight,
             g_settings.m_ResInfo[iResolution].strMode.c_str());
@@ -1347,7 +1349,6 @@ bool CApplication::Initialize()
         return false;
     }
 
-    StartEPGManager();
     StartPVRManager();
 
     if (g_advancedSettings.m_splashImage)
@@ -1418,7 +1419,8 @@ bool CApplication::Initialize()
   ResetScreenSaver();
 
 #ifdef HAS_SDL_JOYSTICK
-  g_Joystick.SetEnabled(g_guiSettings.GetBool("input.enablejoystick"));
+  g_Joystick.SetEnabled(g_guiSettings.GetBool("input.enablejoystick") &&
+                    (CPeripheralImon::GetCountOfImonsConflictWithDInput() == 0 || !g_guiSettings.GetBool("input.disablejoystickwithimon")) );
 #endif
 
   return true;
@@ -1825,12 +1827,7 @@ void CApplication::StopZeroconf()
 void CApplication::StartPVRManager()
 {
   if (g_guiSettings.GetBool("pvrmanager.enabled"))
-    g_PVRManager.Start();
-}
-
-void CApplication::StartEPGManager(void)
-{
-  g_EpgContainer.Start();
+    g_PVRManager.Start(true);
 }
 
 void CApplication::StopPVRManager()
@@ -1839,10 +1836,6 @@ void CApplication::StopPVRManager()
   if (g_PVRManager.IsPlaying())
     StopPlaying();
   g_PVRManager.Stop();
-}
-
-void CApplication::StopEPGManager(void)
-{
   g_EpgContainer.Stop();
 }
 
@@ -2222,24 +2215,6 @@ bool CApplication::RenderNoPresent()
   }
 
   bool hasRendered = g_windowManager.Render();
-
-  // if we're recording an audio stream then show blinking REC
-  if (!g_graphicsContext.IsFullScreenVideo())
-  {
-    if (m_pPlayer && m_pPlayer->IsRecording() )
-    {
-      static int iBlinkRecord = 0;
-      iBlinkRecord++;
-      if (iBlinkRecord > 25)
-      {
-        CGUIFont* pFont = g_fontManager.GetFont("font13");
-        CGUITextLayout::DrawText(pFont, 60, 50, 0xffff0000, 0, "REC", 0);
-      }
-
-      if (iBlinkRecord > 50)
-        iBlinkRecord = 0;
-    }
-  }
 
   g_graphicsContext.Unlock();
 
@@ -2683,7 +2658,7 @@ bool CApplication::OnAction(const CAction &action)
   // screenshot : take a screenshot :)
   if (action.GetID() == ACTION_TAKE_SCREENSHOT)
   {
-    CUtil::TakeScreenshot();
+    CScreenShot::TakeScreenshot();
     return true;
   }
   // built in functions : execute the built-in
@@ -2957,6 +2932,10 @@ void CApplication::UpdateLCD()
   {
     if (g_application.NavigationIdleTime() < 5)
       g_lcd->Render(ILCD::LCD_MODE_NAVIGATION);
+    else if (g_PVRManager.IsPlayingTV())
+      g_lcd->Render(ILCD::LCD_MODE_PVRTV);
+    else if (g_PVRManager.IsPlayingRadio())
+      g_lcd->Render(ILCD::LCD_MODE_PVRRADIO);
     else if (IsPlayingVideo())
       g_lcd->Render(ILCD::LCD_MODE_VIDEO);
     else if (IsPlayingAudio())
@@ -3676,7 +3655,6 @@ void CApplication::Stop(int exitCode)
     CApplicationMessenger::Get().Cleanup();
 
     StopPVRManager();
-    StopEPGManager();
     StopServices();
     //Sleep(5000);
 
