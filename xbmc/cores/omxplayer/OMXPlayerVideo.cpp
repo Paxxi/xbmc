@@ -47,15 +47,15 @@
 
 #include "OMXPlayer.h"
 
-class COMXMsgAudioCodecChange : public CDVDMsg
+class COMXMsgVideoCodecChange : public CDVDMsg
 {
 public:
-  COMXMsgAudioCodecChange(const CDVDStreamInfo &hints, COMXVideo *codec)
+  COMXMsgVideoCodecChange(const CDVDStreamInfo &hints, COMXVideo *codec)
     : CDVDMsg(GENERAL_STREAMCHANGE)
     , m_codec(codec)
     , m_hints(hints)
   {}
- ~COMXMsgAudioCodecChange()
+ ~COMXMsgVideoCodecChange()
   {
     delete m_codec;
   }
@@ -95,6 +95,7 @@ OMXPlayerVideo::OMXPlayerVideo(OMXClock *av_clock,
   m_dropbase              = 0.0;
   m_autosync              = 1;
   m_fForcedAspectRatio    = 0.0f;
+  m_send_eos              = false;
   m_messageQueue.SetMaxDataSize(10 * 1024 * 1024);
   m_messageQueue.SetMaxTimeSize(8.0);
 
@@ -137,7 +138,7 @@ bool OMXPlayerVideo::OpenStream(CDVDStreamInfo &hints)
   }
 
   if(m_messageQueue.IsInited())
-    m_messageQueue.Put(new COMXMsgAudioCodecChange(hints, NULL), 0);
+    m_messageQueue.Put(new COMXMsgVideoCodecChange(hints, NULL), 0);
   else
   {
     if(!OpenStream(hints, NULL))
@@ -157,6 +158,7 @@ bool OMXPlayerVideo::OpenStream(CDVDStreamInfo &hints)
   */
 
   m_open        = true;
+  m_send_eos    = false;
 
   return true;
 }
@@ -585,7 +587,7 @@ void OMXPlayerVideo::Process()
     }
     else if (pMsg->IsType(CDVDMsg::GENERAL_STREAMCHANGE))
     {
-      COMXMsgAudioCodecChange* msg(static_cast<COMXMsgAudioCodecChange*>(pMsg));
+      COMXMsgVideoCodecChange* msg(static_cast<COMXMsgVideoCodecChange*>(pMsg));
       OpenStream(msg->m_hints, msg->m_codec);
       msg->m_codec = NULL;
     }
@@ -631,13 +633,19 @@ void OMXPlayerVideo::Process()
           m_stalled = false;
         }
 
+        double output_pts = 0;
         // validate picture timing,
         // if both dts/pts invalid, use pts calulated from picture.iDuration
         // if pts invalid use dts, else use picture.pts as passed
         if (pPacket->dts == DVD_NOPTS_VALUE && pPacket->pts == DVD_NOPTS_VALUE)
-          pPacket->pts = pts;
+          output_pts = pts;
         else if (pPacket->pts == DVD_NOPTS_VALUE)
-          pPacket->pts = pPacket->dts;
+          output_pts = pPacket->dts;
+        else
+          output_pts = pts;
+
+        if(output_pts != DVD_NOPTS_VALUE)
+          output_pts += m_iVideoDelay;
 
         if(pPacket->pts != DVD_NOPTS_VALUE)
           pPacket->pts += m_iVideoDelay;
@@ -646,7 +654,8 @@ void OMXPlayerVideo::Process()
           pPacket->duration = frametime;
 
         m_omxVideo.Decode(pPacket->pData, pPacket->iSize, pPacket->pts, pPacket->pts);
-        Output(pPacket->iGroupId, pPacket->pts, bRequestDrop);
+
+        Output(pPacket->iGroupId, output_pts, bRequestDrop);
 
         if(m_started == false)
         {
@@ -706,7 +715,7 @@ bool OMXPlayerVideo::OpenDecoder()
 
   if(!bVideoDecoderOpen)
   {
-    CLog::Log(LOGERROR, "OMXPlayerAudio : Error open video output");
+    CLog::Log(LOGERROR, "OMXPlayerVideo : Error open video output");
     m_omxVideo.Close();
   }
   else
@@ -746,7 +755,9 @@ int  OMXPlayerVideo::GetDecoderFreeSpace()
 
 void OMXPlayerVideo::WaitCompletion()
 {
-  m_omxVideo.WaitCompletion();
+  if(!m_send_eos)
+    m_omxVideo.WaitCompletion();
+  m_send_eos = true;
 }
 
 void OMXPlayerVideo::SetSpeed(int speed)
