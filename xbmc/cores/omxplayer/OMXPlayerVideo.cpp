@@ -642,18 +642,27 @@ void OMXPlayerVideo::Process()
         else if (pPacket->pts == DVD_NOPTS_VALUE)
           output_pts = pPacket->dts;
         else
-          output_pts = pts;
-
-        if(output_pts != DVD_NOPTS_VALUE)
-          output_pts += m_iVideoDelay;
+          output_pts = pPacket->pts;
 
         if(pPacket->pts != DVD_NOPTS_VALUE)
           pPacket->pts += m_iVideoDelay;
 
+        if(output_pts != DVD_NOPTS_VALUE)
+          output_pts += m_iVideoDelay;
+
         if(pPacket->duration == 0)
           pPacket->duration = frametime;
 
-        m_omxVideo.Decode(pPacket->pData, pPacket->iSize, pPacket->pts, pPacket->pts);
+        switch(m_hints.codec)
+        {
+          case CODEC_ID_MPEG1VIDEO:
+          case CODEC_ID_MPEG2VIDEO:
+            m_omxVideo.Decode(pPacket->pData, pPacket->iSize, pPacket->pts, pPacket->pts);
+            break;
+          default:
+            m_omxVideo.Decode(pPacket->pData, pPacket->iSize, output_pts, output_pts);
+            break;
+        }
 
         Output(pPacket->iGroupId, output_pts, bRequestDrop);
 
@@ -702,11 +711,8 @@ bool OMXPlayerVideo::OpenDecoder()
     CLog::Log(LOGINFO, "OMXPlayerVideo::OpenDecoder : Invalid framerate %d, using forced 25fps and just trust timestamps\n", (int)m_fFrameRate);
     m_fFrameRate = 25;
   }
-  // use aspect in stream if available
-  if (m_hints.forced_aspect)
-    m_fForcedAspectRatio = m_hints.aspect;
-  else
-    m_fForcedAspectRatio = 0.0;
+  // use aspect in stream always
+  m_fForcedAspectRatio = m_hints.aspect;
 
   m_av_clock->Lock();
   m_av_clock->OMXStop(false);
