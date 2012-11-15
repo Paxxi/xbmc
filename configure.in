@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([xbmc], [11.9.7], [http://trac.xbmc.org])
+AC_INIT([xbmc], [12.0b1], [http://trac.xbmc.org])
 AC_CONFIG_HEADERS([xbmc/config.h])
 AH_TOP([#pragma once])
 m4_include([m4/ax_python_devel.m4])
@@ -1141,15 +1141,18 @@ if test "x$use_pulse" != "xno"; then
     fi
     USE_PULSE=0
   else
-    AC_CHECK_LIB([pulse], [main],,
-      [if test "x$use_pulse" = "xyes"; then
-        AC_MSG_ERROR($pulse_not_found)
-      else
-        use_pulse=no
-        USE_PULSE=0
-        AC_MSG_RESULT($pulse_not_found)
-      fi])
+    AC_CHECK_LIB([pulse],[main],,pulse_found="no")
+    AC_CHECK_LIB([pulse-simple],[main],,pulse_found="no")
+
+    if test "x$pulse_found" != "xno"; then
       USE_PULSE=1
+    elif test "x$use_pulse" = "xyes"; then
+      AC_MSG_ERROR($pulse_not_found)
+    else
+      use_pulse=no
+      USE_PULSE=0
+      AC_MSG_RESULT($pulse_not_found)
+    fi
   fi
 else
   AC_MSG_RESULT($pulse_disabled)
