@@ -581,19 +581,6 @@ retry:
 
   if (!m_pInputStream->Open(m_filename.c_str(), m_mimetype))
   {
-      if(m_pInputStream->IsStreamType(DVDSTREAM_TYPE_DVD))
-      {
-        CLog::Log(LOGERROR, "CDVDPlayer::OpenInputStream - failed to open [%s] as DVD ISO, trying Bluray", m_filename.c_str());
-        m_mimetype = "bluray/iso";
-        filename = m_filename;
-        filename = filename + "/BDMV/index.bdmv";
-        int title = (int)m_item.GetProperty("BlurayStartingTitle").asInteger();
-        if( title )
-          filename.AppendFormat("?title=%d",title);
-
-        m_filename = filename;
-        goto retry;
-      }
     CLog::Log(LOGERROR, "CDVDPlayer::OpenInputStream - error opening [%s]", m_filename.c_str());
     return false;
   }
@@ -1085,9 +1072,9 @@ void CDVDPlayer::Process()
       continue;
     }
 
-    // always yield to players if they have data
-    if((m_dvdPlayerAudio.HasData() || m_CurrentAudio.id < 0)
-    && (m_dvdPlayerVideo.HasData() || m_CurrentVideo.id < 0))
+    // always yield to players if they have data levels > 50 percent
+    if((m_dvdPlayerAudio.GetLevel() > 50 || m_CurrentAudio.id < 0)
+    && (m_dvdPlayerVideo.GetLevel() > 50 || m_CurrentVideo.id < 0))
       Sleep(0);
 
     DemuxPacket* pPacket = NULL;

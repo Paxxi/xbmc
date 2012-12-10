@@ -391,6 +391,11 @@ bool CGUIWindowVideoNav::GetDirectory(const CStdString &strDirectory, CFileItemL
 
 void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items)
 {
+  LoadVideoInfo(items, m_database);
+}
+
+void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items, CVideoDatabase &database, bool allowReplaceLabels)
+{
   // TODO: this could possibly be threaded as per the music info loading,
   //       we could also cache the info
   if (!items.GetContent().IsEmpty() && !items.IsPlugin())
@@ -400,7 +405,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items)
   // determine content only if it isn't set
   if (content.IsEmpty())
   {
-    content = m_database.GetContentForPath(items.GetPath());
+    content = database.GetContentForPath(items.GetPath());
     items.SetContent(content.IsEmpty() ? "files" : content);
   }
 
@@ -416,7 +421,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items)
     setting is enabled.
     */
   const bool stackItems    = items.GetProperty("isstacked").asBoolean() || (StackingAvailable(items) && g_settings.m_videoStacking);
-  const bool replaceLabels = g_guiSettings.GetBool("myvideos.replacelabels");
+  const bool replaceLabels = allowReplaceLabels && g_guiSettings.GetBool("myvideos.replacelabels");
 
   CFileItemList dbItems;
   /* NOTE: In the future when GetItemsForPath returns all items regardless of whether they're "in the library"
@@ -424,7 +429,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items)
   bool fetchedPlayCounts = false;
   if (!content.IsEmpty())
   {
-    m_database.GetItemsForPath(content, items.GetPath(), dbItems);
+    database.GetItemsForPath(content, items.GetPath(), dbItems);
     dbItems.SetFastLookup(true);
   }
 
@@ -460,7 +465,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items)
                 This code can be removed once the content tables are always filled */
       if (!pItem->m_bIsFolder && !fetchedPlayCounts)
       {
-        m_database.GetPlayCounts(items.GetPath(), items);
+        database.GetPlayCounts(items.GetPath(), items);
         fetchedPlayCounts = true;
       }
       
@@ -1207,6 +1212,7 @@ bool CGUIWindowVideoNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       VECSOURCES sources=g_settings.m_videoSources;
       g_mediaManager.GetLocalDrives(sources);
       CStdString result;
+      CGUIDialogVideoInfo::AddItemPathToFileBrowserSources(sources, *item);
       if (!CGUIDialogFileBrowser::ShowAndGetImage(items, sources,
                                                   g_localizeStrings.Get(13511), result))
       {
@@ -1404,6 +1410,7 @@ void CGUIWindowVideoNav::OnChooseFanart(const CFileItem &videoItem)
   CStdString result;
   VECSOURCES sources(g_settings.m_videoSources);
   g_mediaManager.GetLocalDrives(sources);
+  CGUIDialogVideoInfo::AddItemPathToFileBrowserSources(sources, item);
   bool flip=false;
   if (!CGUIDialogFileBrowser::ShowAndGetImage(items, sources, g_localizeStrings.Get(20437), result, &flip, 20445) || result.Equals("fanart://Current"))
     return;

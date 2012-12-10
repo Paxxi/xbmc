@@ -27,6 +27,7 @@
 #include <taglib/id3v2tag.h>
 #include <taglib/apetag.h>
 #include <taglib/xiphcomment.h>
+#include <taglib/id3v1genres.h>
 
 #include <taglib/textidentificationframe.h>
 #include <taglib/uniquefileidentifierframe.h>
@@ -44,11 +45,28 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "utils/CharsetConverter.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace std;
 using namespace TagLib;
 using namespace MUSIC_INFO;
+
+class TagStringHandler : public ID3v2::Latin1StringHandler
+{
+public:
+  TagStringHandler() {}
+  virtual ~TagStringHandler() {}
+  virtual String parse(const ByteVector &data) const
+  {
+    CStdString strSource(data.data(), data.size());
+    CStdString strUTF8;
+    g_charsetConverter.unknownToUTF8(strSource, strUTF8);
+    return String(strUTF8, String::UTF8);
+  }
+};
+
+static const TagStringHandler StringHandler;
 
 CTagLoaderTagLib::CTagLoaderTagLib()
 {
@@ -84,6 +102,7 @@ bool CTagLoaderTagLib::Load(const string& strFileName, CMusicInfoTag& tag, Embed
     return false;
   }
   
+  ID3v2::Tag::setLatin1StringHandler(&StringHandler);
   TagLib::File*              file = NULL;
   TagLib::APE::File*         apeFile = NULL;
   TagLib::ASF::File*         asfFile = NULL;
@@ -134,6 +153,7 @@ bool CTagLoaderTagLib::Load(const string& strFileName, CMusicInfoTag& tag, Embed
     if (!file || !file->isValid())
     {
       delete file;
+      oggFlacFile = NULL;
       file = oggVorbisFile = new Ogg::Vorbis::File(stream);
     }
   }
@@ -626,8 +646,24 @@ void CTagLoaderTagLib::SetAlbumArtist(CMusicInfoTag &tag, const vector<string> &
 
 void CTagLoaderTagLib::SetGenre(CMusicInfoTag &tag, const vector<string> &values)
 {
-  if (values.size() == 1)
-    tag.SetGenre(values[0]);
+  /*
+   TagLib doesn't resolve ID3v1 genre numbers in the case were only
+   a number is specified, thus this workaround.
+   */
+  vector<string> genres;
+  for (vector<string>::const_iterator i = values.begin(); i != values.end(); ++i)
+  {
+    string genre = *i;
+    if (StringUtils::IsNaturalNumber(genre))
+    {
+      int number = strtol(i->c_str(), NULL, 10);
+      if (number >= 0 && number < 256)
+        genre = ID3v1::genre(number).to8Bit(true);
+    }
+    genres.push_back(genre);
+  }
+  if (genres.size() == 1)
+    tag.SetGenre(genres[0]);
   else
-    tag.SetGenre(values);
+    tag.SetGenre(genres);
 }

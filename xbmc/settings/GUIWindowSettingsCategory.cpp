@@ -1536,6 +1536,14 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
     CStdString strLanguage = pControl->GetCurrentLabel();
     if (strLanguage != ".svn" && strLanguage != pSettingString->GetData())
       g_guiSettings.SetLanguage(strLanguage);
+
+    // user set language, no longer use the TV's language
+    vector<CPeripheral *> cecDevices;
+    if (g_peripherals.GetPeripheralsWithFeature(cecDevices, FEATURE_CEC) > 0)
+    {
+      for (vector<CPeripheral *>::iterator it = cecDevices.begin(); it != cecDevices.end(); it++)
+        (*it)->SetSetting("use_tv_menu_language", false);
+    }
   }
   else if (strSetting.Equals("lookandfeel.skintheme"))
   { //a new Theme was chosen
@@ -1954,7 +1962,12 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
     {
       CGUISpinControlEx *pControl = (CGUISpinControlEx *)GetControl(pSettingControl->GetID());
 #if defined(TARGET_DARWIN)
-      g_guiSettings.SetString("audiooutput.audiodevice", pControl->GetCurrentLabel());
+      // save the sinkname - since we don't have sinks on osx
+      // we need to get the fitting sinkname for the device label from the
+      // factory
+      std::string label2sink = pControl->GetCurrentLabel();
+      CAEFactory::VerifyOutputDevice(label2sink, false);
+      g_guiSettings.SetString("audiooutput.audiodevice", label2sink.c_str());
 #else
       g_guiSettings.SetString("audiooutput.audiodevice", m_AnalogAudioSinkMap[pControl->GetCurrentLabel()]);
 #endif
@@ -2761,7 +2774,7 @@ void CGUIWindowSettingsCategory::FillInViewModes(CSetting *pSetting, int windowI
     window->Initialize();
     for (int i = 50; i < 60; i++)
     {
-      CGUIBaseContainer *control = (CGUIBaseContainer *)window->GetControl(i);
+      IGUIContainer *control = (IGUIContainer *)window->GetControl(i);
       if (control)
       {
         int type = (control->GetType() << 16) | i;
@@ -2870,8 +2883,6 @@ void CGUIWindowSettingsCategory::FillInAudioDevices(CSetting* pSetting, bool Pas
     m_AnalogAudioSinkMap["Error - no devices found"] = "null:";
   }
 
-  int numberSinks = 0;
-
   int selectedValue = -1;
   AEDeviceList sinkList;
   CAEFactory::EnumerateOutputDevices(sinkList, Passthrough);
@@ -2879,7 +2890,6 @@ void CGUIWindowSettingsCategory::FillInAudioDevices(CSetting* pSetting, bool Pas
   if (sinkList.size()==0)
   {
     pControl->AddLabel("Error - no devices found", 0);
-    numberSinks = 1;
     selectedValue = 0;
   }
   else
@@ -2903,7 +2913,6 @@ void CGUIWindowSettingsCategory::FillInAudioDevices(CSetting* pSetting, bool Pas
       i++;
     }
 
-    numberSinks = sinkList.size();
 #if !defined(TARGET_DARWIN)
   }
 #endif
