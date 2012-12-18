@@ -1353,8 +1353,16 @@ bool CApplication::Initialize()
       CJSONRPC::Initialize();
 #endif
       ADDON::CAddonMgr::Get().StartServices(false);
-      StartPVRManager();
-      g_windowManager.ActivateWindow(g_SkinInfo->GetFirstWindow());
+      if (g_SkinInfo->GetFirstWindow() == WINDOW_PVR)
+      {
+        g_windowManager.ActivateWindow(WINDOW_HOME);
+        StartPVRManager(true);
+      }
+      else
+      {
+        StartPVRManager(false);
+        g_windowManager.ActivateWindow(g_SkinInfo->GetFirstWindow());
+      }
     }
 
   }
@@ -1396,7 +1404,7 @@ bool CApplication::Initialize()
 
 #ifdef HAS_SDL_JOYSTICK
   g_Joystick.SetEnabled(g_guiSettings.GetBool("input.enablejoystick") &&
-                    (CPeripheralImon::GetCountOfImonsConflictWithDInput() == 0 || !g_guiSettings.GetBool("input.disablejoystickwithimon")) );
+                    CPeripheralImon::GetCountOfImonsConflictWithDInput() == 0 );
 #endif
 
   return true;
@@ -1793,10 +1801,10 @@ void CApplication::StopZeroconf()
 #endif
 }
 
-void CApplication::StartPVRManager()
+void CApplication::StartPVRManager(bool bOpenPVRWindow /* = false */)
 {
   if (g_guiSettings.GetBool("pvrmanager.enabled"))
-    g_PVRManager.Start(true);
+    g_PVRManager.Start(true, bOpenPVRWindow);
 }
 
 void CApplication::StopPVRManager()
@@ -3839,7 +3847,9 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     g_settings.m_currentVideoSettings = g_settings.m_defaultVideoSettings;
     // see if we have saved options in the database
 
-    m_iPlaySpeed = 1;
+    SetPlaySpeed(1);
+    m_iPlaySpeed = 1;     // Reset both CApp's & Player's speed else we'll get confused
+
     *m_itemCurrentFile = item;
     m_nextPlaylistItem = -1;
     m_currentStackPosition = 0;
