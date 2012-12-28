@@ -27,9 +27,11 @@
 #include "config.h"
 #endif
 
+#include <stdint.h>
+#include <WinSock2.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
+//#include <inttypes.h>
 #include <limits.h>
 #include <string.h>  /* For memset */
 #include <sys/time.h>
@@ -581,7 +583,7 @@ static int32_t eval_command(uint8_t *bytes, registers_t* registers, link_t *retu
 
   if(command.instruction & ~ command.examined) {
     fprintf(MSG_OUT, "libdvdnav: decoder.c: [WARNING, unknown bits:");
-    fprintf(MSG_OUT, " %08"PRIx64, (command.instruction & ~ command.examined) );
+    fprintf(MSG_OUT, " %08I64x", (command.instruction & ~ command.examined) );
     fprintf(MSG_OUT, "]\n");
   }
 

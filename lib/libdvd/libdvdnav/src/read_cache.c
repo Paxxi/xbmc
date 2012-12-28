@@ -28,7 +28,9 @@
 #include "config.h"
 #endif
 
-#include <inttypes.h>
+#include <stdint.h>
+#include <WinSock2.h>
+//#include <inttypes.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <sys/time.h>

@@ -33,7 +33,9 @@
 #endif
 #endif /* _MSC_VER */
 
-#include <inttypes.h>
+#include <stdint.h>
+#include <WinSock2.h>
+//#include <inttypes.h>
 #include <limits.h>
 #include <sys/time.h>
 #include "dvdnav/dvdnav.h"

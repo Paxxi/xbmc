@@ -696,7 +696,8 @@ typedef struct {
   uint8_t  zero_1;
   uint16_t nr_of_entries;
   map_ent_t *map_ent;
-} ATTRIBUTE_PACKED vts_tmap_t;
+//} ATTRIBUTE_PACKED vts_tmap_t;
+} vts_tmap_t;
 #define VTS_TMAP_SIZE 4U
 
 /**

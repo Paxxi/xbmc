@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="dvdcss">
+      <UniqueIdentifier>{294c035e-2dda-48f5-8a1d-d60f90114445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdnav">
+      <UniqueIdentifier>{411b50c8-ef01-44f8-8f8f-80b0effcdfbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdread">
+      <UniqueIdentifier>{d3189157-95d7-40d2-8847-5c770bd2b147}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\libdvdcss.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\dvdcss\dvdcss.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\bsdi_dvd.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\common.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\css.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\csstables.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\device.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\ioctl.h">
+      <Filter>dvdcss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\read_cache.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\remap.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav\dvdnav.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav\dvdnav_events.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav\dvd_types.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\vm\decoder.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\vm\vm.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\vm\vmcmd.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav_internal.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\md5.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\bitreader.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\dvd_reader.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\dvd_udf.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\ifo_print.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\ifo_read.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\ifo_types.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\nav_print.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\nav_read.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread\nav_types.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\bswap.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvd_input.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\src\dvdread_internal.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdread\msvc\config.h">
+      <Filter>dvdread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\libdvd\libdvdnav\msvc\config.h">
+      <Filter>dvdnav</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\bsdi_ioctl.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\css.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\device.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\error.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\ioctl.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\libdvdcss.c">
+      <Filter>dvdcss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\remap.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\searching.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\settings.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\vm\decoder.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\vm\vm.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\vm\vmcmd.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\dvdnav.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\highlight.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\navigation.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\read_cache.c">
+      <Filter>dvdnav</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\md5.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\nav_print.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\nav_read.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\bitreader.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\dvd_input.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\dvd_reader.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\dvd_udf.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\ifo_print.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libdvd\libdvdread\src\ifo_read.c">
+      <Filter>dvdread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\lib\libdvd\libdvdnav\src\README.MAP">
+      <Filter>dvdnav</Filter>
+    </None>
+    <None Include="..\..\lib\libdvd\libdvdnav\src\FELLOWSHIP.map">
+      <Filter>dvdnav</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -8,6 +8,7 @@
 /* #undef HAVE_INTTYPES_H */
 #define HAVE_MEMORY_H 1
 /* #undef HAVE_STDINT_H */
+#define HAVE_STDINT_H 1
 #define HAVE_STDLIB_H 1
 #define HAVE_STRINGS_H 1
 #define HAVE_STRING_H 1
@@ -43,7 +44,7 @@
 #define S_ISCHR(m) 0
 
 /* Fallback types (very x86-centric, sorry) */
-typedef unsigned char       uint8_t;
+/*typedef unsigned char       uint8_t;
 typedef signed char         int8_t;
 typedef unsigned short      uint16_t;
 typedef signed short        int16_t;
@@ -52,5 +53,5 @@ typedef signed int          int32_t;
 typedef unsigned __int64    uint64_t;
 typedef signed __int64      int64_t;
 typedef unsigned int        uintptr_t;
-
+*/
 #endif /* LIBDVDREAD_CONFIG_H */
