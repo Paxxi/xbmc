@@ -525,12 +525,18 @@ static int libc_open ( dvdcss_t dvdcss, char const *psz_device )
 #if defined( WIN32 )
 static int win2k_open ( dvdcss_t dvdcss, char const *psz_device )
 {
+#ifdef WITH_CACHE
+  DWORD flags = FILE_FLAG_NO_BUFFERING; /* we handle buffering ourself */
+#else
+  DWORD flags = FILE_FLAG_RANDOM_ACCESS;
+#endif //!_XBOX
+
 #ifdef _XBOX
     char psz_dvd[70];
     strcpy(psz_dvd, "cdrom0:");
 #else
     char psz_dvd[7];
-    snprintf( psz_dvd, 7, "\\\\.\\%c:", psz_device[0] );
+    _snprintf( psz_dvd, 7, "\\\\.\\%c:", psz_device[0] );
 
 #endif
     /* To work around an M$ bug in IOCTL_DVD_READ_STRUCTURE, we need read
@@ -541,12 +547,6 @@ static int win2k_open ( dvdcss_t dvdcss, char const *psz_device )
      * won't send back the right result).
      * (See Microsoft Q241374: Read and Write Access Required for SCSI
      * Pass Through Requests) */
-
-#ifdef WITH_CACHE
-    DWORD flags = FILE_FLAG_NO_BUFFERING; /* we handle buffering ourself */
-#else
-    DWORD flags = FILE_FLAG_RANDOM_ACCESS;
-#endif //!_XBOX
 
     dvdcss->i_fd = (int)
                 CreateFile( psz_dvd, GENERIC_READ | GENERIC_WRITE,

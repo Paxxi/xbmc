@@ -1257,6 +1257,7 @@ int DVDReadBlocksCached( dvd_file_t *dvd_file, int offset,
 		       size_t block_count, unsigned char *data, int encrypted )
 {
     int ret=0;
+    int cachehit = 0;
     /* Check arguments. */
     if( dvd_file == NULL || offset < 0 || data == NULL )
       return -1;
@@ -1276,7 +1277,6 @@ int DVDReadBlocksCached( dvd_file_t *dvd_file, int offset,
     }
 
     /* check if first sector is in cache */
-    int cachehit = 0;
     if( offset == dvd_file->lb_cache ) {
       memcpy( data, dvd_file->cache, DVD_VIDEO_LB_LEN );
       block_count--;

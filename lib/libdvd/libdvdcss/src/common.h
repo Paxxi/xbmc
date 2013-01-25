@@ -66,7 +66,7 @@ typedef _off_t off_t;
 #   endif
 
 #   if defined( _MSC_VER )
-#       define lseek _lseeki64
+//#       define lseek _lseeki64
 #       if !defined( _OFF_T_DEFINED )
 typedef __int64 off_t;
 #           define _OFF_T_DEFINED

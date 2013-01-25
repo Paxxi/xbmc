@@ -327,7 +327,7 @@ LIBDVDCSS_EXPORT dvdcss_t dvdcss_open ( char *psz_target )
                 }
             }
 #endif
-            snprintf( psz_buffer + home_pos, PATH_MAX - home_pos,
+            _snprintf( psz_buffer + home_pos, PATH_MAX - home_pos,
                       "%s/.dvdcss", psz_home );
             psz_buffer[PATH_MAX-1] = '\0';
             psz_cache = psz_buffer;

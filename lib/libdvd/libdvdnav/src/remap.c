@@ -206,7 +206,7 @@ remap_t* remap_loadmap( char *title) {
         fprintf(MSG_OUT, "libdvdnav: Unable to find home directory" );
         return NULL;
     }
-    snprintf(fname, sizeof(fname), "%s/.dvdnav/%s.map", home, title);
+    _snprintf(fname, sizeof(fname), "%s/.dvdnav/%s.map", home, title);
 
     /* Open the map file */
     fp = fopen( fname, "r");

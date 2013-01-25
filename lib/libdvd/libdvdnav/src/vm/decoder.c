@@ -98,7 +98,7 @@ static uint16_t get_GPRM(registers_t* registers, uint8_t reg) {
 
 static void set_GPRM(registers_t* registers, uint8_t reg, uint16_t value) {
   if (registers->GPRM_mode[reg] & 0x01) {
-    struct timeval current_time;
+    timeval current_time;
     /* Counter mode */
     /* fprintf(MSG_OUT, "libdvdnav: Setting counter %d\n",reg); */
     gettimeofday(&current_time, NULL);

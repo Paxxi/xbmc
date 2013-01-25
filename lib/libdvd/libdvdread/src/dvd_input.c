@@ -51,6 +51,7 @@ char *      (*dvdinput_error) (dvd_input_t);
 /* dlopening libdvdcss */
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
+#include <dlfcn.c>
 #else
 /* Only needed on MINGW at the moment */
 #include "../../msvc/contrib/dlfcn.c"

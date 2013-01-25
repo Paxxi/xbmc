@@ -1317,6 +1317,7 @@ int dvdnav_get_button_info(dvdnav_t* this, int alpha[2][4], int color[2][4])
 
 dvdnav_status_t dvdnav_get_audio_info(dvdnav_t * self, int32_t streamid, audio_attr_t* audio_attributes)
 {
+    audio_attr_t attributes;
     if(!self) {
         printerr("Passed a NULL pointer.");
         return -1;
@@ -1327,7 +1328,7 @@ dvdnav_status_t dvdnav_get_audio_info(dvdnav_t * self, int32_t streamid, audio_a
     }
 
     pthread_mutex_lock(&self->vm_lock);
-    audio_attr_t attributes = vm_get_audio_attr(self->vm,streamid);
+    attributes = vm_get_audio_attr(self->vm,streamid);
     pthread_mutex_unlock(&self->vm_lock);
 	audio_attributes->audio_format = attributes.audio_format;
 	audio_attributes->multichannel_extension = attributes.multichannel_extension; 
@@ -1347,6 +1348,7 @@ dvdnav_status_t dvdnav_get_audio_info(dvdnav_t * self, int32_t streamid, audio_a
 dvdnav_status_t dvdnav_get_stitle_info(dvdnav_t * self
 												 , int32_t streamid, subp_attr_t* stitle_attributes)
 {
+    subp_attr_t attributes;
     if(!self) {
         printerr("Passed a NULL pointer.");
         return -1;
@@ -1357,7 +1359,7 @@ dvdnav_status_t dvdnav_get_stitle_info(dvdnav_t * self
     }
 
     pthread_mutex_lock(&self->vm_lock);
-    subp_attr_t attributes = vm_get_subp_attr(self->vm,streamid);
+    attributes = vm_get_subp_attr(self->vm,streamid);
     pthread_mutex_unlock(&self->vm_lock);
 	stitle_attributes->code_mode = attributes.code_mode;
 	stitle_attributes->zero1 = attributes.zero1;
@@ -1371,6 +1373,7 @@ dvdnav_status_t dvdnav_get_stitle_info(dvdnav_t * self
 
 dvdnav_status_t dvdnav_get_video_info(dvdnav_t * self, video_attr_t* video_attributes)
 {
+    video_attr_t attributes;
     if(!self) {
         printerr("Passed a NULL pointer.");
         return -1;
@@ -1381,7 +1384,7 @@ dvdnav_status_t dvdnav_get_video_info(dvdnav_t * self, video_attr_t* video_attri
     }
 
     pthread_mutex_lock(&self->vm_lock);
-    video_attr_t attributes = vm_get_video_attr(self->vm);
+    attributes = vm_get_video_attr(self->vm);
     pthread_mutex_unlock(&self->vm_lock);
 
     video_attributes->video_format = attributes.video_format;

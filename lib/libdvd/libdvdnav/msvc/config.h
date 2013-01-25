@@ -32,7 +32,8 @@
 #define ssize_t __int64
 
 #ifndef PATH_MAX
-#define PATH_MAX MAX_PATH
+//#include <Windows.h>
+#define PATH_MAX 260
 #endif
 
 #define strcasecmp stricmp
@@ -44,7 +45,7 @@
 #define S_ISCHR(m) 0
 
 /* Fallback types (very x86-centric, sorry) */
-/*typedef unsigned char       uint8_t;
+typedef unsigned char       uint8_t;
 typedef signed char         int8_t;
 typedef unsigned short      uint16_t;
 typedef signed short        int16_t;
@@ -53,5 +54,12 @@ typedef signed int          int32_t;
 typedef unsigned __int64    uint64_t;
 typedef signed __int64      int64_t;
 typedef unsigned int        uintptr_t;
-*/
+
+/*
+ * Structure used in select() call, taken from the BSD file sys/time.h.
+ */
+typedef struct {
+        long    tv_sec;         /* seconds */
+        long    tv_usec;        /* and microseconds */
+} timeval;
 #endif /* LIBDVNAV_CONFIG_H */

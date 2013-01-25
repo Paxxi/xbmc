@@ -109,6 +109,10 @@ dvdnav_status_t dvdnav_time_search(dvdnav_t *this,
   int32_t found;
   cell_playback_t *cell;
   dvd_state_t *state;
+  vts_tmap_t *tmap;
+  int entry;
+  uint32_t target2;
+  uint64_t timeunit;
 
   if(this->position_current.still != 0) {
     printerr("Cannot seek in a still frame.");
@@ -171,7 +175,7 @@ dvdnav_status_t dvdnav_time_search(dvdnav_t *this,
   }
 
   /* get the tmpat corresponding to the pgc */
-  vts_tmap_t *tmap = &(this->vm->vtsi->vts_tmapt->tmap[state->pgcN-1]);
+  tmap = &(this->vm->vtsi->vts_tmapt->tmap[state->pgcN-1]);
 
   if(tmap->tmu == 0){
     /* no time unit for this time map */
@@ -183,7 +187,7 @@ dvdnav_status_t dvdnav_time_search(dvdnav_t *this,
 
   /* time is in pts (90khz clock), get the number of tmu's that represent */
   /* first entry defines at time tmu not time zero */
-  int entry = time / tmap->tmu / 90000 - 1;
+  entry = time / tmap->tmu / 90000 - 1;
   if(entry > tmap->nr_of_entries)
     entry = tmap->nr_of_entries -1;
 
@@ -203,8 +207,8 @@ dvdnav_status_t dvdnav_time_search(dvdnav_t *this,
 
   if( entry < tmap->nr_of_entries - 1)
   {
-    const uint32_t target2 = tmap->map_ent[entry+1];
-    const uint64_t timeunit = tmap->tmu*90000;
+    target2 = tmap->map_ent[entry+1];
+    timeunit = tmap->tmu*90000;
     if( !( target2 & 0x80000000) )
     {
       length = target2 - target;
@@ -246,7 +250,7 @@ timemapdone:
         break;
       }
     }
-
+  }
   if(found) {
     uint32_t vobu;
 #ifdef LOG_DEBUG

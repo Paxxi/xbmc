@@ -82,7 +82,7 @@ typedef struct {
   uint16_t SPRM[24];
   uint16_t GPRM[16];
   uint8_t  GPRM_mode[16];  /* Need to have some thing to indicate normal/counter mode for every GPRM */
-  struct timeval GPRM_time[16]; /* For counter mode */
+  timeval GPRM_time[16]; /* For counter mode */
 } registers_t;
 
 /* a VM command data set */

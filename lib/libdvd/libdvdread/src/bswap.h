@@ -67,13 +67,19 @@
 #define B2N_32(x) x = be32toh(x)
 #define B2N_64(x) x = be64toh(x)
 
+#elif defined(WIN32)
+#include <stdlib.h>
+#define B2N_16(x) x = _byteswap_ushort(x)
+#define B2N_32(x) x = _byteswap_ulong(x)
+#define B2N_64(x) x = _byteswap_uint64(x)
+
 /* This is a slow but portable implementation, it has multiple evaluation
  * problems so beware.
  * Old FreeBSD's and Solaris don't have <byteswap.h> or any other such
  * functionality!
  */
 
-#elif defined(__FreeBSD__) || defined(__sun) || defined(__bsdi__) || defined(WIN32) || defined(__CYGWIN__) || defined(__BEOS__) || defined(__OS2__)
+#elif defined(__FreeBSD__) || defined(__sun) || defined(__bsdi__) || defined(__CYGWIN__) || defined(__BEOS__) || defined(__OS2__)
 #define B2N_16(x) \
  x = ((((x) & 0xff00) >> 8) | \
       (((x) & 0x00ff) << 8))

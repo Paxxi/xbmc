@@ -11,14 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\bsdi_dvd.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\common.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\css.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\csstables.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\device.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\dvdcss\dvdcss.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\ioctl.h" />
-    <ClInclude Include="..\..\lib\libdvd\libdvdcss\src\libdvdcss.h" />
     <ClInclude Include="..\..\lib\libdvd\libdvdnav\msvc\config.h" />
     <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav\dvdnav.h" />
     <ClInclude Include="..\..\lib\libdvd\libdvdnav\src\dvdnav\dvdnav_events.h" />
@@ -45,12 +37,6 @@
     <ClInclude Include="..\..\lib\libdvd\libdvdread\src\md5.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\bsdi_ioctl.c" />
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\css.c" />
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\device.c" />
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\error.c" />
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\ioctl.c" />
-    <ClCompile Include="..\..\lib\libdvd\libdvdcss\src\libdvdcss.c" />
     <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\dvdnav.c" />
     <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\highlight.c" />
     <ClCompile Include="..\..\lib\libdvd\libdvdnav\src\navigation.c" />
@@ -72,8 +58,7 @@
     <ClCompile Include="..\..\lib\libdvd\libdvdread\src\nav_read.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\lib\libdvd\libdvdnav\src\FELLOWSHIP.map" />
-    <None Include="..\..\lib\libdvd\libdvdnav\src\README.MAP" />
+    <None Include="..\..\lib\libdvd\libdvdnav\msvc\libdvdnav.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E1113475-7FDB-4387-AE86-8BC431D9E597}</ProjectGuid>
@@ -84,7 +69,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110_xp</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -106,7 +91,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
+    <OutDir>XBMC\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include</IncludePath>
   </PropertyGroup>
@@ -119,15 +104,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>HAVE_CONFIG_H;HAVE_STDINT_H;WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBDVDNAV_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_XBMC;HAVE_CONFIG_H;HAVE_STDINT_H;WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBDVDNAV_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>..\..\lib\libdvd\libdvdread\src\dvdread;..\..\lib\libdvd\libdvdread\src;..\..\lib\libdvd\libdvdnav\src\dvdnav;..\..\lib\libdvd\libdvdnav\src;..\..\lib\libdvd\libdvdnav\msvc\contrib\dirent\;..\..\lib\libdvd\libdvdnav\msvc\;..\..\lib\libdvd\libdvdnav\msvc\include\;..\..\lib\libdvd\libdvdread\msvc\;..\..\lib\libdvd\libdvdread\msvc\include</AdditionalIncludeDirectories>
+      <CompileAs>Default</CompileAs>
+      <AdditionalIncludeDirectories>..\..\lib\libdvd\libdvdnav\msvc\contrib;..\..\lib\libdvd\libdvdread\src\dvdread;..\..\lib\libdvd\libdvdread\src;..\..\lib\libdvd\libdvdnav\src\dvdnav;..\..\lib\libdvd\libdvdnav\src;..\..\lib\libdvd\libdvdnav\msvc\contrib\dirent\;..\..\lib\libdvd\libdvdnav\msvc\;..\..\lib\libdvd\libdvdnav\msvc\include\;..\..\lib\libdvd\libdvdread\msvc\;..\..\lib\libdvd\libdvdread\msvc\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>..\..\lib\libdvd\libdvdnav\msvc\libdvdnav.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
