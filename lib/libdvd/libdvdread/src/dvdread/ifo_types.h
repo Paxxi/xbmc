@@ -205,16 +205,16 @@ typedef uint8_t pgc_program_map_t;
  * Cell Playback Information.
  */
 typedef struct {
-  unsigned int block_mode       : 2;
-  unsigned int block_type       : 2;
-  unsigned int seamless_play    : 1;
-  unsigned int interleaved      : 1;
-  unsigned int stc_discontinuity: 1;
-  unsigned int seamless_angle   : 1;
+  uint16_t block_mode       : 2;
+  uint16_t block_type       : 2;
+  uint16_t seamless_play    : 1;
+  uint16_t interleaved      : 1;
+  uint16_t stc_discontinuity: 1;
+  uint16_t seamless_angle   : 1;
 
-  unsigned int playback_mode    : 1;  /**< When set, enter StillMode after each VOBU */
-  unsigned int restricted       : 1;  /**< ?? drop out of fastforward? */
-  unsigned int unknown2         : 6;
+  uint16_t playback_mode    : 1;  /**< When set, enter StillMode after each VOBU */
+  uint16_t restricted       : 1;  /**< ?? drop out of fastforward? */
+  uint16_t unknown2         : 6;
   uint8_t still_time;
   uint8_t cell_cmd_nr;
   dvd_time_t playback_time;
@@ -436,14 +436,14 @@ typedef struct {
 } ATTRIBUTE_PACKED vmgi_mat_t;
 
 typedef struct {
-  unsigned int zero_1                    : 1;
-  unsigned int multi_or_random_pgc_title : 1; /* 0: one sequential pgc title */
-  unsigned int jlc_exists_in_cell_cmd    : 1;
-  unsigned int jlc_exists_in_prepost_cmd : 1;
-  unsigned int jlc_exists_in_button_cmd  : 1;
-  unsigned int jlc_exists_in_tt_dom      : 1;
-  unsigned int chapter_search_or_play    : 1; /* UOP 1 */
-  unsigned int title_or_time_play        : 1; /* UOP 0 */
+  uint8_t zero_1                    : 1;
+  uint8_t multi_or_random_pgc_title : 1; /* 0: one sequential pgc title */
+  uint8_t jlc_exists_in_cell_cmd    : 1;
+  uint8_t jlc_exists_in_prepost_cmd : 1;
+  uint8_t jlc_exists_in_button_cmd  : 1;
+  uint8_t jlc_exists_in_tt_dom      : 1;
+  uint8_t chapter_search_or_play    : 1; /* UOP 1 */
+  uint8_t title_or_time_play        : 1; /* UOP 0 */
 } ATTRIBUTE_PACKED playback_type_t;
 
 /**
@@ -696,8 +696,7 @@ typedef struct {
   uint8_t  zero_1;
   uint16_t nr_of_entries;
   map_ent_t *map_ent;
-//} ATTRIBUTE_PACKED vts_tmap_t;
-} vts_tmap_t;
+} ATTRIBUTE_PACKED vts_tmap_t;
 #define VTS_TMAP_SIZE 4U
 
 /**

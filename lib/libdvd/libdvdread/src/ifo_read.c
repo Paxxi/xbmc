@@ -1088,7 +1088,8 @@ int ifoRead_TT_SRPT(ifo_handle_t *ifofile) {
     B2N_32(tt_srpt->title[i].title_set_sector);
   }
 
-
+  fprintf(stderr, "title_info_t: %d\n", sizeof(title_info_t));
+  fprintf(stderr, "tt_srpt_t: %d\n", sizeof(tt_srpt_t));
   CHECK_ZERO(tt_srpt->zero_1);
   CHECK_VALUE(tt_srpt->nr_of_srpts != 0);
   CHECK_VALUE(tt_srpt->nr_of_srpts < 100); /* ?? */
