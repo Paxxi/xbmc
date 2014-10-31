@@ -24,6 +24,9 @@
 #include "utils/Utf8Utils.h"
 #include "system.h"
 
+#include <string>
+#include <unicode/ucnv.h>
+
 #include "gtest/gtest.h"
 
 static const uint16_t refutf16LE1[] = { 0xff54, 0xff45, 0xff53, 0xff54,
@@ -46,7 +49,7 @@ static const uint16_t refutf16LE2[] = { 0xff54, 0xff45, 0xff53, 0xff54,
 static const char refutf16LE3[] = "T\377E\377S\377T\377?\377S\377T\377"
                                   "R\377I\377N\377G\377#\377H\377A\377"
                                   "R\377S\377E\377T\377\064\377O\377\065"
-                                  "\377T\377F\377\030\377";
+                                  "\377T\377F\377\030\377\000";
 
 static const uint16_t refutf16LE4[] = { 0xff54, 0xff45, 0xff53, 0xff54,
                                         0xff3f, 0xff55, 0xff54, 0xff46,
@@ -82,6 +85,203 @@ static const uint16_t refucs2[] = { 0xff54, 0xff45, 0xff53, 0xff54,
                                     0xff12, 0xff54, 0xff4f, 0xff35,
                                     0xff34, 0xff26, 0xff18, 0x0 };
 
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1251.TXT
+static const uint8_t refCP1251[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xE0, 0xE1, 0xE2, 0xE3, 0xE4,
+  0xE5, 0xE6, 0xE7, 0xE8, 0xE9,
+  0xEA, 0xEB, 0xEC, 0xED, 0xEE,
+  0xEF, 0xF0, 0xF1, 0xF2, 0xF3,
+  0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
+  0xF9, 0xFA, 0xFB, 0xFC, 0xFD,
+  0xFE, 0xFF, 0x00
+};
+
+static const uint8_t CP1251asUTF8[] = {
+  0xD0, 0xB0, 0xD0, 0xB1, 0xD0, 0xB2, 0xD0, 0xB3, 0xD0, 0xB4,
+  0xD0, 0xB5, 0xD0, 0xB6, 0xD0, 0xB7, 0xD0, 0xB8, 0xD0, 0xB9,
+  0xD0, 0xBA, 0xD0, 0xBB, 0xD0, 0xBC, 0xD0, 0xBD, 0xD0, 0xBE,
+  0xD0, 0xBF, 0xD1, 0x80, 0xD1, 0x81, 0xD1, 0x82, 0xD1, 0x83,
+  0xD1, 0x84, 0xD1, 0x85, 0xD1, 0x86, 0xD1, 0x87, 0xD1, 0x88,
+  0xD1, 0x89, 0xD1, 0x8A, 0xD1, 0x8B, 0xD1, 0x8C, 0xD1, 0x8D,
+  0xD1, 0x8E, 0xD1, 0x8F, 0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
+static const uint8_t refCP1252[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xE0, 0xE1, 0xE2, 0xE3, 0xE4,
+  0xE5, 0xE6, 0xE7, 0xE8, 0xE9,
+  0xEA, 0xEB, 0xEC, 0xED, 0xEE,
+  0xEF, 0xF0, 0xF1, 0xF2, 0xF3,
+  0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
+  0xF9, 0xFA, 0xFB, 0xFC, 0xFD,
+  0xFE, 0xFF, 0x00
+};
+
+static const uint8_t CP1252asUTF8[] = {
+  0xC3, 0xA0, 0xC3, 0xA1, 0xC3, 0xA2, 0xC3, 0xA3, 0xC3, 0xA4,
+  0xC3, 0xA5, 0xC3, 0xA6, 0xC3, 0xA7, 0xC3, 0xA8, 0xC3, 0xA9,
+  0xC3, 0xAA, 0xC3, 0xAB, 0xC3, 0xAC, 0xC3, 0xAD, 0xC3, 0xAE,
+  0xC3, 0xAF, 0xC3, 0xB0, 0xC3, 0xB1, 0xC3, 0xB2, 0xC3, 0xB3,
+  0xC3, 0xB4, 0xC3, 0xB5, 0xC3, 0xB6, 0xC3, 0xB7, 0xC3, 0xB8,
+  0xC3, 0xB9, 0xC3, 0xBA, 0xC3, 0xBB, 0xC3, 0xBC, 0xC3, 0xBD,
+  0xC3, 0xBE, 0xC3, 0xBF, 0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1253.TXT
+static const uint8_t refCP1253[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xE0, 0xE1, 0xE2, 0xE3, 0xE4,
+  0xE5, 0xE6, 0xE7, 0xE8, 0xE9,
+  0xEA, 0xEB, 0xEC, 0xED, 0xEE,
+  0xEF, 0xF0, 0xF1, 0xF2, 0xF3,
+  0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
+  0xF9, 0xFA, 0xFB, 0xFC, 0xFD,
+  0xFE, 0x00
+};
+
+static const uint8_t CP1253asUTF8[] = {
+  0xCE, 0xB0, 0xCE, 0xB1, 0xCE, 0xB2, 0xCE, 0xB3, 0xCE, 0xB4,
+  0xCE, 0xB5, 0xCE, 0xB6, 0xCE, 0xB7, 0xCE, 0xB8, 0xCE, 0xB9,
+  0xCE, 0xBA, 0xCE, 0xBB, 0xCE, 0xBC, 0xCE, 0xBD, 0xCE, 0xBE,
+  0xCE, 0xBF, 0xCF, 0x80, 0xCF, 0x81, 0xCF, 0x82, 0xCF, 0x83,
+  0xCF, 0x84, 0xCF, 0x85, 0xCF, 0x86, 0xCF, 0x87, 0xCF, 0x88,
+  0xCF, 0x89, 0xCF, 0x8A, 0xCF, 0x8B, 0xCF, 0x8C, 0xCF, 0x8D,
+  0xCF, 0x8E, 0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1255.TXT
+static const uint8_t refCP1255[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xE0, 0xE1, 0xE2, 0xE3, 0xE4,
+  0xE5, 0xE6, 0xE7, 0xE8, 0xE9,
+  0xEA, 0xEB, 0xEC, 0xED, 0xEE,
+  0xEF, 0xF0, 0xF1, 0xF2, 0xF3,
+  0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
+  0xF9, 0xFA, 0x00
+};
+
+static const uint8_t CP1255asUTF8[] = {
+  0xD7, 0x90, 0xD7, 0x91, 0xD7, 0x92, 0xD7, 0x93, 0xD7, 0x94,
+  0xD7, 0x95, 0xD7, 0x96, 0xD7, 0x97, 0xD7, 0x98, 0xD7, 0x99,
+  0xD7, 0x9A, 0xD7, 0x9B, 0xD7, 0x9C, 0xD7, 0x9D, 0xD7, 0x9E,
+  0xD7, 0x9F, 0xD7, 0xA0, 0xD7, 0xA1, 0xD7, 0xA2, 0xD7, 0xA3,
+  0xD7, 0xA4, 0xD7, 0xA5, 0xD7, 0xA6, 0xD7, 0xA7, 0xD7, 0xA8,
+  0xD7, 0xA9, 0xD7, 0xAA, 0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1256.TXT
+static const uint8_t refCP1256[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xC0, 0xC1, 0xC2, 0xC3, 0xC4,
+  0xC5, 0xC6, 0xC7, 0xC8, 0xC9,
+  0xCA, 0xCB, 0xCC, 0xCD, 0xCE,
+  0xCF, 0xD0, 0xD1, 0xD2, 0xD3,
+  0xD4, 0xD5, 0xD6, 0xD8, 0xD9,
+  0xDA, 0xDB, 0xDC, 0xDD, 0xDE,
+  0xDF, 0x00
+};
+
+static const uint8_t CP1256asUTF8[] = {
+  0xDB, 0x81, 0xD8, 0xA1, 0xD8, 0xA2, 0xD8, 0xA3, 0xD8, 0xA4,
+  0xD8, 0xA5, 0xD8, 0xA6, 0xD8, 0xA7, 0xD8, 0xA8, 0xD8, 0xA9,
+  0xD8, 0xAA, 0xD8, 0xAB, 0xD8, 0xAC, 0xD8, 0xAD, 0xD8, 0xAE,
+  0xD8, 0xAF, 0xD8, 0xB0, 0xD8, 0xB1, 0xD8, 0xB2, 0xD8, 0xB3,
+  0xD8, 0xB4, 0xD8, 0xB5, 0xD8, 0xB6, 0xD8, 0xB7, 0xD8, 0xB8,
+  0xD8, 0xB9, 0xD8, 0xBA, 0xD9, 0x80, 0xD9, 0x81, 0xD9, 0x82,
+  0xD9, 0x83, 0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP874.TXT
+static const uint8_t refCP874[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xE0, 0xE1, 0xE2, 0xE3,
+  0xE4, 0xE5, 0xE6, 0xE7,
+  0xE8, 0xE9, 0xEA, 0xEB,
+  0xEC, 0xED, 0xEE, 0xEF,
+  0xF0, 0xF1, 0xF2, 0xF3,
+  0xF4, 0xF5, 0xF6, 0xF7,
+  0xF8, 0xF9, 0xFA, 0xFB,
+  0x00
+};
+
+static const uint8_t CP874asUTF8[] = {
+  //uses 3 bytes
+  0xE0, 0xB9, 0x80, 0xE0, 0xB9, 0x81, 0xE0, 0xB9, 0x82, 0xE0, 0xB9, 0x83,
+  0xE0, 0xB9, 0x84, 0xE0, 0xB9, 0x85, 0xE0, 0xB9, 0x86, 0xE0, 0xB9, 0x87,
+  0xE0, 0xB9, 0x88, 0xE0, 0xB9, 0x89, 0xE0, 0xB9, 0x8A, 0xE0, 0xB9, 0x8B,
+  0xE0, 0xB9, 0x8C, 0xE0, 0xB9, 0x8D, 0xE0, 0xB9, 0x8E, 0xE0, 0xB9, 0x8F,
+  0xE0, 0xB9, 0x90, 0xE0, 0xB9, 0x91, 0xE0, 0xB9, 0x92, 0xE0, 0xB9, 0x93,
+  0xE0, 0xB9, 0x94, 0xE0, 0xB9, 0x95, 0xE0, 0xB9, 0x96, 0xE0, 0xB9, 0x97,
+  0xE0, 0xB9, 0x98, 0xE0, 0xB9, 0x99, 0xE0, 0xB9, 0x9A, 0xE0, 0xB9, 0x9B,
+  0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP932.TXT
+static const uint8_t refCP932[] = {
+  //match column width with utf8 version to make it easier to spot any errors
+  //or make changes
+  0xC0, 0xC1, 0xC2, 0xC3,
+  0xC4, 0xC5, 0xC6, 0xC7,
+  0xC8, 0xC9, 0xCA, 0xCB,
+  0xCC, 0xCD, 0xCE, 0xCF,
+  0x00
+};
+
+static const uint8_t CP932asUTF8[] = {
+  //uses 3 bytes
+  0xEF, 0xBE, 0x80, 0xEF, 0xBE, 0x81, 0xEF, 0xBE, 0x82, 0xEF, 0xBE, 0x83,
+  0xEF, 0xBE, 0x84, 0xEF, 0xBE, 0x85, 0xEF, 0xBE, 0x86, 0xEF, 0xBE, 0x87,
+  0xEF, 0xBE, 0x88, 0xEF, 0xBE, 0x89, 0xEF, 0xBE, 0x8A, 0xEF, 0xBE, 0x8B,
+  0xEF, 0xBE, 0x8C, 0xEF, 0xBE, 0x8D, 0xEF, 0xBE, 0x8E, 0xEF, 0xBE, 0x8F,
+  0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP932.TXT
+static const uint8_t refCP932Hiranga[] = {
+  //uses 2 bytes
+  0x82, 0xB0, 0x82, 0xB1, 0x82, 0xB2, 0x82, 0xB3,
+  0x82, 0xB4, 0x82, 0xB5, 0x82, 0xB6, 0x82, 0xB7,
+  0x82, 0xB8, 0x82, 0xB9, 0x82, 0xBA, 0x82, 0xBB,
+  0x82, 0xBC, 0x82, 0xBD, 0x82, 0xBE, 0x82, 0xBF,
+  0x00
+};
+
+static const uint8_t CP932HirangaAsUTF8[] = {
+  //uses 3 bytes
+  0xE3, 0x81, 0x92, 0xE3, 0x81, 0x93, 0xE3, 0x81, 0x94, 0xE3, 0x81, 0x95,
+  0xE3, 0x81, 0x96, 0xE3, 0x81, 0x97, 0xE3, 0x81, 0x98, 0xE3, 0x81, 0x99,
+  0xE3, 0x81, 0x9A, 0xE3, 0x81, 0x9B, 0xE3, 0x81, 0x9C, 0xE3, 0x81, 0x9D,
+  0xE3, 0x81, 0x9E, 0xE3, 0x81, 0x9F, 0xE3, 0x81, 0xA0, 0xE3, 0x81, 0xA1,
+  0x00
+};
+
+// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP949.TXT
+static const uint8_t refCP949[] = {
+  //uses 2 bytes
+  0x81, 0x41, 0x81, 0x42, 0x81, 0x43, 0x81, 0x44,
+  0x81, 0x45, 0x81, 0x46, 0x81, 0x47, 0x81, 0x48,
+  0x81, 0x49, 0x81, 0x4A, 0x81, 0x4B, 0x81, 0x4C,
+  0x81, 0x4D, 0x81, 0x4E, 0x81, 0x4F,
+  0x00
+};
+
+static const uint8_t CP949asUTF8[] = {
+  //uses 3 bytes
+  0xEA, 0xB0, 0x82, 0xEA, 0xB0, 0x83, 0xEA, 0xB0, 0x85, 0xEA, 0xB0, 0x86,
+  0xEA, 0xB0, 0x8B, 0xEA, 0xB0, 0x8C, 0xEA, 0xB0, 0x8D, 0xEA, 0xB0, 0x8E,
+  0xEA, 0xB0, 0x8F, 0xEA, 0xB0, 0x98, 0xEA, 0xB0, 0x9E, 0xEA, 0xB0, 0x9F,
+  0xEA, 0xB0, 0xA1, 0xEA, 0xB0, 0xA2, 0xEA, 0xB0, 0xA3,
+  0x00
+};
+
 class TestCharsetConverter : public testing::Test
 {
 protected:
@@ -115,29 +315,235 @@ protected:
     CSettings::Get().Unload();
   }
 
-  CStdStringA refstra1, refstra2, varstra1;
-  CStdStringW refstrw1, varstrw1;
-  CStdString16 refstr16_1, varstr16_1;
-  CStdString32 refstr32_1, varstr32_1;
-  CStdString refstr1;
+  std::string refstra1, refstra2, varstra1;
+  std::wstring refstrw1, varstrw1;
+  std::u16string refstr16_1, varstr16_1;
+  std::u32string refstr32_1, varstr32_1;
+  std::string refstr1;
 };
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP1251)
+{
+  std::string data((char*)&refCP1251);
+  std::string expected((char*)&CP1251asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-1251"); //simulate CP1251 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP1252)
+{
+  std::string data((char*)&refCP1252);
+  std::string expected((char*)&CP1252asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-1252"); //simulate CP1252 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP1253)
+{
+  std::string data((char*)&refCP1253);
+  std::string expected((char*)&CP1253asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-1253"); //simulate CP1253 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP1255)
+{
+  std::string data((char*)&refCP1255);
+  std::string expected((char*)&CP1255asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-1255"); //simulate CP1255 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP1256)
+{
+  std::string data((char*)&refCP1256);
+  std::string expected((char*)&CP1256asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-1256"); //simulate CP1256 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP874)
+{
+  std::string data((char*)&refCP874);
+  std::string expected((char*)&CP874asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-874"); //simulate CP874 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP932)
+{
+  std::string data((char*)&refCP932);
+  std::string expected((char*)&CP932asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP932Hiranga)
+{
+  std::string data((char*)&refCP932Hiranga);
+  std::string expected((char*)&CP932HirangaAsUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, systemToUtf8_CP949)
+{
+  std::string data((char*)&refCP949);
+  std::string expected((char*)&CP949asUTF8);
+  std::string temp;
+  const char* defCodePage = ucnv_getDefaultName();
+  ucnv_setDefaultName("CP-949"); //simulate CP949 as system codepage
+  g_charsetConverter.systemToUtf8(data, temp, false);
+  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP1251)
+{
+  std::string source((char*)&CP1251asUTF8);
+  std::string expected((char*)&refCP1251);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-1251");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP1252)
+{
+  std::string source((char*)&CP1252asUTF8);
+  std::string expected((char*)&refCP1252);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-1252");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP1253)
+{
+  std::string source((char*)&CP1253asUTF8);
+  std::string expected((char*)&refCP1253);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-1253");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP1255)
+{
+  std::string source((char*)&CP1255asUTF8);
+  std::string expected((char*)&refCP1255);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-1255");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP1256)
+{
+  std::string source((char*)&CP1256asUTF8);
+  std::string expected((char*)&refCP1256);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-1256");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP874)
+{
+  std::string source((char*)&CP874asUTF8);
+  std::string expected((char*)&refCP874);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-874");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP932)
+{
+  std::string source((char*)&CP932asUTF8);
+  std::string expected((char*)&refCP932);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-932");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP932Hiranga)
+{
+  std::string source((char*)&CP932HirangaAsUTF8);
+  std::string expected((char*)&refCP932Hiranga);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-932");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToSystem_CP949)
+{
+  std::string source((char*)&CP949asUTF8);
+  std::string expected((char*)&refCP949);
+  const char* defCodePage = ucnv_getDefaultName();
+
+  ucnv_setDefaultName("CP-949");
+  g_charsetConverter.utf8ToSystem(source, false);
+  ucnv_setDefaultName(defCodePage);
+  EXPECT_STREQ(expected.c_str(), source.c_str());
+}
 
 TEST_F(TestCharsetConverter, utf8ToW)
 {
   refstra1 = "test utf8ToW";
   refstrw1 = L"test utf8ToW";
   varstrw1.clear();
-  g_charsetConverter.utf8ToW(refstra1, varstrw1, true, false, NULL);
-  EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
-}
-
-TEST_F(TestCharsetConverter, utf16LEtoW)
-{
-  refstrw1 = L"ｔｅｓｔ＿ｕｔｆ１６ＬＥｔｏｗ";
-  /* TODO: Should be able to use '=' operator instead of assign() */
-  refstr16_1.assign(refutf16LE1);
-  varstrw1.clear();
-  g_charsetConverter.utf16LEtoW(refstr16_1, varstrw1);
+  g_charsetConverter.utf8ToW(refstra1, varstrw1, false, false, false);
   EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
 }
 
@@ -272,15 +678,6 @@ TEST_F(TestCharsetConverter, utf16BEtoUTF8)
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
-TEST_F(TestCharsetConverter, utf16LEtoUTF8)
-{
-  refstr16_1.assign(refutf16LE4);
-  refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＬＥｔｏＵＴＦ８";
-  varstra1.clear();
-  g_charsetConverter.utf16LEtoUTF8(refstr16_1, varstra1);
-  EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
-}
-
 TEST_F(TestCharsetConverter, ucs2ToUTF8)
 {
   refstr16_1.assign(refucs2);
@@ -379,29 +776,29 @@ TEST_F(TestCharsetConverter, unknownToUTF8_2)
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
-TEST_F(TestCharsetConverter, toW)
-{
-  refstra1 = "ｔｅｓｔ＿ｔｏＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
-  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
-             L"\x94BD\xBDEF\xEF8F\xB7BC\xBCEF\xEF9A\xBFBC\xBDEF"
-             L"\xEF83\x88BD\xBDEF\xEF81\x92BD\xBDEF\xEF93\x85BD"
-             L"\xBDEF\xEF94\xBFBC\xBCEF\xEFB5\xB4BC\xBCEF\xEFA6"
-             L"\x8DBC\xBCEF\xEF91\x96BC\xBCEF\xEFAC\xA5BC";
-  varstrw1.clear();
-  g_charsetConverter.toW(refstra1, varstrw1, "UTF-16LE");
-  EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
-}
-
-TEST_F(TestCharsetConverter, fromW)
-{
-  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
-             L"\x86BD\xBDEF\xEF92\x8FBD\xBDEF\xEF8D\xB7BC\xBCEF"
-             L"\xEF9A\xBFBC\xBDEF\xEF83\x88BD\xBDEF\xEF81\x92BD"
-             L"\xBDEF\xEF93\x85BD\xBDEF\xEF94\xBFBC\xBCEF\xEFB5"
-             L"\xB4BC\xBCEF\xEFA6\x8DBC\xBCEF\xEF91\x96BC\xBCEF"
-             L"\xEFAC\xA5BC";
-  refstra1 = "ｔｅｓｔ＿ｆｒｏｍＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
-  varstra1.clear();
-  g_charsetConverter.fromW(refstrw1, varstra1, "UTF-16LE");
-  EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
-}
+//TEST_F(TestCharsetConverter, toW)
+//{
+//  refstra1 = "ｔｅｓｔ＿ｔｏＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
+//  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
+//             L"\x94BD\xBDEF\xEF8F\xB7BC\xBCEF\xEF9A\xBFBC\xBDEF"
+//             L"\xEF83\x88BD\xBDEF\xEF81\x92BD\xBDEF\xEF93\x85BD"
+//             L"\xBDEF\xEF94\xBFBC\xBCEF\xEFB5\xB4BC\xBCEF\xEFA6"
+//             L"\x8DBC\xBCEF\xEF91\x96BC\xBCEF\xEFAC\xA5BC";
+//  varstrw1.clear();
+//  g_charsetConverter.toW(refstra1, varstrw1, "UTF-16LE");
+//  EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
+//}
+//
+//TEST_F(TestCharsetConverter, fromW)
+//{
+//  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
+//             L"\x86BD\xBDEF\xEF92\x8FBD\xBDEF\xEF8D\xB7BC\xBCEF"
+//             L"\xEF9A\xBFBC\xBDEF\xEF83\x88BD\xBDEF\xEF81\x92BD"
+//             L"\xBDEF\xEF93\x85BD\xBDEF\xEF94\xBFBC\xBCEF\xEFB5"
+//             L"\xB4BC\xBCEF\xEFA6\x8DBC\xBCEF\xEF91\x96BC\xBCEF"
+//             L"\xEFAC\xA5BC";
+//  refstra1 = "ｔｅｓｔ＿ｆｒｏｍＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
+//  varstra1.clear();
+//  g_charsetConverter.fromW(refstrw1, varstra1, "UTF-16LE");
+//  EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
+//}

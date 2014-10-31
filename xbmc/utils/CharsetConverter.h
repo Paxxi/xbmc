@@ -28,6 +28,7 @@
 
 #include <string>
 #include <vector>
+#include <utility> //std::pair
 
 class CSetting;
 
@@ -63,6 +64,27 @@ public:
    * @return converted string on successful conversion, empty string on any error
    */
   static std::u32string utf8ToUtf32(const std::string& utf8StringSrc, bool failOnBadChar = true);
+
+  /**
+  * Convert UTF-8 string to UTF-16 string.
+  * No RTL logical-visual transformation is performed.
+  * @param utf8StringSrc       is source UTF-8 string to convert
+  * @param utf16StringDst      is output UTF-16 string, empty on any error
+  * @param failOnBadChar       if set to true function will fail on invalid character,
+  *                            otherwise invalid character will be skipped
+  * @return true on successful conversion, false on any error
+  */
+  static bool utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
+  /**
+  * Convert UTF-8 string to UTF-36 string.
+  * No RTL logical-visual transformation is performed.
+  * @param utf8StringSrc       is source UTF-8 string to convert
+  * @param failOnBadChar       if set to true function will fail on invalid character,
+  *                            otherwise invalid character will be skipped
+  * @return converted string on successful conversion, empty string on any error
+  */
+  static std::u16string utf8ToUtf16(const std::string& utf8StringSrc, bool failOnBadChar = true);
+  
   /**
    * Convert UTF-8 string to UTF-32 string.
    * RTL logical-visual transformation is optionally performed.
@@ -96,16 +118,7 @@ public:
    * @return converted string on successful conversion, empty string on any error
    */
   static std::string utf32ToUtf8(const std::u32string& utf32StringSrc, bool failOnBadChar = false);
-  /**
-   * Convert UTF-32 string to wchar_t string (wstring).
-   * No RTL visual-logical transformation is performed.
-   * @param utf32StringSrc      is source UTF-32 string to convert
-   * @param wStringDst          is output wchar_t string, empty on any error
-   * @param failOnBadChar       if set to true function will fail on invalid character,
-   *                            otherwise invalid character will be skipped
-   * @return true on successful conversion, false on any error
-   */
-  static bool utf32ToW(const std::u32string& utf32StringSrc, std::wstring& wStringDst, bool failOnBadChar = false);
+  
   /**
    * Perform logical to visual flip.
    * @param logicalStringSrc    is source string with logical characters order
@@ -114,28 +127,18 @@ public:
    * @return true on success, false otherwise
    */
   static bool utf32logicalToVisualBiDi(const std::u32string& logicalStringSrc, std::u32string& visualStringDst, bool forceLTRReadingOrder = false, bool failOnBadString = false);
-  /**
-   * Strictly convert wchar_t string (wstring) to UTF-32 string.
-   * No RTL visual-logical transformation is performed.
-   * @param wStringSrc          is source wchar_t string to convert
-   * @param utf32StringDst      is output UTF-32 string, empty on any error
-   * @param failOnBadChar       if set to true function will fail on invalid character,
-   *                            otherwise invalid character will be skipped
-   * @return true on successful conversion, false on any error
-   */
-  static bool wToUtf32(const std::wstring& wStringSrc, std::u32string& utf32StringDst, bool failOnBadChar = false);
-
+  
   static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst,
                 bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false,
                 bool failOnBadChar = false);
+  static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
-  static bool utf16LEtoW(const std::u16string& utf16String, std::wstring& wString);
 
   static bool subtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
 
   static bool utf8ToStringCharset(const std::string& utf8StringSrc, std::string& stringDst);
-
   static bool utf8ToStringCharset(std::string& stringSrcDst);
+
   static bool utf8ToSystem(std::string& stringSrcDst, bool failOnBadChar = false);
   static bool systemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
@@ -145,14 +148,10 @@ public:
 
   static bool ToUtf8(const std::string& strSourceCharset, const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
-  static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
   static bool utf16BEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
-  static bool utf16LEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
   static bool ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst);
 
   static bool utf8logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString = false);
-
-  static bool utf32ToStringCharset(const std::u32string& utf32StringSrc, std::string& stringDst);
 
   static std::vector<std::string> getCharsetLabels();
   static std::string getCharsetLabelByName(const std::string& charsetName);
@@ -161,8 +160,6 @@ public:
   static bool unknownToUTF8(std::string& stringSrcDst);
   static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
-  static bool toW(const std::string& stringSrc, std::wstring& wStringDst, const std::string& enc);
-  static bool fromW(const std::wstring& wStringSrc, std::string& stringDst, const std::string& enc);
 
   static void SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data);
 private:
