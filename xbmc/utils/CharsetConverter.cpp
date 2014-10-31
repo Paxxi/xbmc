@@ -34,7 +34,7 @@
 #include <iconv.h>
 #include <unicode/ucnv.h>
 #include <unicode/urename.h>
-#include <unicode/ustring.h>
+#include <unicode/ubidi.h>
 #include <memory>
 
 #if !defined(TARGET_WINDOWS) && defined(HAVE_CONFIG_H)
@@ -87,11 +87,19 @@
    here all staff that require usage of types defined in this file or in additional headers */
 class CCharsetConverter::CInnerConverter
 {
-public:
-  static bool logicalToVisualBiDi(const std::u32string& stringSrc, std::u32string& stringDst, FriBidiCharType base = FRIBIDI_TYPE_LTR, const bool failOnBadString = false);
+  static bool internalBidiHelper(const UChar* srcBuffer, int32_t srcLength, 
+                                 UChar** dstBuffer, int32_t& dstLength,
+                                 const UBiDiLevel bidiOptions, const bool failOnBadString);
 
+public:
+  template<class INPUT, class OUTPUT>
+  static bool logicalToVisualBiDi(const std::string& sourceCharset, const std::string& targetCharset,
+                                  const INPUT& strSource, OUTPUT& strDest,
+                                  UBiDiLevel bidiOptions = 0, const bool failOnBadString = false);
+  
   template<class INPUT,class OUTPUT>
-  static bool customConvert(const std::string& sourceCharset, const std::string& targetCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);
+  static bool customConvert(const std::string& sourceCharset, const std::string& targetCharset,
+                            const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);
 
   template<class INPUT, class OUTPUT>
   static bool toUtf16(const std::string& sourceCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/);
@@ -112,15 +120,15 @@ public:
   UConverterGuard() : converter(nullptr) {};
   UConverterGuard(UConverter* cnv) : converter(cnv) {};
   ~UConverterGuard() 
-{
+  {
     if (converter)
       ucnv_close(converter);
-}
+  }
   void Set(UConverter* cnv) { converter = cnv; }
   operator UConverter*() const
-{
+  {
     return this->converter;
-}
+  }
 };
 
 template<class INPUT,class OUTPUT>
@@ -135,14 +143,16 @@ bool CCharsetConverter::CInnerConverter::customConvert(const std::string& source
   UConverterGuard dstConv;
 
   int32_t srcLength = -1;
-  int32_t tempBufferLength = -1;
+  int32_t srcLengthInBytes = -1;
   int32_t dstLength = -1;
+  int32_t dstLengthInBytes = -1;
 
   const char* srcBuffer = NULL;
   char* dstBuffer = NULL;
-  UChar* tempBuffer = NULL;
-  /*std::unique_ptr<char[]> dstBuffer;
-  std::unique_ptr<UChar[]> tempBuffer;*/
+
+  //ucnv_ConvertEx moves the pointer to the end of the buffer
+  //use this for input to ucnv_ConvertEx
+  char* dstBufferWalker = NULL;
 
   //if any of the charsets are empty we fall back to the default
   //encoder
@@ -150,14 +160,9 @@ bool CCharsetConverter::CInnerConverter::customConvert(const std::string& source
     srcConv.Set(ucnv_open(NULL, &err));
   else
     srcConv.Set(ucnv_open(sourceCharset.c_str(), &err));
-    
+
   if (U_FAILURE(err))
     return false;
-
-  if (failOnInvalidChar)
-    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
-  else
-    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
 
   if (targetCharset.empty())
     dstConv.Set(ucnv_open(NULL, &err));
@@ -168,49 +173,61 @@ bool CCharsetConverter::CInnerConverter::customConvert(const std::string& source
     return false;
 
   if (failOnInvalidChar)
+  {
+    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
     ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
+  }
   else
+  {
     ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
-
-  //input to ucnv_toUChars is a char* pointer so multiply the length by
-  //the minimum size of a char
-  srcLength = strSource.length() * ucnv_getMinCharSize(srcConv);
-  srcBuffer = (const char*)strSource.c_str();
-
-  tempBufferLength = UCNV_GET_MAX_BYTES_FOR_STRING(srcLength, ucnv_getMaxCharSize(srcConv));
-  tempBuffer = new UChar[tempBufferLength];
-
-  int res = ucnv_toUChars(srcConv, tempBuffer, tempBufferLength, srcBuffer, -1, &err);
-
-  if (U_FAILURE(err))
-    return false;
-
-  assert(U_SUCCESS(err));
-
-  dstLength = UCNV_GET_MAX_BYTES_FOR_STRING(res, ucnv_getMaxCharSize(dstConv));
-  dstBuffer = new char[dstLength];
-
-  res = ucnv_fromUChars(dstConv, dstBuffer, dstLength, tempBuffer, res, &err);
-
-  if (U_FAILURE(err))
-    return false;
-
-  res /= ucnv_getMinCharSize(dstConv);
-
-  uint16_t bom = (uint16_t)dstBuffer[0];
-  //check for a utf-16 or utf-32 bom
-  if (bom == 65535 || bom == 65279)
-{
-    dstBuffer += 2;
-    --res;
+    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
   }
 
-  strDest.assign(reinterpret_cast<OUTPUT::value_type *>(dstBuffer), res);
+  /*U_STABLE void U_EXPORT2
+    ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
+    char **target, const char *targetLimit,
+    const char **source, const char *sourceLimit,
+    UChar *pivotStart, UChar **pivotSource,
+    UChar **pivotTarget, const UChar *pivotLimit,
+    UBool reset, UBool flush,
+    UErrorCode *pErrorCode);*/
 
-    return true;
+  srcLength = strSource.length();
+  srcLengthInBytes = strSource.length() * ucnv_getMinCharSize(srcConv);
+  srcBuffer = (const char*)strSource.c_str();
+
+  //Point of no return, remember to free dstBuffer :)
+  dstLengthInBytes = UCNV_GET_MAX_BYTES_FOR_STRING(srcLength, ucnv_getMaxCharSize(dstConv));
+  dstBuffer = new char[dstLengthInBytes];
+  dstBufferWalker = dstBuffer;
+
+  ucnv_convertEx(dstConv, srcConv, &dstBufferWalker, dstBufferWalker + dstLengthInBytes,
+    &srcBuffer, srcBuffer + srcLengthInBytes, NULL, NULL, NULL, NULL, FALSE, TRUE, &err);
+  
+  assert(U_SUCCESS(err));
+
+  if (U_SUCCESS(err))
+  {
+    ptrdiff_t res = (dstBufferWalker - dstBuffer) / ucnv_getMinCharSize(dstConv);
+    dstBufferWalker = dstBuffer;
+
+    uint16_t bom = (uint16_t)dstBuffer[0];
+    //check for a utf-16 or utf-32 bom
+    if (bom == 65535 || bom == 65279)
+    {
+      dstBufferWalker += 2;
+      --res;
+    }
+
+    strDest.assign(reinterpret_cast<OUTPUT::value_type *>(dstBufferWalker), res);
+  }
+  
+  delete[] dstBuffer;
+
+  return true;
 }
 
-template<class INPUT,class OUTPUT>
+template<class INPUT, class OUTPUT>
 bool CCharsetConverter::CInnerConverter::toUtf16(const std::string& sourceCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/)
 {
   strDest.clear();
@@ -235,11 +252,11 @@ bool CCharsetConverter::CInnerConverter::toUtf16(const std::string& sourceCharse
 
   if (U_FAILURE(err))
     return false;
-    
+
   if (failOnInvalidChar)
     ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
   else
-  ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
+    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
 
   //input to ucnv_toUChars is a char* pointer so multiply the length by
   //the minimum size of a char
@@ -255,16 +272,16 @@ bool CCharsetConverter::CInnerConverter::toUtf16(const std::string& sourceCharse
     return false;
 
   res /= ucnv_getMinCharSize(srcConv);
-
+  
 
   strDest = reinterpret_cast<OUTPUT::value_type *>(dstBuffer.get());
 
   return true;
 }
 
-template<class INPUT,class OUTPUT>
+template<class INPUT, class OUTPUT>
 bool CCharsetConverter::CInnerConverter::fromUtf16(const std::string& targetCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/)
-  {
+{
   strDest.clear();
   if (strSource.empty())
     return true;
@@ -288,7 +305,7 @@ bool CCharsetConverter::CInnerConverter::fromUtf16(const std::string& targetChar
   if (U_FAILURE(err))
     return false;
 
-        if (failOnInvalidChar)
+  if (failOnInvalidChar)
     ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
   else
     ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
@@ -311,59 +328,190 @@ bool CCharsetConverter::CInnerConverter::fromUtf16(const std::string& targetChar
   return true;
 }
 
-bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::u32string& stringSrc, std::u32string& stringDst, FriBidiCharType base /*= FRIBIDI_TYPE_LTR*/, const bool failOnBadString /*= false*/)
+template<class INPUT, class OUTPUT>
+bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::string& sourceCharset, const std::string& targetCharset,
+  const INPUT& strSource, OUTPUT& strDest,
+  UBiDiLevel bidiOptions, const bool failOnBadString)
 {
-  stringDst.clear();
-
-  const size_t srcLen = stringSrc.length();
-  if (srcLen == 0)
+  strDest.clear();
+  if (strSource.empty())
     return true;
 
-  stringDst.reserve(srcLen);
-  size_t lineStart = 0;
+  UErrorCode err = U_ZERO_ERROR;
+  UConverterGuard srcConv;
+  UConverterGuard dstConv;
 
-  // libfribidi is not threadsafe, so make sure we make it so
-  do
+  int32_t srcLength = -1;
+  int32_t srcLengthInBytes = -1;
+  int32_t dstLength = -1;
+  int32_t dstLengthInBytes = -1;
+
+  const char* srcBuffer = NULL;
+  char* dstBuffer = NULL;
+  UChar* conversionBuffer = NULL;
+  UChar* bidiResultBuffer = NULL;
+
+  //if any of the charsets are empty we fall back to the default
+  //encoder
+  if (sourceCharset.empty())
+    srcConv.Set(ucnv_open(NULL, &err));
+  else
+    srcConv.Set(ucnv_open(sourceCharset.c_str(), &err));
+
+  if (U_FAILURE(err))
+    return false;
+
+  if (targetCharset.empty())
+    dstConv.Set(ucnv_open(NULL, &err));
+  else
+    dstConv.Set(ucnv_open(targetCharset.c_str(), &err));
+
+  if (U_FAILURE(err))
+    return false;
+
+  if (failOnBadString)
   {
-    size_t lineEnd = stringSrc.find('\n', lineStart);
-    if (lineEnd >= srcLen) // equal to 'lineEnd == std::string::npos'
-      lineEnd = srcLen;
+    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
+    ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &err);
+  }
     else
-      lineEnd++; // include '\n'
+  {
+    ucnv_setFromUCallBack(dstConv, UCNV_FROM_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
+    ucnv_setToUCallBack(srcConv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &err);
+  }
     
-    const size_t lineLen = lineEnd - lineStart;
+  srcLength = strSource.length();
+  srcLengthInBytes = strSource.length() * ucnv_getMinCharSize(srcConv);
+  srcBuffer = (const char*)strSource.c_str();
 
-    FriBidiChar* visual = (FriBidiChar*) malloc((lineLen + 1) * sizeof(FriBidiChar));
-    if (visual == NULL)
+  //Point of no return, remember to free dstBuffer :)
+  dstLengthInBytes = UCNV_GET_MAX_BYTES_FOR_STRING(srcLength, ucnv_getMaxCharSize(srcConv));
+  dstLength = dstLengthInBytes / 2; //we know UChar is always 2 bytes
+  conversionBuffer = new UChar[dstLength];
+
+  int res = ucnv_toUChars(srcConv, conversionBuffer, dstLength, srcBuffer, srcLength, &err);
+
+  assert(U_SUCCESS(err));
+  if (U_FAILURE(err))
     {
-      free(visual);
-      CLog::Log(LOGSEVERE, "%s: can't allocate memory", __FUNCTION__);
+    delete[] conversionBuffer;
       return false;
     }
 
-    bool bidiFailed = false;
-    FriBidiCharType baseCopy = base; // preserve same value for all lines, required because fribidi_log2vis will modify parameter value
-    if (fribidi_log2vis((const FriBidiChar*)(stringSrc.c_str() + lineStart), lineLen, &baseCopy, visual, NULL, NULL, NULL))
+  bidiResultBuffer = conversionBuffer;
+
+  if (!CInnerConverter::internalBidiHelper(conversionBuffer, res, &bidiResultBuffer, res, bidiOptions, failOnBadString))
     {
-      // Removes bidirectional marks
-      const int newLen = fribidi_remove_bidi_marks(visual, lineLen, NULL, NULL, NULL);
-      if (newLen > 0)
-        stringDst.append((const char32_t*)visual, (size_t)newLen);
-      else if (newLen < 0)
-        bidiFailed = failOnBadString;
+    delete[] conversionBuffer;
+    return false;
     }
-    else
-      bidiFailed = failOnBadString;
 
-    free(visual);
+  dstLengthInBytes = UCNV_GET_MAX_BYTES_FOR_STRING(res, ucnv_getMaxCharSize(dstConv));
+  dstBuffer = new char[dstLengthInBytes];
 
-    if (bidiFailed)
+  res = ucnv_fromUChars(dstConv, dstBuffer, dstLengthInBytes, bidiResultBuffer, res, &err);
+
+  if (U_FAILURE(err))
+  {
+    delete[] conversionBuffer;
+    delete[] bidiResultBuffer;
+    delete[] dstBuffer;
       return false;
+  }
 
-    lineStart = lineEnd;
-  } while (lineStart < srcLen);
+  res /= ucnv_getMinCharSize(dstConv);
 
-  return !stringDst.empty();
+  if (U_SUCCESS(err))
+  {
+    uint16_t bom = (uint16_t)dstBuffer[0];
+    //check for a utf-16 or utf-32 bom
+    if (bom == 65535 || bom == 65279)
+    {
+      dstBuffer += 2;
+      --res;
+    }
+
+    strDest.assign(reinterpret_cast<OUTPUT::value_type *>(dstBuffer), res);
+  }
+
+  delete[] conversionBuffer;
+  delete[] bidiResultBuffer;
+  delete[] dstBuffer;
+
+  return true;
+}
+
+bool CCharsetConverter::CInnerConverter::internalBidiHelper(const UChar* srcBuffer, int32_t srcLength,
+                                                            UChar** dstBuffer, int32_t& dstLength,
+                                                            const UBiDiLevel bidiOptions, const bool failOnBadString)
+{
+
+  UBiDi* bidiConv = ubidi_open();
+  UBiDiLevel bidiLevel = 0;
+  UErrorCode err = U_ZERO_ERROR;
+
+  //ubidi_setPara changes the srcBuffer pointer so make it const
+  //and get a local copy of it
+  UChar* inputBuffer = const_cast<UChar*>(srcBuffer);
+  UChar* outputBuffer = NULL;
+
+  ubidi_setPara(bidiConv, inputBuffer, srcLength, bidiOptions, &bidiLevel, &err);
+
+  assert(U_SUCCESS(err));
+
+  int32_t outputLength = ubidi_getResultLength(bidiConv) + 1; //allow for null terminator
+  outputBuffer = new UChar[dstLength];
+
+  ubidi_writeReordered(bidiConv, outputBuffer, outputLength, UBIDI_REMOVE_BIDI_CONTROLS, &err);
+
+  assert(U_SUCCESS(err));
+
+
+  ubidi_close(bidiConv);
+  *dstBuffer = outputBuffer;
+  dstLength = outputLength;
+  return true;
+  //do
+  //{
+  //  size_t lineEnd = stringSrc.find('\n', lineStart);
+  //  if (lineEnd >= srcLen) // equal to 'lineEnd == std::string::npos'
+  //    lineEnd = srcLen;
+  //  else
+  //    lineEnd++; // include '\n'
+  //  
+  //  const size_t lineLen = lineEnd - lineStart;
+
+  //  FriBidiChar* visual = (FriBidiChar*) malloc((lineLen + 1) * sizeof(FriBidiChar));
+  //  if (visual == NULL)
+  //  {
+  //    free(visual);
+  //    CLog::Log(LOGSEVERE, "%s: can't allocate memory", __FUNCTION__);
+  //    return false;
+  //  }
+
+  //  bool bidiFailed = false;
+  //  FriBidiCharType baseCopy = base; // preserve same value for all lines, required because fribidi_log2vis will modify parameter value
+  //  if (fribidi_log2vis((const FriBidiChar*)(stringSrc.c_str() + lineStart), lineLen, &baseCopy, visual, NULL, NULL, NULL))
+  //  {
+  //    // Removes bidirectional marks
+  //    const int newLen = fribidi_remove_bidi_marks(visual, lineLen, NULL, NULL, NULL);
+  //    if (newLen > 0)
+  //      stringDst.append((const char32_t*)visual, (size_t)newLen);
+  //    else if (newLen < 0)
+  //      bidiFailed = failOnBadString;
+  //  }
+  //  else
+  //    bidiFailed = failOnBadString;
+
+  //  free(visual);
+
+  //  if (bidiFailed)
+  //    return false;
+
+  //  lineStart = lineEnd;
+  //} while (lineStart < srcLen);
+
+  //return !stringDst.empty();
 }
 
 
@@ -503,15 +651,10 @@ std::u16string CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc, 
 
 bool CCharsetConverter::utf8ToUtf32Visual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool bVisualBiDiFlip /*= false*/, bool forceLTRReadingOrder /*= false*/, bool failOnBadChar /*= false*/)
 {
- /* if (bVisualBiDiFlip)
+  if (bVisualBiDiFlip)
   {
-    std::u32string converted;
-    if (!CInnerConverter::stdConvert(Utf8ToUtf32, utf8StringSrc, converted, failOnBadChar))
-      return false;
-
-    return CInnerConverter::logicalToVisualBiDi(converted, utf32StringDst, forceLTRReadingOrder ? FRIBIDI_TYPE_LTR : FRIBIDI_TYPE_PDF, failOnBadChar);
+    return CInnerConverter::logicalToVisualBiDi("UTF-8", "UTF-32", utf8StringSrc, utf32StringDst, forceLTRReadingOrder ? 0 : 1, failOnBadChar);
   }
-  return CInnerConverter::stdConvert(Utf8ToUtf32, utf8StringSrc, utf32StringDst, failOnBadChar);*/
   return CInnerConverter::customConvert("utf-8", "utf-32", utf8StringSrc, utf32StringDst, failOnBadChar);
 }
 
@@ -529,7 +672,7 @@ std::string CCharsetConverter::utf32ToUtf8(const std::u32string& utf32StringSrc,
 
 bool CCharsetConverter::utf32logicalToVisualBiDi(const std::u32string& logicalStringSrc, std::u32string& visualStringDst, bool forceLTRReadingOrder /*= false*/, bool failOnBadString /*= false*/)
 {
-  return CInnerConverter::logicalToVisualBiDi(logicalStringSrc, visualStringDst, forceLTRReadingOrder ? FRIBIDI_TYPE_LTR : FRIBIDI_TYPE_PDF, failOnBadString);
+  return CInnerConverter::logicalToVisualBiDi("UTF-32", "UTF-32", logicalStringSrc, visualStringDst, forceLTRReadingOrder ? 0 : 1, failOnBadString);
 }
 
 // The bVisualBiDiFlip forces a flip of characters for hebrew/arabic languages, only set to false if the flipping
@@ -540,15 +683,7 @@ bool CCharsetConverter::utf8ToW(const std::string& utf8StringSrc, std::wstring& 
   // Try to flip hebrew/arabic characters, if any
   if (bVisualBiDiFlip)
   {
-    wStringDst.clear();
-    std::u32string utf32str;
-    if (!CInnerConverter::customConvert(UTF8_SOURCE, "UTF-32", utf8StringSrc, utf32str, failOnBadChar))
-      return false;
-
-    std::u32string utf32flipped;
-    const bool bidiResult = CInnerConverter::logicalToVisualBiDi(utf32str, utf32flipped, forceLTRReadingOrder ? FRIBIDI_TYPE_LTR : FRIBIDI_TYPE_PDF, failOnBadChar);
-
-    return CInnerConverter::customConvert("UTF-32", WCHAR_CHARSET, utf32flipped, wStringDst, failOnBadChar) && bidiResult;
+    return CInnerConverter::logicalToVisualBiDi("UTF-8", WCHAR_CHARSET, utf8StringSrc, wStringDst, forceLTRReadingOrder ? 0 : 1, failOnBadChar);
   }
   
   return CInnerConverter::toUtf16(UTF8_SOURCE, utf8StringSrc, wStringDst, failOnBadChar);
