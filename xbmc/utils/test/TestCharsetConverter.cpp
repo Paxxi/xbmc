@@ -94,7 +94,8 @@ static const uint8_t refCP1251[] = {
   0xEF, 0xF0, 0xF1, 0xF2, 0xF3,
   0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
   0xF9, 0xFA, 0xFB, 0xFC, 0xFD,
-  0xFE, 0xFF, 0x00
+  0xFE, 0xFF,
+  0x00
 };
 
 static const uint8_t CP1251asUTF8[] = {
@@ -104,7 +105,30 @@ static const uint8_t CP1251asUTF8[] = {
   0xD0, 0xBF, 0xD1, 0x80, 0xD1, 0x81, 0xD1, 0x82, 0xD1, 0x83,
   0xD1, 0x84, 0xD1, 0x85, 0xD1, 0x86, 0xD1, 0x87, 0xD1, 0x88,
   0xD1, 0x89, 0xD1, 0x8A, 0xD1, 0x8B, 0xD1, 0x8C, 0xD1, 0x8D,
-  0xD1, 0x8E, 0xD1, 0x8F, 0x00
+  0xD1, 0x8E, 0xD1, 0x8F,
+  0x00
+};
+
+static const uint16_t CP1251asUTF16[] = {
+  0x0430, 0x0431, 0x0432, 0x0433, 0x0434,
+  0x0435, 0x0436, 0x0437, 0x0438, 0x0439,
+  0x043A, 0x043B, 0x043C, 0x043D, 0x043E,
+  0x043F, 0x0440, 0x0441, 0x0442, 0x0443,
+  0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
+  0x0449, 0x044A, 0x044B, 0x044C, 0x044D,
+  0x044E, 0x044F,
+  0x0000
+};
+
+static const uint32_t CP1251asUTF32[] = {
+  0x04300000, 0x04310000, 0x04320000, 0x04330000, 0x04340000,
+  0x04350000, 0x04360000, 0x04370000, 0x04380000, 0x04390000,
+  0x043A0000, 0x043B0000, 0x043C0000, 0x043D0000, 0x043E0000,
+  0x043F0000, 0x04400000, 0x04410000, 0x04420000, 0x04430000,
+  0x04440000, 0x04450000, 0x04460000, 0x04470000, 0x04480000,
+  0x04490000, 0x044A0000, 0x044B0000, 0x044C0000, 0x044D0000,
+  0x044E0000, 0x044F0000,
+  0x0000
 };
 
 // ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
@@ -262,24 +286,45 @@ static const uint8_t CP932HirangaAsUTF8[] = {
   0x00
 };
 
-// ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP949.TXT
-static const uint8_t refCP949[] = {
-  //uses 2 bytes
-  0x81, 0x41, 0x81, 0x42, 0x81, 0x43, 0x81, 0x44,
-  0x81, 0x45, 0x81, 0x46, 0x81, 0x47, 0x81, 0x48,
-  0x81, 0x49, 0x81, 0x4A, 0x81, 0x4B, 0x81, 0x4C,
-  0x81, 0x4D, 0x81, 0x4E, 0x81, 0x4F,
+//http://ftp.unicode.org/Public/UNIDATA/BidiCharacterTest.txt
+//05D0 05D1 0028 05D2 05D3 005B 0026 0065 0066 005D 002E 0029 0067 0068; 0; 0; 1 1 0 1 1 0 0 0 0 0 0 0 0 0; 1 0 2 4 3 5 6 7 8 9 10 11 12 13
+//LTR
+static const uint16_t bidiReorder_1_LTR_utf16BE[] = {
+  0x05D0, 0x05D1, 0x0028, 0x05D2, 0x05D3,
+  0x005B, 0x0026, 0x0065, 0x0066, 0x005D,
+  0x002E, 0x0029, 0x0067, 0x0068,
+  0x0000
+};
+
+static const uint16_t bidiReorder_1_LTR_utf16LE[] = {
+  0xD005, 0xD105, 0x2800, 0xD205, 0xD305,
+  0x5B00, 0x2600, 0x6500, 0x6600, 0x5D00,
+  0x2E00, 0x2900, 0x6700, 0x6800,
+  0x0000
+};
+
+static const uint16_t bidiReorder_1_LTR_utf16LE_Expected[] = {
+  0xD105, 0xD005, 0x2800, 0xD305, 0xD205,
+  0x5B00, 0x2600, 0x6500, 0x6600, 0x5D00,
+  0x2E00, 0x2900, 0x6700, 0x6800,
+  0x0000
+};
+
+static const uint8_t bidiReorder_1_utf8[] = {
   0x00
 };
 
-static const uint8_t CP949asUTF8[] = {
-  //uses 3 bytes
-  0xEA, 0xB0, 0x82, 0xEA, 0xB0, 0x83, 0xEA, 0xB0, 0x85, 0xEA, 0xB0, 0x86,
-  0xEA, 0xB0, 0x8B, 0xEA, 0xB0, 0x8C, 0xEA, 0xB0, 0x8D, 0xEA, 0xB0, 0x8E,
-  0xEA, 0xB0, 0x8F, 0xEA, 0xB0, 0x98, 0xEA, 0xB0, 0x9E, 0xEA, 0xB0, 0x9F,
-  0xEA, 0xB0, 0xA1, 0xEA, 0xB0, 0xA2, 0xEA, 0xB0, 0xA3,
-  0x00
-};
+//05D0 05D1 0028 05D2 05D3 005B 0026 0065 0066 005D 002E 0029 0067 0068; 1; 1; 1 1 1 1 1 1 1 2 2 1 1 1 2 2; 12 13 11 10 9 7 8 6 5 4 3 2 1 0
+//0061 0062 0063 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 05D0 05D1 05D2; 0; 0; 0 0 0 0 0 0 0 0 0 1 1 1 0 0 1 1 1; 0 1 2 3 4 5 6 7 8 11 10 9 12 13 16 15 14
+//0061 0062 0063 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 05D0 05D1 05D2; 1; 1; 2 2 2 1 1 2 2 2 1 1 1 1 1 1 1 1 1; 16 15 14 13 12 11 10 9 8 5 6 7 4 3 0 1 2
+//05D0 05D1 05D2 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 0061 0062 0063; 0; 0; 1 1 1 0 0 0 0 0 0 1 1 1 0 0 0 0 0; 2 1 0 3 4 5 6 7 8 11 10 9 12 13 14 15 16
+//05D0 05D1 05D2 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 0061 0062 0063; 1; 1; 1 1 1 1 1 2 2 2 1 1 1 1 1 1 2 2 2; 14 15 16 13 12 11 10 9 8 5 6 7 4 3 2 1 0
+//0061 0062 0063 0020 0028 0627 0628 062C 0020 0064 0065 0066 0029 0020 05D0 05D1 05D2; 0; 0; 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1 1 1; 0 1 2 3 4 7 6 5 8 9 10 11 12 13 16 15 14
+//0061 0062 0063 0020 0028 0627 0628 062C 0020 0064 0065 0066 0029 0020 05D0 05D1 05D2; 1; 1; 2 2 2 1 1 1 1 1 1 2 2 2 1 1 1 1 1; 16 15 14 13 12 9 10 11 8 7 6 5 4 3 0 1 2
+//05D0 05D1 05D2 0020 0028 0627 0628 062C 0020 0064 0065 0066 0029 0020 0061 0062 0063; 0; 0; 1 1 1 0 0 1 1 1 0 0 0 0 0 0 0 0 0; 2 1 0 3 4 7 6 5 8 9 10 11 12 13 14 15 16
+//05D0 05D1 05D2 0020 0028 0627 0628 062C 0020 0064 0065 0066 0029 0020 0061 0062 0063; 1; 1; 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2 2 2; 14 15 16 13 12 9 10 11 8 7 6 5 4 3 2 1 0
+//0627 0628 062C 0020 0062 006F 006F 006B 0028 0073 0029; 0; 0; 1 1 1 0 0 0 0 0 0 0 0; 2 1 0 3 4 5 6 7 8 9 10
+//0627 0628 062C 0020 0062 006F 006F 006B 0028 0073 0029; 1; 1; 1 1 1 1 2 2 2 2 2 2 2; 4 5 6 7 8 9 10 3 2 1 0
 
 class TestCharsetConverter : public testing::Test
 {
@@ -417,18 +462,6 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP932Hiranga)
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
-TEST_F(TestCharsetConverter, systemToUtf8_CP949)
-{
-  std::string data((char*)&refCP949);
-  std::string expected((char*)&CP949asUTF8);
-  std::string temp;
-  const char* defCodePage = ucnv_getDefaultName();
-  ucnv_setDefaultName("CP-949"); //simulate CP949 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
-  ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
-  EXPECT_STREQ(expected.c_str(), temp.c_str());
-}
-
 TEST_F(TestCharsetConverter, utf8ToSystem_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
@@ -525,16 +558,39 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932Hiranga)
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
 
-TEST_F(TestCharsetConverter, utf8ToSystem_CP949)
+TEST_F(TestCharsetConverter, utf16BEToLE)
 {
-  std::string source((char*)&CP949asUTF8);
-  std::string expected((char*)&refCP949);
-  const char* defCodePage = ucnv_getDefaultName();
+  std::u16string source(bidiReorder_1_LTR_utf16BE);
+  std::u16string expected(bidiReorder_1_LTR_utf16LE);
+  std::string temp;
+  g_charsetConverter.utf16BEtoUTF8(source, temp);
+  g_charsetConverter.utf8ToUtf16(temp, source);
+  EXPECT_STREQ((wchar_t*)expected.c_str(), (wchar_t*)source.c_str());
+}
 
-  ucnv_setDefaultName("CP-949");
-  g_charsetConverter.utf8ToSystem(source, false);
-  ucnv_setDefaultName(defCodePage);
-  EXPECT_STREQ(expected.c_str(), source.c_str());
+TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
+{
+  std::u16string u16Source(bidiReorder_1_LTR_utf16BE);
+  std::wstring u16Expected((wchar_t*)bidiReorder_1_LTR_utf16LE_Expected);
+
+  std::string source;
+  std::string expected;
+  std::string temp;
+
+  g_charsetConverter.utf16BEtoUTF8(u16Source, source);
+  g_charsetConverter.wToUTF8(u16Expected, expected, false);
+  g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false);
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
+{
+  std::u16string u16Source(bidiReorder_1_LTR_utf16LE);
+  std::u16string u16Expected(bidiReorder_1_LTR_utf16LE_Expected);
+  std::u16string result;
+
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
 TEST_F(TestCharsetConverter, utf8ToW)
@@ -542,17 +598,7 @@ TEST_F(TestCharsetConverter, utf8ToW)
   refstra1 = "test utf8ToW";
   refstrw1 = L"test utf8ToW";
   varstrw1.clear();
-  g_charsetConverter.utf8ToW(refstra1, varstrw1, false, false, false);
-  EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
-}
-
-TEST_F(TestCharsetConverter, utf16LEtoW)
-{
-  refstrw1 = L"ｔｅｓｔ＿ｕｔｆ１６ＬＥｔｏｗ";
-  /* TODO: Should be able to use '=' operator instead of assign() */
-  refstr16_1.assign(refutf16LE1);
-  varstrw1.clear();
-  g_charsetConverter.utf16LEtoW(refstr16_1, varstrw1);
+  g_charsetConverter.utf8ToW(refstra1, varstrw1);
   EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
 }
 
@@ -598,7 +644,30 @@ TEST_F(TestCharsetConverter, utf8To_ASCII)
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
-/*
+TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
+{
+  std::string source((char*)&CP1251asUTF8);
+  std::u16string expected((char16_t*)&CP1251asUTF16);
+  std::u16string temp;
+
+  g_charsetConverter.utf8ToUtf16(source, temp);
+  EXPECT_EQ(expected.length(), temp.length());
+  EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
+    expected.length() * sizeof(char16_t)));
+}
+
+TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
+{
+  std::string source((char*)&CP1251asUTF8);
+  std::u32string expected((char32_t*)&CP1251asUTF32);
+  std::u32string temp;
+
+  g_charsetConverter.utf8ToUtf32(source, temp, false);
+  EXPECT_EQ(expected.length(), temp.length());
+  EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
+    expected.length() * sizeof(char32_t)));
+}
+
 TEST_F(TestCharsetConverter, utf8To_UTF16LE)
 {
   refstra1 = "ｔｅｓｔ＿ｕｔｆ８Ｔｏ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ，＿"
@@ -609,27 +678,26 @@ TEST_F(TestCharsetConverter, utf8To_UTF16LE)
   EXPECT_TRUE(!memcmp(refstr16_1.c_str(), varstr16_1.c_str(),
                       refstr16_1.length() * sizeof(uint16_t)));
 }
-*/
 
-//TEST_F(TestCharsetConverter, utf8To_UTF32LE)
-//{
-//  refstra1 = "ｔｅｓｔ＿ｕｔｆ８Ｔｏ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－３２ＬＥ，＿"
-//#ifdef TARGET_DARWIN
-///* OSX has it's own 'special' utf-8 charset which we use (see UTF8_SOURCE in CharsetConverter.cpp)
-//   which is basically NFD (decomposed) utf-8.  The trouble is, it fails on the COW FACE and MOUSE FACE
-//   characters for some reason (possibly anything over 0x100000, or maybe there's a decomposed form of these
-//   that I couldn't find???)  If UTF8_SOURCE is switched to UTF-8 then this test would pass as-is, but then
-//   some filenames stored in utf8-mac wouldn't display correctly in the UI. */
-//             "ＣＳｔｄＳｔｒｉｎｇ３２＿";
-//#else
-//             "ＣＳｔｄＳｔｒｉｎｇ３２＿🐭🐮";
-//#endif
-//  refstr32_1.assign(refutf32LE1);
-//  varstr32_1.clear();
-//  g_charsetConverter.utf8To("UTF-32LE", refstra1, varstr32_1);
-//  EXPECT_TRUE(!memcmp(refstr32_1.c_str(), varstr32_1.c_str(),
-//                      sizeof(refutf32LE1)));
-//}
+TEST_F(TestCharsetConverter, utf8To_UTF32LE)
+{
+  refstra1 = "ｔｅｓｔ＿ｕｔｆ８Ｔｏ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－３２ＬＥ，＿"
+#ifdef TARGET_DARWIN
+/* OSX has it's own 'special' utf-8 charset which we use (see UTF8_SOURCE in CharsetConverter.cpp)
+   which is basically NFD (decomposed) utf-8.  The trouble is, it fails on the COW FACE and MOUSE FACE
+   characters for some reason (possibly anything over 0x100000, or maybe there's a decomposed form of these
+   that I couldn't find???)  If UTF8_SOURCE is switched to UTF-8 then this test would pass as-is, but then
+   some filenames stored in utf8-mac wouldn't display correctly in the UI. */
+             "ＣＳｔｄＳｔｒｉｎｇ３２＿";
+#else
+             "ＣＳｔｄＳｔｒｉｎｇ３２＿🐭🐮";
+#endif
+  refstr32_1.assign(refutf32LE1);
+  varstr32_1.clear();
+  g_charsetConverter.utf8To("UTF-32LE", refstra1, varstr32_1);
+  EXPECT_TRUE(!memcmp(refstr32_1.c_str(), varstr32_1.c_str(),
+                      sizeof(refutf32LE1)));
+}
 
 TEST_F(TestCharsetConverter, stringCharsetToUtf8)
 {
@@ -680,21 +748,12 @@ TEST_F(TestCharsetConverter, wToUTF8)
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
-//TEST_F(TestCharsetConverter, utf16BEtoUTF8)
-//{
-//  refstr16_1.assign(refutf16BE);
-//  refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＢＥｔｏＵＴＦ８";
-//  varstra1.clear();
-//  g_charsetConverter.utf16BEtoUTF8(refstr16_1, varstra1);
-//  EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
-//}
-
-TEST_F(TestCharsetConverter, utf16LEtoUTF8)
+TEST_F(TestCharsetConverter, utf16BEtoUTF8)
 {
-  refstr16_1.assign(refutf16LE4);
-  refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＬＥｔｏＵＴＦ８";
+  refstr16_1.assign(refutf16BE);
+  refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＢＥｔｏＵＴＦ８";
   varstra1.clear();
-  g_charsetConverter.utf16LEtoUTF8(refstr16_1, varstra1);
+  g_charsetConverter.utf16BEtoUTF8(refstr16_1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 

@@ -128,9 +128,10 @@ public:
    */
   static bool utf32logicalToVisualBiDi(const std::u32string& logicalStringSrc, std::u32string& visualStringDst, bool forceLTRReadingOrder = false, bool failOnBadString = false);
   
-  static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst,
+  static bool utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
                 bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false,
                 bool failOnBadChar = false);
+  static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst, bool failOnBadChar = false);
   static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
 
@@ -153,6 +154,10 @@ public:
 
   static bool utf8logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString = false);
 
+  static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString = false);
+  static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst, bool failOnBadString = false);
+  static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst, bool failOnBadString = false);
+
   static std::vector<std::string> getCharsetLabels();
   static std::string getCharsetLabelByName(const std::string& charsetName);
   static std::string getCharsetNameByLabel(const std::string& charsetLabel);
@@ -167,7 +172,12 @@ private:
   static void resetSubtitleCharset(void);
   static void resetKaraokeCharset(void);
 
-  static const int m_Utf8CharMinSize, m_Utf8CharMaxSize;
+  enum BiDiLevel
+  {
+    LTR,
+    RTL,
+  };
+
   class CInnerConverter;
 };
 
