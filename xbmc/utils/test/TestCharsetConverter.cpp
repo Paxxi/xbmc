@@ -121,6 +121,17 @@ static const uint16_t CP1251asUTF16[] = {
   0x0000
 };
 
+static const uint16_t CP1251asUTF16LE[] = {
+  0x3004, 0x3104, 0x3204, 0x3304, 0x3404,
+  0x3504, 0x3604, 0x3704, 0x3804, 0x3904,
+  0x3A04, 0x3B04, 0x3C04, 0x3D04, 0x3E04,
+  0x3F04, 0x4004, 0x4104, 0x4204, 0x4304,
+  0x4404, 0x4504, 0x4604, 0x4704, 0x4804,
+  0x4904, 0x4A04, 0x4B04, 0x4C04, 0x4D04,
+  0x4E04, 0x4F04,
+  0x0000
+};
+
 static const uint32_t CP1251asUTF32[] = {
   0x04300000, 0x04310000, 0x04320000, 0x04330000, 0x04340000,
   0x04350000, 0x04360000, 0x04370000, 0x04380000, 0x04390000,
@@ -315,6 +326,143 @@ static const uint8_t bidiReorder_1_utf8[] = {
   0x00
 };
 
+static const uint16_t bidiLogicalOrder_1_UTF16LE[] = {
+  /* Arabic mathematical Symbols 0x1EE00 - 0x1EE1B */
+  0xD83B, 0xDE00, 0xD83B, 0xDE01, 0xD83B, 0xDE02, 0xD83B, 0xDE03, 0x20,
+    0xD83B, 0xDE24, 0xD83B, 0xDE05, 0xD83B, 0xDE06, 0x20,
+    0xD83B, 0xDE07, 0xD83B, 0xDE08, 0xD83B, 0xDE09, 0x20,
+    0xD83B, 0xDE0A, 0xD83B, 0xDE0B, 0xD83B, 0xDE0C, 0xD83B, 0xDE0D, 0x20,
+    0xD83B, 0xDE0E, 0xD83B, 0xDE0F, 0xD83B, 0xDE10, 0xD83B, 0xDE11, 0x20,
+    0xD83B, 0xDE12, 0xD83B, 0xDE13, 0xD83B, 0xDE14, 0xD83B, 0xDE15, 0x20,
+    0xD83B, 0xDE16, 0xD83B, 0xDE17, 0xD83B, 0xDE18, 0x20,
+  0xD83B, 0xDE19, 0xD83B, 0xDE1A, 0xD83B, 0xDE1B,
+  0X0
+};
+static const uint16_t bidiLogicalOrder_1_UTF16BE[] = {
+  0X3BD8, 0XDE, 0X3BD8, 0X1DE,
+  0X3BD8, 0X2DE, 0X3BD8, 0X3DE,
+  0X2000, 0X3BD8, 0X24DE, 0X3BD8,
+  0X5DE, 0X3BD8, 0X6DE, 0X2000,
+  0X3BD8, 0X7DE, 0X3BD8, 0X8DE,
+  0X3BD8, 0X9DE, 0X2000, 0X3BD8,
+  0XADE, 0X3BD8, 0XBDE, 0X3BD8,
+  0XCDE, 0X3BD8, 0XDDE, 0X2000,
+  0X3BD8, 0XEDE, 0X3BD8, 0XFDE,
+  0X3BD8, 0X10DE, 0X3BD8, 0X11DE,
+  0X2000, 0X3BD8, 0X12DE, 0X3BD8,
+  0X13DE, 0X3BD8, 0X14DE, 0X3BD8,
+  0X15DE, 0X2000, 0X3BD8, 0X16DE,
+  0X3BD8, 0X17DE, 0X3BD8, 0X18DE,
+  0X2000, 0X3BD8, 0X19DE, 0X3BD8,
+  0X1ADE, 0X3BD8, 0X1BDE,
+};
+static const uint16_t bidiLogicalOrder_2_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Looped Symbols, 0x1EE80 - 0x1EE9B */
+  0xD83B, 0xDE80, 0xD83B, 0xDE81, 0xD83B, 0xDE82, 0xD83B, 0xDE83, 0x20,
+    0xD83B, 0xDE84, 0xD83B, 0xDE85, 0xD83B, 0xDE86, 0x20,
+    0xD83B, 0xDE87, 0xD83B, 0xDE88, 0xD83B, 0xDE89, 0x20,
+    0xD83B, 0xDE8B, 0xD83B, 0xDE8C, 0xD83B, 0xDE8D, 0x20,
+    0xD83B, 0xDE8E, 0xD83B, 0xDE8F, 0xD83B, 0xDE90, 0xD83B, 0xDE91, 0x20,
+    0xD83B, 0xDE92, 0xD83B, 0xDE93, 0xD83B, 0xDE94, 0xD83B, 0xDE95, 0x20,
+    0xD83B, 0xDE96, 0xD83B, 0xDE97, 0xD83B, 0xDE98, 0x20,
+  0xD83B, 0xDE99, 0xD83B, 0xDE9A, 0xD83B, 0xDE9B,
+  0x00
+};
+
+static const uint16_t bidiLogicalOrder_3_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Double-struck Symbols, 0x1EEA1 - 0x1EEBB */
+  0xD83B, 0xDEA1, 0xD83B, 0xDEA2, 0xD83B, 0xDEA3, 0x20,
+    0xD83B, 0xDEA5, 0xD83B, 0xDEA6, 0x20,
+    0xD83B, 0xDEA7, 0xD83B, 0xDEA8, 0xD83B, 0xDEA9, 0x20,
+    0xD83B, 0xDEAB, 0xD83B, 0xDEAC, 0xD83B, 0xDEAD, 0x20,
+    0xD83B, 0xDEAE, 0xD83B, 0xDEAF, 0xD83B, 0xDEB0, 0xD83B, 0xDEB1, 0x20,
+    0xD83B, 0xDEB2, 0xD83B, 0xDEB3, 0xD83B, 0xDEB4, 0xD83B, 0xDEB5, 0x20,
+    0xD83B, 0xDEB6, 0xD83B, 0xDEB7, 0xD83B, 0xDEB8, 0x20,
+  0xD83B, 0xDEB9, 0xD83B, 0xDEBA, 0xD83B, 0xDEBB,
+  0x00
+};
+
+static const uint16_t bidiLogicalOrder_4_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Initial Symbols, 0x1EE21 - 0x1EE3B */
+  0xD83B, 0xDE21, 0xD83B, 0xDE22, 0x20,
+    0xD83B, 0xDE27, 0xD83B, 0xDE29, 0x20,
+    0xD83B, 0xDE2A, 0xD83B, 0xDE2B, 0xD83B, 0xDE2C, 0xD83B, 0xDE2D, 0x20,
+    0xD83B, 0xDE2E, 0xD83B, 0xDE2F, 0xD83B, 0xDE30, 0xD83B, 0xDE31, 0x20,
+    0xD83B, 0xDE32, 0xD83B, 0xDE34, 0xD83B, 0xDE35, 0x20,
+    0xD83B, 0xDE36, 0xD83B, 0xDE37, 0x20,
+  0xD83B, 0xDE39, 0xD83B, 0xDE3B,
+  0x00
+};
+
+static const uint16_t bidiLogicalOrder_5_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Tailed Symbols */
+    0xD83B, 0xDE42, 0xD83B, 0xDE47, 0xD83B, 0xDE49, 0xD83B, 0xDE4B, 0x20,
+    0xD83B, 0xDE4D, 0xD83B, 0xDE4E, 0xD83B, 0xDE4F, 0x20,
+    0xD83B, 0xDE51, 0xD83B, 0xDE52, 0xD83B, 0xDE54, 0xD83B, 0xDE57, 0x20,
+    0xD83B, 0xDE59, 0xD83B, 0xDE5B, 0xD83B, 0xDE5D, 0xD83B, 0xDE5F,
+    0x00
+};
+
+static const uint16_t bidiVisualOrder_1_UTF16LE[] = {
+  /* Arabic mathematical Symbols 0x1EE00 - 0x1EE1B */
+  0xD83B, 0xDE1B, 0xD83B, 0xDE1A, 0xD83B, 0xDE19, 0x20,
+    0xD83B, 0xDE18, 0xD83B, 0xDE17, 0xD83B, 0xDE16, 0x20,
+    0xD83B, 0xDE15, 0xD83B, 0xDE14, 0xD83B, 0xDE13, 0xD83B, 0xDE12, 0x20,
+    0xD83B, 0xDE11, 0xD83B, 0xDE10, 0xD83B, 0xDE0F, 0xD83B, 0xDE0E, 0x20,
+    0xD83B, 0xDE0D, 0xD83B, 0xDE0C, 0xD83B, 0xDE0B, 0xD83B, 0xDE0A, 0x20,
+    0xD83B, 0xDE09, 0xD83B, 0xDE08, 0xD83B, 0xDE07, 0x20,
+    0xD83B, 0xDE06, 0xD83B, 0xDE05, 0xD83B, 0xDE24, 0x20,
+  0xD83B, 0xDE03, 0xD83B, 0xDE02, 0xD83B, 0xDE01, 0xD83B, 0xDE00,
+  0x00
+};
+
+static const uint16_t bidiVisualOrder_2_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Looped Symbols, 0x1EE80 - 0x1EE9B */
+  0xD83B, 0xDE9B, 0xD83B, 0xDE9A, 0xD83B, 0xDE99, 0x20,
+    0xD83B, 0xDE98, 0xD83B, 0xDE97, 0xD83B, 0xDE96, 0x20,
+    0xD83B, 0xDE95, 0xD83B, 0xDE94, 0xD83B, 0xDE93, 0xD83B, 0xDE92, 0x20,
+    0xD83B, 0xDE91, 0xD83B, 0xDE90, 0xD83B, 0xDE8F, 0xD83B, 0xDE8E, 0x20,
+    0xD83B, 0xDE8D, 0xD83B, 0xDE8C, 0xD83B, 0xDE8B, 0x20,
+    0xD83B, 0xDE89, 0xD83B, 0xDE88, 0xD83B, 0xDE87, 0x20,
+    0xD83B, 0xDE86, 0xD83B, 0xDE85, 0xD83B, 0xDE84, 0x20,
+  0xD83B, 0xDE83, 0xD83B, 0xDE82, 0xD83B, 0xDE81, 0xD83B, 0xDE80,
+  0x00
+};
+
+static const uint16_t bidiVisualOrder_3_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Double-struck Symbols, 0x1EEA1 - 0x1EEBB */
+  0xD83B, 0xDEBB, 0xD83B, 0xDEBA, 0xD83B, 0xDEB9, 0x20,
+    0xD83B, 0xDEB8, 0xD83B, 0xDEB7, 0xD83B, 0xDEB6, 0x20,
+    0xD83B, 0xDEB5, 0xD83B, 0xDEB4, 0xD83B, 0xDEB3, 0xD83B, 0xDEB2, 0x20,
+    0xD83B, 0xDEB1, 0xD83B, 0xDEB0, 0xD83B, 0xDEAF, 0xD83B, 0xDEAE, 0x20,
+    0xD83B, 0xDEAD, 0xD83B, 0xDEAC, 0xD83B, 0xDEAB, 0x20,
+    0xD83B, 0xDEA9, 0xD83B, 0xDEA8, 0xD83B, 0xDEA7, 0x20,
+    0xD83B, 0xDEA6, 0xD83B, 0xDEA5, 0x20,
+  0xD83B, 0xDEA3, 0xD83B, 0xDEA2, 0xD83B, 0xDEA1,
+  0x00
+};
+
+static const uint16_t bidiVisualOrder_4_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Initial Symbols, 0x1EE21 - 0x1EE3B */
+  0xD83B, 0xDE3B, 0xD83B, 0xDE39, 0x20,
+    0xD83B, 0xDE37, 0xD83B, 0xDE36, 0x20,
+    0xD83B, 0xDE35, 0xD83B, 0xDE34, 0xD83B, 0xDE32, 0x20,
+    0xD83B, 0xDE31, 0xD83B, 0xDE30, 0xD83B, 0xDE2F, 0xD83B, 0xDE2E, 0x20,
+    0xD83B, 0xDE2D, 0xD83B, 0xDE2C, 0xD83B, 0xDE2B, 0xD83B, 0xDE2A, 0x20,
+    0xD83B, 0xDE29, 0xD83B, 0xDE27, 0x20,
+  0xD83B, 0xDE22, 0xD83B, 0xDE21,
+  0x00
+};
+
+static const uint16_t bidiVisualOrder_5_UTF16LE[] = {
+    /* Arabic mathematical Symbols - Tailed Symbols */
+    0xD83B, 0xDE5F, 0xD83B, 0xDE5D, 0xD83B, 0xDE5B, 0xD83B, 0xDE59, 0x20,
+    0xD83B, 0xDE57, 0xD83B, 0xDE54, 0xD83B, 0xDE52, 0xD83B, 0xDE51, 0x20,
+    0xD83B, 0xDE4F, 0xD83B, 0xDE4E, 0xD83B, 0xDE4D, 0x20,
+    0xD83B, 0xDE4B, 0xD83B, 0xDE49, 0xD83B, 0xDE47, 0xD83B, 0xDE42,
+    0x00
+};
+
 //05D0 05D1 0028 05D2 05D3 005B 0026 0065 0066 005D 002E 0029 0067 0068; 1; 1; 1 1 1 1 1 1 1 2 2 1 1 1 2 2; 12 13 11 10 9 7 8 6 5 4 3 2 1 0
 //0061 0062 0063 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 05D0 05D1 05D2; 0; 0; 0 0 0 0 0 0 0 0 0 1 1 1 0 0 1 1 1; 0 1 2 3 4 5 6 7 8 11 10 9 12 13 16 15 14
 //0061 0062 0063 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 05D0 05D1 05D2; 1; 1; 2 2 2 1 1 2 2 2 1 1 1 1 1 1 1 1 1; 16 15 14 13 12 11 10 9 8 5 6 7 4 3 0 1 2
@@ -332,27 +480,6 @@ class TestCharsetConverter : public testing::Test
 protected:
   TestCharsetConverter()
   {
-    /* Add default settings for locale.
-     * Settings here are taken from CGUISettings::Initialize()
-     */
-    /* TODO
-    CSettingsCategory *loc = CSettings::Get().AddCategory(7, "locale", 14090);
-    CSettings::Get().AddString(loc, "locale.language",248,"english",
-                            SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.country", 20026, "USA",
-                            SPIN_CONTROL_TEXT);
-    CSettings::Get().AddString(loc, "locale.charset", 14091, "DEFAULT",
-                            SPIN_CONTROL_TEXT); // charset is set by the
-                                                // language file
-
-    // Add default settings for subtitles
-    CSettingsCategory *sub = CSettings::Get().AddCategory(5, "subtitles", 287);
-    CSettings::Get().AddString(sub, "subtitles.charset", 735, "DEFAULT",
-                            SPIN_CONTROL_TEXT);
-    */
-
-    g_charsetConverter.reset();
-    g_charsetConverter.clear();
   }
 
   ~TestCharsetConverter()
@@ -571,23 +698,123 @@ TEST_F(TestCharsetConverter, utf16BEToLE)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
 {
-  std::u16string u16Source(bidiReorder_1_LTR_utf16BE);
-  std::wstring u16Expected((wchar_t*)bidiReorder_1_LTR_utf16LE_Expected);
+  std::u16string u16Source(bidiLogicalOrder_1_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
 
   std::string source;
   std::string expected;
   std::string temp;
 
-  g_charsetConverter.utf16BEtoUTF8(u16Source, source);
-  g_charsetConverter.wToUTF8(u16Expected, expected, false);
-  g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false);
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8LogicalToVisual_2)
+{
+  std::u16string u16Source(bidiLogicalOrder_2_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
+
+  std::string source;
+  std::string expected;
+  std::string temp;
+
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8LogicalToVisual_3)
+{
+  std::u16string u16Source(bidiLogicalOrder_3_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
+
+  std::string source;
+  std::string expected;
+  std::string temp;
+
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8LogicalToVisual_4)
+{
+  std::u16string u16Source(bidiLogicalOrder_4_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
+
+  std::string source;
+  std::string expected;
+  std::string temp;
+
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_STREQ(expected.c_str(), temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8LogicalToVisual_5)
+{
+  std::u16string u16Source(bidiLogicalOrder_5_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
+
+  std::string source;
+  std::string expected;
+  std::string temp;
+
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
 {
-  std::u16string u16Source(bidiReorder_1_LTR_utf16LE);
-  std::u16string u16Expected(bidiReorder_1_LTR_utf16LE_Expected);
+  std::u16string u16Source(bidiLogicalOrder_1_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
+  std::u16string result;
+
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf16LogicalToVisual_2)
+{
+  std::u16string u16Source(bidiLogicalOrder_2_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
+  std::u16string result;
+
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf16LogicalToVisual_3)
+{
+  std::u16string u16Source(bidiLogicalOrder_3_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
+  std::u16string result;
+
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf16LogicalToVisual_4)
+{
+  std::u16string u16Source(bidiLogicalOrder_4_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
+  std::u16string result;
+
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf16LogicalToVisual_5)
+{
+  std::u16string u16Source(bidiLogicalOrder_5_UTF16LE);
+  std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
@@ -648,13 +875,15 @@ TEST_F(TestCharsetConverter, utf8To_ASCII)
 TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u16string expected((char16_t*)&CP1251asUTF16);
+  std::u16string expected(CP1251asUTF16);
   std::u16string temp;
 
   g_charsetConverter.utf8ToUtf16(source, temp);
   EXPECT_EQ(expected.length(), temp.length());
-  EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
-    expected.length() * sizeof(char16_t)));
+  EXPECT_STREQ((wchar_t*)expected.c_str(), (wchar_t*)temp.c_str());
+
+  //EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
+  //  expected.length() * sizeof(char16_t)));
 }
 
 TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
