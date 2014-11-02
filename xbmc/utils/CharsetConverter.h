@@ -37,6 +37,14 @@ class CCharsetConverter : public ISettingCallback
 public:
   CCharsetConverter();
 
+  enum BiDiOptions
+  {
+    LTR = 1,
+    RTL = 2,
+    WRITE_REVERSE = 4,
+    REMOVE_CONTROLS = 8
+  };
+
   virtual void OnSettingChanged(const CSetting* setting);
 
   static void reset();
@@ -119,14 +127,7 @@ public:
    */
   static std::string utf32ToUtf8(const std::u32string& utf32StringSrc, bool failOnBadChar = false);
   
-  /**
-   * Perform logical to visual flip.
-   * @param logicalStringSrc    is source string with logical characters order
-   * @param visualStringDst     is output string with visual characters order, empty on any error
-   * @param forceLTRReadingOrder        force LTR reading order
-   * @return true on success, false otherwise
-   */
-  static bool utf32logicalToVisualBiDi(const std::u32string& logicalStringSrc, std::u32string& visualStringDst, bool forceLTRReadingOrder = false, bool failOnBadString = false);
+  
   
 #ifdef TARGET_WINDOWS
   static bool utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
@@ -141,6 +142,9 @@ public:
   static bool utf8ToStringCharset(const std::string& utf8StringSrc, std::string& stringDst);
   static bool utf8ToStringCharset(std::string& stringSrcDst);
 
+  static bool utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
+  static bool utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
+
   static bool utf8ToSystem(std::string& stringSrcDst, bool failOnBadChar = false);
   static bool systemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
@@ -154,11 +158,38 @@ public:
   static bool utf16LEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
   static bool ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst);
 
-  static bool utf8logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString = false);
+  /**
+  * Perform logical to visual flip.
+  * @param logicalStringSrc    is source string with logical characters order
+  * @param visualStringDst     is output string with visual characters order, empty on any error
+  * @param forceLTRReadingOrder        force LTR reading order
+  * @return true on success, false otherwise
+  */
+  static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, 
+                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  bool failOnBadString = false);
 
-  static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString = false);
-  static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst, bool failOnBadString = false);
-  static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst, bool failOnBadString = false);
+  /**
+  * Perform logical to visual flip.
+  * @param logicalStringSrc    is source string with logical characters order
+  * @param visualStringDst     is output string with visual characters order, empty on any error
+  * @param forceLTRReadingOrder        force LTR reading order
+  * @return true on success, false otherwise
+  */
+  static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
+                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  bool failOnBadString = false);
+
+  /**
+  * Perform logical to visual flip.
+  * @param logicalStringSrc    is source string with logical characters order
+  * @param visualStringDst     is output string with visual characters order, empty on any error
+  * @param forceLTRReadingOrder        force LTR reading order
+  * @return true on success, false otherwise
+  */
+  static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
+                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  bool failOnBadString = false);
 
   static std::vector<std::string> getCharsetLabels();
   static std::string getCharsetLabelByName(const std::string& charsetName);
@@ -173,12 +204,6 @@ private:
   static void resetUserCharset(void);
   static void resetSubtitleCharset(void);
   static void resetKaraokeCharset(void);
-
-  enum BiDiLevel
-  {
-    LTR,
-    RTL,
-  };
 
   class CInnerConverter;
 };
