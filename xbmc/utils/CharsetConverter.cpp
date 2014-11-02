@@ -92,13 +92,13 @@ class CCharsetConverter::CInnerConverter
 private:
   static bool internalBidiHelper(const UChar* srcBuffer, int32_t srcLength, 
                                  UChar** dstBuffer, int32_t& dstLength,
-                                 const BiDiLevel bidiOptions, const bool failOnBadString);
+                                 const uint16_t bidiOptions);
 public:
 
   template<class INPUT, class OUTPUT>
   static bool logicalToVisualBiDi(const std::string& sourceCharset, const std::string& targetCharset,
                                   const INPUT& strSource, OUTPUT& strDest,
-                                  BiDiLevel bidiOptions = BiDiLevel::LTR, const bool failOnBadString = false);
+                                  const uint16_t bidiOptions, const bool failOnBadString = false);
 
   template<class INPUT,class OUTPUT>
   static bool customConvert(const std::string& sourceCharset, const std::string& targetCharset,
@@ -215,7 +215,7 @@ bool CCharsetConverter::CInnerConverter::customConvert(const std::string& source
 template<class INPUT, class OUTPUT>
 bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::string& sourceCharset, const std::string& targetCharset,
                                                             const INPUT& strSource, OUTPUT& strDest,
-                                                            BiDiLevel bidiOptions, const bool failOnBadString)
+                                                            const uint16_t bidiOptions, const bool failOnBadString)
 {
   strDest.clear();
   if (strSource.empty())
@@ -282,7 +282,7 @@ bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::string& 
     return false;
   }
 
-  if (!CInnerConverter::internalBidiHelper(conversionBuffer, res, &bidiResultBuffer, res, bidiOptions, failOnBadString))
+  if (!CInnerConverter::internalBidiHelper(conversionBuffer, res, &bidiResultBuffer, res, bidiOptions))
   {
     delete[] conversionBuffer;
     return false;
@@ -322,12 +322,13 @@ bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::string& 
 
 bool CCharsetConverter::CInnerConverter::internalBidiHelper(const UChar* srcBuffer, int32_t srcLength,
                                                             UChar** dstBuffer, int32_t& dstLength,
-                                                            const BiDiLevel bidiOptions, const bool failOnBadString)
+                                                            const uint16_t bidiOptions)
 {
   bool result = false;
   int32_t outputLength = -1;
   int32_t requiredLength = -1;
   UErrorCode err = U_ZERO_ERROR;
+  UBiDiLevel level = 0;
   UBiDi* bidiConv = ubidi_open();
   
   //ubidi_setPara changes the srcBuffer pointer so make it const
@@ -335,7 +336,14 @@ bool CCharsetConverter::CInnerConverter::internalBidiHelper(const UChar* srcBuff
   UChar* inputBuffer = const_cast<UChar*>(srcBuffer);
   UChar* outputBuffer = NULL;
 
-  ubidi_setPara(bidiConv, inputBuffer, -1, UBIDI_DEFAULT_LTR, NULL, &err);
+  if (bidiOptions & BiDiOptions::LTR)
+    level = UBIDI_DEFAULT_LTR;
+  else if (bidiOptions & BiDiOptions::RTL)
+    level = UBIDI_DEFAULT_RTL;
+  else
+    level = UBIDI_DEFAULT_LTR;
+
+  ubidi_setPara(bidiConv, inputBuffer, srcLength, level, NULL, &err);
 
   if (U_SUCCESS(err))
   {
@@ -344,7 +352,17 @@ bool CCharsetConverter::CInnerConverter::internalBidiHelper(const UChar* srcBuff
 
     do
     {
-      requiredLength = ubidi_writeReordered(bidiConv, outputBuffer, outputLength, UBIDI_DO_MIRRORING, &err);
+      //make sure our err is reset, some icu functions fail if it contains
+      //a previous bad result
+      err = U_ZERO_ERROR;
+
+      uint16_t options = UBIDI_DO_MIRRORING;
+      if (bidiOptions & BiDiOptions::REMOVE_CONTROLS)
+        options |= UBIDI_REMOVE_BIDI_CONTROLS;
+      if (bidiOptions & BiDiOptions::WRITE_REVERSE)
+        options |= UBIDI_OUTPUT_REVERSE;
+
+      requiredLength = ubidi_writeReordered(bidiConv, outputBuffer, outputLength, options, &err);
 
       if (U_SUCCESS(err))
         break;
@@ -504,11 +522,21 @@ std::u16string CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc, 
   return converted;
 }
 
+bool CCharsetConverter::utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar /* = true */)
+{
+  return CInnerConverter::customConvert(UTF8_CHARSET, UTF16BE_CHARSET, utf8StringSrc, utf16StringDst, failOnBadChar);
+}
+
+bool CCharsetConverter::utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar /* = true */)
+{
+  return CInnerConverter::customConvert(UTF8_CHARSET, UTF16LE_CHARSET, utf8StringSrc, utf16StringDst, failOnBadChar);
+}
+
 bool CCharsetConverter::utf8ToUtf32Visual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool bVisualBiDiFlip /*= false*/, bool forceLTRReadingOrder /*= false*/, bool failOnBadChar /*= false*/)
 {
   if (bVisualBiDiFlip)
   {
-    return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst, forceLTRReadingOrder ? BiDiLevel::LTR : BiDiLevel::RTL, failOnBadChar);
+    return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst, forceLTRReadingOrder ? BiDiOptions::LTR : BiDiOptions::RTL, failOnBadChar);
   }
   return CInnerConverter::customConvert(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst, failOnBadChar);
 }
@@ -525,11 +553,6 @@ std::string CCharsetConverter::utf32ToUtf8(const std::u32string& utf32StringSrc,
   return converted;
 }
 
-bool CCharsetConverter::utf32logicalToVisualBiDi(const std::u32string& logicalStringSrc, std::u32string& visualStringDst, bool forceLTRReadingOrder /*= false*/, bool failOnBadString /*= false*/)
-{
-  return CInnerConverter::logicalToVisualBiDi(UTF32_CHARSET, UTF32_CHARSET, logicalStringSrc, visualStringDst, forceLTRReadingOrder ? BiDiLevel::LTR : BiDiLevel::RTL, failOnBadString);
-}
-
 // The bVisualBiDiFlip forces a flip of characters for hebrew/arabic languages, only set to false if the flipping
 // of the string is already made or the string is not displayed in the GUI
 bool CCharsetConverter::utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst, bool bVisualBiDiFlip /*= true*/, 
@@ -538,7 +561,7 @@ bool CCharsetConverter::utf8ToWLogicalToVisual(const std::string& utf8StringSrc,
   // Try to flip hebrew/arabic characters, if any
   if (bVisualBiDiFlip)
   {
-    return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst, forceLTRReadingOrder ? BiDiLevel::LTR : BiDiLevel::RTL, failOnBadChar);
+    return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst, forceLTRReadingOrder ? BiDiOptions::LTR : BiDiOptions::RTL, failOnBadChar);
   }
   
   return CInnerConverter::customConvert(UTF8_CHARSET, UTF16_CHARSET, utf8StringSrc, wStringDst, failOnBadChar);
@@ -652,24 +675,25 @@ bool CCharsetConverter::systemToUtf8(const std::string& sysStringSrc, std::strin
   return CInnerConverter::customConvert("", UTF8_CHARSET, sysStringSrc, utf8StringDst, failOnBadChar);
 }
 
-bool CCharsetConverter::utf8logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString /*= false*/)
+bool CCharsetConverter::logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst,
+                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */,
+                                            bool failOnBadString /* = false */)
 {
-  return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, UTF8_CHARSET, utf8StringSrc, utf8StringDst, BiDiLevel::LTR, failOnBadString);
+  return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, UTF8_CHARSET, utf8StringSrc, utf8StringDst, bidiOptions, failOnBadString);
 }
 
-bool CCharsetConverter::logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, bool failOnBadString /* = false */)
+bool CCharsetConverter::logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
+                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */,
+                                            bool failOnBadString /* = false */)
 {
-  return CInnerConverter::logicalToVisualBiDi(UTF8_CHARSET, UTF8_CHARSET, utf8StringSrc, utf8StringDst, BiDiLevel::LTR, failOnBadString);
+  return CInnerConverter::logicalToVisualBiDi(UTF16_CHARSET, UTF16_CHARSET, utf16StringSrc, utf16StringDst, bidiOptions, failOnBadString);
 }
 
-bool CCharsetConverter::logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst, bool failOnBadString /* = false */)
+bool CCharsetConverter::logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
+                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */,
+                                            bool failOnBadString /* = false */)
 {
-  return CInnerConverter::logicalToVisualBiDi(UTF16_CHARSET, UTF16_CHARSET, utf16StringSrc, utf16StringDst, BiDiLevel::LTR, failOnBadString);
-}
-
-bool CCharsetConverter::logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst, bool failOnBadString /* = false */)
-{
-  return CInnerConverter::logicalToVisualBiDi(UTF32_CHARSET, UTF32_CHARSET, utf32StringSrc, utf32StringDst, BiDiLevel::LTR, failOnBadString);
+  return CInnerConverter::logicalToVisualBiDi(UTF32_CHARSET, UTF32_CHARSET, utf32StringSrc, utf32StringDst, bidiOptions, failOnBadString);
 }
 
 void CCharsetConverter::SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data)

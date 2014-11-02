@@ -24,6 +24,7 @@
 #include "system.h"
 
 #include <string>
+#include <stdio.h>
 #include <unicode/ucnv.h>
 
 #include "gtest/gtest.h"
@@ -109,7 +110,7 @@ static const uint8_t CP1251asUTF8[] = {
   0x00
 };
 
-static const uint16_t CP1251asUTF16[] = {
+static const uint16_t CP1251asUTF16LE[] = {
   0x0430, 0x0431, 0x0432, 0x0433, 0x0434,
   0x0435, 0x0436, 0x0437, 0x0438, 0x0439,
   0x043A, 0x043B, 0x043C, 0x043D, 0x043E,
@@ -120,7 +121,7 @@ static const uint16_t CP1251asUTF16[] = {
   0x0000
 };
 
-static const uint16_t CP1251asUTF16LE[] = {
+static const uint16_t CP1251asUTF16BE[] = {
   0x3004, 0x3104, 0x3204, 0x3304, 0x3404,
   0x3504, 0x3604, 0x3704, 0x3804, 0x3904,
   0x3A04, 0x3B04, 0x3C04, 0x3D04, 0x3E04,
@@ -131,14 +132,14 @@ static const uint16_t CP1251asUTF16LE[] = {
   0x0000
 };
 
-static const uint32_t CP1251asUTF32[] = {
-  0x04300000, 0x04310000, 0x04320000, 0x04330000, 0x04340000,
-  0x04350000, 0x04360000, 0x04370000, 0x04380000, 0x04390000,
-  0x043A0000, 0x043B0000, 0x043C0000, 0x043D0000, 0x043E0000,
-  0x043F0000, 0x04400000, 0x04410000, 0x04420000, 0x04430000,
-  0x04440000, 0x04450000, 0x04460000, 0x04470000, 0x04480000,
-  0x04490000, 0x044A0000, 0x044B0000, 0x044C0000, 0x044D0000,
-  0x044E0000, 0x044F0000,
+static const uint32_t CP1251asUTF32LE[] = {
+  0x0430, 0x0431, 0x0432, 0x0433, 0x0434,
+  0x0435, 0x0436, 0x0437, 0x0438, 0x0439,
+  0x043A, 0x043B, 0x043C, 0x043D, 0x043E,
+  0x043F, 0x0440, 0x0441, 0x0442, 0x0443,
+  0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
+  0x0449, 0x044A, 0x044B, 0x044C, 0x044D,
+  0x044E, 0x044F,
   0x0000
 };
 
@@ -474,6 +475,40 @@ static const uint16_t bidiVisualOrder_5_UTF16LE[] = {
 //0627 0628 062C 0020 0062 006F 006F 006B 0028 0073 0029; 0; 0; 1 1 1 0 0 0 0 0 0 0 0; 2 1 0 3 4 5 6 7 8 9 10
 //0627 0628 062C 0020 0062 006F 006F 006B 0028 0073 0029; 1; 1; 1 1 1 1 2 2 2 2 2 2 2; 4 5 6 7 8 9 10 3 2 1 0
 
+template<typename T>
+std::string toHex(const T& str)
+{
+  std::string result = "\"";
+  char buf[16];
+
+  for (int i = 0; i < str.length(); ++i)
+  {
+    _snprintf(buf, 16, "\\%#X", str[i]);
+    buf[15] = 0;
+    result.append(buf);
+  }
+  result.append("\"");
+
+  return result;
+}
+
+template<typename STR>
+::testing::AssertionResult AssertStringEquals(const char* exp_expr,
+                                              const char* act_expr,
+                                              STR& exp,
+                                              STR& act) 
+{
+  if (exp == act)
+    return ::testing::AssertionSuccess();
+
+  return ::testing::AssertionFailure()
+    << "Value of: " << act_expr << std::endl
+    << "Actual: " << toHex(act) << std::endl
+    << "Expected: " << exp_expr << std::endl
+    << "Which is: " << toHex(exp);
+}
+
+
 class TestCharsetConverter : public testing::Test
 {
 protected:
@@ -706,7 +741,7 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
 
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -721,7 +756,7 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_2)
 
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -736,7 +771,7 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_3)
 
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -751,7 +786,7 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_4)
 
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -766,7 +801,7 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_5)
 
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
   EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.utf8logicalToVisualBiDi(source, temp, false));
+  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -776,7 +811,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
   std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
   EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
@@ -786,7 +821,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_2)
   std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
   EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
@@ -796,7 +831,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_3)
   std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
   EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
@@ -806,7 +841,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_4)
   std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
   EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
@@ -816,7 +851,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_5)
   std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result, false);
+  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
   EXPECT_STREQ((wchar_t*)u16Expected.c_str(), (wchar_t*)result.c_str());
 }
 
@@ -874,27 +909,44 @@ TEST_F(TestCharsetConverter, utf8To_ASCII)
 TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u16string expected(CP1251asUTF16);
+  std::u16string expected(CP1251asUTF16LE);
   std::u16string temp;
 
   g_charsetConverter.utf8ToUtf16(source, temp);
   EXPECT_EQ(expected.length(), temp.length());
   EXPECT_STREQ((wchar_t*)expected.c_str(), (wchar_t*)temp.c_str());
+}
 
-  //EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
-  //  expected.length() * sizeof(char16_t)));
+TEST_F(TestCharsetConverter, utf8ToUtf16LE_CP1251)
+{
+  std::string source((char*)&CP1251asUTF8);
+  std::u16string expected(CP1251asUTF16LE);
+  std::u16string temp;
+
+  g_charsetConverter.utf8ToUtf16LE(source, temp);
+  EXPECT_EQ(expected.length(), temp.length());
+  EXPECT_STREQ((wchar_t*)expected.c_str(), (wchar_t*)temp.c_str());
+}
+
+TEST_F(TestCharsetConverter, utf8ToUtf16BE_CP1251)
+{
+  std::string source((char*)&CP1251asUTF8);
+  std::u16string expected(CP1251asUTF16BE);
+  std::u16string temp;
+
+  g_charsetConverter.utf8ToUtf16BE(source, temp);
+  EXPECT_EQ(expected.length(), temp.length());
+  EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
 
 TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u32string expected((char32_t*)&CP1251asUTF32);
+  std::u32string expected(CP1251asUTF32LE);
   std::u32string temp;
 
   g_charsetConverter.utf8ToUtf32(source, temp, false);
-  EXPECT_EQ(expected.length(), temp.length());
-  EXPECT_EQ(0, memcmp(expected.c_str(), temp.c_str(),
-    expected.length() * sizeof(char32_t)));
+  EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
 
 TEST_F(TestCharsetConverter, utf8To_UTF16LE)
@@ -904,8 +956,7 @@ TEST_F(TestCharsetConverter, utf8To_UTF16LE)
   refstr16_1.assign(refutf16LE2);
   varstr16_1.clear();
   g_charsetConverter.utf8To("UTF-16LE", refstra1, varstr16_1);
-  EXPECT_TRUE(!memcmp(refstr16_1.c_str(), varstr16_1.c_str(),
-                      refstr16_1.length() * sizeof(uint16_t)));
+  EXPECT_PRED_FORMAT2(AssertStringEquals, refstr16_1, varstr16_1);
 }
 
 TEST_F(TestCharsetConverter, utf8To_UTF32LE)
@@ -961,13 +1012,6 @@ TEST_F(TestCharsetConverter, isValidUtf8_4)
   EXPECT_FALSE(CUtf8Utils::isValidUtf8(refutf16LE3));
 }
 
-/* TODO: Resolve correct input/output for this function */
-// TEST_F(TestCharsetConverter, ucs2CharsetToStringCharset)
-// {
-//   void ucs2CharsetToStringCharset(const std::wstring& strSource,
-//                                   std::string& strDest, bool swap = false);
-// }
-
 TEST_F(TestCharsetConverter, wToUTF8)
 {
   refstrw1 = L"ｔｅｓｔ＿ｗＴｏＵＴＦ８";
@@ -1000,15 +1044,9 @@ TEST_F(TestCharsetConverter, utf8logicalToVisualBiDi)
   refstra1 = "ｔｅｓｔ＿ｕｔｆ８ｌｏｇｉｃａｌＴｏＶｉｓｕａｌＢｉＤｉ";
   refstra2 = "ｔｅｓｔ＿ｕｔｆ８ｌｏｇｉｃａｌＴｏＶｉｓｕａｌＢｉＤｉ";
   varstra1.clear();
-  g_charsetConverter.utf8logicalToVisualBiDi(refstra1, varstra1);
+  g_charsetConverter.logicalToVisualBiDi(refstra1, varstra1);
   EXPECT_STREQ(refstra2.c_str(), varstra1.c_str());
 }
-
-/* TODO: Resolve correct input/output for this function */
-// TEST_F(TestCharsetConverter, utf32ToStringCharset)
-// {
-//   void utf32ToStringCharset(const unsigned long* strSource, std::string& strDest);
-// }
 
 TEST_F(TestCharsetConverter, getCharsetLabels)
 {
@@ -1083,30 +1121,3 @@ TEST_F(TestCharsetConverter, unknownToUTF8_2)
   g_charsetConverter.unknownToUTF8(refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
-
-//TEST_F(TestCharsetConverter, toW)
-//{
-//  refstra1 = "ｔｅｓｔ＿ｔｏＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
-//  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
-//             L"\x94BD\xBDEF\xEF8F\xB7BC\xBCEF\xEF9A\xBFBC\xBDEF"
-//             L"\xEF83\x88BD\xBDEF\xEF81\x92BD\xBDEF\xEF93\x85BD"
-//             L"\xBDEF\xEF94\xBFBC\xBCEF\xEFB5\xB4BC\xBCEF\xEFA6"
-//             L"\x8DBC\xBCEF\xEF91\x96BC\xBCEF\xEFAC\xA5BC";
-//  varstrw1.clear();
-//  g_charsetConverter.toW(refstra1, varstrw1, "UTF-16LE");
-//  EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
-//}
-//
-//TEST_F(TestCharsetConverter, fromW)
-//{
-//  refstrw1 = L"\xBDEF\xEF94\x85BD\xBDEF\xEF93\x94BD\xBCEF\xEFBF"
-//             L"\x86BD\xBDEF\xEF92\x8FBD\xBDEF\xEF8D\xB7BC\xBCEF"
-//             L"\xEF9A\xBFBC\xBDEF\xEF83\x88BD\xBDEF\xEF81\x92BD"
-//             L"\xBDEF\xEF93\x85BD\xBDEF\xEF94\xBFBC\xBCEF\xEFB5"
-//             L"\xB4BC\xBCEF\xEFA6\x8DBC\xBCEF\xEF91\x96BC\xBCEF"
-//             L"\xEFAC\xA5BC";
-//  refstra1 = "ｔｅｓｔ＿ｆｒｏｍＷ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ";
-//  varstra1.clear();
-//  g_charsetConverter.fromW(refstrw1, varstra1, "UTF-16LE");
-//  EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
-//}
