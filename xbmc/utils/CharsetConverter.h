@@ -1,6 +1,4 @@
-#ifndef CCHARSET_CONVERTER
-#define CCHARSET_CONVERTER
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -21,8 +19,6 @@
  *
  */
 
-#include "settings/lib/ISettingCallback.h"
-#include "threads/CriticalSection.h"
 #include "utils/GlobalsHandling.h"
 #include "utils/uXstrings.h"
 
@@ -32,7 +28,7 @@
 
 class CSetting;
 
-class CCharsetConverter : public ISettingCallback
+class CCharsetConverter
 {
 public:
   CCharsetConverter();
@@ -44,14 +40,6 @@ public:
     WRITE_REVERSE = 4,
     REMOVE_CONTROLS = 8
   };
-
-  virtual void OnSettingChanged(const CSetting* setting);
-
-  static void reset();
-  static void resetSystemCharset();
-  static void reinitCharsetsFromSettings(void);
-
-  static void clear();
 
   /**
    * Convert UTF-8 string to UTF-32 string.
@@ -198,16 +186,12 @@ public:
   static bool unknownToUTF8(std::string& stringSrcDst);
   static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
+  static bool utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
 
   static void SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data);
 private:
-  static void resetUserCharset(void);
-  static void resetSubtitleCharset(void);
-  static void resetKaraokeCharset(void);
 
   class CInnerConverter;
 };
 
 XBMC_GLOBAL(CCharsetConverter,g_charsetConverter);
-
-#endif

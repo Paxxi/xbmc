@@ -264,7 +264,6 @@ void CSettings::Uninitialize()
   m_settingsManager->UnregisterCallback(&CStereoscopicsManager::Get());
   m_settingsManager->UnregisterCallback(&g_application);
   m_settingsManager->UnregisterCallback(&g_audioManager);
-  m_settingsManager->UnregisterCallback(&g_charsetConverter);
   m_settingsManager->UnregisterCallback(&g_graphicsContext);
   m_settingsManager->UnregisterCallback(&g_langInfo);
 #if defined(TARGET_WINDOWS) || defined(HAS_SDL_JOYSTICK)
@@ -729,12 +728,6 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.clear();
   settingSet.insert("lookandfeel.soundskin");
   m_settingsManager->RegisterCallback(&g_audioManager, settingSet);
-
-  settingSet.clear();
-  settingSet.insert("subtitles.charset");
-  settingSet.insert("karaoke.charset");
-  settingSet.insert("locale.charset");
-  m_settingsManager->RegisterCallback(&g_charsetConverter, settingSet);
 
   settingSet.clear();
   settingSet.insert("videoscreen.fakefullscreen");
