@@ -685,3 +685,13 @@ void CLangInfo::SettingOptionsRegionsFiller(const CSetting *setting, std::vector
   if (!match && regions.size() > 0)
     current = regions[0];
 }
+
+void CLangInfo::SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data)
+{
+  std::vector<std::string> vecCharsets = g_charsetConverter.getCharsetLabels();
+  sort(vecCharsets.begin(), vecCharsets.end(), sortstringbyname());
+
+  list.push_back(make_pair(g_localizeStrings.Get(13278), "DEFAULT")); // "Default"
+  for (int i = 0; i < (int)vecCharsets.size(); ++i)
+    list.push_back(make_pair(vecCharsets[i], g_charsetConverter.getCharsetNameByLabel(vecCharsets[i])));
+}
