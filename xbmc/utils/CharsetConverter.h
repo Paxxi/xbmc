@@ -24,9 +24,6 @@
 
 #include <string>
 #include <vector>
-#include <utility> //std::pair
-
-class CSetting;
 
 class CCharsetConverter
 {
@@ -122,6 +119,8 @@ public:
                 bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false,
                 bool failOnBadChar = false);
   static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst, bool failOnBadChar = false);
+  static bool utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
+
   static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 #endif
 
@@ -144,6 +143,7 @@ public:
 
   static bool utf16BEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
   static bool utf16LEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
+  static bool utf16ToUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
   static bool ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst);
 
   /**
@@ -187,8 +187,8 @@ public:
   static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
   static bool utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
+  
 
-  static void SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data);
 private:
 
   class CInnerConverter;
