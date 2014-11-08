@@ -25,25 +25,16 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
-#include "threads/SingleLock.h"
 #include "utils/Utf8Utils.h"
-#include "log.h"
 
-#include <errno.h>
-#include <iconv.h>
 #include <unicode/ucnv.h>
 #include <unicode/urename.h>
 #include <unicode/ubidi.h>
-#include <memory>
+#include <unicode/uniset.h>
+#include <unicode/normalizer2.h>
 
 #if !defined(TARGET_WINDOWS) && defined(HAVE_CONFIG_H)
   #include "config.h"
-#endif
-
-#ifdef WORDS_BIGENDIAN
-  #define ENDIAN_SUFFIX "BE"
-#else
-  #define ENDIAN_SUFFIX "LE"
 #endif
 
 #define UTF8_CHARSET "UTF-8"
@@ -55,34 +46,18 @@
 #define UTF32BE_CHARSET "UTF-32BE"
 
 #if defined(TARGET_DARWIN)
-  #define WCHAR_IS_UCS_4 1
-  #define UTF16_CHARSET "UTF-16" ENDIAN_SUFFIX
-  #define UTF32_CHARSET "UTF-32" ENDIAN_SUFFIX
-  #define UTF8_SOURCE "UTF-8-MAC"
-  #define WCHAR_CHARSET UTF32_CHARSET
+
 #elif defined(TARGET_WINDOWS)
   #define WCHAR_CHARSET UTF16_CHARSET 
+#ifdef NDEBUG
   #pragma comment(lib, "icuuc.lib")
-#elif defined(TARGET_ANDROID)
-  #define WCHAR_IS_UCS_4 1
-  #define UTF16_CHARSET "UTF-16" ENDIAN_SUFFIX
-  #define UTF32_CHARSET "UTF-32" ENDIAN_SUFFIX
-  #define UTF8_SOURCE "UTF-8"
-  #define WCHAR_CHARSET UTF32_CHARSET 
 #else
-  #define UTF16_CHARSET "UTF-16" ENDIAN_SUFFIX
-  #define UTF32_CHARSET "UTF-32" ENDIAN_SUFFIX
-  #define UTF8_SOURCE "UTF-8"
-  #define WCHAR_CHARSET "WCHAR_T"
-  #if __STDC_ISO_10646__
-    #ifdef SIZEOF_WCHAR_T
-      #if SIZEOF_WCHAR_T == 4
-        #define WCHAR_IS_UCS_4 1
-      #elif SIZEOF_WCHAR_T == 2
-        #define WCHAR_IS_UCS_2 1
-      #endif
-    #endif
-  #endif
+  #pragma comment(lib, "icuucd.lib")
+#endif
+#elif defined(TARGET_ANDROID)
+
+#else
+
 #endif
 
 /* We don't want to pollute header file with many additional includes and definitions, so put 
@@ -103,8 +78,9 @@ public:
   template<class INPUT,class OUTPUT>
   static bool customConvert(const std::string& sourceCharset, const std::string& targetCharset,
                             const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);
-};
 
+  static bool normalizeSystemSafe(std::u16string& strSrc);
+};
 
 
 class UConverterGuard
@@ -387,6 +363,38 @@ bool CCharsetConverter::CInnerConverter::internalBidiHelper(const UChar* srcBuff
   return result;
 }
 
+bool CCharsetConverter::CInnerConverter::normalizeSystemSafe(std::u16string& strSrc)
+{
+  UErrorCode err = U_ZERO_ERROR;
+  
+  //https://developer.apple.com/library/mac/qa/qa1173/_index.html
+  //which U + 2000 through U + 2FFF, U + F900 through U + FAFF, and U + 2F800 through U + 2FAFF
+  //are not decomposed(this avoids problems with round trip conversions from old Mac text encodings).
+  UnicodeString usetString("[^[\\u2000-\\u2fff][\\uf900-\\ufaff][\\u2f800-\\u2faff]]");
+  UnicodeSet uSet(usetString, err);
+  
+  if (U_FAILURE(err))
+    return false;
+
+  UnicodeString src((UChar*)strSrc.c_str());
+  UnicodeString dst;
+
+  const Normalizer2* nfd = Normalizer2::getNFDInstance(err);
+
+  if (U_FAILURE(err))
+    return false;
+
+  FilteredNormalizer2 filteredNfd(*nfd, uSet);
+
+  filteredNfd.normalize(src, dst, err);
+
+  if (U_FAILURE(err))
+    return false;
+
+  strSrc.assign((char16_t*)dst.getBuffer(), dst.length());
+
+  return true;
+}
 
 static struct SCharsetMapping
 {
@@ -425,24 +433,6 @@ CCharsetConverter::CCharsetConverter()
 {
 }
 
-void CCharsetConverter::OnSettingChanged(const CSetting* setting)
-{
-  if (setting == NULL)
-    return;
-
-  const std::string& settingId = setting->GetId();
-  if (settingId == "locale.charset")
-    resetUserCharset();
-  else if (settingId == "subtitles.charset")
-    resetSubtitleCharset();
-  else if (settingId == "karaoke.charset")
-    resetKaraokeCharset();
-}
-
-void CCharsetConverter::clear()
-{
-}
-
 std::vector<std::string> CCharsetConverter::getCharsetLabels()
 {
   std::vector<std::string> lab;
@@ -472,30 +462,6 @@ std::string CCharsetConverter::getCharsetNameByLabel(const std::string& charsetL
   }
 
   return "";
-}
-
-void CCharsetConverter::reset(void)
-{
-}
-
-void CCharsetConverter::resetSystemCharset(void)
-{
-}
-
-void CCharsetConverter::resetUserCharset(void)
-{
-}
-
-void CCharsetConverter::resetSubtitleCharset(void)
-{
-}
-
-void CCharsetConverter::resetKaraokeCharset(void)
-{
-}
-
-void CCharsetConverter::reinitCharsetsFromSettings(void)
-{
 }
 
 bool CCharsetConverter::utf8ToUtf32(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool failOnBadChar /*= true*/)
@@ -694,6 +660,27 @@ bool CCharsetConverter::logicalToVisualBiDi(const std::u32string& utf32StringSrc
                                             bool failOnBadString /* = false */)
 {
   return CInnerConverter::logicalToVisualBiDi(UTF32_CHARSET, UTF32_CHARSET, utf32StringSrc, utf32StringDst, bidiOptions, failOnBadString);
+}
+
+bool CCharsetConverter::utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst)
+{
+  stringDst.clear();
+
+  if (stringSrc.empty())
+    return true;
+
+  std::u16string buffer;
+    
+  if (!utf8ToUtf16(stringSrc, buffer, true))
+    return false;
+
+  if (!CInnerConverter::normalizeSystemSafe(buffer))
+    return false;
+
+  if (!utf16LEtoUTF8(buffer, stringDst))
+    return false;
+
+  return true;
 }
 
 void CCharsetConverter::SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data)
