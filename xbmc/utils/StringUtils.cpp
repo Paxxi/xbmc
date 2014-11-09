@@ -39,6 +39,7 @@
 #include <sstream>
 #include <time.h>
 #include <stdlib.h>
+#include <unicode/unistr.h>
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 
@@ -358,6 +359,12 @@ void StringUtils::ToUpper(wstring &str)
   transform(str.begin(), str.end(), str.begin(), toupperUnicode);
 }
 
+void StringUtils::ToUpper(std::u16string &str)
+{
+  UnicodeString temp(reinterpret_cast<const UChar*>(str.c_str()));
+  str.assign(reinterpret_cast<const char16_t*>(temp.toUpper().getTerminatedBuffer()));
+}
+
 void StringUtils::ToLower(string &str)
 {
   transform(str.begin(), str.end(), str.begin(), ::tolower);
@@ -366,6 +373,12 @@ void StringUtils::ToLower(string &str)
 void StringUtils::ToLower(wstring &str)
 {
   transform(str.begin(), str.end(), str.begin(), tolowerUnicode);
+}
+
+void StringUtils::ToLower(std::u16string &str)
+{
+  UnicodeString temp(reinterpret_cast<const UChar*>(str.c_str()));
+  str.assign(reinterpret_cast<const char16_t*>(temp.toLower().getTerminatedBuffer()));
 }
 
 bool StringUtils::EqualsNoCase(const std::string &str1, const std::string &str2)

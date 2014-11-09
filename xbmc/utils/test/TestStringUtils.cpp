@@ -19,8 +19,46 @@
  */
 
 #include "utils/StringUtils.h"
-
+#include "utils/uXstrings.h"
 #include "gtest/gtest.h"
+
+#include <string>
+
+template<typename T>
+std::string toHex(const T& str)
+{
+  std::string result = "\"";
+  char buf[16];
+
+  for (size_t i = 0; i < str.length(); ++i)
+  {
+    _snprintf(buf, 16, "\\%#X", str[i]);
+    buf[15] = 0;
+    result.append(buf);
+  }
+  result.append("\"");
+
+  return result;
+}
+
+//gtest doesn't know about char16_t and char32_t so make our own
+//comparison to avoid memcmp and get the same output as regular
+//string on failure
+template<typename STR>
+::testing::AssertionResult AssertStringEquals(const char* exp_expr,
+                                              const char* act_expr,
+                                              STR& exp,
+                                              STR& act)
+{
+  if (exp == act)
+    return ::testing::AssertionSuccess();
+
+  return ::testing::AssertionFailure()
+    << "Value of: " << act_expr << std::endl
+    << "Actual: " << toHex(act) << std::endl
+    << "Expected: " << exp_expr << std::endl
+    << "Which is: " << toHex(exp);
+}
 
 TEST(TestStringUtils, Format)
 {
@@ -33,7 +71,7 @@ TEST(TestStringUtils, Format)
   EXPECT_STREQ("", varstr.c_str());
 }
 
-TEST(TestStringUtils, ToUpper)
+TEST(TestStringUtils, ToUpper_ascii)
 {
   std::string refstr = "TEST";
 
@@ -42,13 +80,37 @@ TEST(TestStringUtils, ToUpper)
   EXPECT_STREQ(refstr.c_str(), varstr.c_str());
 }
 
-TEST(TestStringUtils, ToLower)
+TEST(TestStringUtils, ToUpper_char16)
+{
+  //testdata taken from icu file icu\source\test\cintltst\cstrcase.c
+  char16_t ref[] = { 0x41, 0x42, 0x49, 0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0xd93f, 0xdfff, 0x00 };
+  char16_t var[] = { 0x61, 0x42, 0x69, 0x3c2, 0xdf, 0x3c3, 0x2f, 0xfb03, 0xd93f, 0xdfff, 0x00 };
+  std::u16string refstr(ref);
+  std::u16string varstr(var);
+
+  StringUtils::ToUpper(varstr);
+  EXPECT_PRED_FORMAT2(AssertStringEquals, refstr, varstr);
+}
+
+TEST(TestStringUtils, ToLower_ascii)
 {
   std::string refstr = "test";
   
   std::string varstr = "TeSt";
   StringUtils::ToLower(varstr);
   EXPECT_STREQ(refstr.c_str(), varstr.c_str());
+}
+
+TEST(TestStringUtils, ToLower_char16)
+{
+  //testdata taken from icu file icu\source\test\cintltst\cstrcase.c
+  char16_t ref[] = { 0x61, 0x62, 0x69, 0x3c3, 0xdf, 0x3c2, 0x2f, 0xd93f, 0xdfff, 0x00 };
+  char16_t var[] = { 0x61, 0x42, 0x49, 0x3a3, 0xdf, 0x3a3, 0x2f, 0xd93f, 0xdfff, 0x00 };
+  std::u16string refstr(ref);
+  std::u16string varstr(var);
+
+  StringUtils::ToLower(varstr);
+  EXPECT_PRED_FORMAT2(AssertStringEquals, refstr, varstr);
 }
 
 TEST(TestStringUtils, EqualsNoCase)

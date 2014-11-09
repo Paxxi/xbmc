@@ -34,6 +34,7 @@
 #include <string>
 
 #include "XBDateTime.h"
+#include "utils/uXstrings.h"
 #include "utils/StdString.h"
 #include "utils/params_check_macros.h"
 
@@ -57,8 +58,10 @@ public:
   static std::wstring FormatV(PRINTF_FORMAT_STRING const wchar_t *fmt, va_list args);
   static void ToUpper(std::string &str);
   static void ToUpper(std::wstring &str);
+  static void ToUpper(std::u16string &str);
   static void ToLower(std::string &str);
   static void ToLower(std::wstring &str);
+  static void ToLower(std::u16string &str);
   static bool EqualsNoCase(const std::string &str1, const std::string &str2);
   static bool EqualsNoCase(const std::string &str1, const char *s2);
   static bool EqualsNoCase(const char *s1, const char *s2);
