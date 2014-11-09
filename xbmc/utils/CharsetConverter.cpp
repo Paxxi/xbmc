@@ -326,8 +326,8 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
 
   if (U_SUCCESS(err))
   {
-    outputLength = ubidi_getResultLength(bidiConv) + 1; //allow for null terminator
-  outputBuffer = new UChar[outputLength];
+    outputLength = ubidi_getProcessedLength(bidiConv) + 1; //allow for null terminator
+    outputBuffer = new UChar[outputLength];
 
     do
     {
@@ -340,7 +340,10 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
       requiredLength = ubidi_writeReordered(bidiConv, outputBuffer, outputLength, options, &err);
 
       if (U_SUCCESS(err))
+      {
+        outputLength = requiredLength;
         break;
+      }
 
       if (err == U_BUFFER_OVERFLOW_ERROR)
       {
@@ -362,8 +365,8 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
       }
     } while (1);
 
-  *dstBuffer = outputBuffer;
-  dstLength = outputLength;
+    *dstBuffer = outputBuffer;
+    dstLength = outputLength;
     result = true;
   }
 

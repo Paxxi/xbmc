@@ -114,7 +114,6 @@ public:
   
   
   
-#ifdef TARGET_WINDOWS
   static bool utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
                 bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false,
                 bool failOnBadChar = false);
@@ -122,7 +121,6 @@ public:
   static bool utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
 
   static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
-#endif
 
   static bool subtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
 
