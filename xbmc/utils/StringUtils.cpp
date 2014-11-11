@@ -40,6 +40,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unicode/unistr.h>
+#include <unicode/ustring.h>
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 
@@ -383,28 +384,40 @@ void StringUtils::ToLower(std::u16string &str)
 
 bool StringUtils::EqualsNoCase(const std::string &str1, const std::string &str2)
 {
-  return EqualsNoCase(str1.c_str(), str2.c_str());
+  return CompareNoCase(str1.c_str(), str2.c_str()) == 0;
+}
+
+bool StringUtils::EqualsNoCase(const std::u16string &str1, const std::u16string &str2)
+{
+  return CompareNoCase(str1.c_str(), str2.c_str()) == 0;
 }
 
 bool StringUtils::EqualsNoCase(const std::string &str1, const char *s2)
 {
-  return EqualsNoCase(str1.c_str(), s2);
+  return CompareNoCase(str1.c_str(), s2) == 0;
+}
+
+bool StringUtils::EqualsNoCase(const std::u16string &str1, const char16_t *s2)
+{
+  return CompareNoCase(str1.c_str(), s2) == 0;
 }
 
 bool StringUtils::EqualsNoCase(const char *s1, const char *s2)
 {
-  char c2; // we need only one char outside the loop
-  do
-  {
-    const char c1 = *s1++; // const local variable should help compiler to optimize
-    c2 = *s2++;
-    if (c1 != c2 && ::tolower(c1) != ::tolower(c2)) // This includes the possibility that one of the characters is the null-terminator, which implies a string mismatch.
-      return false;
-  } while (c2 != '\0'); // At this point, we know c1 == c2, so there's no need to test them both.
-  return true;
+  return CompareNoCase(s1, s2) == 0;
+}
+
+bool StringUtils::EqualsNoCase(const char16_t *s1, const char16_t *s2)
+{
+  return CompareNoCase(s1, s2) == 0;
 }
 
 int StringUtils::CompareNoCase(const std::string &str1, const std::string &str2)
+{
+  return CompareNoCase(str1.c_str(), str2.c_str());
+}
+
+int StringUtils::CompareNoCase(const std::u16string &str1, const std::u16string &str2)
 {
   return CompareNoCase(str1.c_str(), str2.c_str());
 }
@@ -420,6 +433,13 @@ int StringUtils::CompareNoCase(const char *s1, const char *s2)
       return ::tolower(c1) - ::tolower(c2);
   } while (c2 != '\0'); // At this point, we know c1 == c2, so there's no need to test them both.
   return 0;
+}
+
+int StringUtils::CompareNoCase(const char16_t *s1, const char16_t *s2)
+{
+  return u_strcasecmp(reinterpret_cast<const UChar*>(s1),
+                      reinterpret_cast<const UChar*>(s2),
+                      0);
 }
 
 string StringUtils::Left(const string &str, size_t count)
