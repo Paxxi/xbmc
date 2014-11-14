@@ -289,7 +289,13 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
 
           std::wstring unicodeText, unicodeText2;
 
-          g_charsetConverter.utf8ToW(htmlText, unicodeText2, m_rtlText);
+          if (m_rtlText)
+          {
+            std::string htmlText2(htmlText);
+            g_charsetConverter.reverseRTL(htmlText2, htmlText);
+          }
+
+          g_charsetConverter.utf8ToW(htmlText, unicodeText2);
           html.ConvertHTMLToW(unicodeText2, unicodeText);
 
           mTagElements.insert(StrPair(*i, unicodeText));

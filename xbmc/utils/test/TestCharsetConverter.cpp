@@ -1013,63 +1013,65 @@ TEST_F(TestCharsetConverter, utf8logicalToVisualBiDi)
   EXPECT_STREQ(refstra2.c_str(), varstra1.c_str());
 }
 
-TEST_F(TestCharsetConverter, getCharsetLabels)
-{
-  std::vector<std::string> reflabels;
-  reflabels.push_back("Western Europe (ISO)");
-  reflabels.push_back("Central Europe (ISO)");
-  reflabels.push_back("South Europe (ISO)");
-  reflabels.push_back("Baltic (ISO)");
-  reflabels.push_back("Cyrillic (ISO)");
-  reflabels.push_back("Arabic (ISO)");
-  reflabels.push_back("Greek (ISO)");
-  reflabels.push_back("Hebrew (ISO)");
-  reflabels.push_back("Turkish (ISO)");
-  reflabels.push_back("Central Europe (Windows)");
-  reflabels.push_back("Cyrillic (Windows)");
-  reflabels.push_back("Western Europe (Windows)");
-  reflabels.push_back("Greek (Windows)");
-  reflabels.push_back("Turkish (Windows)");
-  reflabels.push_back("Hebrew (Windows)");
-  reflabels.push_back("Arabic (Windows)");
-  reflabels.push_back("Baltic (Windows)");
-  reflabels.push_back("Vietnamesse (Windows)");
-  reflabels.push_back("Thai (Windows)");
-  reflabels.push_back("Chinese Traditional (Big5)");
-  reflabels.push_back("Chinese Simplified (GBK)");
-  reflabels.push_back("Japanese (Shift-JIS)");
-  reflabels.push_back("Korean");
-  reflabels.push_back("Hong Kong (Big5-HKSCS)");
+//keep it here for now, no CLangInfo test cases?
 
-  std::vector<std::string> varlabels = g_charsetConverter.getCharsetLabels();
-  ASSERT_EQ(reflabels.size(), varlabels.size());
-
-  std::vector<std::string>::iterator it;
-  for (it = varlabels.begin(); it < varlabels.end(); ++it)
-  {
-    EXPECT_STREQ((reflabels.at(it - varlabels.begin())).c_str(), (*it).c_str());
-  }
-}
-
-TEST_F(TestCharsetConverter, getCharsetLabelByName)
-{
-  std::string varstr =
-    g_charsetConverter.getCharsetLabelByName("ISO-8859-1");
-  EXPECT_STREQ("Western Europe (ISO)", varstr.c_str());
-  varstr.clear();
-  varstr = g_charsetConverter.getCharsetLabelByName("Bogus");
-  EXPECT_STREQ("", varstr.c_str());
-}
-
-TEST_F(TestCharsetConverter, getCharsetNameByLabel)
-{
-  std::string varstr =
-    g_charsetConverter.getCharsetNameByLabel("Western Europe (ISO)");
-  EXPECT_STREQ("ISO-8859-1", varstr.c_str());
-  varstr.clear();
-  varstr = g_charsetConverter.getCharsetNameByLabel("Bogus");
-  EXPECT_STREQ("", varstr.c_str());
-}
+//TEST_F(TestCharsetConverter, getCharsetLabels)
+//{
+//  std::vector<std::string> reflabels;
+//  reflabels.push_back("Western Europe (ISO)");
+//  reflabels.push_back("Central Europe (ISO)");
+//  reflabels.push_back("South Europe (ISO)");
+//  reflabels.push_back("Baltic (ISO)");
+//  reflabels.push_back("Cyrillic (ISO)");
+//  reflabels.push_back("Arabic (ISO)");
+//  reflabels.push_back("Greek (ISO)");
+//  reflabels.push_back("Hebrew (ISO)");
+//  reflabels.push_back("Turkish (ISO)");
+//  reflabels.push_back("Central Europe (Windows)");
+//  reflabels.push_back("Cyrillic (Windows)");
+//  reflabels.push_back("Western Europe (Windows)");
+//  reflabels.push_back("Greek (Windows)");
+//  reflabels.push_back("Turkish (Windows)");
+//  reflabels.push_back("Hebrew (Windows)");
+//  reflabels.push_back("Arabic (Windows)");
+//  reflabels.push_back("Baltic (Windows)");
+//  reflabels.push_back("Vietnamesse (Windows)");
+//  reflabels.push_back("Thai (Windows)");
+//  reflabels.push_back("Chinese Traditional (Big5)");
+//  reflabels.push_back("Chinese Simplified (GBK)");
+//  reflabels.push_back("Japanese (Shift-JIS)");
+//  reflabels.push_back("Korean");
+//  reflabels.push_back("Hong Kong (Big5-HKSCS)");
+//
+//  std::vector<std::string> varlabels = g_charsetConverter.getCharsetLabels();
+//  ASSERT_EQ(reflabels.size(), varlabels.size());
+//
+//  std::vector<std::string>::iterator it;
+//  for (it = varlabels.begin(); it < varlabels.end(); ++it)
+//  {
+//    EXPECT_STREQ((reflabels.at(it - varlabels.begin())).c_str(), (*it).c_str());
+//  }
+//}
+//
+//TEST_F(TestCharsetConverter, getCharsetLabelByName)
+//{
+//  CStdString varstr =
+//    g_charsetConverter.getCharsetLabelByName("ISO-8859-1");
+//  EXPECT_STREQ("Western Europe (ISO)", varstr.c_str());
+//  varstr.clear();
+//  varstr = g_charsetConverter.getCharsetLabelByName("Bogus");
+//  EXPECT_STREQ("", varstr.c_str());
+//}
+//
+//TEST_F(TestCharsetConverter, getCharsetNameByLabel)
+//{
+//  CStdString varstr =
+//    g_charsetConverter.getCharsetNameByLabel("Western Europe (ISO)");
+//  EXPECT_STREQ("ISO-8859-1", varstr.c_str());
+//  varstr.clear();
+//  varstr = g_charsetConverter.getCharsetNameByLabel("Bogus");
+//  EXPECT_STREQ("", varstr.c_str());
+//}
 
 TEST_F(TestCharsetConverter, unknownToUTF8_1)
 {
