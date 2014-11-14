@@ -28,7 +28,6 @@
 class CCharsetConverter
 {
 public:
-  CCharsetConverter();
 
   enum BiDiOptions
   {
@@ -152,7 +151,7 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, 
-                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
                                   bool failOnBadString = false);
 
   /**
@@ -163,7 +162,7 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
-                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
                                   bool failOnBadString = false);
 
   /**
@@ -174,18 +173,21 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
-                                  uint16_t bidiOptions = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS,
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
                                   bool failOnBadString = false);
 
-  static std::vector<std::string> getCharsetLabels();
-  static std::string getCharsetLabelByName(const std::string& charsetName);
-  static std::string getCharsetNameByLabel(const std::string& charsetLabel);
+  /**
+   * Reverse an RTL string, taking into account encoding
+   * @param utf8StringSrc[in]     RTL string to be reversed in utf8 encoding
+   * @param utf8StringDst[in,out] Destination for the reversed string  
+   * @return true in success, false otherwise
+   */
+  static bool reverseRTL(const std::string& utf8StringSrc, std::string& utf8StringDst);
 
   static bool unknownToUTF8(std::string& stringSrcDst);
   static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 
   static bool utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
-  
 
 private:
 
