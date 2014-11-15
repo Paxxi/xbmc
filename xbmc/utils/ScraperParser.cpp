@@ -515,7 +515,7 @@ void CScraperParser::Clean(std::string& strDirty)
       g_charsetConverter.utf8ToW(strBuffer, wbuffer);
       std::wstring wConverted;
       HTML::CHTMLUtil::ConvertHTMLToW(wbuffer,wConverted);
-      g_charsetConverter.wToUTF8(wConverted, strBuffer, false);
+      g_charsetConverter.wToUTF8(wConverted, strBuffer);
       StringUtils::Trim(strBuffer);
       ConvertJSON(strBuffer);
       strDirty.replace(i, i2-i+14, strBuffer);

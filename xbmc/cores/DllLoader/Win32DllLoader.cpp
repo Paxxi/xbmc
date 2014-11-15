@@ -243,7 +243,7 @@ bool Win32DllLoader::HasSymbols()
 void Win32DllLoader::OverrideImports(const std::string &dll)
 {
   std::wstring strdllW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(dll), strdllW, false);
+  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dll), strdllW);
   BYTE* image_base = (BYTE*)GetModuleHandleW(strdllW.c_str());
 
   if (!image_base)
@@ -338,7 +338,7 @@ bool Win32DllLoader::NeedsHooking(const char *dllName)
     }
   }
   std::wstring strdllNameW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(dllName), strdllNameW, false);
+  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dllName), strdllNameW);
   HMODULE hModule = GetModuleHandleW(strdllNameW.c_str());
   if (hModule == NULL)
     return false;
