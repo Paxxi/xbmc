@@ -359,7 +359,12 @@ bool CRssReader::Parse(int iFeed)
     {
       std::string strChannel = titleNode->FirstChild()->Value();
       std::wstring strChannelUnicode;
-      g_charsetConverter.utf8ToW(strChannel, strChannelUnicode, m_rtlText);
+      if (m_rtlText)
+      {
+        std::string strChannelTemp(strChannel);
+        g_charsetConverter.reverseRTL(strChannelTemp, strChannel);
+      }
+      g_charsetConverter.utf8ToW(strChannel, strChannelUnicode);
       AddString(strChannelUnicode, RSS_COLOR_CHANNEL, iFeed);
 
       AddString(L":", RSS_COLOR_CHANNEL, iFeed);

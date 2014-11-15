@@ -222,7 +222,7 @@ bool CGUITextLayout::Update(const std::string &text, float maxWidth, bool forceU
   m_lastUtf8Text = text;
   m_lastUpdateW = false;
   std::wstring utf16;
-  g_charsetConverter.utf8ToW(text, utf16, false);
+  g_charsetConverter.utf8ToW(text, utf16);
   UpdateCommon(utf16, maxWidth, forceLTRReadingOrder);
   return true;
 }
@@ -329,7 +329,7 @@ std::wstring CGUITextLayout::BidiFlip(const std::wstring &text, bool forceLTRRea
 void CGUITextLayout::Filter(std::string &text)
 {
   std::wstring utf16;
-  g_charsetConverter.utf8ToW(text, utf16, false);
+  g_charsetConverter.utf8ToW(text, utf16);
   vecColors colors;
   vecText parsedText;
   ParseText(utf16, 0, 0xffffffff, colors, parsedText);
@@ -659,7 +659,7 @@ void CGUITextLayout::AppendToUTF32(const std::string &utf8, character_t colStyle
 {
   std::wstring utf16;
   // no need to bidiflip here - it's done in BidiTransform above
-  g_charsetConverter.utf8ToW(utf8, utf16, false);
+  g_charsetConverter.utf8ToW(utf8, utf16);
   AppendToUTF32(utf16, colStyle, utf32);
 }
 

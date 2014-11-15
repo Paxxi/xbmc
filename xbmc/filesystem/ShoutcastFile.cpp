@@ -158,7 +158,7 @@ bool CShoutcastFile::ExtractTagInfo(const char* buf)
   bool result=false;
 
   std::wstring wBuffer, wConverted;
-  g_charsetConverter.utf8ToW(strBuffer, wBuffer, false);
+  g_charsetConverter.utf8ToW(strBuffer, wBuffer);
   HTML::CHTMLUtil::ConvertHTMLToW(wBuffer, wConverted);
   g_charsetConverter.wToUTF8(wConverted, strBuffer);
 

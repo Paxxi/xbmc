@@ -128,7 +128,7 @@ bool win32_exception::write_minidump(EXCEPTION_POINTERS* pEp)
 
   dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
 
-  g_charsetConverter.utf8ToW(dumpFileName, dumpFileNameW, false);
+  g_charsetConverter.utf8ToW(dumpFileName, dumpFileNameW);
   HANDLE hDumpFile = CreateFileW(dumpFileNameW.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
 
   if (hDumpFile == INVALID_HANDLE_VALUE)
@@ -231,8 +231,8 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
 
   dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
 
-  g_charsetConverter.utf8ToW(dumpFileName, dumpFileNameW, false);
-  hDumpFile = CreateFileW(dumpFileNameW.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+  g_charsetConverter.utf8ToW(dumpFileName, dumpFileNameW);
+  HANDLE hDumpFile = CreateFileW(dumpFileNameW.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
 
   if (hDumpFile == INVALID_HANDLE_VALUE)
   {

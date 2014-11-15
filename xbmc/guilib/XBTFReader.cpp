@@ -60,7 +60,7 @@ bool CXBTFReader::Open(const std::string& fileName)
 
 #ifdef TARGET_WINDOWS
   std::wstring strPathW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(m_fileName), strPathW, false);
+  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(m_fileName), strPathW);
   m_file = _wfopen(strPathW.c_str(), L"rb");
 #else
   m_file = fopen(m_fileName.c_str(), "rb");

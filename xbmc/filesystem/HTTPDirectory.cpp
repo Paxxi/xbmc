@@ -98,7 +98,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       std::wstring wName, wLink, wConverted;
       if (fileCharset.empty())
         g_charsetConverter.unknownToUTF8(strNameTemp);
-      g_charsetConverter.utf8ToW(strNameTemp, wName, false);
+      g_charsetConverter.utf8ToW(strNameTemp, wName);
       HTML::CHTMLUtil::ConvertHTMLToW(wName, wConverted);
       g_charsetConverter.wToUTF8(wConverted, strNameTemp);
       URIUtils::RemoveSlashAtEnd(strNameTemp);
@@ -119,7 +119,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       strLinkTemp = CURL::Decode(strLinkTemp);
       if (fileCharset.empty())
         g_charsetConverter.unknownToUTF8(strLinkTemp);
-      g_charsetConverter.utf8ToW(strLinkTemp, wLink, false);
+      g_charsetConverter.utf8ToW(strLinkTemp, wLink);
       HTML::CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
       g_charsetConverter.wToUTF8(wConverted, strLinkTemp);
 

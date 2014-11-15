@@ -415,7 +415,7 @@ void CUtil::GetHomePath(std::string& strPath, const std::string& strTarget)
   {
     //expand potential relative path to full path
     std::wstring strPathW;
-    g_charsetConverter.utf8ToW(strPath, strPathW, false);
+    g_charsetConverter.utf8ToW(strPath, strPathW);
     CWIN32Util::AddExtraLongPathPrefix(strPathW);
     const unsigned int bufSize = GetFullPathNameW(strPathW.c_str(), 0, NULL, NULL);
     if (bufSize != 0)
