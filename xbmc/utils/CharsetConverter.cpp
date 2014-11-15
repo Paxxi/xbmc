@@ -437,6 +437,11 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
 
 bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& strSrcDst)
 {
+  //This is only needed on darwin but doesn't cause any harm on other platforms.
+  //To be compatible with older versions of icu on Linux we just ignore this whole function
+  //since we don't really need it.
+  //Could mess up some testing though and might be better to try and check for icu version
+#if defined(TARGET_DARWIN)
   UErrorCode err = U_ZERO_ERROR;
   
   //https://developer.apple.com/library/mac/qa/qa1173/_index.html
@@ -465,7 +470,7 @@ bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& str
     return false;
 
   strSrcDst.assign(reinterpret_cast<const char16_t*>(dst.getBuffer()), dst.length());
-
+#endif
   return true;
 }
 
@@ -484,6 +489,11 @@ std::u32string CCharsetConverter::utf8ToUtf32(const std::string& utf8StringSrc)
 bool CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst)
 {
   return CInnerConverter::Convert(UTF8_CHARSET, UTF16_CHARSET, utf8StringSrc, utf16StringDst, false);
+}
+
+bool CCharsetConverter::TryUtf8ToUtf16(const std::string & utf8StringSrc, std::u16string & utf16StringDst)
+{
+  return CInnerConverter::Convert(UTF8_CHARSET, UTF16_CHARSET, utf8StringSrc, utf16StringDst, true);
 }
 
 std::u16string CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc)
@@ -615,6 +625,11 @@ bool CCharsetConverter::utf16ToUTF8(const std::u16string& utf16StringSrc, std::s
   return CInnerConverter::Convert(UTF16_CHARSET, UTF8_CHARSET, utf16StringSrc, utf8StringDst, false);
 }
 
+bool CCharsetConverter::TryUtf16ToUtf8(const std::u16string utf16StringSrc, std::string & utf8StringDst)
+{
+  return CInnerConverter::Convert(UTF16_CHARSET, UTF8_CHARSET, utf16StringSrc, utf8StringDst, true);
+}
+
 bool CCharsetConverter::ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst)
 {
   //UCS2 is technically only BE and ICU includes no LE version converter
@@ -672,7 +687,7 @@ bool CCharsetConverter::reverseRTL(const std::string& utf8StringSrc, std::string
 bool CCharsetConverter::utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst)
 {
   //perform mac specific string sanitation for file system access
-#ifdef TARGET_DARWIN
+#if defined(TARGET_DARWIN)
   stringDst.clear();
 
   if (stringSrc.empty())
@@ -680,13 +695,13 @@ bool CCharsetConverter::utf8ToSystemSafe(const std::string& stringSrc, std::stri
 
   std::u16string buffer;
     
-  if (!utf8ToUtf16(stringSrc, buffer, true))
+  if (!TryUtf8ToUtf16(stringSrc, buffer))
     return false;
 
   if (!CInnerConverter::NormalizeSystemSafe(buffer))
     return false;
 
-  if (!utf16LEtoUTF8(buffer, stringDst))
+  if (!TryUtf16ToUtf8(buffer, stringDst))
     return false;
 #else
   //other platforms have nothing special AFAIK

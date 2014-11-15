@@ -443,7 +443,7 @@ std::string toHex(const T& str)
 
   for (size_t i = 0; i < str.length(); ++i)
   {
-    _snprintf(buf, 16, "\\%#X", str[i]);
+    snprintf(buf, 16, "\\%#X", str[i]);
     buf[15] = 0;
     result.append(buf);
   }
@@ -499,7 +499,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1251)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1251"); //simulate CP1251 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -511,7 +511,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1252)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1252"); //simulate CP1252 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -523,7 +523,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1253)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1253"); //simulate CP1253 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -535,7 +535,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1255)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1255"); //simulate CP1255 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -547,7 +547,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1256)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1256"); //simulate CP1256 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -559,7 +559,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP874)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-874"); //simulate CP874 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -571,7 +571,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP932)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -583,7 +583,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP932Hiranga)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp, false);
+  g_charsetConverter.systemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -595,7 +595,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1251)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1251");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -607,7 +607,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1252)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1252");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -619,7 +619,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1253)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1253");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -631,7 +631,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1255)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1255");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -643,7 +643,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1256)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1256");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -655,7 +655,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP874)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-874");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -667,7 +667,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-932");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -679,7 +679,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932Hiranga)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-932");
-  g_charsetConverter.utf8ToSystem(source, false);
+  g_charsetConverter.utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -816,8 +816,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_6)
   std::u16string result;
 
   g_charsetConverter.logicalToVisualBiDi(u16Source, result,
-                                         CCharsetConverter::BiDiOptions::LTR |
-                                         CCharsetConverter::BiDiOptions::REMOVE_CONTROLS);
+                                         CCharsetConverter::LTR |
+                                         CCharsetConverter::REMOVE_CONTROLS);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -911,7 +911,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
   std::u32string expected(CP1251asUTF32LE);
   std::u32string temp;
 
-  g_charsetConverter.utf8ToUtf32(source, temp, false);
+  g_charsetConverter.utf8ToUtf32(source, temp);
   EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
 
@@ -948,7 +948,7 @@ TEST_F(TestCharsetConverter, stringCharsetToUtf8)
 {
   refstra1 = "ｔｅｓｔ＿ｓｔｒｉｎｇＣｈａｒｓｅｔＴｏＵｔｆ８";
   varstra1.clear();
-  g_charsetConverter.ToUtf8("UTF-16LE", refutf16LE3, varstra1);
+  g_charsetConverter.ToUtf8("UTF-8", refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -979,8 +979,8 @@ TEST_F(TestCharsetConverter, isValidUtf8_4)
 
 TEST_F(TestCharsetConverter, wToUTF8)
 {
-  refstrw1 = L"ｔｅｓｔ＿ｗＴｏＵＴＦ８";
-  refstra1 = "ｔｅｓｔ＿ｗＴｏＵＴＦ８";
+  refstrw1 = L"test utf8ToW";
+  refstra1 = "test utf8ToW";
   varstra1.clear();
   g_charsetConverter.wToUTF8(refstrw1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
