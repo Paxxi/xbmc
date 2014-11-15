@@ -46,7 +46,7 @@ public:
    *                            otherwise invalid character will be skipped
    * @return true on successful conversion, false on any error
    */
-  static bool utf8ToUtf32(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool failOnBadChar = true);
+  static bool utf8ToUtf32(const std::string& utf8StringSrc, std::u32string& utf32StringDst);
   /**
    * Convert UTF-8 string to UTF-32 string.
    * No RTL logical-visual transformation is performed.
@@ -55,7 +55,7 @@ public:
    *                            otherwise invalid character will be skipped
    * @return converted string on successful conversion, empty string on any error
    */
-  static std::u32string utf8ToUtf32(const std::string& utf8StringSrc, bool failOnBadChar = true);
+  static std::u32string utf8ToUtf32(const std::string& utf8StringSrc);
 
   /**
   * Convert UTF-8 string to UTF-16 string.
@@ -66,7 +66,7 @@ public:
   *                            otherwise invalid character will be skipped
   * @return true on successful conversion, false on any error
   */
-  static bool utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
+  static bool utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
   /**
   * Convert UTF-8 string to UTF-36 string.
   * No RTL logical-visual transformation is performed.
@@ -75,7 +75,7 @@ public:
   *                            otherwise invalid character will be skipped
   * @return converted string on successful conversion, empty string on any error
   */
-  static std::u16string utf8ToUtf16(const std::string& utf8StringSrc, bool failOnBadChar = true);
+  static std::u16string utf8ToUtf16(const std::string& utf8StringSrc);
   
   /**
    * Convert UTF-8 string to UTF-32 string.
@@ -90,7 +90,7 @@ public:
    *                            otherwise invalid character will be skipped
    * @return true on successful conversion, false on any error
    */
-  static bool utf8ToUtf32Visual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool bVisualBiDiFlip = false, bool forceLTRReadingOrder = false, bool failOnBadChar = false);
+  static bool utf8ToUtf32Visual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, bool bVisualBiDiFlip = false, bool forceLTRReadingOrder = false);
   /**
    * Convert UTF-32 string to UTF-8 string.
    * No RTL visual-logical transformation is performed.
@@ -100,7 +100,7 @@ public:
    *                            otherwise invalid character will be skipped
    * @return true on successful conversion, false on any error
    */
-  static bool utf32ToUtf8(const std::u32string& utf32StringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
+  static bool utf32ToUtf8(const std::u32string& utf32StringSrc, std::string& utf8StringDst);
   /**
    * Convert UTF-32 string to UTF-8 string.
    * No RTL visual-logical transformation is performed.
@@ -109,34 +109,35 @@ public:
    *                            otherwise invalid character will be skipped
    * @return converted string on successful conversion, empty string on any error
    */
-  static std::string utf32ToUtf8(const std::u32string& utf32StringSrc, bool failOnBadChar = false);
+  static std::string utf32ToUtf8(const std::u32string& utf32StringSrc);
   
   
   
   static bool utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
-                bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false,
-                bool failOnBadChar = false);
-  static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst, bool failOnBadChar = false);
+                bool bVisualBiDiFlip = true, bool forceLTRReadingOrder = false);
+  static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
   static bool utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
 
-  static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
+  static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst);
 
   static bool subtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
 
   static bool utf8ToStringCharset(const std::string& utf8StringSrc, std::string& stringDst);
   static bool utf8ToStringCharset(std::string& stringSrcDst);
 
-  static bool utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
-  static bool utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst, bool failOnBadChar = true);
+  static bool utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+  static bool utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
 
-  static bool utf8ToSystem(std::string& stringSrcDst, bool failOnBadChar = false);
-  static bool systemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
+  static bool utf8ToSystem(std::string& stringSrcDst);
+  static bool systemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst);
+  static bool TrySystemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst);
 
   static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::string& stringDst);
   static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u16string& utf16StringDst);
   static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u32string& utf32StringDst);
 
-  static bool ToUtf8(const std::string& strSourceCharset, const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
+  static bool ToUtf8(const std::string& strSourceCharset, const std::string& stringSrc, std::string& utf8StringDst);
+  static bool TryToUtf8(const std::string& strSourceCharset, const std::string& stringSrc, std::string& utf8StringDst);
 
   static bool utf16BEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
   static bool utf16LEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
@@ -151,8 +152,7 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, 
-                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
-                                  bool failOnBadString = false);
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
   * Perform logical to visual flip.
@@ -162,8 +162,7 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
-                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
-                                  bool failOnBadString = false);
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
   * Perform logical to visual flip.
@@ -173,8 +172,7 @@ public:
   * @return true on success, false otherwise
   */
   static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
-                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS,
-                                  bool failOnBadString = false);
+                                  uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
    * Reverse an RTL string, taking into account encoding
@@ -185,9 +183,11 @@ public:
   static bool reverseRTL(const std::string& utf8StringSrc, std::string& utf8StringDst);
 
   static bool unknownToUTF8(std::string& stringSrcDst);
-  static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
+  static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst);
 
   static bool utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
+
+  static bool wToUTF8SystemSafe(const std::wstring& stringSrc, std::string& stringDst);
 
 private:
 

@@ -147,7 +147,7 @@ bool CTextureBundleXPR::OpenBundle()
 
 #ifndef TARGET_POSIX
   std::wstring strPathW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(strPath), strPathW, false);
+  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(strPath), strPathW);
   m_hFile = _wfopen(strPathW.c_str(), L"rb");
 #else
   m_hFile = fopen(strPath.c_str(), "rb");
