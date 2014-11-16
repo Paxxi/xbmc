@@ -55,26 +55,83 @@
 #define WCHAR_CHARSET UTF16_CHARSET
 #endif
 
-/* We don't want to pollute header file with many additional includes and definitions, so put 
-   here all stuff that require usage of types defined in this file or in additional headers */
+/**
+ * \class CCharsetConverter::CInnerConverter
+ *
+ * We don't want to pollute header file with many additional includes and definitions, so put
+ * here all stuff that require usage of types defined in this file or in additional headers
+ */
 class CCharsetConverter::CInnerConverter
 {
 private:
+  /**
+   * Helper function to perform BiDi flip and reverse hebrew/arabic text
+   *
+   * \param[in]  srcBuffer      array of UChar containing the string to process
+   * \param[in]  srcLength      length in characters of srcBuffer
+   * \param[out] dstBuffer      empty pointer to store result in
+   *                            on success will contain the processed buffer.
+   *                            it's up to the caller to delete buffer on any successful calls.
+   * \param[out] dstLength      length in characters of processed string
+   * \param[in]  bidiOptions    options for logical to visual processing
+   *
+   * \return true on success, false on any error
+   * \sa CCharsetConverter::BiDiOptions
+   */
   static bool InternalBidiHelper(const UChar* srcBuffer, int32_t srcLength, 
                                  UChar** dstBuffer, int32_t& dstLength,
                                  const uint16_t bidiOptions);
 public:
 
+  /**
+   * Handles logical to visual processing
+   *
+   * Input string is converted to UTF-16 and then BiDi processing
+   * is performed by InternalBiDiHelper before converting the result
+   * to the specified output encoding
+   *
+   * \param[in]  sourceCharset        charset of source string
+   * \param[in]  targetCharset        charset of destination string
+   * \param[in]  strSource            source string to be processed
+   * \param[out] strDest              output string after processing
+   * \param[in]  bidiOptions          options for logical to visual processing
+   * \param[in]  failOnBadString      determines if invalid byte sequences aborts processing
+   *                                  or gets skipped
+   *
+   * \return true on success, false on any error
+   * \sa CCharsetConverter::BiDiOptions
+   * \sa Convert
+   */
   template<class INPUT, class OUTPUT>
   static bool LogicalToVisualBiDi(const std::string& sourceCharset, const std::string& targetCharset,
                                   const INPUT& strSource, OUTPUT& strDest,
                                   const uint16_t bidiOptions, const bool failOnBadString = false);
 
+  /**
+  * Handles conversion between two encodings
+  *
+  * \param[in]  sourceCharset        charset of source string
+  * \param[in]  targetCharset        charset of destination string
+  * \param[in]  strSource            source string to be processed
+  * \param[out] strDest              output string after processing
+  * \param[in]  failOnBadString      determines if invalid byte sequences aborts processing
+  *                                  or gets skipped
+  *
+  * \return true on success, false on any error
+  * \sa LogicalToVisualBiDi
+  */
   template<class INPUT,class OUTPUT>
   static bool Convert(const std::string& sourceCharset, const std::string& targetCharset,
                             const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);
 
-  static bool NormalizeSystemSafe(std::u16string& strSrc);
+  /**
+   * Normalize string to conform to osx file system conventions
+   *
+   * \param[in,out] strSrcDst     is source UTF-16 string, contains processed UTF-16 string on success
+   *
+   * \return true on success, false on any error
+   */
+  static bool NormalizeSystemSafe(std::u16string& strSrcDst);
 };
 
 
@@ -378,7 +435,7 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
   return result;
 }
 
-bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& strSrc)
+bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& strSrcDst)
 {
   UErrorCode err = U_ZERO_ERROR;
   
@@ -391,7 +448,7 @@ bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& str
   if (U_FAILURE(err))
     return false;
 
-  UnicodeString src(reinterpret_cast<const UChar*>(strSrc.c_str()));
+  UnicodeString src(reinterpret_cast<const UChar*>(strSrcDst.c_str()));
   UnicodeString dst;
 
   //this should not be deleted, it's managed by icu
@@ -407,7 +464,7 @@ bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& str
   if (U_FAILURE(err))
     return false;
 
-  strSrc.assign(reinterpret_cast<const char16_t*>(dst.getBuffer()), dst.length());
+  strSrcDst.assign(reinterpret_cast<const char16_t*>(dst.getBuffer()), dst.length());
 
   return true;
 }
@@ -446,15 +503,11 @@ bool CCharsetConverter::utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16
   return CInnerConverter::Convert(UTF8_CHARSET, UTF16LE_CHARSET, utf8StringSrc, utf16StringDst, false);
 }
 
-bool CCharsetConverter::utf8ToUtf32Visual(const std::string& utf8StringSrc, std::u32string& utf32StringDst,
-                                          bool bVisualBiDiFlip /*= false*/, bool forceLTRReadingOrder /*= false*/)
+bool CCharsetConverter::utf8ToUtf32LogicalToVisual(const std::string& utf8StringSrc, std::u32string& utf32StringDst,
+                                                   uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
 {
-  if (bVisualBiDiFlip)
-  {
-    return CInnerConverter::LogicalToVisualBiDi(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst,
-                                                forceLTRReadingOrder ? LTR : RTL, false);
-  }
-  return CInnerConverter::Convert(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst, false);
+  return CInnerConverter::LogicalToVisualBiDi(UTF8_CHARSET, UTF32_CHARSET, utf8StringSrc, utf32StringDst,
+                                                bidiOptions, false);
 }
 
 bool CCharsetConverter::utf32ToUtf8(const std::u32string& utf32StringSrc, std::string& utf8StringDst)
@@ -469,19 +522,11 @@ std::string CCharsetConverter::utf32ToUtf8(const std::u32string& utf32StringSrc)
   return converted;
 }
 
-// The bVisualBiDiFlip forces a flip of characters for Hebrew/Arabic languages, only set to false if the flipping
-// of the string is already made or the string is not displayed in the GUI
 bool CCharsetConverter::utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
-                                               bool bVisualBiDiFlip /*= true*/, bool forceLTRReadingOrder /*= false*/)
+                                               uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
 {
-  // Try to flip Hebrew/Arabic characters, if any
-  if (bVisualBiDiFlip)
-  {
-    return CInnerConverter::LogicalToVisualBiDi(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst,
-                                                forceLTRReadingOrder ? LTR : RTL, false);
-  }
-  
-  return CInnerConverter::Convert(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst, false);
+  return CInnerConverter::LogicalToVisualBiDi(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst,
+                                              bidiOptions, false);
 }
 
 bool CCharsetConverter::utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst)
@@ -596,19 +641,25 @@ bool CCharsetConverter::TrySystemToUtf8(const std::string& sysStringSrc, std::st
 }
 
 bool CCharsetConverter::logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst,
-                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */)
+                                            uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
 {
   return CInnerConverter::LogicalToVisualBiDi(UTF8_CHARSET, UTF8_CHARSET, utf8StringSrc, utf8StringDst, bidiOptions, false);
 }
 
 bool CCharsetConverter::logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
-                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */)
+                                            uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
 {
   return CInnerConverter::LogicalToVisualBiDi(UTF16_CHARSET, UTF16_CHARSET, utf16StringSrc, utf16StringDst, bidiOptions, false);
 }
 
+bool CCharsetConverter::logicalToVisualBiDi(const std::wstring& wStringSrc, std::wstring& wStringDst,
+                                            uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
+{
+  return CInnerConverter::LogicalToVisualBiDi(WCHAR_CHARSET, WCHAR_CHARSET, wStringSrc, wStringDst, bidiOptions, false);
+}
+
 bool CCharsetConverter::logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
-                                            uint16_t bidiOptions /* = BiDiOptions::LTR | BiDiOptions::REMOVE_CONTROLS */)
+                                            uint16_t bidiOptions /* = LTR | REMOVE_CONTROLS */)
 {
   return CInnerConverter::LogicalToVisualBiDi(UTF32_CHARSET, UTF32_CHARSET, utf32StringSrc, utf32StringDst, bidiOptions, false);
 }
@@ -652,7 +703,7 @@ bool CCharsetConverter::utf8ToWSystemSafe(const std::string& stringSrc, std::wst
   return CInnerConverter::Convert(UTF8_CHARSET, WCHAR_CHARSET, stringSrc, stringDst, true);
 }
 
-bool CCharsetConverter::wToUTF8SystemSafe(const std::wstring& stringSrc, std::string& stringDst)
+bool CCharsetConverter::wToUTF8SystemSafe(const std::wstring& wStringSrc, std::string& utf8StringDst)
 {
-  return CInnerConverter::Convert(WCHAR_CHARSET, UTF8_CHARSET, stringSrc, stringDst, true);
+  return CInnerConverter::Convert(WCHAR_CHARSET, UTF8_CHARSET, wStringSrc, utf8StringDst, true);
 }

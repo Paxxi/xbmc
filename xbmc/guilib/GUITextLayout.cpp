@@ -319,9 +319,13 @@ std::wstring CGUITextLayout::BidiFlip(const std::wstring &text, bool forceLTRRea
   std::string utf8text;
   std::wstring visualText;
 
-  // convert to utf8, and back to utf16 with bidi flipping
-  g_charsetConverter.wToUTF8(text, utf8text);
-  g_charsetConverter.utf8ToWLogicalToVisual(utf8text, visualText, true, forceLTRReadingOrder);
+  if (forceLTRReadingOrder)
+    g_charsetConverter.logicalToVisualBiDi(text, visualText, CCharsetConverter::RTL |
+                                                             CCharsetConverter::REMOVE_CONTROLS |
+                                                             CCharsetConverter::WRITE_REVERSE);
+  else
+    g_charsetConverter.logicalToVisualBiDi(text, visualText, CCharsetConverter::LTR |
+                                                             CCharsetConverter::REMOVE_CONTROLS);
 
   return visualText;
 }
