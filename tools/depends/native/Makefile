@@ -9,7 +9,8 @@ NATIVE= m4-native gettext-native autoconf-native automake-native \
         gas-preprocessor-native python26-native zlib-native \
         pcre-native swig-native rpl-native libsdl_image-native \
         tiff-native libpng-native libjpeg-turbo-native liblzo2-native \
-        libsdl-native distribute-native distutilscross-native JsonSchemaBuilder
+        libsdl-native distribute-native distutilscross-native JsonSchemaBuilder \
+				libicu-native
 
 
 ifeq ($(OS),ios)
@@ -37,6 +38,7 @@ distribute-native: python26-native
 distutilscross-native: python26-native distribute-native
 tar-native: xz-native
 python26-native: zlib-native
+libicu-native: 
 
 #liblzo2 has stale packaged automake files that cause borked host/build detection
 liblzo2-native: automake-native

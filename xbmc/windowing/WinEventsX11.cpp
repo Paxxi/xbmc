@@ -463,7 +463,7 @@ bool CWinEventsX11Imp::MessagePump()
           {
             CStdString   data(WinEvents->m_keybuf, len);
             CStdStringW keys;
-            g_charsetConverter.utf8ToW(data, keys, false);
+            g_charsetConverter.utf8ToW(data, keys);
 
             if (keys.length() == 0)
             {
