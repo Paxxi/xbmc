@@ -316,12 +316,15 @@ void CGUITextLayout::BidiTransform(vector<CGUIString> &lines, bool forceLTRReadi
 
 CStdStringW CGUITextLayout::BidiFlip(const CStdStringW &text, bool forceLTRReadingOrder)
 {
-  CStdStringA utf8text;
   CStdStringW visualText;
-
-  // convert to utf8, and back to utf16 with bidi flipping
-  g_charsetConverter.wToUTF8(text, utf8text);
-  g_charsetConverter.utf8ToWLogicalToVisual(utf8text, visualText, true, forceLTRReadingOrder);
+  
+  if (forceLTRReadingOrder)
+    g_charsetConverter.logicalToVisualBiDi(text, visualText, CCharsetConverter::RTL |
+                                                             CCharsetConverter::REMOVE_CONTROLS |
+                                                             CCharsetConverter::WRITE_REVERSE);
+  else
+    g_charsetConverter.logicalToVisualBiDi(text, visualText, CCharsetConverter::LTR |
+                                                             CCharsetConverter::REMOVE_CONTROLS);
 
   return visualText;
 }
