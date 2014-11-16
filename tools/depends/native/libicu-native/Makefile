@@ -1,4 +1,6 @@
 include ../../Makefile.include
+PREFIX=$(NATIVEPREFIX)
+PLATFORM=$(NATIVEPLATFORM)
 DEPS= ../../Makefile.include Makefile
 
 # lib name, version
@@ -7,25 +9,15 @@ VERSION=54.1
 SOURCE=$(LIBNAME)-$(VERSION)
 ARCHIVE=$(SOURCE).tar.gz
 ICU_PLATFORM=
-ICU_CROSS=
 
-ifeq ($(OS),linux)
+ifeq ($(findstring linux,$(NATIVEPLATFORM)),linux)
 	ICU_PLATFORM=Linux/GCC
-else ifeq ($(OS),android)
-	ICU_PLATFORM=Linux/GCC
-else ifeq ($(OS),osx)
-	ICU_PLATFORM=MacOSX
-else ifeq ($(OS),ios)
+else ifeq ($(findstring osx,$(NATIVEPLATFORM)),osx)
 	ICU_PLATFORM=MacOSX
 endif
-
-ifeq ($(CROSS_COMPILING),yes)
-	ICU_CROSS=--with-cross-build=$(XBMCROOT)/tools/depends/native/libicu-native/$(NATIVEPLATFORM)/source
-endif
-
 # configuration settings
 CONFIGURE=cp -f $(CONFIG_SUB) $(CONFIG_GUESS) .; \
-        ./runConfigureICU $(ICU_PLATFORM) --prefix=$(PREFIX) --disable-tests --disable-samples $(ICU_CROSS)
+        ./runConfigureICU $(ICU_PLATFORM) --prefix=$(PREFIX) --disable-tests --disable-samples
 
 LIBDYLIB=$(PLATFORM)/source/lib/lib$(LIBNAME).a
 
