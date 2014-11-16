@@ -624,6 +624,71 @@ const std::string& CLangInfo::GetSpeedUnitString() const
   return g_localizeStrings.Get(SPEED_UNIT_STRINGS+m_currentRegion->m_speedUnit);
 }
 
+
+static struct SCharsetMapping
+{
+  const char* charset;
+  const char* caption;
+} g_charsets[] = {
+    { "ISO-8859-1", "Western Europe (ISO)" }
+    , { "ISO-8859-2", "Central Europe (ISO)" }
+    , { "ISO-8859-3", "South Europe (ISO)" }
+    , { "ISO-8859-4", "Baltic (ISO)" }
+    , { "ISO-8859-5", "Cyrillic (ISO)" }
+    , { "ISO-8859-6", "Arabic (ISO)" }
+    , { "ISO-8859-7", "Greek (ISO)" }
+    , { "ISO-8859-8", "Hebrew (ISO)" }
+    , { "ISO-8859-9", "Turkish (ISO)" }
+    , { "CP1250", "Central Europe (Windows)" }
+    , { "CP1251", "Cyrillic (Windows)" }
+    , { "CP1252", "Western Europe (Windows)" }
+    , { "CP1253", "Greek (Windows)" }
+    , { "CP1254", "Turkish (Windows)" }
+    , { "CP1255", "Hebrew (Windows)" }
+    , { "CP1256", "Arabic (Windows)" }
+    , { "CP1257", "Baltic (Windows)" }
+    , { "CP1258", "Vietnamesse (Windows)" }
+    , { "CP874", "Thai (Windows)" }
+    , { "BIG5", "Chinese Traditional (Big5)" }
+    , { "GBK", "Chinese Simplified (GBK)" }
+    , { "SHIFT_JIS", "Japanese (Shift-JIS)" }
+    , { "CP949", "Korean" }
+    , { "BIG5-HKSCS", "Hong Kong (Big5-HKSCS)" }
+    , { NULL, NULL }
+};
+
+std::vector<std::string> CLangInfo::GetCharsetLabels()
+{
+  std::vector<std::string> lab;
+  for (SCharsetMapping* c = g_charsets; c->charset; c++)
+    lab.push_back(c->caption);
+
+  return lab;
+}
+
+std::string CLangInfo::GetCharsetLabelByName(const std::string& charsetName)
+{
+  for (SCharsetMapping* c = g_charsets; c->charset; c++)
+  {
+    if (StringUtils::EqualsNoCase(charsetName, c->charset))
+      return c->caption;
+  }
+
+  return "";
+}
+
+std::string CLangInfo::GetCharsetNameByLabel(const std::string& charsetLabel)
+{
+  for (SCharsetMapping* c = g_charsets; c->charset; c++)
+  {
+    if (StringUtils::EqualsNoCase(charsetLabel, c->caption))
+      return c->charset;
+  }
+
+  return "";
+}
+
+
 void CLangInfo::SettingOptionsLanguagesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data)
 {
   //find languages...
@@ -688,10 +753,10 @@ void CLangInfo::SettingOptionsRegionsFiller(const CSetting *setting, std::vector
 
 void CLangInfo::SettingOptionsCharsetsFiller(const CSetting* setting, std::vector< std::pair<std::string, std::string> >& list, std::string& current, void *data)
 {
-  std::vector<std::string> vecCharsets = g_charsetConverter.getCharsetLabels();
+  std::vector<std::string> vecCharsets = g_langInfo.GetCharsetLabels();
   sort(vecCharsets.begin(), vecCharsets.end(), sortstringbyname());
 
   list.push_back(make_pair(g_localizeStrings.Get(13278), "DEFAULT")); // "Default"
   for (int i = 0; i < (int)vecCharsets.size(); ++i)
-    list.push_back(make_pair(vecCharsets[i], g_charsetConverter.getCharsetNameByLabel(vecCharsets[i])));
+    list.push_back(make_pair(vecCharsets[i], g_langInfo.GetCharsetNameByLabel(vecCharsets[i])));
 }
