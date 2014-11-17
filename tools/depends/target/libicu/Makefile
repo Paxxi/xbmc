@@ -1,13 +1,14 @@
 include ../../Makefile.include
-DEPS= ../../Makefile.include Makefile
+DEPS= ../../Makefile.include Makefile uconfig_defines.patch
 
 # lib name, version
 LIBNAME=icu
 VERSION=54.1
 SOURCE=$(LIBNAME)-$(VERSION)
 ARCHIVE=$(SOURCE).tar.gz
+
 ICU_PLATFORM=
-ICU_CROSS=
+ICU_CROSS=--with-cross-build=$(XBMCROOT)/tools/depends/native/libicu-native/$(NATIVEPLATFORM)/source
 
 ifeq ($(OS),linux)
 	ICU_PLATFORM=Linux/GCC
@@ -17,10 +18,6 @@ else ifeq ($(OS),osx)
 	ICU_PLATFORM=MacOSX
 else ifeq ($(OS),ios)
 	ICU_PLATFORM=MacOSX
-endif
-
-ifeq ($(CROSS_COMPILING),yes)
-	ICU_CROSS=--with-cross-build=$(XBMCROOT)/tools/depends/native/libicu-native/$(NATIVEPLATFORM)/source
 endif
 
 # configuration settings

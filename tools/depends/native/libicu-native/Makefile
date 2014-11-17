@@ -1,7 +1,7 @@
 include ../../Makefile.include
 PREFIX=$(NATIVEPREFIX)
 PLATFORM=$(NATIVEPLATFORM)
-DEPS= ../../Makefile.include Makefile
+DEPS= ../../Makefile.include Makefile uconfig_defines.patch
 
 # lib name, version
 LIBNAME=icu
@@ -12,7 +12,7 @@ ICU_PLATFORM=
 
 ifeq ($(findstring linux,$(NATIVEPLATFORM)),linux)
 	ICU_PLATFORM=Linux/GCC
-else ifeq ($(findstring darwing,$(NATIVEPLATFORM)),darwin)
+else ifeq ($(findstring darwin,$(NATIVEPLATFORM)),darwin)
 	ICU_PLATFORM=MacOSX
 endif
 # configuration settings
