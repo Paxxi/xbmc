@@ -12,14 +12,14 @@ ICU_PLATFORM=
 
 ifeq ($(findstring linux,$(NATIVEPLATFORM)),linux)
 	ICU_PLATFORM=Linux/GCC
-else ifeq ($(findstring osx,$(NATIVEPLATFORM)),osx)
+else ifeq ($(findstring darwin,$(NATIVEPLATFORM)),darwin)
 	ICU_PLATFORM=MacOSX
 endif
 # configuration settings
 CONFIGURE=cp -f $(CONFIG_SUB) $(CONFIG_GUESS) .; \
         ./runConfigureICU $(ICU_PLATFORM) --prefix=$(PREFIX) --disable-tests --disable-samples
 
-LIBDYLIB=$(PLATFORM)/source/lib/lib$(LIBNAME).a
+LIBDYLIB=$(PLATFORM)/source/lib/lib$(LIBNAME)uc.a
 
 all: .installed-$(PLATFORM)
 
