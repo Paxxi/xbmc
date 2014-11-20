@@ -25,9 +25,11 @@ endif
 
 # configuration settings
 CONFIGURE=cp -f $(CONFIG_SUB) $(CONFIG_GUESS) .; \
-        ./runConfigureICU $(ICU_PLATFORM) --prefix=$(PREFIX) --disable-tests --disable-samples $(ICU_CROSS)
+        ./runConfigureICU $(ICU_PLATFORM) --prefix=$(PREFIX) \
+		--disable-tests --disable-samples $(ICU_CROSS) \
+		--disable-shared --enable-static
 
-LIBDYLIB=$(PLATFORM)/source/lib/lib$(LIBNAME).a
+LIBDYLIB=$(PLATFORM)/source/lib/lib$(LIBNAME)uc.a
 
 all: .installed-$(PLATFORM)
 

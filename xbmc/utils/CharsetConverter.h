@@ -85,6 +85,18 @@ public:
   * \return true on successful conversion, false on any error
   */
   static bool utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+
+  /**
+  * Try to convert UTF-8 string to UTF-16.
+  * Will fail on invalid byte sequences.
+  *
+  * \param[in]  utf8StringSrc       is source UTF-8 string to convert
+  * \param[out] utf16StringDst      is output UTF-16 string, empty on any error
+  *
+  * \return true on successful conversion, false on any error
+  * \sa utf8ToUtf16
+  */
+  static bool TryUtf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
   
   /**
   * Convert UTF-8 string to UTF-16 string.
@@ -388,6 +400,20 @@ public:
   * \sa utf16LEtoUTF8
   */
   static bool utf16ToUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
+
+/**
+   * Try to convert string in system encoding to UTF-8.
+   * Will fail on invalid byte sequences.
+   *
+   * \param[in]  utf16StringSrc           is source UTF-16 string to convert
+   * \param[out] utf8StringDst            is output string in UTF-8
+   *
+   * \return true on successful conversion, false on any error
+   * \sa utf16ToUTF8
+   * \sa utf16LEtoUTF8
+   * \sa utf16BEtoUTF8
+   */
+  static bool TryUtf16ToUtf8(const std::u16string utf16StringSrc, std::string& utf8StringDst);
 
   /**
    * Convert UCS-2 to UTF-8

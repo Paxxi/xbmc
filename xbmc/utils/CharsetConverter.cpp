@@ -486,6 +486,11 @@ bool CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc, std::u16st
   return CInnerConverter::Convert(UTF8_CHARSET, UTF16_CHARSET, utf8StringSrc, utf16StringDst, false);
 }
 
+bool CCharsetConverter::TryUtf8ToUtf16(const std::string & utf8StringSrc, std::u16string & utf16StringDst)
+{
+  return CInnerConverter::Convert(UTF8_CHARSET, UTF16_CHARSET, utf8StringSrc, utf16StringDst, true);
+}
+
 std::u16string CCharsetConverter::utf8ToUtf16(const std::string& utf8StringSrc)
 {
   std::u16string converted;
@@ -615,6 +620,11 @@ bool CCharsetConverter::utf16ToUTF8(const std::u16string& utf16StringSrc, std::s
   return CInnerConverter::Convert(UTF16_CHARSET, UTF8_CHARSET, utf16StringSrc, utf8StringDst, false);
 }
 
+bool CCharsetConverter::TryUtf16ToUtf8(const std::u16string utf16StringSrc, std::string & utf8StringDst)
+{
+  return CInnerConverter::Convert(UTF16_CHARSET, UTF8_CHARSET, utf16StringSrc, utf8StringDst, true);
+}
+
 bool CCharsetConverter::ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst)
 {
   //UCS2 is technically only BE and ICU includes no LE version converter
@@ -680,13 +690,13 @@ bool CCharsetConverter::utf8ToSystemSafe(const std::string& stringSrc, std::stri
 
   std::u16string buffer;
     
-  if (!utf8ToUtf16(stringSrc, buffer, true))
+  if (!TryUtf8ToUtf16(stringSrc, buffer))
     return false;
 
   if (!CInnerConverter::NormalizeSystemSafe(buffer))
     return false;
 
-  if (!utf16LEtoUTF8(buffer, stringDst))
+  if (!TryUtf16ToUtf8(buffer, stringDst))
     return false;
 #else
   //other platforms have nothing special AFAIK
