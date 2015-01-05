@@ -101,7 +101,6 @@ pythonmodule-pil: $(ZLIB) libjpeg-turbo libpng freetype2 python26
 libsdl2: $(LINUX_SYSTEM_LIBS)
 libxslt: libgcrypt
 ffmpeg: $(ICONV) $(ZLIB) bzip2 libvorbis $(FFMPEG_DEPENDS)
-libicu:
 
 .installed-$(PLATFORM): $(DEPENDS)
 	touch $@
