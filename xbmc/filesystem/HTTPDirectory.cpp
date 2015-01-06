@@ -140,7 +140,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
          */
         if (fileCharset.empty())
           g_charsetConverter.unknownToUTF8(strLinkBase);
-        g_charsetConverter.utf8ToW(strLinkBase, wLink, false);
+        g_charsetConverter.utf8ToW(strLinkBase, wLink);
         HTML::CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
         g_charsetConverter.wToUTF8(wConverted, strLinkBase);
 
