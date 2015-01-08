@@ -437,6 +437,11 @@ bool CCharsetConverter::CInnerConverter::InternalBidiHelper(const UChar* srcBuff
 
 bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& strSrcDst)
 {
+  //This is only needed on darwin but doesn't cause any harm on other platforms.
+  //To be compatible with older versions of icu on Linux we just ignore this whole function
+  //since we don't really need it.
+  //Could mess up some testing though and might be better to try and check for icu version
+#if defined(TARGET_DARWIN)
   UErrorCode err = U_ZERO_ERROR;
   
   //https://developer.apple.com/library/mac/qa/qa1173/_index.html
@@ -465,7 +470,7 @@ bool CCharsetConverter::CInnerConverter::NormalizeSystemSafe(std::u16string& str
     return false;
 
   strSrcDst.assign(reinterpret_cast<const char16_t*>(dst.getBuffer()), dst.length());
-
+#endif
   return true;
 }
 
@@ -682,7 +687,7 @@ bool CCharsetConverter::reverseRTL(const std::string& utf8StringSrc, std::string
 bool CCharsetConverter::utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst)
 {
   //perform mac specific string sanitation for file system access
-#ifdef TARGET_DARWIN
+#if defined(TARGET_DARWIN)
   stringDst.clear();
 
   if (stringSrc.empty())

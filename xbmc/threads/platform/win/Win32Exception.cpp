@@ -199,7 +199,6 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
   STACKFRAME64 frame = { 0 };
   HANDLE hCurProc = GetCurrentProcess();
   IMAGEHLP_SYMBOL64* pSym = NULL;
-  HANDLE hDumpFile = INVALID_HANDLE_VALUE;
   tSC pSC = NULL;
 
   HMODULE hDbgHelpDll = ::LoadLibrary("DBGHELP.DLL");
