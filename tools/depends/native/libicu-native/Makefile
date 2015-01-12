@@ -5,9 +5,9 @@ DEPS= ../../Makefile.include Makefile uconfig_defines.patch
 
 # lib name, version
 LIBNAME=icu
-VERSION=54.1
-SOURCE=$(LIBNAME)-$(VERSION)
-ARCHIVE=$(SOURCE).tar.gz
+VERSION=54_1
+SOURCE=$(LIBNAME)4c-$(VERSION)-src
+ARCHIVE=$(SOURCE).tgz
 ICU_PLATFORM=
 
 ifeq ($(findstring linux,$(NATIVEPLATFORM)),linux)
