@@ -28,6 +28,7 @@
 #include <unicode/ubidi.h>
 #include <unicode/uniset.h>
 #include <unicode/normalizer2.h>
+#include <memory.h>
 
 #if !defined(TARGET_WINDOWS) && defined(HAVE_CONFIG_H)
   #include "config.h"
