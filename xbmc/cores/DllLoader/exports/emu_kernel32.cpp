@@ -132,13 +132,13 @@ static void to_WIN32_FIND_DATA(LPWIN32_FIND_DATAW wdata, LPWIN32_FIND_DATA data)
 static void to_WIN32_FIND_DATAW(LPWIN32_FIND_DATA data, LPWIN32_FIND_DATAW wdata)
 {
   std::wstring strwname;
-  g_charsetConverter.utf8ToWSystemSafe(data->cFileName, strwname);
+  g_charsetConverter.Utf8ToWSystemSafe(data->cFileName, strwname);
   size_t size = sizeof(wdata->cFileName) / sizeof(wchar_t);
   wcsncpy(wdata->cFileName, strwname.c_str(), size);
   if (size)
     wdata->cFileName[size - 1] = '\0';
 
-  g_charsetConverter.utf8ToWSystemSafe(data->cAlternateFileName, strwname);
+  g_charsetConverter.Utf8ToWSystemSafe(data->cAlternateFileName, strwname);
   size = sizeof(wdata->cAlternateFileName) / sizeof(wchar_t);
   wcsncpy(wdata->cAlternateFileName, strwname.c_str(), size);
   if (size)
@@ -170,7 +170,7 @@ extern "C" HANDLE WINAPI dllFindFirstFileA(LPCTSTR lpFileName, LPWIN32_FIND_DATA
 #ifdef TARGET_WINDOWS
   struct _WIN32_FIND_DATAW FindFileDataW;
   std::wstring strwfile;
-  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(p), strwfile);
+  g_charsetConverter.Utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(p), strwfile);
   HANDLE res = FindFirstFileW(strwfile.c_str(), &FindFileDataW);
   if (res != INVALID_HANDLE_VALUE)
     to_WIN32_FIND_DATA(&FindFileDataW, lpFindFileData);

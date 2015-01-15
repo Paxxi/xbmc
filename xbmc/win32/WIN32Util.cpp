@@ -485,25 +485,25 @@ std::wstring CWIN32Util::ConvertPathToWin32Form(const std::string& pathUtf8)
   { // assume local file path in form 'C:\Folder\File.ext'
     std::string formedPath("\\\\?\\"); // insert "\\?\" prefix
     formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8, '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path
-    convertResult = g_charsetConverter.utf8ToWSystemSafe(formedPath, result);
+    convertResult = g_charsetConverter.Utf8ToWSystemSafe(formedPath, result);
   }
   else if (pathUtf8.compare(0, 8, "\\\\?\\UNC\\", 8) == 0) // pathUtf8 starts from "\\?\UNC\"
   {
     std::string formedPath("\\\\?\\UNC"); // start from "\\?\UNC" prefix
     formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8.substr(7), '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path, don't touch "\\?\UNC" prefix,
-    convertResult = g_charsetConverter.utf8ToWSystemSafe(formedPath, result); 
+    convertResult = g_charsetConverter.Utf8ToWSystemSafe(formedPath, result); 
   }
   else if (pathUtf8.compare(0, 4, "\\\\?\\", 4) == 0) // pathUtf8 starts from "\\?\", but it's not UNC path
   {
     std::string formedPath("\\\\?"); // start from "\\?" prefix
     formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8.substr(3), '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path, don't touch "\\?" prefix,
-    convertResult = g_charsetConverter.utf8ToWSystemSafe(formedPath, result);
+    convertResult = g_charsetConverter.Utf8ToWSystemSafe(formedPath, result);
   }
   else // pathUtf8 starts from "\\", but not from "\\?\UNC\"
   { // assume UNC path in form '\\server\share\folder\file.ext'
     std::string formedPath("\\\\?\\UNC"); // append "\\?\UNC" prefix
     formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8), '\\'); // fix duplicated and forward slashes, resolve relative path, transform "\\" prefix to single "\"
-    convertResult = g_charsetConverter.utf8ToWSystemSafe(formedPath, result);
+    convertResult = g_charsetConverter.Utf8ToWSystemSafe(formedPath, result);
   }
 
   if (!convertResult)
@@ -525,7 +525,7 @@ std::wstring CWIN32Util::ConvertPathToWin32Form(const CURL& url)
   if (url.GetProtocol().empty())
   {
     std::wstring result;
-    if (g_charsetConverter.utf8ToWSystemSafe("\\\\?\\" +
+    if (g_charsetConverter.Utf8ToWSystemSafe("\\\\?\\" +
           URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(url.GetFileName(), '\\'), '\\'), result))
       return result;
   }
@@ -535,7 +535,7 @@ std::wstring CWIN32Util::ConvertPathToWin32Form(const CURL& url)
       return std::wstring(); // empty string
     
     std::wstring result;
-    if (g_charsetConverter.utf8ToWSystemSafe("\\\\?\\UNC\\" +
+    if (g_charsetConverter.Utf8ToWSystemSafe("\\\\?\\UNC\\" +
           URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(url.GetHostName() + '\\' + url.GetFileName(), '\\'), '\\'),
           result))
       return result;
@@ -974,7 +974,7 @@ extern "C"
   {
     std::string modetmp = _Mode;
     std::wstring wfilename, wmode(modetmp.begin(), modetmp.end());
-    g_charsetConverter.utf8ToWSystemSafe(_Filename, wfilename);
+    g_charsetConverter.Utf8ToWSystemSafe(_Filename, wfilename);
     return _wfopen(wfilename.c_str(), wmode.c_str());
   }
 }

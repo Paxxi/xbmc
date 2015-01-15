@@ -696,7 +696,7 @@ bool CCharsetConverter::Utf8ToSystemSafe(const std::string& stringSrc, std::stri
   return true;
 }
 
-bool CCharsetConverter::utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst)
+bool CCharsetConverter::Utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst)
 {
   //W should be win32 only and requires no special handling, make sure we fail on bad chars
   //to avoid any weird behavior
@@ -708,4 +708,24 @@ bool CCharsetConverter::WToUtf8SystemSafe(const std::wstring& wStringSrc, std::s
 {
   return CInnerConverter::Convert(WCHAR_CHARSET, UTF8_CHARSET, wStringSrc, utf8StringDst,
                                   NO_BIDI, NO_NORMALIZATION, true);
+}
+
+bool CCharsetConverter::Normalize(const std::string& source, std::string& destination, uint16_t options)
+{
+  return CInnerConverter::Convert(UTF8_CHARSET, UTF8_CHARSET, source, destination, NO_BIDI, options, false);
+}
+
+bool CCharsetConverter::Normalize(const std::u16string & source, std::u16string & destination, uint16_t options)
+{
+  return CInnerConverter::Convert(UTF16_CHARSET, UTF16_CHARSET, source, destination, NO_BIDI, options, false);
+}
+
+bool CCharsetConverter::Normalize(const std::u32string & source, std::u32string & destination, uint16_t options)
+{
+  return CInnerConverter::Convert(UTF32_CHARSET, UTF32_CHARSET, source, destination, NO_BIDI, options, false);
+}
+
+bool CCharsetConverter::Normalize(const std::wstring & source, std::wstring & destination, uint16_t options)
+{
+  return CInnerConverter::Convert(WCHAR_CHARSET, WCHAR_CHARSET, source, destination, NO_BIDI, options, false);
 }

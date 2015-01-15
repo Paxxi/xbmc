@@ -183,7 +183,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa Utf8ToWLogicalToVisual
-   * \sa utf8ToWSystemSafe
+   * \sa Utf8ToWSystemSafe
    */
   static bool Utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
 
@@ -199,7 +199,7 @@ public:
    * \sa Utf8ToWLogicalToVisual
    * \sa Utf8ToW
    */
-  static bool utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
+  static bool Utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
 
   /**
    * Convert wide string to UTF-8 string.
@@ -573,6 +573,77 @@ public:
    */
   static bool WToUtf8SystemSafe(const std::wstring& wStringSrc, std::string& utf8StringDst);
 
+  /**
+   * Normalize a string to composed or decomposed form
+   *
+   * It's also possible to use the special mac decomposed form for any special
+   * needs on darwin platforms
+   *
+   * \param[in]   source        String to normalize
+   * \param[out]  destination   String to store the normalized version
+   * \param[in]   options       Specify which type of normalization to use
+   * \return true on success, false on any failures
+   *
+   * \sa NormalizationOptions
+   * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+   * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+   * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+   */
+  static bool Normalize(const std::string& source, std::string& destination, uint16_t options);
+
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+  * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+  */
+  static bool Normalize(const std::u16string& source, std::u16string& destination, uint16_t options);
+  
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+  * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+  */
+  static bool Normalize(const std::u32string& source, std::u32string& destination, uint16_t options);
+  
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+  * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+  */
+  static bool Normalize(const std::wstring& source, std::wstring& destination, uint16_t options);
 private:
 
   class CInnerConverter;

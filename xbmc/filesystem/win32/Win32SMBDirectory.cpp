@@ -270,8 +270,8 @@ bool CWin32SMBDirectory::RealExists(const CURL& url, bool tryToConnect)
       std::wstring shareNameW;
       SHARE_INFO_1* info = NULL;
       // try fast way
-      if (g_charsetConverter.utf8ToWSystemSafe("\\\\" + url.GetHostName(), serverNameW) &&
-          g_charsetConverter.utf8ToWSystemSafe(url.GetShareName(), shareNameW) &&
+      if (g_charsetConverter.Utf8ToWSystemSafe("\\\\" + url.GetHostName(), serverNameW) &&
+          g_charsetConverter.Utf8ToWSystemSafe(url.GetShareName(), shareNameW) &&
           NetShareGetInfo((LPWSTR)serverNameW.c_str(), (LPWSTR)shareNameW.c_str(), 1, (LPBYTE*)&info) == NERR_Success)
       {
         const bool ret = ((info->shi1_type & STYPE_MASK) == STYPE_DISKTREE);
@@ -366,7 +366,7 @@ bool CWin32SMBDirectory::GetNetworkResources(const CURL& basePath, CFileItemList
     basePathStr.push_back('/');
 
   std::wstring remoteName;
-  if (!basePathStr.empty() && !g_charsetConverter.utf8ToWSystemSafe("\\\\" + basePath.GetHostName(), remoteName))
+  if (!basePathStr.empty() && !g_charsetConverter.Utf8ToWSystemSafe("\\\\" + basePath.GetHostName(), remoteName))
   {
     CLog::LogF(LOGERROR, "can't convert host name \"%s\" to wide character form", basePath.GetHostName().c_str());
     return false;
@@ -617,7 +617,7 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
 
   /* convert everything to wide strings */
   std::wstring serverNameW;
-  if (!g_charsetConverter.utf8ToWSystemSafe(url.GetHostName(), serverNameW))
+  if (!g_charsetConverter.Utf8ToWSystemSafe(url.GetHostName(), serverNameW))
   {
     CLog::LogF(LOGERROR, "Can't convert server name \"%s\" to wide string", url.GetHostName().c_str());
     return false;
@@ -629,7 +629,7 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   if (!url.GetShareName().empty())
   {
     serverShareName = "\\\\" + url.GetHostName() + "\\" + url.GetShareName();
-    if (!g_charsetConverter.utf8ToWSystemSafe(serverShareName, serverShareNameW))
+    if (!g_charsetConverter.Utf8ToWSystemSafe(serverShareName, serverShareNameW))
     {
       CLog::LogF(LOGERROR, "Can't convert share name \"%s\" to wide string", serverShareName.c_str());
       return false;
@@ -642,12 +642,12 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   }
 
   std::wstring usernameW;
-  if (!url.GetUserName().empty() && !g_charsetConverter.utf8ToWSystemSafe(url.GetUserName(), usernameW))
+  if (!url.GetUserName().empty() && !g_charsetConverter.Utf8ToWSystemSafe(url.GetUserName(), usernameW))
   {
     CLog::LogF(LOGERROR, "Can't convert username \"%s\" to wide string", url.GetUserName().c_str());
     return false;
     std::wstring domainW;
-    if (!url.GetDomain().empty() && !g_charsetConverter.utf8ToWSystemSafe(url.GetDomain(), domainW))
+    if (!url.GetDomain().empty() && !g_charsetConverter.Utf8ToWSystemSafe(url.GetDomain(), domainW))
     {
       CLog::LogF(LOGERROR, "Can't convert domain name \"%s\" to wide string", url.GetDomain().c_str());
       return false;
@@ -657,7 +657,7 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   }
 
   std::wstring passwordW;
-  if (!url.GetPassWord().empty() && !g_charsetConverter.utf8ToWSystemSafe(url.GetPassWord(), passwordW))
+  if (!url.GetPassWord().empty() && !g_charsetConverter.Utf8ToWSystemSafe(url.GetPassWord(), passwordW))
   {
     CLog::LogF(LOGERROR, "Can't convert password to wide string");
     return false;
