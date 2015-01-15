@@ -62,7 +62,7 @@ public:
   {
     std::string strSource(data.data(), data.size());
     std::string strUTF8;
-    g_charsetConverter.unknownToUTF8(strSource, strUTF8);
+    g_charsetConverter.UnknownToUtf8(strSource, strUTF8);
     return String(strUTF8, String::UTF8);
   }
 };

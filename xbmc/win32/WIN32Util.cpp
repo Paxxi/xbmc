@@ -297,9 +297,9 @@ bool CWIN32Util::XBMCShellExecute(const std::string &strPath, bool bWaitForScrip
   }
 
   std::wstring WstrExe, WstrParams, WstrWorkingDir;
-  g_charsetConverter.utf8ToW(strExe, WstrExe);
-  g_charsetConverter.utf8ToW(strParams, WstrParams);
-  g_charsetConverter.utf8ToW(strWorkingDir, WstrWorkingDir);
+  g_charsetConverter.Utf8ToW(strExe, WstrExe);
+  g_charsetConverter.Utf8ToW(strParams, WstrParams);
+  g_charsetConverter.Utf8ToW(strWorkingDir, WstrWorkingDir);
 
   bool ret;
   SHELLEXECUTEINFOW ShExecInfo = {0};
@@ -394,7 +394,7 @@ std::string CWIN32Util::GetSpecialFolder(int csidl)
   if(SUCCEEDED(SHGetFolderPathW(NULL, csidl, NULL, SHGFP_TYPE_CURRENT, buf)))
   {
     buf[bufSize-1] = 0;
-    g_charsetConverter.wToUTF8(buf, strProfilePath);
+    g_charsetConverter.WToUtf8(buf, strProfilePath);
     strProfilePath = UncToSmb(strProfilePath);
   }
   else
@@ -902,9 +902,9 @@ void CWIN32Util::GetDrivesByType(VECSOURCES &localDrives, Drive_Types eDriveType
          ( eDriveType == DVD_DRIVES && ( uDriveType == DRIVE_CDROM ))))
       {
         //share.strPath = strWdrive;
-        g_charsetConverter.wToUTF8(strWdrive, share.strPath);
+        g_charsetConverter.WToUtf8(strWdrive, share.strPath);
         if( cVolumeName[0] != L'\0' )
-          g_charsetConverter.wToUTF8(cVolumeName, share.strName);
+          g_charsetConverter.WToUtf8(cVolumeName, share.strName);
         if( uDriveType == DRIVE_CDROM && nResult)
         {
           // Has to be the same as auto mounted devices

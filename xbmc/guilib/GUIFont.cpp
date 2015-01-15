@@ -36,7 +36,7 @@ CScrollInfo::CScrollInfo(unsigned int wait /* = 50 */, float pos /* = 0 */,
     initialWait = wait;
     initialPos = pos;
     SetSpeed(speed ? speed : defaultSpeed);
-    g_charsetConverter.utf8ToW(scrollSuffix, suffix);
+    g_charsetConverter.Utf8ToW(scrollSuffix, suffix);
     Reset();
 }
 

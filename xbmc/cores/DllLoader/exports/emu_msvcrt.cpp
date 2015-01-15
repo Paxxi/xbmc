@@ -250,7 +250,7 @@ static int convert_fmode(const char* mode)
 static void to_finddata64i32(_wfinddata64i32_t *wdata, _finddata64i32_t *data)
 {
   std::string strname;
-  g_charsetConverter.wToUTF8(wdata->name, strname);
+  g_charsetConverter.WToUtf8(wdata->name, strname);
   size_t size = sizeof(data->name) / sizeof(char);
   strncpy(data->name, strname.c_str(), size);
   if (size)

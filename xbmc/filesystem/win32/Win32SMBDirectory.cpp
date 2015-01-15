@@ -165,7 +165,7 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       continue;
     
     std::string itemName;
-    if (!g_charsetConverter.wToUTF8SystemSafe(itemNameW, itemName) || itemName.empty())
+    if (!g_charsetConverter.WToUtf8SystemSafe(itemNameW, itemName) || itemName.empty())
     {
       CLog::LogF(LOGERROR, "Can't convert wide string item name to UTF-8");
       continue;
@@ -458,7 +458,7 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
             if (remoteName.length() > 2 && remoteName.compare(0, 2, L"\\\\", 2) == 0)
             {
               std::string remoteNameUtf8;
-              if (g_charsetConverter.wToUTF8SystemSafe(remoteName.substr(2), remoteNameUtf8) && !remoteNameUtf8.empty())
+              if (g_charsetConverter.WToUtf8SystemSafe(remoteName.substr(2), remoteNameUtf8) && !remoteNameUtf8.empty())
               {
                 CFileItemPtr pItem(new CFileItem(remoteNameUtf8));
                 pItem->SetPath(urlPrefixForItems + remoteNameUtf8 + '/');
@@ -489,7 +489,7 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
               if (slashPos < serverShareName.length() - 1) // slash must be not on last position
               {
                 std::string shareNameUtf8;
-                if (g_charsetConverter.wToUTF8SystemSafe(serverShareName.substr(slashPos + 1), shareNameUtf8) && !shareNameUtf8.empty())
+                if (g_charsetConverter.WToUtf8SystemSafe(serverShareName.substr(slashPos + 1), shareNameUtf8) && !shareNameUtf8.empty())
                 {
                   CFileItemPtr pItem(new CFileItem(shareNameUtf8));
                   pItem->SetPath(urlPrefixForItems + shareNameUtf8 + '/');
@@ -581,7 +581,7 @@ static bool localGetShares(const std::wstring& serverNameToScan, const std::stri
         {
           std::string shareNameUtf8;
           if (curShare.shi1_netname && curShare.shi1_netname[0] &&
-              g_charsetConverter.wToUTF8SystemSafe(curShare.shi1_netname, shareNameUtf8) && !shareNameUtf8.empty())
+              g_charsetConverter.WToUtf8SystemSafe(curShare.shi1_netname, shareNameUtf8) && !shareNameUtf8.empty())
           {
             CFileItemPtr pItem(new CFileItem(shareNameUtf8));
             pItem->SetPath(urlPrefixForItems + shareNameUtf8 + '/');

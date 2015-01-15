@@ -100,9 +100,9 @@ void CKeyboardLayoutConfiguration::readCharMapFromXML(const TiXmlElement* pXMLMa
       if (!strInChar.empty() && !strOutChar.empty())
       {
         std::wstring fromStr;
-        g_charsetConverter.utf8ToW(strInChar, fromStr);
+        g_charsetConverter.Utf8ToW(strInChar, fromStr);
         std::wstring toStr;
-        g_charsetConverter.utf8ToW(strOutChar, toStr);
+        g_charsetConverter.Utf8ToW(strOutChar, toStr);
         if (fromStr.size()==1 && toStr.size()==1)
         {
           charToCharMap.insert(pair<WCHAR, WCHAR>(fromStr[0], toStr[0]));
@@ -139,7 +139,7 @@ void CKeyboardLayoutConfiguration::readByteMapFromXML(const TiXmlElement* pXMLMa
       {
         std::string hexValue = strInHex;
         std::wstring toStr;
-        g_charsetConverter.utf8ToW(strOutChar, toStr);
+        g_charsetConverter.Utf8ToW(strOutChar, toStr);
 
         int from;
         if (sscanf(hexValue.c_str(), "%x", (unsigned int *)&from))

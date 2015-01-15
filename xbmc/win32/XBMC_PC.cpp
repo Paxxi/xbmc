@@ -126,7 +126,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
       return 20;
     for (int i = 0; i < argc; i++)
     {
-      g_charsetConverter.wToUTF8(argvW[i], strargvA[i]);
+      g_charsetConverter.WToUtf8(argvW[i], strargvA[i]);
       argv[i] = strargvA[i].c_str();
     }
 

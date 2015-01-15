@@ -107,13 +107,13 @@ extern "C" BOOL WINAPI dllFindClose(HANDLE hFile)
 static void to_WIN32_FIND_DATA(LPWIN32_FIND_DATAW wdata, LPWIN32_FIND_DATA data)
 {
   std::string strname;
-  g_charsetConverter.wToUTF8(wdata->cFileName, strname);
+  g_charsetConverter.WToUtf8(wdata->cFileName, strname);
   size_t size = sizeof(data->cFileName) / sizeof(char);
   strncpy(data->cFileName, strname.c_str(), size);
   if (size)
     data->cFileName[size - 1] = '\0';
 
-  g_charsetConverter.wToUTF8(wdata->cAlternateFileName, strname);
+  g_charsetConverter.WToUtf8(wdata->cAlternateFileName, strname);
   size = sizeof(data->cAlternateFileName) / sizeof(char);
   strncpy(data->cAlternateFileName, strname.c_str(), size);
   if (size)

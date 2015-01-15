@@ -417,8 +417,8 @@ BOOL CExternalPlayer::ExecuteAppW32(const char* strPath, const char* strSwitches
   si.wShowWindow = m_hideconsole ? SW_HIDE : SW_SHOW;
 
   std::wstring WstrPath, WstrSwitches;
-  g_charsetConverter.utf8ToW(strPath, WstrPath);
-  g_charsetConverter.utf8ToW(strSwitches, WstrSwitches);
+  g_charsetConverter.Utf8ToW(strPath, WstrPath);
+  g_charsetConverter.Utf8ToW(strSwitches, WstrSwitches);
 
   if (m_bAbortRequest) return false;
 
