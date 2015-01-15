@@ -423,7 +423,7 @@ bool CCharsetConverter::CInnerConverter::NormalizationHelper(const UChar* srcBuf
     //https://developer.apple.com/library/mac/qa/qa1173/_index.html
     //which U + 2000 through U + 2FFF, U + F900 through U + FAFF, and U + 2F800 through U + 2FAFF
     //are not decomposed(this avoids problems with round trip conversions from old Mac text encodings).
-    UnicodeString usetString("[^[\\u2000-\\u2fff][\\uf900-\\ufaff][\\u2f800-\\u2faff]]");
+    UnicodeString usetString("[[^\\u2000-\\u2fff][^\\uf900-\\ufaff][^\\u2f800-\\u2faff]]");
     UnicodeSet uSet(usetString, err);
 
     if (U_FAILURE(err))
@@ -443,7 +443,7 @@ bool CCharsetConverter::CInnerConverter::NormalizationHelper(const UChar* srcBuf
       return false;
   }
 
-  dstLength = dst.length() + 1;
+  dstLength = dst.length();
   *dstBuffer = new UChar[dstLength];
   
   memcpy(static_cast<void*>(*dstBuffer), static_cast<const void*>(dst.getTerminatedBuffer()), dstLength * 2);
