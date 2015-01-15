@@ -51,10 +51,20 @@ public:
   /** Options to specify BiDi text handling */
   enum BiDiOptions
   {
-    LTR = 1,            /**< specifies that the text is mainly left-to-right */
-    RTL = 2,            /**< specifies that the text is mainly right-to-left */
-    WRITE_REVERSE = 4,  /**< specifies that the text should be reversed, e.g flip rtl text to ltr */
-    REMOVE_CONTROLS = 8 /**< specifies that bidi control characters such as LRE, RLE, PDF should be removed from the output*/
+    NO_BIDI = 0,        /**< No BiDi processing */
+    LTR = 1,            /**< text is mainly left-to-right */
+    RTL = 2,            /**< text is mainly right-to-left */
+    WRITE_REVERSE = 4,  /**< text should be reversed, e.g flip rtl text to ltr */
+    REMOVE_CONTROLS = 8 /**< bidi control characters such as LRE, RLE, PDF should be removed from the output*/
+  };
+
+  /** Options to specify if any normalization should be performed and how*/
+  enum NormalizationOptions
+  {
+    NO_NORMALIZATION = 0, /**< no normalization should be performed */
+    COMPOSE = 1,          /**< text should be normalized to NFC e.g. merging ¨a into a single ä */
+    DECOMPOSE = 2,        /**< text should be normalized to NFD e.g. splitting ä into ¨a */
+    DECOMPOSE_MAC = 4     /**< text should be normalized to OSX specific NFD excluding certain ranges */
   };
 
   /**
