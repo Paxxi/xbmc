@@ -484,6 +484,110 @@ static const uint16_t normalizationTestNFDMac3[] = {
   0x8C48, 0x0000 //(豈; 豈; 豈; 豈; 豈; ) CJK COMPATIBILITY IDEOGRAPH - F900
 };
 
+// for realistic test results all characters in the next sequences are real characters from Unicode tables
+
+// two bytes UTF-8 sequences and corresponding wide strings
+static const unsigned char testCyrUtf8u[] = {
+  0xD0, 0x90, 0xD0, 0x91, 0xD0, 0x92, 0xD0, 0x93, 0xD0, 0x94, 0xD0, 0x95, 0xD0, 0x96, 0xD0, 0x97, 0xD0, 0x98, 0xD0, 0x99, 0xD0, 0x9A, 0xD0,
+  0x9B, 0xD0, 0x9C, 0xD0, 0x9D, 0xD0, 0x9E, 0xD0, 0x9F, 0xD0, 0xA0, 0xD0, 0xA1, 0xD0, 0xA2, 0xD0, 0xA3, 0xD0, 0xA4, 0xD0, 0xA5, 0xD0, 0xA6,
+  0xD0, 0xA7, 0xD0, 0xA8, 0xD0, 0xA9, 0xD0, 0xAA, 0xD0, 0xAB, 0xD0, 0xAC, 0xD0, 0xAD, 0xD0, 0xAE, 0xD0, 0xAF, 0xD0, 0xB0, 0xD0, 0xB1, 0xD0,
+  0xB2, 0xD0, 0xB3, 0xD0, 0xB4, 0xD0, 0xB5, 0xD0, 0xB6, 0xD0, 0xB7, 0xD0, 0xB8, 0xD0, 0xB9, 0xD0, 0xBA, 0xD0, 0xBB, 0xD0, 0xBC, 0xD0, 0xBD,
+  0xD0, 0xBE, 0xD0, 0xBF, 0xD1, 0x80, 0xD1, 0x81, 0xD1, 0x82, 0xD1, 0x83, 0xD1, 0x84, 0xD1, 0x85, 0xD1, 0x86, 0xD1, 0x87, 0xD1, 0x88, 0xD1,
+  0x89, 0xD1, 0x8A, 0xD1, 0x8B, 0xD1, 0x8C, 0xD1, 0x8D, 0xD1, 0x8E, 0xD1, 0x8F, 0 
+};
+static const char* const testCyrUtf8 = (const char*)testCyrUtf8u;
+
+static const wchar_t testCyrW[] = {
+  0x410, 0x411, 0x412, 0x413, 0x414, 0x415, 0x416, 0x417, 0x418, 0x419, 0x41A, 0x41B, 0x41C, 0x41D, 0x41E, 0x41F, 0x420, 0x421, 0x422, 0x423,
+  0x424, 0x425, 0x426, 0x427, 0x428, 0x429, 0x42A, 0x42B, 0x42C, 0x42D, 0x42E, 0x42F, 0x430, 0x431, 0x432, 0x433, 0x434, 0x435, 0x436, 0x437,
+  0x438, 0x439, 0x43A, 0x43B, 0x43C, 0x43D, 0x43E, 0x43F, 0x440, 0x441, 0x442, 0x443, 0x444, 0x445, 0x446, 0x447, 0x448, 0x449, 0x44A, 0x44B,
+  0x44C, 0x44D, 0x44E, 0x44F, 0 
+};
+
+static const unsigned char testGreekUtf8u[] = {
+  0xCE, 0x91, 0xCE, 0x92, 0xCE, 0x93, 0xCE, 0x94, 0xCE, 0x95, 0xCE, 0x96, 0xCE, 0x97, 0xCE, 0x98, 0xCE, 0x99, 0xCE, 0x9A, 0xCE, 0x9B, 0xCF,
+  0x80, 0xCF, 0x81, 0xCF, 0x82, 0xCF, 0x83, 0xCF, 0x84, 0xCF, 0x85, 0xCF, 0x86, 0xCF, 0x87, 0xCF, 0x88, 0xCF, 0x89, 0
+};
+static const char* const testGreekUtf8 = (const char*)testGreekUtf8u;
+
+static const wchar_t testGreekW[] ={
+  0x391, 0x392, 0x393, 0x394, 0x395, 0x396, 0x397, 0x398, 0x399, 0x39A, 0x39B, 0x3C0, 0x3C1, 0x3C2, 0x3C3, 0x3C4, 0x3C5, 0x3C6, 0x3C7, 0x3C8,
+  0x3C9, 0
+};
+
+static const unsigned char testArmUtf8u[] = {
+  0xD4, 0xB1, 0xD4, 0xB2, 0xD4, 0xB3, 0xD4, 0xB4, 0xD4, 0xB5, 0xD4, 0xB6, 0xD4, 0xB7, 0xD4, 0xB8, 0xD4, 0xB9, 0xD4, 0xBA, 0xD5, 0xA7, 0xD5,
+  0xA8, 0xD5, 0xA9, 0xD5, 0xAA, 0xD5, 0xAB, 0xD5, 0xAC, 0xD5, 0xAD, 0xD5, 0xAE, 0xD5, 0xAF, 0xD5, 0xB0, 0xD5, 0xB1, 0xD5, 0xB2, 0
+};
+static const char* const testArmUtf8 = (const char*)testArmUtf8u;
+
+static const wchar_t testArmW[] = {
+  0x531, 0x532, 0x533, 0x534, 0x535, 0x536, 0x537, 0x538, 0x539, 0x53A, 0x567, 0x568, 0x569, 0x56A, 0x56B, 0x56C, 0x56D, 0x56E, 0x56F, 0x570,
+  0x571, 0x572, 0
+};
+
+// three bytes UTF-8 sequences and corresponding wide strings
+static const unsigned char testDevnUtf8u[] = {
+  0xE0, 0xA4, 0x84, 0xE0, 0xA4, 0x85, 0xE0, 0xA4, 0x86, 0xE0, 0xA4, 0x87, 0xE0, 0xA4, 0x88, 0xE0, 0xA4, 0x89, 0xE0, 0xA4, 0x8A, 0xE0, 0xA4,
+  0x8B, 0xE0, 0xA4, 0x8C, 0xE0, 0xA4, 0x8D, 0xE0, 0xA4, 0x8E, 0xE0, 0xA5, 0xBB, 0xE0, 0xA5, 0xBC, 0xE0, 0xA5, 0xBD, 0xE0, 0xA5, 0xBE, 0xE0,
+  0xA5, 0xBF, 0
+};
+static const char* const testDevnUtf8 = (const char*)testDevnUtf8u;
+
+static const wchar_t testDevnW[] = {
+  0x904, 0x905, 0x906, 0x907, 0x908, 0x909, 0x90A, 0x90B, 0x90C, 0x90D, 0x90E, 0x97B, 0x97C, 0x97D, 0x97E, 0x97F, 0
+};
+
+static const unsigned char testGeorgUtf8u[] = {
+  0xE1, 0x82, 0xA0, 0xE1, 0x82, 0xA1, 0xE1, 0x82, 0xA2, 0xE1, 0x82, 0xA3, 0xE1, 0x82, 0xA4, 0xE1, 0x82, 0xA5, 0xE1, 0x82, 0xA6, 0xE1, 0x83,
+  0xA8, 0xE1, 0x83, 0xA9, 0xE1, 0x83, 0xAA, 0xE1, 0x83, 0xAB, 0xE1, 0x83, 0xAC, 0xE1, 0x83, 0xAD, 0xE1, 0x83, 0xAE, 0xE1, 0x83, 0xAF, 0
+};
+static const char* const testGeorgUtf8 = (const char*)testGeorgUtf8u;
+
+static const wchar_t testGeorgW[] = {
+  0x10A0, 0x10A1, 0x10A2, 0x10A3, 0x10A4, 0x10A5, 0x10A6, 0x10E8, 0x10E9, 0x10EA, 0x10EB, 0x10EC, 0x10ED, 0x10EE, 0x10EF, 0
+};
+
+static const unsigned char testCJKUtf8u[] = {
+  0xE7, 0x81, 0xB5, 0xE7, 0x81, 0xB6, 0xE7, 0x81, 0xB7, 0xE7, 0x81, 0xB8, 0xE7, 0x81, 0xB9, 0xE7, 0x81, 0xBA, 0xE7, 0x81, 0xBB, 0xE7, 0x83,
+  0xA9, 0xE7, 0x83, 0xAA, 0xE7, 0x83, 0xAB, 0xE7, 0x83, 0xAC, 0xE7, 0x83, 0xAD, 0
+};
+static const char* const testCJKUtf8 = (const char*)testCJKUtf8u;
+
+static const wchar_t testCJKW[] = {
+  0x7075, 0x7076, 0x7077, 0x7078, 0x7079, 0x707A, 0x707B, 0x70E9, 0x70EA, 0x70EB, 0x70EC, 0x70ED, 0
+};
+
+static const unsigned char testArLiUtf8u[] = {
+  0xEF, 0xB5, 0x94, 0xEF, 0xB5, 0x95, 0xEF, 0xB5, 0x96, 0xEF, 0xB5, 0x97, 0xEF, 0xB5, 0x98, 0xEF, 0xB6, 0xA7, 0xEF, 0xB6, 0xA8, 0
+};
+static const char* const testArLiUtf8 = (const char*)testArLiUtf8u;
+
+static const wchar_t testArLiW[] = {
+  0xFD54, 0xFD55, 0xFD56, 0xFD57, 0xFD58, 0xFDA7, 0xFDA8, 0
+};
+
+// four bytes UTF-8 sequences
+static const unsigned char testLinBIdeoUtf8u[] = {
+  0xF0, 0x90, 0x82, 0x82, 0xF0, 0x90, 0x82, 0x83, 0xF0, 0x90, 0x82, 0x84, 0xF0, 0x90, 0x82, 0x85, 0xF0, 0x90, 0x83, 0xA8, 0xF0, 0x90, 0x83,
+  0xA9, 0xF0, 0x90, 0x83, 0xAA, 0xF0, 0x90, 0x83, 0xAB, 0xF0, 0x90, 0x83, 0xAC, 0xF0, 0x90, 0x83, 0xAD, 0
+};
+static const char* const testLinBIdeoUtf8 = (const char*)testLinBIdeoUtf8u;
+
+static const unsigned char testCJKComIdUtf8u[] = {
+  0xF0, 0xAF, 0xA1, 0xA3, 0xF0, 0xAF, 0xA1, 0xA4, 0xF0, 0xAF, 0xA1, 0xA5, 0xF0, 0xAF, 0xA1, 0xA6, 0xF0, 0xAF, 0xA1, 0xA7, 0xF0, 0xAF, 0xA1,
+  0xA8, 0xF0, 0xAF, 0xA3, 0x96, 0xF0, 0xAF, 0xA3, 0x97, 0xF0, 0xAF, 0xA3, 0x98, 0xF0, 0xAF, 0xA3, 0x99, 0xF0, 0xAF, 0xA3, 0x9A, 0
+};
+static const char* const testCJKComIdUtf8 = (const char*)testCJKComIdUtf8u;
+
+static const unsigned char testTagsUtf8u[] = {
+  0xF3, 0xA0, 0x80, 0xA1, 0xF3, 0xA0, 0x80, 0xA2, 0xF3, 0xA0, 0x80, 0xA3, 0xF3, 0xA0, 0x80, 0xA4, 0xF3, 0xA0, 0x80, 0xA5, 0xF3, 0xA0, 0x80,
+  0xA6, 0xF3, 0xA0, 0x80, 0xA7, 0xF3, 0xA0, 0x80, 0xA8, 0xF3, 0xA0, 0x80, 0xA9, 0xF3, 0xA0, 0x80, 0xAA, 0xF3, 0xA0, 0x81, 0xAA, 0xF3, 0xA0,
+  0x81, 0xAB, 0xF3, 0xA0, 0x81, 0xAC, 0xF3, 0xA0, 0x81, 0xAD, 0xF3, 0xA0, 0x81, 0xAE, 0xF3, 0xA0, 0x81, 0xAF, 0
+};
+static const char* const testTagsUtf8 = (const char*)testTagsUtf8u;
+
+
 template<typename T>
 std::string toHex(const T& str)
 {
@@ -532,7 +636,7 @@ protected:
 TEST_F(TestCharsetConverter, utf8ToSystemSafe_1)
 {
   uint16_t c[] = { 0xFA1B, 0x0000 };
-  std::u16string cs(c);
+  std::u16string cs((char16_t*)c);
 
   std::string u8str;
   std::string u8str2;
@@ -735,8 +839,8 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932Hiranga)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
 {
-  std::u16string u16Source(bidiLogicalOrder_1_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_1_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_1_UTF16LE);
 
   std::string source;
   std::string expected;
@@ -750,8 +854,8 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_2)
 {
-  std::u16string u16Source(bidiLogicalOrder_2_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_2_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_2_UTF16LE);
 
   std::string source;
   std::string expected;
@@ -765,8 +869,8 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_2)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_3)
 {
-  std::u16string u16Source(bidiLogicalOrder_3_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_3_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_3_UTF16LE);
 
   std::string source;
   std::string expected;
@@ -780,8 +884,8 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_3)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_4)
 {
-  std::u16string u16Source(bidiLogicalOrder_4_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_4_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_4_UTF16LE);
 
   std::string source;
   std::string expected;
@@ -795,8 +899,8 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_4)
 
 TEST_F(TestCharsetConverter, utf8LogicalToVisual_5)
 {
-  std::u16string u16Source(bidiLogicalOrder_5_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_5_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_5_UTF16LE);
 
   std::string source;
   std::string expected;
@@ -810,8 +914,8 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_5)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
 {
-  std::u16string u16Source(bidiLogicalOrder_1_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_1_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_1_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
@@ -820,8 +924,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_2)
 {
-  std::u16string u16Source(bidiLogicalOrder_2_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_2_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_2_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
@@ -830,8 +934,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_2)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_3)
 {
-  std::u16string u16Source(bidiLogicalOrder_3_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_3_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_3_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
@@ -840,8 +944,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_3)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_4)
 {
-  std::u16string u16Source(bidiLogicalOrder_4_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_4_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_4_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
@@ -850,8 +954,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_4)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_5)
 {
-  std::u16string u16Source(bidiLogicalOrder_5_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_5_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_5_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
@@ -860,8 +964,8 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_5)
 
 TEST_F(TestCharsetConverter, utf16LogicalToVisual_6)
 {
-  std::u16string u16Source(bidiLogicalOrder_6_UTF16LE);
-  std::u16string u16Expected(bidiVisualOrder_6_UTF16LE);
+  std::u16string u16Source((char16_t*)bidiLogicalOrder_6_UTF16LE);
+  std::u16string u16Expected((char16_t*)bidiVisualOrder_6_UTF16LE);
   std::u16string result;
 
   g_charsetConverter.LogicalToVisualBiDi(u16Source, result,
@@ -924,7 +1028,7 @@ TEST_F(TestCharsetConverter, utf8To_ASCII)
 TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u16string expected(CP1251asUTF16LE);
+  std::u16string expected((char16_t*)CP1251asUTF16LE);
   std::u16string temp;
 
   g_charsetConverter.Utf8ToUtf16(source, temp);
@@ -935,7 +1039,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
 TEST_F(TestCharsetConverter, utf8ToUtf16LE_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u16string expected(CP1251asUTF16LE);
+  std::u16string expected((char16_t*)CP1251asUTF16LE);
   std::u16string temp;
 
   g_charsetConverter.Utf8ToUtf16LE(source, temp);
@@ -946,7 +1050,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16LE_CP1251)
 TEST_F(TestCharsetConverter, utf8ToUtf16BE_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u16string expected(CP1251asUTF16BE);
+  std::u16string expected((char16_t*)CP1251asUTF16BE);
   std::u16string temp;
 
   g_charsetConverter.Utf8ToUtf16BE(source, temp);
@@ -957,7 +1061,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16BE_CP1251)
 TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
 {
   std::string source((char*)&CP1251asUTF8);
-  std::u32string expected(CP1251asUTF32LE);
+  std::u32string expected((char32_t*)CP1251asUTF32LE);
   std::u32string temp;
 
   g_charsetConverter.Utf8ToUtf32(source, temp);
@@ -968,7 +1072,7 @@ TEST_F(TestCharsetConverter, utf8To_UTF16LE)
 {
   refstra1 = "ｔｅｓｔ＿ｕｔｆ８Ｔｏ：＿ｃｈａｒｓｅｔ＿ＵＴＦ－１６ＬＥ，＿"
              "ＣＳｔｄＳｔｒｉｎｇ１６";
-  refstr16_1.assign(refutf16LE2);
+  refstr16_1.assign((char16_t*)refutf16LE2);
   varstr16_1.clear();
   g_charsetConverter.Utf8To("UTF-16LE", refstra1, varstr16_1);
   EXPECT_PRED_FORMAT2(AssertStringEquals, refstr16_1, varstr16_1);
@@ -987,7 +1091,7 @@ TEST_F(TestCharsetConverter, utf8To_UTF32LE)
 #else
              "ＣＳｔｄＳｔｒｉｎｇ３２＿🐭🐮";
 #endif
-  refstr32_1.assign(refutf32LE1);
+  refstr32_1.assign((char32_t*)refutf32LE1);
   varstr32_1.clear();
   g_charsetConverter.Utf8To("UTF-32LE", refstra1, varstr32_1);
   EXPECT_PRED_FORMAT2(AssertStringEquals, refstr32_1, varstr32_1);
@@ -1037,7 +1141,7 @@ TEST_F(TestCharsetConverter, wToUTF8)
 
 TEST_F(TestCharsetConverter, utf16BEtoUTF8)
 {
-  refstr16_1.assign(refutf16BE);
+  refstr16_1.assign((char16_t*)refutf16BE);
   refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＢＥｔｏＵＴＦ８";
   varstra1.clear();
   g_charsetConverter.Utf16BEToUtf8(refstr16_1, varstra1);
@@ -1046,7 +1150,7 @@ TEST_F(TestCharsetConverter, utf16BEtoUTF8)
 
 TEST_F(TestCharsetConverter, ucs2ToUTF8)
 {
-  refstr16_1.assign(refucs2);
+  refstr16_1.assign((char16_t*)refucs2);
   refstra1 = "ｔｅｓｔ＿ｕｃｓ２ｔｏＵＴＦ８";
   varstra1.clear();
   g_charsetConverter.Ucs2ToUtf8(refstr16_1, varstra1);
@@ -1243,3 +1347,148 @@ TEST_F(TestCharsetConverter, unknownToUTF8_2)
   g_charsetConverter.UnknownToUtf8(refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
+
+TEST_F(TestCharsetConverter, WToUtf8)
+{
+  std::string testString;
+   /* test one byte UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(L"Simple US-ASCII string 1234567890,?./!", testString));
+  EXPECT_STREQ("Simple US-ASCII string 1234567890,?./!", testString.c_str());
+
+  /* test two bytes UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testCyrW, testString));
+  EXPECT_STREQ(testCyrUtf8, testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testGreekW, testString));
+  EXPECT_STREQ(testGreekUtf8, testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testArmW, testString));
+  EXPECT_STREQ(testArmUtf8, testString.c_str());
+
+  /* test three bytes UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testDevnW, testString));
+  EXPECT_STREQ(testDevnUtf8, testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testGeorgW, testString));
+  EXPECT_STREQ(testGeorgUtf8, testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testCJKW, testString));
+  EXPECT_STREQ(testCJKUtf8, testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testArLiW, testString));
+  EXPECT_STREQ(testArLiUtf8, testString.c_str());
+
+  /* test four bytes UTF-8 sequences */
+  /* those tests can fail on some platform with limited wchar_t range and lack of surrogates support */
+  std::wstring helperStringW;
+  EXPECT_TRUE(g_charsetConverter.TryUtf8ToW(testLinBIdeoUtf8, helperStringW)) << "Can't prepare source wide string for test";
+  EXPECT_TRUE(CCharsetConverter::TryWToUtf8(helperStringW, testString));
+  EXPECT_STREQ(testLinBIdeoUtf8, testString.c_str());
+  helperStringW.clear();
+  EXPECT_TRUE(g_charsetConverter.TryUtf8ToW(testCJKComIdUtf8, helperStringW)) << "Can't prepare source wide string for test";
+  EXPECT_TRUE(CCharsetConverter::TryWToUtf8(helperStringW, testString));
+  EXPECT_STREQ(testCJKComIdUtf8, testString.c_str());
+  helperStringW.clear();
+  EXPECT_TRUE(g_charsetConverter.TryUtf8ToW(testTagsUtf8, helperStringW)) << "Can't prepare source wide string for test";
+  EXPECT_TRUE(CCharsetConverter::TryWToUtf8(helperStringW, testString));
+  EXPECT_STREQ(testTagsUtf8, testString.c_str());
+
+  /* test invalid chars */
+  static const wchar_t testInvalid1W[] =
+  { L'a', L'b', L'c', 0xD800, 0 }; // invalid char at the end 
+  static const wchar_t testInvalid2W[] =
+  { L'1', L'2', 0xDE00, 0xDF00, L'3', L'4', 0 }; // invalid chars at the middle 
+  static const wchar_t testInvalid3W[] =
+  { 0xD901, L'x', L'y', L'z', 0 }; // invalid char at the beginning 
+  static const wchar_t testInvalid4W[] =
+  { 0xDA11, 0xDBCC, 0 }; // only invalid char 
+  EXPECT_FALSE(CCharsetConverter::TryWToUtf8(testInvalid1W, testString));
+  EXPECT_FALSE(CCharsetConverter::TryWToUtf8(testInvalid2W, testString));
+  EXPECT_FALSE(CCharsetConverter::TryWToUtf8(testInvalid3W, testString));
+  EXPECT_FALSE(CCharsetConverter::TryWToUtf8(testInvalid4W, testString));
+  
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testInvalid1W, testString));
+  EXPECT_STREQ("abc", testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testInvalid2W, testString));
+  EXPECT_STREQ("1234", testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testInvalid3W, testString));
+  EXPECT_STREQ("xyz", testString.c_str());
+  EXPECT_TRUE(CCharsetConverter::WToUtf8(testInvalid4W, testString));
+  EXPECT_STREQ("", testString.c_str());
+}
+
+TEST_F(TestCharsetConverter, Utf8ToW)
+{
+  std::wstring testStringW;
+   /* test one byte UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW("Simple US-ASCII string 1234567890,?./!", testStringW));
+  EXPECT_STREQ(L"Simple US-ASCII string 1234567890,?./!", testStringW.c_str());
+
+  /* test two bytes UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testCyrUtf8, testStringW));
+  EXPECT_STREQ(testCyrW, testStringW.c_str());
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testGreekUtf8, testStringW));
+  EXPECT_STREQ(testGreekW, testStringW.c_str());
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testArmUtf8, testStringW));
+  EXPECT_STREQ(testArmW, testStringW.c_str());
+
+  /* test three bytes UTF-8 sequences */
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testDevnUtf8, testStringW));
+  EXPECT_STREQ(testDevnW, testStringW.c_str());
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testGeorgUtf8, testStringW));
+  EXPECT_STREQ(testGeorgW, testStringW.c_str());
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testCJKUtf8, testStringW));
+  EXPECT_STREQ(testCJKW, testStringW.c_str());
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testArLiUtf8, testStringW));
+  EXPECT_STREQ(testArLiW, testStringW.c_str());
+
+  /* test four bytes UTF-8 sequences */
+  /* those tests can fail on some platform with limited wchar_t range and lack of surrogates support */
+  std::string resultStringUtf8;
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testLinBIdeoUtf8, testStringW));
+  EXPECT_TRUE(CCharsetConverter::TryWToUtf8(testStringW, resultStringUtf8)) << "Can't convert result back to UTF-8 from wide string";
+  EXPECT_STREQ(testLinBIdeoUtf8, resultStringUtf8.c_str());
+  resultStringUtf8.clear();
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testCJKComIdUtf8, testStringW));
+  EXPECT_TRUE(g_charsetConverter.TryWToUtf8(testStringW, resultStringUtf8)) << "Can't convert result back to UTF-8 from wide string";
+  EXPECT_STREQ(testCJKComIdUtf8, resultStringUtf8.c_str());
+  resultStringUtf8.clear();
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testTagsUtf8, testStringW));
+  EXPECT_TRUE(g_charsetConverter.TryWToUtf8(testStringW, resultStringUtf8)) << "Can't convert result back to UTF-8 from wide string";
+  EXPECT_STREQ(testTagsUtf8, resultStringUtf8.c_str());
+
+  /* test invalid sequences */
+  static const char testInvalid1Utf8[] =
+  { 'a', 'b', 'c', (char)0xC0, 0 }; // invalid sequences at the end 
+  static const char testInvalid2Utf8[] =
+  { '1', '2', (char)0xC1, (char)0xAB, '3', '4', 0 }; // invalid sequences at the middle 
+  static const char testInvalid3Utf8[] =
+  { 'F', 'J', (char)0xC2, 'Q', 'W', 0 }; // incomplete sequences at the middle, 'Q' must be decoded 
+  static const char testInvalid4Utf8[] =
+  { (char)0xF7, 'x', 'y', 'z', 0 }; // invalid sequences at the beginning 
+  static const char testInvalid5Utf8[] =
+  { ' ', (char)0xED, (char)0xA0, (char)0x80, (char)0xED, (char)0xB0, (char)0x82, '?', '!', '*', 0 }; // surrogates in the middle 
+  static const char testInvalid6Utf8[] =
+  { (char)0xF4, (char)0x90, (char)0x80, (char)0x80, 0 }; // only invalid sequences 
+
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid1Utf8, testStringW));
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid2Utf8, testStringW));
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid3Utf8, testStringW));
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid4Utf8, testStringW));
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid5Utf8, testStringW));
+  EXPECT_FALSE(CCharsetConverter::TryUtf8ToW(testInvalid6Utf8, testStringW));
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid1Utf8, testStringW));
+  EXPECT_STREQ(L"abc", testStringW.c_str());
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid2Utf8, testStringW));
+  EXPECT_STREQ(L"1234", testStringW.c_str());
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid3Utf8, testStringW));
+  EXPECT_STREQ(L"FJQW", testStringW.c_str());
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid4Utf8, testStringW));
+  EXPECT_STREQ(L"xyz", testStringW.c_str());
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid5Utf8, testStringW));
+  EXPECT_STREQ(L" ?!*", testStringW.c_str());
+
+  EXPECT_TRUE(CCharsetConverter::Utf8ToW(testInvalid6Utf8, testStringW));
+  EXPECT_STREQ(L"", testStringW.c_str());
+}
+

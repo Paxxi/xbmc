@@ -188,6 +188,19 @@ public:
   static bool Utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
 
   /**
+  * Convert UTF-8 string to wide string.
+  *
+  * \param[in]  utf8StringSrc       is source UTF-8 string to convert
+  * \param[out] wStringDst          is output wide string, empty on any error
+  *
+  * \return true on successful conversion, false on any error
+  * \sa Utf8ToWLogicalToVisual
+  * \sa Utf8ToWSystemSafe
+  * \sa Utf8ToW
+  */
+  static bool TryUtf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
+
+  /**
    * Convert UTF-8 string to wide string and perform extra processing
    * to ensure that the string is valid for file system operations.
    * Fails on invalid byte sequences.
@@ -208,8 +221,20 @@ public:
    * \param[out] utf8StringDst          is output wide string, empty on any error
    *
    * \return true on successful conversion, false on any error
+   * \sa TryWToUtf8
    */
   static bool WToUtf8(const std::wstring& wStringSrc, std::string& utf8StringDst);
+
+  /**
+  * Convert wide string to UTF-8 string.
+  *
+  * \param[in]  wStringSrc             is source UTF-8 string to convert
+  * \param[out] utf8StringDst          is output wide string, empty on any error
+  *
+  * \return true on successful conversion, false on any error
+  * \sa WToUtf8
+  */
+  static bool TryWToUtf8(const std::wstring& wStringSrc, std::string& utf8StringDst);
 
   /**
    * Convert from the user selected subtitle encoding to UTF-8

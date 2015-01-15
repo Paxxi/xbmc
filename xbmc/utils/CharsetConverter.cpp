@@ -527,6 +527,18 @@ bool CCharsetConverter::Utf8ToW(const std::string& utf8StringSrc, std::wstring& 
                                   NO_BIDI, NO_NORMALIZATION | NORMALIZE, false);
 }
 
+bool CCharsetConverter::TryUtf8ToW(const std::string & utf8StringSrc, std::wstring & wStringDst)
+{
+  return CInnerConverter::Convert(UTF8_CHARSET, WCHAR_CHARSET, utf8StringSrc, wStringDst,
+                                  NO_BIDI, NO_NORMALIZATION | NORMALIZE, true);
+}
+
+bool CCharsetConverter::TryWToUtf8(const std::wstring & wStringSrc, std::string & utf8StringDst)
+{
+  return CInnerConverter::Convert(WCHAR_CHARSET, UTF8_CHARSET, wStringSrc, utf8StringDst,
+                                  NO_BIDI, NO_NORMALIZATION, true);
+}
+
 bool CCharsetConverter::SubtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst)
 {
   std::string subtitleCharset = g_langInfo.GetSubtitleCharSet();
