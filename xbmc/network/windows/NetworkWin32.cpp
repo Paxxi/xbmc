@@ -54,7 +54,7 @@ CNetworkInterfaceWin32::~CNetworkInterfaceWin32(void)
 
 std::string& CNetworkInterfaceWin32::GetName(void)
 {
-  g_charsetConverter.unknownToUTF8(m_adaptername);
+  g_charsetConverter.UnknownToUtf8(m_adaptername);
   return m_adaptername;
 }
 
@@ -122,7 +122,7 @@ std::string CNetworkInterfaceWin32::GetCurrentWirelessEssId(void)
           StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
           std::wstring strGuid = wcguid;
           std::wstring strAdaptername;
-          g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
+          g_charsetConverter.Utf8ToW(m_adapter.AdapterName, strAdaptername);
           if( strGuid == strAdaptername)
           {
             if(WlanQueryInterface(hClientHdl,&ppInterfaceList->InterfaceInfo[i].InterfaceGuid,wlan_intf_opcode_current_connection, NULL, &dwSize, (PVOID*)&pAttributes, NULL ) == ERROR_SUCCESS)
@@ -349,7 +349,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
     StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
     std::wstring strGuid = wcguid;
     std::wstring strAdaptername;
-    g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
+    g_charsetConverter.Utf8ToW(m_adapter.AdapterName, strAdaptername);
     if (strGuid == strAdaptername)
     {
       WLAN_BSS_LIST *bss_list;
@@ -463,7 +463,7 @@ void CNetworkInterfaceWin32::GetSettings(NetworkAssignment& assignment, std::str
           StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
           std::wstring strGuid = wcguid;
           std::wstring strAdaptername;
-          g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
+          g_charsetConverter.Utf8ToW(m_adapter.AdapterName, strAdaptername);
           if( strGuid == strAdaptername)
           {
             if(WlanQueryInterface(hClientHdl,&ppInterfaceList->InterfaceInfo[i].InterfaceGuid,wlan_intf_opcode_current_connection, NULL, &dwSize, (PVOID*)&pAttributes, NULL ) == ERROR_SUCCESS)

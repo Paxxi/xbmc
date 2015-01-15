@@ -488,8 +488,8 @@ TEST_F(TestCharsetConverter, utf8ToSystemSafe_1)
   std::string u8str;
   std::string u8str2;
 
-  g_charsetConverter.utf16LEtoUTF8(cs, u8str);
-  ASSERT_TRUE(g_charsetConverter.utf8ToSystemSafe(u8str, u8str2));
+  g_charsetConverter.Utf16LEToUtf8(cs, u8str);
+  ASSERT_TRUE(g_charsetConverter.Utf8ToSystemSafe(u8str, u8str2));
 }
 
 TEST_F(TestCharsetConverter, systemToUtf8_CP1251)
@@ -499,7 +499,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1251)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1251"); //simulate CP1251 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -511,7 +511,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1252)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1252"); //simulate CP1252 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -523,7 +523,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1253)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1253"); //simulate CP1253 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -535,7 +535,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1255)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1255"); //simulate CP1255 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -547,7 +547,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP1256)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-1256"); //simulate CP1256 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -559,7 +559,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP874)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-874"); //simulate CP874 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -571,7 +571,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP932)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -583,7 +583,7 @@ TEST_F(TestCharsetConverter, systemToUtf8_CP932Hiranga)
   std::string temp;
   const char* defCodePage = ucnv_getDefaultName();
   ucnv_setDefaultName("CP-932"); //simulate CP932 as system codepage
-  g_charsetConverter.systemToUtf8(data, temp);
+  g_charsetConverter.SystemToUtf8(data, temp);
   ucnv_setDefaultName(defCodePage); //reset codepage to avoid tainting other tests
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
@@ -595,7 +595,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1251)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1251");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -607,7 +607,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1252)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1252");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -619,7 +619,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1253)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1253");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -631,7 +631,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1255)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1255");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -643,7 +643,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP1256)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-1256");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -655,7 +655,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP874)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-874");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -667,7 +667,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-932");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -679,7 +679,7 @@ TEST_F(TestCharsetConverter, utf8ToSystem_CP932Hiranga)
   const char* defCodePage = ucnv_getDefaultName();
 
   ucnv_setDefaultName("CP-932");
-  g_charsetConverter.utf8ToSystem(source);
+  g_charsetConverter.Utf8ToSystem(source);
   ucnv_setDefaultName(defCodePage);
   EXPECT_STREQ(expected.c_str(), source.c_str());
 }
@@ -693,9 +693,9 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_1)
   std::string expected;
   std::string temp;
 
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.LogicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -708,9 +708,9 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_2)
   std::string expected;
   std::string temp;
 
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.LogicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -723,9 +723,9 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_3)
   std::string expected;
   std::string temp;
 
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.LogicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -738,9 +738,9 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_4)
   std::string expected;
   std::string temp;
 
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.LogicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -753,9 +753,9 @@ TEST_F(TestCharsetConverter, utf8LogicalToVisual_5)
   std::string expected;
   std::string temp;
 
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Source, source));
-  EXPECT_TRUE(g_charsetConverter.utf16LEtoUTF8(u16Expected, expected));
-  EXPECT_TRUE(g_charsetConverter.logicalToVisualBiDi(source, temp));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Source, source));
+  EXPECT_TRUE(g_charsetConverter.Utf16LEToUtf8(u16Expected, expected));
+  EXPECT_TRUE(g_charsetConverter.LogicalToVisualBiDi(source, temp));
   EXPECT_STREQ(expected.c_str(), temp.c_str());
 }
 
@@ -765,7 +765,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_1)
   std::u16string u16Expected(bidiVisualOrder_1_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -775,7 +775,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_2)
   std::u16string u16Expected(bidiVisualOrder_2_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -785,7 +785,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_3)
   std::u16string u16Expected(bidiVisualOrder_3_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -795,7 +795,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_4)
   std::u16string u16Expected(bidiVisualOrder_4_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -805,7 +805,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_5)
   std::u16string u16Expected(bidiVisualOrder_5_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result);
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
 }
 
@@ -815,7 +815,7 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_6)
   std::u16string u16Expected(bidiVisualOrder_6_UTF16LE);
   std::u16string result;
 
-  g_charsetConverter.logicalToVisualBiDi(u16Source, result,
+  g_charsetConverter.LogicalToVisualBiDi(u16Source, result,
                                          CCharsetConverter::LTR |
                                          CCharsetConverter::REMOVE_CONTROLS);
   EXPECT_PRED_FORMAT2(AssertStringEquals, u16Expected, result);
@@ -823,10 +823,10 @@ TEST_F(TestCharsetConverter, utf16LogicalToVisual_6)
 
 TEST_F(TestCharsetConverter, utf8ToW)
 {
-  refstra1 = "test utf8ToW";
-  refstrw1 = L"test utf8ToW";
+  refstra1 = "test Utf8ToW";
+  refstrw1 = L"test Utf8ToW";
   varstrw1.clear();
-  g_charsetConverter.utf8ToW(refstra1, varstrw1);
+  g_charsetConverter.Utf8ToW(refstra1, varstrw1);
   EXPECT_STREQ(refstrw1.c_str(), varstrw1.c_str());
 }
 
@@ -834,7 +834,7 @@ TEST_F(TestCharsetConverter, subtitleCharsetToUtf8)
 {
   refstra1 = "test subtitleCharsetToW";
   varstra1.clear();
-  g_charsetConverter.subtitleCharsetToUtf8(refstra1, varstra1);
+  g_charsetConverter.SubtitleCharsetToUtf8(refstra1, varstra1);
 
   /* Assign refstra1 to refstrw1 so that we can compare */
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
@@ -842,33 +842,33 @@ TEST_F(TestCharsetConverter, subtitleCharsetToUtf8)
 
 TEST_F(TestCharsetConverter, utf8ToStringCharset_1)
 {
-  refstra1 = "test utf8ToStringCharset";
+  refstra1 = "test Utf8ToStringCharset";
   varstra1.clear();
-  g_charsetConverter.utf8ToStringCharset(refstra1, varstra1);
+  g_charsetConverter.Utf8ToStringCharset(refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
 TEST_F(TestCharsetConverter, utf8ToStringCharset_2)
 {
-  refstra1 = "test utf8ToStringCharset";
-  varstra1 = "test utf8ToStringCharset";
-  g_charsetConverter.utf8ToStringCharset(varstra1);
+  refstra1 = "test Utf8ToStringCharset";
+  varstra1 = "test Utf8ToStringCharset";
+  g_charsetConverter.Utf8ToStringCharset(varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
 TEST_F(TestCharsetConverter, utf8ToSystem)
 {
-  refstra1 = "test utf8ToSystem";
-  varstra1 = "test utf8ToSystem";
-  g_charsetConverter.utf8ToSystem(varstra1);
+  refstra1 = "test Utf8ToSystem";
+  varstra1 = "test Utf8ToSystem";
+  g_charsetConverter.Utf8ToSystem(varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
 TEST_F(TestCharsetConverter, utf8To_ASCII)
 {
-  refstra1 = "test utf8To: charset ASCII, std::string";
+  refstra1 = "test Utf8To: charset ASCII, std::string";
   varstra1.clear();
-  g_charsetConverter.utf8To("ASCII", refstra1, varstra1);
+  g_charsetConverter.Utf8To("ASCII", refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -878,7 +878,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16_CP1251)
   std::u16string expected(CP1251asUTF16LE);
   std::u16string temp;
 
-  g_charsetConverter.utf8ToUtf16(source, temp);
+  g_charsetConverter.Utf8ToUtf16(source, temp);
   EXPECT_EQ(expected.length(), temp.length());
   EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
@@ -889,7 +889,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16LE_CP1251)
   std::u16string expected(CP1251asUTF16LE);
   std::u16string temp;
 
-  g_charsetConverter.utf8ToUtf16LE(source, temp);
+  g_charsetConverter.Utf8ToUtf16LE(source, temp);
   EXPECT_EQ(expected.length(), temp.length());
   EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
@@ -900,7 +900,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf16BE_CP1251)
   std::u16string expected(CP1251asUTF16BE);
   std::u16string temp;
 
-  g_charsetConverter.utf8ToUtf16BE(source, temp);
+  g_charsetConverter.Utf8ToUtf16BE(source, temp);
   EXPECT_EQ(expected.length(), temp.length());
   EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
@@ -911,7 +911,7 @@ TEST_F(TestCharsetConverter, utf8ToUtf32_CP1251)
   std::u32string expected(CP1251asUTF32LE);
   std::u32string temp;
 
-  g_charsetConverter.utf8ToUtf32(source, temp);
+  g_charsetConverter.Utf8ToUtf32(source, temp);
   EXPECT_PRED_FORMAT2(AssertStringEquals, expected, temp);
 }
 
@@ -921,7 +921,7 @@ TEST_F(TestCharsetConverter, utf8To_UTF16LE)
              "ＣＳｔｄＳｔｒｉｎｇ１６";
   refstr16_1.assign(refutf16LE2);
   varstr16_1.clear();
-  g_charsetConverter.utf8To("UTF-16LE", refstra1, varstr16_1);
+  g_charsetConverter.Utf8To("UTF-16LE", refstra1, varstr16_1);
   EXPECT_PRED_FORMAT2(AssertStringEquals, refstr16_1, varstr16_1);
 }
 
@@ -940,7 +940,7 @@ TEST_F(TestCharsetConverter, utf8To_UTF32LE)
 #endif
   refstr32_1.assign(refutf32LE1);
   varstr32_1.clear();
-  g_charsetConverter.utf8To("UTF-32LE", refstra1, varstr32_1);
+  g_charsetConverter.Utf8To("UTF-32LE", refstra1, varstr32_1);
   EXPECT_PRED_FORMAT2(AssertStringEquals, refstr32_1, varstr32_1);
 }
 
@@ -979,10 +979,10 @@ TEST_F(TestCharsetConverter, isValidUtf8_4)
 
 TEST_F(TestCharsetConverter, wToUTF8)
 {
-  refstrw1 = L"test utf8ToW";
-  refstra1 = "test utf8ToW";
+  refstrw1 = L"test Utf8ToW";
+  refstra1 = "test Utf8ToW";
   varstra1.clear();
-  g_charsetConverter.wToUTF8(refstrw1, varstra1);
+  g_charsetConverter.WToUtf8(refstrw1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -991,7 +991,7 @@ TEST_F(TestCharsetConverter, utf16BEtoUTF8)
   refstr16_1.assign(refutf16BE);
   refstra1 = "ｔｅｓｔ＿ｕｔｆ１６ＢＥｔｏＵＴＦ８";
   varstra1.clear();
-  g_charsetConverter.utf16BEtoUTF8(refstr16_1, varstra1);
+  g_charsetConverter.Utf16BEToUtf8(refstr16_1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -1000,7 +1000,7 @@ TEST_F(TestCharsetConverter, ucs2ToUTF8)
   refstr16_1.assign(refucs2);
   refstra1 = "ｔｅｓｔ＿ｕｃｓ２ｔｏＵＴＦ８";
   varstra1.clear();
-  g_charsetConverter.ucs2ToUTF8(refstr16_1, varstra1);
+  g_charsetConverter.Ucs2ToUtf8(refstr16_1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -1009,7 +1009,7 @@ TEST_F(TestCharsetConverter, utf8logicalToVisualBiDi)
   refstra1 = "ｔｅｓｔ＿ｕｔｆ８ｌｏｇｉｃａｌＴｏＶｉｓｕａｌＢｉＤｉ";
   refstra2 = "ｔｅｓｔ＿ｕｔｆ８ｌｏｇｉｃａｌＴｏＶｉｓｕａｌＢｉＤｉ";
   varstra1.clear();
-  g_charsetConverter.logicalToVisualBiDi(refstra1, varstra1);
+  g_charsetConverter.LogicalToVisualBiDi(refstra1, varstra1);
   EXPECT_STREQ(refstra2.c_str(), varstra1.c_str());
 }
 
@@ -1077,7 +1077,7 @@ TEST_F(TestCharsetConverter, unknownToUTF8_1)
 {
   refstra1 = "ｔｅｓｔ＿ｕｎｋｎｏｗｎＴｏＵＴＦ８";
   varstra1 = "ｔｅｓｔ＿ｕｎｋｎｏｗｎＴｏＵＴＦ８";
-  g_charsetConverter.unknownToUTF8(varstra1);
+  g_charsetConverter.UnknownToUtf8(varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }
 
@@ -1085,6 +1085,6 @@ TEST_F(TestCharsetConverter, unknownToUTF8_2)
 {
   refstra1 = "ｔｅｓｔ＿ｕｎｋｎｏｗｎＴｏＵＴＦ８";
   varstra1.clear();
-  g_charsetConverter.unknownToUTF8(refstra1, varstra1);
+  g_charsetConverter.UnknownToUtf8(refstra1, varstra1);
   EXPECT_STREQ(refstra1.c_str(), varstra1.c_str());
 }

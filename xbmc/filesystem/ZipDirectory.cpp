@@ -119,7 +119,7 @@ namespace XFILE
 
       CFileItemPtr pFileItem(new CFileItem);
 
-      g_charsetConverter.unknownToUTF8(pathTokens[baseTokens.size()]);
+      g_charsetConverter.UnknownToUtf8(pathTokens[baseTokens.size()]);
 
       pFileItem->SetLabel(pathTokens[baseTokens.size()]);
       if (bIsFolder)

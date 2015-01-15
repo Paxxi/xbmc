@@ -115,11 +115,11 @@ std::vector<std::string> CKeyboardLayout::BreakCharacters(const std::string &cha
 {
   std::vector<std::string> result;
   // break into utf8 characters
-  std::u32string chars32 = g_charsetConverter.utf8ToUtf32(chars);
+  std::u32string chars32 = g_charsetConverter.Utf8ToUtf32(chars);
   for (size_t i = 0; i < chars32.size(); i++)
   {
     std::u32string char32(1, chars32[i]);
-    result.push_back(g_charsetConverter.utf32ToUtf8(char32));
+    result.push_back(g_charsetConverter.Utf32ToUtf8(char32));
   }
   return result;
 }

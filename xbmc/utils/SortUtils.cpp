@@ -656,7 +656,7 @@ void SortUtils::Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute attribute
         }
 
         std::wstring sortLabel;
-        g_charsetConverter.utf8ToW(preparator(attributes, *item), sortLabel);
+        g_charsetConverter.Utf8ToW(preparator(attributes, *item), sortLabel);
         item->insert(pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
       }
 
@@ -695,7 +695,7 @@ void SortUtils::Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute attribute
         }
 
         std::wstring sortLabel;
-        g_charsetConverter.utf8ToW(preparator(attributes, **item), sortLabel);
+        g_charsetConverter.Utf8ToW(preparator(attributes, **item), sortLabel);
         (*item)->insert(pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
       }
 

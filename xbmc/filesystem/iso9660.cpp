@@ -688,7 +688,7 @@ string iso9660::GetThinText(BYTE* strTxt, int iLen )
   std::u16string strTxtUnicode((char16_t*)strTxt, iLen / 2);
   std::string utf8String;
 
-  g_charsetConverter.utf16BEtoUTF8(strTxtUnicode, utf8String);
+  g_charsetConverter.Utf16BEToUtf8(strTxtUnicode, utf8String);
 
   return utf8String;
 }

@@ -157,7 +157,7 @@ bool Win32DllLoader::Load()
   std::string strFileName = GetFileName();
 
   std::wstring strDllW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(strFileName), strDllW);
+  g_charsetConverter.Utf8ToW(CSpecialProtocol::TranslatePath(strFileName), strDllW);
   m_dllHandle = LoadLibraryExW(strDllW.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
   if (!m_dllHandle)
   {
@@ -170,7 +170,7 @@ bool Win32DllLoader::Load()
     if (strLen != 0)
     {
       std::string strMessage;
-      g_charsetConverter.wToUTF8(std::wstring(lpMsgBuf, strLen), strMessage);
+      g_charsetConverter.WToUtf8(std::wstring(lpMsgBuf, strLen), strMessage);
       CLog::Log(LOGERROR, "%s: Failed to load \"%s\" with error %lu: \"%s\"", __FUNCTION__, CSpecialProtocol::TranslatePath(strFileName).c_str(), dw, strMessage.c_str());
     }
     else
@@ -243,7 +243,7 @@ bool Win32DllLoader::HasSymbols()
 void Win32DllLoader::OverrideImports(const std::string &dll)
 {
   std::wstring strdllW;
-  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dll), strdllW);
+  g_charsetConverter.Utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dll), strdllW);
   BYTE* image_base = (BYTE*)GetModuleHandleW(strdllW.c_str());
 
   if (!image_base)
@@ -338,7 +338,7 @@ bool Win32DllLoader::NeedsHooking(const char *dllName)
     }
   }
   std::wstring strdllNameW;
-  g_charsetConverter.utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dllName), strdllNameW);
+  g_charsetConverter.Utf8ToWSystemSafe(CSpecialProtocol::TranslatePath(dllName), strdllNameW);
   HMODULE hModule = GetModuleHandleW(strdllNameW.c_str());
   if (hModule == NULL)
     return false;
@@ -346,7 +346,7 @@ bool Win32DllLoader::NeedsHooking(const char *dllName)
   wchar_t filepathW[MAX_PATH];
   GetModuleFileNameW(hModule, filepathW, MAX_PATH);
   std::string dllPath;
-  g_charsetConverter.wToUTF8(filepathW, dllPath);
+  g_charsetConverter.WToUtf8(filepathW, dllPath);
 
   // compare this filepath with some special directories
   std::string xbmcPath = CSpecialProtocol::TranslatePath("special://xbmc");

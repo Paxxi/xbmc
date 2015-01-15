@@ -75,7 +75,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool utf8ToUtf32(const std::string& utf8StringSrc, std::u32string& utf32StringDst);
+  static bool Utf8ToUtf32(const std::string& utf8StringSrc, std::u32string& utf32StringDst);
   
   /**
    * Convert UTF-8 string to UTF-32 string.
@@ -84,7 +84,7 @@ public:
    *
    * \return converted string on successful conversion, empty string on any error
    */
-  static std::u32string utf8ToUtf32(const std::string& utf8StringSrc);
+  static std::u32string Utf8ToUtf32(const std::string& utf8StringSrc);
 
   /**
   * Convert UTF-8 string to UTF-16 string.
@@ -94,7 +94,7 @@ public:
   *
   * \return true on successful conversion, false on any error
   */
-  static bool utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+  static bool Utf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
 
   /**
   * Try to convert UTF-8 string to UTF-16.
@@ -104,7 +104,7 @@ public:
   * \param[out] utf16StringDst      is output UTF-16 string, empty on any error
   *
   * \return true on successful conversion, false on any error
-  * \sa utf8ToUtf16
+  * \sa Utf8ToUtf16
   */
   static bool TryUtf8ToUtf16(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
   
@@ -115,7 +115,7 @@ public:
   *
   * \return converted string on successful conversion, empty string on any error
   */
-  static std::u16string utf8ToUtf16(const std::string& utf8StringSrc);
+  static std::u16string Utf8ToUtf16(const std::string& utf8StringSrc);
   
   /**
    * Convert UTF-8 string to UTF-32 string and perform logical to visual processing
@@ -130,9 +130,9 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa utf8ToUtf32
+   * \sa Utf8ToUtf32
    */
-  static bool utf8ToUtf32LogicalToVisual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, 
+  static bool Utf8ToUtf32LogicalToVisual(const std::string& utf8StringSrc, std::u32string& utf32StringDst, 
                                          uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
   
   /**
@@ -142,9 +142,9 @@ public:
    * \param[out] utf8StringDst       is output UTF-8 string, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf32ToUtf8(std::u32string&)
+   * \sa Utf32ToUtf8(std::u32string&)
    */
-  static bool utf32ToUtf8(const std::u32string& utf32StringSrc, std::string& utf8StringDst);
+  static bool Utf32ToUtf8(const std::u32string& utf32StringSrc, std::string& utf8StringDst);
   
   /**
    * Convert UTF-32 string to UTF-8 string.
@@ -152,9 +152,9 @@ public:
    * \param[in] utf32StringSrc      is source UTF-32 string to convert
    *
    * \return converted string on successful conversion, empty string on any error
-   * \sa utf32ToUtf8(std::u32string&, std::string&)
+   * \sa Utf32ToUtf8(std::u32string&, std::string&)
    */
-  static std::string utf32ToUtf8(const std::u32string& utf32StringSrc);
+  static std::string Utf32ToUtf8(const std::u32string& utf32StringSrc);
   
   /**
    * Convert UTF-8 string to wide string and perform logical to visual processing
@@ -169,10 +169,10 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa utf8ToW
-   * \sa utf8ToUtf32LogicalToVisual
+   * \sa Utf8ToW
+   * \sa Utf8ToUtf32LogicalToVisual
    */
-  static bool utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
+  static bool Utf8ToWLogicalToVisual(const std::string& utf8StringSrc, std::wstring& wStringDst,
                                      uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
@@ -182,10 +182,10 @@ public:
    * \param[out] wStringDst          is output wide string, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8ToWLogicalToVisual
-   * \sa utf8ToWSystemSafe
+   * \sa Utf8ToWLogicalToVisual
+   * \sa Utf8ToWSystemSafe
    */
-  static bool utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
+  static bool Utf8ToW(const std::string& utf8StringSrc, std::wstring& wStringDst);
 
   /**
    * Convert UTF-8 string to wide string and perform extra processing
@@ -196,10 +196,10 @@ public:
    * \param[out] wStringDst          is output wide string, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8ToWLogicalToVisual
-   * \sa utf8ToW
+   * \sa Utf8ToWLogicalToVisual
+   * \sa Utf8ToW
    */
-  static bool utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
+  static bool Utf8ToWSystemSafe(const std::string& stringSrc, std::wstring& stringDst);
 
   /**
    * Convert wide string to UTF-8 string.
@@ -209,7 +209,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool wToUTF8(const std::wstring& wStringSrc, std::string& utf8StringDst);
+  static bool WToUtf8(const std::wstring& wStringSrc, std::string& utf8StringDst);
 
   /**
    * Convert from the user selected subtitle encoding to UTF-8
@@ -219,7 +219,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool subtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
+  static bool SubtitleCharsetToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
 
   /**
    * Convert UTF-8 string to the user selected GUI character set
@@ -229,7 +229,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool utf8ToStringCharset(const std::string& utf8StringSrc, std::string& stringDst);
+  static bool Utf8ToStringCharset(const std::string& utf8StringSrc, std::string& stringDst);
 
   /**
    * Convert UTF-8 string to the user selected GUI character set
@@ -239,7 +239,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool utf8ToStringCharset(std::string& stringSrcDst);
+  static bool Utf8ToStringCharset(std::string& stringSrcDst);
 
   /**
    * Convert UTF-8 string to UTF-16 big endian string.
@@ -248,24 +248,24 @@ public:
    * \param[out] utf16StringDst         is output UTF-16 big endian, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8ToUtf16LE
-   * \sa utf8ToUtf16
+   * \sa Utf8ToUtf16LE
+   * \sa Utf8ToUtf16
    */
-  static bool utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+  static bool Utf8ToUtf16BE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
 
   /**
    * Convert UTF-8 string to UTF-16 little endian string.
    * Only for special cases where endianness matters, prefer
-   * utf8ToUtf16 for general use.
+   * Utf8ToUtf16 for general use.
    *
    * \param[in]  utf8StringSrc          is source UTF-8 string to convert
    * \param[out] utf16StringDst         is output UTF-16 little endian, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8ToUtf16BE
-   * \sa utf8ToUtf16
+   * \sa Utf8ToUtf16BE
+   * \sa Utf8ToUtf16
    */
-  static bool utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+  static bool Utf8ToUtf16LE(const std::string& utf8StringSrc, std::u16string& utf16StringDst);
 
   /**
    * Convert UTF-8 string to system encoding, likely UTF-8 on Linux
@@ -275,10 +275,10 @@ public:
    *                                        Undefined value on errors
    *
    * \return true on successful conversion, false on any error
-   * \sa systemToUtf8
-   * \sa utf8To
+   * \sa SystemToUtf8
+   * \sa Utf8To
    */
-  static bool utf8ToSystem(std::string& stringSrcDst);
+  static bool Utf8ToSystem(std::string& stringSrcDst);
 
   /**
    * Convert string in system encoding to UTF-8
@@ -287,11 +287,11 @@ public:
    * \param[out] utf8StringDst         is output UTF-8 string, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8ToSystem
-   * \sa utf8To
+   * \sa Utf8ToSystem
+   * \sa Utf8To
    * \sa TrySystemToUtf8
    */
-  static bool systemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst);
+  static bool SystemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst);
 
   /**
    * Try to convert string in system encoding to UTF-8.
@@ -301,8 +301,8 @@ public:
    * \param[out] utf8StringDst        is output UTF-8 string, empty on any error
    *
    * \return true on successful conversion, false on any error
-   * \sa systemToUtf8
-   * \sa utf8To
+   * \sa SystemToUtf8
+   * \sa Utf8To
    */
   static bool TrySystemToUtf8(const std::string& sysStringSrc, std::string& utf8StringDst);
 
@@ -315,10 +315,10 @@ public:
    * \param[out] stringDst              is output string in specified encoding
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8To(const std::string&, const std::string&, std::u16string&)
-   * \sa utf8To(const std::string&, const std::string&, std::u32string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::u16string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::u32string&)
    */
-  static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::string& stringDst);
+  static bool Utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::string& stringDst);
 
   /**
    * Convert UTF-8 string to specified 16-bit encoding
@@ -329,10 +329,10 @@ public:
    * \param[out] utf16StringDst         is output string in specified encoding
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8To(const std::string&, const std::string&, std::string&)
-   * \sa utf8To(const std::string&, const std::string&, std::u32string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::u32string&)
    */
-  static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u16string& utf16StringDst);
+  static bool Utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u16string& utf16StringDst);
 
   /**
    * Convert UTF-8 string to specified 32-bit encoding
@@ -343,10 +343,10 @@ public:
    * \param[out] utf32StringDst         is output string in specified encoding
    *
    * \return true on successful conversion, false on any error
-   * \sa utf8To(const std::string&, const std::string&, std::string&)
-   * \sa utf8To(const std::string&, const std::string&, std::u16string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::string&)
+   * \sa Utf8To(const std::string&, const std::string&, std::u16string&)
    */
-  static bool utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u32string& utf32StringDst);
+  static bool Utf8To(const std::string& strDestCharset, const std::string& utf8StringSrc, std::u32string& utf32StringDst);
 
   /**
    * Convert specified 8-bit encoding to UTF-8
@@ -382,10 +382,10 @@ public:
    * \param[out] utf8StringDst            is output string in UTF-8
    *
    * \return true on successful conversion, false on any error
-   * \sa utf16ToUTF8
-   * \sa utf16LEtoUTF8
+   * \sa Utf16ToUtf8
+   * \sa Utf16LEToUtf8
    */
-  static bool utf16BEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
+  static bool Utf16BEToUtf8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
 
   /**
   * Convert UTF-16 little endian to UTF-8
@@ -394,10 +394,10 @@ public:
   * \param[out] utf8StringDst            is output string in UTF-8
   *
   * \return true on successful conversion, false on any error
-  * \sa utf16ToUTF8
-  * \sa utf16BEtoUTF8
+  * \sa Utf16ToUtf8
+  * \sa Utf16BEToUtf8
   */
-  static bool utf16LEtoUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
+  static bool Utf16LEToUtf8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
 
   /**
   * Convert UTF-16 to UTF-8
@@ -406,10 +406,10 @@ public:
   * \param[out] utf8StringDst            is output string in UTF-8
   *
   * \return true on successful conversion, false on any error
-  * \sa utf16ToUTF8
-  * \sa utf16LEtoUTF8
+  * \sa Utf16ToUtf8
+  * \sa Utf16LEToUtf8
   */
-  static bool utf16ToUTF8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
+  static bool Utf16ToUtf8(const std::u16string& utf16StringSrc, std::string& utf8StringDst);
 
 /**
    * Try to convert string in system encoding to UTF-8.
@@ -419,15 +419,15 @@ public:
    * \param[out] utf8StringDst            is output string in UTF-8
    *
    * \return true on successful conversion, false on any error
-   * \sa utf16ToUTF8
-   * \sa utf16LEtoUTF8
-   * \sa utf16BEtoUTF8
+   * \sa Utf16ToUtf8
+   * \sa Utf16LEToUtf8
+   * \sa Utf16BEToUtf8
    */
   static bool TryUtf16ToUtf8(const std::u16string utf16StringSrc, std::string& utf8StringDst);
 
   /**
    * Convert UCS-2 to UTF-8
-   * This is really another name for utf16LEtoUTF8, technically
+   * This is really another name for Utf16LEToUtf8, technically
    * UCS-2 is only big endian but our use case requires little endian
    * conversion
    *
@@ -435,11 +435,11 @@ public:
    * \param[out] utf8StringDst            is output string in UTF-8
    *
    * \return true on successful conversion, false on any error
-   * \sa utf16ToUTF8
-   * \sa utf16LEtoUTF8
-   * \sa utf16BEtoUTF8
+   * \sa Utf16ToUtf8
+   * \sa Utf16LEToUtf8
+   * \sa Utf16BEToUtf8
    */
-  static bool ucs2ToUTF8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst);
+  static bool Ucs2ToUtf8(const std::u16string& ucs2StringSrc, std::string& utf8StringDst);
 
   /**
    * Perform logical to visual processing on the string.
@@ -453,11 +453,11 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa logicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
    */
-  static bool logicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, 
+  static bool LogicalToVisualBiDi(const std::string& utf8StringSrc, std::string& utf8StringDst, 
                                   uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
@@ -472,11 +472,11 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa logicalToVisualBiDi(const std::string&, std::string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::string&, std::string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
    */
-  static bool logicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
+  static bool LogicalToVisualBiDi(const std::u16string& utf16StringSrc, std::u16string& utf16StringDst,
                                   uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
@@ -491,11 +491,11 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa logicalToVisualBiDi(const std::string&, std::string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::string&, std::string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u32string, std::u32string&, uint16_t)
    */
-  static bool logicalToVisualBiDi(const std::wstring& wStringSrc, std::wstring& wStringDst,
+  static bool LogicalToVisualBiDi(const std::wstring& wStringSrc, std::wstring& wStringDst,
                                   uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
@@ -510,11 +510,11 @@ public:
    *
    * \return true on successful conversion, false on any error
    * \sa CCharsetConverter::BiDiOptions
-   * \sa logicalToVisualBiDi(const std::string&, std::string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
-   * \sa logicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::string&, std::string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::u16string&, std::u16string&, uint16_t)
+   * \sa LogicalToVisualBiDi(const std::wstring&, std::wstring&, uint16_t)
    */
-  static bool logicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
+  static bool LogicalToVisualBiDi(const std::u32string& utf32StringSrc, std::u32string& utf32StringDst,
                                   uint16_t bidiOptions = LTR | REMOVE_CONTROLS);
 
   /**
@@ -525,7 +525,7 @@ public:
    *
    * \return true in success, false otherwise
    */
-  static bool reverseRTL(const std::string& utf8StringSrc, std::string& utf8StringDst);
+  static bool ReverseRTL(const std::string& utf8StringSrc, std::string& utf8StringDst);
 
   /**
    * Convert from unkown encoding to UTF-8
@@ -536,7 +536,7 @@ public:
    * \return true on successful conversion, false on any error
    * \sa unkownToUTF8(const std::string&, std::string&)
    */
-  static bool unknownToUTF8(std::string& stringSrcDst);
+  static bool UnknownToUtf8(std::string& stringSrcDst);
 
   /**
    * Convert from unkown encoding to UTF-8
@@ -547,7 +547,7 @@ public:
    * \return true on successful conversion, false on any error
    * \sa unkownToUTF8(std::string&)
    */
-  static bool unknownToUTF8(const std::string& stringSrc, std::string& utf8StringDst);
+  static bool UnknownToUtf8(const std::string& stringSrc, std::string& utf8StringDst);
 
   /**
    * Convert UTF-8 string to system encoding and perform extra processing
@@ -559,7 +559,7 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
+  static bool Utf8ToSystemSafe(const std::string& stringSrc, std::string& stringDst);
 
   /**
    * Convert wide string to UTF-8 string and perform extra processing
@@ -571,8 +571,79 @@ public:
    *
    * \return true on successful conversion, false on any error
    */
-  static bool wToUTF8SystemSafe(const std::wstring& wStringSrc, std::string& utf8StringDst);
+  static bool WToUtf8SystemSafe(const std::wstring& wStringSrc, std::string& utf8StringDst);
 
+  /**
+   * Normalize a string to composed or decomposed form
+   *
+   * It's also possible to use the special mac decomposed form for any special
+   * needs on darwin platforms
+   *
+   * \param[in]   source        String to normalize
+   * \param[out]  destination   String to store the normalized version
+   * \param[in]   options       Specify which type of normalization to use
+   * \return true on success, false on any failures
+   *
+   * \sa NormalizationOptions
+   * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+   * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+   * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+   */
+  static bool Normalize(const std::string& source, std::string& destination, uint16_t options);
+
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+  * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+  */
+  static bool Normalize(const std::u16string& source, std::u16string& destination, uint16_t options);
+  
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+  * \sa Normalize(const std::wstring&, std::wstring&, uint16_t)
+  */
+  static bool Normalize(const std::u32string& source, std::u32string& destination, uint16_t options);
+  
+  /**
+  * Normalize a string to composed or decomposed form
+  *
+  * It's also possible to use the special mac decomposed form for any special
+  * needs on darwin platforms
+  *
+  * \param[in]   source        String to normalize
+  * \param[out]  destination   String to store the normalized version
+  * \param[in]   options       Specify which type of normalization to use
+  * \return true on success, false on any failures
+  *
+  * \sa NormalizationOptions
+  * \sa Normalize(const std::string&, std::string&, uint16_t)
+  * \sa Normalize(const std::u16string&, std::u16string&, uint16_t)
+  * \sa Normalize(const std::u32string&, std::u32string&, uint16_t)
+  */
+  static bool Normalize(const std::wstring& source, std::wstring& destination, uint16_t options);
 private:
 
   class CInnerConverter;

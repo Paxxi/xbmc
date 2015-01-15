@@ -112,7 +112,7 @@ void CKaraokeLyricsText::addLyrics(const std::string & text, unsigned int timing
   {
     // Reset the flag
     flags &= ~LYRICS_CONVERT_UTF8;
-    g_charsetConverter.unknownToUTF8(text, line.text);
+    g_charsetConverter.UnknownToUtf8(text, line.text);
   }
   else
   {
@@ -496,7 +496,7 @@ void CKaraokeLyricsText::rescanLyrics()
 
       // This piece extracts the first character of a new string and makes it uppercase in Unicode way
       std::wstring temptext;
-      g_charsetConverter.utf8ToW( line_text, temptext );
+      g_charsetConverter.Utf8ToW( line_text, temptext );
 
       // This is pretty ugly upper/lowercase for Russian unicode character set
       if ( temptext[0] >= 0x410 && temptext[0] <= 0x44F )
@@ -609,7 +609,7 @@ void CKaraokeLyricsText::rescanLyrics()
   for ( unsigned int i = 0; i < m_lyrics.size(); i++ )
   {
     std::wstring utf16;
-    g_charsetConverter.utf8ToW( m_lyrics[i].text, utf16 );
+    g_charsetConverter.Utf8ToW( m_lyrics[i].text, utf16 );
 
     // Skip empty lyrics
     if ( utf16.size() == 0 )
@@ -660,7 +660,7 @@ void CKaraokeLyricsText::rescanLyrics()
         l.flags = 0;
       l.timing = (unsigned int) MathUtils::round_int( m_lyrics[ i ].timing + j * time_per_char );
 
-      g_charsetConverter.wToUTF8( utf16.substr(j, 1), l.text);
+      g_charsetConverter.WToUtf8( utf16.substr(j, 1), l.text);
 
       if ( l.text == " " )
       {
@@ -691,7 +691,7 @@ float CKaraokeLyricsText::getStringWidth(const std::string & text)
   std::wstring utf16;
   vecText utf32;
 
-  g_charsetConverter.utf8ToW(text, utf16);
+  g_charsetConverter.Utf8ToW(text, utf16);
 
   utf32.resize( utf16.size() );
   for ( unsigned int i = 0; i < utf16.size(); i++ )
