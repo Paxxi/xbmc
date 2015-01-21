@@ -68,6 +68,10 @@ echo "***** Building libdvdnav *****"
       --disable-debug
 mkdir -p ../includes/dvdnav
 cp ../libdvdnav/src/dvdnav/*.h ../includes/dvdnav
+cp ../libdvdnav/src/dvdnav_internal.h ../includes/dvdnav
+cp ../libdvdnav/src/vm/vm*.h ../includes/dvdnav
+cp ../libdvdnav/src/vm/decoder.h ../includes/dvdnav
+
 make $MAKEFLAGS
 gcc \
       -shared \

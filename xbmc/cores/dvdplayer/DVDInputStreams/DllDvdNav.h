@@ -24,7 +24,7 @@ extern "C" {
 #define DVDNAV_COMPILE
  #include <stdint.h>
 
- #include "dvdnav/dvdnav.h"
+ #include <dvdnav/dvdnav.h>
 
  #ifndef WIN32
  #define WIN32
@@ -34,9 +34,9 @@ extern "C" {
  #define HAVE_CONFIG_H
  #endif
 
- #include "dvdnav/dvdnav_internal.h"
- #include "dvdnav/vm.h"
- #include "dvdnav/dvd_types.h"
+ #include <dvdnav/dvdnav_internal.h>
+ #include <dvdnav/vm.h>
+ #include <dvdnav/dvd_types.h>
 
  #ifdef WIN32 // WIN32INCLUDES
  #undef HAVE_CONFIG_H
