@@ -63,6 +63,12 @@ typedef int32_t dvdnav_status_t;
 #define DVDNAV_STATUS_ERR 0
 #define DVDNAV_STATUS_OK  1
 
+#define DVDNAV_FORMAT_AC3 0
+#define DVDNAV_FORMAT_MPEGAUDIO 3
+#define DVDNAV_FORMAT_LPCM 4
+#define DVDNAV_FORMAT_DTS 5
+#define DVDNAV_FORMAT_SDDS 6
+
 /*********************************************************************
  * initialisation & housekeeping functions                           *
  *********************************************************************/
@@ -697,6 +703,10 @@ int8_t dvdnav_is_domain_vtsm(dvdnav_t *self);
  */
 int8_t dvdnav_is_domain_vts(dvdnav_t *self);
 
+/* XBMC added functions */
+int dvdnav_get_button_info(dvdnav_t* self, int alpha[2][4], int color[2][4]);
+
+int64_t dvdnav_convert_time(dvd_time_t *time);
 
 #ifdef __cplusplus
 }

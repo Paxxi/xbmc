@@ -28,8 +28,26 @@
 #ifndef LIBDVDREAD_NAV_TYPES_H
 #define LIBDVDREAD_NAV_TYPES_H
 
-#include <inttypes.h>
+//#include <inttypes.h>
 #include "ifo_types.h" /* only dvd_time_t, vm_cmd_t and user_ops_t */
+
+
+#undef ATTRIBUTE_PACKED
+#undef PRAGMA_PACK_BEGIN 
+#undef PRAGMA_PACK_END
+
+#if defined(__GNUC__)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
+#define ATTRIBUTE_PACKED __attribute__ ((packed))
+#define PRAGMA_PACK 0
+#endif
+#endif
+
+#if !defined(ATTRIBUTE_PACKED)
+#define ATTRIBUTE_PACKED
+#define PRAGMA_PACK 1
+#endif
+
 
 /* The length including the substream id byte. */
 #define PCI_BYTES 0x3d4
@@ -40,6 +58,12 @@
 
 /* Remove this */
 #define DSI_START_BYTE 1031
+
+
+#if PRAGMA_PACK
+#pragma pack(1)
+#endif
+
 
 /**
  * PCI General Information

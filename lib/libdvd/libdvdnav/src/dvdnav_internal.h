@@ -25,9 +25,15 @@
 #include "config.h"
 #endif
 
-#ifdef WIN32
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
+#include <string.h>
+
+#ifdef TARGET_WINDOWS
 
 /* pthread_mutex_* wrapper for win32 */
+#ifndef TARGET_POSIX
 #include <windows.h>
 #include <process.h>
 typedef CRITICAL_SECTION pthread_mutex_t;
@@ -35,6 +41,7 @@ typedef CRITICAL_SECTION pthread_mutex_t;
 #define pthread_mutex_lock(a)    EnterCriticalSection(a)
 #define pthread_mutex_unlock(a)  LeaveCriticalSection(a)
 #define pthread_mutex_destroy(a) DeleteCriticalSection(a)
+#endif // !TARGET_POSIX
 
 #ifndef HAVE_GETTIMEOFDAY
 /* replacement gettimeofday implementation */
@@ -50,14 +57,24 @@ static inline int _private_gettimeofday( struct timeval *tv, void *tz )
 #define gettimeofday(TV, TZ) _private_gettimeofday((TV), (TZ))
 #endif
 
+#ifndef TARGET_POSIX
 #include <io.h> /* read() */
 #define lseek64 _lseeki64
+#endif // !TARGET_POSIX
 
 #else
 
 #include <pthread.h>
 
-#endif /* WIN32 */
+#endif /* TARGET_WINDOWS */
+
+/* Uncomment for VM command tracing */
+/* #define TRACE */
+
+#include "decoder.h"
+#include "dvdnav.h"
+#include "vm.h"
+#include "vmcmd.h"
 
 /* where should libdvdnav write its messages (stdout/stderr) */
 #define MSG_OUT stderr
@@ -226,12 +243,12 @@ int64_t dvdnav_convert_time(dvd_time_t *time);
 /*
  * Get current playback state
  */
-dvdnav_status_t dvdnav_get_state(dvdnav_t *this, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_get_state(dvdnav_t *self, dvd_state_t *save_state);
 
 /*
  * Resume playback state
  */
-dvdnav_status_t dvdnav_set_state(dvdnav_t *this, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_set_state(dvdnav_t *self, dvd_state_t *save_state);
 /* end XBMC */
 
 /** USEFUL MACROS **/
@@ -246,7 +263,7 @@ dvdnav_status_t dvdnav_set_state(dvdnav_t *this, dvd_state_t *save_state);
 #else
 #define printerrf(...) \
 	do { if (this) snprintf(this->err_str, MAX_ERR_LEN, __VA_ARGS__); } while (0)
-#endif /* WIN32 */
+#endif /* TARGET_WINDOWS */
 #endif
 #define printerr(str) \
 	do { if (this) strncpy(this->err_str, str, MAX_ERR_LEN - 1); } while (0)

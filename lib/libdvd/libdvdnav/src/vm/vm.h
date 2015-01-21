@@ -23,6 +23,9 @@
 #ifndef LIBDVDNAV_VM_H
 #define LIBDVDNAV_VM_H
 
+#include "remap.h"
+#include "dvdnav_internal.h"
+
 /* DOMAIN enum */
 
 typedef enum {
@@ -180,5 +183,7 @@ int vm_set_state(vm_t *vm, dvd_state_t *save_state);
 void vm_position_print(vm_t *vm, vm_position_t *position);
 #endif
 
+/* XBMC added functions */
+vm_t* dvdnav_get_vm(dvdnav_t *self);
 
 #endif /* LIBDVDNAV_VM_H */

@@ -25,6 +25,10 @@
 #ifndef LIBDVDNAV_DVDNAV_EVENTS_H
 #define LIBDVDNAV_DVDNAV_EVENTS_H
 
+#include "ifo_types.h"
+#include "dvd_reader.h"
+#include "nav_types.h"
+
 /*
  * DVDNAV_BLOCK_OK
  *
