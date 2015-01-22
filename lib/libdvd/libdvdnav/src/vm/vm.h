@@ -24,8 +24,6 @@
 #define LIBDVDNAV_VM_H
 
 #include "remap.h"
-#include "dvdnav_internal.h"
-
 /* DOMAIN enum */
 
 typedef enum {

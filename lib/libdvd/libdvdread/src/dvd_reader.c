@@ -20,19 +20,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include "config.h"
+#include <sys/types.h>      /* off_t */
+#include <sys/stat.h>       /* stat */
 #include <sys/time.h> /* For the timing of dvdcss_title crack. */
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <strings.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <limits.h>
-#include <dirent.h>
+#include <fcntl.h>          /* open */
+#include <stdlib.h>         /* free */
+#include <stdio.h>          /* fprintf */
+#include <errno.h>          /* errno, EIN* */
+#include <string.h>         /* memcpy, strlen */
+#include <unistd.h>         /* chdir, getcwd */
+#include <limits.h>         /* PATH_MAX */
+#include <dirent.h>         /* opendir, readdir */
+#include <ctype.h>          /* isalpha */
 #ifndef WIN32
 #include <paths.h>
 #endif

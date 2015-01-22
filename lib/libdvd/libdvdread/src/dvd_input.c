@@ -19,13 +19,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "config.h"                  /* Required for HAVE_DVDCSS_DVDCSS_H */
+#include <stdio.h>                               /* fprintf */
+#include <stdlib.h>                              /* free */
+#include <fcntl.h>                               /* open */
+#include <unistd.h>                              /* lseek */
 
-#include "config.h"
-#include "dvdread/dvd_reader.h"
+#include "dvdread/dvd_reader.h"      /* DVD_VIDEO_LB_LEN */
 #include "dvd_input.h"
 
 

@@ -34,7 +34,7 @@ extern "C" {
  #define HAVE_CONFIG_H
  #endif
 
- #include <dvdnav/dvdnav_internal.h>
+ //#include <dvdnav/dvdnav_internal.h>
  #include <dvdnav/vm.h>
  #include <dvdnav/dvd_types.h>
 

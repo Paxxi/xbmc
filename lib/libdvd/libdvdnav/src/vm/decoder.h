@@ -22,8 +22,7 @@
 #ifndef LIBDVDNAV_DECODER_H
 #define LIBDVDNAV_DECODER_H
 
-#include "ifo_types.h" /*  vm_cmd_t */
-#include "dvdnav_internal.h"
+#include <sys/time.h>
 
 /* link command types */
 typedef enum {
