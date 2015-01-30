@@ -177,6 +177,7 @@ protected:
     SPEED_UNIT m_speedUnit;
   };
 
+  void LoadAgain();
 
   typedef std::map<std::string, CRegion> MAPREGIONS;
   typedef std::map<std::string, CRegion>::iterator ITMAPREGIONS;

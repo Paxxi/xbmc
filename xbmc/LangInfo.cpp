@@ -37,6 +37,9 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
+#include <unicode/locid.h>
+#include <set>
+
 using namespace std;
 using namespace PVR;
 
@@ -234,6 +237,14 @@ void CLangInfo::OnSettingChanged(const CSetting *setting)
   }
 }
 
+void CLangInfo::LoadAgain()
+{
+  int32_t nrLocales;
+  Locale* availableLocales = const_cast<Locale*>(Locale::getAvailableLocales(nrLocales));
+  Locale english = Locale::getEnglish();
+
+}
+
 bool CLangInfo::Load(const std::string& strFileName, bool onlyCheckLanguage /*= false*/)
 {
   SetDefaults();
@@ -377,6 +388,8 @@ bool CLangInfo::Load(const std::string& strFileName, bool onlyCheckLanguage /*= 
 
   if (!onlyCheckLanguage)
     LoadTokens(pRootElement->FirstChild("sorttokens"), g_advancedSettings.m_vecTokens);
+
+  LoadAgain();
 
   return true;
 }
@@ -572,13 +585,30 @@ const std::string& CLangInfo::GetMeridiemSymbol(MERIDIEM_SYMBOL symbol) const
 // Fills the array with the region names available for this language
 void CLangInfo::GetRegionNames(vector<string>& array)
 {
-  for (ITMAPREGIONS it=m_regions.begin(); it!=m_regions.end(); ++it)
+  //for (ITMAPREGIONS it=m_regions.begin(); it!=m_regions.end(); ++it)
+  //{
+  //  std::string strName=it->first;
+  //  if (strName=="N/A")
+  //    strName=g_localizeStrings.Get(416);
+  //  array.push_back(strName);
+  //}
+  int32_t nrLocales;
+  Locale* availableLocales = const_cast<Locale*>(Locale::getAvailableLocales(nrLocales));
+  Locale english = Locale::getEnglish();
+  std::set<std::string> tempSet;
+  for (int i = 0; i < nrLocales; ++i)
   {
-    std::string strName=it->first;
-    if (strName=="N/A")
-      strName=g_localizeStrings.Get(416);
-    array.push_back(strName);
+    UnicodeString loc;
+    UnicodeString dispLang = availableLocales->getDisplayCountry(english, loc);
+    std::string result;
+    dispLang.toUTF8String(result);
+    if (!result.empty())
+      tempSet.insert(result);
+    availableLocales += 1;
   }
+
+  for (auto a : tempSet)
+    array.push_back(a);
 }
 
 // Set the current region by its name, names from GetRegionNames() are valid.
