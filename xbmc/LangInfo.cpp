@@ -38,10 +38,18 @@
 #include "utils/XMLUtils.h"
 
 #include <unicode/locid.h>
+#include <unicode/datefmt.h>
+#include <unicode/smpdtfmt.h>
 #include <set>
 
 using namespace std;
 using namespace PVR;
+
+#ifdef NDEBUG
+#pragma comment(lib, "icuin.lib")
+#else
+#pragma comment(lib, "icuind.lib")
+#endif
 
 #define TEMP_UNIT_STRINGS 20027
 
@@ -559,6 +567,18 @@ const std::string& CLangInfo::GetRegionLocale() const
 // Returns the format string for the date of the current language
 const std::string& CLangInfo::GetDateFormat(bool bLongDate/*=false*/) const
 {
+  Locale loc = Locale::createFromName("sv");
+  DateFormat* dt = DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, loc);
+  SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(dt);
+  if (sdf)
+  {
+    UnicodeString pattern;
+    sdf->toPattern(pattern);
+    std::string result;
+    pattern.toUTF8String(result);
+    return result;
+  }
+
   if (bLongDate)
     return m_currentRegion->m_strDateFormatLong;
   else
