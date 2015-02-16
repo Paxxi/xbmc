@@ -141,6 +141,7 @@
 		1D638128161E211E003603ED /* PeripheralImon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D638126161E211E003603ED /* PeripheralImon.cpp */; };
 		1DAFDB7C16DFDCA7007F8C68 /* PeripheralBusCEC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DAFDB7A16DFDCA7007F8C68 /* PeripheralBusCEC.cpp */; };
 		1DE0443515828F4B005DDB4D /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DE0443315828F4B005DDB4D /* Exception.cpp */; };
+		221E0C961ACDDB0000AE1234 /* InfoScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 221E0C951ACDDB0000AE1234 /* InfoScanner.cpp */; };
 		2F4564D51970129A00396109 /* GUIFontCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F4564D31970129A00396109 /* GUIFontCache.cpp */; };
 		2F4564D61970129A00396109 /* GUIFontCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F4564D31970129A00396109 /* GUIFontCache.cpp */; };
 		2F4564D71970129A00396109 /* GUIFontCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F4564D31970129A00396109 /* GUIFontCache.cpp */; };
@@ -3477,6 +3478,8 @@
 		1DAFDB7B16DFDCA7007F8C68 /* PeripheralBusCEC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralBusCEC.h; sourceTree = "<group>"; };
 		1DE0443315828F4B005DDB4D /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Exception.cpp; path = commons/Exception.cpp; sourceTree = "<group>"; };
 		1DE0443415828F4B005DDB4D /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Exception.h; path = commons/Exception.h; sourceTree = "<group>"; };
+		221E0C941ACDDB0000AE1234 /* InfoScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoScanner.h; sourceTree = "<group>"; };
+		221E0C951ACDDB0000AE1234 /* InfoScanner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoScanner.cpp; sourceTree = "<group>"; };
 		2F4564D31970129A00396109 /* GUIFontCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIFontCache.cpp; sourceTree = "<group>"; };
 		2F4564D41970129A00396109 /* GUIFontCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIFontCache.h; sourceTree = "<group>"; };
 		32C631261423A90F00F18420 /* JpegIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JpegIO.cpp; sourceTree = "<group>"; };
@@ -5125,6 +5128,14 @@
 		E38E18580D25F9FA00618676 /* LangInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LangInfo.cpp; sourceTree = "<group>"; };
 		E38E18590D25F9FA00618676 /* LangInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LangInfo.h; sourceTree = "<group>"; };
 		E38E18830D25F9FA00618676 /* libexif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libexif.h; sourceTree = "<group>"; };
+		E38E196E0D25F9FB00618676 /* hdhomerun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun.h; sourceTree = "<group>"; };
+		E38E196F0D25F9FB00618676 /* hdhomerun_channelscan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_channelscan.h; sourceTree = "<group>"; };
+		E38E19700D25F9FB00618676 /* hdhomerun_control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_control.h; sourceTree = "<group>"; };
+		E38E19710D25F9FB00618676 /* hdhomerun_device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_device.h; sourceTree = "<group>"; };
+		E38E19720D25F9FB00618676 /* hdhomerun_discover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_discover.h; sourceTree = "<group>"; };
+		E38E19730D25F9FB00618676 /* hdhomerun_os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_os.h; sourceTree = "<group>"; };
+		E38E19740D25F9FB00618676 /* hdhomerun_pkt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_pkt.h; sourceTree = "<group>"; };
+		E38E19750D25F9FB00618676 /* hdhomerun_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_video.h; sourceTree = "<group>"; };
 		E38E1AB80D25F9FB00618676 /* SConstruct */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SConstruct; sourceTree = "<group>"; };
 		E38E1CD70D25F9FC00618676 /* dataset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dataset.cpp; sourceTree = "<group>"; };
 		E38E1CD80D25F9FC00618676 /* dataset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dataset.h; sourceTree = "<group>"; };
@@ -8181,6 +8192,8 @@
 				E38E17F30D25F9FA00618676 /* GUIPassword.h */,
 				E38E17F60D25F9FA00618676 /* GUIUserMessages.h */,
 				DFEF0BAB180ADE6400AEAED1 /* IFileItemListModifier.h */,
+				221E0C941ACDDB0000AE1234 /* InfoScanner.h */,
+				221E0C951ACDDB0000AE1234 /* InfoScanner.cpp */,
 				E38E184F0D25F9FA00618676 /* IProgressCallback.h */,
 				E38E18580D25F9FA00618676 /* LangInfo.cpp */,
 				E38E18590D25F9FA00618676 /* LangInfo.h */,
@@ -10730,6 +10743,7 @@
 				DFB65FB715373AE7006B8FF1 /* AEEncoderFFmpeg.cpp in Sources */,
 				DFB65FCC15373AE7006B8FF1 /* AEBitstreamPacker.cpp in Sources */,
 				DFB65FCD15373AE7006B8FF1 /* AEBuffer.cpp in Sources */,
+				221E0C961ACDDB0000AE1234 /* InfoScanner.cpp in Sources */,
 				DFB65FCE15373AE7006B8FF1 /* AEChannelInfo.cpp in Sources */,
 				DFB65FD015373AE7006B8FF1 /* AEPackIEC61937.cpp in Sources */,
 				DFB65FD215373AE7006B8FF1 /* AEStreamInfo.cpp in Sources */,
