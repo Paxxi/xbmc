@@ -1346,10 +1346,10 @@ CGUIListItemPtr CGUIEPGGridContainer::GetListItem(int offset, unsigned int flag)
     return CGUIListItemPtr();
 
   int item = m_channelCursor + m_channelOffset + offset;
-  if (flag & INFOFLAG_LISTITEM_POSITION)
+  if (flag & GUIInfo::LISTITEM_POSITION)
     item = (int)(m_channelScrollOffset / m_channelLayout->Size(VERTICAL));
 
-  if (flag & INFOFLAG_LISTITEM_WRAP)
+  if (flag & GUIInfo::LISTITEM_WRAP)
   {
     item %= (int)m_channelItems.size();
     if (item < 0) item += m_channelItems.size();

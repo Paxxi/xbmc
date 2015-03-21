@@ -687,37 +687,38 @@ namespace EPG
   typedef std::shared_ptr<EPG::CEpgInfoTag> CEpgInfoTagPtr;
 }
 
-// Info Flags
-// Stored in the top 8 bits of GUIInfo::m_data1
-// therefore we only have room for 8 flags
-#define INFOFLAG_LISTITEM_WRAP        ((uint32_t) (1 << 25))  // Wrap ListItem lookups
-#define INFOFLAG_LISTITEM_POSITION    ((uint32_t) (1 << 26))  // Absolute ListItem lookups
-
 // structure to hold multiple integer data
 // for storage referenced from a single integer
 class GUIInfo
 {
 public:
-  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint32_t flag = 0)
+  enum Flag : uint8_t
   {
-    m_info = info;
-    m_data1 = data1;
-    m_data2 = data2;
-    if (flag)
-      SetInfoFlag(flag);
-  }
+    LISTITEM_WRAP     = 1,
+    LISTITEM_POSITION = 2
+  };
+
+  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint8_t flag = 0) :
+    m_info{info},
+    m_data1{data1},
+    m_data2{data2},
+    m_flags{flag}
+  {  }
+
   bool operator ==(const GUIInfo &right) const
   {
-    return (m_info == right.m_info && m_data1 == right.m_data1 && m_data2 == right.m_data2);
+    return (m_info == right.m_info && m_data1 == right.m_data1 &&
+            m_data2 == right.m_data2 && m_flags == right.m_flags);
   };
-  uint32_t GetInfoFlag() const;
+
+  uint8_t GetInfoFlag() const;
   uint32_t GetData1() const;
   int GetData2() const;
-  int m_info;
+  int m_info; // Holds the value of this specific info, one of the defines from above
 private:
-  void SetInfoFlag(uint32_t flag);
-  uint32_t m_data1;
-  int m_data2;
+  uint32_t m_data1; // link to another GUIInfo 
+  int m_data2; // link to a conditionalString
+  uint8_t m_flags;
 };
 
 /*!
@@ -867,6 +868,7 @@ protected:
   bool CheckWindowCondition(CGUIWindow *window, int condition) const;
   CGUIWindow *GetWindowWithCondition(int contextWindow, int condition) const;
 
+public:
   /*! \brief class for holding information on properties
    */
   class Property
@@ -882,6 +884,7 @@ protected:
     std::vector<std::string> params;
   };
 
+protected:
   bool GetMultiInfoBool(const GUIInfo &info, int contextWindow = 0, const CGUIListItem *item = NULL);
   bool GetMultiInfoInt(int &value, const GUIInfo &info, int contextWindow = 0) const;
   std::string GetMultiInfoLabel(const GUIInfo &info, int contextWindow = 0, std::string *fallback = NULL);
@@ -890,6 +893,7 @@ protected:
   TIME_FORMAT TranslateTimeFormat(const std::string &format);
   bool GetItemBool(const CGUIListItem *item, int condition) const;
 
+public: //make this public for testing
   /*! \brief Split an info string into it's constituent parts and parameters
    Format is:
      
@@ -900,8 +904,9 @@ protected:
    \param infoString the original string
    \param info the resulting pairs of info and parameters.
    */
+  
   void SplitInfoString(const std::string &infoString, std::vector<Property> &info);
-
+protected:
   // Conditional string parameters for testing are stored in a vector for later retrieval.
   // The offset into the string parameters array is returned.
   int ConditionalStringParameter(const std::string &strParameter, bool caseSensitive = false);

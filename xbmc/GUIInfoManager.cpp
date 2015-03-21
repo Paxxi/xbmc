@@ -835,6 +835,9 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
   std::string strTest = strCondition;
   StringUtils::Trim(strTest);
 
+  if (strTest.empty())
+    return 0;
+
   vector< Property> info;
   SplitInfoString(strTest, info);
 
@@ -1128,7 +1131,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       if (ret)
         listItemDependent = true;
       if (offset)
-        return AddMultiInfo(GUIInfo(ret, 0, offset, INFOFLAG_LISTITEM_WRAP));
+        return AddMultiInfo(GUIInfo(ret, 0, offset, GUIInfo::LISTITEM_WRAP));
       return ret;
     }
     else if (cat.name == "listitemposition")
@@ -1138,7 +1141,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       if (ret)
         listItemDependent = true;
       if (offset)
-        return AddMultiInfo(GUIInfo(ret, 0, offset, INFOFLAG_LISTITEM_POSITION));
+        return AddMultiInfo(GUIInfo(ret, 0, offset, GUIInfo::LISTITEM_POSITION));
       return ret;
     }
     else if (cat.name == "listitemnowrap")
@@ -1314,12 +1317,12 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       else if (info[1].name == "listitemposition")
       {
         listItemDependent = true;
-        return AddMultiInfo(GUIInfo(TranslateListItem(info[2]), id, offset, INFOFLAG_LISTITEM_POSITION));
+        return AddMultiInfo(GUIInfo(TranslateListItem(info[2]), id, offset, GUIInfo::LISTITEM_POSITION));
       }
       else if (info[1].name == "listitem")
       {
         listItemDependent = true;
-        return AddMultiInfo(GUIInfo(TranslateListItem(info[2]), id, offset, INFOFLAG_LISTITEM_WRAP));
+        return AddMultiInfo(GUIInfo(TranslateListItem(info[2]), id, offset, GUIInfo::LISTITEM_WRAP));
       }
     }
     else if (info[0].name == "control")
@@ -5560,24 +5563,14 @@ const CVideoInfoTag* CGUIInfoManager::GetCurrentMovieTag() const
   return NULL;
 }
 
-void GUIInfo::SetInfoFlag(uint32_t flag)
+uint8_t GUIInfo::GetInfoFlag() const
 {
-  assert(flag >= (1 << 24));
-  m_data1 |= flag;
-}
-
-uint32_t GUIInfo::GetInfoFlag() const
-{
-  // we strip out the bottom 24 bits, where we keep data
-  // and return the flag only
-  return m_data1 & 0xff000000;
+  return m_flags;
 }
 
 uint32_t GUIInfo::GetData1() const
 {
-  // we strip out the top 8 bits, where we keep flags
-  // and return the unflagged data
-  return m_data1 & ((1 << 24) -1);
+  return m_data1;
 }
 
 int GUIInfo::GetData2() const
