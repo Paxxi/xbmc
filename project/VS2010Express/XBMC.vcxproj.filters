@@ -3195,6 +3195,12 @@
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryRefreshingJob.cpp">
       <Filter>video\jobs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPlayerInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIWeatherInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6097,95 +6103,14 @@
     <ClInclude Include="..\..\xbmc\guiinfo\GUIInfoLabels.h">
       <Filter>guiinfo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\network\dacp\dacp.h">
-      <Filter>network\dacp</Filter>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h">
+      <Filter>guiinfo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogAudioDSPManager.h">
-      <Filter>settings\dialogs</Filter>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIWeatherInfo.h">
+      <Filter>guiinfo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\addons\ImageResource.h">
-      <Filter>addons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\pictures\PictureScalingAlgorithm.h">
-      <Filter>pictures</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\main\win32\MessagePrinter.h">
-      <Filter>main\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\messaging\ApplicationMessenger.h">
-      <Filter>messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\messaging\ThreadMessage.h">
-      <Filter>messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\messaging\IMessageTarget.h">
-      <Filter>messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogAudioDSPSettings.h">
-      <Filter>settings\dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\windows\GUIWindowSplash.h">
-      <Filter>windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\InputCodingTable.h">
-      <Filter>input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\InputCodingTableBaiduPY.h">
-      <Filter>input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\InputCodingTableBasePY.h">
-      <Filter>input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\InputCodingTableFactory.h">
-      <Filter>input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\EventsDirectory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\windows\GUIViewStateEventLog.h">
-      <Filter>events\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\windows\GUIWindowEventLog.h">
-      <Filter>events\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\AddonEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\AddonManagementEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\BaseEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\EventLog.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\IEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\MediaLibraryEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\NotificationEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\events\UniqueEvent.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\Directorization.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\XbtDirectory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\XbtFile.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\XbtManager.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryRefreshingJob.h">
-      <Filter>video\jobs</Filter>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIInfo.h">
+      <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\win32\gpu_memcpy_sse4.h">
       <Filter>utils\win32</Filter>

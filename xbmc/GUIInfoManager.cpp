@@ -64,6 +64,8 @@
 #include <functional>
 #include <iterator>
 #include <memory>
+#include <functional>
+#include <map>
 #include "cores/DataCacheCore.h"
 #include "guiinfo/GUIInfoLabels.h"
 #include "messaging/ApplicationMessenger.h"
@@ -129,6 +131,8 @@ CGUIInfoManager::CGUIInfoManager(void) :
   m_playerShowCodec = false;
   m_playerShowInfo = false;
   m_fps = 0.0f;
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUIPlayerInfo>(this)));
   ResetLibraryBools();
 }
 
@@ -220,17 +224,17 @@ const infomap player_labels[] =  {{ "hasmedia",         PLAYER_HAS_MEDIA },     
                                   { "seekenabled",      PLAYER_CAN_SEEK },
                                   { "channelpreviewactive", PLAYER_IS_CHANNEL_PREVIEW_ACTIVE}};
 
-const infomap player_param[] =   {{ "art",              PLAYER_ITEM_ART }};
+const infomap player_param[] = {{"art", PLAYER_ITEM_ART}};
 
-const infomap player_times[] =   {{ "seektime",         PLAYER_SEEKTIME },
-                                  { "seekoffset",       PLAYER_SEEKOFFSET },
-                                  { "seekstepsize",     PLAYER_SEEKSTEPSIZE },
-                                  { "timeremaining",    PLAYER_TIME_REMAINING },
-                                  { "timespeed",        PLAYER_TIME_SPEED },
-                                  { "time",             PLAYER_TIME },
-                                  { "duration",         PLAYER_DURATION },
-                                  { "finishtime",       PLAYER_FINISH_TIME },
-                                  { "starttime",        PLAYER_START_TIME}};
+const infomap player_times[] = {{"seektime", PLAYER_SEEKTIME},
+                                {"seekoffset", PLAYER_SEEKOFFSET},
+                                {"seekstepsize", PLAYER_SEEKSTEPSIZE},
+                                {"timeremaining", PLAYER_TIME_REMAINING},
+                                {"timespeed", PLAYER_TIME_SPEED},
+                                {"time", PLAYER_TIME},
+                                {"duration", PLAYER_DURATION},
+                                {"finishtime", PLAYER_FINISH_TIME},
+                                {"starttime", PLAYER_START_TIME}};
 
 const infomap weather[] =        {{ "isfetched",        WEATHER_IS_FETCHED },
                                   { "conditions",       WEATHER_CONDITIONS },         // labels from here
@@ -1455,6 +1459,14 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
 
     return strLabel;
   }
+  switch (info & CATEGORY_MASK) //clear the message bits and switch on the categories
+  {
+  case PLAYER_MASK:
+    return m_infoHandlers[PLAYER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
+    break;
+  default:
+    break;
+  }
 
   switch (info)
   {
@@ -1496,9 +1508,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case PVR_ACTUAL_STREAM_SERVICE:
   case PVR_ACTUAL_STREAM_MUX:
   case PVR_ACTUAL_STREAM_PROVIDER:
-  case PVR_TIMESHIFT_START_TIME:
-  case PVR_TIMESHIFT_END_TIME:
-  case PVR_TIMESHIFT_PLAY_TIME:
     g_PVRManager.TranslateCharInfo(info, strLabel);
     break;
   case ADSP_ACTIVE_STREAM_TYPE:
@@ -1508,25 +1517,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case ADSP_MASTER_OWN_ICON:
   case ADSP_MASTER_OVERRIDE_ICON:
     ActiveAE::CActiveAEDSP::GetInstance().TranslateCharInfo(info, strLabel);
-    break;
-  case WEATHER_CONDITIONS:
-    strLabel = g_weatherManager.GetInfo(WEATHER_LABEL_CURRENT_COND);
-    StringUtils::Trim(strLabel);
-    break;
-  case WEATHER_TEMPERATURE:
-    strLabel = StringUtils::Format("%s%s",
-                                   g_weatherManager.GetInfo(WEATHER_LABEL_CURRENT_TEMP).c_str(),
-                                   g_langInfo.GetTemperatureUnitString().c_str());
-    break;
-  case WEATHER_LOCATION:
-    strLabel = g_weatherManager.GetInfo(WEATHER_LABEL_LOCATION);
-    break;
-  case WEATHER_FANART_CODE:
-    strLabel = URIUtils::GetFileName(g_weatherManager.GetInfo(WEATHER_IMAGE_CURRENT_ICON));
-    URIUtils::RemoveExtension(strLabel);
-    break;
-  case WEATHER_PLUGIN:
-    strLabel = CSettings::GetInstance().GetString(CSettings::SETTING_WEATHER_ADDON);
     break;
   case SYSTEM_DATE:
     strLabel = GetDate();
@@ -2162,7 +2152,7 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
   }
 
   value = 0;
-  switch( info )
+  switch (info & CATEGORY_MASK)
   {
     case PLAYER_VOLUME:
       value = (int)g_application.GetVolume();
@@ -2210,9 +2200,9 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
             value = g_application.m_pPlayer->GetChapterCount();
             break;
           }
-        }
-      }
-      return true;
+  switch( info )
+  {
+    
     case SYSTEM_FREE_MEMORY:
     case SYSTEM_USED_MEMORY:
       {

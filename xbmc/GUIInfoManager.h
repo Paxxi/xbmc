@@ -39,6 +39,7 @@
 
 #include <list>
 #include <map>
+#include <memory>
 
 namespace MUSIC_INFO
 {
@@ -53,6 +54,14 @@ namespace INFO
   class InfoSingle;
 }
 
+namespace GUIINFO
+{
+  class IGUIInfo;
+  class CGUIPlayerInfo;
+  class CGUIWeatherInfo;
+}
+
+
 // forward
 class CGUIWindow;
 namespace EPG
@@ -60,8 +69,6 @@ namespace EPG
   class CEpgInfoTag;
   typedef std::shared_ptr<EPG::CEpgInfoTag> CEpgInfoTagPtr;
 }
-
-
 
 // structure to hold multiple integer data
 // for storage referenced from a single integer
@@ -272,7 +279,7 @@ protected:
    \param info the resulting pairs of info and parameters.
    */
   void SplitInfoString(const std::string &infoString, std::vector<Property> &info);
-
+  
   // Conditional string parameters for testing are stored in a vector for later retrieval.
   // The offset into the string parameters array is returned.
   int ConditionalStringParameter(const std::string &strParameter, bool caseSensitive = false);
@@ -334,6 +341,8 @@ protected:
 
   SPlayerVideoStreamInfo m_videoInfo;
   SPlayerAudioStreamInfo m_audioInfo;
+
+  std::map<int, std::unique_ptr<GUIINFO::IGUIInfo>> m_infoHandlers;
 
   CCriticalSection m_critInfo;
 };

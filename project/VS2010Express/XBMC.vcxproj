@@ -432,6 +432,8 @@
     <ClCompile Include="..\..\xbmc\filesystem\ZipFile.cpp" />
     <ClCompile Include="..\..\xbmc\filesystem\ZipManager.cpp" />
     <ClCompile Include="..\..\xbmc\GUIInfoManager.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPlayerInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIWeatherInfo.cpp" />
     <ClCompile Include="..\..\xbmc\GUILargeTextureManager.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\AnimatedGif.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\cximage.cpp" />
@@ -962,7 +964,12 @@
     <ClInclude Include="..\..\xbmc\filesystem\XbtFile.h" />
     <ClInclude Include="..\..\xbmc\filesystem\XbtManager.h" />
     <ClInclude Include="..\..\xbmc\guiinfo\GUIInfoLabels.h" />
-    <ClInclude Include="..\..\xbmc\guilib\cximage.h" />
+   <ClInclude 
+     Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h"
+   />
+   <ClInclude 
+    Include="..\..\xbmc\guiinfo\GUIWeatherInfo.h" 
+/><ClInclude Include="..\..\xbmc\guilib\cximage.h" />
     <ClInclude Include="..\..\xbmc\guilib\GUIKeyboard.h" />
     <ClInclude Include="..\..\xbmc\guilib\GUIKeyboardFactory.h" />
     <ClInclude Include="..\..\xbmc\guilib\GUIShaderDX.h" />
