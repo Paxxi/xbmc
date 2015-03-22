@@ -170,12 +170,17 @@ int CGUIInfoManager::TranslateString(const std::string &condition)
   std::string strCondition(CGUIInfoLabel::ReplaceLocalize(condition));
   return TranslateSingleString(strCondition);
 }
+enum Options
+{
+  CASE_INSENSITIVE = 1
 
+};
 enum class ParameterFlags : uint8_t
 {
   NONE,
   LABEL,
   STRING,
+  NUMBER,
   CONDITIONAL,
   TIME
 };
@@ -186,7 +191,7 @@ struct ParseInfo
   uint8_t nrParams;
   ParameterFlags param1;
   ParameterFlags param2;
-  int flags;
+  int options;
 };
 
 #define INFO_LABEL(s, i) { s, {i, 0, ParameterFlags::NONE, ParameterFlags::NONE, 0}}
@@ -201,6 +206,7 @@ typedef struct
 
 const infomap player_param[] = {{"art", PLAYER_ITEM_ART}};
 
+//done
 const infomap player_times[] = {{"seektime", PLAYER_SEEKTIME},
                                 {"seekoffset", PLAYER_SEEKOFFSET},
                                 {"seekstepsize", PLAYER_SEEKSTEPSIZE},
@@ -423,13 +429,57 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("pvr.actstreamencryptionname", PVR_ACTUAL_STREAM_CRYPTION),
   INFO_LABEL("pvr.actstreamservicename", PVR_ACTUAL_STREAM_SERVICE),
   INFO_LABEL("pvr.actstreammux", PVR_ACTUAL_STREAM_MUX),
-  INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER)
+  INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER),
+  INFO_LABEL("musicplayer.title", MUSICPLAYER_TITLE),
+  INFO_LABEL("musicplayer.album", MUSICPLAYER_ALBUM),
+  INFO_LABEL("musicplayer.artist", MUSICPLAYER_ARTIST),
+  INFO_LABEL("musicplayer.albumartist", MUSICPLAYER_ALBUM_ARTIST),
+  INFO_LABEL("musicplayer.year", MUSICPLAYER_YEAR),
+  INFO_LABEL("musicplayer.genre", MUSICPLAYER_GENRE),
+  INFO_LABEL("musicplayer.duration", MUSICPLAYER_DURATION),
+  INFO_LABEL("musicplayer.tracknumber", MUSICPLAYER_TRACK_NUMBER),
+  INFO_LABEL("musicplayer.cover", MUSICPLAYER_COVER),
+  INFO_LABEL("musicplayer.bitrate", MUSICPLAYER_BITRATE),
+  INFO_LABEL("musicplayer.playlistlength", MUSICPLAYER_PLAYLISTLEN),
+  INFO_LABEL("musicplayer.playlistposition", MUSICPLAYER_PLAYLISTPOS),
+  INFO_LABEL("musicplayer.channels", MUSICPLAYER_CHANNELS),
+  INFO_LABEL("musicplayer.bitspersample", MUSICPLAYER_BITSPERSAMPLE),
+  INFO_LABEL("musicplayer.samplerate", MUSICPLAYER_SAMPLERATE),
+  INFO_LABEL("musicplayer.codec", MUSICPLAYER_CODEC),
+  INFO_LABEL("musicplayer.discnumber", MUSICPLAYER_DISC_NUMBER),
+  INFO_LABEL("musicplayer.rating", MUSICPLAYER_RATING),
+  INFO_LABEL("musicplayer.comment", MUSICPLAYER_COMMENT),
+  INFO_LABEL("musicplayer.lyrics", MUSICPLAYER_LYRICS),
+  INFO_LABEL("musicplayer.playlistplaying", MUSICPLAYER_PLAYLISTPLAYING),
+  INFO_LABEL("musicplayer.exists", MUSICPLAYER_EXISTS),
+  INFO_LABEL("musicplayer.hasprevious", MUSICPLAYER_HASPREVIOUS),
+  INFO_LABEL("musicplayer.hasnext", MUSICPLAYER_HASNEXT),
+  INFO_LABEL("musicplayer.playcount", MUSICPLAYER_PLAYCOUNT),
+  INFO_LABEL("musicplayer.lastplayed", MUSICPLAYER_LASTPLAYED),
+  INFO_LABEL("musicplayer.channelname", MUSICPLAYER_CHANNEL_NAME),
+  INFO_LABEL("musicplayer.channelnumber", MUSICPLAYER_CHANNEL_NUMBER),
+  INFO_LABEL("musicplayer.subchannelnumber", MUSICPLAYER_SUB_CHANNEL_NUMBER),
+  INFO_LABEL("musicplayer.channelnumberlabel", MUSICPLAYER_CHANNEL_NUMBER_LBL),
+  INFO_LABEL("musicplayer.channelgroup", MUSICPLAYER_CHANNEL_GROUP),
+
+  INFO_LABEL_PARAM1("player.seektime", PLAYER_SEEKTIME, TIME, 0),
+  INFO_LABEL_PARAM1("player.seekoffset", PLAYER_SEEKOFFSET, TIME, 0),
+  INFO_LABEL_PARAM1("player.seekstepsize", PLAYER_SEEKSTEPSIZE, TIME, 0),
+  INFO_LABEL_PARAM1("player.timeremaining", PLAYER_TIME_REMAINING, TIME, 0),
+  INFO_LABEL_PARAM1("player.timespeed", PLAYER_TIME_SPEED, TIME, 0),
+  INFO_LABEL_PARAM1("player.time", PLAYER_TIME, TIME, 0),
+  INFO_LABEL_PARAM1("player.duration", PLAYER_DURATION, TIME, 0),
+  INFO_LABEL_PARAM1("player.finishtime", PLAYER_FINISH_TIME, TIME, 0),
+  INFO_LABEL_PARAM1("player.starttime", PLAYER_START_TIME, TIME, 0),
+  INFO_LABEL_PARAM1("system.getbool", SYSTEM_GET_BOOL, CONDITIONAL, CASE_INSENSITIVE)
+
 };
 
 #undef INFO_LABEL
 #undef INFO_LABEL_PARAM1
 #undef INFO_LABEL_PARAM2
 
+//not sure what these are
 const infomap system_param[] =   {{ "hasalarm",         SYSTEM_HAS_ALARM },
                                   { "hascoreid",        SYSTEM_HAS_CORE_ID },
                                   { "setting",          SYSTEM_SETTING },
@@ -438,7 +488,7 @@ const infomap system_param[] =   {{ "hasalarm",         SYSTEM_HAS_ALARM },
 
 
 
-
+//done
 const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
                                   { "album",            MUSICPLAYER_ALBUM },
                                   { "artist",           MUSICPLAYER_ARTIST },
@@ -933,8 +983,49 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     const Property &prop = info[1];
 
     const auto val = labels.find(cat.name + "." + prop.name);
-    if (val != labels.end())
+
+    //this is a label, just return it's id
+    if (val != labels.end() && (*val).second.nrParams == 0)
       return (*val).second.id;
+
+    if (val != labels.end())
+    {
+      const auto& pInfo = (*val).second;
+
+      switch (pInfo.param1)
+      {
+      case ParameterFlags::CONDITIONAL:
+        return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(cat.param(0), (pInfo.options & CASE_INSENSITIVE) != 0)));
+        break;
+      case ParameterFlags::LABEL:
+        return AddMultiInfo(GUIInfo(pInfo.id, TranslateSingleString(cat.param(0), listItemDependent)));
+        break;
+      case ParameterFlags::NUMBER:
+        return AddMultiInfo(GUIInfo(pInfo.id, atoi(cat.param(0).c_str())));
+        break;
+      case ParameterFlags::TIME:
+        return AddMultiInfo(GUIInfo(pInfo.id, TranslateTimeFormat(cat.param(0))));
+        break;
+      default:
+        break;
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if (cat.name == "player")
     {
@@ -1398,7 +1489,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
 
     return strLabel;
   }
-  if (info & CATEGORY_MASK)
+  if (info & CATEGORY_MASK && (info & SYSTEM_MASK) == 0)
     return m_infoHandlers[info & CATEGORY_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
 
   switch (info)
@@ -1983,7 +2074,7 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
   }
 
   value = 0;
-  if (info & CATEGORY_MASK)
+  if (info & CATEGORY_MASK && (info & SYSTEM_MASK) == 0)
     return m_infoHandlers.at(info & CATEGORY_MASK)->GetInt(value, info, contextWindow, item);
   
   switch( info )

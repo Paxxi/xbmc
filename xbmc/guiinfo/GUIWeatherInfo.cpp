@@ -36,7 +36,10 @@ int CGUIWeatherInfo::LabelMask()
 
 std::string CGUIWeatherInfo::GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback)
 {
-  std::string strLabel{*fallback};
+  std::string strLabel;
+
+  if (fallback != nullptr)
+    strLabel = *fallback;
 
   switch (info)
   {
