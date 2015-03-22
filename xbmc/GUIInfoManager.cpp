@@ -92,6 +92,7 @@
 
 #include "guiinfo/GUIInfoLabels.h"
 #include "guiinfo/GUIPlayerInfo.h"
+#include "guiinfo/GUIWeatherInfo.h"
 
 #if defined(TARGET_DARWIN_OSX)
 #include "osx/smc.h"
@@ -131,6 +132,8 @@ CGUIInfoManager::CGUIInfoManager(void) :
   m_fps = 0.0f;
   m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
                         std::make_unique<GUIINFO::CGUIPlayerInfo>(this)));
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIWeatherInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUIWeatherInfo>(this)));
   ResetLibraryBools();
 }
 
@@ -168,6 +171,28 @@ int CGUIInfoManager::TranslateString(const std::string &condition)
   return TranslateSingleString(strCondition);
 }
 
+enum class ParameterFlags : uint8_t
+{
+  NONE,
+  LABEL,
+  STRING,
+  CONDITIONAL,
+  TIME
+};
+
+struct ParseInfo
+{
+  int id;
+  uint8_t nrParams;
+  ParameterFlags param1;
+  ParameterFlags param2;
+  int flags;
+};
+
+#define INFO_LABEL(s, i) { s, {i, 0, ParameterFlags::NONE, ParameterFlags::NONE, 0}}
+#define INFO_LABEL_PARAM1(s, i, pf, f) { s, {i, 1, ParameterFlags::##pf , ParameterFlags::NONE, f}}
+#define INFO_LABEL_PARAM2(s, i, pf1, pf2, f) { s, {i, 2, ParameterFlags::##pf1 , ParameterFlags::##pf2 , f}}
+
 typedef struct
 {
   const char *str;
@@ -186,219 +211,224 @@ const infomap player_times[] = {{"seektime", PLAYER_SEEKTIME},
                                 {"finishtime", PLAYER_FINISH_TIME},
                                 {"starttime", PLAYER_START_TIME}};
 
-const std::map<std::string, int> labels =
+
+const std::map<std::string, ParseInfo> labels =
 {
-                                  { "player.hasmedia",         PLAYER_HAS_MEDIA },           // bools from here
-                                  { "player.hasaudio",         PLAYER_HAS_AUDIO },
-                                  { "player.hasvideo",         PLAYER_HAS_VIDEO },
-                                  { "player.playing",          PLAYER_PLAYING },
-                                  { "player.paused",           PLAYER_PAUSED },
-                                  { "player.rewinding",        PLAYER_REWINDING },
-                                  { "player.forwarding",       PLAYER_FORWARDING },
-                                  { "player.rewinding2x",      PLAYER_REWINDING_2x },
-                                  { "player.rewinding4x",      PLAYER_REWINDING_4x },
-                                  { "player.rewinding8x",      PLAYER_REWINDING_8x },
-                                  { "player.rewinding16x",     PLAYER_REWINDING_16x },
-                                  { "player.rewinding32x",     PLAYER_REWINDING_32x },
-                                  { "player.forwarding2x",     PLAYER_FORWARDING_2x },
-                                  { "player.forwarding4x",     PLAYER_FORWARDING_4x },
-                                  { "player.forwarding8x",     PLAYER_FORWARDING_8x },
-                                  { "player.forwarding16x",    PLAYER_FORWARDING_16x },
-                                  { "player.forwarding32x",    PLAYER_FORWARDING_32x },
-                                  { "player.canrecord",        PLAYER_CAN_RECORD },
-                                  { "player.recording",        PLAYER_RECORDING },
-                                  { "player.displayafterseek", PLAYER_DISPLAY_AFTER_SEEK },
-                                  { "player.caching",          PLAYER_CACHING },
-                                  { "player.seekbar",          PLAYER_SEEKBAR },
-                                  { "player.seeking",          PLAYER_SEEKING },
-                                  { "player.showtime",         PLAYER_SHOWTIME },
-                                  { "player.showcodec",        PLAYER_SHOWCODEC },
-                                  { "player.showinfo",         PLAYER_SHOWINFO },
-                                  { "player.title",            PLAYER_TITLE },
-                                  { "player.muted",            PLAYER_MUTED },
-                                  { "player.hasduration",      PLAYER_HASDURATION },
-                                  { "player.passthrough",      PLAYER_PASSTHROUGH },
-                                  { "player.cachelevel",       PLAYER_CACHELEVEL },          // labels from here
-                                  { "player.progress",         PLAYER_PROGRESS },
-                                  { "player.progresscache",    PLAYER_PROGRESS_CACHE },
-                                  { "player.volume",           PLAYER_VOLUME },
-                                  { "player.subtitledelay",    PLAYER_SUBTITLE_DELAY },
-                                  { "player.audiodelay",       PLAYER_AUDIO_DELAY },
-                                  { "player.chapter",          PLAYER_CHAPTER },
-                                  { "player.chaptercount",     PLAYER_CHAPTERCOUNT },
-                                  { "player.chaptername",      PLAYER_CHAPTERNAME },
-                                  { "player.starrating",       PLAYER_STAR_RATING },
-                                  { "player.folderpath",       PLAYER_PATH },
-                                  { "player.filenameandpath",  PLAYER_FILEPATH },
-                                  { "player.filename",         PLAYER_FILENAME },
-                                  { "player.isinternetstream", PLAYER_ISINTERNETSTREAM },
-                                  { "player.pauseenabled",     PLAYER_CAN_PAUSE },
-                                  { "player.seekenabled",      PLAYER_CAN_SEEK },
-                                  { "weather.isfetched",        WEATHER_IS_FETCHED },
-                                  { "weather.conditions",       WEATHER_CONDITIONS },         // labels from here
-                                  { "weather.temperature",      WEATHER_TEMPERATURE },
-                                  { "weather.location",         WEATHER_LOCATION },
-                                  { "weather.fanartcode",       WEATHER_FANART_CODE },
-                                  { "weather.plugin",           WEATHER_PLUGIN },
-                                  { "network.isdhcp",           NETWORK_IS_DHCP },
-                                  { "network.ipaddress",        NETWORK_IP_ADDRESS}, //labels from here
-                                  { "network.linkstate",        NETWORK_LINK_STATE},
-                                  { "network.macaddress",       NETWORK_MAC_ADDRESS},
-                                  { "network.subnetmask",       NETWORK_SUBNET_MASK},
-                                  { "network.gatewayaddress",   NETWORK_GATEWAY_ADDRESS},
-                                  { "network.dns1address",      NETWORK_DNS1_ADDRESS},
-                                  { "network.dns2address",      NETWORK_DNS2_ADDRESS},
-                                  { "network.dhcpaddress",      NETWORK_DHCP_ADDRESS},
-                                  { "system.hasnetwork",       SYSTEM_ETHERNET_LINK_ACTIVE },
-                                  { "system.hasmediadvd",      SYSTEM_MEDIA_DVD },
-                                  { "system.dvdready",         SYSTEM_DVDREADY },
-                                  { "system.trayopen",         SYSTEM_TRAYOPEN },
-                                  { "system.haslocks",         SYSTEM_HASLOCKS },
-                                  { "system.hasloginscreen",   SYSTEM_HAS_LOGINSCREEN },
-                                  { "system.ismaster",         SYSTEM_ISMASTER },
-                                  { "system.isfullscreen",     SYSTEM_ISFULLSCREEN },
-                                  { "system.isstandalone",     SYSTEM_ISSTANDALONE },
-                                  { "system.loggedon",         SYSTEM_LOGGEDON },
-                                  { "system.showexitbutton",   SYSTEM_SHOW_EXIT_BUTTON },
-                                  { "system.canpowerdown",     SYSTEM_CAN_POWERDOWN },
-                                  { "system.cansuspend",       SYSTEM_CAN_SUSPEND },
-                                  { "system.canhibernate",     SYSTEM_CAN_HIBERNATE },
-                                  { "system.canreboot",        SYSTEM_CAN_REBOOT },
-                                  { "system.screensaveractive",SYSTEM_SCREENSAVER_ACTIVE },
-                                  { "system.dpmsactive",       SYSTEM_DPMS_ACTIVE },
-                                  { "system.cputemperature",   SYSTEM_CPU_TEMPERATURE },     // labels from here
-                                  { "system.cpuusage",         SYSTEM_CPU_USAGE },
-                                  { "system.gputemperature",   SYSTEM_GPU_TEMPERATURE },
-                                  { "system.fanspeed",         SYSTEM_FAN_SPEED },
-                                  { "system.freespace",        SYSTEM_FREE_SPACE },
-                                  { "system.usedspace",        SYSTEM_USED_SPACE },
-                                  { "system.totalspace",       SYSTEM_TOTAL_SPACE },
-                                  { "system.usedspacepercent", SYSTEM_USED_SPACE_PERCENT },
-                                  { "system.freespacepercent", SYSTEM_FREE_SPACE_PERCENT },
-                                  { "system.buildversion",     SYSTEM_BUILD_VERSION },
-                                  { "system.buildversionshort",SYSTEM_BUILD_VERSION_SHORT },
-                                  { "system.builddate",        SYSTEM_BUILD_DATE },
-                                  { "system.fps",              SYSTEM_FPS },
-                                  { "system.dvdtraystate",     SYSTEM_DVD_TRAY_STATE },
-                                  { "system.freememory",       SYSTEM_FREE_MEMORY },
-                                  { "system.language",         SYSTEM_LANGUAGE },
-                                  { "system.temperatureunits", SYSTEM_TEMPERATURE_UNITS },
-                                  { "system.screenmode",       SYSTEM_SCREEN_MODE },
-                                  { "system.screenwidth",      SYSTEM_SCREEN_WIDTH },
-                                  { "system.screenheight",     SYSTEM_SCREEN_HEIGHT },
-                                  { "system.currentwindow",    SYSTEM_CURRENT_WINDOW },
-                                  { "system.currentcontrol",   SYSTEM_CURRENT_CONTROL },
-                                  { "system.dvdlabel",         SYSTEM_DVD_LABEL },
-                                  { "system.internetstate",    SYSTEM_INTERNET_STATE },
-                                  { "system.osversioninfo",    SYSTEM_OS_VERSION_INFO },
-                                  { "system.kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
-                                  { "system.uptime",           SYSTEM_UPTIME },
-                                  { "system.totaluptime",      SYSTEM_TOTALUPTIME },
-                                  { "system.cpufrequency",     SYSTEM_CPUFREQUENCY },
-                                  { "system.screenresolution", SYSTEM_SCREEN_RESOLUTION },
-                                  { "system.videoencoderinfo", SYSTEM_VIDEO_ENCODER_INFO },
-                                  { "system.profilename",      SYSTEM_PROFILENAME },
-                                  { "system.profilethumb",     SYSTEM_PROFILETHUMB },
-                                  { "system.profilecount",     SYSTEM_PROFILECOUNT },
-                                  { "system.profileautologin", SYSTEM_PROFILEAUTOLOGIN },
-                                  { "system.progressbar",      SYSTEM_PROGRESS_BAR },
-                                  { "system.batterylevel",     SYSTEM_BATTERY_LEVEL },
-                                  { "system.friendlyname",     SYSTEM_FRIENDLY_NAME },
-                                  { "system.alarmpos",         SYSTEM_ALARM_POS },
-                                  { "system.isinhibit",        SYSTEM_ISINHIBIT },
-                                  { "system.hasshutdown",      SYSTEM_HAS_SHUTDOWN },
-                                  { "system.haspvr",           SYSTEM_HAS_PVR },
-                                  { "system.startupwindow",    SYSTEM_STARTUP_WINDOW },
-                                  { "system.stereoscopicmode", SYSTEM_STEREOSCOPIC_MODE },
-                                  {"musicpartymode.enabled", MUSICPM_ENABLED},
-                                  {"musicpartymode.songsplayed", MUSICPM_SONGSPLAYED},
-                                  {"musicpartymode.matchingsongs", MUSICPM_MATCHINGSONGS},
-                                  {"musicpartymode.matchingsongspicked", MUSICPM_MATCHINGSONGSPICKED},
-                                  {"musicpartymode.matchingsongsleft", MUSICPM_MATCHINGSONGSLEFT},
-                                  {"musicpartymode.relaxedsongspicked", MUSICPM_RELAXEDSONGSPICKED},
-                                  {"musicpartymode.randomsongspicked", MUSICPM_RANDOMSONGSPICKED},
-                                  {"slideshow.ispaused", SLIDESHOW_ISPAUSED},
-                                  {"slideshow.isactive", SLIDESHOW_ISACTIVE},
-                                  {"slideshow.isvideo", SLIDESHOW_ISVIDEO},
-                                  {"slideshow.israndom", SLIDESHOW_ISRANDOM},
-                                  {"mediacontainer.hasfiles", CONTAINER_HASFILES},
-                                  {"mediacontainer.hasfolders", CONTAINER_HASFOLDERS},
-                                  {"mediacontainer.isstacked", CONTAINER_STACKED},
-                                  {"mediacontainer.folderpath", CONTAINER_FOLDERPATH},
-                                  {"mediacontainer.foldername", CONTAINER_FOLDERNAME},
-                                  {"mediacontainer.pluginname", CONTAINER_PLUGINNAME},
-                                  {"mediacontainer.viewmode", CONTAINER_VIEWMODE},
-                                  {"mediacontainer.totaltime", CONTAINER_TOTALTIME},
-                                  {"mediacontainer.hasthumb", CONTAINER_HAS_THUMB},
-                                  {"mediacontainer.sortmethod", CONTAINER_SORT_METHOD},
-                                  {"mediacontainer.showplot", CONTAINER_SHOWPLOT},
-                                  {"visualisation.locked", VISUALISATION_LOCKED},
-                                  {"visualisation.preset", VISUALISATION_PRESET},
-                                  {"visualisation.name", VISUALISATION_NAME},
-                                  {"visualisation.enabled", VISUALISATION_ENABLED},
+  INFO_LABEL("player.hasmedia", PLAYER_HAS_MEDIA ),           // bools from here
+  INFO_LABEL("player.hasaudio", PLAYER_HAS_AUDIO ),
+  INFO_LABEL("player.hasvideo", PLAYER_HAS_VIDEO),
+  INFO_LABEL("player.playing", PLAYER_PLAYING ),
+  INFO_LABEL("player.paused", PLAYER_PAUSED ),
+  INFO_LABEL("player.rewinding", PLAYER_REWINDING ),
+  INFO_LABEL("player.forwarding", PLAYER_FORWARDING ),
+  INFO_LABEL("player.rewinding2x", PLAYER_REWINDING_2x ),
+  INFO_LABEL("player.rewinding4x", PLAYER_REWINDING_4x ),
+  INFO_LABEL("player.rewinding8x", PLAYER_REWINDING_8x ),
+  INFO_LABEL("player.rewinding16x", PLAYER_REWINDING_16x ),
+  INFO_LABEL("player.rewinding32x", PLAYER_REWINDING_32x ),
+  INFO_LABEL("player.forwarding2x", PLAYER_FORWARDING_2x ),
+  INFO_LABEL("player.forwarding4x", PLAYER_FORWARDING_4x ),
+  INFO_LABEL("player.forwarding8x", PLAYER_FORWARDING_8x ),
+  INFO_LABEL("player.forwarding16x", PLAYER_FORWARDING_16x ),
+  INFO_LABEL("player.forwarding32x", PLAYER_FORWARDING_32x ),
+  INFO_LABEL("player.canrecord", PLAYER_CAN_RECORD ),
+  INFO_LABEL("player.recording", PLAYER_RECORDING ),
+  INFO_LABEL("player.displayafterseek", PLAYER_DISPLAY_AFTER_SEEK ),
+  INFO_LABEL("player.caching", PLAYER_CACHING ),
+  INFO_LABEL("player.seekbar", PLAYER_SEEKBAR ),
+  INFO_LABEL("player.seeking", PLAYER_SEEKING ),
+  INFO_LABEL("player.showtime", PLAYER_SHOWTIME ),
+  INFO_LABEL("player.showcodec", PLAYER_SHOWCODEC ),
+  INFO_LABEL("player.showinfo", PLAYER_SHOWINFO ),
+  INFO_LABEL("player.title", PLAYER_TITLE ),
+  INFO_LABEL("player.muted", PLAYER_MUTED ),
+  INFO_LABEL("player.hasduration", PLAYER_HASDURATION ),
+  INFO_LABEL("player.passthrough", PLAYER_PASSTHROUGH ),
+  INFO_LABEL("player.cachelevel", PLAYER_CACHELEVEL ),          // labels from here
+  INFO_LABEL("player.progress", PLAYER_PROGRESS ),
+  INFO_LABEL("player.progresscache", PLAYER_PROGRESS_CACHE ),
+  INFO_LABEL("player.volume", PLAYER_VOLUME ),
+  INFO_LABEL("player.subtitledelay", PLAYER_SUBTITLE_DELAY ),
+  INFO_LABEL("player.audiodelay", PLAYER_AUDIO_DELAY ),
+  INFO_LABEL("player.chapter", PLAYER_CHAPTER ),
+  INFO_LABEL("player.chaptercount", PLAYER_CHAPTERCOUNT ),
+  INFO_LABEL("player.chaptername", PLAYER_CHAPTERNAME ),
+  INFO_LABEL("player.starrating", PLAYER_STAR_RATING ),
+  INFO_LABEL("player.folderpath", PLAYER_PATH ),
+  INFO_LABEL("player.filenameandpath", PLAYER_FILEPATH ),
+  INFO_LABEL("player.filename", PLAYER_FILENAME ),
+  INFO_LABEL("player.isinternetstream", PLAYER_ISINTERNETSTREAM ),
+  INFO_LABEL("player.pauseenabled", PLAYER_CAN_PAUSE ),
+  INFO_LABEL("player.seekenabled", PLAYER_CAN_SEEK ),
+  INFO_LABEL("weather.isfetched", WEATHER_IS_FETCHED ),
+  INFO_LABEL("weather.conditions", WEATHER_CONDITIONS ),         // labels from here
+  INFO_LABEL("weather.temperature", WEATHER_TEMPERATURE ),
+  INFO_LABEL("weather.location", WEATHER_LOCATION ),
+  INFO_LABEL("weather.fanartcode", WEATHER_FANART_CODE ),
+  INFO_LABEL("weather.plugin", WEATHER_PLUGIN ),
+  INFO_LABEL("network.isdhcp", NETWORK_IS_DHCP ),
+  INFO_LABEL("network.ipaddress", NETWORK_IP_ADDRESS), //labels from here
+  INFO_LABEL("network.linkstate", NETWORK_LINK_STATE),
+  INFO_LABEL("network.macaddress", NETWORK_MAC_ADDRESS),
+  INFO_LABEL("network.subnetmask", NETWORK_SUBNET_MASK),
+  INFO_LABEL("network.gatewayaddress", NETWORK_GATEWAY_ADDRESS),
+  INFO_LABEL("network.dns1address", NETWORK_DNS1_ADDRESS),
+  INFO_LABEL("network.dns2address", NETWORK_DNS2_ADDRESS),
+  INFO_LABEL("network.dhcpaddress", NETWORK_DHCP_ADDRESS),
+  INFO_LABEL("system.hasnetwork", SYSTEM_ETHERNET_LINK_ACTIVE ),
+  INFO_LABEL("system.hasmediadvd", SYSTEM_MEDIA_DVD ),
+  INFO_LABEL("system.dvdready", SYSTEM_DVDREADY ),
+  INFO_LABEL("system.trayopen", SYSTEM_TRAYOPEN ),
+  INFO_LABEL("system.haslocks", SYSTEM_HASLOCKS ),
+  INFO_LABEL("system.hasloginscreen", SYSTEM_HAS_LOGINSCREEN ),
+  INFO_LABEL("system.ismaster", SYSTEM_ISMASTER ),
+  INFO_LABEL("system.isfullscreen", SYSTEM_ISFULLSCREEN ),
+  INFO_LABEL("system.isstandalone", SYSTEM_ISSTANDALONE ),
+  INFO_LABEL("system.loggedon", SYSTEM_LOGGEDON ),
+  INFO_LABEL("system.showexitbutton", SYSTEM_SHOW_EXIT_BUTTON ),
+  INFO_LABEL("system.canpowerdown", SYSTEM_CAN_POWERDOWN ),
+  INFO_LABEL("system.cansuspend", SYSTEM_CAN_SUSPEND ),
+  INFO_LABEL("system.canhibernate", SYSTEM_CAN_HIBERNATE ),
+  INFO_LABEL("system.canreboot", SYSTEM_CAN_REBOOT ),
+  INFO_LABEL("system.screensaveractive", SYSTEM_SCREENSAVER_ACTIVE ),
+  INFO_LABEL("system.dpmsactive", SYSTEM_DPMS_ACTIVE ),
+  INFO_LABEL("system.cputemperature", SYSTEM_CPU_TEMPERATURE ),     // labels from here
+  INFO_LABEL("system.cpuusage", SYSTEM_CPU_USAGE ),
+  INFO_LABEL("system.gputemperature", SYSTEM_GPU_TEMPERATURE ),
+  INFO_LABEL("system.fanspeed", SYSTEM_FAN_SPEED ),
+  INFO_LABEL("system.freespace", SYSTEM_FREE_SPACE ),
+  INFO_LABEL("system.usedspace", SYSTEM_USED_SPACE ),
+  INFO_LABEL("system.totalspace", SYSTEM_TOTAL_SPACE ),
+  INFO_LABEL("system.usedspacepercent", SYSTEM_USED_SPACE_PERCENT ),
+  INFO_LABEL("system.freespacepercent", SYSTEM_FREE_SPACE_PERCENT ),
+  INFO_LABEL("system.buildversion", SYSTEM_BUILD_VERSION ),
+  INFO_LABEL("system.buildversionshort", SYSTEM_BUILD_VERSION_SHORT ),
+  INFO_LABEL("system.builddate", SYSTEM_BUILD_DATE ),
+  INFO_LABEL("system.fps", SYSTEM_FPS ),
+  INFO_LABEL("system.dvdtraystate", SYSTEM_DVD_TRAY_STATE ),
+  INFO_LABEL("system.freememory", SYSTEM_FREE_MEMORY ),
+  INFO_LABEL("system.language", SYSTEM_LANGUAGE ),
+  INFO_LABEL("system.temperatureunits", SYSTEM_TEMPERATURE_UNITS ),
+  INFO_LABEL("system.screenmode", SYSTEM_SCREEN_MODE ),
+  INFO_LABEL("system.screenwidth", SYSTEM_SCREEN_WIDTH ),
+  INFO_LABEL("system.screenheight", SYSTEM_SCREEN_HEIGHT ),
+  INFO_LABEL("system.currentwindow", SYSTEM_CURRENT_WINDOW ),
+  INFO_LABEL("system.currentcontrol", SYSTEM_CURRENT_CONTROL ),
+  INFO_LABEL("system.dvdlabel", SYSTEM_DVD_LABEL ),
+  INFO_LABEL("system.internetstate", SYSTEM_INTERNET_STATE ),
+  INFO_LABEL("system.osversioninfo", SYSTEM_OS_VERSION_INFO ),
+  INFO_LABEL("system.kernelversion", SYSTEM_OS_VERSION_INFO ), // old, not correct name
+  INFO_LABEL("system.uptime", SYSTEM_UPTIME ),
+  INFO_LABEL("system.totaluptime", SYSTEM_TOTALUPTIME ),
+  INFO_LABEL("system.cpufrequency", SYSTEM_CPUFREQUENCY ),
+  INFO_LABEL("system.screenresolution", SYSTEM_SCREEN_RESOLUTION ),
+  INFO_LABEL("system.videoencoderinfo", SYSTEM_VIDEO_ENCODER_INFO ),
+  INFO_LABEL("system.profilename", SYSTEM_PROFILENAME ),
+  INFO_LABEL("system.profilethumb", SYSTEM_PROFILETHUMB ),
+  INFO_LABEL("system.profilecount", SYSTEM_PROFILECOUNT ),
+  INFO_LABEL("system.profileautologin", SYSTEM_PROFILEAUTOLOGIN ),
+  INFO_LABEL("system.progressbar", SYSTEM_PROGRESS_BAR ),
+  INFO_LABEL("system.batterylevel", SYSTEM_BATTERY_LEVEL ),
+  INFO_LABEL("system.friendlyname", SYSTEM_FRIENDLY_NAME ),
+  INFO_LABEL("system.alarmpos", SYSTEM_ALARM_POS ),
+  INFO_LABEL("system.isinhibit", SYSTEM_ISINHIBIT ),
+  INFO_LABEL("system.hasshutdown", SYSTEM_HAS_SHUTDOWN ),
+  INFO_LABEL("system.haspvr", SYSTEM_HAS_PVR ),
+  INFO_LABEL("system.startupwindow", SYSTEM_STARTUP_WINDOW ),
+  INFO_LABEL("system.stereoscopicmode", SYSTEM_STEREOSCOPIC_MODE ),
+  INFO_LABEL("musicpartymode.enabled", MUSICPM_ENABLED),
+  INFO_LABEL("musicpartymode.songsplayed", MUSICPM_SONGSPLAYED),
+  INFO_LABEL("musicpartymode.matchingsongs", MUSICPM_MATCHINGSONGS),
+  INFO_LABEL("musicpartymode.matchingsongspicked", MUSICPM_MATCHINGSONGSPICKED),
+  INFO_LABEL("musicpartymode.matchingsongsleft", MUSICPM_MATCHINGSONGSLEFT),
+  INFO_LABEL("musicpartymode.relaxedsongspicked", MUSICPM_RELAXEDSONGSPICKED),
+  INFO_LABEL("musicpartymode.randomsongspicked", MUSICPM_RANDOMSONGSPICKED),
+  INFO_LABEL("slideshow.ispaused", SLIDESHOW_ISPAUSED),
+  INFO_LABEL("slideshow.isactive", SLIDESHOW_ISACTIVE),
+  INFO_LABEL("slideshow.isvideo", SLIDESHOW_ISVIDEO),
+  INFO_LABEL("slideshow.israndom", SLIDESHOW_ISRANDOM),
+  INFO_LABEL("mediacontainer.hasfiles", CONTAINER_HASFILES),
+  INFO_LABEL("mediacontainer.hasfolders", CONTAINER_HASFOLDERS),
+  INFO_LABEL("mediacontainer.isstacked", CONTAINER_STACKED),
+  INFO_LABEL("mediacontainer.folderpath", CONTAINER_FOLDERPATH),
+  INFO_LABEL("mediacontainer.foldername", CONTAINER_FOLDERNAME),
+  INFO_LABEL("mediacontainer.pluginname", CONTAINER_PLUGINNAME),
+  INFO_LABEL("mediacontainer.viewmode", CONTAINER_VIEWMODE),
+  INFO_LABEL("mediacontainer.totaltime", CONTAINER_TOTALTIME),
+  INFO_LABEL("mediacontainer.hasthumb", CONTAINER_HAS_THUMB),
+  INFO_LABEL("mediacontainer.sortmethod", CONTAINER_SORT_METHOD),
+  INFO_LABEL("mediacontainer.showplot", CONTAINER_SHOWPLOT),
+  INFO_LABEL("visualisation.locked", VISUALISATION_LOCKED),
+  INFO_LABEL("visualisation.preset", VISUALISATION_PRESET),
+  INFO_LABEL("visualisation.name", VISUALISATION_NAME),
+  INFO_LABEL("visualisation.enabled", VISUALISATION_ENABLED),
 
-                                  {"fanart.color1", FANART_COLOR1},
-                                  {"fanart.color2", FANART_COLOR2},
-                                  {"fanart.color3", FANART_COLOR3},
-                                  {"fanart.image", FANART_IMAGE},
+  INFO_LABEL("fanart.color1", FANART_COLOR1),
+  INFO_LABEL("fanart.color2", FANART_COLOR2),
+  INFO_LABEL("fanart.color3", FANART_COLOR3),
+  INFO_LABEL("fanart.image", FANART_IMAGE),
 
-                                  {"skin.currenttheme", SKIN_THEME},
-                                  {"skin.currentcolourtheme", SKIN_COLOUR_THEME},
-                                  {"skin.hasvideooverlay", SKIN_HAS_VIDEO_OVERLAY},
-                                  {"skin.hasmusicoverlay", SKIN_HAS_MUSIC_OVERLAY},
-                                  {"skin.aspectratio", SKIN_ASPECT_RATIO},
-                                  {"pvr.isrecording", PVR_IS_RECORDING},
-                                  {"pvr.hastimer", PVR_HAS_TIMER},
-                                  {"pvr.hastvchannels", PVR_HAS_TV_CHANNELS},
-                                  {"pvr.hasradiochannels", PVR_HAS_RADIO_CHANNELS},
-                                  {"pvr.hasnonrecordingtimer", PVR_HAS_NONRECORDING_TIMER},
-                                  {"pvr.nowrecordingtitle", PVR_NOW_RECORDING_TITLE},
-                                  {"pvr.nowrecordingdatetime", PVR_NOW_RECORDING_DATETIME},
-                                  {"pvr.nowrecordingchannel", PVR_NOW_RECORDING_CHANNEL},
-                                  {"pvr.nowrecordingchannelicon", PVR_NOW_RECORDING_CHAN_ICO},
-                                  {"pvr.nextrecordingtitle", PVR_NEXT_RECORDING_TITLE},
-                                  {"pvr.nextrecordingdatetime", PVR_NEXT_RECORDING_DATETIME},
-                                  {"pvr.nextrecordingchannel", PVR_NEXT_RECORDING_CHANNEL},
-                                  {"pvr.nextrecordingchannelicon", PVR_NEXT_RECORDING_CHAN_ICO},
-                                  {"pvr.backendname", PVR_BACKEND_NAME},
-                                  {"pvr.backendversion", PVR_BACKEND_VERSION},
-                                  {"pvr.backendhost", PVR_BACKEND_HOST},
-                                  {"pvr.backenddiskspace", PVR_BACKEND_DISKSPACE},
-                                  {"pvr.backenddiskspaceprogr", PVR_BACKEND_DISKSPACE_PROGR},
-                                  {"pvr.backendchannels", PVR_BACKEND_CHANNELS},
-                                  {"pvr.backendtimers", PVR_BACKEND_TIMERS},
-                                  {"pvr.backendrecordings", PVR_BACKEND_RECORDINGS},
-                                  {"pvr.backenddeletedrecordings", PVR_BACKEND_DELETED_RECORDINGS},
-                                  {"pvr.backendnumber", PVR_BACKEND_NUMBER},
-                                  {"pvr.hasepg", PVR_HAS_EPG},
-                                  {"pvr.hastxt", PVR_HAS_TXT},
-                                  {"pvr.hasdirector", PVR_HAS_DIRECTOR},
-                                  {"pvr.totaldiscspace", PVR_TOTAL_DISKSPACE},
-                                  {"pvr.nexttimer", PVR_NEXT_TIMER},
-                                  {"pvr.isplayingtv", PVR_IS_PLAYING_TV},
-                                  {"pvr.isplayingradio", PVR_IS_PLAYING_RADIO},
-                                  {"pvr.isplayingrecording", PVR_IS_PLAYING_RECORDING},
-                                  {"pvr.duration", PVR_PLAYING_DURATION},
-                                  {"pvr.time", PVR_PLAYING_TIME},
-                                  {"pvr.progress", PVR_PLAYING_PROGRESS},
-                                  {"pvr.actstreamclient", PVR_ACTUAL_STREAM_CLIENT},
-                                  {"pvr.actstreamdevice", PVR_ACTUAL_STREAM_DEVICE},
-                                  {"pvr.actstreamstatus", PVR_ACTUAL_STREAM_STATUS},
-                                  {"pvr.actstreamsignal", PVR_ACTUAL_STREAM_SIG},
-                                  {"pvr.actstreamsnr", PVR_ACTUAL_STREAM_SNR},
-                                  {"pvr.actstreamber", PVR_ACTUAL_STREAM_BER},
-                                  {"pvr.actstreamunc", PVR_ACTUAL_STREAM_UNC},
-                                  {"pvr.actstreamvideobitrate", PVR_ACTUAL_STREAM_VIDEO_BR},
-                                  {"pvr.actstreamaudiobitrate", PVR_ACTUAL_STREAM_AUDIO_BR},
-                                  {"pvr.actstreamdolbybitrate", PVR_ACTUAL_STREAM_DOLBY_BR},
-                                  {"pvr.actstreamprogrsignal", PVR_ACTUAL_STREAM_SIG_PROGR},
-                                  {"pvr.actstreamprogrsnr", PVR_ACTUAL_STREAM_SNR_PROGR},
-                                  {"pvr.actstreamisencrypted", PVR_ACTUAL_STREAM_ENCRYPTED},
-                                  {"pvr.actstreamencryptionname", PVR_ACTUAL_STREAM_CRYPTION},
-                                  {"pvr.actstreamservicename", PVR_ACTUAL_STREAM_SERVICE},
-                                  {"pvr.actstreammux", PVR_ACTUAL_STREAM_MUX},
-                                  {"pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER}
+  INFO_LABEL("skin.currenttheme", SKIN_THEME),
+  INFO_LABEL("skin.currentcolourtheme", SKIN_COLOUR_THEME),
+  INFO_LABEL("skin.hasvideooverlay", SKIN_HAS_VIDEO_OVERLAY),
+  INFO_LABEL("skin.hasmusicoverlay", SKIN_HAS_MUSIC_OVERLAY),
+  INFO_LABEL("skin.aspectratio", SKIN_ASPECT_RATIO),
+  INFO_LABEL("pvr.isrecording", PVR_IS_RECORDING),
+  INFO_LABEL("pvr.hastimer", PVR_HAS_TIMER),
+  INFO_LABEL("pvr.hastvchannels", PVR_HAS_TV_CHANNELS),
+  INFO_LABEL("pvr.hasradiochannels", PVR_HAS_RADIO_CHANNELS),
+  INFO_LABEL("pvr.hasnonrecordingtimer", PVR_HAS_NONRECORDING_TIMER),
+  INFO_LABEL("pvr.nowrecordingtitle", PVR_NOW_RECORDING_TITLE),
+  INFO_LABEL("pvr.nowrecordingdatetime", PVR_NOW_RECORDING_DATETIME),
+  INFO_LABEL("pvr.nowrecordingchannel", PVR_NOW_RECORDING_CHANNEL),
+  INFO_LABEL("pvr.nowrecordingchannelicon", PVR_NOW_RECORDING_CHAN_ICO),
+  INFO_LABEL("pvr.nextrecordingtitle", PVR_NEXT_RECORDING_TITLE),
+  INFO_LABEL("pvr.nextrecordingdatetime", PVR_NEXT_RECORDING_DATETIME),
+  INFO_LABEL("pvr.nextrecordingchannel", PVR_NEXT_RECORDING_CHANNEL),
+  INFO_LABEL("pvr.nextrecordingchannelicon", PVR_NEXT_RECORDING_CHAN_ICO),
+  INFO_LABEL("pvr.backendname", PVR_BACKEND_NAME),
+  INFO_LABEL("pvr.backendversion", PVR_BACKEND_VERSION),
+  INFO_LABEL("pvr.backendhost", PVR_BACKEND_HOST),
+  INFO_LABEL("pvr.backenddiskspace", PVR_BACKEND_DISKSPACE),
+  INFO_LABEL("pvr.backenddiskspaceprogr", PVR_BACKEND_DISKSPACE_PROGR),
+  INFO_LABEL("pvr.backendchannels", PVR_BACKEND_CHANNELS),
+  INFO_LABEL("pvr.backendtimers", PVR_BACKEND_TIMERS),
+  INFO_LABEL("pvr.backendrecordings", PVR_BACKEND_RECORDINGS),
+  INFO_LABEL("pvr.backenddeletedrecordings", PVR_BACKEND_DELETED_RECORDINGS),
+  INFO_LABEL("pvr.backendnumber", PVR_BACKEND_NUMBER),
+  INFO_LABEL("pvr.hasepg", PVR_HAS_EPG),
+  INFO_LABEL("pvr.hastxt", PVR_HAS_TXT),
+  INFO_LABEL("pvr.hasdirector", PVR_HAS_DIRECTOR),
+  INFO_LABEL("pvr.totaldiscspace", PVR_TOTAL_DISKSPACE),
+  INFO_LABEL("pvr.nexttimer", PVR_NEXT_TIMER),
+  INFO_LABEL("pvr.isplayingtv", PVR_IS_PLAYING_TV),
+  INFO_LABEL("pvr.isplayingradio", PVR_IS_PLAYING_RADIO),
+  INFO_LABEL("pvr.isplayingrecording", PVR_IS_PLAYING_RECORDING),
+  INFO_LABEL("pvr.duration", PVR_PLAYING_DURATION),
+  INFO_LABEL("pvr.time", PVR_PLAYING_TIME),
+  INFO_LABEL("pvr.progress", PVR_PLAYING_PROGRESS),
+  INFO_LABEL("pvr.actstreamclient", PVR_ACTUAL_STREAM_CLIENT),
+  INFO_LABEL("pvr.actstreamdevice", PVR_ACTUAL_STREAM_DEVICE),
+  INFO_LABEL("pvr.actstreamstatus", PVR_ACTUAL_STREAM_STATUS),
+  INFO_LABEL("pvr.actstreamsignal", PVR_ACTUAL_STREAM_SIG),
+  INFO_LABEL("pvr.actstreamsnr", PVR_ACTUAL_STREAM_SNR),
+  INFO_LABEL("pvr.actstreamber", PVR_ACTUAL_STREAM_BER),
+  INFO_LABEL("pvr.actstreamunc", PVR_ACTUAL_STREAM_UNC),
+  INFO_LABEL("pvr.actstreamvideobitrate", PVR_ACTUAL_STREAM_VIDEO_BR),
+  INFO_LABEL("pvr.actstreamaudiobitrate", PVR_ACTUAL_STREAM_AUDIO_BR),
+  INFO_LABEL("pvr.actstreamdolbybitrate", PVR_ACTUAL_STREAM_DOLBY_BR),
+  INFO_LABEL("pvr.actstreamprogrsignal", PVR_ACTUAL_STREAM_SIG_PROGR),
+  INFO_LABEL("pvr.actstreamprogrsnr", PVR_ACTUAL_STREAM_SNR_PROGR),
+  INFO_LABEL("pvr.actstreamisencrypted", PVR_ACTUAL_STREAM_ENCRYPTED),
+  INFO_LABEL("pvr.actstreamencryptionname", PVR_ACTUAL_STREAM_CRYPTION),
+  INFO_LABEL("pvr.actstreamservicename", PVR_ACTUAL_STREAM_SERVICE),
+  INFO_LABEL("pvr.actstreammux", PVR_ACTUAL_STREAM_MUX),
+  INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER)
 };
+
+#undef INFO_LABEL
+#undef INFO_LABEL_PARAM1
+#undef INFO_LABEL_PARAM2
 
 const infomap system_param[] =   {{ "hasalarm",         SYSTEM_HAS_ALARM },
                                   { "hascoreid",        SYSTEM_HAS_CORE_ID },
@@ -904,7 +934,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 
     const auto val = labels.find(cat.name + "." + prop.name);
     if (val != labels.end())
-      return (*val).second;
+      return (*val).second.id;
 
     if (cat.name == "player")
     {
@@ -1368,14 +1398,8 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
 
     return strLabel;
   }
-  switch (info & CATEGORY_MASK) //clear the message bits and switch on the categories
-  {
-  case PLAYER_MASK:
-    return m_infoHandlers[PLAYER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
-    break;
-  default:
-    break;
-  }
+  if (info & CATEGORY_MASK)
+    return m_infoHandlers[info & CATEGORY_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
 
   switch (info)
   {
@@ -1959,14 +1983,9 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
   }
 
   value = 0;
-  switch (info & CATEGORY_MASK)
-  {
-  case PLAYER_MASK:
-    return m_infoHandlers.at(PLAYER_MASK)->GetInt(value, info, contextWindow, item);
-    break;
-  default:
-    break;
-  }
+  if (info & CATEGORY_MASK)
+    return m_infoHandlers.at(info & CATEGORY_MASK)->GetInt(value, info, contextWindow, item);
+  
   switch( info )
   {
     
