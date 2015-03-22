@@ -55,7 +55,9 @@ namespace INFO
 
 namespace GUIINFO
 {
+  class IGUIInfo;
   class CGUIPlayerInfo;
+  class CGUIWeatherInfo;
 }
 
 
@@ -352,7 +354,7 @@ protected:
   SPlayerVideoStreamInfo m_videoInfo;
   SPlayerAudioStreamInfo m_audioInfo;
 
-  std::unique_ptr<GUIINFO::CGUIPlayerInfo> m_playerInfo;
+  std::map<int, std::unique_ptr<GUIINFO::IGUIInfo>> m_infoHandlers;
 
   CCriticalSection m_critInfo;
 };

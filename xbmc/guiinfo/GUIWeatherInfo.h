@@ -25,12 +25,11 @@
 
 namespace GUIINFO
 {
-
-class CGUIPlayerInfo : public IGUIInfo
+class CGUIWeatherInfo : public IGUIInfo
 {
 public:
-  CGUIPlayerInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
-  virtual ~CGUIPlayerInfo() { }
+  CGUIWeatherInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
+  virtual ~CGUIWeatherInfo() { }
 
   virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback);
   virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) const;

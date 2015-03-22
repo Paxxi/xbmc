@@ -31,16 +31,17 @@
 #include "guilib/LocalizeStrings.h"
 #include "epg/EpgInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
+#include "utils/SeekHandler.h"
 
 using namespace MUSIC_INFO;
 
 
 namespace GUIINFO
 {
-CGUIPlayerInfo::CGUIPlayerInfo(CGUIInfoManager* manager)
-  : m_manager{manager}
-{
 
+int CGUIPlayerInfo::LabelMask()
+{
+  return PLAYER_MASK;
 }
 
 std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback)
@@ -147,4 +148,57 @@ std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int conte
   return strLabel;
 }
 
+bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */) const
+{
+  switch (info)
+  {
+  case PLAYER_VOLUME:
+    value = static_cast<int>(g_application.GetVolume());
+    return true;
+  case PLAYER_SUBTITLE_DELAY:
+    value = g_application.GetSubtitleDelay();
+    return true;
+  case PLAYER_AUDIO_DELAY:
+    value = g_application.GetAudioDelay();
+    return true;
+  case PLAYER_PROGRESS:
+  case PLAYER_PROGRESS_CACHE:
+  case PLAYER_SEEKBAR:
+  case PLAYER_CACHELEVEL:
+  case PLAYER_CHAPTER:
+  case PLAYER_CHAPTERCOUNT:
+  {
+    if (g_application.m_pPlayer->IsPlaying())
+    {
+      switch (info)
+      {
+      case PLAYER_PROGRESS:
+        value = static_cast<int>(g_application.GetPercentage());
+        break;
+      case PLAYER_PROGRESS_CACHE:
+        value = static_cast<int>(g_application.GetCachePercentage());
+        break;
+      case PLAYER_SEEKBAR:
+        value = static_cast<int>(CSeekHandler::Get().GetPercent());
+        break;
+      case PLAYER_CACHELEVEL:
+        value = static_cast<int>(g_application.m_pPlayer->GetCacheLevel());
+        break;
+      case PLAYER_CHAPTER:
+        value = g_application.m_pPlayer->GetChapter();
+        break;
+      case PLAYER_CHAPTERCOUNT:
+        value = g_application.m_pPlayer->GetChapterCount();
+        break;
+      }
+    }
+  }
+  return true;
+  default:
+    break;
+  }
+
+  return false;
 }
+
+} //end namespace GUIINFO

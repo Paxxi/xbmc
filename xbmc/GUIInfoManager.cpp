@@ -129,7 +129,8 @@ CGUIInfoManager::CGUIInfoManager(void) :
   m_playerShowCodec = false;
   m_playerShowInfo = false;
   m_fps = 0.0f;
-  m_playerInfo = std::make_unique<GUIINFO::CGUIPlayerInfo>(this);
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUIPlayerInfo>(this)));
   ResetLibraryBools();
 }
 
@@ -1370,7 +1371,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   switch (info & CATEGORY_MASK) //clear the message bits and switch on the categories
   {
   case PLAYER_MASK:
-    return m_playerInfo->GetLabel(m_currentFile, info, contextWindow, fallback);
+    return m_infoHandlers[PLAYER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
     break;
   default:
     break;
@@ -1417,25 +1418,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case PVR_ACTUAL_STREAM_MUX:
   case PVR_ACTUAL_STREAM_PROVIDER:
     g_PVRManager.TranslateCharInfo(info, strLabel);
-    break;
-  case WEATHER_CONDITIONS:
-    strLabel = g_weatherManager.GetInfo(WEATHER_LABEL_CURRENT_COND);
-    StringUtils::Trim(strLabel);
-    break;
-  case WEATHER_TEMPERATURE:
-    strLabel = StringUtils::Format("%s%s",
-                                   g_weatherManager.GetInfo(WEATHER_LABEL_CURRENT_TEMP).c_str(),
-                                   g_langInfo.GetTemperatureUnitString().c_str());
-    break;
-  case WEATHER_LOCATION:
-    strLabel = g_weatherManager.GetInfo(WEATHER_LABEL_LOCATION);
-    break;
-  case WEATHER_FANART_CODE:
-    strLabel = URIUtils::GetFileName(g_weatherManager.GetInfo(WEATHER_IMAGE_CURRENT_ICON));
-    URIUtils::RemoveExtension(strLabel);
-    break;
-  case WEATHER_PLUGIN:
-    strLabel = CSettings::Get().GetString("weather.addon");
     break;
   case SYSTEM_DATE:
     strLabel = GetDate();
@@ -1977,50 +1959,17 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
   }
 
   value = 0;
+  switch (info & CATEGORY_MASK)
+  {
+  case PLAYER_MASK:
+    return m_infoHandlers.at(PLAYER_MASK)->GetInt(value, info, contextWindow, item);
+    break;
+  default:
+    break;
+  }
   switch( info )
   {
-    case PLAYER_VOLUME:
-      value = (int)g_application.GetVolume();
-      return true;
-    case PLAYER_SUBTITLE_DELAY:
-      value = g_application.GetSubtitleDelay();
-      return true;
-    case PLAYER_AUDIO_DELAY:
-      value = g_application.GetAudioDelay();
-      return true;
-    case PLAYER_PROGRESS:
-    case PLAYER_PROGRESS_CACHE:
-    case PLAYER_SEEKBAR:
-    case PLAYER_CACHELEVEL:
-    case PLAYER_CHAPTER:
-    case PLAYER_CHAPTERCOUNT:
-      {
-        if( g_application.m_pPlayer->IsPlaying())
-        {
-          switch( info )
-          {
-          case PLAYER_PROGRESS:
-            value = (int)(g_application.GetPercentage());
-            break;
-          case PLAYER_PROGRESS_CACHE:
-            value = (int)(g_application.GetCachePercentage());
-            break;
-          case PLAYER_SEEKBAR:
-            value = (int)CSeekHandler::Get().GetPercent();
-            break;
-          case PLAYER_CACHELEVEL:
-            value = (int)(g_application.m_pPlayer->GetCacheLevel());
-            break;
-          case PLAYER_CHAPTER:
-            value = g_application.m_pPlayer->GetChapter();
-            break;
-          case PLAYER_CHAPTERCOUNT:
-            value = g_application.m_pPlayer->GetChapterCount();
-            break;
-          }
-        }
-      }
-      return true;
+    
     case SYSTEM_FREE_MEMORY:
     case SYSTEM_USED_MEMORY:
       {

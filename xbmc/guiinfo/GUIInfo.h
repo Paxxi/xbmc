@@ -21,20 +21,25 @@
 
 #include <string>
 
-#include "GUIInfo.h"
+class CGUIInfoManager;
+class CFileItem;
+class CGUIListItem;
 
 namespace GUIINFO
 {
-
-class CGUIPlayerInfo : public IGUIInfo
+class IGUIInfo
 {
+protected:
+  CGUIInfoManager* m_manager;
+
 public:
-  CGUIPlayerInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
-  virtual ~CGUIPlayerInfo() { }
+  IGUIInfo() = delete;
+  IGUIInfo(CGUIInfoManager * manager) : m_manager{manager} { }
+  virtual ~IGUIInfo() { }
 
-  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback);
-  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) const;
+  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) = 0;
+  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) const = 0;
 
-  static int LabelMask();
+  static int LabelMask() { return 0; };
 };
 }
