@@ -65,6 +65,7 @@
 #include "music/infoscanner/MusicInfoScanner.h"
 #include "cores/IPlayer.h"
 #include "CueDocument.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 
 using namespace std;

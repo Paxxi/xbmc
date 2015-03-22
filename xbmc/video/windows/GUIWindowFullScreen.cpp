@@ -28,6 +28,7 @@
 #include "cores/VideoRenderers/RenderManager.h"
 #endif
 #include "GUIInfoManager.h"
+#include "guiinfo/GUIInfoLabels.h"
 #include "guilib/GUIProgressControl.h"
 #include "guilib/GUIAudioManager.h"
 #include "guilib/GUILabelControl.h"

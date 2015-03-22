@@ -21,6 +21,7 @@
 #include "system.h"
 #include "GUIWindowSystemInfo.h"
 #include "GUIInfoManager.h"
+#include "guiinfo/GUIInfoLabels.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/WindowIDs.h"
 #include "guilib/LocalizeStrings.h"

@@ -48,6 +48,7 @@
 #include "video/VideoInfoTag.h"
 #include "input/Key.h"
 #include "Util.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 using namespace std;
 using namespace UPNP;

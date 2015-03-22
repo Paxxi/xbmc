@@ -41,6 +41,7 @@
 #include "GUIInfoManager.h"
 #include "utils/CharsetConverter.h"
 #include "utils/log.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>

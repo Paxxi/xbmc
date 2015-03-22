@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="win32">
@@ -333,6 +333,9 @@
     </Filter>
     <Filter Include="interfaces\legacy\wsgi">
       <UniqueIdentifier>{4750236a-887e-40c1-af3e-1e095f5960e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guiinfo">
+      <UniqueIdentifier>{c54f2f76-48b0-4799-8c72-261b742f5022}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -3083,6 +3086,9 @@
     <ClCompile Include="..\..\xbmc\filesystem\NFSDirectory.cpp" />
     <ClCompile Include="..\..\xbmc\test\TestGUIInfoManager.cpp">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPlayerInfo.cpp">
+      <Filter>guiinfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5964,6 +5970,12 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\music\EmbeddedArt.h">
       <Filter>music</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIInfoLabels.h">
+      <Filter>guiinfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

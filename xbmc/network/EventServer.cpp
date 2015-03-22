@@ -35,6 +35,7 @@
 #include "Zeroconf.h"
 #include "guilib/GUIAudioManager.h"
 #include "input/Key.h"
+#include "guiinfo/GUIInfoLabels.h"
 #include <map>
 #include <queue>
 #include <cassert>

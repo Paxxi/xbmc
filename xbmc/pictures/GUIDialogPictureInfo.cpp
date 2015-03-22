@@ -24,7 +24,9 @@
 #include "FileItem.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
+#include "guiinfo/GUIInfoLabels.h"
 #include "PictureInfoTag.h"
+
 
 #define CONTROL_PICTURE_INFO 5
 

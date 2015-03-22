@@ -26,6 +26,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 using namespace std;
 

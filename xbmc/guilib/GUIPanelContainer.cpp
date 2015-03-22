@@ -22,6 +22,7 @@
 #include "GUIListItem.h"
 #include "GUIInfoManager.h"
 #include "input/Key.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 #include <cassert>
 

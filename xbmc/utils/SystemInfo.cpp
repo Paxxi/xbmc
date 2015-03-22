@@ -38,6 +38,7 @@
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
 #include "CompileInfo.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 #ifdef TARGET_WINDOWS
 #include "dwmapi.h"

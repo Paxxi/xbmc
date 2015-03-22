@@ -24,6 +24,7 @@
 #include "utils/MathUtils.h"
 #include "utils/StringUtils.h"
 #include "GUIWindowManager.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 static const SliderAction actions[] = {
   {"seek",    "PlayerControl(SeekPercentage(%2f))", PLAYER_PROGRESS, false},

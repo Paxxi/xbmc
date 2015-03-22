@@ -46,6 +46,7 @@
 #include "utils/StringUtils.h"
 #include "URL.h"
 #include "windowing/WindowingFactory.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 
 struct StereoModeMap

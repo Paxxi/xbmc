@@ -52,6 +52,7 @@
 #include "utils/EndianSwap.h"
 #include "URL.h"
 #include "interfaces/AnnouncementManager.h"
+#include "guiinfo/GUIInfoLabels.h"
 
 #include <map>
 #include <string>
