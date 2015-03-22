@@ -172,7 +172,7 @@ int CGUIInfoManager::TranslateString(const std::string &condition)
 }
 enum Options
 {
-  CASE_INSENSITIVE = 1
+  CASE_SENSITIVE = 1
 
 };
 enum class ParameterFlags : uint8_t
@@ -182,7 +182,8 @@ enum class ParameterFlags : uint8_t
   STRING,
   NUMBER,
   CONDITIONAL,
-  TIME
+  TIME,
+  LABEL_OR_CONDITIONAL
 };
 
 struct ParseInfo
@@ -203,20 +204,6 @@ typedef struct
   const char *str;
   int  val;
 } infomap;
-
-const infomap player_param[] = {{"art", PLAYER_ITEM_ART}};
-
-//done
-const infomap player_times[] = {{"seektime", PLAYER_SEEKTIME},
-                                {"seekoffset", PLAYER_SEEKOFFSET},
-                                {"seekstepsize", PLAYER_SEEKSTEPSIZE},
-                                {"timeremaining", PLAYER_TIME_REMAINING},
-                                {"timespeed", PLAYER_TIME_SPEED},
-                                {"time", PLAYER_TIME},
-                                {"duration", PLAYER_DURATION},
-                                {"finishtime", PLAYER_FINISH_TIME},
-                                {"starttime", PLAYER_START_TIME}};
-
 
 const std::map<std::string, ParseInfo> labels =
 {
@@ -266,12 +253,14 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("player.isinternetstream", PLAYER_ISINTERNETSTREAM ),
   INFO_LABEL("player.pauseenabled", PLAYER_CAN_PAUSE ),
   INFO_LABEL("player.seekenabled", PLAYER_CAN_SEEK ),
+
   INFO_LABEL("weather.isfetched", WEATHER_IS_FETCHED ),
   INFO_LABEL("weather.conditions", WEATHER_CONDITIONS ),         // labels from here
   INFO_LABEL("weather.temperature", WEATHER_TEMPERATURE ),
   INFO_LABEL("weather.location", WEATHER_LOCATION ),
   INFO_LABEL("weather.fanartcode", WEATHER_FANART_CODE ),
   INFO_LABEL("weather.plugin", WEATHER_PLUGIN ),
+
   INFO_LABEL("network.isdhcp", NETWORK_IS_DHCP ),
   INFO_LABEL("network.ipaddress", NETWORK_IP_ADDRESS), //labels from here
   INFO_LABEL("network.linkstate", NETWORK_LINK_STATE),
@@ -281,6 +270,7 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("network.dns1address", NETWORK_DNS1_ADDRESS),
   INFO_LABEL("network.dns2address", NETWORK_DNS2_ADDRESS),
   INFO_LABEL("network.dhcpaddress", NETWORK_DHCP_ADDRESS),
+
   INFO_LABEL("system.hasnetwork", SYSTEM_ETHERNET_LINK_ACTIVE ),
   INFO_LABEL("system.hasmediadvd", SYSTEM_MEDIA_DVD ),
   INFO_LABEL("system.dvdready", SYSTEM_DVDREADY ),
@@ -342,6 +332,12 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("system.haspvr", SYSTEM_HAS_PVR ),
   INFO_LABEL("system.startupwindow", SYSTEM_STARTUP_WINDOW ),
   INFO_LABEL("system.stereoscopicmode", SYSTEM_STEREOSCOPIC_MODE ),
+  INFO_LABEL("system.memory.free", SYSTEM_FREE_MEMORY),
+  INFO_LABEL("system.memory.free.percent", SYSTEM_FREE_MEMORY_PERCENT),
+  INFO_LABEL("system.memory.used", SYSTEM_USED_MEMORY),
+  INFO_LABEL("system.memory.used.percent", SYSTEM_USED_MEMORY_PERCENT),
+  INFO_LABEL("system.memory.total", SYSTEM_TOTAL_MEMORY),
+  
   INFO_LABEL("musicpartymode.enabled", MUSICPM_ENABLED),
   INFO_LABEL("musicpartymode.songsplayed", MUSICPM_SONGSPLAYED),
   INFO_LABEL("musicpartymode.matchingsongs", MUSICPM_MATCHINGSONGS),
@@ -349,10 +345,12 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("musicpartymode.matchingsongsleft", MUSICPM_MATCHINGSONGSLEFT),
   INFO_LABEL("musicpartymode.relaxedsongspicked", MUSICPM_RELAXEDSONGSPICKED),
   INFO_LABEL("musicpartymode.randomsongspicked", MUSICPM_RANDOMSONGSPICKED),
+  
   INFO_LABEL("slideshow.ispaused", SLIDESHOW_ISPAUSED),
   INFO_LABEL("slideshow.isactive", SLIDESHOW_ISACTIVE),
   INFO_LABEL("slideshow.isvideo", SLIDESHOW_ISVIDEO),
   INFO_LABEL("slideshow.israndom", SLIDESHOW_ISRANDOM),
+  
   INFO_LABEL("mediacontainer.hasfiles", CONTAINER_HASFILES),
   INFO_LABEL("mediacontainer.hasfolders", CONTAINER_HASFOLDERS),
   INFO_LABEL("mediacontainer.isstacked", CONTAINER_STACKED),
@@ -471,22 +469,24 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL_PARAM1("player.duration", PLAYER_DURATION, TIME, 0),
   INFO_LABEL_PARAM1("player.finishtime", PLAYER_FINISH_TIME, TIME, 0),
   INFO_LABEL_PARAM1("player.starttime", PLAYER_START_TIME, TIME, 0),
-  INFO_LABEL_PARAM1("system.getbool", SYSTEM_GET_BOOL, CONDITIONAL, CASE_INSENSITIVE)
+  INFO_LABEL_PARAM1("player.art", PLAYER_ITEM_ART, CONDITIONAL, 0),
+
+  INFO_LABEL_PARAM1("system.getbool", SYSTEM_GET_BOOL, CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.hasalarm", SYSTEM_HAS_ALARM , CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.hascoreid", SYSTEM_HAS_CORE_ID, CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.setting", SYSTEM_SETTING, CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.hasaddon", SYSTEM_HAS_ADDON, CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.coreusage", SYSTEM_GET_CORE_USAGE, CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.addontitle", SYSTEM_ADDON_TITLE, LABEL_OR_CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.addonicon", SYSTEM_ADDON_ICON, LABEL_OR_CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.addonversion", SYSTEM_ADDON_VERSION, LABEL_OR_CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("system.idletime", SYSTEM_IDLE_TIME, NUMBER, 0)
 
 };
 
 #undef INFO_LABEL
 #undef INFO_LABEL_PARAM1
 #undef INFO_LABEL_PARAM2
-
-//not sure what these are
-const infomap system_param[] =   {{ "hasalarm",         SYSTEM_HAS_ALARM },
-                                  { "hascoreid",        SYSTEM_HAS_CORE_ID },
-                                  { "setting",          SYSTEM_SETTING },
-                                  { "hasaddon",         SYSTEM_HAS_ADDON },
-                                  { "coreusage",        SYSTEM_GET_CORE_USAGE }};
-
-
 
 //done
 const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
@@ -982,7 +982,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
   {
     const Property &prop = info[1];
 
-    const auto val = labels.find(cat.name + "." + prop.name);
+    auto& val = labels.find(cat.name + "." + prop.name);
+
+    //special case, some labels are three levels deep, such as system.memory.free
+    if (val == labels.end() && prop.num_params() == 1)
+      val = labels.find(cat.name + "." + prop.name + "." + prop.param(0));
 
     //this is a label, just return it's id
     if (val != labels.end() && (*val).second.nrParams == 0)
@@ -995,11 +999,22 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       switch (pInfo.param1)
       {
       case ParameterFlags::CONDITIONAL:
-        return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(cat.param(0), (pInfo.options & CASE_INSENSITIVE) != 0)));
+        return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(cat.param(0), (pInfo.options & CASE_SENSITIVE) != 0)));
         break;
       case ParameterFlags::LABEL:
         return AddMultiInfo(GUIInfo(pInfo.id, TranslateSingleString(cat.param(0), listItemDependent)));
         break;
+      case ParameterFlags::LABEL_OR_CONDITIONAL:
+      {
+        int infoLabel = TranslateSingleString(cat.param(0), listItemDependent);
+        if (infoLabel > 0)
+          return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, infoLabel, 0));
+
+        std::string label = CGUIInfoLabel::GetLabel(cat.param(0));
+        StringUtils::ToLower(label);
+        return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, ConditionalStringParameter(label), 1));
+        break;
+      }
       case ParameterFlags::NUMBER:
         return AddMultiInfo(GUIInfo(pInfo.id, atoi(cat.param(0).c_str())));
         break;
@@ -1026,77 +1041,8 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 
 
 
-
-    if (cat.name == "player")
-    {
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++)
-      {
-        if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
-      }
-      if (prop.num_params() == 1)
-      {
-        for (size_t i = 0; i < sizeof(player_param) / sizeof(infomap); i++)
-        {
-          if (prop.name == player_param[i].str)
-            return AddMultiInfo(GUIInfo(player_param[i].val, ConditionalStringParameter(prop.param())));
-        }
-      }
-    }
     else if (cat.name == "system")
     {
-      if (prop.num_params() == 1)
-      {
-        const std::string &param = prop.param();
-        if (prop.name == "getbool")
-        {
-          std::string paramCopy = param;
-          StringUtils::ToLower(paramCopy);
-          return AddMultiInfo(GUIInfo(SYSTEM_GET_BOOL, ConditionalStringParameter(paramCopy, true)));
-        }
-        for (size_t i = 0; i < sizeof(system_param) / sizeof(infomap); i++)
-        {
-          if (prop.name == system_param[i].str)
-            return AddMultiInfo(GUIInfo(system_param[i].val, ConditionalStringParameter(param)));
-        }
-        if (prop.name == "memory")
-        {
-          if (param == "free") return SYSTEM_FREE_MEMORY;
-          else if (param == "free.percent") return SYSTEM_FREE_MEMORY_PERCENT;
-          else if (param == "used") return SYSTEM_USED_MEMORY;
-          else if (param == "used.percent") return SYSTEM_USED_MEMORY_PERCENT;
-          else if (param == "total") return SYSTEM_TOTAL_MEMORY;
-        }
-        else if (prop.name == "addontitle")
-        {
-          int infoLabel = TranslateSingleString(param, listItemDependent);
-          if (infoLabel > 0)
-            return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, infoLabel, 0));
-          std::string label = CGUIInfoLabel::GetLabel(param);
-          StringUtils::ToLower(label);
-          return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, ConditionalStringParameter(label), 1));
-        }
-        else if (prop.name == "addonicon")
-        {
-          int infoLabel = TranslateSingleString(param, listItemDependent);
-          if (infoLabel > 0)
-            return AddMultiInfo(GUIInfo(SYSTEM_ADDON_ICON, infoLabel, 0));
-          std::string label = CGUIInfoLabel::GetLabel(param);
-          StringUtils::ToLower(label);
-          return AddMultiInfo(GUIInfo(SYSTEM_ADDON_ICON, ConditionalStringParameter(label), 1));
-        }
-        else if (prop.name == "addonversion")
-        {
-          int infoLabel = TranslateSingleString(param, listItemDependent);
-          if (infoLabel > 0)
-            return AddMultiInfo(GUIInfo(SYSTEM_ADDON_VERSION, infoLabel, 0));
-          std::string label = CGUIInfoLabel::GetLabel(param);
-          StringUtils::ToLower(label);
-          return AddMultiInfo(GUIInfo(SYSTEM_ADDON_VERSION, ConditionalStringParameter(label), 1));
-        }
-        else if (prop.name == "idletime")
-          return AddMultiInfo(GUIInfo(SYSTEM_IDLE_TIME, atoi(param.c_str())));
-      }
       if (prop.name == "alarmlessorequal" && prop.num_params() == 2)
         return AddMultiInfo(GUIInfo(SYSTEM_ALARM_LESS_OR_EQUAL, ConditionalStringParameter(prop.param(0)), ConditionalStringParameter(prop.param(1))));
       else if (prop.name == "date")
@@ -1149,11 +1095,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "musicplayer")
     {
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
-      {
-        if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
-      }
+      //for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
+      //{
+      //  if (prop.name == player_times[i].str)
+      //    return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
+      //}
       if (prop.name == "content" && prop.num_params())
         return AddMultiInfo(GUIInfo(MUSICPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
       else if (prop.name == "property")
@@ -1167,11 +1113,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "videoplayer")
     {
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
-      {
-        if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
-      }
+      //for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
+      //{
+      //  if (prop.name == player_times[i].str)
+      //    return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
+      //}
       if (prop.name == "content" && prop.num_params())
         return AddMultiInfo(GUIInfo(VIDEOPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
       for (size_t i = 0; i < sizeof(videoplayer) / sizeof(infomap); i++)
@@ -4397,7 +4343,11 @@ int CGUIInfoManager::ConditionalStringParameter(const std::string &parameter, bo
   }
 
   // return the new offset
-  m_stringParameters.push_back(parameter);
+  std::string tmpParam = parameter;
+  if (!caseSensitive)
+    StringUtils::ToLower(tmpParam);
+
+  m_stringParameters.push_back(tmpParam);
   return (int)m_stringParameters.size() - 1;
 }
 
