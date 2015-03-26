@@ -183,7 +183,9 @@ enum class ParameterFlags : uint8_t
   NUMBER,
   CONDITIONAL,
   TIME,
-  LABEL_OR_CONDITIONAL
+  LABEL_OR_CONDITIONAL,
+  OPTIONAL_NUMBER,
+  OPTIONAL_CONDITIONAL
 };
 
 struct ParseInfo
@@ -460,6 +462,227 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("musicplayer.channelnumberlabel", MUSICPLAYER_CHANNEL_NUMBER_LBL),
   INFO_LABEL("musicplayer.channelgroup", MUSICPLAYER_CHANNEL_GROUP),
 
+  INFO_LABEL("videoplayer.title", VIDEOPLAYER_TITLE),
+  INFO_LABEL("videoplayer.genre", VIDEOPLAYER_GENRE),
+  INFO_LABEL("videoplayer.country", VIDEOPLAYER_COUNTRY),
+  INFO_LABEL("videoplayer.originaltitle", VIDEOPLAYER_ORIGINALTITLE),
+  INFO_LABEL("videoplayer.director", VIDEOPLAYER_DIRECTOR),
+  INFO_LABEL("videoplayer.year", VIDEOPLAYER_YEAR),
+  INFO_LABEL("videoplayer.cover", VIDEOPLAYER_COVER),
+  INFO_LABEL("videoplayer.usingoverlays", VIDEOPLAYER_USING_OVERLAYS),
+  INFO_LABEL("videoplayer.isfullscreen", VIDEOPLAYER_ISFULLSCREEN),
+  INFO_LABEL("videoplayer.hasmenu", VIDEOPLAYER_HASMENU),
+  INFO_LABEL("videoplayer.playlistlength", VIDEOPLAYER_PLAYLISTLEN),
+  INFO_LABEL("videoplayer.playlistposition", VIDEOPLAYER_PLAYLISTPOS),
+  INFO_LABEL("videoplayer.plot", VIDEOPLAYER_PLOT),
+  INFO_LABEL("videoplayer.plotoutline", VIDEOPLAYER_PLOT_OUTLINE),
+  INFO_LABEL("videoplayer.episode", VIDEOPLAYER_EPISODE),
+  INFO_LABEL("videoplayer.season", VIDEOPLAYER_SEASON),
+  INFO_LABEL("videoplayer.rating", VIDEOPLAYER_RATING),
+  INFO_LABEL("videoplayer.ratingandvotes", VIDEOPLAYER_RATING_AND_VOTES),
+  INFO_LABEL("videoplayer.votes", VIDEOPLAYER_VOTES),
+  INFO_LABEL("videoplayer.tvshowtitle", VIDEOPLAYER_TVSHOW),
+  INFO_LABEL("videoplayer.premiered", VIDEOPLAYER_PREMIERED),
+  INFO_LABEL("videoplayer.studio", VIDEOPLAYER_STUDIO),
+  INFO_LABEL("videoplayer.mpaa", VIDEOPLAYER_MPAA),
+  INFO_LABEL("videoplayer.top250", VIDEOPLAYER_TOP250),
+  INFO_LABEL("videoplayer.cast", VIDEOPLAYER_CAST),
+  INFO_LABEL("videoplayer.castandrole", VIDEOPLAYER_CAST_AND_ROLE),
+  INFO_LABEL("videoplayer.artist", VIDEOPLAYER_ARTIST),
+  INFO_LABEL("videoplayer.album", VIDEOPLAYER_ALBUM),
+  INFO_LABEL("videoplayer.writer", VIDEOPLAYER_WRITER),
+  INFO_LABEL("videoplayer.tagline", VIDEOPLAYER_TAGLINE),
+  INFO_LABEL("videoplayer.hasinfo", VIDEOPLAYER_HAS_INFO),
+  INFO_LABEL("videoplayer.trailer", VIDEOPLAYER_TRAILER),
+  INFO_LABEL("videoplayer.videocodec", VIDEOPLAYER_VIDEO_CODEC),
+  INFO_LABEL("videoplayer.videoresolution", VIDEOPLAYER_VIDEO_RESOLUTION),
+  INFO_LABEL("videoplayer.videoaspect", VIDEOPLAYER_VIDEO_ASPECT),
+  INFO_LABEL("videoplayer.audiocodec", VIDEOPLAYER_AUDIO_CODEC),
+  INFO_LABEL("videoplayer.audiochannels", VIDEOPLAYER_AUDIO_CHANNELS),
+  INFO_LABEL("videoplayer.audiolanguage", VIDEOPLAYER_AUDIO_LANG),
+  INFO_LABEL("videoplayer.hasteletext", VIDEOPLAYER_HASTELETEXT),
+  INFO_LABEL("videoplayer.lastplayed", VIDEOPLAYER_LASTPLAYED),
+  INFO_LABEL("videoplayer.playcount", VIDEOPLAYER_PLAYCOUNT),
+  INFO_LABEL("videoplayer.hassubtitles", VIDEOPLAYER_HASSUBTITLES),
+  INFO_LABEL("videoplayer.subtitlesenabled", VIDEOPLAYER_SUBTITLESENABLED),
+  INFO_LABEL("videoplayer.subtitleslanguage", VIDEOPLAYER_SUBTITLES_LANG),
+  INFO_LABEL("videoplayer.endtime", VIDEOPLAYER_ENDTIME),
+  INFO_LABEL("videoplayer.nexttitle", VIDEOPLAYER_NEXT_TITLE),
+  INFO_LABEL("videoplayer.nextgenre", VIDEOPLAYER_NEXT_GENRE),
+  INFO_LABEL("videoplayer.nextplot", VIDEOPLAYER_NEXT_PLOT),
+  INFO_LABEL("videoplayer.nextplotoutline", VIDEOPLAYER_NEXT_PLOT_OUTLINE),
+  INFO_LABEL("videoplayer.nextstarttime", VIDEOPLAYER_NEXT_STARTTIME),
+  INFO_LABEL("videoplayer.nextendtime", VIDEOPLAYER_NEXT_ENDTIME),
+  INFO_LABEL("videoplayer.nextduration", VIDEOPLAYER_NEXT_DURATION),
+  INFO_LABEL("videoplayer.channelname", VIDEOPLAYER_CHANNEL_NAME),
+  INFO_LABEL("videoplayer.channelnumber", VIDEOPLAYER_CHANNEL_NUMBER),
+  INFO_LABEL("videoplayer.subchannelnumber", VIDEOPLAYER_SUB_CHANNEL_NUMBER),
+  INFO_LABEL("videoplayer.channelnumberlabel", VIDEOPLAYER_CHANNEL_NUMBER_LBL),
+  INFO_LABEL("videoplayer.channelgroup", VIDEOPLAYER_CHANNEL_GROUP),
+  INFO_LABEL("videoplayer.hasepg", VIDEOPLAYER_HAS_EPG),
+  INFO_LABEL("videoplayer.parentalrating", VIDEOPLAYER_PARENTAL_RATING),
+  INFO_LABEL("videoplayer.isstereoscopic", VIDEOPLAYER_IS_STEREOSCOPIC),
+  INFO_LABEL("videoplayer.stereoscopicmode", VIDEOPLAYER_STEREOSCOPIC_MODE),
+  INFO_LABEL("videoplayer.canresumelivetv", VIDEOPLAYER_CAN_RESUME_LIVE_TV),
+  INFO_LABEL("videoplayer.imdbnumber", VIDEOPLAYER_IMDBNUMBER),
+
+  INFO_LABEL("library.isscanning", LIBRARY_IS_SCANNING),
+  INFO_LABEL("library.isscanningvideo", LIBRARY_IS_SCANNING_VIDEO),
+  INFO_LABEL("library.isscanningmusic", LIBRARY_IS_SCANNING_MUSIC),
+  INFO_LABEL("library.hascontent.music", LIBRARY_HAS_MUSIC),
+  INFO_LABEL("library.hascontent.video", LIBRARY_HAS_VIDEO),
+  INFO_LABEL("library.hascontent.movies", LIBRARY_HAS_MOVIES),
+  INFO_LABEL("library.hascontent.tvshows", LIBRARY_HAS_TVSHOWS),
+  INFO_LABEL("library.hascontent.musicvideos", LIBRARY_HAS_MUSICVIDEOS),
+  INFO_LABEL("library.hascontent.moviesets", LIBRARY_HAS_MOVIE_SETS),
+
+  INFO_LABEL("listitem.thumb", LISTITEM_THUMB),
+  INFO_LABEL("listitem.icon", LISTITEM_ICON),
+  INFO_LABEL("listitem.actualicon", LISTITEM_ACTUAL_ICON),
+  INFO_LABEL("listitem.overlay", LISTITEM_OVERLAY),
+  INFO_LABEL("listitem.label", LISTITEM_LABEL),
+  INFO_LABEL("listitem.label2", LISTITEM_LABEL2),
+  INFO_LABEL("listitem.title", LISTITEM_TITLE),
+  INFO_LABEL("listitem.tracknumber", LISTITEM_TRACKNUMBER),
+  INFO_LABEL("listitem.artist", LISTITEM_ARTIST),
+  INFO_LABEL("listitem.album", LISTITEM_ALBUM),
+  INFO_LABEL("listitem.albumartist", LISTITEM_ALBUM_ARTIST),
+  INFO_LABEL("listitem.year", LISTITEM_YEAR),
+  INFO_LABEL("listitem.genre", LISTITEM_GENRE),
+  INFO_LABEL("listitem.director", LISTITEM_DIRECTOR),
+  INFO_LABEL("listitem.filename", LISTITEM_FILENAME),
+  INFO_LABEL("listitem.filenameandpath", LISTITEM_FILENAME_AND_PATH),
+  INFO_LABEL("listitem.fileextension", LISTITEM_FILE_EXTENSION),
+  INFO_LABEL("listitem.date", LISTITEM_DATE),
+  INFO_LABEL("listitem.size", LISTITEM_SIZE),
+  INFO_LABEL("listitem.rating", LISTITEM_RATING),
+  INFO_LABEL("listitem.ratingandvotes", LISTITEM_RATING_AND_VOTES),
+  INFO_LABEL("listitem.votes", LISTITEM_VOTES),
+  INFO_LABEL("listitem.programcount", LISTITEM_PROGRAM_COUNT),
+  INFO_LABEL("listitem.duration", LISTITEM_DURATION),
+  INFO_LABEL("listitem.isselected", LISTITEM_ISSELECTED),
+  INFO_LABEL("listitem.isplaying", LISTITEM_ISPLAYING),
+  INFO_LABEL("listitem.plot", LISTITEM_PLOT),
+  INFO_LABEL("listitem.plotoutline", LISTITEM_PLOT_OUTLINE),
+  INFO_LABEL("listitem.episode", LISTITEM_EPISODE),
+  INFO_LABEL("listitem.season", LISTITEM_SEASON),
+  INFO_LABEL("listitem.tvshowtitle", LISTITEM_TVSHOW),
+  INFO_LABEL("listitem.premiered", LISTITEM_PREMIERED),
+  INFO_LABEL("listitem.comment", LISTITEM_COMMENT),
+  INFO_LABEL("listitem.path", LISTITEM_PATH),
+  INFO_LABEL("listitem.foldername", LISTITEM_FOLDERNAME),
+  INFO_LABEL("listitem.folderpath", LISTITEM_FOLDERPATH),
+  INFO_LABEL("listitem.picturepath", LISTITEM_PICTURE_PATH),
+  INFO_LABEL("listitem.pictureresolution", LISTITEM_PICTURE_RESOLUTION),
+  INFO_LABEL("listitem.picturedatetime", LISTITEM_PICTURE_DATETIME),
+  INFO_LABEL("listitem.picturedate", LISTITEM_PICTURE_DATE),
+  INFO_LABEL("listitem.picturelongdatetime", LISTITEM_PICTURE_LONGDATETIME),
+  INFO_LABEL("listitem.picturelongdate", LISTITEM_PICTURE_LONGDATE),
+  INFO_LABEL("listitem.picturecomment", LISTITEM_PICTURE_COMMENT),
+  INFO_LABEL("listitem.picturecaption", LISTITEM_PICTURE_CAPTION),
+  INFO_LABEL("listitem.picturedesc", LISTITEM_PICTURE_DESC),
+  INFO_LABEL("listitem.picturekeywords", LISTITEM_PICTURE_KEYWORDS),
+  INFO_LABEL("listitem.picturecammake", LISTITEM_PICTURE_CAM_MAKE),
+  INFO_LABEL("listitem.picturecammodel", LISTITEM_PICTURE_CAM_MODEL),
+  INFO_LABEL("listitem.pictureaperture", LISTITEM_PICTURE_APERTURE),
+  INFO_LABEL("listitem.picturefocallen", LISTITEM_PICTURE_FOCAL_LEN),
+  INFO_LABEL("listitem.picturefocusdist", LISTITEM_PICTURE_FOCUS_DIST),
+  INFO_LABEL("listitem.pictureexpmode", LISTITEM_PICTURE_EXP_MODE),
+  INFO_LABEL("listitem.pictureexptime", LISTITEM_PICTURE_EXP_TIME),
+  INFO_LABEL("listitem.pictureiso", LISTITEM_PICTURE_ISO),
+  INFO_LABEL("listitem.pictureauthor", LISTITEM_PICTURE_AUTHOR),
+  INFO_LABEL("listitem.picturebyline", LISTITEM_PICTURE_BYLINE),
+  INFO_LABEL("listitem.picturebylinetitle", LISTITEM_PICTURE_BYLINE_TITLE),
+  INFO_LABEL("listitem.picturecategory", LISTITEM_PICTURE_CATEGORY),
+  INFO_LABEL("listitem.pictureccdwidth", LISTITEM_PICTURE_CCD_WIDTH),
+  INFO_LABEL("listitem.picturecity", LISTITEM_PICTURE_CITY),
+  INFO_LABEL("listitem.pictureurgency", LISTITEM_PICTURE_URGENCY),
+  INFO_LABEL("listitem.picturecopyrightnotice", LISTITEM_PICTURE_COPYRIGHT_NOTICE),
+  INFO_LABEL("listitem.picturecountry", LISTITEM_PICTURE_COUNTRY),
+  INFO_LABEL("listitem.picturecountrycode", LISTITEM_PICTURE_COUNTRY_CODE),
+  INFO_LABEL("listitem.picturecredit", LISTITEM_PICTURE_CREDIT),
+  INFO_LABEL("listitem.pictureiptcdate", LISTITEM_PICTURE_IPTCDATE),
+  INFO_LABEL("listitem.picturedigitalzoom", LISTITEM_PICTURE_DIGITAL_ZOOM),
+  INFO_LABEL("listitem.pictureexposure", LISTITEM_PICTURE_EXPOSURE),
+  INFO_LABEL("listitem.pictureexposurebias", LISTITEM_PICTURE_EXPOSURE_BIAS),
+  INFO_LABEL("listitem.pictureflashused", LISTITEM_PICTURE_FLASH_USED),
+  INFO_LABEL("listitem.pictureheadline", LISTITEM_PICTURE_HEADLINE),
+  INFO_LABEL("listitem.picturecolour", LISTITEM_PICTURE_COLOUR),
+  INFO_LABEL("listitem.picturelightsource", LISTITEM_PICTURE_LIGHT_SOURCE),
+  INFO_LABEL("listitem.picturemeteringmode", LISTITEM_PICTURE_METERING_MODE),
+  INFO_LABEL("listitem.pictureobjectname", LISTITEM_PICTURE_OBJECT_NAME),
+  INFO_LABEL("listitem.pictureorientation", LISTITEM_PICTURE_ORIENTATION),
+  INFO_LABEL("listitem.pictureprocess", LISTITEM_PICTURE_PROCESS),
+  INFO_LABEL("listitem.picturereferenceservice", LISTITEM_PICTURE_REF_SERVICE),
+  INFO_LABEL("listitem.picturesource", LISTITEM_PICTURE_SOURCE),
+  INFO_LABEL("listitem.picturespecialinstructions", LISTITEM_PICTURE_SPEC_INSTR),
+  INFO_LABEL("listitem.picturestate", LISTITEM_PICTURE_STATE),
+  INFO_LABEL("listitem.picturesupplementalcategories", LISTITEM_PICTURE_SUP_CATEGORIES),
+  INFO_LABEL("listitem.picturetransmissionreference", LISTITEM_PICTURE_TX_REFERENCE),
+  INFO_LABEL("listitem.picturewhitebalance", LISTITEM_PICTURE_WHITE_BALANCE),
+  INFO_LABEL("listitem.pictureimagetype", LISTITEM_PICTURE_IMAGETYPE),
+  INFO_LABEL("listitem.picturesublocation", LISTITEM_PICTURE_SUBLOCATION),
+  INFO_LABEL("listitem.pictureiptctime", LISTITEM_PICTURE_TIMECREATED),
+  INFO_LABEL("listitem.picturegpslat", LISTITEM_PICTURE_GPS_LAT),
+  INFO_LABEL("listitem.picturegpslon", LISTITEM_PICTURE_GPS_LON),
+  INFO_LABEL("listitem.picturegpsalt", LISTITEM_PICTURE_GPS_ALT),
+  INFO_LABEL("listitem.studio", LISTITEM_STUDIO),
+  INFO_LABEL("listitem.country", LISTITEM_COUNTRY),
+  INFO_LABEL("listitem.mpaa", LISTITEM_MPAA),
+  INFO_LABEL("listitem.cast", LISTITEM_CAST),
+  INFO_LABEL("listitem.castandrole", LISTITEM_CAST_AND_ROLE),
+  INFO_LABEL("listitem.writer", LISTITEM_WRITER),
+  INFO_LABEL("listitem.tagline", LISTITEM_TAGLINE),
+  INFO_LABEL("listitem.top250", LISTITEM_TOP250),
+  INFO_LABEL("listitem.trailer", LISTITEM_TRAILER),
+  INFO_LABEL("listitem.starrating", LISTITEM_STAR_RATING),
+  INFO_LABEL("listitem.sortletter", LISTITEM_SORT_LETTER),
+  INFO_LABEL("listitem.videocodec", LISTITEM_VIDEO_CODEC),
+  INFO_LABEL("listitem.videoresolution", LISTITEM_VIDEO_RESOLUTION),
+  INFO_LABEL("listitem.videoaspect", LISTITEM_VIDEO_ASPECT),
+  INFO_LABEL("listitem.audiocodec", LISTITEM_AUDIO_CODEC),
+  INFO_LABEL("listitem.audiochannels", LISTITEM_AUDIO_CHANNELS),
+  INFO_LABEL("listitem.audiolanguage", LISTITEM_AUDIO_LANGUAGE),
+  INFO_LABEL("listitem.subtitlelanguage", LISTITEM_SUBTITLE_LANGUAGE),
+  INFO_LABEL("listitem.isresumable", LISTITEM_IS_RESUMABLE),
+  INFO_LABEL("listitem.percentplayed", LISTITEM_PERCENT_PLAYED),
+  INFO_LABEL("listitem.isfolder", LISTITEM_IS_FOLDER),
+  INFO_LABEL("listitem.originaltitle", LISTITEM_ORIGINALTITLE),
+  INFO_LABEL("listitem.lastplayed", LISTITEM_LASTPLAYED),
+  INFO_LABEL("listitem.playcount", LISTITEM_PLAYCOUNT),
+  INFO_LABEL("listitem.discnumber", LISTITEM_DISC_NUMBER),
+  INFO_LABEL("listitem.starttime", LISTITEM_STARTTIME),
+  INFO_LABEL("listitem.endtime", LISTITEM_ENDTIME),
+  INFO_LABEL("listitem.startdate", LISTITEM_STARTDATE),
+  INFO_LABEL("listitem.enddate", LISTITEM_ENDDATE),
+  INFO_LABEL("listitem.nexttitle", LISTITEM_NEXT_TITLE),
+  INFO_LABEL("listitem.nextgenre", LISTITEM_NEXT_GENRE),
+  INFO_LABEL("listitem.nextplot", LISTITEM_NEXT_PLOT),
+  INFO_LABEL("listitem.nextplotoutline", LISTITEM_NEXT_PLOT_OUTLINE),
+  INFO_LABEL("listitem.nextstarttime", LISTITEM_NEXT_STARTTIME),
+  INFO_LABEL("listitem.nextendtime", LISTITEM_NEXT_ENDTIME),
+  INFO_LABEL("listitem.nextstartdate", LISTITEM_NEXT_STARTDATE),
+  INFO_LABEL("listitem.nextenddate", LISTITEM_NEXT_ENDDATE),
+  INFO_LABEL("listitem.channelname", LISTITEM_CHANNEL_NAME),
+  INFO_LABEL("listitem.channelnumber", LISTITEM_CHANNEL_NUMBER),
+  INFO_LABEL("listitem.subchannelnumber", LISTITEM_SUB_CHANNEL_NUMBER),
+  INFO_LABEL("listitem.channelnumberlabel", LISTITEM_CHANNEL_NUMBER_LBL),
+  INFO_LABEL("listitem.channelgroup", LISTITEM_CHANNEL_GROUP),
+  INFO_LABEL("listitem.hasepg", LISTITEM_HAS_EPG),
+  INFO_LABEL("listitem.hastimer", LISTITEM_HASTIMER),
+  INFO_LABEL("listitem.hasrecording", LISTITEM_HASRECORDING),
+  INFO_LABEL("listitem.isrecording", LISTITEM_ISRECORDING),
+  INFO_LABEL("listitem.inprogress", LISTITEM_INPROGRESS),
+  INFO_LABEL("listitem.isencrypted", LISTITEM_ISENCRYPTED),
+  INFO_LABEL("listitem.progress", LISTITEM_PROGRESS),
+  INFO_LABEL("listitem.dateadded", LISTITEM_DATE_ADDED),
+  INFO_LABEL("listitem.dbtype", LISTITEM_DBTYPE),
+  INFO_LABEL("listitem.dbid", LISTITEM_DBID),
+  INFO_LABEL("listitem.stereoscopicmode", LISTITEM_STEREOSCOPIC_MODE),
+  INFO_LABEL("listitem.isstereoscopic", LISTITEM_IS_STEREOSCOPIC),
+  INFO_LABEL("listitem.imdbnumber", LISTITEM_IMDBNUMBER),
+  INFO_LABEL("listitem.episodename", LISTITEM_EPISODENAME),
+
   INFO_LABEL_PARAM1("player.seektime", PLAYER_SEEKTIME, TIME, 0),
   INFO_LABEL_PARAM1("player.seekoffset", PLAYER_SEEKOFFSET, TIME, 0),
   INFO_LABEL_PARAM1("player.seekstepsize", PLAYER_SEEKSTEPSIZE, TIME, 0),
@@ -471,6 +694,8 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL_PARAM1("player.starttime", PLAYER_START_TIME, TIME, 0),
   INFO_LABEL_PARAM1("player.art", PLAYER_ITEM_ART, CONDITIONAL, 0),
 
+  INFO_LABEL_PARAM1("videoplayer.content", VIDEOPLAYER_CONTENT, CONDITIONAL, 0),
+
   INFO_LABEL_PARAM1("system.getbool", SYSTEM_GET_BOOL, CONDITIONAL, 0),
   INFO_LABEL_PARAM1("system.hasalarm", SYSTEM_HAS_ALARM , CONDITIONAL, 0),
   INFO_LABEL_PARAM1("system.hascoreid", SYSTEM_HAS_CORE_ID, CONDITIONAL, 0),
@@ -480,7 +705,33 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL_PARAM1("system.addontitle", SYSTEM_ADDON_TITLE, LABEL_OR_CONDITIONAL, 0),
   INFO_LABEL_PARAM1("system.addonicon", SYSTEM_ADDON_ICON, LABEL_OR_CONDITIONAL, 0),
   INFO_LABEL_PARAM1("system.addonversion", SYSTEM_ADDON_VERSION, LABEL_OR_CONDITIONAL, 0),
-  INFO_LABEL_PARAM1("system.idletime", SYSTEM_IDLE_TIME, NUMBER, 0)
+  INFO_LABEL_PARAM1("system.idletime", SYSTEM_IDLE_TIME, NUMBER, 0),
+
+  INFO_LABEL_PARAM1("musicplayer.content", MUSICPLAYER_CONTENT, STRING, 0),
+
+  INFO_LABEL_PARAM1("container.onnext", CONTAINER_MOVE_NEXT, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onprevious", CONTAINER_MOVE_PREVIOUS, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onscrollnext", CONTAINER_SCROLL_NEXT, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onscrollprevious", CONTAINER_SCROLL_PREVIOUS, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.numpages", CONTAINER_NUM_PAGES, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.numitems", CONTAINER_NUM_ITEMS, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.currentpage", CONTAINER_CURRENT_PAGE, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.scrolling", CONTAINER_SCROLLING, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasnext", CONTAINER_HAS_NEXT, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasprevious", CONTAINER_HAS_PREVIOUS, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.canfilter", CONTAINER_CAN_FILTER, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.canfilteradvanced", CONTAINER_CAN_FILTERADVANCED, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.filtered", CONTAINER_FILTERED, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.isupdating", CONTAINER_ISUPDATING, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.row", CONTAINER_ROW, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.column", CONTAINER_COLUMN, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.position", CONTAINER_POSITION, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.currentitem", CONTAINER_CURRENT_ITEM, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.subitem", CONTAINER_SUBITEM, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasfocus", CONTAINER_HAS_FOCUS, OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.property", CONTAINER_PROPERTY, OPTIONAL_CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("container.content", CONTAINER_CONTENT, OPTIONAL_CONDITIONAL, 0),
+  INFO_LABEL_PARAM1("container.art", CONTAINER_ART, OPTIONAL_CONDITIONAL, 0)
 
 };
 
@@ -521,245 +772,6 @@ const infomap musicplayer[] =    {{ "title",            MUSICPLAYER_TITLE },
                                   { "channelnumberlabel", MUSICPLAYER_CHANNEL_NUMBER_LBL },
                                   { "channelgroup",     MUSICPLAYER_CHANNEL_GROUP }
 };
-
-const infomap videoplayer[] =    {{ "title",            VIDEOPLAYER_TITLE },
-                                  { "genre",            VIDEOPLAYER_GENRE },
-                                  { "country",          VIDEOPLAYER_COUNTRY },
-                                  { "originaltitle",    VIDEOPLAYER_ORIGINALTITLE },
-                                  { "director",         VIDEOPLAYER_DIRECTOR },
-                                  { "year",             VIDEOPLAYER_YEAR },
-                                  { "cover",            VIDEOPLAYER_COVER },
-                                  { "usingoverlays",    VIDEOPLAYER_USING_OVERLAYS },
-                                  { "isfullscreen",     VIDEOPLAYER_ISFULLSCREEN },
-                                  { "hasmenu",          VIDEOPLAYER_HASMENU },
-                                  { "playlistlength",   VIDEOPLAYER_PLAYLISTLEN },
-                                  { "playlistposition", VIDEOPLAYER_PLAYLISTPOS },
-                                  { "plot",             VIDEOPLAYER_PLOT },
-                                  { "plotoutline",      VIDEOPLAYER_PLOT_OUTLINE },
-                                  { "episode",          VIDEOPLAYER_EPISODE },
-                                  { "season",           VIDEOPLAYER_SEASON },
-                                  { "rating",           VIDEOPLAYER_RATING },
-                                  { "ratingandvotes",   VIDEOPLAYER_RATING_AND_VOTES },
-                                  { "votes",            VIDEOPLAYER_VOTES },
-                                  { "tvshowtitle",      VIDEOPLAYER_TVSHOW },
-                                  { "premiered",        VIDEOPLAYER_PREMIERED },
-                                  { "studio",           VIDEOPLAYER_STUDIO },
-                                  { "mpaa",             VIDEOPLAYER_MPAA },
-                                  { "top250",           VIDEOPLAYER_TOP250 },
-                                  { "cast",             VIDEOPLAYER_CAST },
-                                  { "castandrole",      VIDEOPLAYER_CAST_AND_ROLE },
-                                  { "artist",           VIDEOPLAYER_ARTIST },
-                                  { "album",            VIDEOPLAYER_ALBUM },
-                                  { "writer",           VIDEOPLAYER_WRITER },
-                                  { "tagline",          VIDEOPLAYER_TAGLINE },
-                                  { "hasinfo",          VIDEOPLAYER_HAS_INFO },
-                                  { "trailer",          VIDEOPLAYER_TRAILER },
-                                  { "videocodec",       VIDEOPLAYER_VIDEO_CODEC },
-                                  { "videoresolution",  VIDEOPLAYER_VIDEO_RESOLUTION },
-                                  { "videoaspect",      VIDEOPLAYER_VIDEO_ASPECT },
-                                  { "audiocodec",       VIDEOPLAYER_AUDIO_CODEC },
-                                  { "audiochannels",    VIDEOPLAYER_AUDIO_CHANNELS },
-                                  { "audiolanguage",    VIDEOPLAYER_AUDIO_LANG },
-                                  { "hasteletext",      VIDEOPLAYER_HASTELETEXT },
-                                  { "lastplayed",       VIDEOPLAYER_LASTPLAYED },
-                                  { "playcount",        VIDEOPLAYER_PLAYCOUNT },
-                                  { "hassubtitles",     VIDEOPLAYER_HASSUBTITLES },
-                                  { "subtitlesenabled", VIDEOPLAYER_SUBTITLESENABLED },
-                                  { "subtitleslanguage",VIDEOPLAYER_SUBTITLES_LANG },
-                                  { "endtime",          VIDEOPLAYER_ENDTIME },
-                                  { "nexttitle",        VIDEOPLAYER_NEXT_TITLE },
-                                  { "nextgenre",        VIDEOPLAYER_NEXT_GENRE },
-                                  { "nextplot",         VIDEOPLAYER_NEXT_PLOT },
-                                  { "nextplotoutline",  VIDEOPLAYER_NEXT_PLOT_OUTLINE },
-                                  { "nextstarttime",    VIDEOPLAYER_NEXT_STARTTIME },
-                                  { "nextendtime",      VIDEOPLAYER_NEXT_ENDTIME },
-                                  { "nextduration",     VIDEOPLAYER_NEXT_DURATION },
-                                  { "channelname",      VIDEOPLAYER_CHANNEL_NAME },
-                                  { "channelnumber",    VIDEOPLAYER_CHANNEL_NUMBER },
-                                  { "subchannelnumber", VIDEOPLAYER_SUB_CHANNEL_NUMBER },
-                                  { "channelnumberlabel", VIDEOPLAYER_CHANNEL_NUMBER_LBL },
-                                  { "channelgroup",     VIDEOPLAYER_CHANNEL_GROUP },
-                                  { "hasepg",           VIDEOPLAYER_HAS_EPG },
-                                  { "parentalrating",   VIDEOPLAYER_PARENTAL_RATING },
-                                  { "isstereoscopic",   VIDEOPLAYER_IS_STEREOSCOPIC },
-                                  { "stereoscopicmode", VIDEOPLAYER_STEREOSCOPIC_MODE },
-                                  { "canresumelivetv",  VIDEOPLAYER_CAN_RESUME_LIVE_TV },
-                                  { "imdbnumber",       VIDEOPLAYER_IMDBNUMBER }
-};
-
-const infomap container_bools[] ={{ "onnext",           CONTAINER_MOVE_NEXT },
-                                  { "onprevious",       CONTAINER_MOVE_PREVIOUS },
-                                  { "onscrollnext",     CONTAINER_SCROLL_NEXT },
-                                  { "onscrollprevious", CONTAINER_SCROLL_PREVIOUS },
-                                  { "numpages",         CONTAINER_NUM_PAGES },
-                                  { "numitems",         CONTAINER_NUM_ITEMS },
-                                  { "currentpage",      CONTAINER_CURRENT_PAGE },
-                                  { "scrolling",        CONTAINER_SCROLLING },
-                                  { "hasnext",          CONTAINER_HAS_NEXT },
-                                  { "hasprevious",      CONTAINER_HAS_PREVIOUS },
-                                  { "canfilter",        CONTAINER_CAN_FILTER },
-                                  { "canfilteradvanced",CONTAINER_CAN_FILTERADVANCED },
-                                  { "filtered",         CONTAINER_FILTERED },
-                                  { "isupdating",       CONTAINER_ISUPDATING }};
-
-const infomap container_ints[] = {{ "row",              CONTAINER_ROW },
-                                  { "column",           CONTAINER_COLUMN },
-                                  { "position",         CONTAINER_POSITION },
-                                  { "currentitem",      CONTAINER_CURRENT_ITEM },
-                                  { "subitem",          CONTAINER_SUBITEM },
-                                  { "hasfocus",         CONTAINER_HAS_FOCUS }};
-
-const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
-                                  { "content",          CONTAINER_CONTENT },
-                                  { "art",              CONTAINER_ART }};
-
-const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
-                                  { "icon",             LISTITEM_ICON },
-                                  { "actualicon",       LISTITEM_ACTUAL_ICON },
-                                  { "overlay",          LISTITEM_OVERLAY },
-                                  { "label",            LISTITEM_LABEL },
-                                  { "label2",           LISTITEM_LABEL2 },
-                                  { "title",            LISTITEM_TITLE },
-                                  { "tracknumber",      LISTITEM_TRACKNUMBER },
-                                  { "artist",           LISTITEM_ARTIST },
-                                  { "album",            LISTITEM_ALBUM },
-                                  { "albumartist",      LISTITEM_ALBUM_ARTIST },
-                                  { "year",             LISTITEM_YEAR },
-                                  { "genre",            LISTITEM_GENRE },
-                                  { "director",         LISTITEM_DIRECTOR },
-                                  { "filename",         LISTITEM_FILENAME },
-                                  { "filenameandpath",  LISTITEM_FILENAME_AND_PATH },
-                                  { "fileextension",    LISTITEM_FILE_EXTENSION },
-                                  { "date",             LISTITEM_DATE },
-                                  { "size",             LISTITEM_SIZE },
-                                  { "rating",           LISTITEM_RATING },
-                                  { "ratingandvotes",   LISTITEM_RATING_AND_VOTES },
-                                  { "votes",            LISTITEM_VOTES },
-                                  { "programcount",     LISTITEM_PROGRAM_COUNT },
-                                  { "duration",         LISTITEM_DURATION },
-                                  { "isselected",       LISTITEM_ISSELECTED },
-                                  { "isplaying",        LISTITEM_ISPLAYING },
-                                  { "plot",             LISTITEM_PLOT },
-                                  { "plotoutline",      LISTITEM_PLOT_OUTLINE },
-                                  { "episode",          LISTITEM_EPISODE },
-                                  { "season",           LISTITEM_SEASON },
-                                  { "tvshowtitle",      LISTITEM_TVSHOW },
-                                  { "premiered",        LISTITEM_PREMIERED },
-                                  { "comment",          LISTITEM_COMMENT },
-                                  { "path",             LISTITEM_PATH },
-                                  { "foldername",       LISTITEM_FOLDERNAME },
-                                  { "folderpath",       LISTITEM_FOLDERPATH },
-                                  { "picturepath",      LISTITEM_PICTURE_PATH },
-                                  { "pictureresolution",LISTITEM_PICTURE_RESOLUTION },
-                                  { "picturedatetime",  LISTITEM_PICTURE_DATETIME },
-                                  { "picturedate",      LISTITEM_PICTURE_DATE },
-                                  { "picturelongdatetime",LISTITEM_PICTURE_LONGDATETIME },
-                                  { "picturelongdate",  LISTITEM_PICTURE_LONGDATE },
-                                  { "picturecomment",   LISTITEM_PICTURE_COMMENT },
-                                  { "picturecaption",   LISTITEM_PICTURE_CAPTION },
-                                  { "picturedesc",      LISTITEM_PICTURE_DESC },
-                                  { "picturekeywords",  LISTITEM_PICTURE_KEYWORDS },
-                                  { "picturecammake",   LISTITEM_PICTURE_CAM_MAKE },
-                                  { "picturecammodel",  LISTITEM_PICTURE_CAM_MODEL },
-                                  { "pictureaperture",  LISTITEM_PICTURE_APERTURE },
-                                  { "picturefocallen",  LISTITEM_PICTURE_FOCAL_LEN },
-                                  { "picturefocusdist", LISTITEM_PICTURE_FOCUS_DIST },
-                                  { "pictureexpmode",   LISTITEM_PICTURE_EXP_MODE },
-                                  { "pictureexptime",   LISTITEM_PICTURE_EXP_TIME },
-                                  { "pictureiso",       LISTITEM_PICTURE_ISO },
-                                  { "pictureauthor",                 LISTITEM_PICTURE_AUTHOR },
-                                  { "picturebyline",                 LISTITEM_PICTURE_BYLINE },
-                                  { "picturebylinetitle",            LISTITEM_PICTURE_BYLINE_TITLE },
-                                  { "picturecategory",               LISTITEM_PICTURE_CATEGORY },
-                                  { "pictureccdwidth",               LISTITEM_PICTURE_CCD_WIDTH },
-                                  { "picturecity",                   LISTITEM_PICTURE_CITY },
-                                  { "pictureurgency",                LISTITEM_PICTURE_URGENCY },
-                                  { "picturecopyrightnotice",        LISTITEM_PICTURE_COPYRIGHT_NOTICE },
-                                  { "picturecountry",                LISTITEM_PICTURE_COUNTRY },
-                                  { "picturecountrycode",            LISTITEM_PICTURE_COUNTRY_CODE },
-                                  { "picturecredit",                 LISTITEM_PICTURE_CREDIT },
-                                  { "pictureiptcdate",               LISTITEM_PICTURE_IPTCDATE },
-                                  { "picturedigitalzoom",            LISTITEM_PICTURE_DIGITAL_ZOOM },
-                                  { "pictureexposure",               LISTITEM_PICTURE_EXPOSURE },
-                                  { "pictureexposurebias",           LISTITEM_PICTURE_EXPOSURE_BIAS },
-                                  { "pictureflashused",              LISTITEM_PICTURE_FLASH_USED },
-                                  { "pictureheadline",               LISTITEM_PICTURE_HEADLINE },
-                                  { "picturecolour",                 LISTITEM_PICTURE_COLOUR },
-                                  { "picturelightsource",            LISTITEM_PICTURE_LIGHT_SOURCE },
-                                  { "picturemeteringmode",           LISTITEM_PICTURE_METERING_MODE },
-                                  { "pictureobjectname",             LISTITEM_PICTURE_OBJECT_NAME },
-                                  { "pictureorientation",            LISTITEM_PICTURE_ORIENTATION },
-                                  { "pictureprocess",                LISTITEM_PICTURE_PROCESS },
-                                  { "picturereferenceservice",       LISTITEM_PICTURE_REF_SERVICE },
-                                  { "picturesource",                 LISTITEM_PICTURE_SOURCE },
-                                  { "picturespecialinstructions",    LISTITEM_PICTURE_SPEC_INSTR },
-                                  { "picturestate",                  LISTITEM_PICTURE_STATE },
-                                  { "picturesupplementalcategories", LISTITEM_PICTURE_SUP_CATEGORIES },
-                                  { "picturetransmissionreference",  LISTITEM_PICTURE_TX_REFERENCE },
-                                  { "picturewhitebalance",           LISTITEM_PICTURE_WHITE_BALANCE },
-                                  { "pictureimagetype",              LISTITEM_PICTURE_IMAGETYPE },
-                                  { "picturesublocation",            LISTITEM_PICTURE_SUBLOCATION },
-                                  { "pictureiptctime",               LISTITEM_PICTURE_TIMECREATED },
-                                  { "picturegpslat",    LISTITEM_PICTURE_GPS_LAT },
-                                  { "picturegpslon",    LISTITEM_PICTURE_GPS_LON },
-                                  { "picturegpsalt",    LISTITEM_PICTURE_GPS_ALT },
-                                  { "studio",           LISTITEM_STUDIO },
-                                  { "country",          LISTITEM_COUNTRY },
-                                  { "mpaa",             LISTITEM_MPAA },
-                                  { "cast",             LISTITEM_CAST },
-                                  { "castandrole",      LISTITEM_CAST_AND_ROLE },
-                                  { "writer",           LISTITEM_WRITER },
-                                  { "tagline",          LISTITEM_TAGLINE },
-                                  { "top250",           LISTITEM_TOP250 },
-                                  { "trailer",          LISTITEM_TRAILER },
-                                  { "starrating",       LISTITEM_STAR_RATING },
-                                  { "sortletter",       LISTITEM_SORT_LETTER },
-                                  { "videocodec",       LISTITEM_VIDEO_CODEC },
-                                  { "videoresolution",  LISTITEM_VIDEO_RESOLUTION },
-                                  { "videoaspect",      LISTITEM_VIDEO_ASPECT },
-                                  { "audiocodec",       LISTITEM_AUDIO_CODEC },
-                                  { "audiochannels",    LISTITEM_AUDIO_CHANNELS },
-                                  { "audiolanguage",    LISTITEM_AUDIO_LANGUAGE },
-                                  { "subtitlelanguage", LISTITEM_SUBTITLE_LANGUAGE },
-                                  { "isresumable",      LISTITEM_IS_RESUMABLE},
-                                  { "percentplayed",    LISTITEM_PERCENT_PLAYED},
-                                  { "isfolder",         LISTITEM_IS_FOLDER },
-                                  { "originaltitle",    LISTITEM_ORIGINALTITLE },
-                                  { "lastplayed",       LISTITEM_LASTPLAYED },
-                                  { "playcount",        LISTITEM_PLAYCOUNT },
-                                  { "discnumber",       LISTITEM_DISC_NUMBER },
-                                  { "starttime",        LISTITEM_STARTTIME },
-                                  { "endtime",          LISTITEM_ENDTIME },
-                                  { "startdate",        LISTITEM_STARTDATE },
-                                  { "enddate",          LISTITEM_ENDDATE },
-                                  { "nexttitle",        LISTITEM_NEXT_TITLE },
-                                  { "nextgenre",        LISTITEM_NEXT_GENRE },
-                                  { "nextplot",         LISTITEM_NEXT_PLOT },
-                                  { "nextplotoutline",  LISTITEM_NEXT_PLOT_OUTLINE },
-                                  { "nextstarttime",    LISTITEM_NEXT_STARTTIME },
-                                  { "nextendtime",      LISTITEM_NEXT_ENDTIME },
-                                  { "nextstartdate",    LISTITEM_NEXT_STARTDATE },
-                                  { "nextenddate",      LISTITEM_NEXT_ENDDATE },
-                                  { "channelname",      LISTITEM_CHANNEL_NAME },
-                                  { "channelnumber",    LISTITEM_CHANNEL_NUMBER },
-                                  { "subchannelnumber", LISTITEM_SUB_CHANNEL_NUMBER },
-                                  { "channelnumberlabel", LISTITEM_CHANNEL_NUMBER_LBL },
-                                  { "channelgroup",     LISTITEM_CHANNEL_GROUP },
-                                  { "hasepg",           LISTITEM_HAS_EPG },
-                                  { "hastimer",         LISTITEM_HASTIMER },
-                                  { "hasrecording",     LISTITEM_HASRECORDING },
-                                  { "isrecording",      LISTITEM_ISRECORDING },
-                                  { "inprogress",       LISTITEM_INPROGRESS },
-                                  { "isencrypted",      LISTITEM_ISENCRYPTED },
-                                  { "progress",         LISTITEM_PROGRESS },
-                                  { "dateadded",        LISTITEM_DATE_ADDED },
-                                  { "dbtype",           LISTITEM_DBTYPE },
-                                  { "dbid",             LISTITEM_DBID },
-                                  { "stereoscopicmode", LISTITEM_STEREOSCOPIC_MODE },
-                                  { "isstereoscopic",   LISTITEM_IS_STEREOSCOPIC },
-                                  { "imdbnumber",       LISTITEM_IMDBNUMBER },
-                                  { "episodename",      LISTITEM_EPISODENAME }};
-
 
 
 const infomap window_bools[] =   {{ "ismedia",          WINDOW_IS_MEDIA },
@@ -978,8 +990,6 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       return AddMultiInfo(GUIInfo(STRING_STR, info, compareString));
     }
   }
-  else if (info.size() == 2)
-  {
     const Property &prop = info[1];
 
     auto& val = labels.find(cat.name + "." + prop.name);
@@ -1008,11 +1018,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       {
         int infoLabel = TranslateSingleString(cat.param(0), listItemDependent);
         if (infoLabel > 0)
-          return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, infoLabel, 0));
+        return AddMultiInfo(GUIInfo(pInfo.id, infoLabel, 0));
 
         std::string label = CGUIInfoLabel::GetLabel(cat.param(0));
         StringUtils::ToLower(label);
-        return AddMultiInfo(GUIInfo(SYSTEM_ADDON_TITLE, ConditionalStringParameter(label), 1));
+      return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(label), 1));
         break;
       }
       case ParameterFlags::NUMBER:
@@ -1021,10 +1031,20 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       case ParameterFlags::TIME:
         return AddMultiInfo(GUIInfo(pInfo.id, TranslateTimeFormat(cat.param(0))));
         break;
+    case ParameterFlags::OPTIONAL_NUMBER:
+      int id = atoi(cat.param(0).c_str());
+      if (prop.num_params() == 0)
+        return id > 0 ? AddMultiInfo(GUIInfo(pInfo.id, id)) : pInfo.id;
+
+      return AddMultiInfo(GUIInfo(pInfo.id, id, atoi(prop.param(0).c_str())));
+      break;
+    case ParameterFlags::OPTIONAL_CONDITIONAL:
+      int id = atoi(cat.param(0).c_str());
+      return AddMultiInfo(GUIInfo(pInfo.id, id, ConditionalStringParameter(prop.param(0))));
+      break;
       default:
         break;
       }
-    }
 
 
 
@@ -1041,7 +1061,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 
 
 
-    else if (cat.name == "system")
+    if (cat.name == "system")
     {
       if (prop.name == "alarmlessorequal" && prop.num_params() == 2)
         return AddMultiInfo(GUIInfo(SYSTEM_ALARM_LESS_OR_EQUAL, ConditionalStringParameter(prop.param(0)), ConditionalStringParameter(prop.param(1))));
@@ -1089,20 +1109,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         else if (cat == "tvshows") return LIBRARY_HAS_TVSHOWS;
         else if (cat == "musicvideos") return LIBRARY_HAS_MUSICVIDEOS;
         else if (cat == "moviesets") return LIBRARY_HAS_MOVIE_SETS;
-        else if (cat == "singles") return LIBRARY_HAS_SINGLES;
-        else if (cat == "compilations") return LIBRARY_HAS_COMPILATIONS;
       }
     }
     else if (cat.name == "musicplayer")
     {
-      //for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
-      //{
-      //  if (prop.name == player_times[i].str)
-      //    return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
-      //}
-      if (prop.name == "content" && prop.num_params())
-        return AddMultiInfo(GUIInfo(MUSICPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
-      else if (prop.name == "property")
+      if (prop.name == "property")
       {
         // properties are stored case sensitive in m_listItemProperties, but lookup is insensitive in CGUIListItem::GetProperty
         if (StringUtils::EqualsNoCase(prop.param(), "fanart_image"))
@@ -1111,43 +1122,13 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       }
       return TranslateMusicPlayerString(prop.name);
     }
-    else if (cat.name == "videoplayer")
-    {
-      //for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
-      //{
-      //  if (prop.name == player_times[i].str)
-      //    return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
-      //}
-      if (prop.name == "content" && prop.num_params())
-        return AddMultiInfo(GUIInfo(VIDEOPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
-      for (size_t i = 0; i < sizeof(videoplayer) / sizeof(infomap); i++)
-      {
-        if (prop.name == videoplayer[i].str)
-          return videoplayer[i].val;
-      }
-    }
+
     else if (cat.name == "slideshow")
     {
       return CPictureInfoTag::TranslateString(prop.name);
     }
     else if (cat.name == "container")
     {
-      int id = atoi(cat.param().c_str());
-      for (size_t i = 0; i < sizeof(container_bools) / sizeof(infomap); i++) // these ones can have an id (but don't need to?)
-      {
-        if (prop.name == container_bools[i].str)
-          return id ? AddMultiInfo(GUIInfo(container_bools[i].val, id)) : container_bools[i].val;
-      }
-      for (size_t i = 0; i < sizeof(container_ints) / sizeof(infomap); i++) // these ones can have an int param on the property
-      {
-        if (prop.name == container_ints[i].str)
-          return AddMultiInfo(GUIInfo(container_ints[i].val, id, atoi(prop.param().c_str())));
-      }
-      for (size_t i = 0; i < sizeof(container_str) / sizeof(infomap); i++) // these ones have a string param on the property
-      {
-        if (prop.name == container_str[i].str)
-          return AddMultiInfo(GUIInfo(container_str[i].val, id, ConditionalStringParameter(prop.param())));
-      }
       if (prop.name == "sortdirection")
       {
         SortOrder order = SortOrderNone;
@@ -1356,11 +1337,6 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 
 int CGUIInfoManager::TranslateListItem(const Property &info)
 {
-  for (size_t i = 0; i < sizeof(listitem_labels) / sizeof(infomap); i++) // these ones don't have or need an id
-  {
-    if (info.name == listitem_labels[i].str)
-      return listitem_labels[i].val;
-  }
   if (info.name == "property" && info.num_params() == 1)
   {
     // properties are stored case sensitive in m_listItemProperties, but lookup is insensitive in CGUIListItem::GetProperty
