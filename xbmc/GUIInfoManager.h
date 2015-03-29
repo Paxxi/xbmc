@@ -69,6 +69,8 @@ namespace EPG
   typedef std::shared_ptr<EPG::CEpgInfoTag> CEpgInfoTagPtr;
 }
 
+enum class ParameterFlags : uint8_t;
+
 // structure to hold multiple integer data
 // for storage referenced from a single integer
 class GUIInfo
@@ -80,11 +82,18 @@ public:
     LISTITEM_POSITION = 2
   };
 
-  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint8_t flag = 0) :
-    m_info{info},
-    m_data1{data1},
-    m_data2{data2},
-    m_flags{flag}
+  GUIInfo()
+    : m_info{0}
+    , m_data1{0}
+    , m_data2{0}
+    , m_flags{0}
+  { }
+
+  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint8_t flag = 0)
+    : m_info{info}
+    , m_data1{data1}
+    , m_data2{data2}
+    , m_flags{flag}
   {  }
 
   bool operator ==(const GUIInfo &right) const
@@ -97,9 +106,10 @@ public:
   uint32_t GetData1() const;
   int GetData2() const;
   int m_info; // Holds the value of this specific info, one of the defines from above
-private:
   uint32_t m_data1; // link to another GUIInfo 
   int m_data2; // link to a conditionalString
+  ParameterFlags m_data1Type;
+  ParameterFlags m_data2Type;
   uint8_t m_flags;
 };
 
@@ -274,6 +284,7 @@ protected:
   int TranslateMusicPlayerString(const std::string &info) const;
   TIME_FORMAT TranslateTimeFormat(const std::string &format);
   bool GetItemBool(const CGUIListItem *item, int condition) const;
+  int TranslateParameter(ParameterFlags flag, int options, GUIInfo& gInfo, const std::vector<Property> &info, bool& listItemDependent);
 
   
 

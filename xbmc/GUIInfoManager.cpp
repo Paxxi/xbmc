@@ -185,7 +185,10 @@ enum class ParameterFlags : uint8_t
   TIME,
   LABEL_OR_CONDITIONAL,
   OPTIONAL_NUMBER,
-  OPTIONAL_CONDITIONAL
+  OPTIONAL_CONDITIONAL,
+  CATEGORY_OPTIONAL_NUMBER,
+  CATEGORY_OPTIONAL_CONDITIONAL,
+  LISTITEM_PROP
 };
 
 struct ParseInfo
@@ -339,6 +342,14 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("system.memory.used", SYSTEM_USED_MEMORY),
   INFO_LABEL("system.memory.used.percent", SYSTEM_USED_MEMORY_PERCENT),
   INFO_LABEL("system.memory.total", SYSTEM_TOTAL_MEMORY),
+  INFO_LABEL("system.platform.linux", SYSTEM_PLATFORM_LINUX),
+  INFO_LABEL("system.platform.linux.raspberrypi", SYSTEM_PLATFORM_LINUX_RASPBERRY_PI),
+  INFO_LABEL("system.platform.windows", SYSTEM_PLATFORM_WINDOWS),
+  INFO_LABEL("system.platform.darwin", SYSTEM_PLATFORM_DARWIN),
+  INFO_LABEL("system.platform.osx", SYSTEM_PLATFORM_DARWIN_OSX),
+  INFO_LABEL("system.platform.ios", SYSTEM_PLATFORM_DARWIN_IOS),
+  INFO_LABEL("system.platform.atv2", SYSTEM_PLATFORM_DARWIN_ATV2),
+  INFO_LABEL("system.platform.android", SYSTEM_PLATFORM_ANDROID),
   
   INFO_LABEL("musicpartymode.enabled", MUSICPM_ENABLED),
   INFO_LABEL("musicpartymode.songsplayed", MUSICPM_SONGSPLAYED),
@@ -379,6 +390,7 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("skin.hasvideooverlay", SKIN_HAS_VIDEO_OVERLAY),
   INFO_LABEL("skin.hasmusicoverlay", SKIN_HAS_MUSIC_OVERLAY),
   INFO_LABEL("skin.aspectratio", SKIN_ASPECT_RATIO),
+
   INFO_LABEL("pvr.isrecording", PVR_IS_RECORDING),
   INFO_LABEL("pvr.hastimer", PVR_HAS_TIMER),
   INFO_LABEL("pvr.hastvchannels", PVR_HAS_TV_CHANNELS),
@@ -430,6 +442,7 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("pvr.actstreamservicename", PVR_ACTUAL_STREAM_SERVICE),
   INFO_LABEL("pvr.actstreammux", PVR_ACTUAL_STREAM_MUX),
   INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER),
+
   INFO_LABEL("musicplayer.title", MUSICPLAYER_TITLE),
   INFO_LABEL("musicplayer.album", MUSICPLAYER_ALBUM),
   INFO_LABEL("musicplayer.artist", MUSICPLAYER_ARTIST),
@@ -536,152 +549,154 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("library.hascontent.musicvideos", LIBRARY_HAS_MUSICVIDEOS),
   INFO_LABEL("library.hascontent.moviesets", LIBRARY_HAS_MOVIE_SETS),
 
-  INFO_LABEL("listitem.thumb", LISTITEM_THUMB),
-  INFO_LABEL("listitem.icon", LISTITEM_ICON),
-  INFO_LABEL("listitem.actualicon", LISTITEM_ACTUAL_ICON),
-  INFO_LABEL("listitem.overlay", LISTITEM_OVERLAY),
-  INFO_LABEL("listitem.label", LISTITEM_LABEL),
-  INFO_LABEL("listitem.label2", LISTITEM_LABEL2),
-  INFO_LABEL("listitem.title", LISTITEM_TITLE),
-  INFO_LABEL("listitem.tracknumber", LISTITEM_TRACKNUMBER),
-  INFO_LABEL("listitem.artist", LISTITEM_ARTIST),
-  INFO_LABEL("listitem.album", LISTITEM_ALBUM),
-  INFO_LABEL("listitem.albumartist", LISTITEM_ALBUM_ARTIST),
-  INFO_LABEL("listitem.year", LISTITEM_YEAR),
-  INFO_LABEL("listitem.genre", LISTITEM_GENRE),
-  INFO_LABEL("listitem.director", LISTITEM_DIRECTOR),
-  INFO_LABEL("listitem.filename", LISTITEM_FILENAME),
-  INFO_LABEL("listitem.filenameandpath", LISTITEM_FILENAME_AND_PATH),
-  INFO_LABEL("listitem.fileextension", LISTITEM_FILE_EXTENSION),
-  INFO_LABEL("listitem.date", LISTITEM_DATE),
-  INFO_LABEL("listitem.size", LISTITEM_SIZE),
-  INFO_LABEL("listitem.rating", LISTITEM_RATING),
-  INFO_LABEL("listitem.ratingandvotes", LISTITEM_RATING_AND_VOTES),
-  INFO_LABEL("listitem.votes", LISTITEM_VOTES),
-  INFO_LABEL("listitem.programcount", LISTITEM_PROGRAM_COUNT),
-  INFO_LABEL("listitem.duration", LISTITEM_DURATION),
-  INFO_LABEL("listitem.isselected", LISTITEM_ISSELECTED),
-  INFO_LABEL("listitem.isplaying", LISTITEM_ISPLAYING),
-  INFO_LABEL("listitem.plot", LISTITEM_PLOT),
-  INFO_LABEL("listitem.plotoutline", LISTITEM_PLOT_OUTLINE),
-  INFO_LABEL("listitem.episode", LISTITEM_EPISODE),
-  INFO_LABEL("listitem.season", LISTITEM_SEASON),
-  INFO_LABEL("listitem.tvshowtitle", LISTITEM_TVSHOW),
-  INFO_LABEL("listitem.premiered", LISTITEM_PREMIERED),
-  INFO_LABEL("listitem.comment", LISTITEM_COMMENT),
-  INFO_LABEL("listitem.path", LISTITEM_PATH),
-  INFO_LABEL("listitem.foldername", LISTITEM_FOLDERNAME),
-  INFO_LABEL("listitem.folderpath", LISTITEM_FOLDERPATH),
-  INFO_LABEL("listitem.picturepath", LISTITEM_PICTURE_PATH),
-  INFO_LABEL("listitem.pictureresolution", LISTITEM_PICTURE_RESOLUTION),
-  INFO_LABEL("listitem.picturedatetime", LISTITEM_PICTURE_DATETIME),
-  INFO_LABEL("listitem.picturedate", LISTITEM_PICTURE_DATE),
-  INFO_LABEL("listitem.picturelongdatetime", LISTITEM_PICTURE_LONGDATETIME),
-  INFO_LABEL("listitem.picturelongdate", LISTITEM_PICTURE_LONGDATE),
-  INFO_LABEL("listitem.picturecomment", LISTITEM_PICTURE_COMMENT),
-  INFO_LABEL("listitem.picturecaption", LISTITEM_PICTURE_CAPTION),
-  INFO_LABEL("listitem.picturedesc", LISTITEM_PICTURE_DESC),
-  INFO_LABEL("listitem.picturekeywords", LISTITEM_PICTURE_KEYWORDS),
-  INFO_LABEL("listitem.picturecammake", LISTITEM_PICTURE_CAM_MAKE),
-  INFO_LABEL("listitem.picturecammodel", LISTITEM_PICTURE_CAM_MODEL),
-  INFO_LABEL("listitem.pictureaperture", LISTITEM_PICTURE_APERTURE),
-  INFO_LABEL("listitem.picturefocallen", LISTITEM_PICTURE_FOCAL_LEN),
-  INFO_LABEL("listitem.picturefocusdist", LISTITEM_PICTURE_FOCUS_DIST),
-  INFO_LABEL("listitem.pictureexpmode", LISTITEM_PICTURE_EXP_MODE),
-  INFO_LABEL("listitem.pictureexptime", LISTITEM_PICTURE_EXP_TIME),
-  INFO_LABEL("listitem.pictureiso", LISTITEM_PICTURE_ISO),
-  INFO_LABEL("listitem.pictureauthor", LISTITEM_PICTURE_AUTHOR),
-  INFO_LABEL("listitem.picturebyline", LISTITEM_PICTURE_BYLINE),
-  INFO_LABEL("listitem.picturebylinetitle", LISTITEM_PICTURE_BYLINE_TITLE),
-  INFO_LABEL("listitem.picturecategory", LISTITEM_PICTURE_CATEGORY),
-  INFO_LABEL("listitem.pictureccdwidth", LISTITEM_PICTURE_CCD_WIDTH),
-  INFO_LABEL("listitem.picturecity", LISTITEM_PICTURE_CITY),
-  INFO_LABEL("listitem.pictureurgency", LISTITEM_PICTURE_URGENCY),
-  INFO_LABEL("listitem.picturecopyrightnotice", LISTITEM_PICTURE_COPYRIGHT_NOTICE),
-  INFO_LABEL("listitem.picturecountry", LISTITEM_PICTURE_COUNTRY),
-  INFO_LABEL("listitem.picturecountrycode", LISTITEM_PICTURE_COUNTRY_CODE),
-  INFO_LABEL("listitem.picturecredit", LISTITEM_PICTURE_CREDIT),
-  INFO_LABEL("listitem.pictureiptcdate", LISTITEM_PICTURE_IPTCDATE),
-  INFO_LABEL("listitem.picturedigitalzoom", LISTITEM_PICTURE_DIGITAL_ZOOM),
-  INFO_LABEL("listitem.pictureexposure", LISTITEM_PICTURE_EXPOSURE),
-  INFO_LABEL("listitem.pictureexposurebias", LISTITEM_PICTURE_EXPOSURE_BIAS),
-  INFO_LABEL("listitem.pictureflashused", LISTITEM_PICTURE_FLASH_USED),
-  INFO_LABEL("listitem.pictureheadline", LISTITEM_PICTURE_HEADLINE),
-  INFO_LABEL("listitem.picturecolour", LISTITEM_PICTURE_COLOUR),
-  INFO_LABEL("listitem.picturelightsource", LISTITEM_PICTURE_LIGHT_SOURCE),
-  INFO_LABEL("listitem.picturemeteringmode", LISTITEM_PICTURE_METERING_MODE),
-  INFO_LABEL("listitem.pictureobjectname", LISTITEM_PICTURE_OBJECT_NAME),
-  INFO_LABEL("listitem.pictureorientation", LISTITEM_PICTURE_ORIENTATION),
-  INFO_LABEL("listitem.pictureprocess", LISTITEM_PICTURE_PROCESS),
-  INFO_LABEL("listitem.picturereferenceservice", LISTITEM_PICTURE_REF_SERVICE),
-  INFO_LABEL("listitem.picturesource", LISTITEM_PICTURE_SOURCE),
-  INFO_LABEL("listitem.picturespecialinstructions", LISTITEM_PICTURE_SPEC_INSTR),
-  INFO_LABEL("listitem.picturestate", LISTITEM_PICTURE_STATE),
-  INFO_LABEL("listitem.picturesupplementalcategories", LISTITEM_PICTURE_SUP_CATEGORIES),
-  INFO_LABEL("listitem.picturetransmissionreference", LISTITEM_PICTURE_TX_REFERENCE),
-  INFO_LABEL("listitem.picturewhitebalance", LISTITEM_PICTURE_WHITE_BALANCE),
-  INFO_LABEL("listitem.pictureimagetype", LISTITEM_PICTURE_IMAGETYPE),
-  INFO_LABEL("listitem.picturesublocation", LISTITEM_PICTURE_SUBLOCATION),
-  INFO_LABEL("listitem.pictureiptctime", LISTITEM_PICTURE_TIMECREATED),
-  INFO_LABEL("listitem.picturegpslat", LISTITEM_PICTURE_GPS_LAT),
-  INFO_LABEL("listitem.picturegpslon", LISTITEM_PICTURE_GPS_LON),
-  INFO_LABEL("listitem.picturegpsalt", LISTITEM_PICTURE_GPS_ALT),
-  INFO_LABEL("listitem.studio", LISTITEM_STUDIO),
-  INFO_LABEL("listitem.country", LISTITEM_COUNTRY),
-  INFO_LABEL("listitem.mpaa", LISTITEM_MPAA),
-  INFO_LABEL("listitem.cast", LISTITEM_CAST),
-  INFO_LABEL("listitem.castandrole", LISTITEM_CAST_AND_ROLE),
-  INFO_LABEL("listitem.writer", LISTITEM_WRITER),
-  INFO_LABEL("listitem.tagline", LISTITEM_TAGLINE),
-  INFO_LABEL("listitem.top250", LISTITEM_TOP250),
-  INFO_LABEL("listitem.trailer", LISTITEM_TRAILER),
-  INFO_LABEL("listitem.starrating", LISTITEM_STAR_RATING),
-  INFO_LABEL("listitem.sortletter", LISTITEM_SORT_LETTER),
-  INFO_LABEL("listitem.videocodec", LISTITEM_VIDEO_CODEC),
-  INFO_LABEL("listitem.videoresolution", LISTITEM_VIDEO_RESOLUTION),
-  INFO_LABEL("listitem.videoaspect", LISTITEM_VIDEO_ASPECT),
-  INFO_LABEL("listitem.audiocodec", LISTITEM_AUDIO_CODEC),
-  INFO_LABEL("listitem.audiochannels", LISTITEM_AUDIO_CHANNELS),
-  INFO_LABEL("listitem.audiolanguage", LISTITEM_AUDIO_LANGUAGE),
-  INFO_LABEL("listitem.subtitlelanguage", LISTITEM_SUBTITLE_LANGUAGE),
-  INFO_LABEL("listitem.isresumable", LISTITEM_IS_RESUMABLE),
-  INFO_LABEL("listitem.percentplayed", LISTITEM_PERCENT_PLAYED),
-  INFO_LABEL("listitem.isfolder", LISTITEM_IS_FOLDER),
-  INFO_LABEL("listitem.originaltitle", LISTITEM_ORIGINALTITLE),
-  INFO_LABEL("listitem.lastplayed", LISTITEM_LASTPLAYED),
-  INFO_LABEL("listitem.playcount", LISTITEM_PLAYCOUNT),
-  INFO_LABEL("listitem.discnumber", LISTITEM_DISC_NUMBER),
-  INFO_LABEL("listitem.starttime", LISTITEM_STARTTIME),
-  INFO_LABEL("listitem.endtime", LISTITEM_ENDTIME),
-  INFO_LABEL("listitem.startdate", LISTITEM_STARTDATE),
-  INFO_LABEL("listitem.enddate", LISTITEM_ENDDATE),
-  INFO_LABEL("listitem.nexttitle", LISTITEM_NEXT_TITLE),
-  INFO_LABEL("listitem.nextgenre", LISTITEM_NEXT_GENRE),
-  INFO_LABEL("listitem.nextplot", LISTITEM_NEXT_PLOT),
-  INFO_LABEL("listitem.nextplotoutline", LISTITEM_NEXT_PLOT_OUTLINE),
-  INFO_LABEL("listitem.nextstarttime", LISTITEM_NEXT_STARTTIME),
-  INFO_LABEL("listitem.nextendtime", LISTITEM_NEXT_ENDTIME),
-  INFO_LABEL("listitem.nextstartdate", LISTITEM_NEXT_STARTDATE),
-  INFO_LABEL("listitem.nextenddate", LISTITEM_NEXT_ENDDATE),
-  INFO_LABEL("listitem.channelname", LISTITEM_CHANNEL_NAME),
-  INFO_LABEL("listitem.channelnumber", LISTITEM_CHANNEL_NUMBER),
-  INFO_LABEL("listitem.subchannelnumber", LISTITEM_SUB_CHANNEL_NUMBER),
-  INFO_LABEL("listitem.channelnumberlabel", LISTITEM_CHANNEL_NUMBER_LBL),
-  INFO_LABEL("listitem.channelgroup", LISTITEM_CHANNEL_GROUP),
-  INFO_LABEL("listitem.hasepg", LISTITEM_HAS_EPG),
-  INFO_LABEL("listitem.hastimer", LISTITEM_HASTIMER),
-  INFO_LABEL("listitem.hasrecording", LISTITEM_HASRECORDING),
-  INFO_LABEL("listitem.isrecording", LISTITEM_ISRECORDING),
-  INFO_LABEL("listitem.inprogress", LISTITEM_INPROGRESS),
-  INFO_LABEL("listitem.isencrypted", LISTITEM_ISENCRYPTED),
-  INFO_LABEL("listitem.progress", LISTITEM_PROGRESS),
-  INFO_LABEL("listitem.dateadded", LISTITEM_DATE_ADDED),
-  INFO_LABEL("listitem.dbtype", LISTITEM_DBTYPE),
-  INFO_LABEL("listitem.dbid", LISTITEM_DBID),
-  INFO_LABEL("listitem.stereoscopicmode", LISTITEM_STEREOSCOPIC_MODE),
-  INFO_LABEL("listitem.isstereoscopic", LISTITEM_IS_STEREOSCOPIC),
-  INFO_LABEL("listitem.imdbnumber", LISTITEM_IMDBNUMBER),
-  INFO_LABEL("listitem.episodename", LISTITEM_EPISODENAME),
+  INFO_LABEL_PARAM1("listitem.thumb",                          LISTITEM_THUMB,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.icon",                           LISTITEM_ICON,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.actualicon",                     LISTITEM_ACTUAL_ICON,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.overlay",                        LISTITEM_OVERLAY,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.label",                          LISTITEM_LABEL,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.label2",                         LISTITEM_LABEL2,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.title",                          LISTITEM_TITLE,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.tracknumber",                    LISTITEM_TRACKNUMBER,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.artist",                         LISTITEM_ARTIST,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.album",                          LISTITEM_ALBUM,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.albumartist",                    LISTITEM_ALBUM_ARTIST,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.year",                           LISTITEM_YEAR,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.genre",                          LISTITEM_GENRE,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.director",                       LISTITEM_DIRECTOR,                 CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.filename",                       LISTITEM_FILENAME,                 CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.filenameandpath",                LISTITEM_FILENAME_AND_PATH,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.fileextension",                  LISTITEM_FILE_EXTENSION,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.date",                           LISTITEM_DATE,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.size",                           LISTITEM_SIZE,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.rating",                         LISTITEM_RATING,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.ratingandvotes",                 LISTITEM_RATING_AND_VOTES,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.votes",                          LISTITEM_VOTES,                    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.programcount",                   LISTITEM_PROGRAM_COUNT,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.duration",                       LISTITEM_DURATION,                 CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isselected",                     LISTITEM_ISSELECTED,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isplaying",                      LISTITEM_ISPLAYING,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.plot",                           LISTITEM_PLOT,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.plotoutline",                    LISTITEM_PLOT_OUTLINE,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.episode",                        LISTITEM_EPISODE,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.season",                         LISTITEM_SEASON,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.tvshowtitle",                    LISTITEM_TVSHOW,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.premiered",                      LISTITEM_PREMIERED,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.comment",                        LISTITEM_COMMENT,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.path",                           LISTITEM_PATH,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.foldername",                     LISTITEM_FOLDERNAME,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.folderpath",                     LISTITEM_FOLDERPATH,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturepath",                    LISTITEM_PICTURE_PATH,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureresolution",              LISTITEM_PICTURE_RESOLUTION,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturedatetime",                LISTITEM_PICTURE_DATETIME,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturedate",                    LISTITEM_PICTURE_DATE,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturelongdatetime",            LISTITEM_PICTURE_LONGDATETIME,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturelongdate",                LISTITEM_PICTURE_LONGDATE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecomment",                 LISTITEM_PICTURE_COMMENT,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecaption",                 LISTITEM_PICTURE_CAPTION,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturedesc",                    LISTITEM_PICTURE_DESC,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturekeywords",                LISTITEM_PICTURE_KEYWORDS,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecammake",                 LISTITEM_PICTURE_CAM_MAKE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecammodel",                LISTITEM_PICTURE_CAM_MODEL,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureaperture",                LISTITEM_PICTURE_APERTURE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturefocallen",                LISTITEM_PICTURE_FOCAL_LEN,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturefocusdist",               LISTITEM_PICTURE_FOCUS_DIST,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureexpmode",                 LISTITEM_PICTURE_EXP_MODE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureexptime",                 LISTITEM_PICTURE_EXP_TIME,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureiso",                     LISTITEM_PICTURE_ISO,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureauthor",                  LISTITEM_PICTURE_AUTHOR,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturebyline",                  LISTITEM_PICTURE_BYLINE,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturebylinetitle",             LISTITEM_PICTURE_BYLINE_TITLE,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecategory",                LISTITEM_PICTURE_CATEGORY,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureccdwidth",                LISTITEM_PICTURE_CCD_WIDTH,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecity",                    LISTITEM_PICTURE_CITY,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureurgency",                 LISTITEM_PICTURE_URGENCY,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecopyrightnotice",         LISTITEM_PICTURE_COPYRIGHT_NOTICE, CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecountry",                 LISTITEM_PICTURE_COUNTRY,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecountrycode",             LISTITEM_PICTURE_COUNTRY_CODE,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecredit",                  LISTITEM_PICTURE_CREDIT,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureiptcdate",                LISTITEM_PICTURE_IPTCDATE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturedigitalzoom",             LISTITEM_PICTURE_DIGITAL_ZOOM,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureexposure",                LISTITEM_PICTURE_EXPOSURE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureexposurebias",            LISTITEM_PICTURE_EXPOSURE_BIAS,    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureflashused",               LISTITEM_PICTURE_FLASH_USED,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureheadline",                LISTITEM_PICTURE_HEADLINE,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturecolour",                  LISTITEM_PICTURE_COLOUR,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturelightsource",             LISTITEM_PICTURE_LIGHT_SOURCE,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturemeteringmode",            LISTITEM_PICTURE_METERING_MODE,    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureobjectname",              LISTITEM_PICTURE_OBJECT_NAME,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureorientation",             LISTITEM_PICTURE_ORIENTATION,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureprocess",                 LISTITEM_PICTURE_PROCESS,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturereferenceservice",        LISTITEM_PICTURE_REF_SERVICE,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturesource",                  LISTITEM_PICTURE_SOURCE,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturespecialinstructions",     LISTITEM_PICTURE_SPEC_INSTR,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturestate",                   LISTITEM_PICTURE_STATE,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturesupplementalcategories",  LISTITEM_PICTURE_SUP_CATEGORIES,   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturetransmissionreference",   LISTITEM_PICTURE_TX_REFERENCE,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturewhitebalance",            LISTITEM_PICTURE_WHITE_BALANCE,    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureimagetype",               LISTITEM_PICTURE_IMAGETYPE,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturesublocation",             LISTITEM_PICTURE_SUBLOCATION,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.pictureiptctime",                LISTITEM_PICTURE_TIMECREATED,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturegpslat",                  LISTITEM_PICTURE_GPS_LAT,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturegpslon",                  LISTITEM_PICTURE_GPS_LON,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.picturegpsalt",                  LISTITEM_PICTURE_GPS_ALT,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.studio",                         LISTITEM_STUDIO,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.country",                        LISTITEM_COUNTRY,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.mpaa",                           LISTITEM_MPAA,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.cast",                           LISTITEM_CAST,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.castandrole",                    LISTITEM_CAST_AND_ROLE,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.writer",                         LISTITEM_WRITER,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.tagline",                        LISTITEM_TAGLINE,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.top250",                         LISTITEM_TOP250,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.trailer",                        LISTITEM_TRAILER,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.starrating",                     LISTITEM_STAR_RATING,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.sortletter",                     LISTITEM_SORT_LETTER,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.videocodec",                     LISTITEM_VIDEO_CODEC,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.videoresolution",                LISTITEM_VIDEO_RESOLUTION,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.videoaspect",                    LISTITEM_VIDEO_ASPECT,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.audiocodec",                     LISTITEM_AUDIO_CODEC,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.audiochannels",                  LISTITEM_AUDIO_CHANNELS,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.audiolanguage",                  LISTITEM_AUDIO_LANGUAGE,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.subtitlelanguage",               LISTITEM_SUBTITLE_LANGUAGE,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isresumable",                    LISTITEM_IS_RESUMABLE,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.percentplayed",                  LISTITEM_PERCENT_PLAYED,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isfolder",                       LISTITEM_IS_FOLDER,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.originaltitle",                  LISTITEM_ORIGINALTITLE,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.lastplayed",                     LISTITEM_LASTPLAYED,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.playcount",                      LISTITEM_PLAYCOUNT,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.discnumber",                     LISTITEM_DISC_NUMBER,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.starttime",                      LISTITEM_STARTTIME,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.endtime",                        LISTITEM_ENDTIME,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.startdate",                      LISTITEM_STARTDATE,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.enddate",                        LISTITEM_ENDDATE,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nexttitle",                      LISTITEM_NEXT_TITLE,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextgenre",                      LISTITEM_NEXT_GENRE,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextplot",                       LISTITEM_NEXT_PLOT,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextplotoutline",                LISTITEM_NEXT_PLOT_OUTLINE,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextstarttime",                  LISTITEM_NEXT_STARTTIME,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextendtime",                    LISTITEM_NEXT_ENDTIME,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextstartdate",                  LISTITEM_NEXT_STARTDATE,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.nextenddate",                    LISTITEM_NEXT_ENDDATE,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.channelname",                    LISTITEM_CHANNEL_NAME,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.channelnumber",                  LISTITEM_CHANNEL_NUMBER,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.subchannelnumber",               LISTITEM_SUB_CHANNEL_NUMBER,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.channelnumberlabel",             LISTITEM_CHANNEL_NUMBER_LBL,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.channelgroup",                   LISTITEM_CHANNEL_GROUP,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.hasepg",                         LISTITEM_HAS_EPG,                  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.hastimer",                       LISTITEM_HASTIMER,                 CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.hasrecording",                   LISTITEM_HASRECORDING,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isrecording",                    LISTITEM_ISRECORDING,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.inprogress",                     LISTITEM_INPROGRESS,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isencrypted",                    LISTITEM_ISENCRYPTED,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.progress",                       LISTITEM_PROGRESS,                 CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.dateadded",                      LISTITEM_DATE_ADDED,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.dbtype",                         LISTITEM_DBTYPE,                   CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.dbid",                           LISTITEM_DBID,                     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.stereoscopicmode",               LISTITEM_STEREOSCOPIC_MODE,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.isstereoscopic",                 LISTITEM_IS_STEREOSCOPIC,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.imdbnumber",                     LISTITEM_IMDBNUMBER,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("listitem.episodename",                    LISTITEM_EPISODENAME,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM2("listitem.property",                       LISTITEM_PROPERTY,                 CATEGORY_OPTIONAL_NUMBER, LISTITEM_PROP, 0),
+  INFO_LABEL_PARAM2("listitem.art",                            LISTITEM_ART,                      CATEGORY_OPTIONAL_NUMBER, LISTITEM_PROP, 0),
 
   INFO_LABEL_PARAM1("player.seektime", PLAYER_SEEKTIME, TIME, 0),
   INFO_LABEL_PARAM1("player.seekoffset", PLAYER_SEEKOFFSET, TIME, 0),
@@ -709,29 +724,36 @@ const std::map<std::string, ParseInfo> labels =
 
   INFO_LABEL_PARAM1("musicplayer.content", MUSICPLAYER_CONTENT, STRING, 0),
 
-  INFO_LABEL_PARAM1("container.onnext", CONTAINER_MOVE_NEXT, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.onprevious", CONTAINER_MOVE_PREVIOUS, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.onscrollnext", CONTAINER_SCROLL_NEXT, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.onscrollprevious", CONTAINER_SCROLL_PREVIOUS, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.numpages", CONTAINER_NUM_PAGES, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.numitems", CONTAINER_NUM_ITEMS, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.currentpage", CONTAINER_CURRENT_PAGE, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.scrolling", CONTAINER_SCROLLING, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.hasnext", CONTAINER_HAS_NEXT, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.hasprevious", CONTAINER_HAS_PREVIOUS, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.canfilter", CONTAINER_CAN_FILTER, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.canfilteradvanced", CONTAINER_CAN_FILTERADVANCED, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.filtered", CONTAINER_FILTERED, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.isupdating", CONTAINER_ISUPDATING, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.row", CONTAINER_ROW, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.column", CONTAINER_COLUMN, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.position", CONTAINER_POSITION, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.currentitem", CONTAINER_CURRENT_ITEM, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.subitem", CONTAINER_SUBITEM, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.hasfocus", CONTAINER_HAS_FOCUS, OPTIONAL_NUMBER, 0),
-  INFO_LABEL_PARAM1("container.property", CONTAINER_PROPERTY, OPTIONAL_CONDITIONAL, 0),
-  INFO_LABEL_PARAM1("container.content", CONTAINER_CONTENT, OPTIONAL_CONDITIONAL, 0),
-  INFO_LABEL_PARAM1("container.art", CONTAINER_ART, OPTIONAL_CONDITIONAL, 0)
+  INFO_LABEL_PARAM1("container.onnext",             CONTAINER_MOVE_NEXT,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onprevious",         CONTAINER_MOVE_PREVIOUS,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onscrollnext",       CONTAINER_SCROLL_NEXT,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.onscrollprevious",   CONTAINER_SCROLL_PREVIOUS,    CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.numpages",           CONTAINER_NUM_PAGES,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.numitems",           CONTAINER_NUM_ITEMS,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.currentpage",        CONTAINER_CURRENT_PAGE,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.scrolling",          CONTAINER_SCROLLING,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasnext",            CONTAINER_HAS_NEXT,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasprevious",        CONTAINER_HAS_PREVIOUS,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.canfilter",          CONTAINER_CAN_FILTER,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.canfilteradvanced",  CONTAINER_CAN_FILTERADVANCED, CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.filtered",           CONTAINER_FILTERED,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.isupdating",         CONTAINER_ISUPDATING,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.row",                CONTAINER_ROW,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.column",             CONTAINER_COLUMN,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.position",           CONTAINER_POSITION,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.currentitem",        CONTAINER_CURRENT_ITEM,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.subitem",            CONTAINER_SUBITEM,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("container.hasfocus",           CONTAINER_HAS_FOCUS,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM2("container.property",           CONTAINER_PROPERTY,           CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
+  INFO_LABEL_PARAM2("container.content",            CONTAINER_CONTENT,            CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
+  INFO_LABEL_PARAM2("container.art",                CONTAINER_ART,                CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
+
+  INFO_LABEL_PARAM1("control.hasfocus",   CONTROL_HAS_FOCUS,  NUMBER, 0),
+  INFO_LABEL_PARAM1("control.isvisible",  CONTROL_IS_VISIBLE, NUMBER, 0),
+  INFO_LABEL_PARAM1("control.isenabled",  CONTROL_IS_ENABLED, NUMBER, 0),
+  INFO_LABEL_PARAM1("control.getlabel",   CONTROL_GET_LABEL,  NUMBER, 0),
+
+  INFO_LABEL_PARAM2("controlgroup.hasfocus", CONTROL_GROUP_HAS_FOCUS, CATEGORY_OPTIONAL_NUMBER, NUMBER, 0)
 
 };
 
@@ -781,10 +803,6 @@ const infomap window_bools[] =   {{ "ismedia",          WINDOW_IS_MEDIA },
                                   { "previous",         WINDOW_PREVIOUS },
                                   { "next",             WINDOW_NEXT }};
 
-const infomap control_labels[] = {{ "hasfocus",         CONTROL_HAS_FOCUS },
-                                  { "isvisible",        CONTROL_IS_VISIBLE },
-                                  { "isenabled",        CONTROL_IS_ENABLED },
-                                  { "getlabel",         CONTROL_GET_LABEL }};
 
 const infomap playlist[] =       {{ "length",           PLAYLIST_LENGTH },
                                   { "position",         PLAYLIST_POSITION },
@@ -990,64 +1008,115 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       return AddMultiInfo(GUIInfo(STRING_STR, info, compareString));
     }
   }
-    const Property &prop = info[1];
+  bool treatAsLabel = false;
+  GUIInfo result;
 
-    auto& val = labels.find(cat.name + "." + prop.name);
+  const Property &prop = info[1];
 
-    //special case, some labels are three levels deep, such as system.memory.free
-    if (val == labels.end() && prop.num_params() == 1)
-      val = labels.find(cat.name + "." + prop.name + "." + prop.param(0));
+  auto& val = labels.find(cat.name + "." + prop.name);
 
-    //this is a label, just return it's id
-    if (val != labels.end() && (*val).second.nrParams == 0)
-      return (*val).second.id;
+  //special case, some labels are three levels deep, such as system.memory.free
+  if (val == labels.end() && info.size() >= 3)
+    val = labels.find(cat.name + "." + prop.name + "." + info[2].name);
 
-    if (val != labels.end())
+  //this is a label, just return it's id
+  if (val != labels.end() && (*val).second.nrParams == 0)
+    return (*val).second.id;
+
+  if (val != labels.end())
+  {
+    const auto& pInfo = (*val).second;
+
+    switch (pInfo.param1)
     {
-      const auto& pInfo = (*val).second;
-
-      switch (pInfo.param1)
+    case ParameterFlags::CONDITIONAL:
+      result.m_info = pInfo.id;
+      result.m_data1 = ConditionalStringParameter(prop.param(0), (pInfo.options & CASE_SENSITIVE) != 0);
+      result.m_data1Type = ParameterFlags::CONDITIONAL;
+      break;
+    case ParameterFlags::LABEL:
+      result.m_info = pInfo.id;
+      result.m_data1 = TranslateSingleString(prop.param(0), listItemDependent);
+      result.m_data1Type = ParameterFlags::LABEL;
+      break;
+    case ParameterFlags::LABEL_OR_CONDITIONAL:
+    {
+      result.m_info = pInfo.id;
+      int infoLabel = TranslateSingleString(prop.param(0), listItemDependent);
+      if (infoLabel > 0)
       {
-      case ParameterFlags::CONDITIONAL:
-        return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(cat.param(0), (pInfo.options & CASE_SENSITIVE) != 0)));
-        break;
-      case ParameterFlags::LABEL:
-        return AddMultiInfo(GUIInfo(pInfo.id, TranslateSingleString(cat.param(0), listItemDependent)));
-        break;
-      case ParameterFlags::LABEL_OR_CONDITIONAL:
-      {
-        int infoLabel = TranslateSingleString(cat.param(0), listItemDependent);
-        if (infoLabel > 0)
-        return AddMultiInfo(GUIInfo(pInfo.id, infoLabel, 0));
-
-        std::string label = CGUIInfoLabel::GetLabel(cat.param(0));
-        StringUtils::ToLower(label);
-      return AddMultiInfo(GUIInfo(pInfo.id, ConditionalStringParameter(label), 1));
+        result.m_data1 = infoLabel;
+        result.m_data1Type = ParameterFlags::LABEL;
         break;
       }
-      case ParameterFlags::NUMBER:
-        return AddMultiInfo(GUIInfo(pInfo.id, atoi(cat.param(0).c_str())));
-        break;
-      case ParameterFlags::TIME:
-        return AddMultiInfo(GUIInfo(pInfo.id, TranslateTimeFormat(cat.param(0))));
-        break;
+
+      std::string label = CGUIInfoLabel::GetLabel(prop.param(0));
+      StringUtils::ToLower(label);
+      result.m_data1 = ConditionalStringParameter(label);
+      result.m_data1Type = ParameterFlags::CONDITIONAL;
+      break;
+    }
+    case ParameterFlags::NUMBER:
+      result.m_info = pInfo.id;
+      result.m_data1 = atoi(prop.param(0).c_str());
+      result.m_data1Type = ParameterFlags::NUMBER;
+      break;
+    case ParameterFlags::TIME:
+      result.m_info = pInfo.id;
+      result.m_data1 = TranslateTimeFormat(prop.param(0));
+      result.m_data1Type = ParameterFlags::TIME;
+      break;
     case ParameterFlags::OPTIONAL_NUMBER:
-      int id = atoi(cat.param(0).c_str());
-      if (prop.num_params() == 0)
-        return id > 0 ? AddMultiInfo(GUIInfo(pInfo.id, id)) : pInfo.id;
+    {
+      int id = 0;
+      if (prop.num_params() > 0)
+        id = atoi(prop.param(0).c_str());
+    }
+    case ParameterFlags::CATEGORY_OPTIONAL_NUMBER:
+    {
+      int id = 0;
+      if (cat.num_params() == 1)
+        id = atoi(cat.param(0).c_str());
 
-      return AddMultiInfo(GUIInfo(pInfo.id, id, atoi(prop.param(0).c_str())));
-      break;
-    case ParameterFlags::OPTIONAL_CONDITIONAL:
-      int id = atoi(cat.param(0).c_str());
-      return AddMultiInfo(GUIInfo(pInfo.id, id, ConditionalStringParameter(prop.param(0))));
-      break;
-      default:
-        break;
+      if (id == 0)
+        treatAsLabel = true;
+      else
+      {
+        result.m_info = pInfo.id;
+        result.m_data1 = id;
+        result.m_data1Type = ParameterFlags::NUMBER;
       }
+      break;
+    }
+    default:
+      break;
+    }
 
+    switch (pInfo.param2)
+    {
+    case ParameterFlags::CONDITIONAL:
+      result.m_info = pInfo.id;
+      result.m_data2 = ConditionalStringParameter(prop.param(0), (pInfo.options & CASE_SENSITIVE) != 0);
+      result.m_data2Type = ParameterFlags::CONDITIONAL;
+      break;
+    case ParameterFlags::NUMBER:
+      result.m_info = pInfo.id;
+      result.m_data2 = atoi(prop.param(prop.num_params() - 1).c_str());
+      result.m_data2Type = ParameterFlags::NUMBER;
+      break;
+    case ParameterFlags::LISTITEM_PROP:
+      result.m_info = pInfo.id;
+      result.m_data2 = AddListItemProp(prop.param(0));
+      result.m_data2Type = ParameterFlags::LISTITEM_PROP;
+      break;
+    default:
+      break;
+    }
+    if (treatAsLabel)
+      return pInfo.id;
 
-
+    return AddMultiInfo(result);
+  }
 
 
 
@@ -1120,7 +1189,6 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
           return AddMultiInfo(GUIInfo(PLAYER_ITEM_ART, ConditionalStringParameter("fanart")));
         return AddListItemProp(prop.param(), MUSICPLAYER_PROPERTY_OFFSET);
       }
-      return TranslateMusicPlayerString(prop.name);
     }
 
     else if (cat.name == "slideshow")
@@ -1212,19 +1280,6 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         }
       }
     }
-    else if (cat.name == "control")
-    {
-      for (size_t i = 0; i < sizeof(control_labels) / sizeof(infomap); i++)
-      {
-        if (prop.name == control_labels[i].str)
-        { // TODO: The parameter for these should really be on the first not the second property
-          int controlID = atoi(prop.param().c_str());
-          if (controlID)
-            return AddMultiInfo(GUIInfo(control_labels[i].val, controlID, 0));
-          return 0;
-        }
-      }
-    }
     else if (cat.name == "controlgroup" && prop.name == "hasfocus")
     {
       int groupID = atoi(cat.param().c_str());
@@ -1259,28 +1314,10 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         }
       }
     }
-  }
+  
   else if (info.size() == 3 || info.size() == 4)
   {
-    if (info[0].name == "system" && info[1].name == "platform")
-    { // TODO: replace with a single system.platform
-      std::string platform = info[2].name;
-      if (platform == "linux")
-      {
-        if (info.size() == 4)
-        {
-          std::string device = info[3].name;
-          if (device == "raspberrypi") return SYSTEM_PLATFORM_LINUX_RASPBERRY_PI;
-        }
-        else return SYSTEM_PLATFORM_LINUX;
-      }
-      else if (platform == "windows") return SYSTEM_PLATFORM_WINDOWS;
-      else if (platform == "darwin")  return SYSTEM_PLATFORM_DARWIN;
-      else if (platform == "osx")  return SYSTEM_PLATFORM_DARWIN_OSX;
-      else if (platform == "ios")  return SYSTEM_PLATFORM_DARWIN_IOS;
-      else if (platform == "atv2") return SYSTEM_PLATFORM_DARWIN_ATV2;
-      else if (platform == "android") return SYSTEM_PLATFORM_ANDROID;
-    }
+
     if (info[0].name == "musicplayer")
     { // TODO: these two don't allow duration(foo) and also don't allow more than this number of levels...
       if (info[1].name == "position")
@@ -1316,20 +1353,20 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         return AddMultiInfo(GUIInfo(TranslateListItem(info[2]), id, offset, GUIInfo::LISTITEM_WRAP));
       }
     }
-    else if (info[0].name == "control")
-    {
-      const Property &prop = info[1];
-      for (size_t i = 0; i < sizeof(control_labels) / sizeof(infomap); i++)
-      {
-        if (prop.name == control_labels[i].str)
-        { // TODO: The parameter for these should really be on the first not the second property
-          int controlID = atoi(prop.param().c_str());
-          if (controlID)
-            return AddMultiInfo(GUIInfo(control_labels[i].val, controlID, atoi(info[2].param(0).c_str())));
-          return 0;
-        }
-      }
-    }
+    //else if (info[0].name == "control")
+    //{
+    //  const Property &prop = info[1];
+    //  for (size_t i = 0; i < sizeof(control_labels) / sizeof(infomap); i++)
+    //  {
+    //    if (prop.name == control_labels[i].str)
+    //    { // TODO: The parameter for these should really be on the first not the second property
+    //      int controlID = atoi(prop.param().c_str());
+    //      if (controlID)
+    //        return AddMultiInfo(GUIInfo(control_labels[i].val, controlID, atoi(info[2].param(0).c_str())));
+    //      return 0;
+    //    }
+    //  }
+    //}
   }
 
   return 0;
@@ -1347,6 +1384,36 @@ int CGUIInfoManager::TranslateListItem(const Property &info)
   if (info.name == "art" && info.num_params() == 1)
     return AddListItemProp(info.param(), LISTITEM_ART_OFFSET);
   return 0;
+}
+
+int CGUIInfoManager::AddListItemProp(const std::string &str, int offset)
+{
+  for (int i = 0; i < (int)m_listitemProperties.size(); i++)
+    if (m_listitemProperties[i] == str)
+      return (LISTITEM_PROPERTY_START + offset + i);
+
+  if (m_listitemProperties.size() < LISTITEM_PROPERTY_END - LISTITEM_PROPERTY_START)
+  {
+    m_listitemProperties.push_back(str);
+    return LISTITEM_PROPERTY_START + offset + m_listitemProperties.size() - 1;
+  }
+
+  CLog::Log(LOGERROR, "%s - not enough listitem property space!", __FUNCTION__);
+  return 0;
+}
+
+int CGUIInfoManager::AddMultiInfo(const GUIInfo &info)
+{
+  // check to see if we have this info already
+  for (unsigned int i = 0; i < m_multiInfo.size(); i++)
+    if (m_multiInfo[i] == info)
+      return (int)i + MULTI_INFO_START;
+  // return the new offset
+  m_multiInfo.push_back(info);
+  int id = (int)m_multiInfo.size() + MULTI_INFO_START - 1;
+  if (id > MULTI_INFO_END)
+    CLog::Log(LOGERROR, "%s - too many multiinfo bool/labels in this skin", __FUNCTION__);
+  return id;
 }
 
 int CGUIInfoManager::TranslateMusicPlayerString(const std::string &info) const
@@ -4272,35 +4339,7 @@ void CGUIInfoManager::UpdateAVInfo()
   }
 }
 
-int CGUIInfoManager::AddListItemProp(const std::string &str, int offset)
-{
-  for (int i=0; i < (int)m_listitemProperties.size(); i++)
-    if (m_listitemProperties[i] == str)
-      return (LISTITEM_PROPERTY_START+offset + i);
 
-  if (m_listitemProperties.size() < LISTITEM_PROPERTY_END - LISTITEM_PROPERTY_START)
-  {
-    m_listitemProperties.push_back(str);
-    return LISTITEM_PROPERTY_START + offset + m_listitemProperties.size() - 1;
-  }
-
-  CLog::Log(LOGERROR,"%s - not enough listitem property space!", __FUNCTION__);
-  return 0;
-}
-
-int CGUIInfoManager::AddMultiInfo(const GUIInfo &info)
-{
-  // check to see if we have this info already
-  for (unsigned int i = 0; i < m_multiInfo.size(); i++)
-    if (m_multiInfo[i] == info)
-      return (int)i + MULTI_INFO_START;
-  // return the new offset
-  m_multiInfo.push_back(info);
-  int id = (int)m_multiInfo.size() + MULTI_INFO_START - 1;
-  if (id > MULTI_INFO_END)
-    CLog::Log(LOGERROR, "%s - too many multiinfo bool/labels in this skin", __FUNCTION__);
-  return id;
-}
 
 int CGUIInfoManager::ConditionalStringParameter(const std::string &parameter, bool caseSensitive /*= false*/)
 {
@@ -5621,4 +5660,30 @@ CEpgInfoTagPtr CGUIInfoManager::GetEpgInfoTag() const
       currentTag = currentTag->GetNextEvent();
   }
   return currentTag;
+}
+
+int CGUIInfoManager::TranslateParameter(ParameterFlags flag, int options, GUIInfo& gInfo, const std::vector<Property>& info, bool& listItemDependent)
+{
+  const auto& cat = info.front();
+  const auto& prop = info.back();
+
+  switch (flag)
+  {
+  case ParameterFlags::CONDITIONAL:
+    return ConditionalStringParameter(prop.param(0), (options & CASE_SENSITIVE) != 0);
+    break;
+  case ParameterFlags::LABEL:
+    return TranslateSingleString(prop.param(0), listItemDependent);
+    break;
+  case ParameterFlags::LABEL_OR_CONDITIONAL:
+  {
+    int infoLabel = TranslateSingleString(prop.param(0), listItemDependent);
+    if (infoLabel > 0)
+      return infoLabel;
+
+    std::string label = CGUIInfoLabel::GetLabel(prop.param(0));
+    StringUtils::ToLower(label);
+    return ConditionalStringParameter(label);
+  }
+  }
 }

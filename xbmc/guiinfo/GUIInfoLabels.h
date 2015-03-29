@@ -638,12 +638,14 @@
 #define LISTITEM_IMDBNUMBER         (LISTITEM_START + 146)
 #define LISTITEM_EPISODENAME        (LISTITEM_START + 147)
 
+#define LISTITEM_PROPERTY           (LISTITEM_START + 199)
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)
 #define LISTITEM_END                (LISTITEM_PROPERTY_END)
 
 #define MUSICPLAYER_PROPERTY_OFFSET 800 // 100 id's reserved for musicplayer props.
 #define LISTITEM_ART_OFFSET         900 // 100 id's reserved for listitem art.
+#define LISTITEM_ART                1000
 
 #define CONDITIONAL_LABEL_START       LISTITEM_END + 1 // 36001
 #define CONDITIONAL_LABEL_END         37000
