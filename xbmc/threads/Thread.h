@@ -35,9 +35,17 @@
 #include <mach/mach.h>
 #endif
 
+/*! \class IRunnable
+ *
+ * \brief Interface to implement to let a task run on a separate thread
+ */
 class IRunnable
 {
 public:
+  /*! \brief  This method must be overridden and is the entry point
+   *          called when the thread is launched
+   *
+   */
   virtual void Run()=0;
   virtual ~IRunnable() {}
 };
@@ -45,21 +53,75 @@ public:
 // minimum as mandated by XTL
 #define THREAD_MINSTACKSIZE 0x10000
 
-namespace XbmcThreads { class ThreadSettings; }
-
+/**
+ * \class CThread
+ *
+ * \brief Represents a thread object, can either be instantiated directly
+ *        or inherited from.
+ *
+ * TODO: long description
+ *
+ *
+ */
 class CThread
 {
   static XbmcCommons::ILogger* logger;
 
 protected:
+  /*! \brief Constructor used when inheriting from CThread
+   *
+   * \param[in] Name of the thread
+   */
   CThread(const char* ThreadName);
 
 public:
+  /*! \brief  Constructor when instantiating a CThread object
+   *          this will not actually launch a new thread
+   *
+   * \param[in] pRunnable   Object inheriting from IRunnable that will be run in the
+   *                        new thread
+   * \param[in] ThreadName  Name of the thread
+   * \sa IRunnable
+   * \sa CThread::Create
+   */
   CThread(IRunnable* pRunnable, const char* ThreadName);
   virtual ~CThread();
+
+  /*! \brief  Create and launch a new thread.
+   *
+   *  This method is not thread safe and the caller must make
+   *  sure that it's not called twice. Failing to do so will
+   *  call exit(1) and kill the process without warning
+   *
+   * \param[in] bAutoDelete Should the thread be deleted once it's finished
+   *                        running? defaults to false
+   * \param[in] stacksize   Set the threads stack size. Default value is 0
+   *                        which lets the system decide the size
+   */
   void Create(bool bAutoDelete = false, unsigned stacksize = 0);
+
+  /*! \brief Put the current thread to sleep for some amount of time
+   *
+   *  The sleep method varies depending on how this is called, it can either
+   *  use libc sleep or an Event
+   *
+   * \param[in] milliseconds  Time to sleep in milliseconds
+   */
   void Sleep(unsigned int milliseconds);
+
+  /*! \brief Get the realtime priority value
+   *
+   *  This is currently only implemented on OSX
+   *
+   * \return  priority value, range depends on system 
+   */
   int GetSchedRRPriority(void);
+
+  /*! \brief Set the realtime priority value to use
+   *
+   * \param[in] iPriority realtime priority value to use
+   * \return true if successful otherwise false
+   */
   bool SetPrioritySched_RR(int iPriority);
   bool IsAutoDelete() const;
   virtual void StopThread(bool bWait = true);
