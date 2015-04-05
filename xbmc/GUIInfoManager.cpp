@@ -444,37 +444,37 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("pvr.actstreammux", PVR_ACTUAL_STREAM_MUX),
   INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER),
 
-  INFO_LABEL_PARAM1("musicplayer.title",               MUSICPLAYER_TITLE,               CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.album",               MUSICPLAYER_ALBUM,               CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.artist",              MUSICPLAYER_ARTIST,              CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.albumartist",         MUSICPLAYER_ALBUM_ARTIST,        CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.year",                MUSICPLAYER_YEAR,                CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.genre",               MUSICPLAYER_GENRE,               CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.duration",            MUSICPLAYER_DURATION,            CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.tracknumber",         MUSICPLAYER_TRACK_NUMBER,        CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.cover",               MUSICPLAYER_COVER,               CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.bitrate",             MUSICPLAYER_BITRATE,             CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.playlistlength",      MUSICPLAYER_PLAYLISTLEN,         CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.playlistposition",    MUSICPLAYER_PLAYLISTPOS,         CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.channels",            MUSICPLAYER_CHANNELS,            CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.bitspersample",       MUSICPLAYER_BITSPERSAMPLE,       CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.samplerate",          MUSICPLAYER_SAMPLERATE,          CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.codec",               MUSICPLAYER_CODEC,               CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.discnumber",          MUSICPLAYER_DISC_NUMBER,         CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.rating",              MUSICPLAYER_RATING,              CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.comment",             MUSICPLAYER_COMMENT,             CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.lyrics",              MUSICPLAYER_LYRICS,              CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.playlistplaying",     MUSICPLAYER_PLAYLISTPLAYING,     CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.exists",              MUSICPLAYER_EXISTS,              CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.hasprevious",         MUSICPLAYER_HASPREVIOUS,         CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.hasnext",             MUSICPLAYER_HASNEXT,             CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.playcount",           MUSICPLAYER_PLAYCOUNT,           CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.lastplayed",          MUSICPLAYER_LASTPLAYED,          CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.channelname",         MUSICPLAYER_CHANNEL_NAME,        CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.channelnumber",       MUSICPLAYER_CHANNEL_NUMBER,      CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.subchannelnumber",    MUSICPLAYER_SUB_CHANNEL_NUMBER,  CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.channelnumberlabel",  MUSICPLAYER_CHANNEL_NUMBER_LBL,  CATEGORY_OPTIONAL_NUMBER),
-  INFO_LABEL_PARAM1("musicplayer.channelgroup",        MUSICPLAYER_CHANNEL_GROUP,       CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.title",               MUSICPLAYER_TITLE,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.album",               MUSICPLAYER_ALBUM,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.artist",              MUSICPLAYER_ARTIST,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.albumartist",         MUSICPLAYER_ALBUM_ARTIST,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.year",                MUSICPLAYER_YEAR,                CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.genre",               MUSICPLAYER_GENRE,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.duration",            MUSICPLAYER_DURATION,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.tracknumber",         MUSICPLAYER_TRACK_NUMBER,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.cover",               MUSICPLAYER_COVER,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.bitrate",             MUSICPLAYER_BITRATE,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.playlistlength",      MUSICPLAYER_PLAYLISTLEN,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.playlistposition",    MUSICPLAYER_PLAYLISTPOS,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.channels",            MUSICPLAYER_CHANNELS,            CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.bitspersample",       MUSICPLAYER_BITSPERSAMPLE,       CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.samplerate",          MUSICPLAYER_SAMPLERATE,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.codec",               MUSICPLAYER_CODEC,               CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.discnumber",          MUSICPLAYER_DISC_NUMBER,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.rating",              MUSICPLAYER_RATING,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.comment",             MUSICPLAYER_COMMENT,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.lyrics",              MUSICPLAYER_LYRICS,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.playlistplaying",     MUSICPLAYER_PLAYLISTPLAYING,     CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.exists",              MUSICPLAYER_EXISTS,              CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.hasprevious",         MUSICPLAYER_HASPREVIOUS,         CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.hasnext",             MUSICPLAYER_HASNEXT,             CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.playcount",           MUSICPLAYER_PLAYCOUNT,           CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.lastplayed",          MUSICPLAYER_LASTPLAYED,          CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.channelname",         MUSICPLAYER_CHANNEL_NAME,        CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.channelnumber",       MUSICPLAYER_CHANNEL_NUMBER,      CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.subchannelnumber",    MUSICPLAYER_SUB_CHANNEL_NUMBER,  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.channelnumberlabel",  MUSICPLAYER_CHANNEL_NUMBER_LBL,  CATEGORY_OPTIONAL_NUMBER, 0),
+  INFO_LABEL_PARAM1("musicplayer.channelgroup",        MUSICPLAYER_CHANNEL_GROUP,       CATEGORY_OPTIONAL_NUMBER, 0),
 
   INFO_LABEL("videoplayer.title", VIDEOPLAYER_TITLE),
   INFO_LABEL("videoplayer.genre", VIDEOPLAYER_GENRE),
@@ -1168,6 +1168,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         result.m_info = AddListItemProp(prop.param(0));
       break;
     case ParameterFlags::SORTDIRECTION:
+    {
       SortOrder order = SortOrderNone;
       if (StringUtils::EqualsNoCase(prop.param(0), "ascending"))
         order = SortOrderAscending;
@@ -1176,6 +1177,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       result.m_data2 = order;
       result.m_data2Type = ParameterFlags::SORTDIRECTION;
       break;
+    }
     default:
       break;
     }
