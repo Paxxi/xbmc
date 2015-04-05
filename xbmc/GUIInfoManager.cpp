@@ -183,6 +183,7 @@ enum class ParameterFlags : uint8_t
   NUMBER,
   CONDITIONAL,
   TIME,
+  SORTDIRECTION,
   LABEL_OR_CONDITIONAL,
   OPTIONAL_NUMBER,
   OPTIONAL_CONDITIONAL,
@@ -443,37 +444,37 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL("pvr.actstreammux", PVR_ACTUAL_STREAM_MUX),
   INFO_LABEL("pvr.actstreamprovidername", PVR_ACTUAL_STREAM_PROVIDER),
 
-  INFO_LABEL("musicplayer.title", MUSICPLAYER_TITLE),
-  INFO_LABEL("musicplayer.album", MUSICPLAYER_ALBUM),
-  INFO_LABEL("musicplayer.artist", MUSICPLAYER_ARTIST),
-  INFO_LABEL("musicplayer.albumartist", MUSICPLAYER_ALBUM_ARTIST),
-  INFO_LABEL("musicplayer.year", MUSICPLAYER_YEAR),
-  INFO_LABEL("musicplayer.genre", MUSICPLAYER_GENRE),
-  INFO_LABEL("musicplayer.duration", MUSICPLAYER_DURATION),
-  INFO_LABEL("musicplayer.tracknumber", MUSICPLAYER_TRACK_NUMBER),
-  INFO_LABEL("musicplayer.cover", MUSICPLAYER_COVER),
-  INFO_LABEL("musicplayer.bitrate", MUSICPLAYER_BITRATE),
-  INFO_LABEL("musicplayer.playlistlength", MUSICPLAYER_PLAYLISTLEN),
-  INFO_LABEL("musicplayer.playlistposition", MUSICPLAYER_PLAYLISTPOS),
-  INFO_LABEL("musicplayer.channels", MUSICPLAYER_CHANNELS),
-  INFO_LABEL("musicplayer.bitspersample", MUSICPLAYER_BITSPERSAMPLE),
-  INFO_LABEL("musicplayer.samplerate", MUSICPLAYER_SAMPLERATE),
-  INFO_LABEL("musicplayer.codec", MUSICPLAYER_CODEC),
-  INFO_LABEL("musicplayer.discnumber", MUSICPLAYER_DISC_NUMBER),
-  INFO_LABEL("musicplayer.rating", MUSICPLAYER_RATING),
-  INFO_LABEL("musicplayer.comment", MUSICPLAYER_COMMENT),
-  INFO_LABEL("musicplayer.lyrics", MUSICPLAYER_LYRICS),
-  INFO_LABEL("musicplayer.playlistplaying", MUSICPLAYER_PLAYLISTPLAYING),
-  INFO_LABEL("musicplayer.exists", MUSICPLAYER_EXISTS),
-  INFO_LABEL("musicplayer.hasprevious", MUSICPLAYER_HASPREVIOUS),
-  INFO_LABEL("musicplayer.hasnext", MUSICPLAYER_HASNEXT),
-  INFO_LABEL("musicplayer.playcount", MUSICPLAYER_PLAYCOUNT),
-  INFO_LABEL("musicplayer.lastplayed", MUSICPLAYER_LASTPLAYED),
-  INFO_LABEL("musicplayer.channelname", MUSICPLAYER_CHANNEL_NAME),
-  INFO_LABEL("musicplayer.channelnumber", MUSICPLAYER_CHANNEL_NUMBER),
-  INFO_LABEL("musicplayer.subchannelnumber", MUSICPLAYER_SUB_CHANNEL_NUMBER),
-  INFO_LABEL("musicplayer.channelnumberlabel", MUSICPLAYER_CHANNEL_NUMBER_LBL),
-  INFO_LABEL("musicplayer.channelgroup", MUSICPLAYER_CHANNEL_GROUP),
+  INFO_LABEL_PARAM1("musicplayer.title",               MUSICPLAYER_TITLE,               CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.album",               MUSICPLAYER_ALBUM,               CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.artist",              MUSICPLAYER_ARTIST,              CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.albumartist",         MUSICPLAYER_ALBUM_ARTIST,        CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.year",                MUSICPLAYER_YEAR,                CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.genre",               MUSICPLAYER_GENRE,               CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.duration",            MUSICPLAYER_DURATION,            CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.tracknumber",         MUSICPLAYER_TRACK_NUMBER,        CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.cover",               MUSICPLAYER_COVER,               CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.bitrate",             MUSICPLAYER_BITRATE,             CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.playlistlength",      MUSICPLAYER_PLAYLISTLEN,         CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.playlistposition",    MUSICPLAYER_PLAYLISTPOS,         CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.channels",            MUSICPLAYER_CHANNELS,            CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.bitspersample",       MUSICPLAYER_BITSPERSAMPLE,       CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.samplerate",          MUSICPLAYER_SAMPLERATE,          CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.codec",               MUSICPLAYER_CODEC,               CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.discnumber",          MUSICPLAYER_DISC_NUMBER,         CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.rating",              MUSICPLAYER_RATING,              CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.comment",             MUSICPLAYER_COMMENT,             CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.lyrics",              MUSICPLAYER_LYRICS,              CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.playlistplaying",     MUSICPLAYER_PLAYLISTPLAYING,     CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.exists",              MUSICPLAYER_EXISTS,              CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.hasprevious",         MUSICPLAYER_HASPREVIOUS,         CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.hasnext",             MUSICPLAYER_HASNEXT,             CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.playcount",           MUSICPLAYER_PLAYCOUNT,           CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.lastplayed",          MUSICPLAYER_LASTPLAYED,          CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.channelname",         MUSICPLAYER_CHANNEL_NAME,        CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.channelnumber",       MUSICPLAYER_CHANNEL_NUMBER,      CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.subchannelnumber",    MUSICPLAYER_SUB_CHANNEL_NUMBER,  CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.channelnumberlabel",  MUSICPLAYER_CHANNEL_NUMBER_LBL,  CATEGORY_OPTIONAL_NUMBER),
+  INFO_LABEL_PARAM1("musicplayer.channelgroup",        MUSICPLAYER_CHANNEL_GROUP,       CATEGORY_OPTIONAL_NUMBER),
 
   INFO_LABEL("videoplayer.title", VIDEOPLAYER_TITLE),
   INFO_LABEL("videoplayer.genre", VIDEOPLAYER_GENRE),
@@ -747,6 +748,7 @@ const std::map<std::string, ParseInfo> labels =
   INFO_LABEL_PARAM2("container.property",           CONTAINER_PROPERTY,           CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
   INFO_LABEL_PARAM2("container.content",            CONTAINER_CONTENT,            CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
   INFO_LABEL_PARAM2("container.art",                CONTAINER_ART,                CATEGORY_OPTIONAL_NUMBER, CONDITIONAL, 0),
+  INFO_LABEL_PARAM2("container.sortdirection",      CONTAINER_SORT_DIRECTION,     CATEGORY_OPTIONAL_NUMBER, SORTDIRECTION, 0),
 
   INFO_LABEL_PARAM1("control.hasfocus",   CONTROL_HAS_FOCUS,  NUMBER, 0),
   INFO_LABEL_PARAM1("control.isvisible",  CONTROL_IS_VISIBLE, NUMBER, 0),
@@ -888,7 +890,47 @@ unsigned int CGUIInfoManager::Property::num_params() const
   return params.size();
 }
 
-void CGUIInfoManager::SplitInfoString(const std::string &infoString, vector<Property> &info)
+std::string CGUIInfoManager::PreCompatHelper(std::string infoString)
+{
+  if (StringUtils::CompareNoCase(infoString, "musicplayer.position") == 0)
+  {
+    //erase .position
+    infoString = infoString.erase(11, 9);
+  }
+
+  if (StringUtils::CompareNoCase(infoString, "musicplayer.offset") == 0)
+  {
+    //erase .offset
+    infoString = infoString.erase(11, 7);
+    if (StringUtils::isasciidigit(infoString[13]))
+      infoString = infoString.insert(13, "+");
+  }
+
+  return infoString;
+}
+
+void CGUIInfoManager::PostCompatHelper(std::vector<Property> &info)
+{
+  for (auto& i : info)
+  {
+    if (i.name == "property" && i.num_params() == 1)
+    {
+      if (StringUtils::EqualsNoCase(i.param(0), "fanart_image") ||
+          StringUtils::EqualsNoCase(i.param(0), "fanart"))
+      {
+        //old style listitem can have property(fanart) or property(fanart_image)
+        //change fanart_image to fanart and
+        //change property to art that's the new format we want to use
+        i.name = "art";
+        i.params[0] = "fanart";
+      }
+    }
+  }
+
+  return;
+}
+
+void CGUIInfoManager::SplitInfoString(std::string infoString, vector<Property> &info)
 {
   // our string is of the form:
   // category[(params)][.info(params).info2(params)] ...
@@ -896,6 +938,9 @@ void CGUIInfoManager::SplitInfoString(const std::string &infoString, vector<Prop
   unsigned int parentheses = 0;
   std::string property;
   std::string param;
+
+  infoString = PreCompatHelper(infoString);
+
   for (size_t i = 0; i < infoString.size(); ++i)
   {
     if (infoString[i] == '(')
@@ -933,6 +978,8 @@ void CGUIInfoManager::SplitInfoString(const std::string &infoString, vector<Prop
     StringUtils::ToLower(property);
     info.push_back(Property(property, param));
   }
+
+  PostCompatHelper(info);
 }
 
 /// \brief Translates a string as given by the skin into an int that we use for more
@@ -1076,7 +1123,14 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     {
       int id = 0;
       if (cat.num_params() == 1)
+      {
+        if (cat.param(0)[0] == '+' || cat.param(0)[0] == '-')
+          result.m_flags |= GUIInfo::OFFSET;
+        else
+          result.m_flags |= GUIInfo::POSITION;
+
         id = atoi(cat.param(0).c_str());
+      }
 
       if (id == 0)
         treatAsLabel = true;
@@ -1105,9 +1159,22 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       result.m_data2Type = ParameterFlags::NUMBER;
       break;
     case ParameterFlags::LISTITEM_PROP:
-      result.m_info = pInfo.id;
-      result.m_data2 = AddListItemProp(prop.param(0));
-      result.m_data2Type = ParameterFlags::LISTITEM_PROP;
+      //special case, listitem.property and listitem.art store the original
+      //string in a list for later property lookup. They don't have any special
+      //id so place in the list is expected in the id field.
+      if (prop.name == "art")
+        result.m_info = AddListItemProp(prop.param(0), LISTITEM_ART_OFFSET);
+      else
+        result.m_info = AddListItemProp(prop.param(0));
+      break;
+    case ParameterFlags::SORTDIRECTION:
+      SortOrder order = SortOrderNone;
+      if (StringUtils::EqualsNoCase(prop.param(0), "ascending"))
+        order = SortOrderAscending;
+      else if (StringUtils::EqualsNoCase(prop.param(0), "descending"))
+        order = SortOrderDescending;
+      result.m_data2 = order;
+      result.m_data2Type = ParameterFlags::SORTDIRECTION;
       break;
     default:
       break;
@@ -1195,53 +1262,6 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     {
       return CPictureInfoTag::TranslateString(prop.name);
     }
-    else if (cat.name == "container")
-    {
-      if (prop.name == "sortdirection")
-      {
-        SortOrder order = SortOrderNone;
-        if (StringUtils::EqualsNoCase(prop.param(), "ascending"))
-          order = SortOrderAscending;
-        else if (StringUtils::EqualsNoCase(prop.param(), "descending"))
-          order = SortOrderDescending;
-        return AddMultiInfo(GUIInfo(CONTAINER_SORT_DIRECTION, order));
-      }
-      else if (prop.name == "sort")
-      {
-        if (StringUtils::EqualsNoCase(prop.param(), "songrating"))
-          return AddMultiInfo(GUIInfo(CONTAINER_SORT_METHOD, SortByRating));
-      }
-    }
-    else if (cat.name == "listitem")
-    {
-      int offset = atoi(cat.param().c_str());
-      int ret = TranslateListItem(prop);
-      if (ret)
-        listItemDependent = true;
-      if (offset)
-        return AddMultiInfo(GUIInfo(ret, 0, offset, GUIInfo::LISTITEM_WRAP));
-      return ret;
-    }
-    else if (cat.name == "listitemposition")
-    {
-      int offset = atoi(cat.param().c_str());
-      int ret = TranslateListItem(prop);
-      if (ret)
-        listItemDependent = true;
-      if (offset)
-        return AddMultiInfo(GUIInfo(ret, 0, offset, GUIInfo::LISTITEM_POSITION));
-      return ret;
-    }
-    else if (cat.name == "listitemnowrap")
-    {
-      int offset = atoi(cat.param().c_str());
-      int ret = TranslateListItem(prop);
-      if (ret)
-        listItemDependent = true;
-      if (offset)
-        return AddMultiInfo(GUIInfo(ret, 0, offset));
-      return ret;
-    }
     else if (cat.name == "skin")
     {
       if (prop.num_params())
@@ -1317,23 +1337,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
   
   else if (info.size() == 3 || info.size() == 4)
   {
-
-    if (info[0].name == "musicplayer")
-    { // TODO: these two don't allow duration(foo) and also don't allow more than this number of levels...
-      if (info[1].name == "position")
-      {
-        int position = atoi(info[1].param().c_str());
-        int value = TranslateMusicPlayerString(info[2].name); // musicplayer.position(foo).bar
-        return AddMultiInfo(GUIInfo(value, 0, position));
-      }
-      else if (info[1].name == "offset")
-      {
-        int position = atoi(info[1].param().c_str());
-        int value = TranslateMusicPlayerString(info[2].name); // musicplayer.offset(foo).bar
-        return AddMultiInfo(GUIInfo(value, 1, position));
-      }
-    }
-    else if (info[0].name == "container")
+    if (info[0].name == "container")
     {
       int id = atoi(info[0].param().c_str());
       int offset = atoi(info[1].param().c_str());

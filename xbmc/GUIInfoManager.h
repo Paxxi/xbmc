@@ -79,7 +79,9 @@ public:
   enum Flag : uint8_t
   {
     LISTITEM_WRAP     = 1,
-    LISTITEM_POSITION = 2
+    LISTITEM_POSITION = 2,
+    OFFSET            = 4,
+    POSITION          = 8
   };
 
   GUIInfo()
@@ -272,7 +274,6 @@ public:
     unsigned int num_params() const;
 
     std::string name;
-  private:
     std::vector<std::string> params;
   };
 
@@ -298,9 +299,24 @@ protected:
    \param infoString the original string
    \param info the resulting pairs of info and parameters.
    */
+  void SplitInfoString(std::string infoString, std::vector<Property> &info);
+
+  /*! \brief  Rewrite the infostring into the format we want
+   *          to avoid handling every old corner case in the
+   *          main parsing logic
+   *
+   * \param[in] infoString  The infolabel to rewrite
+   * \return the fixed infoString, can be the same string if nothing had to be done
+   */
+  std::string PreCompatHelper(std::string infoString);
+
+  /*! \brief  Change the parsed info vector if needed to make
+   *          parsing easier in our main logic
+   *
+   * \param[in,out] info  The parsed infoString that we want to fix up
+   */
+  void PostCompatHelper(std::vector<Property> &info);
   
-  void SplitInfoString(const std::string &infoString, std::vector<Property> &info);
-protected:
   // Conditional string parameters for testing are stored in a vector for later retrieval.
   // The offset into the string parameters array is returned.
   int ConditionalStringParameter(const std::string &strParameter, bool caseSensitive = false);
