@@ -1196,16 +1196,16 @@ void CGUIWindowMusicBase::OnInitWindow()
   if (CMediaSettings::GetInstance().GetMusicNeedsUpdate() == 53)
   {
     if (g_infoManager.GetLibraryBool(LIBRARY_HAS_MUSIC) && !g_application.IsMusicScanning())
-    {
-      // rescan of music library required
+  {
+    // rescan of music library required
       if (CGUIDialogYesNo::ShowAndGetInput(CVariant{799}, CVariant{800}))
-      {
-        int flags = CMusicInfoScanner::SCAN_RESCAN;
+    {
+      int flags = CMusicInfoScanner::SCAN_RESCAN;
         if (CSettings::GetInstance().GetBool(CSettings::SETTING_MUSICLIBRARY_DOWNLOADINFO))
-          flags |= CMusicInfoScanner::SCAN_ONLINE;
+        flags |= CMusicInfoScanner::SCAN_ONLINE;
         if (CSettings::GetInstance().GetBool(CSettings::SETTING_MUSICLIBRARY_BACKGROUNDUPDATE))
-          flags |= CMusicInfoScanner::SCAN_BACKGROUND;
-        g_application.StartMusicScan("", true, flags);
+        flags |= CMusicInfoScanner::SCAN_BACKGROUND;
+      g_application.StartMusicScan("", true, flags);
         CMediaSettings::GetInstance().SetMusicNeedsUpdate(0); // once is enough (user may interrupt, but that's up to them)
         CSettings::GetInstance().Save();
       }

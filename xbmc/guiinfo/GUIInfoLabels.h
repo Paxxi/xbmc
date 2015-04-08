@@ -79,7 +79,10 @@
 #define PLAYER_ISINTERNETSTREAM      54
 #define PLAYER_FILENAME              55
 #define PLAYER_SEEKSTEPSIZE          56
+<<<<<<< HEAD
 #define PLAYER_IS_CHANNEL_PREVIEW_ACTIVE  57
+=======
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define WEATHER_CONDITIONS          100
 #define WEATHER_TEMPERATURE         101
@@ -125,7 +128,10 @@
 #define SYSTEM_PROFILENAME          146
 #define SYSTEM_PROFILETHUMB         147
 #define SYSTEM_HAS_LOGINSCREEN      148
+<<<<<<< HEAD
 #define SYSTEM_HAS_MODAL_DIALOG     149
+=======
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define SYSTEM_HDD_SMART            150
 #define SYSTEM_HDD_TEMPERATURE      151
 #define SYSTEM_HDD_MODEL            152
@@ -258,7 +264,10 @@
 #define VIDEOPLAYER_IMDBNUMBER        317
 #define VIDEOPLAYER_EPISODENAME       318
 
+<<<<<<< HEAD
 #define CONTAINER_HAS_PARENT_ITEM    341
+=======
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define CONTAINER_CAN_FILTER         342
 #define CONTAINER_CAN_FILTERADVANCED 343
 #define CONTAINER_FILTERED           344
@@ -296,9 +305,13 @@
 #define CONTAINER_CURRENT_PAGE      375
 #define CONTAINER_SHOWPLOT          376
 #define CONTAINER_TOTALTIME         377
+<<<<<<< HEAD
 #define CONTAINER_SORT_ORDER        378
 #define CONTAINER_TOTALWATCHED      379
 #define CONTAINER_TOTALUNWATCHED    380
+=======
+
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define MUSICPM_ENABLED             381
 #define MUSICPM_SONGSPLAYED         382
 #define MUSICPM_MATCHINGSONGS       383
@@ -329,6 +342,11 @@
 
 #define SKIN_BOOL                   600
 #define SKIN_STRING                 601
+<<<<<<< HEAD
+=======
+#define SKIN_HAS_MUSIC_OVERLAY      602
+#define SKIN_HAS_VIDEO_OVERLAY      603
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define SKIN_THEME                  604
 #define SKIN_COLOUR_THEME           605
 #define SKIN_HAS_THEME              606
@@ -409,7 +427,10 @@
 #define FANART_IMAGE                1003
 
 #define SYSTEM_PROFILEAUTOLOGIN     1004
+<<<<<<< HEAD
 #define SYSTEM_HAS_ADSP             1005
+=======
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define PVR_CONDITIONS_START        1100
 #define PVR_IS_RECORDING            (PVR_CONDITIONS_START)
@@ -424,8 +445,12 @@
 #define PVR_ACTUAL_STREAM_ENCRYPTED (PVR_CONDITIONS_START + 9)
 #define PVR_HAS_TV_CHANNELS         (PVR_CONDITIONS_START + 10)
 #define PVR_HAS_RADIO_CHANNELS      (PVR_CONDITIONS_START + 11)
+<<<<<<< HEAD
 #define PVR_IS_TIMESHIFTING         (PVR_CONDITIONS_START + 12)
 #define PVR_CONDITIONS_END          PVR_IS_TIMESHIFTING
+=======
+#define PVR_CONDITIONS_END          PVR_HAS_RADIO_CHANNELS
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define PVR_STRINGS_START           1200
 #define PVR_NEXT_RECORDING_CHANNEL  (PVR_STRINGS_START)
@@ -467,6 +492,7 @@
 #define PVR_ACTUAL_STREAM_MUX       (PVR_STRINGS_START + 36)
 #define PVR_ACTUAL_STREAM_PROVIDER  (PVR_STRINGS_START + 37)
 #define PVR_BACKEND_DISKSPACE_PROGR (PVR_STRINGS_START + 38)
+<<<<<<< HEAD
 #define PVR_TIMESHIFT_START_TIME    (PVR_STRINGS_START + 39)
 #define PVR_TIMESHIFT_END_TIME      (PVR_STRINGS_START + 40)
 #define PVR_TIMESHIFT_PLAY_TIME     (PVR_STRINGS_START + 41)
@@ -491,6 +517,9 @@
 #define ADSP_MASTER_OWN_ICON        (ADSP_STRINGS_START + 9)
 #define ADSP_MASTER_OVERRIDE_ICON   (ADSP_STRINGS_START + 10)
 #define ADSP_STRINGS_END            ADSP_MASTER_OVERRIDE_ICON
+=======
+#define PVR_STRINGS_END             PVR_ACTUAL_STREAM_PROVIDER
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define WINDOW_PROPERTY             9993
 #define WINDOW_IS_TOPMOST           9994
@@ -506,6 +535,7 @@
 #define CONTROL_GROUP_HAS_FOCUS     29999
 #define CONTROL_HAS_FOCUS           30000
 
+<<<<<<< HEAD
 #define LISTITEM_START              35000
 #define LISTITEM_THUMB              (LISTITEM_START)
 #define LISTITEM_LABEL              (LISTITEM_START + 1)
@@ -556,6 +586,58 @@
 #define LISTITEM_PICTURE_EXP_MODE   (LISTITEM_START + 44)    // => SLIDE_EXIF_EXPOSURE_MODE
 #define LISTITEM_PICTURE_EXP_TIME   (LISTITEM_START + 45)    // => SLIDE_EXIF_EXPOSURE_TIME
 #define LISTITEM_PICTURE_ISO        (LISTITEM_START + 46)    // => SLIDE_EXIF_ISO_EQUIV
+=======
+#define LISTITEM_START                    35000
+#define LISTITEM_THUMB                    (LISTITEM_START)
+#define LISTITEM_LABEL                    (LISTITEM_START + 1)
+#define LISTITEM_TITLE                    (LISTITEM_START + 2)
+#define LISTITEM_TRACKNUMBER              (LISTITEM_START + 3)
+#define LISTITEM_ARTIST                   (LISTITEM_START + 4)
+#define LISTITEM_ALBUM                    (LISTITEM_START + 5)
+#define LISTITEM_YEAR                     (LISTITEM_START + 6)
+#define LISTITEM_GENRE                    (LISTITEM_START + 7)
+#define LISTITEM_ICON                     (LISTITEM_START + 8)
+#define LISTITEM_DIRECTOR                 (LISTITEM_START + 9)
+#define LISTITEM_OVERLAY                  (LISTITEM_START + 10)
+#define LISTITEM_LABEL2                   (LISTITEM_START + 11)
+#define LISTITEM_FILENAME                 (LISTITEM_START + 12)
+#define LISTITEM_DATE                     (LISTITEM_START + 13)
+#define LISTITEM_SIZE                     (LISTITEM_START + 14)
+#define LISTITEM_RATING                   (LISTITEM_START + 15)
+#define LISTITEM_PROGRAM_COUNT            (LISTITEM_START + 16)
+#define LISTITEM_DURATION                 (LISTITEM_START + 17)
+#define LISTITEM_ISPLAYING                (LISTITEM_START + 18)
+#define LISTITEM_ISSELECTED               (LISTITEM_START + 19)
+#define LISTITEM_PLOT                     (LISTITEM_START + 20)
+#define LISTITEM_PLOT_OUTLINE             (LISTITEM_START + 21)
+#define LISTITEM_EPISODE                  (LISTITEM_START + 22)
+#define LISTITEM_SEASON                   (LISTITEM_START + 23)
+#define LISTITEM_TVSHOW                   (LISTITEM_START + 24)
+#define LISTITEM_PREMIERED                (LISTITEM_START + 25)
+#define LISTITEM_COMMENT                  (LISTITEM_START + 26)
+#define LISTITEM_ACTUAL_ICON              (LISTITEM_START + 27)
+#define LISTITEM_PATH                     (LISTITEM_START + 28)
+#define LISTITEM_PICTURE_PATH             (LISTITEM_START + 29)
+// the ordering of LISTITEM_PICTURE_* is important as they're mapped to SLIDE_* items in GUIInfoManager.cpp
+#define LISTITEM_PICTURE_START            (LISTITEM_START + 30)
+#define LISTITEM_PICTURE_RESOLUTION       (LISTITEM_PICTURE_START) // => SLIDE_RESOLUTION
+#define LISTITEM_PICTURE_LONGDATE         (LISTITEM_START + 31)    // => SLIDE_EXIF_LONG_DATE
+#define LISTITEM_PICTURE_LONGDATETIME     (LISTITEM_START + 32)    // => SLIDE_EXIF_LONG_DATE_TIME
+#define LISTITEM_PICTURE_DATE             (LISTITEM_START + 33)    // => SLIDE_EXIF_DATE
+#define LISTITEM_PICTURE_DATETIME         (LISTITEM_START + 34)    // => SLIDE_EXIF_DATE_TIME
+#define LISTITEM_PICTURE_COMMENT          (LISTITEM_START + 35)    // => SLIDE_COMMENT
+#define LISTITEM_PICTURE_CAPTION          (LISTITEM_START + 36)    // => SLIDE_IPTC_CAPTION
+#define LISTITEM_PICTURE_DESC             (LISTITEM_START + 37)    // => SLIDE_EXIF_DESCRIPTION
+#define LISTITEM_PICTURE_KEYWORDS         (LISTITEM_START + 38)    // => SLIDE_IPTC_KEYWORDS
+#define LISTITEM_PICTURE_CAM_MAKE         (LISTITEM_START + 39)    // => SLIDE_EXIF_CAMERA_MAKE
+#define LISTITEM_PICTURE_CAM_MODEL        (LISTITEM_START + 40)    // => SLIDE_EXIF_CAMERA_MODEL
+#define LISTITEM_PICTURE_APERTURE         (LISTITEM_START + 41)    // => SLIDE_EXIF_APERTURE
+#define LISTITEM_PICTURE_FOCAL_LEN        (LISTITEM_START + 42)    // => SLIDE_EXIF_FOCAL_LENGTH
+#define LISTITEM_PICTURE_FOCUS_DIST       (LISTITEM_START + 43)    // => SLIDE_EXIF_FOCUS_DIST
+#define LISTITEM_PICTURE_EXP_MODE         (LISTITEM_START + 44)    // => SLIDE_EXIF_EXPOSURE_MODE
+#define LISTITEM_PICTURE_EXP_TIME         (LISTITEM_START + 45)    // => SLIDE_EXIF_EXPOSURE_TIME
+#define LISTITEM_PICTURE_ISO              (LISTITEM_START + 46)    // => SLIDE_EXIF_ISO_EQUIV
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define LISTITEM_PICTURE_AUTHOR           (LISTITEM_START + 47) // => SLIDE_IPTC_AUTHOR
 #define LISTITEM_PICTURE_BYLINE           (LISTITEM_START + 48) // => SLIDE_IPTC_BYLINE
 #define LISTITEM_PICTURE_BYLINE_TITLE     (LISTITEM_START + 49) // => SLIDE_IPTC_BYLINE_TITLE
@@ -589,6 +671,7 @@
 #define LISTITEM_PICTURE_IMAGETYPE        (LISTITEM_START + 77) // => SLIDE_IPTC_IMAGETYPE
 #define LISTITEM_PICTURE_SUBLOCATION      (LISTITEM_START + 78) // => SLIDE_IPTC_SUBLOCATION
 #define LISTITEM_PICTURE_TIMECREATED      (LISTITEM_START + 79) // => SLIDE_IPTC_TIMECREATED
+<<<<<<< HEAD
 #define LISTITEM_PICTURE_GPS_LAT    (LISTITEM_START + 80)    // => SLIDE_EXIF_GPS_LATITUDE
 #define LISTITEM_PICTURE_GPS_LON    (LISTITEM_START + 81)    // => SLIDE_EXIF_GPS_LONGITUDE
 #define LISTITEM_PICTURE_GPS_ALT    (LISTITEM_START + 82)    // => SLIDE_EXIF_GPS_ALTITUDE
@@ -627,6 +710,46 @@
 #define LISTITEM_DATE_ADDED         (LISTITEM_START + 114)
 #define LISTITEM_DBTYPE             (LISTITEM_START + 115)
 #define LISTITEM_DBID               (LISTITEM_START + 116)
+=======
+#define LISTITEM_PICTURE_GPS_LAT          (LISTITEM_START + 80)    // => SLIDE_EXIF_GPS_LATITUDE
+#define LISTITEM_PICTURE_GPS_LON          (LISTITEM_START + 81)    // => SLIDE_EXIF_GPS_LONGITUDE
+#define LISTITEM_PICTURE_GPS_ALT          (LISTITEM_START + 82)    // => SLIDE_EXIF_GPS_ALTITUDE
+#define LISTITEM_PICTURE_END              (LISTITEM_PICTURE_GPS_ALT)
+#define LISTITEM_STUDIO                   (LISTITEM_START + 83)
+#define LISTITEM_MPAA                     (LISTITEM_START + 84)
+#define LISTITEM_CAST                     (LISTITEM_START + 85)
+#define LISTITEM_CAST_AND_ROLE            (LISTITEM_START + 86)
+#define LISTITEM_WRITER                   (LISTITEM_START + 87)
+#define LISTITEM_TAGLINE                  (LISTITEM_START + 88)
+#define LISTITEM_TOP250                   (LISTITEM_START + 89)
+#define LISTITEM_RATING_AND_VOTES         (LISTITEM_START + 90)
+#define LISTITEM_TRAILER                  (LISTITEM_START + 91)
+#define LISTITEM_STAR_RATING              (LISTITEM_START + 92)
+#define LISTITEM_FILENAME_AND_PATH        (LISTITEM_START + 93)
+#define LISTITEM_SORT_LETTER              (LISTITEM_START + 94)
+#define LISTITEM_ALBUM_ARTIST             (LISTITEM_START + 95)
+#define LISTITEM_FOLDERNAME               (LISTITEM_START + 96)
+#define LISTITEM_VIDEO_CODEC              (LISTITEM_START + 97)
+#define LISTITEM_VIDEO_RESOLUTION         (LISTITEM_START + 98)
+#define LISTITEM_VIDEO_ASPECT             (LISTITEM_START + 99)
+#define LISTITEM_AUDIO_CODEC              (LISTITEM_START + 100)
+#define LISTITEM_AUDIO_CHANNELS           (LISTITEM_START + 101)
+#define LISTITEM_AUDIO_LANGUAGE           (LISTITEM_START + 102)
+#define LISTITEM_SUBTITLE_LANGUAGE        (LISTITEM_START + 103)
+#define LISTITEM_IS_FOLDER                (LISTITEM_START + 104)
+#define LISTITEM_ORIGINALTITLE            (LISTITEM_START + 105)
+#define LISTITEM_COUNTRY                  (LISTITEM_START + 106)
+#define LISTITEM_PLAYCOUNT                (LISTITEM_START + 107)
+#define LISTITEM_LASTPLAYED               (LISTITEM_START + 108)
+#define LISTITEM_FOLDERPATH               (LISTITEM_START + 109)
+#define LISTITEM_DISC_NUMBER              (LISTITEM_START + 110)
+#define LISTITEM_FILE_EXTENSION           (LISTITEM_START + 111)
+#define LISTITEM_IS_RESUMABLE             (LISTITEM_START + 112)
+#define LISTITEM_PERCENT_PLAYED           (LISTITEM_START + 113)
+#define LISTITEM_DATE_ADDED               (LISTITEM_START + 114)
+#define LISTITEM_DBTYPE                   (LISTITEM_START + 115)
+#define LISTITEM_DBID                     (LISTITEM_START + 116)
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define LISTITEM_STARTTIME          (LISTITEM_START + 117)
 #define LISTITEM_ENDTIME            (LISTITEM_START + 118)
@@ -660,10 +783,13 @@
 #define LISTITEM_IMDBNUMBER         (LISTITEM_START + 146)
 #define LISTITEM_EPISODENAME        (LISTITEM_START + 147)
 #define LISTITEM_IS_COLLECTION      (LISTITEM_START + 148)
+<<<<<<< HEAD
 #define LISTITEM_HASTIMERSCHEDULE   (LISTITEM_START + 149)
 #define LISTITEM_TIMERTYPE          (LISTITEM_START + 150)
 #define LISTITEM_EPG_EVENT_TITLE    (LISTITEM_START + 151)
 #define LISTITEM_DATETIME           (LISTITEM_START + 152)
+=======
+>>>>>>> Moved a few functions from infomanager to sysinfo
 
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)
@@ -672,7 +798,11 @@
 #define MUSICPLAYER_PROPERTY_OFFSET 800 // 100 id's reserved for musicplayer props.
 #define LISTITEM_ART_OFFSET         900 // 100 id's reserved for listitem art.
 
+<<<<<<< HEAD
 #define CONDITIONAL_LABEL_START       LISTITEM_END + 1 // 36201
+=======
+#define CONDITIONAL_LABEL_START       LISTITEM_END + 1 // 36001
+>>>>>>> Moved a few functions from infomanager to sysinfo
 #define CONDITIONAL_LABEL_END         37000
 
 // the multiple information vector
@@ -684,4 +814,8 @@
 // Stored in the top 8 bits of GUIInfo::m_data1
 // therefore we only have room for 8 flags
 #define INFOFLAG_LISTITEM_WRAP        ((uint32_t) (1 << 25))  // Wrap ListItem lookups
+<<<<<<< HEAD
 #define INFOFLAG_LISTITEM_POSITION    ((uint32_t) (1 << 26))  // Absolute ListItem lookups
+=======
+#define INFOFLAG_LISTITEM_POSITION    ((uint32_t) (1 << 26))  // Absolute ListItem lookups
+>>>>>>> Moved a few functions from infomanager to sysinfo

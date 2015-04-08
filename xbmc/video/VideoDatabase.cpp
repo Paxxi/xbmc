@@ -873,7 +873,7 @@ void CVideoDatabase::UpdateFileDateAdded(int idFile, const std::string& strFileN
     if (NULL == m_pDS.get()) return;
      
     // 1 prefering to use the files mtime(if it's valid) and only using the file's ctime if the mtime isn't valid
-    if (g_advancedSettings.m_iVideoLibraryDateAdded == 1)
+        if (g_advancedSettings.m_iVideoLibraryDateAdded == 1)
       dateAdded = CFileUtils::GetModificationDate(strFileNameAndPath, false);
     //2 using the newer datetime of the file's mtime and ctime
     else if (g_advancedSettings.m_iVideoLibraryDateAdded == 2)
@@ -4491,8 +4491,8 @@ void CVideoDatabase::UpdateTables(int iVersion)
       m_pDS->query(PrepareSQL("SELECT MIN(%s), name FROM %s GROUP BY name HAVING COUNT(1) > 1",
                               tablePk.c_str(), table.c_str()));
 
-      while (!m_pDS->eof())
-      {
+  while (!m_pDS->eof())
+  {
         duplicatesMinMap.insert(std::make_pair(m_pDS->fv(0).get_asInt(), m_pDS->fv(1).get_asString()));
         m_pDS->next();
       }
@@ -4509,13 +4509,13 @@ void CVideoDatabase::UpdateTables(int iVersion)
         while (!m_pDS->eof())
         {
           int id = m_pDS->fv(0).get_asInt();
-          m_pDS->next();
+    m_pDS->next();
 
           ids << id;
           if (!m_pDS->eof())
             ids << ",";
-        }
-        m_pDS->close();
+  }
+  m_pDS->close();
 
         duplicatesMap.insert(std::make_pair(entry.first, ids.str()));
       }

@@ -1844,7 +1844,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     }
   case CONTAINER_SORT_METHOD:
   case CONTAINER_SORT_ORDER:
-  {
+    {
       CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
       if (window)
       {
@@ -1852,11 +1852,11 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
         if (viewState)
         {
           if (info == CONTAINER_SORT_METHOD)
-            strLabel = g_localizeStrings.Get(viewState->GetSortMethodLabel());
+          strLabel = g_localizeStrings.Get(viewState->GetSortMethodLabel());
           else if (info == CONTAINER_SORT_ORDER)
             strLabel = g_localizeStrings.Get(viewState->GetSortOrderLabel());
         }
-      }
+    }
     }
     break;
   case CONTAINER_NUM_PAGES:
@@ -2192,7 +2192,7 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
                 value = tag->ProgressPercentage();
             }
             else
-              value = (int)(g_application.GetPercentage());
+            value = (int)(g_application.GetPercentage());
             break;
           case PLAYER_PROGRESS_CACHE:
             value = (int)(g_application.GetCachePercentage());
@@ -4949,25 +4949,25 @@ std::string CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, std::
         if (tag)
         {
           if (tag->SeriesNumber() > 0)
-            iSeason = tag->SeriesNumber();
+          iSeason = tag->SeriesNumber();
           if (tag->EpisodeNumber() > 0)
-            iEpisode = tag->EpisodeNumber();
+          iEpisode = tag->EpisodeNumber();
         }
       }
       else if (item->HasEPGInfoTag())
       {
         if (item->GetEPGInfoTag()->SeriesNumber() > 0)
-          iSeason = item->GetEPGInfoTag()->SeriesNumber();
+        iSeason = item->GetEPGInfoTag()->SeriesNumber();
         if (item->GetEPGInfoTag()->EpisodeNumber() > 0)
-          iEpisode = item->GetEPGInfoTag()->EpisodeNumber();
+        iEpisode = item->GetEPGInfoTag()->EpisodeNumber();
       }
       else if (item->HasPVRTimerInfoTag() && item->GetPVRTimerInfoTag()->HasEpgInfoTag())
       {
         CEpgInfoTagPtr tag(item->GetPVRTimerInfoTag()->GetEpgInfoTag());
         if (tag->SeriesNumber() > 0)
-          iSeason = tag->SeriesNumber();
+        iSeason = tag->SeriesNumber();
         if (tag->EpisodeNumber() > 0)
-          iEpisode = tag->EpisodeNumber();
+        iEpisode = tag->EpisodeNumber();
       }
       else if (item->HasPVRRecordingInfoTag() && item->GetPVRRecordingInfoTag()->m_iEpisode > 0)
       {

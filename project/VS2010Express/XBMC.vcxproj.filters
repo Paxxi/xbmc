@@ -6049,7 +6049,7 @@
     <ClInclude Include="..\..\xbmc\addons\LanguageResource.h">
       <Filter>addons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
+     <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
       <Filter>addons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ResourceFile.h">

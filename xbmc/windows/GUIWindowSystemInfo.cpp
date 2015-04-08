@@ -54,7 +54,7 @@ bool CGUIWindowSystemInfo::OnMessage(CGUIMessage& message)
 {
   switch (message.GetMessage())
   {
-    case GUI_MSG_WINDOW_INIT:
+  case GUI_MSG_WINDOW_INIT:
     {
       CGUIWindow::OnMessage(message);
       SET_CONTROL_LABEL(52, CSysInfo::GetAppName() + " " + CSysInfo::GetVersion());
@@ -64,7 +64,7 @@ bool CGUIWindowSystemInfo::OnMessage(CGUIMessage& message)
     }
     break;
 
-    case GUI_MSG_WINDOW_DEINIT:
+  case GUI_MSG_WINDOW_DEINIT:
     {
       CGUIWindow::OnMessage(message);
       m_diskUsage.clear();
@@ -72,7 +72,7 @@ bool CGUIWindowSystemInfo::OnMessage(CGUIMessage& message)
     }
     break;
 
-    case GUI_MSG_FOCUSED:
+  case GUI_MSG_FOCUSED:
     {
       CGUIWindow::OnMessage(message);
       int focusedControl = GetFocusedControlID();
@@ -161,7 +161,7 @@ void CGUIWindowSystemInfo::FrameMove()
 #if !(defined(__arm__) && defined(TARGET_LINUX))
     SetControlLabel(i++, "%s %s", 13271, SYSTEM_CPU_USAGE);
 #endif
-    i++;  // empty line
+    i++; // empty line
     SetControlLabel(i++, "%s: %s", 22012, SYSTEM_TOTAL_MEMORY);
     SetControlLabel(i++, "%s: %s", 158, SYSTEM_FREE_MEMORY);
   }
@@ -172,14 +172,14 @@ void CGUIWindowSystemInfo::FrameMove()
     int i = 2;
 
     SetControlLabel(i++, "%s: %s", 19120, PVR_BACKEND_NUMBER);
-    i++;  // empty line
+    i++; // empty line
     SetControlLabel(i++, "%s: %s", 19012, PVR_BACKEND_NAME);
     SetControlLabel(i++, "%s: %s", 19114, PVR_BACKEND_VERSION);
     SetControlLabel(i++, "%s: %s", 19115, PVR_BACKEND_HOST);
     SetControlLabel(i++, "%s: %s", 19116, PVR_BACKEND_DISKSPACE);
     SetControlLabel(i++, "%s: %s", 19019, PVR_BACKEND_CHANNELS);
     SetControlLabel(i++, "%s: %s", 19163, PVR_BACKEND_RECORDINGS);
-    SetControlLabel(i++, "%s: %s", 19168, PVR_BACKEND_DELETED_RECORDINGS);  // Deleted and recoverable recordings
+    SetControlLabel(i++, "%s: %s", 19168, PVR_BACKEND_DELETED_RECORDINGS); // Deleted and recoverable recordings
     SetControlLabel(i++, "%s: %s", 19025, PVR_BACKEND_TIMERS);
   }
   CGUIWindow::FrameMove();
