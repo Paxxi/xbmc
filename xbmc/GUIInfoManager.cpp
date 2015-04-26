@@ -17,58 +17,69 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
+#include <functional>
+#include <map>
+#include <memory>
 
-#include "network/Network.h"
-#include "system.h"
-#include "CompileInfo.h"
-#include "GUIInfoManager.h"
-#include "windows/GUIMediaWindow.h"
-#include "dialogs/GUIDialogProgress.h"
 #include "Application.h"
-#include "Util.h"
-#include "utils/URIUtils.h"
-#include "utils/Weather.h"
+#include "GUIInfoManager.h"
+#include "GUIUserMessages.h"
+#include "LangInfo.h"
 #include "PartyModeManager.h"
+#include "URL.h"
+#include "Util.h"
+#include "addons/AddonManager.h"
+#include "addons/Skin.h"
 #include "addons/Visualisation.h"
+#include "cores/DataCacheCore.h"
+#include "cores/IPlayer.h"
+#include "cores/VideoRenderers/BaseRenderer.h"
+#include "dialogs/GUIDialogProgress.h"
+#include "epg/EpgContainer.h"
+#include "guiinfo/GUIInfoLabels.h"
+#include "guiinfo/GUIPlayerInfo.h"
+#include "guiinfo/GUISystemInfo.h"
+#include "guiinfo/GUIWeatherInfo.h"
+#include "guilib/GUITextBox.h"
+#include "guilib/GUIWindowManager.h"
+#include "guilib/IGUIContainer.h"
+#include "guilib/LocalizeStrings.h"
+#include "guilib/StereoscopicsManager.h"
 #include "input/ButtonTranslator.h"
 #include "utils/AlarmClock.h"
 #include "LangInfo.h"
 #include "utils/SystemInfo.h"
 #include "guilib/GUITextBox.h"
-#include "guilib/GUIControlGroupList.h"
 #include "pictures/GUIWindowSlideShow.h"
 #include "pictures/PictureInfoTag.h"
-#include "music/tags/MusicInfoTag.h"
-#include "guilib/IGUIContainer.h"
-#include "guilib/GUIWindowManager.h"
 #include "playlists/PlayList.h"
-#include "profiles/ProfilesManager.h"
-#include "windowing/WindowingFactory.h"
 #include "powermanagement/PowerManager.h"
+#include "profiles/ProfilesManager.h"
+#include "pvr/PVRManager.h"
+#include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/recordings/PVRRecording.h"
+#include "pvr/timers/PVRTimers.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
 #include "settings/SkinSettings.h"
-#include "guilib/LocalizeStrings.h"
-#include "guilib/StereoscopicsManager.h"
+#include "storage/MediaManager.h"
+#include "system.h"
+#include "threads/SingleLock.h"
+#include "utils/AlarmClock.h"
+#include "utils/CPUInfo.h"
 #include "utils/CharsetConverter.h"
 #include "utils/CPUInfo.h"
-#include "utils/SortUtils.h"
 #include "utils/StringUtils.h"
 #include "utils/MathUtils.h"
 #include "utils/SeekHandler.h"
 #include "URL.h"
 #include "addons/Skin.h"
-#include <algorithm>
-#include <functional>
-#include <iterator>
 #include <memory>
 #include <functional>
 #include <map>
 #include "cores/DataCacheCore.h"
 #include "guiinfo/GUIInfoLabels.h"
-#include "messaging/ApplicationMessenger.h"
 
 // stuff for current song
 #include "music/MusicInfoLoader.h"
@@ -78,8 +89,14 @@
 #include "music/dialogs/GUIDialogMusicInfo.h"
 #include "storage/MediaManager.h"
 #include "utils/TimeUtils.h"
-#include "threads/SingleLock.h"
+#include "utils/URIUtils.h"
+#include "utils/Weather.h"
 #include "utils/log.h"
+#include "video/VideoDatabase.h"
+#include "video/VideoThumbLoader.h"
+#include "video/dialogs/GUIDialogVideoInfo.h"
+#include "windowing/WindowingFactory.h"
+#include "windows/GUIMediaWindow.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
@@ -93,7 +110,6 @@
 #include "music/MusicThumbLoader.h"
 #include "video/VideoDatabase.h"
 #include "cores/IPlayer.h"
-#include "cores/AudioEngine/DSPAddons/ActiveAEDSPProcess.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
 #include "cores/VideoRenderers/BaseRenderer.h"
 #include "interfaces/info/InfoExpression.h"
@@ -133,6 +149,10 @@ CGUIInfoManager::CGUIInfoManager(void) :
   m_fps = 0.0f;
   m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
                         std::make_unique<GUIINFO::CGUIPlayerInfo>(this)));
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUIWeatherInfo>(this)));
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUISystemInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUISystemInfo>(this)));
   ResetLibraryBools();
 }
 
@@ -1464,6 +1484,12 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case PLAYER_MASK:
     return m_infoHandlers[PLAYER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
     break;
+  case SYSTEM_MASK:
+    return m_infoHandlers[SYSTEM_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
+    break;
+  case WEATHER_MASK:
+    return m_infoHandlers[WEATHER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
+    break;
   default:
     break;
   }
@@ -1518,103 +1544,8 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case ADSP_MASTER_OVERRIDE_ICON:
     ActiveAE::CActiveAEDSP::GetInstance().TranslateCharInfo(info, strLabel);
     break;
-  case SYSTEM_DATE:
-    strLabel = GetDate();
-    break;
-  case SYSTEM_FPS:
-    strLabel = StringUtils::Format("%02.2f", m_fps);
-    break;
-  case PLAYER_VOLUME:
-    strLabel = StringUtils::Format("%2.1f dB", CAEUtil::PercentToGain(g_application.GetVolume(false)));
-    break;
-  case PLAYER_SUBTITLE_DELAY:
-    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::GetInstance().GetCurrentVideoSettings().m_SubtitleDelay);
-    break;
-  case PLAYER_AUDIO_DELAY:
-    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::GetInstance().GetCurrentVideoSettings().m_AudioDelay);
-    break;
-  case PLAYER_CHAPTER:
-    if(g_application.m_pPlayer->IsPlaying())
-      strLabel = StringUtils::Format("%02d", g_application.m_pPlayer->GetChapter());
-    break;
-  case PLAYER_CHAPTERCOUNT:
-    if(g_application.m_pPlayer->IsPlaying())
-      strLabel = StringUtils::Format("%02d", g_application.m_pPlayer->GetChapterCount());
-    break;
-  case PLAYER_CHAPTERNAME:
-    if(g_application.m_pPlayer->IsPlaying())
-      g_application.m_pPlayer->GetChapterName(strLabel);
-    break;
-  case PLAYER_CACHELEVEL:
-    {
-      int iLevel = 0;
-      if(g_application.m_pPlayer->IsPlaying() && GetInt(iLevel, PLAYER_CACHELEVEL) && iLevel >= 0)
-        strLabel = StringUtils::Format("%i", iLevel);
-    }
-    break;
-  case PLAYER_TIME:
-    if(g_application.m_pPlayer->IsPlaying())
-      strLabel = GetCurrentPlayTime(TIME_FORMAT_HH_MM);
-    break;
-  case PLAYER_DURATION:
-    if(g_application.m_pPlayer->IsPlaying())
-      strLabel = GetDuration(TIME_FORMAT_HH_MM);
-    break;
-  case PLAYER_PATH:
-  case PLAYER_FILENAME:
-  case PLAYER_FILEPATH:
-    if (m_currentFile)
-    {
-      if (m_currentFile->HasMusicInfoTag())
-        strLabel = m_currentFile->GetMusicInfoTag()->GetURL();
-      else if (m_currentFile->HasVideoInfoTag())
-        strLabel = m_currentFile->GetVideoInfoTag()->m_strFileNameAndPath;
-      if (strLabel.empty())
-        strLabel = m_currentFile->GetPath();
-    }
-    if (info == PLAYER_PATH)
-    {
-      // do this twice since we want the path outside the archive if this
-      // is to be of use.
-      if (URIUtils::IsInArchive(strLabel))
-        strLabel = URIUtils::GetParentPath(strLabel);
-      strLabel = URIUtils::GetParentPath(strLabel);
-    }
-    else if (info == PLAYER_FILENAME)
-      strLabel = URIUtils::GetFileName(strLabel);
-    break;
-  case PLAYER_TITLE:
-    {
-      if(m_currentFile)
-      {
-        if (m_currentFile->HasPVRChannelInfoTag())
-        {
-          CEpgInfoTagPtr tag(m_currentFile->GetPVRChannelInfoTag()->GetEPGNow());
-          return tag ?
-                   tag->Title() :
-                   CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_HIDENOINFOAVAILABLE) ?
-                            "" : g_localizeStrings.Get(19055); // no information available
-        }
-        if (m_currentFile->HasPVRRecordingInfoTag() && !m_currentFile->GetPVRRecordingInfoTag()->m_strTitle.empty())
-          return m_currentFile->GetPVRRecordingInfoTag()->m_strTitle;
-        if (m_currentFile->HasVideoInfoTag() && !m_currentFile->GetVideoInfoTag()->m_strTitle.empty())
-          return m_currentFile->GetVideoInfoTag()->m_strTitle;
-        if (m_currentFile->HasMusicInfoTag() && !m_currentFile->GetMusicInfoTag()->GetTitle().empty())
-          return m_currentFile->GetMusicInfoTag()->GetTitle();
-        // don't have the title, so use dvdplayer, label, or drop down to title from path
-        if (!g_application.m_pPlayer->GetPlayingTitle().empty())
-          return g_application.m_pPlayer->GetPlayingTitle();
-        if (!m_currentFile->GetLabel().empty())
-          return m_currentFile->GetLabel();
-        return CUtil::GetTitleFromPath(m_currentFile->GetPath());
-      }
-      else
-      {
-        if (!g_application.m_pPlayer->GetPlayingTitle().empty())
-          return g_application.m_pPlayer->GetPlayingTitle();
-      }
-    }
-    break;
+
+  
   case MUSICPLAYER_TITLE:
   case MUSICPLAYER_ALBUM:
   case MUSICPLAYER_ARTIST:
@@ -1756,45 +1687,10 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     strLabel = GetMusicPartyModeLabel(info);
   break;
 
-  case SYSTEM_FREE_SPACE:
-  case SYSTEM_USED_SPACE:
-  case SYSTEM_TOTAL_SPACE:
-  case SYSTEM_FREE_SPACE_PERCENT:
-  case SYSTEM_USED_SPACE_PERCENT:
-    return g_sysinfo.GetHddSpaceInfo(info);
-  break;
+  
 
-  case SYSTEM_CPU_TEMPERATURE:
-  case SYSTEM_GPU_TEMPERATURE:
-  case SYSTEM_FAN_SPEED:
-  case SYSTEM_CPU_USAGE:
-    return GetSystemHeatInfo(info);
-    break;
-
-  case SYSTEM_VIDEO_ENCODER_INFO:
   case NETWORK_MAC_ADDRESS:
-  case SYSTEM_OS_VERSION_INFO:
-  case SYSTEM_CPUFREQUENCY:
-  case SYSTEM_INTERNET_STATE:
-  case SYSTEM_UPTIME:
-  case SYSTEM_TOTALUPTIME:
-  case SYSTEM_BATTERY_LEVEL:
     return g_sysinfo.GetInfo(info);
-    break;
-
-  case SYSTEM_SCREEN_RESOLUTION:
-    if(g_Windowing.IsFullScreen())
-      strLabel = StringUtils::Format("%ix%i@%.2fHz - %s",
-        CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
-        CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
-        CDisplaySettings::GetInstance().GetCurrentResolutionInfo().fRefreshRate,
-        g_localizeStrings.Get(244).c_str());
-    else
-      strLabel = StringUtils::Format("%ix%i - %s",
-        CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
-        CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
-        g_localizeStrings.Get(242).c_str());
-    return strLabel;
     break;
 
   case CONTAINER_FOLDERPATH:
@@ -1913,15 +1809,15 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       int iMemPercentUsed = 100 - iMemPercentFree;
 
       if (info == SYSTEM_FREE_MEMORY)
-        strLabel = StringUtils::Format("%uMB", (unsigned int)(stat.ullAvailPhys/MB));
+        strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullAvailPhys/MB));
       else if (info == SYSTEM_FREE_MEMORY_PERCENT)
         strLabel = StringUtils::Format("%i%%", iMemPercentFree);
       else if (info == SYSTEM_USED_MEMORY)
-        strLabel = StringUtils::Format("%uMB", (unsigned int)((stat.ullTotalPhys - stat.ullAvailPhys)/MB));
+        strLabel = StringUtils::Format("%luMB", (ULONG)((stat.ullTotalPhys - stat.ullAvailPhys)/MB));
       else if (info == SYSTEM_USED_MEMORY_PERCENT)
         strLabel = StringUtils::Format("%i%%", iMemPercentUsed);
       else if (info == SYSTEM_TOTAL_MEMORY)
-        strLabel = StringUtils::Format("%uMB", (unsigned int)(stat.ullTotalPhys/MB));
+        strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullTotalPhys/MB));
     }
     break;
   case SYSTEM_SCREEN_MODE:
@@ -1937,7 +1833,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     return g_localizeStrings.Get(g_windowManager.GetFocusedWindow());
     break;
   case SYSTEM_STARTUP_WINDOW:
-    strLabel = StringUtils::Format("%i", CSettings::GetInstance().GetInt(CSettings::SETTING_LOOKANDFEEL_STARTUPWINDOW));
+    strLabel = StringUtils::Format("%i", CSettings::Get().GetInt("lookandfeel.startupwindow"));
     break;
   case SYSTEM_CURRENT_CONTROL:
     {
@@ -1968,15 +1864,15 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     }
     break;
   case SYSTEM_PROFILENAME:
-    strLabel = CProfilesManager::GetInstance().GetCurrentProfile().getName();
+    strLabel = CProfilesManager::Get().GetCurrentProfile().getName();
     break;
   case SYSTEM_PROFILECOUNT:
-    strLabel = StringUtils::Format("%" PRIuS, CProfilesManager::GetInstance().GetNumberOfProfiles());
+    strLabel = StringUtils::Format("%" PRIuS, CProfilesManager::Get().GetNumberOfProfiles());
     break;
   case SYSTEM_PROFILEAUTOLOGIN:
     {
-      int profileId = CProfilesManager::GetInstance().GetAutoLoginProfileId();
-      if ((profileId < 0) || (!CProfilesManager::GetInstance().GetProfileName(profileId, strLabel)))
+      int profileId = CProfilesManager::Get().GetAutoLoginProfileId();
+      if ((profileId < 0) || (!CProfilesManager::Get().GetProfileName(profileId, strLabel)))
         strLabel = g_localizeStrings.Get(37014); // Last used profile
     }
     break;
@@ -1998,7 +1894,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     break;
   case SYSTEM_STEREOSCOPIC_MODE:
     {
-      int stereoMode = CSettings::GetInstance().GetInt(CSettings::SETTING_VIDEOSCREEN_STEREOSCOPICMODE);
+      int stereoMode = CSettings::Get().GetInt("videoscreen.stereoscopicmode");
       strLabel = StringUtils::Format("%i", stereoMode);
     }
     break;
@@ -4757,7 +4653,7 @@ std::string CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, std::
         return item->GetEPGInfoTag()->FirstAiredAsLocalTime().GetAsLocalizedDate(true);
     }
     else if (item->HasPVRTimerInfoTag() && item->GetPVRTimerInfoTag()->HasEpgInfoTag())
-    {
+      {
       CEpgInfoTagPtr tag(item->GetPVRTimerInfoTag()->GetEpgInfoTag());
       if (tag->FirstAiredAsLocalTime().IsValid())
         return tag->FirstAiredAsLocalTime().GetAsLocalizedDate(true);

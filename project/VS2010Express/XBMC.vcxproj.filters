@@ -3201,6 +3201,9 @@
     <ClCompile Include="..\..\xbmc\guiinfo\GUIWeatherInfo.cpp">
       <Filter>guiinfo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUISystemInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6110,6 +6113,9 @@
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\guiinfo\GUIInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUISystemInfo.h">
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\win32\gpu_memcpy_sse4.h">
