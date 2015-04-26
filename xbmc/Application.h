@@ -86,31 +86,7 @@ namespace MUSIC_INFO
   class CMusicInfoScanner;
 }
 
-#define VOLUME_MINIMUM 0.0f        // -60dB
-#define VOLUME_MAXIMUM 1.0f        // 0dB
-#define VOLUME_DYNAMIC_RANGE 90.0f // 60dB
-#define VOLUME_CONTROL_STEPS 90    // 90 steps
 
-// replay gain settings struct for quick access by the player multiple
-// times per second (saves doing settings lookup)
-struct ReplayGainSettings
-{
-  int iPreAmp;
-  int iNoGainPreAmp;
-  int iType;
-  bool bAvoidClipping;
-};
-
-class CBackgroundPlayer : public CThread
-{
-public:
-  CBackgroundPlayer(const CFileItem &item, int iPlayList);
-  virtual ~CBackgroundPlayer();
-  virtual void Process();
-protected:
-  CFileItem *m_item;
-  int       m_iPlayList;
-};
 
 class CApplication : public CXBApplicationEx, public IPlayerCallback, public IMsgTargetCallback,
                      public ISettingCallback, public ISettingsHandler, public ISubSettings
@@ -159,33 +135,11 @@ public:
   void UnloadSkin(bool forReload = false);
   bool LoadUserWindows();
   void ReloadSkin(bool confirm = false);
-  const std::string& CurrentFile();
-  CFileItem& CurrentFileItem();
-  CFileItem& CurrentUnstackedItem();
+
   virtual bool OnMessage(CGUIMessage& message);
-  PLAYERCOREID GetCurrentPlayer();
-  virtual void OnPlayBackEnded();
-  virtual void OnPlayBackStarted();
-  virtual void OnPlayBackPaused();
-  virtual void OnPlayBackResumed();
-  virtual void OnPlayBackStopped();
-  virtual void OnQueueNextItem();
-  virtual void OnPlayBackSeek(int iTime, int seekOffset);
-  virtual void OnPlayBackSeekChapter(int iChapter);
-  virtual void OnPlayBackSpeedChanged(int iSpeed);
-  bool PlayMedia(const CFileItem& item, int iPlaylist = PLAYLIST_MUSIC);
-  bool PlayMediaSync(const CFileItem& item, int iPlaylist = PLAYLIST_MUSIC);
-  bool ProcessAndStartPlaylist(const std::string& strPlayList, PLAYLIST::CPlayList& playlist, int iPlaylist, int track=0);
-  PlayBackRet PlayFile(const CFileItem& item, bool bRestart = false);
-  void SaveFileState(bool bForeground = false);
-  void UpdateFileState();
+  
   void LoadVideoSettings(const CFileItem& item);
-  void StopPlaying();
-  void Restart(bool bSamePosition = true);
-  void DelayedPlayerRestart();
-  void CheckDelayedPlayerRestart();
-  bool IsPlayingFullScreenVideo() const;
-  bool IsStartingPlayback() const { return m_bPlaybackStarting; }
+  
   bool IsFullScreen();
   bool OnAppCommand(const CAction &action);
   bool OnAction(const CAction &action);
@@ -203,40 +157,14 @@ public:
   virtual void Process();
   void ProcessSlow();
   void ResetScreenSaver();
-  float GetVolume(bool percentage = true) const;
-  void SetVolume(float iValue, bool isPercentage = true);
-  bool IsMuted() const;
-  bool IsMutedInternal() const { return m_muted; }
-  void ToggleMute(void);
-  void SetMute(bool mute);
-  void ShowVolumeBar(const CAction *action = NULL);
-  int GetSubtitleDelay() const;
-  int GetAudioDelay() const;
+  
   void ResetSystemIdleTimer();
   void ResetScreenSaverTimer();
   void StopScreenSaverTimer();
   // Wakes up from the screensaver and / or DPMS. Returns true if woken up.
   bool WakeUpScreenSaverAndDPMS(bool bPowerOffKeyPressed = false);
   bool WakeUpScreenSaver(bool bPowerOffKeyPressed = false);
-  /*!
-   \brief Returns the total time in fractional seconds of the currently playing media
-
-   Beware that this method returns fractional seconds whereas IPlayer::GetTotalTime() returns milliseconds.
-   */
-  double GetTotalTime() const;
-  /*!
-   \brief Returns the current time in fractional seconds of the currently playing media
-
-   Beware that this method returns fractional seconds whereas IPlayer::GetTime() returns milliseconds.
-   */
-  double GetTime() const;
-  float GetPercentage() const;
-
-  // Get the percentage of data currently cached/buffered (aq/vq + FileCache) from the input stream if applicable.
-  float GetCachePercentage() const;
-
-  void SeekPercentage(float percent);
-  void SeekTime( double dTime = 0.0 );
+  
 
   void StopShutdownTimer();
   void ResetShutdownTimers();
@@ -296,26 +224,13 @@ public:
   MEDIA_DETECT::CDetectDVDMedia m_DetectDVDType;
 #endif
 
-  CApplicationPlayer* m_pPlayer;
+  
 
   inline bool IsInScreenSaver() { return m_bScreenSave; };
   inline bool IsDPMSActive() { return m_dpmsIsActive; };
   int m_iScreenSaveLock; // spiff: are we checking for a lock? if so, ignore the screensaver state, if -1 we have failed to input locks
 
-  bool m_bPlaybackStarting;
-  typedef enum
-  {
-    PLAY_STATE_NONE = 0,
-    PLAY_STATE_STARTING,
-    PLAY_STATE_PLAYING,
-    PLAY_STATE_STOPPED,
-    PLAY_STATE_ENDED,
-  } PlayState;
-  PlayState m_ePlayState;
-  CCriticalSection m_playStateMutex;
-
-  CKaraokeLyricsManager* m_pKaraokeMgr;
-
+  
   PLAYERCOREID m_eForcedNextPlayer;
   std::string m_strPlayListFile;
 
@@ -374,7 +289,7 @@ public:
   bool SetLanguage(const std::string &strLanguage);
   bool LoadLanguage(bool reload, bool& fallback);
 
-  ReplayGainSettings& GetReplayGainSettings() { return m_replayGainSettings; }
+  
 
   void SetLoggingIn(bool loggingIn) { m_loggingIn = loggingIn; }
   
@@ -443,22 +358,13 @@ protected:
   bool m_dpmsIsActive;
   bool m_dpmsIsManual;
 
-  CFileItemPtr m_itemCurrentFile;
-  CFileItemList* m_currentStack;
-  CFileItemPtr m_stackFileItemToUpdate;
-
   std::string m_prevMedia;
   CSplash* m_splash;
   ThreadIdentifier m_threadID;       // application thread ID.  Used in applicationMessanger to know where we are firing a thread with delay from.
   bool m_bInitializing;
   bool m_bPlatformDirectories;
 
-  CBookmark& m_progressTrackingVideoResumeBookmark;
-  CFileItemPtr m_progressTrackingItem;
-  bool m_progressTrackingPlayCountUpdate;
-
-  int m_currentStackPosition;
-  int m_nextPlaylistItem;
+  
 
   bool m_bPresentFrame;
   unsigned int m_lastFrameTime;
@@ -472,19 +378,6 @@ protected:
 
   MUSIC_INFO::CMusicInfoScanner *m_musicInfoScanner;
 
-  bool m_muted;
-  float m_volumeLevel;
-
-  void Mute();
-  void UnMute();
-
-  void SetHardwareVolume(float hardwareVolume);
-
-  void VolumeChanged() const;
-
-  PlayBackRet PlayStack(const CFileItem& item, bool bRestart);
-  int  GetActiveWindowID(void);
-
   float NavigationIdleTime();
 
   bool InitDirectoriesLinux();
@@ -492,14 +385,11 @@ protected:
   bool InitDirectoriesWin32();
   void CreateUserDirs();
 
-  CPlayerController *m_playerController;
   CInertialScrollingHandler *m_pInertialScrollingHandler;
   CNetwork    *m_network;
 #ifdef HAS_PERFORMANCE_SAMPLE
   CPerformanceStats m_perfStats;
 #endif
-
-  ReplayGainSettings m_replayGainSettings;
   
   std::vector<IActionListener *> m_actionListeners;
   

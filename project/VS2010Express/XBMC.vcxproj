@@ -695,6 +695,7 @@
     <ClCompile Include="..\..\xbmc\pictures\PictureInfoTag.cpp" />
     <ClCompile Include="..\..\xbmc\pictures\PictureThumbLoader.cpp" />
     <ClCompile Include="..\..\xbmc\pictures\SlideShowPicture.cpp" />
+    <ClCompile Include="..\..\xbmc\PlaybackManager.cpp" />
     <ClCompile Include="..\..\xbmc\PlayListPlayer.cpp" />
     <ClCompile Include="..\..\xbmc\playlists\PlayList.cpp" />
     <ClCompile Include="..\..\xbmc\playlists\PlayListB4S.cpp" />
@@ -971,6 +972,7 @@
     <ClInclude Include="..\..\xbmc\network\NetworkServices.h" />
     <ClInclude Include="..\..\xbmc\peripherals\bus\virtual\PeripheralBusCEC.h" />
     <ClInclude Include="..\..\xbmc\network\upnp\UPnPSettings.h" />
+    <ClInclude Include="..\..\xbmc\PlaybackManager.h" />
     <ClInclude Include="..\..\xbmc\playlists\SmartPlaylistFileItemListModifier.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogLockSettings.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogProfileSettings.h" />
