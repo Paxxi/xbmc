@@ -37,19 +37,26 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "epg/EpgContainer.h"
 #include "guiinfo/GUIInfoLabels.h"
+#include "guiinfo/GUINetworkInfo.h"
 #include "guiinfo/GUIPlayerInfo.h"
 #include "guiinfo/GUISystemInfo.h"
 #include "guiinfo/GUIWeatherInfo.h"
+#include "guiinfo/GUIMusicPlayerInfo.h"
+#include "guiinfo/GUIPvrInfo.h"
+#include "guiinfo/GUIVideoPlayerInfo.h"
 #include "guilib/GUITextBox.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/IGUIContainer.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/StereoscopicsManager.h"
 #include "input/ButtonTranslator.h"
-#include "utils/AlarmClock.h"
-#include "LangInfo.h"
-#include "utils/SystemInfo.h"
-#include "guilib/GUITextBox.h"
+#include "interfaces/info/InfoBool.h"
+#include "interfaces/info/InfoExpression.h"
+#include "music/MusicInfoLoader.h"
+#include "music/MusicThumbLoader.h"
+#include "music/dialogs/GUIDialogMusicInfo.h"
+#include "music/tags/MusicInfoTag.h"
+#include "network/Network.h"
 #include "pictures/GUIWindowSlideShow.h"
 #include "pictures/PictureInfoTag.h"
 #include "playlists/PlayList.h"
@@ -147,12 +154,25 @@ CGUIInfoManager::CGUIInfoManager(void) :
   m_playerShowCodec = false;
   m_playerShowInfo = false;
   m_fps = 0.0f;
-  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
+
+#define ADD_INFO_PROVIDER(p) m_infoHandlers.insert(std::make_pair(p##::LabelMask(), \
+                              std::make_unique<p>(this)))
+  /*m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
                         std::make_unique<GUIINFO::CGUIPlayerInfo>(this)));
   m_infoHandlers.insert(std::make_pair(GUIINFO::CGUIPlayerInfo::LabelMask(),
                         std::make_unique<GUIINFO::CGUIWeatherInfo>(this)));
   m_infoHandlers.insert(std::make_pair(GUIINFO::CGUISystemInfo::LabelMask(),
                         std::make_unique<GUIINFO::CGUISystemInfo>(this)));
+  m_infoHandlers.insert(std::make_pair(GUIINFO::CGUINetworkInfo::LabelMask(),
+                        std::make_unique<GUIINFO::CGUINetworkInfo>(this)));*/
+  ADD_INFO_PROVIDER(GUIINFO::CGUINetworkInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUIPlayerInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUISystemInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUIWeatherInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUIMusicPlayerInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUIPvrInfo);
+  ADD_INFO_PROVIDER(GUIINFO::CGUIVideoPlayerInfo);
+#undef ADD_INFO_PROVIDER
   ResetLibraryBools();
 }
 
@@ -1479,63 +1499,16 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
 
     return strLabel;
   }
-  switch (info & CATEGORY_MASK) //clear the message bits and switch on the categories
-  {
-  case PLAYER_MASK:
-    return m_infoHandlers[PLAYER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
-    break;
-  case SYSTEM_MASK:
-    return m_infoHandlers[SYSTEM_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
-    break;
-  case WEATHER_MASK:
-    return m_infoHandlers[WEATHER_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
-    break;
-  default:
-    break;
-  }
 
+  if (info & CATEGORY_MASK > 0)
+    return m_infoHandlers[info & CATEGORY_MASK]->GetLabel(m_currentFile, info, contextWindow, fallback);
+  
   switch (info)
   {
-  case PVR_NEXT_RECORDING_CHANNEL:
-  case PVR_NEXT_RECORDING_CHAN_ICO:
-  case PVR_NEXT_RECORDING_DATETIME:
-  case PVR_NEXT_RECORDING_TITLE:
-  case PVR_NOW_RECORDING_CHANNEL:
-  case PVR_NOW_RECORDING_CHAN_ICO:
-  case PVR_NOW_RECORDING_DATETIME:
-  case PVR_NOW_RECORDING_TITLE:
-  case PVR_BACKEND_NAME:
-  case PVR_BACKEND_VERSION:
-  case PVR_BACKEND_HOST:
-  case PVR_BACKEND_DISKSPACE:
-  case PVR_BACKEND_CHANNELS:
-  case PVR_BACKEND_TIMERS:
-  case PVR_BACKEND_RECORDINGS:
-  case PVR_BACKEND_DELETED_RECORDINGS:
-  case PVR_BACKEND_NUMBER:
-  case PVR_TOTAL_DISKSPACE:
-  case PVR_NEXT_TIMER:
-  case PVR_PLAYING_DURATION:
-  case PVR_PLAYING_TIME:
-  case PVR_PLAYING_PROGRESS:
-  case PVR_ACTUAL_STREAM_CLIENT:
-  case PVR_ACTUAL_STREAM_DEVICE:
-  case PVR_ACTUAL_STREAM_STATUS:
-  case PVR_ACTUAL_STREAM_SIG:
-  case PVR_ACTUAL_STREAM_SNR:
-  case PVR_ACTUAL_STREAM_SIG_PROGR:
-  case PVR_ACTUAL_STREAM_SNR_PROGR:
-  case PVR_ACTUAL_STREAM_BER:
-  case PVR_ACTUAL_STREAM_UNC:
-  case PVR_ACTUAL_STREAM_VIDEO_BR:
-  case PVR_ACTUAL_STREAM_AUDIO_BR:
-  case PVR_ACTUAL_STREAM_DOLBY_BR:
-  case PVR_ACTUAL_STREAM_CRYPTION:
-  case PVR_ACTUAL_STREAM_SERVICE:
-  case PVR_ACTUAL_STREAM_MUX:
-  case PVR_ACTUAL_STREAM_PROVIDER:
-    g_PVRManager.TranslateCharInfo(info, strLabel);
-    break;
+  
+  
+  
+
   case ADSP_ACTIVE_STREAM_TYPE:
   case ADSP_DETECTED_STREAM_TYPE:
   case ADSP_MASTER_NAME:
@@ -1543,154 +1516,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case ADSP_MASTER_OWN_ICON:
   case ADSP_MASTER_OVERRIDE_ICON:
     ActiveAE::CActiveAEDSP::GetInstance().TranslateCharInfo(info, strLabel);
-    break;
-
-  
-  case MUSICPLAYER_TITLE:
-  case MUSICPLAYER_ALBUM:
-  case MUSICPLAYER_ARTIST:
-  case MUSICPLAYER_ALBUM_ARTIST:
-  case MUSICPLAYER_GENRE:
-  case MUSICPLAYER_YEAR:
-  case MUSICPLAYER_TRACK_NUMBER:
-  case MUSICPLAYER_BITRATE:
-  case MUSICPLAYER_PLAYLISTLEN:
-  case MUSICPLAYER_PLAYLISTPOS:
-  case MUSICPLAYER_CHANNELS:
-  case MUSICPLAYER_BITSPERSAMPLE:
-  case MUSICPLAYER_SAMPLERATE:
-  case MUSICPLAYER_CODEC:
-  case MUSICPLAYER_DISC_NUMBER:
-  case MUSICPLAYER_RATING:
-  case MUSICPLAYER_COMMENT:
-  case MUSICPLAYER_LYRICS:
-  case MUSICPLAYER_CHANNEL_NAME:
-  case MUSICPLAYER_CHANNEL_NUMBER:
-  case MUSICPLAYER_SUB_CHANNEL_NUMBER:
-  case MUSICPLAYER_CHANNEL_NUMBER_LBL:
-  case MUSICPLAYER_CHANNEL_GROUP:
-  case MUSICPLAYER_PLAYCOUNT:
-  case MUSICPLAYER_LASTPLAYED:
-    strLabel = GetMusicLabel(info);
-  break;
-  case VIDEOPLAYER_TITLE:
-  case VIDEOPLAYER_ORIGINALTITLE:
-  case VIDEOPLAYER_GENRE:
-  case VIDEOPLAYER_DIRECTOR:
-  case VIDEOPLAYER_YEAR:
-  case VIDEOPLAYER_PLAYLISTLEN:
-  case VIDEOPLAYER_PLAYLISTPOS:
-  case VIDEOPLAYER_PLOT:
-  case VIDEOPLAYER_PLOT_OUTLINE:
-  case VIDEOPLAYER_EPISODE:
-  case VIDEOPLAYER_SEASON:
-  case VIDEOPLAYER_RATING:
-  case VIDEOPLAYER_RATING_AND_VOTES:
-  case VIDEOPLAYER_TVSHOW:
-  case VIDEOPLAYER_PREMIERED:
-  case VIDEOPLAYER_STUDIO:
-  case VIDEOPLAYER_COUNTRY:
-  case VIDEOPLAYER_MPAA:
-  case VIDEOPLAYER_TOP250:
-  case VIDEOPLAYER_CAST:
-  case VIDEOPLAYER_CAST_AND_ROLE:
-  case VIDEOPLAYER_ARTIST:
-  case VIDEOPLAYER_ALBUM:
-  case VIDEOPLAYER_WRITER:
-  case VIDEOPLAYER_TAGLINE:
-  case VIDEOPLAYER_TRAILER:
-  case VIDEOPLAYER_STARTTIME:
-  case VIDEOPLAYER_ENDTIME:
-  case VIDEOPLAYER_NEXT_TITLE:
-  case VIDEOPLAYER_NEXT_GENRE:
-  case VIDEOPLAYER_NEXT_PLOT:
-  case VIDEOPLAYER_NEXT_PLOT_OUTLINE:
-  case VIDEOPLAYER_NEXT_STARTTIME:
-  case VIDEOPLAYER_NEXT_ENDTIME:
-  case VIDEOPLAYER_NEXT_DURATION:
-  case VIDEOPLAYER_CHANNEL_NAME:
-  case VIDEOPLAYER_CHANNEL_NUMBER:
-  case VIDEOPLAYER_SUB_CHANNEL_NUMBER:
-  case VIDEOPLAYER_CHANNEL_NUMBER_LBL:
-  case VIDEOPLAYER_CHANNEL_GROUP:
-  case VIDEOPLAYER_PARENTAL_RATING:
-  case VIDEOPLAYER_PLAYCOUNT:
-  case VIDEOPLAYER_LASTPLAYED:
-  case VIDEOPLAYER_IMDBNUMBER:
-  case VIDEOPLAYER_EPISODENAME:
-    strLabel = GetVideoLabel(info);
-  break;
-  case VIDEOPLAYER_VIDEO_CODEC:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      strLabel = m_videoInfo.videoCodecName;
-    }
-    break;
-  case VIDEOPLAYER_VIDEO_RESOLUTION:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      return CStreamDetails::VideoDimsToResolutionDescription(m_videoInfo.width, m_videoInfo.height);
-    }
-    break;
-  case VIDEOPLAYER_AUDIO_CODEC:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      strLabel = m_audioInfo.audioCodecName;
-    }
-    break;
-  case VIDEOPLAYER_VIDEO_ASPECT:
-    if (g_application.m_pPlayer->IsPlaying())
-    {
-      strLabel = CStreamDetails::VideoAspectToAspectDescription(m_videoInfo.videoAspectRatio);
-    }
-    break;
-  case VIDEOPLAYER_AUDIO_CHANNELS:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      strLabel = StringUtils::Format("%i", m_audioInfo.channels);
-    }
-    break;
-  case VIDEOPLAYER_AUDIO_LANG:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      SPlayerAudioStreamInfo info;
-      g_application.m_pPlayer->GetAudioStreamInfo(CURRENT_STREAM, info);
-      strLabel = info.language;
-    }
-    break;
-  case VIDEOPLAYER_STEREOSCOPIC_MODE:
-    if(g_application.m_pPlayer->IsPlaying())
-    {
-      strLabel = m_videoInfo.stereoMode;
-    }
-    break;
-  case VIDEOPLAYER_SUBTITLES_LANG:
-    if(g_application.m_pPlayer && g_application.m_pPlayer->IsPlaying() && g_application.m_pPlayer->GetSubtitleVisible())
-    {
-      SPlayerSubtitleStreamInfo info;
-      g_application.m_pPlayer->GetSubtitleStreamInfo(g_application.m_pPlayer->GetSubtitle(), info);
-      strLabel = info.language;
-    }
-    break;
-  case PLAYLIST_LENGTH:
-  case PLAYLIST_POSITION:
-  case PLAYLIST_RANDOM:
-  case PLAYLIST_REPEAT:
-    strLabel = GetPlaylistLabel(info);
-  break;
-  case MUSICPM_SONGSPLAYED:
-  case MUSICPM_MATCHINGSONGS:
-  case MUSICPM_MATCHINGSONGSPICKED:
-  case MUSICPM_MATCHINGSONGSLEFT:
-  case MUSICPM_RELAXEDSONGSPICKED:
-  case MUSICPM_RANDOMSONGSPICKED:
-    strLabel = GetMusicPartyModeLabel(info);
-  break;
-
-  
-
-  case NETWORK_MAC_ADDRESS:
-    return g_sysinfo.GetInfo(info);
     break;
 
   case CONTAINER_FOLDERPATH:
@@ -1874,7 +1699,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       int profileId = CProfilesManager::Get().GetAutoLoginProfileId();
       if ((profileId < 0) || (!CProfilesManager::Get().GetProfileName(profileId, strLabel)))
         strLabel = g_localizeStrings.Get(37014); // Last used profile
-    }
+        }
     break;
   case SYSTEM_LANGUAGE:
     strLabel = g_langInfo.GetEnglishLanguageName();
@@ -1887,7 +1712,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       int percent;
       if (GetInt(percent, SYSTEM_PROGRESS_BAR) && percent > 0)
         strLabel = StringUtils::Format("%i", percent);
-    }
+      }
     break;
   case SYSTEM_FRIENDLY_NAME:
     strLabel = CSysInfo::GetDeviceName();
@@ -1932,14 +1757,14 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
     break;
   case NETWORK_DNS1_ADDRESS:
     {
-      std::vector<std::string> nss = g_application.getNetwork().GetNameServers();
+      vector<std::string> nss = g_application.getNetwork().GetNameServers();
       if (nss.size() >= 1)
         return nss[0];
     }
     break;
   case NETWORK_DNS2_ADDRESS:
     {
-      std::vector<std::string> nss = g_application.getNetwork().GetNameServers();
+      vector<std::string> nss = g_application.getNetwork().GetNameServers();
       if (nss.size() >= 2)
         return nss[1];
     }
@@ -2015,15 +1840,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
         return ((CGUIMediaWindow *)window)->CurrentDirectory().GetArt("fanart");
     }
     break;
-  case SYSTEM_RENDER_VENDOR:
-    strLabel = g_Windowing.GetRenderVendor();
-    break;
-  case SYSTEM_RENDER_RENDERER:
-    strLabel = g_Windowing.GetRenderRenderer();
-    break;
-  case SYSTEM_RENDER_VERSION:
-    strLabel = g_Windowing.GetRenderVersionString();
-    break;
   }
 
   return strLabel;
@@ -2048,97 +1864,9 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
   }
 
   value = 0;
-  switch (info & CATEGORY_MASK)
-  {
-    case PLAYER_VOLUME:
-      value = (int)g_application.GetVolume();
-      return true;
-    case PLAYER_SUBTITLE_DELAY:
-      value = g_application.GetSubtitleDelay();
-      return true;
-    case PLAYER_AUDIO_DELAY:
-      value = g_application.GetAudioDelay();
-      return true;
-    case PLAYER_PROGRESS:
-    case PLAYER_PROGRESS_CACHE:
-    case PLAYER_SEEKBAR:
-    case PLAYER_CACHELEVEL:
-    case PLAYER_CHAPTER:
-    case PLAYER_CHAPTERCOUNT:
-      {
-        if( g_application.m_pPlayer->IsPlaying())
-        {
-          switch( info )
-          {
-          case PLAYER_PROGRESS:
-            if (IsPlayerChannelPreviewActive())
-            {
-              CEpgInfoTagPtr tag(GetEpgInfoTag());
-              if (tag)
-                value = tag->ProgressPercentage();
-            }
-            else
-            value = (int)(g_application.GetPercentage());
-            break;
-          case PLAYER_PROGRESS_CACHE:
-            value = (int)(g_application.GetCachePercentage());
-            break;
-          case PLAYER_SEEKBAR:
-            value = (int)GetSeekPercent();
-            break;
-          case PLAYER_CACHELEVEL:
-            value = (int)(g_application.m_pPlayer->GetCacheLevel());
-            break;
-          case PLAYER_CHAPTER:
-            value = g_application.m_pPlayer->GetChapter();
-            break;
-          case PLAYER_CHAPTERCOUNT:
-            value = g_application.m_pPlayer->GetChapterCount();
-            break;
-          }
-  switch( info )
-  {
+  if (info & CATEGORY_MASK > 0)
+    return m_infoHandlers[info & CATEGORY_MASK]->GetInt(value, info, contextWindow, item);
     
-    case SYSTEM_FREE_MEMORY:
-    case SYSTEM_USED_MEMORY:
-      {
-        MEMORYSTATUSEX stat;
-        stat.dwLength = sizeof(MEMORYSTATUSEX);
-        GlobalMemoryStatusEx(&stat);
-        int memPercentUsed = (int)( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f );
-        if (info == SYSTEM_FREE_MEMORY)
-          value = 100 - memPercentUsed;
-        else
-          value = memPercentUsed;
-        return true;
-      }
-    case SYSTEM_PROGRESS_BAR:
-      {
-        CGUIDialogProgress *bar = (CGUIDialogProgress *)g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
-        if (bar && bar->IsDialogRunning())
-          value = bar->GetPercentage();
-        return true;
-      }
-    case SYSTEM_FREE_SPACE:
-    case SYSTEM_USED_SPACE:
-      {
-        g_sysinfo.GetHddSpaceInfo(value, info, true);
-        return true;
-      }
-    case SYSTEM_CPU_USAGE:
-      value = g_cpuInfo.getUsedPercentage();
-      return true;
-    case PVR_PLAYING_PROGRESS:
-    case PVR_ACTUAL_STREAM_SIG_PROGR:
-    case PVR_ACTUAL_STREAM_SNR_PROGR:
-    case PVR_BACKEND_DISKSPACE_PROGR:
-    case PVR_TIMESHIFT_PROGRESS:
-      value = g_PVRManager.TranslateIntInfo(info);
-      return true;
-    case SYSTEM_BATTERY_LEVEL:
-      value = g_powerManager.BatteryLevel();
-      return true;
-  }
   return false;
 }
 
@@ -3486,52 +3214,6 @@ std::string CGUIInfoManager::GetDuration(TIME_FORMAT format) const
   return "";
 }
 
-std::string CGUIInfoManager::GetMusicPartyModeLabel(int item)
-{
-  // get song counts
-  if (item >= MUSICPM_SONGSPLAYED && item <= MUSICPM_RANDOMSONGSPICKED)
-  {
-    int iSongs = -1;
-    switch (item)
-    {
-    case MUSICPM_SONGSPLAYED:
-      {
-        iSongs = g_partyModeManager.GetSongsPlayed();
-        break;
-      }
-    case MUSICPM_MATCHINGSONGS:
-      {
-        iSongs = g_partyModeManager.GetMatchingSongs();
-        break;
-      }
-    case MUSICPM_MATCHINGSONGSPICKED:
-      {
-        iSongs = g_partyModeManager.GetMatchingSongsPicked();
-        break;
-      }
-    case MUSICPM_MATCHINGSONGSLEFT:
-      {
-        iSongs = g_partyModeManager.GetMatchingSongsLeft();
-        break;
-      }
-    case MUSICPM_RELAXEDSONGSPICKED:
-      {
-        iSongs = g_partyModeManager.GetRelaxedSongs();
-        break;
-      }
-    case MUSICPM_RANDOMSONGSPICKED:
-      {
-        iSongs = g_partyModeManager.GetRandomSongs();
-        break;
-      }
-    }
-    if (iSongs < 0)
-      return "";
-    std::string strLabel = StringUtils::Format("%i", iSongs);
-    return strLabel;
-  }
-  return "";
-}
 
 const std::string CGUIInfoManager::GetMusicPlaylistInfo(const GUIInfo& info)
 {
@@ -3570,43 +3252,6 @@ const std::string CGUIInfoManager::GetMusicPlaylistInfo(const GUIInfo& info)
   else if (info.m_info == MUSICPLAYER_COVER)
     return playlistItem->GetArt("thumb");
   return GetMusicTagLabel(info.m_info, playlistItem.get());
-}
-
-std::string CGUIInfoManager::GetPlaylistLabel(int item, int playlistid /* = PLAYLIST_NONE */) const
-{
-  if (playlistid <= PLAYLIST_NONE && !g_application.m_pPlayer->IsPlaying())
-    return "";
-
-  int iPlaylist = playlistid == PLAYLIST_NONE ? g_playlistPlayer.GetCurrentPlaylist() : playlistid;
-  switch (item)
-  {
-  case PLAYLIST_LENGTH:
-    {
-      return StringUtils::Format("%i", g_playlistPlayer.GetPlaylist(iPlaylist).size());
-    }
-  case PLAYLIST_POSITION:
-    {
-      return StringUtils::Format("%i", g_playlistPlayer.GetCurrentSong() + 1);
-    }
-  case PLAYLIST_RANDOM:
-    {
-      if (g_playlistPlayer.IsShuffled(iPlaylist))
-        return g_localizeStrings.Get(590); // 590: Random
-      else
-        return g_localizeStrings.Get(591); // 591: Off
-    }
-  case PLAYLIST_REPEAT:
-    {
-      PLAYLIST::REPEAT_STATE state = g_playlistPlayer.GetRepeat(iPlaylist);
-      if (state == PLAYLIST::REPEAT_ONE)
-        return g_localizeStrings.Get(592); // 592: One
-      else if (state == PLAYLIST::REPEAT_ALL)
-        return g_localizeStrings.Get(593); // 593: All
-      else
-        return g_localizeStrings.Get(594); // 594: Off
-    }
-  }
-  return "";
 }
 
 std::string CGUIInfoManager::GetMusicLabel(int item)

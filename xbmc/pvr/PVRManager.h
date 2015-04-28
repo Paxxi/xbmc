@@ -756,3 +756,9 @@ namespace PVR
     bool DoWork();
   };
 }
+
+#define g_PVRManager       PVR::CPVRManager::Get()
+#define g_PVRChannelGroups g_PVRManager.ChannelGroups()
+#define g_PVRTimers        g_PVRManager.Timers()
+#define g_PVRRecordings    g_PVRManager.Recordings()
+#define g_PVRClients       g_PVRManager.Clients()

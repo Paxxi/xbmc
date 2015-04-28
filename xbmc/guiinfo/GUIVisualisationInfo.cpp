@@ -1,4 +1,3 @@
-#pragma once
 /*
 *      Copyright (C) 2005-2015 Team XBMC
 *      http://xbmc.org
@@ -19,22 +18,39 @@
 *
 */
 
-#include <string>
-
-#include "GUIInfo.h"
+#include "GUIVisualisationInfo.h"
+#include "GUIInfoLabels.h"
+#include "GUIInfoManager.h"
 
 namespace GUIINFO
 {
-
-class CGUIPlayerInfo : public IGUIInfo
+int CGUIVisualisationInfo::LabelMask()
 {
-public:
-  CGUIPlayerInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
-  virtual ~CGUIPlayerInfo() { }
+  return VISUALISATION_MASK;
+}
 
-  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
-  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
+std::string CGUIVisualisationInfo::GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string* fallback)
+{
+  std::string strLabel = fallback == nullptr ? "" : *fallback;
 
-  static int LabelMask();
-};
+  switch (info)
+  {
+  default:
+    break;
+  }
+
+  return strLabel;
+}
+
+bool CGUIVisualisationInfo::GetInt(int& value, int info, int contextWindow, const CGUIListItem* item)
+{
+  switch (info)
+  {
+  default:
+    break;
+  }
+
+  return false;
+}
+
 }

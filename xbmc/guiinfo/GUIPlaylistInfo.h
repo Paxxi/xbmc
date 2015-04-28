@@ -26,15 +26,17 @@
 namespace GUIINFO
 {
 
-class CGUIPlayerInfo : public IGUIInfo
-{
-public:
-  CGUIPlayerInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
-  virtual ~CGUIPlayerInfo() { }
+  class CGUIPlaylistInfo : public IGUIInfo
+  {
+  public:
+    CGUIPlaylistInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
+    virtual ~CGUIPlaylistInfo() { }
 
-  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
-  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
+    virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
+    virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
 
-  static int LabelMask();
-};
+    static int LabelMask();
+
+    std::string GetPlaylistLabel(int item, int playlistid = -1 /* PLAYLIST_NONE */);
+  };
 }

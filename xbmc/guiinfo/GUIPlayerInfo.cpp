@@ -148,7 +148,7 @@ std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int conte
   return strLabel;
 }
 
-bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */) const
+bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */)
 {
   switch (info)
   {

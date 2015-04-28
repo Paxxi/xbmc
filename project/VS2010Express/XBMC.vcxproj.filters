@@ -3204,6 +3204,27 @@
     <ClCompile Include="..\..\xbmc\guiinfo\GUISystemInfo.cpp">
       <Filter>guiinfo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUINetworkInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIMusicPlayerInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPvrInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIVideoPlayerInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIMusicPMInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPlaylistInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIVisualisationInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6058,7 +6079,7 @@
     <ClInclude Include="..\..\xbmc\addons\LanguageResource.h">
       <Filter>addons</Filter>
     </ClInclude>
-     <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
+    <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
       <Filter>addons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ResourceFile.h">
@@ -6116,6 +6137,27 @@
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\guiinfo\GUISystemInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUINetworkInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIMusicPlayerInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIPvrInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIVideoPlayerInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIMusicPMInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIPlaylistInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIVisualisationInfo.h">
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\win32\gpu_memcpy_sse4.h">

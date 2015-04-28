@@ -432,8 +432,15 @@
     <ClCompile Include="..\..\xbmc\filesystem\ZipFile.cpp" />
     <ClCompile Include="..\..\xbmc\filesystem\ZipManager.cpp" />
     <ClCompile Include="..\..\xbmc\GUIInfoManager.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIMusicPlayerInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIMusicPMInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUINetworkInfo.cpp" />
     <ClCompile Include="..\..\xbmc\guiinfo\GUIPlayerInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPlaylistInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIPvrInfo.cpp" />
     <ClCompile Include="..\..\xbmc\guiinfo\GUISystemInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIVideoPlayerInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIVisualisationInfo.cpp" />
     <ClCompile Include="..\..\xbmc\guiinfo\GUIWeatherInfo.cpp" />
     <ClCompile Include="..\..\xbmc\GUILargeTextureManager.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\AnimatedGif.cpp" />
@@ -964,10 +971,13 @@
     <ClInclude Include="..\..\xbmc\filesystem\XbtDirectory.h" />
     <ClInclude Include="..\..\xbmc\filesystem\XbtFile.h" />
     <ClInclude Include="..\..\xbmc\filesystem\XbtManager.h" />
-    <ClInclude Include="..\..\xbmc\guiinfo\GUIInfoLabels.h" />
-    <ClInclude      Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h"
-   />
-<ClInclude Include="..\..\xbmc\guiinfo\GUISystemInfo.h" />
+<ClInclude Include="..\..\xbmc\guiinfo\GUIMusicPlayerInfo.h" />
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIMusicPMInfo.h" />
+    <ClInclude Include="..\..\xbmc\guiinfo\GUINetworkInfo.h" /><ClInclude Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h" />
+<ClInclude Include="..\..\xbmc\guiinfo\GUIPlaylistInfo.h" />
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIPvrInfo.h" />    <ClInclude Include="..\..\xbmc\guiinfo\GUISystemInfo.h" />
+ <ClInclude Include="..\..\xbmc\guiinfo\GUIVideoPlayerInfo.h" />
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIVisualisationInfo.h" />
     <ClInclude Include="..\..\xbmc\guiinfo\GUIWeatherInfo.h" />
 <ClInclude Include="..\..\xbmc\guilib\cximage.h" />
     <ClInclude Include="..\..\xbmc\guilib\GUIKeyboard.h" />

@@ -172,8 +172,6 @@ public:
   std::string GetMusicLabel(int item);
   std::string GetMusicTagLabel(int info, const CFileItem *item);
   std::string GetVideoLabel(int item);
-  std::string GetPlaylistLabel(int item, int playlistid = -1 /* PLAYLIST_NONE */) const;
-  std::string GetMusicPartyModeLabel(int item);
   const std::string GetMusicPlaylistInfo(const GUIInfo& info);
   std::string GetPictureLabel(int item);
 

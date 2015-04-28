@@ -66,7 +66,7 @@ std::string CGUIWeatherInfo::GetLabel(CFileItem* currentFile, int info, int cont
   return strLabel;
 }
 
-bool CGUIWeatherInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */) const
+bool CGUIWeatherInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */)
 {
   return false;
 }

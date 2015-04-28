@@ -34,6 +34,9 @@
 #include <xbmc/guilib/GraphicContext.h>
 #include <xbmc/guilib/GUIControl.h>
 #include <xbmc/storage/MediaManager.h>
+#include <xbmc/powermanagement/PowerManager.h>
+#include <xbmc/utils/CPUInfo.h>
+#include <xbmc/dialogs/GUIDialogProgress.h>
 
 namespace GUIINFO
 {
@@ -42,7 +45,7 @@ int CGUISystemInfo::LabelMask()
   return SYSTEM_MASK;
 }
 
-std::string CGUISystemInfo::GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback)
+std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /*contextWindow*/, std::string *fallback)
 {
   std::string strLabel = fallback == nullptr ? "" : *fallback;
 
@@ -108,19 +111,19 @@ std::string CGUISystemInfo::GetLabel(CFileItem* currentFile, int info, int conte
     MEMORYSTATUSEX stat;
     stat.dwLength = sizeof(MEMORYSTATUSEX);
     GlobalMemoryStatusEx(&stat);
-    int iMemPercentFree = 100 - ((int)(100.0f* (stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys + 0.5f));
+    int iMemPercentFree = 100 - static_cast<int>(100.0f* (stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys + 0.5f);
     int iMemPercentUsed = 100 - iMemPercentFree;
 
     if (info == SYSTEM_FREE_MEMORY)
-      strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullAvailPhys / MB));
+      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullAvailPhys / MB)));
     else if (info == SYSTEM_FREE_MEMORY_PERCENT)
       strLabel = StringUtils::Format("%i%%", iMemPercentFree);
     else if (info == SYSTEM_USED_MEMORY)
-      strLabel = StringUtils::Format("%luMB", (ULONG)((stat.ullTotalPhys - stat.ullAvailPhys) / MB));
+      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>(((stat.ullTotalPhys - stat.ullAvailPhys) / MB)));
     else if (info == SYSTEM_USED_MEMORY_PERCENT)
       strLabel = StringUtils::Format("%i%%", iMemPercentUsed);
     else if (info == SYSTEM_TOTAL_MEMORY)
-      strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullTotalPhys / MB));
+      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullTotalPhys / MB)));
   }
   break;
   case SYSTEM_SCREEN_MODE:
@@ -208,6 +211,15 @@ std::string CGUISystemInfo::GetLabel(CFileItem* currentFile, int info, int conte
   case SYSTEM_FPS:
     strLabel = StringUtils::Format("%02.2f", m_manager->GetFPS());
     break;
+  case SYSTEM_RENDER_VENDOR:
+    strLabel = g_Windowing.GetRenderVendor();
+    break;
+  case SYSTEM_RENDER_RENDERER:
+    strLabel = g_Windowing.GetRenderRenderer();
+    break;
+  case SYSTEM_RENDER_VERSION:
+    strLabel = g_Windowing.GetRenderVersionString();
+    break;
   default:
     break;
   }
@@ -215,8 +227,44 @@ std::string CGUISystemInfo::GetLabel(CFileItem* currentFile, int info, int conte
   return strLabel;
 }
 
-bool CGUISystemInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */) const
+bool CGUISystemInfo::GetInt(int &value, int info, int /*contextWindow*/, const CGUIListItem */*item*/ /* = nullptr */)
 {
+  switch (info)
+  {
+
+  case SYSTEM_FREE_MEMORY:
+  case SYSTEM_USED_MEMORY:
+  {
+    MEMORYSTATUSEX stat;
+    stat.dwLength = sizeof(MEMORYSTATUSEX);
+    GlobalMemoryStatusEx(&stat);
+    int memPercentUsed = static_cast<int>(100.0f* (stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys + 0.5f);
+    if (info == SYSTEM_FREE_MEMORY)
+      value = 100 - memPercentUsed;
+    else
+      value = memPercentUsed;
+    return true;
+  }
+  case SYSTEM_PROGRESS_BAR:
+  {
+    CGUIDialogProgress *bar = static_cast<CGUIDialogProgress *>(g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS));
+    if (bar && bar->IsDialogRunning())
+      value = bar->GetPercentage();
+    return true;
+  }
+  case SYSTEM_FREE_SPACE:
+  case SYSTEM_USED_SPACE:
+  {
+    g_sysinfo.GetHddSpaceInfo(value, info, true);
+    return true;
+  }
+  case SYSTEM_CPU_USAGE:
+    value = g_cpuInfo.getUsedPercentage();
+    return true;
+  case SYSTEM_BATTERY_LEVEL:
+    value = g_powerManager.BatteryLevel();
+    return true;
+  }
   return false;
 }
 }

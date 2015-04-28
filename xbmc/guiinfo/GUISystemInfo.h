@@ -31,8 +31,8 @@ public:
   CGUISystemInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
   virtual ~CGUISystemInfo() { }
 
-  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback);
-  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) const;
+  virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
+  virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
 
   static int LabelMask();
 };
