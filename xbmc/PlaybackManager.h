@@ -1,15 +1,35 @@
 ﻿#pragma once
-#include <xbmc/utils/FileOperationJob.h>
-#include <xbmc/ApplicationPlayer.h>
-#include <xbmc/video/Bookmark.h>
-#include <xbmc/video/PlayerController.h>
+/*
+*      Copyright (C) 2005-2015 Team XBMC
+*      http://xbmc.org
+*
+*  This Program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2, or (at your option)
+*  any later version.
+*
+*  This Program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with XBMC; see the file COPYING.  If not, see
+*  <http://www.gnu.org/licenses/>.
+*
+*/
+#include "ApplicationPlayer.h"
+#include "video/Bookmark.h"
+#include "video/PlayerController.h"
 #include "threads/Thread.h"
+#include "PlayListPlayer.h"
 
 #define VOLUME_MINIMUM 0.0f        // -60dB
 #define VOLUME_MAXIMUM 1.0f        // 0dB
 #define VOLUME_DYNAMIC_RANGE 90.0f // 60dB
 #define VOLUME_CONTROL_STEPS 90    // 90 steps
 #include <xbmc/music/karaoke/karaokelyricsmanager.h>
+#include "utils/Stopwatch.h"
 
 namespace PLAYLIST{
   class CPlayList;
@@ -38,10 +58,10 @@ protected:
 
 class CFileItem;
 
-class CPlaybackManager
+class CPlaybackManager : public IPlayerCallback
 {
 private:
-  CPlaybackManager() { };
+  CPlaybackManager();
   CPlaybackManager(const CPlaybackManager&) = delete;
   CPlaybackManager const& operator=(CPlaybackManager const&) = delete;
   virtual ~CPlaybackManager() { };
@@ -67,6 +87,8 @@ public:
 
   PLAYERCOREID GetCurrentPlayer();
 
+  void LoadVideoSettings(const CFileItem& item);
+
   bool PlayMedia(const CFileItem& item, int iPlaylist = PLAYLIST_MUSIC);
   bool PlayMediaSync(const CFileItem& item, int iPlaylist = PLAYLIST_MUSIC);
   bool ProcessAndStartPlaylist(const std::string& strPlayList, PLAYLIST::CPlayList& playlist, int iPlaylist, int track = 0);
@@ -78,6 +100,7 @@ public:
   void Restart(bool bSamePosition = true);
   void DelayedPlayerRestart();
   void CheckDelayedPlayerRestart();
+  void CheckPlayingProgress();
   bool IsPlayingFullScreenVideo() const;
   bool IsStartingPlayback() const { return m_bPlaybackStarting; }
 
@@ -87,7 +110,7 @@ public:
   bool IsMutedInternal() const { return m_muted; }
   void ToggleMute(void);
   void SetMute(bool mute);
-  void ShowVolumeBar(const CAction *action = NULL);
+  void ShowVolumeBar(const CAction *action = nullptr);
   int GetSubtitleDelay() const;
   int GetAudioDelay() const;
 
@@ -138,6 +161,8 @@ private:
   bool m_muted;
   float m_volumeLevel;
 
+  bool m_bStop;
+
   CApplicationPlayer* m_pPlayer;
   CPlayerController *m_playerController;
   ReplayGainSettings m_replayGainSettings;
@@ -145,6 +170,11 @@ private:
   CCriticalSection m_playStateMutex;
 
   CKaraokeLyricsManager* m_pKaraokeMgr;
+
+  PLAYERCOREID m_eForcedNextPlayer;
+  std::string m_strPlayListFile;
+
+  CStopWatch m_restartPlayerTimer;
 
   void Mute();
   void UnMute();

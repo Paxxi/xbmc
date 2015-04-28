@@ -30,8 +30,6 @@
 #include "Util.h"
 #include "URL.h"
 #include "guilib/TextureManager.h"
-#include "cores/IPlayer.h"
-#include "cores/dvdplayer/DVDFileInfo.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
 #include "PlayListPlayer.h"
@@ -42,7 +40,6 @@
 #include "guilib/GUIControlProfiler.h"
 #include "utils/LangCodeExpander.h"
 #include "GUIInfoManager.h"
-#include "playlists/PlayListFactory.h"
 #include "guilib/GUIFontManager.h"
 #include "guilib/GUIColorManager.h"
 #include "guilib/StereoscopicsManager.h"
@@ -74,7 +71,6 @@
 #include "utils/TimeUtils.h"
 #include "GUILargeTextureManager.h"
 #include "TextureCache.h"
-#include "playlists/SmartPlayList.h"
 #ifdef HAS_FILESYSTEM_RAR
 #include "filesystem/RarManager.h"
 #endif
@@ -83,13 +79,10 @@
 #include "windowing/WindowingFactory.h"
 #include "powermanagement/PowerManager.h"
 #include "powermanagement/DPMSSupport.h"
-#include "settings/SettingAddon.h"
 #include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
-#include "settings/MediaSourceSettings.h"
-#include "settings/SkinSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/CPUInfo.h"
 #include "utils/RssManager.h"
@@ -97,9 +90,6 @@
 #include "view/ViewStateSettings.h"
 
 #include "input/KeyboardLayoutManager.h"
-#include "input/KeyboardStat.h"
-#include "input/XBMC_vkeys.h"
-#include "input/MouseStat.h"
 
 #if SDL_VERSION == 1
 #include <SDL/SDL.h>
@@ -109,7 +99,6 @@
 
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
-#include "network/upnp/UPnPSettings.h"
 #include "filesystem/UPnPDirectory.h"
 #endif
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
@@ -152,7 +141,6 @@
 #include "interfaces/AnnouncementManager.h"
 #include "peripherals/Peripherals.h"
 #include "peripherals/dialogs/GUIDialogPeripheralManager.h"
-#include "peripherals/dialogs/GUIDialogPeripheralSettings.h"
 #include "peripherals/devices/PeripheralImon.h"
 #include "music/infoscanner/MusicInfoScanner.h"
 
@@ -170,19 +158,15 @@
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogSubMenu.h"
 #include "dialogs/GUIDialogButtonMenu.h"
-#include "dialogs/GUIDialogSimpleMenu.h"
 #include "addons/GUIDialogAddonSettings.h"
 
 // PVR related include Files
 #include "pvr/PVRManager.h"
-#include "pvr/timers/PVRTimers.h"
 
 #include "epg/EpgContainer.h"
 
 #include "video/dialogs/GUIDialogFullScreenInfo.h"
 #include "guilib/GUIControlFactory.h"
-#include "dialogs/GUIDialogCache.h"
-#include "dialogs/GUIDialogPlayEject.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 #include "addons/AddonInstaller.h"
@@ -198,7 +182,6 @@
 #endif
 
 #ifdef TARGET_WINDOWS
-#include <shlobj.h>
 #include "win32util.h"
 #endif
 
@@ -217,11 +200,8 @@
 
 #include "storage/MediaManager.h"
 #include "utils/JobManager.h"
-#include "utils/SaveFileStateJob.h"
 #include "utils/AlarmClock.h"
-#include "utils/RssReader.h"
 #include "utils/StringUtils.h"
-#include "utils/Weather.h"
 #include "DatabaseManager.h"
 #include "input/InputManager.h"
 
@@ -244,7 +224,7 @@
 #endif
 
 #include "cores/FFmpeg.h"
-#include <project/VS2010Express/CPlaybackManager.h>
+#include "PlaybackManager.h"
 
 using namespace std;
 using namespace ADDON;
@@ -276,11 +256,7 @@ using namespace XbmcThreads;
 
 //extern IDirectSoundRenderer* m_pAudioDecoder;
 CApplication::CApplication(void)
-  : m_pPlayer(new CApplicationPlayer)
-  , m_progressTrackingVideoResumeBookmark(*new CBookmark)
-  , m_progressTrackingItem(new CFileItem)
-  , m_musicInfoScanner(new CMusicInfoScanner)
-  , m_playerController(new CPlayerController)
+  : m_musicInfoScanner(new CMusicInfoScanner)
 {
   m_network = NULL;
   TiXmlBase::SetCondenseWhiteSpace(false);
@@ -291,11 +267,6 @@ CApplication::CApplication(void)
   m_dpmsIsManual = false;
   m_iScreenSaveLock = 0;
   m_bInitializing = true;
-  m_eForcedNextPlayer = EPC_NONE;
-  m_strPlayListFile = "";
-  m_nextPlaylistItem = -1;
-  m_bPlaybackStarting = false;
-  m_ePlayState = PLAY_STATE_NONE;
   m_skinReverting = false;
   m_loggingIn = false;
 
@@ -322,15 +293,11 @@ CApplication::CApplication(void)
 
   m_splash = NULL;
   m_threadID = 0;
-  m_progressTrackingPlayCountUpdate = false;
-  m_currentStackPosition = 0;
   m_lastFrameTime = 0;
   m_lastRenderTime = 0;
   m_skipGuiRender = false;
   m_bTestMode = false;
 
-  m_muted = false;
-  m_volumeLevel = VOLUME_MAXIMUM;
 }
 
 CApplication::~CApplication(void)
@@ -2715,22 +2682,6 @@ bool CApplication::IsFullScreen()
 }
 
 
-void CApplication::LoadVideoSettings(const CFileItem& item)
-{
-  CVideoDatabase dbs;
-  if (dbs.Open())
-  {
-    CLog::Log(LOGDEBUG, "Loading settings for %s", item.GetPath().c_str());
-    
-    // Load stored settings if they exist, otherwise use default
-    if (!dbs.GetVideoSettings(item, CMediaSettings::Get().GetCurrentVideoSettings()))
-      CMediaSettings::Get().GetCurrentVideoSettings() = CMediaSettings::Get().GetDefaultVideoSettings();
-    
-    dbs.Close();
-  }
-}
-
-
 
 void CApplication::ResetSystemIdleTimer()
 {
@@ -3353,7 +3304,7 @@ void CApplication::Process()
 
   // check how far we are through playing the current item
   // and do anything that needs doing (playcount updates etc)
-  CheckPlayingProgress();
+  CPlaybackManager::Get().CheckPlayingProgress();
 
   // update sound
   m_pPlayer->DoAudioWork();
@@ -3486,189 +3437,7 @@ float CApplication::NavigationIdleTime()
   return m_navigationTimer.GetElapsedSeconds();
 }
 
-void CApplication::DelayedPlayerRestart()
-{
-  m_restartPlayerTimer.StartZero();
-}
 
-void CApplication::CheckDelayedPlayerRestart()
-{
-  if (m_restartPlayerTimer.GetElapsedSeconds() > 3)
-  {
-    m_restartPlayerTimer.Stop();
-    m_restartPlayerTimer.Reset();
-    Restart(true);
-  }
-}
-
-void CApplication::Restart(bool bSamePosition)
-{
-  // this function gets called when the user changes a setting (like noninterleaved)
-  // and which means we gotta close & reopen the current playing file
-
-  // first check if we're playing a file
-  if ( !m_pPlayer->IsPlayingVideo() && !m_pPlayer->IsPlayingAudio())
-    return ;
-
-  if( !m_pPlayer->HasPlayer() )
-    return ;
-
-  SaveFileState();
-
-  // do we want to return to the current position in the file
-  if (false == bSamePosition)
-  {
-    // no, then just reopen the file and start at the beginning
-    PlayFile(*m_itemCurrentFile, true);
-    return ;
-  }
-
-  // else get current position
-  double time = GetTime();
-
-  // get player state, needed for dvd's
-  std::string state = m_pPlayer->GetPlayerState();
-
-  // set the requested starttime
-  m_itemCurrentFile->m_lStartOffset = (long)(time * 75.0);
-
-  // reopen the file
-  if ( PlayFile(*m_itemCurrentFile, true) == PLAYBACK_OK )
-    m_pPlayer->SetPlayerState(state);
-}
-
-
-
-void CApplication::ShowVolumeBar(const CAction *action)
-{
-  CGUIDialog *volumeBar = (CGUIDialog *)g_windowManager.GetWindow(WINDOW_DIALOG_VOLUME_BAR);
-  if (volumeBar)
-  {
-    volumeBar->Show();
-    if (action)
-      volumeBar->OnAction(*action);
-  }
-}
-
-bool CApplication::IsMuted() const
-{
-  if (g_peripherals.IsMuted())
-    return true;
-  return CAEFactory::IsMuted();
-}
-
-void CApplication::ToggleMute(void)
-{
-  if (m_muted)
-    UnMute();
-  else
-    Mute();
-}
-
-void CApplication::SetMute(bool mute)
-{
-  if (m_muted != mute)
-  {
-    ToggleMute();
-    m_muted = mute;
-  }
-}
-
-void CApplication::Mute()
-{
-  if (g_peripherals.Mute())
-    return;
-
-  CAEFactory::SetMute(true);
-  m_muted = true;
-  VolumeChanged();
-}
-
-void CApplication::UnMute()
-{
-  if (g_peripherals.UnMute())
-    return;
-
-  CAEFactory::SetMute(false);
-  m_muted = false;
-  VolumeChanged();
-}
-
-void CApplication::SetVolume(float iValue, bool isPercentage/*=true*/)
-{
-  float hardwareVolume = iValue;
-
-  if(isPercentage)
-    hardwareVolume /= 100.0f;
-
-  SetHardwareVolume(hardwareVolume);
-  VolumeChanged();
-}
-
-void CApplication::SetHardwareVolume(float hardwareVolume)
-{
-  hardwareVolume = std::max(VOLUME_MINIMUM, std::min(VOLUME_MAXIMUM, hardwareVolume));
-  m_volumeLevel = hardwareVolume;
-
-  CAEFactory::SetVolume(hardwareVolume);
-}
-
-float CApplication::GetVolume(bool percentage /* = true */) const
-{
-  if (percentage)
-  {
-    // converts the hardware volume to a percentage
-    return m_volumeLevel * 100.0f;
-  }
-  
-  return m_volumeLevel;
-}
-
-void CApplication::VolumeChanged() const
-{
-  CVariant data(CVariant::VariantTypeObject);
-  data["volume"] = GetVolume();
-  data["muted"] = m_muted;
-  CAnnouncementManager::Get().Announce(Application, "xbmc", "OnVolumeChanged", data);
-
-  // if player has volume control, set it.
-  if (m_pPlayer->ControlsVolume())
-  {
-     m_pPlayer->SetVolume(m_volumeLevel);
-     m_pPlayer->SetMute(m_muted);
-  }
-}
-
-int CApplication::GetSubtitleDelay() const
-{
-  // converts subtitle delay to a percentage
-  return int(((float)(CMediaSettings::Get().GetCurrentVideoSettings().m_SubtitleDelay + g_advancedSettings.m_videoSubsDelayRange)) / (2 * g_advancedSettings.m_videoSubsDelayRange)*100.0f + 0.5f);
-}
-
-int CApplication::GetAudioDelay() const
-{
-  // converts audio delay to a percentage
-  return int(((float)(CMediaSettings::Get().GetCurrentVideoSettings().m_AudioDelay + g_advancedSettings.m_videoAudioDelayRange)) / (2 * g_advancedSettings.m_videoAudioDelayRange)*100.0f + 0.5f);
-}
-
-// Returns the total time in seconds of the current media.  Fractional
-// portions of a second are possible - but not necessarily supported by the
-// player class.  This returns a double to be consistent with GetTime() and
-// SeekTime().
-double CApplication::GetTotalTime() const
-{
-  double rc = 0.0;
-
-  if (m_pPlayer->IsPlaying())
-  {
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-      rc = (*m_currentStack)[m_currentStack->Size() - 1]->m_lEndOffset;
-    else
-      rc = static_cast<double>(m_pPlayer->GetTotalTime() * 0.001f);
-  }
-
-  return rc;
-}
 
 void CApplication::StopShutdownTimer()
 {
@@ -3683,121 +3452,6 @@ void CApplication::ResetShutdownTimers()
   // delete custom shutdown timer
   if (g_alarmClock.HasAlarm("shutdowntimer"))
     g_alarmClock.Stop("shutdowntimer", true);
-}
-
-// Returns the current time in seconds of the currently playing media.
-// Fractional portions of a second are possible.  This returns a double to
-// be consistent with GetTotalTime() and SeekTime().
-double CApplication::GetTime() const
-{
-  double rc = 0.0;
-
-  if (m_pPlayer->IsPlaying())
-  {
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-    {
-      long startOfCurrentFile = (m_currentStackPosition > 0) ? (*m_currentStack)[m_currentStackPosition-1]->m_lEndOffset : 0;
-      rc = (double)startOfCurrentFile + m_pPlayer->GetTime() * 0.001;
-    }
-    else
-      rc = static_cast<double>(m_pPlayer->GetTime() * 0.001f);
-  }
-
-  return rc;
-}
-
-// Sets the current position of the currently playing media to the specified
-// time in seconds.  Fractional portions of a second are valid.  The passed
-// time is the time offset from the beginning of the file as opposed to a
-// delta from the current position.  This method accepts a double to be
-// consistent with GetTime() and GetTotalTime().
-void CApplication::SeekTime( double dTime )
-{
-  if (m_pPlayer->IsPlaying() && (dTime >= 0.0))
-  {
-    if (!m_pPlayer->CanSeek()) return;
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-    {
-      // find the item in the stack we are seeking to, and load the new
-      // file if necessary, and calculate the correct seek within the new
-      // file.  Otherwise, just fall through to the usual routine if the
-      // time is higher than our total time.
-      for (int i = 0; i < m_currentStack->Size(); i++)
-      {
-        if ((*m_currentStack)[i]->m_lEndOffset > dTime)
-        {
-          long startOfNewFile = (i > 0) ? (*m_currentStack)[i-1]->m_lEndOffset : 0;
-          if (m_currentStackPosition == i)
-            m_pPlayer->SeekTime((int64_t)((dTime - startOfNewFile) * 1000.0));
-          else
-          { // seeking to a new file
-            m_currentStackPosition = i;
-            CFileItem item(*(*m_currentStack)[i]);
-            item.m_lStartOffset = (long)((dTime - startOfNewFile) * 75.0);
-            // don't just call "PlayFile" here, as we are quite likely called from the
-            // player thread, so we won't be able to delete ourselves.
-            CApplicationMessenger::Get().PlayFile(item, true);
-          }
-          return;
-        }
-      }
-    }
-    // convert to milliseconds and perform seek
-    m_pPlayer->SeekTime( static_cast<int64_t>( dTime * 1000.0 ) );
-  }
-}
-
-float CApplication::GetPercentage() const
-{
-  if (m_pPlayer->IsPlaying())
-  {
-    if (m_pPlayer->GetTotalTime() == 0 && m_pPlayer->IsPlayingAudio() && m_itemCurrentFile->HasMusicInfoTag())
-    {
-      const CMusicInfoTag& tag = *m_itemCurrentFile->GetMusicInfoTag();
-      if (tag.GetDuration() > 0)
-        return (float)(GetTime() / tag.GetDuration() * 100);
-    }
-
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-    {
-      double totalTime = GetTotalTime();
-      if (totalTime > 0.0f)
-        return (float)(GetTime() / totalTime * 100);
-    }
-    else
-      return m_pPlayer->GetPercentage();
-  }
-  return 0.0f;
-}
-
-float CApplication::GetCachePercentage() const
-{
-  if (m_pPlayer->IsPlaying())
-  {
-    // Note that the player returns a relative cache percentage and we want an absolute percentage
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-    {
-      float stackedTotalTime = (float) GetTotalTime();
-      // We need to take into account the stack's total time vs. currently playing file's total time
-      if (stackedTotalTime > 0.0f)
-        return min( 100.0f, GetPercentage() + (m_pPlayer->GetCachePercentage() * m_pPlayer->GetTotalTime() * 0.001f / stackedTotalTime ) );
-    }
-    else
-      return min( 100.0f, m_pPlayer->GetPercentage() + m_pPlayer->GetCachePercentage() );
-  }
-  return 0.0f;
-}
-
-void CApplication::SeekPercentage(float percent)
-{
-  if (m_pPlayer->IsPlaying() && (percent >= 0.0))
-  {
-    if (!m_pPlayer->CanSeek()) return;
-    if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
-      SeekTime(percent * 0.01 * GetTotalTime());
-    else
-      m_pPlayer->SeekPercentage(percent);
-  }
 }
 
 // SwitchToFullScreen() returns true if a switch is made, else returns false
@@ -3835,10 +3489,7 @@ void CApplication::Minimize()
   g_Windowing.Minimize();
 }
 
-PLAYERCOREID CApplication::GetCurrentPlayer()
-{
-  return m_pPlayer->GetCurrentPlayer();
-}
+
 
 void CApplication::UpdateLibraries()
 {
@@ -3946,65 +3597,6 @@ void CApplication::StartMusicArtistScan(const std::string& strDirectory,
   m_musicInfoScanner->ShowDialog(true);
 
   m_musicInfoScanner->FetchArtistInfo(strDirectory,refresh);
-}
-
-void CApplication::CheckPlayingProgress()
-{
-  // check if we haven't rewound past the start of the file
-  if (m_pPlayer->IsPlaying())
-  {
-    int iSpeed = g_application.m_pPlayer->GetPlaySpeed();
-    if (iSpeed < 1)
-    {
-      iSpeed *= -1;
-      int iPower = 0;
-      while (iSpeed != 1)
-      {
-        iSpeed >>= 1;
-        iPower++;
-      }
-      if (g_infoManager.GetPlayTime() / 1000 < iPower)
-      {
-        g_application.m_pPlayer->SetPlaySpeed(1, g_application.m_muted);
-        g_application.SeekTime(0);
-      }
-    }
-  }
-}
-
-bool CApplication::ProcessAndStartPlaylist(const std::string& strPlayList, CPlayList& playlist, int iPlaylist, int track)
-{
-  CLog::Log(LOGDEBUG,"CApplication::ProcessAndStartPlaylist(%s, %i)",strPlayList.c_str(), iPlaylist);
-
-  // initial exit conditions
-  // no songs in playlist just return
-  if (playlist.size() == 0)
-    return false;
-
-  // illegal playlist
-  if (iPlaylist < PLAYLIST_MUSIC || iPlaylist > PLAYLIST_VIDEO)
-    return false;
-
-  // setup correct playlist
-  g_playlistPlayer.ClearPlaylist(iPlaylist);
-
-  // if the playlist contains an internet stream, this file will be used
-  // to generate a thumbnail for musicplayer.cover
-  g_application.m_strPlayListFile = strPlayList;
-
-  // add the items to the playlist player
-  g_playlistPlayer.Add(iPlaylist, playlist);
-
-  // if we have a playlist
-  if (g_playlistPlayer.GetPlaylist(iPlaylist).size())
-  {
-    // start playing it
-    g_playlistPlayer.SetCurrentPlaylist(iPlaylist);
-    g_playlistPlayer.Reset();
-    g_playlistPlayer.Play(track);
-    return true;
-  }
-  return false;
 }
 
 bool CApplication::IsCurrentThread() const

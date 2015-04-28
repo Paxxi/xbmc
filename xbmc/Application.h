@@ -47,8 +47,6 @@ namespace MEDIA_DETECT
 class CPlayerController;
 
 #include "cores/IPlayerCallback.h"
-#include "cores/playercorefactory/PlayerCoreFactory.h"
-#include "PlayListPlayer.h"
 #include "settings/lib/ISettingsHandler.h"
 #include "settings/lib/ISettingCallback.h"
 #include "settings/lib/ISubSettings.h"
@@ -65,7 +63,6 @@ class CPlayerController;
 #include "windowing/XBMC_events.h"
 #include "threads/Thread.h"
 
-#include "ApplicationPlayer.h"
 #include "interfaces/IActionListener.h"
 
 class CSeekHandler;
@@ -91,7 +88,6 @@ namespace MUSIC_INFO
 class CApplication : public CXBApplicationEx, public IPlayerCallback, public IMsgTargetCallback,
                      public ISettingCallback, public ISettingsHandler, public ISubSettings
 {
-  friend class CApplicationPlayer;
 public:
 
   enum ESERVERS
@@ -138,7 +134,7 @@ public:
 
   virtual bool OnMessage(CGUIMessage& message);
   
-  void LoadVideoSettings(const CFileItem& item);
+  
   
   bool IsFullScreen();
   bool OnAppCommand(const CAction &action);
@@ -148,7 +144,6 @@ public:
   bool IsIdleShutdownInhibited() const;
   // Checks whether the screensaver and / or DPMS should become active.
   void CheckScreenSaverAndDPMS();
-  void CheckPlayingProgress();
   void ActivateScreenSaver(bool forceType = false);
   bool SetupNetwork();
   void CloseNetworkShares();
@@ -230,9 +225,6 @@ public:
   inline bool IsDPMSActive() { return m_dpmsIsActive; };
   int m_iScreenSaveLock; // spiff: are we checking for a lock? if so, ignore the screensaver state, if -1 we have failed to input locks
 
-  
-  PLAYERCOREID m_eForcedNextPlayer;
-  std::string m_strPlayListFile;
 
   int GlobalIdleTime();
 
@@ -346,7 +338,6 @@ protected:
   CStopWatch m_idleTimer;
   CStopWatch m_screenSaverTimer;
 #endif
-  CStopWatch m_restartPlayerTimer;
   CStopWatch m_frameTime;
   CStopWatch m_navigationTimer;
   CStopWatch m_slowTimer;
