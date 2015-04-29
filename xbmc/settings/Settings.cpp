@@ -80,6 +80,7 @@
 #include "view/ViewStateSettings.h"
 #include "windowing/WindowingFactory.h"
 #include "input/InputManager.h"
+#include "PlaybackManager.h"
 
 #define SETTINGS_XML_FOLDER "special://xbmc/system/settings/"
 #define SETTINGS_XML_ROOT   "settings"
@@ -668,6 +669,7 @@ void CSettings::InitializeISubSettings()
   m_settingsManager->RegisterSubSettings(&CSkinSettings::Get());
   m_settingsManager->RegisterSubSettings(&g_sysinfo);
   m_settingsManager->RegisterSubSettings(&CViewStateSettings::Get());
+  m_settingsManager->RegisterSubSettings(&CPlaybackManager::Get());
 }
 
 void CSettings::InitializeISettingCallbacks()
@@ -739,10 +741,6 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("lookandfeel.skintheme");
   settingSet.insert("lookandfeel.skincolors");
   settingSet.insert("lookandfeel.skinzoom");
-  settingSet.insert("musicplayer.replaygainpreamp");
-  settingSet.insert("musicplayer.replaygainnogainpreamp");
-  settingSet.insert("musicplayer.replaygaintype");
-  settingSet.insert("musicplayer.replaygainavoidclipping");
   settingSet.insert("scrapers.musicvideosdefault");
   settingSet.insert("screensaver.mode");
   settingSet.insert("screensaver.preview");
@@ -753,6 +751,13 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("videoplayer.useamcodec");
   settingSet.insert("videoplayer.usemediacodec");
   m_settingsManager->RegisterCallback(&g_application, settingSet);
+
+  settingSet.clear();
+  settingSet.insert("musicplayer.replaygainpreamp");
+  settingSet.insert("musicplayer.replaygainnogainpreamp");
+  settingSet.insert("musicplayer.replaygaintype");
+  settingSet.insert("musicplayer.replaygainavoidclipping");
+  m_settingsManager->RegisterCallback(&CPlaybackManager::Get(), settingSet);
 
   settingSet.clear();
   settingSet.insert("lookandfeel.soundskin");

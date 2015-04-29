@@ -18,21 +18,25 @@
 *  <http://www.gnu.org/licenses/>.
 *
 */
+
+#include <memory>
 #include "ApplicationPlayer.h"
-#include "video/Bookmark.h"
-#include "video/PlayerController.h"
 #include "threads/Thread.h"
-#include "PlayListPlayer.h"
+#include "utils/Stopwatch.h"
+#include "settings/lib/ISettingCallback.h"
+#include "settings/lib/ISubSettings.h"
+#include "cores/IPlayerCallback.h"
 
 #define VOLUME_MINIMUM 0.0f        // -60dB
 #define VOLUME_MAXIMUM 1.0f        // 0dB
 #define VOLUME_DYNAMIC_RANGE 90.0f // 60dB
 #define VOLUME_CONTROL_STEPS 90    // 90 steps
-#include <xbmc/music/karaoke/karaokelyricsmanager.h>
-#include "utils/Stopwatch.h"
+
+
 
 namespace PLAYLIST{
   class CPlayList;
+  class CPlayListPlayer;
 }
 
 // replay gain settings struct for quick access by the player multiple
@@ -50,15 +54,19 @@ class CBackgroundPlayer : public CThread
 public:
   CBackgroundPlayer(const CFileItem &item, int iPlayList);
   virtual ~CBackgroundPlayer();
-  virtual void Process();
+  virtual void Process() override;
 protected:
   CFileItem *m_item;
   int       m_iPlayList;
 };
 
 class CFileItem;
+class CSeekHandler;
+class CKaraokeLyricsManager;
+class CBookmark;
+class CPlayerController;
 
-class CPlaybackManager : public IPlayerCallback
+class CPlaybackManager : public IPlayerCallback, public ISettingCallback, public ISubSettings
 {
 private:
   CPlaybackManager();
@@ -66,20 +74,36 @@ private:
   CPlaybackManager const& operator=(CPlaybackManager const&) = delete;
   virtual ~CPlaybackManager() { };
 
+  typedef enum
+  {
+    PLAY_STATE_NONE = 0,
+    PLAY_STATE_STARTING,
+    PLAY_STATE_PLAYING,
+    PLAY_STATE_STOPPED,
+    PLAY_STATE_ENDED,
+  } PlayState;
+  PlayState m_ePlayState;
 public:
   /*! \brief static method to get the current instance of the class. Creates a new instance the first time it's called.
   */
   static CPlaybackManager& Get();
+
+  bool Initialize();
   
-  virtual void OnPlayBackEnded();
-  virtual void OnPlayBackStarted();
-  virtual void OnPlayBackPaused();
-  virtual void OnPlayBackResumed();
-  virtual void OnPlayBackStopped();
-  virtual void OnQueueNextItem();
-  virtual void OnPlayBackSeek(int iTime, int seekOffset);
-  virtual void OnPlayBackSeekChapter(int iChapter);
-  virtual void OnPlayBackSpeedChanged(int iSpeed);
+  virtual void OnPlayBackEnded() override;
+  virtual void OnPlayBackStarted() override;
+  virtual void OnPlayBackPaused() override;
+  virtual void OnPlayBackResumed() override;
+  virtual void OnPlayBackStopped() override;
+  virtual void OnQueueNextItem() override;
+  virtual void OnPlayBackSeek(int iTime, int seekOffset) override;
+  virtual void OnPlayBackSeekChapter(int iChapter) override;
+  virtual void OnPlayBackSpeedChanged(int iSpeed) override;
+
+  virtual void OnSettingChanged(const CSetting* setting) override;
+
+  virtual bool Load(const TiXmlNode *settings) override;
+  virtual bool Save(TiXmlNode *settings);
 
   const std::string& CurrentFile();
   CFileItem& CurrentFileItem();
@@ -134,21 +158,13 @@ public:
   void SeekPercentage(float percent);
   void SeekTime(double dTime = 0.0);
 
-  bool m_bPlaybackStarting;
-  typedef enum
-  {
-    PLAY_STATE_NONE = 0,
-    PLAY_STATE_STARTING,
-    PLAY_STATE_PLAYING,
-    PLAY_STATE_STOPPED,
-    PLAY_STATE_ENDED,
-  } PlayState;
-  PlayState m_ePlayState;
+  bool IsExternalPlayerActive() const;
+
 
   ReplayGainSettings& GetReplayGainSettings() { return m_replayGainSettings; }
 private:
   CFileItemPtr m_itemCurrentFile;
-  CFileItemList* m_currentStack;
+  std::unique_ptr<CFileItemList> m_currentStack;
   CFileItemPtr m_stackFileItemToUpdate;
 
   CBookmark& m_progressTrackingVideoResumeBookmark;
@@ -161,15 +177,16 @@ private:
   bool m_muted;
   float m_volumeLevel;
 
+  bool m_bPlaybackStarting;
   bool m_bStop;
 
-  CApplicationPlayer* m_pPlayer;
-  CPlayerController *m_playerController;
+  std::unique_ptr<CApplicationPlayer> m_pPlayer;
+  std::unique_ptr<CPlayerController> m_playerController;
   ReplayGainSettings m_replayGainSettings;
 
   CCriticalSection m_playStateMutex;
 
-  CKaraokeLyricsManager* m_pKaraokeMgr;
+  std::unique_ptr<CKaraokeLyricsManager> m_pKaraokeMgr;
 
   PLAYERCOREID m_eForcedNextPlayer;
   std::string m_strPlayListFile;

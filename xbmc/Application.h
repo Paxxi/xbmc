@@ -44,12 +44,9 @@ namespace MEDIA_DETECT
 {
   class CAutorun;
 }
-class CPlayerController;
 
-#include "cores/IPlayerCallback.h"
 #include "settings/lib/ISettingsHandler.h"
 #include "settings/lib/ISettingCallback.h"
-#include "settings/lib/ISubSettings.h"
 #if !defined(TARGET_WINDOWS) && defined(HAS_DVD_DRIVE)
 #include "storage/DetectDVDType.h"
 #endif
@@ -65,12 +62,10 @@ class CPlayerController;
 
 #include "interfaces/IActionListener.h"
 
-class CSeekHandler;
-class CKaraokeLyricsManager;
+
 class CInertialScrollingHandler;
 class DPMSSupport;
 class CSplash;
-class CBookmark;
 class CNetwork;
 
 namespace VIDEO
@@ -85,8 +80,8 @@ namespace MUSIC_INFO
 
 
 
-class CApplication : public CXBApplicationEx, public IPlayerCallback, public IMsgTargetCallback,
-                     public ISettingCallback, public ISettingsHandler, public ISubSettings
+class CApplication : public CXBApplicationEx, public IMsgTargetCallback,
+                     public ISettingCallback, public ISettingsHandler
 {
 public:
 
@@ -298,10 +293,6 @@ public:
 
 protected:
   virtual bool OnSettingsSaving() const;
-
-  virtual bool Load(const TiXmlNode *settings);
-  virtual bool Save(TiXmlNode *settings) const;
-
   virtual void OnSettingChanged(const CSetting *setting);
   virtual void OnSettingAction(const CSetting *setting);
   virtual bool OnSettingUpdate(CSetting* &setting, const char *oldSettingId, const TiXmlNode *oldSettingNode);

@@ -56,6 +56,8 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "video/VideoDatabase.h"
+#include "settings/Settings.h"
+#include "utils/XMLUtils.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;
@@ -74,6 +76,29 @@ CPlaybackManager& CPlaybackManager::Get()
 {
   static CPlaybackManager playbackManager;
   return playbackManager;
+}
+
+bool CPlaybackManager::Initialize()
+{
+  // start the AudioEngine
+  if (!CAEFactory::StartEngine())
+  {
+    CLog::Log(LOGFATAL, "CApplication::Create: Failed to start the AudioEngine");
+    return false;
+  }
+
+  // restore AE's previous volume state
+  SetHardwareVolume(m_volumeLevel);
+  CAEFactory::SetMute(m_muted);
+  CAEFactory::SetSoundMode(CSettings::Get().GetInt("audiooutput.guisoundmode"));
+
+  // initialize m_replayGainSettings
+  m_replayGainSettings.iType = CSettings::Get().GetInt("musicplayer.replaygaintype");
+  m_replayGainSettings.iPreAmp = CSettings::Get().GetInt("musicplayer.replaygainpreamp");
+  m_replayGainSettings.iNoGainPreAmp = CSettings::Get().GetInt("musicplayer.replaygainnogainpreamp");
+  m_replayGainSettings.bAvoidClipping = CSettings::Get().GetBool("musicplayer.replaygainavoidclipping");
+
+  return true;
 }
 
 const std::string& CPlaybackManager::CurrentFile()
@@ -915,6 +940,61 @@ void CPlaybackManager::OnPlayBackSpeedChanged(int iSpeed)
   ANNOUNCEMENT::CAnnouncementManager::Get().Announce(Player, "xbmc", "OnSpeedChanged", m_itemCurrentFile, param);
 }
 
+void CPlaybackManager::OnSettingChanged(const CSetting* setting)
+{
+  if (setting == nullptr)
+    return;
+
+  auto settingId = setting->GetId();
+
+  if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygaintype"))
+    m_replayGainSettings.iType = ((CSettingInt*)setting)->GetValue();
+  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainpreamp"))
+    m_replayGainSettings.iPreAmp = ((CSettingInt*)setting)->GetValue();
+  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainnogainpreamp"))
+    m_replayGainSettings.iNoGainPreAmp = ((CSettingInt*)setting)->GetValue();
+  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainavoidclipping"))
+    m_replayGainSettings.bAvoidClipping = ((CSettingBool*)setting)->GetValue();
+}
+
+bool CPlaybackManager::Load(const TiXmlNode* settings)
+{
+  if (settings == nullptr)
+    return false;
+
+  const TiXmlElement *audioElement = settings->FirstChildElement("audio");
+  if (audioElement != nullptr)
+  {
+#ifndef TARGET_ANDROID
+    XMLUtils::GetBoolean(audioElement, "mute", m_muted);
+    if (!XMLUtils::GetFloat(audioElement, "fvolumelevel", m_volumeLevel, VOLUME_MINIMUM, VOLUME_MAXIMUM))
+      m_volumeLevel = VOLUME_MAXIMUM;
+#else
+    // Use system volume settings
+    m_volumeLevel = CXBMCApp::GetSystemVolume();
+    m_muted = (m_volumeLevel == 0);
+#endif
+  }
+
+  return true;
+}
+
+bool CPlaybackManager::Save(TiXmlNode* settings)
+{
+  if (settings == nullptr)
+    return false;
+
+  TiXmlElement volumeNode("audio");
+  TiXmlNode *audioNode = settings->InsertEndChild(volumeNode);
+  if (audioNode == nullptr)
+    return false;
+
+  XMLUtils::SetBoolean(audioNode, "mute", m_muted);
+  XMLUtils::SetFloat(audioNode, "fvolumelevel", m_volumeLevel);
+
+  return true;
+}
+
 void CPlaybackManager::OnPlayBackSeek(int iTime, int seekOffset)
 {
 #ifdef HAS_PYTHON
@@ -1150,6 +1230,14 @@ void CPlaybackManager::SeekTime(double dTime)
     // convert to milliseconds and perform seek
     m_pPlayer->SeekTime(static_cast<int64_t>(dTime * 1000.0));
   }
+}
+
+bool CPlaybackManager::IsExternalPlayerActive() const
+{
+  if (m_pPlayer == nullptr)
+    return false;
+
+  return m_pPlayer->GetCurrentPlayer() == EPC_EXTPLAYER && m_pPlayer->IsPlaying();
 }
 
 float CPlaybackManager::GetPercentage() const

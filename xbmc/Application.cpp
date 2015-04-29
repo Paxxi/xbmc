@@ -275,11 +275,6 @@ CApplication::CApplication(void)
 #endif
 
 
-  /* for now always keep this around */
-#ifdef HAS_KARAOKE
-  m_pKaraokeMgr = new CKaraokeLyricsManager();
-#endif
-
   m_bPresentFrame = false;
   m_bPlatformDirectories = true;
 
@@ -303,19 +298,12 @@ CApplication::CApplication(void)
 CApplication::~CApplication(void)
 {
   delete m_musicInfoScanner;
-  delete &m_progressTrackingVideoResumeBookmark;
 #ifdef HAS_DVD_DRIVE
   delete m_Autorun;
 #endif
 
-#ifdef HAS_KARAOKE
-  delete m_pKaraokeMgr;
-#endif
-
   delete m_dpms;
-  delete m_playerController;
   delete m_pInertialScrollingHandler;
-  delete m_pPlayer;
 
   m_actionListeners.clear();
 }
@@ -625,23 +613,7 @@ bool CApplication::Create()
   CWIN32Util::SetThreadLocalLocale(true); // enable independent locale for each thread, see https://connect.microsoft.com/VisualStudio/feedback/details/794122
 #endif // TARGET_WINDOWS
 
-  // start the AudioEngine
-  if (!CAEFactory::StartEngine())
-  {
-    CLog::Log(LOGFATAL, "CApplication::Create: Failed to start the AudioEngine");
-    return false;
-  }
-
-  // restore AE's previous volume state
-  SetHardwareVolume(m_volumeLevel);
-  CAEFactory::SetMute     (m_muted);
-  CAEFactory::SetSoundMode(CSettings::Get().GetInt("audiooutput.guisoundmode"));
-
-  // initialize m_replayGainSettings
-  m_replayGainSettings.iType = CSettings::Get().GetInt("musicplayer.replaygaintype");
-  m_replayGainSettings.iPreAmp = CSettings::Get().GetInt("musicplayer.replaygainpreamp");
-  m_replayGainSettings.iNoGainPreAmp = CSettings::Get().GetInt("musicplayer.replaygainnogainpreamp");
-  m_replayGainSettings.bAvoidClipping = CSettings::Get().GetBool("musicplayer.replaygainavoidclipping");
+  CPlaybackManager::Get().Initialize();
 
   // initialize the addon database (must be before the addon manager is init'd)
   CDatabaseManager::Get().Initialize(true);
@@ -1291,7 +1263,7 @@ void CApplication::StopPVRManager()
 {
   CLog::Log(LOGINFO, "stopping PVRManager");
   if (g_PVRManager.IsPlaying())
-    StopPlaying();
+    CPlaybackManager::Get().StopPlaying();
   g_PVRManager.Stop();
   g_EpgContainer.Stop();
 }
@@ -1381,14 +1353,7 @@ void CApplication::OnSettingChanged(const CSetting *setting)
       CApplicationMessenger::Get().MediaRestart(false);
     }
   }
-  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygaintype"))
-    m_replayGainSettings.iType = ((CSettingInt*)setting)->GetValue();
-  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainpreamp"))
-    m_replayGainSettings.iPreAmp = ((CSettingInt*)setting)->GetValue();
-  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainnogainpreamp"))
-    m_replayGainSettings.iNoGainPreAmp = ((CSettingInt*)setting)->GetValue();
-  else if (StringUtils::EqualsNoCase(settingId, "musicplayer.replaygainavoidclipping"))
-    m_replayGainSettings.bAvoidClipping = ((CSettingBool*)setting)->GetValue();
+  
 }
 
 void CApplication::OnSettingAction(const CSetting *setting)
@@ -1512,44 +1477,6 @@ void CApplication::ReloadSkin(bool confirm/*=false*/)
     }
   }
   m_skinReverting = false;
-}
-
-bool CApplication::Load(const TiXmlNode *settings)
-{
-  if (settings == NULL)
-    return false;
-
-  const TiXmlElement *audioElement = settings->FirstChildElement("audio");
-  if (audioElement != NULL)
-  {
-#ifndef TARGET_ANDROID
-    XMLUtils::GetBoolean(audioElement, "mute", m_muted);
-    if (!XMLUtils::GetFloat(audioElement, "fvolumelevel", m_volumeLevel, VOLUME_MINIMUM, VOLUME_MAXIMUM))
-      m_volumeLevel = VOLUME_MAXIMUM;
-#else
-    // Use system volume settings
-    m_volumeLevel = CXBMCApp::GetSystemVolume();
-    m_muted = (m_volumeLevel == 0);
-#endif
-  }
-
-  return true;
-}
-
-bool CApplication::Save(TiXmlNode *settings) const
-{
-  if (settings == NULL)
-    return false;
-
-  TiXmlElement volumeNode("audio");
-  TiXmlNode *audioNode = settings->InsertEndChild(volumeNode);
-  if (audioNode == NULL)
-    return false;
-
-  XMLUtils::SetBoolean(audioNode, "mute", m_muted);
-  XMLUtils::SetFloat(audioNode, "fvolumelevel", m_volumeLevel);
-
-  return true;
 }
 
 bool CApplication::LoadSkin(const std::string& skinID)
@@ -1860,7 +1787,7 @@ void CApplication::Render()
   bool vsync = true;
 
   // Whether externalplayer is playing and we're unfocused
-  bool extPlayerActive = m_pPlayer->GetCurrentPlayer() == EPC_EXTPLAYER && m_pPlayer->IsPlaying() && !m_AppFocused;
+  bool extPlayerActive = CPlaybackManager::Get().IsExternalPlayerActive() && !m_AppFocused;
 
   {
     // Less fps in DPMS
@@ -3488,8 +3415,6 @@ void CApplication::Minimize()
 {
   g_Windowing.Minimize();
 }
-
-
 
 void CApplication::UpdateLibraries()
 {
