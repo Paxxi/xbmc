@@ -26,7 +26,7 @@
 #include <tinyxml.h>
 #include "utils/log.h"
 #include "utils/MathUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "threads/SystemClock.h"
 #include "GUIInfoManager.h"
@@ -41,6 +41,7 @@
 using namespace PVR;
 using namespace EPG;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 #define SHORTGAP     5 // how many blocks is considered a short-gap in nav logic
 #define MINSPERBLOCK 5 /// would be nice to offer zooming of busy schedules /// performance cost to increase resolution 5 fold?

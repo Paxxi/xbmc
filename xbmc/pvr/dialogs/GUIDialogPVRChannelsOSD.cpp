@@ -32,7 +32,7 @@
 #include "settings/Settings.h"
 #include "GUIInfoManager.h"
 #include "cores/IPlayer.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
@@ -43,6 +43,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_LIST                  11
 

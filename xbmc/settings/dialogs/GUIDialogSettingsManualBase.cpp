@@ -26,9 +26,10 @@
 #include "settings/lib/Setting.h"
 #include "settings/lib/SettingSection.h"
 #include "settings/lib/SettingsManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogSettingsManualBase::CGUIDialogSettingsManualBase(int windowId, const std::string &xmlFile)
     : CGUIDialogSettingsManagerBase(windowId, xmlFile),

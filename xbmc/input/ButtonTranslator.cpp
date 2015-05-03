@@ -31,10 +31,10 @@
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "XBIRRemote.h"
 #include "Util.h"
 
@@ -50,6 +50,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 typedef struct
 {

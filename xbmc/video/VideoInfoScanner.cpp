@@ -25,7 +25,7 @@
 #include "filesystem/DirectoryCache.h"
 #include "Util.h"
 #include "NfoFile.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/md5.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "filesystem/StackDirectory.h"
@@ -39,7 +39,7 @@
 #include "interfaces/AnnouncementManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIWindowManager.h"
 #include "utils/TimeUtils.h"
@@ -55,6 +55,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 namespace VIDEO
 {

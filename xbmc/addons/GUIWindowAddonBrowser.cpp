@@ -42,7 +42,7 @@
 #include "threads/SingleLock.h"
 #include "settings/Settings.h"
 #include "settings/MediaSourceSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "AddonDatabase.h"
 #include "settings/AdvancedSettings.h"
 #include "storage/MediaManager.h"
@@ -58,6 +58,7 @@
 
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CGUIWindowAddonBrowser::CGUIWindowAddonBrowser(void)

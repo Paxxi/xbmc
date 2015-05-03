@@ -36,7 +36,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ApplicationMessenger.h"
 #include "Application.h"
 #include "URL.h"
@@ -44,6 +44,7 @@
 using namespace XFILE;
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 map<int, CPluginDirectory *> CPluginDirectory::globalHandles;
 int CPluginDirectory::handleCounter = 0;

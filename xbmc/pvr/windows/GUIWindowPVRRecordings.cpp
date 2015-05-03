@@ -32,12 +32,13 @@
 #include "pvr/recordings/PVRRecordings.h"
 #include "pvr/timers/PVRTimers.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 #include "pvr/addons/PVRClients.h"
 #include "video/windows/GUIWindowVideoNav.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowPVRRecordings::CGUIWindowPVRRecordings(bool bRadio) :
   CGUIWindowPVRBase(bRadio, bRadio ? WINDOW_RADIO_RECORDINGS : WINDOW_TV_RECORDINGS, "MyPVRRecordings.xml") ,

@@ -19,7 +19,7 @@
  */
 
 #include "md5.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 typedef unsigned char md5byte;
 
@@ -56,7 +56,8 @@ std::string XBMC::XBMC_MD5::getDigest()
 {
   unsigned char szBuf[16] = {'\0'};
   getDigest(szBuf);
-  return StringUtils::Format("%02X%02X%02X%02X%02X%02X%02X%02X"\
+  return KODI::UTILS::TEXT::StringUtils::Format(
+                             "%02X%02X%02X%02X%02X%02X%02X%02X"\
                              "%02X%02X%02X%02X%02X%02X%02X%02X",
                              szBuf[0], szBuf[1], szBuf[2],
                              szBuf[3], szBuf[4], szBuf[5], szBuf[6], szBuf[7], szBuf[8],

@@ -24,13 +24,14 @@
 #include "Util.h"
 #include "XBDateTime.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 string ArrayToString(SortAttribute attributes, const CVariant &variant, const string &seperator = " / ")
 {

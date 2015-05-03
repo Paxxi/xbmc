@@ -40,12 +40,13 @@
 #include "cores/dvdplayer/DVDFileInfo.h"
 #include "video/VideoInfoScanner.h"
 #include "music/MusicDatabase.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace XFILE;
 using namespace std;
 using namespace VIDEO;
+using namespace KODI::UTILS::TEXT;
 
 CThumbExtractor::CThumbExtractor(const CFileItem& item,
                                  const std::string& listpath,

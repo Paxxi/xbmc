@@ -34,7 +34,7 @@
 #include "interfaces/Builtins.h"
 #include "utils/log.h"
 #include "utils/Weather.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "network/Network.h"
 #include "addons/Skin.h"
 #include "guilib/GUIMessage.h"
@@ -50,6 +50,8 @@
 #include "view/ViewState.h"
 #include "pvr/PVRManager.h"
 #include "ContextMenuManager.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BIG_LIST               52
 #define CONTROL_LABEL_HEADER            2

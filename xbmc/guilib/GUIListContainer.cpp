@@ -22,7 +22,7 @@
 #include "GUIListContainer.h"
 #include "GUIListItem.h"
 #include "input/Key.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CGUIListContainer::CGUIListContainer(int parentID, int controlID, float posX, float posY, float width, float height, ORIENTATION orientation, const CScroller& scroller, int preloadItems)
     : CGUIBaseContainer(parentID, controlID, posX, posY, width, height, orientation, scroller, preloadItems)
@@ -295,7 +295,7 @@ CGUIListContainer::CGUIListContainer(int parentID, int controlID, float posX, fl
   CGUIListItemLayout layout;
   layout.CreateListControlLayouts(width, textureHeight + spaceBetweenItems, false, labelInfo, labelInfo2, textureButton, textureButtonFocus, textureHeight, itemWidth, itemHeight, "", "");
   m_layouts.push_back(layout);
-  std::string condition = StringUtils::Format("control.hasfocus(%i)", controlID);
+  std::string condition = KODI::UTILS::TEXT::StringUtils::Format("control.hasfocus(%i)", controlID);
   std::string condition2 = "!" + condition;
   CGUIListItemLayout focusLayout;
   focusLayout.CreateListControlLayouts(width, textureHeight + spaceBetweenItems, true, labelInfo, labelInfo2, textureButton, textureButtonFocus, textureHeight, itemWidth, itemHeight, condition2, condition);

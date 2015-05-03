@@ -35,10 +35,11 @@
 #include "File.h"
 #include "SpecialProtocol.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 namespace XFILE
 {

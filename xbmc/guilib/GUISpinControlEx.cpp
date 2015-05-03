@@ -19,7 +19,7 @@
  */
 
 #include "GUISpinControlEx.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CGUISpinControlEx::CGUISpinControlEx(int parentID, int controlID, float posX, float posY, float width, float height, float spinWidth, float spinHeight, const CLabelInfo& spinInfo, const CTextureInfo &textureFocus, const CTextureInfo &textureNoFocus, const CTextureInfo& textureUp, const CTextureInfo& textureDown, const CTextureInfo& textureUpFocus, const CTextureInfo& textureDownFocus, const CLabelInfo& labelInfo, int iType)
     : CGUISpinControl(parentID, controlID, posX, posY, spinWidth, spinHeight, textureUp, textureDown, textureUpFocus, textureDownFocus, spinInfo, iType)
@@ -124,7 +124,7 @@ const std::string CGUISpinControlEx::GetCurrentLabel() const
 
 std::string CGUISpinControlEx::GetDescription() const
 {
-  return StringUtils::Format("%s (%s)", m_buttonControl.GetDescription().c_str(), GetLabel().c_str());
+  return KODI::UTILS::TEXT::StringUtils::Format("%s (%s)", m_buttonControl.GetDescription().c_str(), GetLabel().c_str());
 }
 
 void CGUISpinControlEx::SetItemInvalid(bool invalid)

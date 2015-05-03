@@ -25,7 +25,7 @@
 #include "utils/URIUtils.h"
 #ifdef TARGET_WINDOWS
 #include "WIN32Util.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #endif
 #include "guilib/GUIWindowManager.h"
 #ifdef HAS_DVD_DRIVE
@@ -44,7 +44,7 @@
 #include "utils/log.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "utils/JobManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "AutorunMediaJob.h"
 
 #include "FileItem.h"
@@ -70,6 +70,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;

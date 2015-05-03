@@ -24,7 +24,7 @@
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
@@ -35,6 +35,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTN_FIND                4
 #define CONTROL_BTN_SWITCH              5

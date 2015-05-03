@@ -19,7 +19,7 @@
  */
 
 #include "utils/XBMCTinyXML.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "test/TestUtils.h"
 
 #include "gtest/gtest.h"

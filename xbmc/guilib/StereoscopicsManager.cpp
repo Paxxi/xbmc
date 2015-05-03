@@ -42,10 +42,12 @@
 #include "settings/Settings.h"
 #include "rendering/RenderSystem.h"
 #include "utils/log.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "windowing/WindowingFactory.h"
+
+using namespace KODI::UTILS::TEXT;
 
 
 struct StereoModeMap

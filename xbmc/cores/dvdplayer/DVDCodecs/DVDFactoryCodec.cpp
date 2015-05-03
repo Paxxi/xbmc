@@ -62,7 +62,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "settings/VideoSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CDVDVideoCodec* CDVDFactoryCodec::OpenCodec(CDVDVideoCodec* pCodec, CDVDStreamInfo &hints, CDVDCodecOptions &options )
 {
@@ -333,7 +333,7 @@ CDVDVideoCodec* CDVDFactoryCodec::CreateVideoCodec(CDVDStreamInfo &hint, unsigne
   }
 #endif
 
-  std::string value = StringUtils::Format("%d", surfaces);
+  std::string value = KODI::UTILS::TEXT::StringUtils::Format("%d", surfaces);
   options.m_keys.push_back(CDVDCodecOption("surfaces", value));
   if( (pCodec = OpenCodec(new CDVDVideoCodecFFmpeg(), hint, options)) ) return pCodec;
 

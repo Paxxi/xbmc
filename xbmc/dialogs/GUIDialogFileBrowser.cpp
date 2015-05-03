@@ -21,7 +21,7 @@
 #include "GUIDialogFileBrowser.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "network/GUIDialogNetworkSetup.h"
 #include "GUIDialogMediaSource.h"
 #include "GUIDialogContextMenu.h"
@@ -50,6 +50,7 @@
 #include "view/ViewState.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_LIST          450
 #define CONTROL_THUMBS        451

@@ -35,6 +35,7 @@
 #include "profiles/ProfilesManager.h"
 #include "pvr/PVRManager.h"
 #include "settings/SettingAddon.h"
+#include "utils/text/StringUtils.h"
 #if defined(HAS_LIBAMCODEC)
 #include "utils/AMLUtils.h"
 #endif // defined(HAS_LIBAMCODEC)
@@ -43,6 +44,8 @@
 #if defined(TARGET_DARWIN_OSX)
 #include "osx/DarwinUtils.h"
 #endif// defined(TARGET_DARWIN_OSX)
+
+using namespace KODI::UTILS::TEXT;
 
 bool AddonHasSettings(const std::string &condition, const std::string &value, const CSetting *setting)
 {

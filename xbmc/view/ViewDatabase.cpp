@@ -23,12 +23,14 @@
 #include "view/ViewState.h"
 #include "utils/LegacyPathTranslation.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #ifdef TARGET_POSIX
 #include "linux/ConvUtils.h" // GetLastError()
 #endif
 #include "dbwrappers/dataset.h"
 #include "SortFileItem.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CViewDatabase::CViewDatabase(void)
 { }

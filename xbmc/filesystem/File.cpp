@@ -32,7 +32,7 @@
 #include "utils/BitstreamStats.h"
 #include "Util.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "commons/Exception.h"
 

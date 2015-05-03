@@ -35,7 +35,7 @@
 #include "addons/Repository.h"
 #include "guilib/GUIWindowManager.h"      // for callback
 #include "GUIUserMessages.h"              // for callback
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogProgress.h"
@@ -46,7 +46,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
-
+using namespace KODI::UTILS::TEXT;
 
 struct find_map : public binary_function<CAddonInstaller::JobMap::value_type, unsigned int, bool>
 {

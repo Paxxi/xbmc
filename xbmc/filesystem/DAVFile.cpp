@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "DllLibCurl.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 
 using namespace XFILE;
 using namespace XCURL;
@@ -90,7 +90,7 @@ bool CDAVFile::Execute(const CURL& url)
       if (CDAVCommon::ValueWithoutNamespace(pChild, "response"))
       {
         std::string sRetCode = CDAVCommon::GetStatusTag(pChild->ToElement());
-        CRegExp rxCode;
+        KODI::UTILS::TEXT::CRegExp rxCode;
         rxCode.RegComp("HTTP/1\\.1\\s(\\d+)\\s.*"); 
         if (rxCode.RegFind(sRetCode) >= 0)
         {

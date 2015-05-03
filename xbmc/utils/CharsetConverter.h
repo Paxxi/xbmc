@@ -1,5 +1,4 @@
-#ifndef CCHARSET_CONVERTER
-#define CCHARSET_CONVERTER
+#pragma once
 
 /*
  *      Copyright (C) 2005-2013 Team XBMC
@@ -22,7 +21,6 @@
  */
 
 #include "settings/lib/ISettingCallback.h"
-#include "threads/CriticalSection.h"
 #include "utils/GlobalsHandling.h"
 #include "utils/uXstrings.h"
 
@@ -30,6 +28,13 @@
 #include <vector>
 
 class CSetting;
+
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 class CCharsetConverter : public ISettingCallback
 {
@@ -173,7 +178,8 @@ private:
   static const int m_Utf8CharMinSize, m_Utf8CharMaxSize;
   class CInnerConverter;
 };
+}
+}
+}
+XBMC_GLOBAL(KODI::UTILS::TEXT::CCharsetConverter,g_charsetConverter);
 
-XBMC_GLOBAL(CCharsetConverter,g_charsetConverter);
-
-#endif

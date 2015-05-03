@@ -39,7 +39,7 @@
 #include "settings/lib/SettingsManager.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
@@ -58,6 +58,7 @@
 #define SETTING_AUDIO_MAKE_DEFAULT             "audio.makedefault"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogAudioSubtitleSettings::CGUIDialogAudioSubtitleSettings()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_AUDIO_OSD_SETTINGS, "VideoOSDSettings.xml"),

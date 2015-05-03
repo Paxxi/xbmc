@@ -22,7 +22,7 @@
 #include "JSONServiceDescription.h"
 #include "utils/log.h"
 #include "utils/JSONVariantParser.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "JSONRPC.h"
 #include "PlayerOperations.h"
 #include "PlaylistOperations.h"
@@ -43,6 +43,7 @@
 
 using namespace std;
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 map<string, CVariant> CJSONServiceDescription::m_notifications = map<string, CVariant>();
 CJSONServiceDescription::CJsonRpcMethodMap CJSONServiceDescription::m_actionMap;

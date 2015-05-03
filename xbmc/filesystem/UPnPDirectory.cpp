@@ -33,11 +33,12 @@
 #include "FileItem.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace MUSIC_INFO;
 using namespace XFILE;
 using namespace UPNP;
+using namespace KODI::UTILS::TEXT;
 
 namespace XFILE
 {

@@ -29,7 +29,7 @@
 #include "dialogs/GUIDialogKaiToast.h"
 #include "ModuleXbmcgui.h"
 #include "guilib/GUIKeyboardFactory.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define ACTIVE_WINDOW g_windowManager.GetActiveWindow()
 

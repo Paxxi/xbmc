@@ -26,7 +26,7 @@
 #include "utils/log.h"
 #ifndef TARGET_POSIX
 #include <sys/stat.h>
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #endif
 #include <lzo/lzo1x.h>
 #include "addons/Skin.h"
@@ -34,7 +34,7 @@
 #include "filesystem/SpecialProtocol.h"
 #include "utils/EndianSwap.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifdef TARGET_WINDOWS
 #pragma comment(lib,"liblzo2.lib")
@@ -45,6 +45,7 @@
 #undef ALIGN
 #define ALIGN (512)
 
+using namespace KODI::UTILS::TEXT;
 
 enum XPR_FLAGS
 {

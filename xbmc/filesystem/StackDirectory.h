@@ -20,7 +20,7 @@
  */
 
 #include "IDirectory.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include <string>
 
 namespace XFILE
@@ -33,7 +33,7 @@ namespace XFILE
     virtual bool GetDirectory(const CURL& url, CFileItemList& items);
     virtual bool AllowAll() const { return true; }
     static std::string GetStackedTitlePath(const std::string &strPath);
-    static std::string GetStackedTitlePath(const std::string &strPath, VECCREGEXP& RegExps);
+    static std::string GetStackedTitlePath(const std::string &strPath, KODI::UTILS::TEXT::VECCREGEXP& RegExps);
     static std::string GetFirstStackedFile(const std::string &strPath);
     static bool GetPaths(const std::string& strPath, std::vector<std::string>& vecPaths);
     static std::string ConstructStackPath(const CFileItemList& items, const std::vector<int> &stack);

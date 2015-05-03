@@ -30,7 +30,7 @@
 #include "DllLibPlist.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
@@ -49,6 +49,7 @@
 #endif // HAS_ZEROCONF
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #ifdef TARGET_WINDOWS

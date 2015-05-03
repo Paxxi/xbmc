@@ -35,7 +35,7 @@
 #include "threads/SingleLock.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/Settings.h"
 #include "windowing/WindowingFactory.h"
 #include "CompileInfo.h"
@@ -48,6 +48,7 @@
 #include "../WinEventsX11.h"
 #include "input/InputManager.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define EGL_NO_CONFIG (EGLConfig)0

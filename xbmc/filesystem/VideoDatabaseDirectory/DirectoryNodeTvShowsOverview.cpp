@@ -22,7 +22,7 @@
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
 #include "video/VideoDbUrl.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
@@ -72,7 +72,7 @@ bool CDirectoryNodeTvShowsOverview::GetContent(CFileItemList& items) const
     CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(TvShowChildren[i].label)));
 
     CVideoDbUrl itemUrl = videoUrl;
-    std::string strDir = StringUtils::Format("%s/", TvShowChildren[i].id.c_str());
+    std::string strDir = KODI::UTILS::TEXT::StringUtils::Format("%s/", TvShowChildren[i].id.c_str());
     itemUrl.AppendPath(strDir);
     pItem->SetPath(itemUrl.ToString());
 

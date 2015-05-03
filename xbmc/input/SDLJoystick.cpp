@@ -24,14 +24,15 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/lib/Setting.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
-#include "utils/RegExp.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/RegExp.h"
 
 #include <math.h>
 
 #ifdef HAS_SDL_JOYSTICK
 #include <SDL2/SDL.h>
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CJoystick::CJoystick()

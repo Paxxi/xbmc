@@ -30,7 +30,7 @@
 #include "settings/DisplaySettings.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "cores/IPlayer.h"
 #include "cores/AudioEngine/AEFactory.h"
 #ifdef TARGET_POSIX
@@ -41,6 +41,7 @@
 using namespace std;
 using namespace MUSIC_INFO;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CAudioBuffer::CAudioBuffer(int iSize)
 {

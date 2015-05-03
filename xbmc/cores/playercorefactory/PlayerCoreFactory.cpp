@@ -31,12 +31,13 @@
 #include "PlayerCoreConfig.h"
 #include "PlayerSelectionRule.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XMLUtils.h"
 
 #define PLAYERCOREFACTORY_XML "playercorefactory.xml"
 
 using namespace AUTOPTR;
+using namespace KODI::UTILS::TEXT;
 
 CPlayerCoreFactory::CPlayerCoreFactory()
 { }

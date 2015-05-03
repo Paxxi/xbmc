@@ -30,9 +30,10 @@
 #include "settings/lib/SettingsManager.h"
 #include "settings/windows/GUIControlSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 #define SETTING_TMR_ACTIVE              "timer.active"
 #define SETTING_TMR_CHNAME              "timer.channelname"

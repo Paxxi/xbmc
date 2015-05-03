@@ -21,12 +21,13 @@
 #include "MusicDatabaseFile.h"
 #include "music/MusicDatabase.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 #include <sys/stat.h>
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CMusicDatabaseFile::CMusicDatabaseFile(void)
 {

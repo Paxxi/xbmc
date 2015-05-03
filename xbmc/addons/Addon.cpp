@@ -36,7 +36,7 @@
 #include "freebsd/FreeBSDGNUReplacements.h"
 #endif
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "Util.h"
@@ -46,6 +46,7 @@
 
 using XFILE::CDirectory;
 using XFILE::CFile;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 namespace ADDON

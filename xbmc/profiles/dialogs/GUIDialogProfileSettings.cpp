@@ -34,8 +34,10 @@
 #include "settings/lib/Setting.h"
 #include "storage/MediaManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_PROFILE_IMAGE         CONTROL_SETTINGS_CUSTOM + 1
 #define CONTROL_PROFILE_NAME          CONTROL_SETTINGS_CUSTOM + 2

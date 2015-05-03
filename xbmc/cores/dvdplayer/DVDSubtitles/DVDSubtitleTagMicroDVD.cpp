@@ -20,7 +20,7 @@
 
 #include "DVDSubtitleTagMicroDVD.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 void CDVDSubtitleTagMicroDVD::ConvertLine(CDVDOverlayText* pOverlay, const char* line, int len)
 {
@@ -46,7 +46,7 @@ void CDVDSubtitleTagMicroDVD::ConvertLine(CDVDOverlayText* pOverlay, const char*
         {
           std::string tagName = strUTF8.substr(pos + 1, pos2 - pos - 1);
           std::string tagValue = strUTF8.substr(pos2 + 1, pos3 - pos2 - 1);
-          StringUtils::ToLower(tagValue);
+          KODI::UTILS::TEXT::StringUtils::ToLower(tagValue);
           strUTF8.erase(pos, pos3 - pos + 1);
           if ((tagName == "Y") || (tagName == "y"))
           {

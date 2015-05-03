@@ -23,7 +23,7 @@
 #include "GUIListItem.h"
 #include "GUIWindowManager.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CGUIProgressControl::CGUIProgressControl(int parentID, int controlID,
                                          float posX, float posY, float width,
@@ -211,7 +211,7 @@ bool CGUIProgressControl::UpdateColors()
 
 std::string CGUIProgressControl::GetDescription() const
 {
-  return StringUtils::Format("%2.f", m_fPercent);
+  return KODI::UTILS::TEXT::StringUtils::Format("%2.f", m_fPercent);
 }
 
 bool CGUIProgressControl::UpdateLayout(void)

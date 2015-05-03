@@ -25,12 +25,13 @@
 #include "FileItem.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define CONTROL_HEADER_LABEL   2
 #define CONTROL_NONE_AVAILABLE 4
 #define CONTROL_LIST           5
 
+using namespace KODI::UTILS::TEXT;
 using ADDON::CVisualisation;
 
 CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList(void)

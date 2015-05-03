@@ -20,10 +20,11 @@
 
 #include "GUISpinControl.h"
 #include "input/Key.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <stdio.h>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 #define SPIN_BUTTON_DOWN 1
 #define SPIN_BUTTON_UP   2

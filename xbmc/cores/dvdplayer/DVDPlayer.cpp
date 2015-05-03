@@ -68,7 +68,7 @@
 #include "storage/MediaManager.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "LangInfo.h"
 #include "URL.h"
@@ -83,6 +83,7 @@
 
 using namespace std;
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 void CSelectionStreams::Clear(StreamType type, StreamSource source)
 {

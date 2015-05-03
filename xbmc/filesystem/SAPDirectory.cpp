@@ -30,7 +30,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #if defined(TARGET_DARWIN)
 #include "osx/OSXGNUReplacements.h" // strnlen
@@ -44,6 +44,7 @@
 #include <arpa/inet.h>
 #include <vector>
 
+using namespace KODI::UTILS::TEXT;
 //using namespace std; On VS2010, bind conflicts with std::bind
 
 CSAPSessions g_sapsessions;

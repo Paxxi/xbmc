@@ -62,7 +62,7 @@
 #include "settings/MediaSettings.h"
 #include "settings/MediaSourceSettings.h"
 #include "settings/SkinSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoLibraryQueue.h"
 #include "Util.h"
@@ -107,6 +107,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;

@@ -24,7 +24,7 @@
 #include "AddonManager.h"
 #include "utils/ScraperParser.h"
 #include "utils/ScraperUrl.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "music/infoscanner/MusicAlbumInfo.h"
 #include "music/infoscanner/MusicArtistInfo.h"
@@ -33,7 +33,7 @@
 #include "FileItem.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "music/MusicDatabase.h"
 #include "video/VideoDatabase.h"
 #include "music/Album.h"
@@ -48,6 +48,7 @@ using namespace std;
 using namespace XFILE;
 using namespace MUSIC_GRABBER;
 using namespace VIDEO;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

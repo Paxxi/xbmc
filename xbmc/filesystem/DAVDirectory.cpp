@@ -25,12 +25,13 @@
 #include "URL.h"
 #include "CurlFile.h"
 #include "FileItem.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CDAVDirectory::CDAVDirectory(void) {}
 CDAVDirectory::~CDAVDirectory(void) {}

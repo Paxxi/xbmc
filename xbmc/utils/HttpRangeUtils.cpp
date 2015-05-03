@@ -21,10 +21,12 @@
 #include "HttpRangeUtils.h"
 #include "Util.h"
 #include "network/httprequesthandler/IHTTPRequestHandler.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 
 #include <algorithm>
+
+using namespace KODI::UTILS::TEXT;
 
 #define HEADER_NEWLINE        "\r\n"
 #define HEADER_SEPARATOR      HEADER_NEWLINE HEADER_NEWLINE

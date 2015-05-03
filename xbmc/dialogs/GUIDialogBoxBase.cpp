@@ -22,8 +22,9 @@
 #include "GUIDialogBoxBase.h"
 #include "guilib/LocalizeStrings.h"
 #include "threads/SingleLock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define CONTROL_HEADING 1

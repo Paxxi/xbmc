@@ -29,11 +29,12 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/LegacyPathTranslation.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS::TEXT;
 
 CMusicDatabaseDirectory::CMusicDatabaseDirectory(void)
 {

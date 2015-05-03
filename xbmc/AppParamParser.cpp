@@ -25,7 +25,7 @@
 #include "ApplicationMessenger.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "input/InputManager.h"
 #ifdef TARGET_WINDOWS
 #include "WIN32Util.h"
@@ -34,6 +34,8 @@
 #include "linux/XTimeUtils.h"
 #endif
 #include <stdlib.h>
+
+using namespace KODI::UTILS::TEXT;
 
 CAppParamParser::CAppParamParser()
 {

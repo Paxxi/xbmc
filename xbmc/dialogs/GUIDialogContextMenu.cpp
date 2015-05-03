@@ -44,12 +44,13 @@
 #include "TextureCache.h"
 #include "video/windows/GUIWindowVideoBase.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifdef TARGET_WINDOWS
 #include "WIN32Util.h"
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define BACKGROUND_IMAGE       999

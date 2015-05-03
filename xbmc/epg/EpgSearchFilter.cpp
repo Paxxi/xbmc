@@ -19,7 +19,7 @@
  */
 
 #include "guilib/LocalizeStrings.h"
-#include "utils/TextSearch.h"
+#include "utils/text/TextSearch.h"
 #include "utils/log.h"
 #include "FileItem.h"
 #include "../addons/include/xbmc_pvr_types.h"
@@ -35,6 +35,7 @@
 using namespace std;
 using namespace EPG;
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 void EpgSearchFilter::Reset()
 {

@@ -24,7 +24,7 @@
 
 #include "Win32InterfaceForCLog.h"
 #include "win32/WIN32Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/auto_buffer.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -87,7 +87,7 @@ bool CWin32InterfaceForCLog::WriteStringToLog(const std::string& logString)
     return false;
 
   std::string strData(logString);
-  StringUtils::Replace(strData, "\n", "\r\n");
+  KODI::UTILS::TEXT::StringUtils::Replace(strData, "\n", "\r\n");
   strData += "\r\n";
 
   DWORD written;

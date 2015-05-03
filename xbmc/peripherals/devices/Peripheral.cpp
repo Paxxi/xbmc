@@ -21,7 +21,7 @@
 #include "Peripheral.h"
 #include "peripherals/Peripherals.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/lib/Setting.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
@@ -29,6 +29,7 @@
 #include "guilib/LocalizeStrings.h"
 
 using namespace PERIPHERALS;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 struct SortBySettingsOrder

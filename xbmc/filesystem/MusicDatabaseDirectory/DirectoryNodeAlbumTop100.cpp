@@ -21,7 +21,7 @@
 #include "DirectoryNodeAlbumTop100.h"
 #include "music/MusicDatabase.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 
@@ -63,7 +63,7 @@ bool CDirectoryNodeAlbumTop100::GetContent(CFileItemList& items) const
   for (int i=0; i<(int)albums.size(); ++i)
   {
     CAlbum& album=albums[i];
-    std::string strDir = StringUtils::Format("%s%ld/", BuildPath().c_str(), album.idAlbum);
+    std::string strDir = KODI::UTILS::TEXT::StringUtils::Format("%s%ld/", BuildPath().c_str(), album.idAlbum);
     CFileItemPtr pItem(new CFileItem(strDir, album));
     items.Add(pItem);
   }

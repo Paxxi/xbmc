@@ -20,7 +20,9 @@
 
 #include "HTTPPythonInvoker.h"
 #include "CompileInfo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CHTTPPythonInvoker::CHTTPPythonInvoker(ILanguageInvocationHandler* invocationHandler, HTTPPythonRequest* request)
   : CPythonInvoker(invocationHandler),

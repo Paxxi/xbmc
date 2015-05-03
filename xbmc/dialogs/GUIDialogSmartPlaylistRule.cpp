@@ -31,7 +31,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "storage/MediaManager.h"
 #include "utils/LabelFormatter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define CONTROL_FIELD           15
 #define CONTROL_OPERATOR        16
@@ -40,6 +40,7 @@
 #define CONTROL_CANCEL          19
 #define CONTROL_BROWSE          20
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule(void)

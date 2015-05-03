@@ -29,12 +29,13 @@
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "network/Network.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "cores/dvdplayer/DVDCodecs/DVDCodecs.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "FileItem.h"
 #include "music/tags/MusicInfoTag.h"
 #include "music/MusicDatabase.h"
@@ -35,6 +35,7 @@
 
 using namespace std;
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS::TEXT;
 
 CAnnouncementManager::CAnnouncementManager()
 { }

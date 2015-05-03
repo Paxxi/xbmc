@@ -23,7 +23,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/VideoSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "addons/include/xbmc_pvr_types.h"
 
 #include "EpgDatabase.h"
@@ -33,6 +33,7 @@
 using namespace std;
 using namespace dbiplus;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 bool CEpgDatabase::Open(void)
 {

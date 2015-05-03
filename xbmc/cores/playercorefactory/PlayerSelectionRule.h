@@ -22,7 +22,11 @@
 #include "FileItem.h"
 #include "PlayerCoreFactory.h"
 
+namespace KODI { namespace UTILS { namespace TEXT
+{
 class CRegExp;
+} } }
+
 class TiXmlElement;
 
 class CPlayerSelectionRule
@@ -37,8 +41,8 @@ public:
 
 private:
   static int GetTristate(const char* szValue);
-  static bool CompileRegExp(const std::string& str, CRegExp& regExp);
-  static bool MatchesRegExp(const std::string& str, CRegExp& regExp);
+  static bool CompileRegExp(const std::string& str, KODI::UTILS::TEXT::CRegExp& regExp);
+  static bool MatchesRegExp(const std::string& str, KODI::UTILS::TEXT::CRegExp& regExp);
   void Initialize(TiXmlElement* pRule);
   PLAYERCOREID GetPlayerCore();
 

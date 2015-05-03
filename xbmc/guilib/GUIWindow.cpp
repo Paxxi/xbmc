@@ -38,12 +38,13 @@
 #include "Application.h"
 #include "ApplicationMessenger.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifdef HAS_PERFORMANCE_SAMPLE
 #include "utils/PerformanceSample.h"
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 bool CGUIWindow::icompare::operator()(const std::string &s1, const std::string &s2) const

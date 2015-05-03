@@ -22,7 +22,7 @@
 #include "GUIWindowManager.h"
 #include "input/Key.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 
@@ -31,8 +31,8 @@ CGUIMultiSelectTextControl::CSelectableString::CSelectableString(CGUIFont *font,
  , m_clickAction(clickAction)
 {
   m_selectable = selectable;
-  StringUtils::TrimLeft(m_clickAction, " =");
-  StringUtils::TrimRight(m_clickAction);
+  KODI::UTILS::TEXT::StringUtils::TrimLeft(m_clickAction, " =");
+  KODI::UTILS::TEXT::StringUtils::TrimRight(m_clickAction);
   m_text.Update(text);
   float height;
   m_text.GetTextExtent(m_length, height);

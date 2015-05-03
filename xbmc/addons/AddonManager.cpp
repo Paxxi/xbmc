@@ -26,7 +26,7 @@
 #include "DllLibCPluff.h"
 #include "LanguageResource.h"
 #include "UISoundsResource.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/JobManager.h"
 #include "threads/SingleLock.h"
 #include "FileItem.h"
@@ -58,6 +58,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

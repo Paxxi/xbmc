@@ -26,7 +26,9 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 IAE* CAEFactory::AE = NULL;
 static float  g_fVolume = 1.0f;

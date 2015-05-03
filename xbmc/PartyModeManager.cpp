@@ -33,12 +33,13 @@
 #include "playlists/PlayList.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Application.h"
 #include "interfaces/AnnouncementManager.h"
 
 using namespace std;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 #define QUEUE_DEPTH       10
 

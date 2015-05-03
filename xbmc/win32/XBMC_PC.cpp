@@ -20,7 +20,7 @@
 
 #include "AppParamParser.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/SystemInfo.h"
 #include "threads/platform/win/Win32Exception.h"
@@ -31,7 +31,7 @@
 #include "Application.h"
 #include "XbmcContext.h"
 #include "GUIInfoManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/CPUInfo.h"
 #include <mmdeviceapi.h>
 #include "win32/IMMNotificationClient.h"

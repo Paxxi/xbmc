@@ -20,16 +20,16 @@
 
 #include "URL.h"
 #include "Application.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "filesystem/File.h"
 #include "FileItem.h"
 #include "filesystem/StackDirectory.h"
 #include "addons/Addon.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "network/Network.h"
 #ifndef TARGET_POSIX
 #include <sys\types.h>
@@ -38,6 +38,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CURL::CURL(const std::string& strURL1)
 {

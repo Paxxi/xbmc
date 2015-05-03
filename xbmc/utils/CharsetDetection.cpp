@@ -20,12 +20,18 @@
 
 #include <algorithm>
 #include "CharsetDetection.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
-#include "utils/Utf8Utils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/Utf8Utils.h"
 #include "LangInfo.h"
 #include "utils/log.h"
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 /* XML declaration can be virtually any size (with many-many whitespaces) 
  * but for in real world we don't need to process megabytes of data
  * so limit search for XML declaration to reasonable value */
@@ -43,24 +49,38 @@ std::string CCharsetDetection::GetBomEncoding(const char* const content, const s
 {
   if (contentLength < 2)
     return "";
-  if (content[0] == (char)0xFE && content[1] == (char)0xFF)
+
+  if (content[0] == static_cast<char>(0xFE) && content[1] == static_cast<char>(0xFF))
     return "UTF-16BE";
-  if (contentLength >= 4 && content[0] == (char)0xFF && content[1] == (char)0xFE && content[2] == (char)0x00 && content[3] == (char)0x00)
+
+  if (contentLength >= 4 && content[0] == static_cast<char>(0xFF) &&
+      content[1] == static_cast<char>(0xFE) && content[2] == static_cast<char>(0x00) &&
+      content[3] == static_cast<char>(0x00))
     return "UTF-32LE";  /* first two bytes are same for UTF-16LE and UTF-32LE, so first check for full UTF-32LE mark */
-  if (content[0] == (char)0xFF && content[1] == (char)0xFE)
+
+  if (content[0] == static_cast<char>(0xFF) && content[1] == static_cast<char>(0xFE))
    return "UTF-16LE";
+
   if (contentLength < 3)
     return "";
-  if (content[0] == (char)0xEF && content[1] == (char)0xBB && content[2] == (char)0xBF)
+
+  if (content[0] == static_cast<char>(0xEF) && content[1] == static_cast<char>(0xBB) && content[2] == static_cast<char>(0xBF))
     return "UTF-8";
+
   if (contentLength < 4)
     return "";
-  if (content[0] == (char)0x00 && content[1] == (char)0x00 && content[2] == (char)0xFE && content[3] == (char)0xFF)
+
+  if (content[0] == static_cast<char>(0x00) && content[1] == static_cast<char>(0x00) &&
+      content[2] == static_cast<char>(0xFE) && content[3] == static_cast<char>(0xFF))
     return "UTF-32BE";
-  if (contentLength >= 5 && content[0] == (char)0x2B && content[1] == (char)0x2F && content[2] == (char)0x76 &&
-            (content[4] == (char)0x32 || content[4] == (char)0x39 || content[4] == (char)0x2B || content[4] == (char)0x2F))
+
+  if (contentLength >= 5 && content[0] == static_cast<char>(0x2B) && content[1] == static_cast<char>(0x2F) &&
+      content[2] == static_cast<char>(0x76) && (content[4] == static_cast<char>(0x32) || content[4] == static_cast<char>(0x39) ||
+      content[4] == static_cast<char>(0x2B) || content[4] == static_cast<char>(0x2F)))
     return "UTF-7";
-  if (content[0] == (char)0x84 && content[1] == (char)0x31 && content[2] == (char)0x95 && content[3] == (char)0x33)
+
+  if (content[0] == static_cast<char>(0x84) && content[1] == static_cast<char>(0x31) &&
+      content[2] == static_cast<char>(0x95) && content[3] == static_cast<char>(0x33))
     return "GB18030";
 
   return "";
@@ -258,15 +278,17 @@ bool CCharsetDetection::GuessXmlEncoding(const char* const xmlContent, const siz
   if (contentLength < 4)
     return false; // too little data to guess
 
-  if (xmlContent[0] == 0 && xmlContent[1] == 0 && xmlContent[2] == 0 && xmlContent[3] == (char)0x3C) // '<' == '00 00 00 3C' in UCS-4 (UTF-32) big-endian
+  if (xmlContent[0] == 0 && xmlContent[1] == 0 && xmlContent[2] == 0 && xmlContent[3] == static_cast<char>(0x3C)) // '<' == '00 00 00 3C' in UCS-4 (UTF-32) big-endian
     supposedEncoding = "UCS-4BE"; // use UCS-4 according to W3C recommendation
-  else if (xmlContent[0] == (char)0x3C && xmlContent[1] == 0 && xmlContent[2] == 0 && xmlContent[3] == 0) // '<' == '3C 00 00 00' in UCS-4 (UTF-32) little-endian
+  else if (xmlContent[0] == static_cast<char>(0x3C) && xmlContent[1] == 0 && xmlContent[2] == 0 && xmlContent[3] == 0) // '<' == '3C 00 00 00' in UCS-4 (UTF-32) little-endian
     supposedEncoding = "UCS-4LE"; // use UCS-4 according to W3C recommendation
-  else if (xmlContent[0] == 0 && xmlContent[1] == (char)0x3C && xmlContent[2] == 0 && xmlContent[3] == (char)0x3F) // "<?" == "00 3C 00 3F" in UTF-16 (UCS-2) big-endian
+  else if (xmlContent[0] == 0 && xmlContent[1] == static_cast<char>(0x3C) && xmlContent[2] == 0 && xmlContent[3] == static_cast<char>(0x3F)) // "<?" == "00 3C 00 3F" in UTF-16 (UCS-2) big-endian
     supposedEncoding = "UTF-16BE";
-  else if (xmlContent[0] == (char)0x3C && xmlContent[1] == 0 && xmlContent[2] == (char)0x3F && xmlContent[3] == 0) // "<?" == "3C 00 3F 00" in UTF-16 (UCS-2) little-endian
+  else if (xmlContent[0] == static_cast<char>(0x3C) && xmlContent[1] == 0 && xmlContent[2] == static_cast<char>(0x3F) &&
+           xmlContent[3] == 0) // "<?" == "3C 00 3F 00" in UTF-16 (UCS-2) little-endian
     supposedEncoding = "UTF-16LE";
-  else if (xmlContent[0] == (char)0x4C && xmlContent[1] == (char)0x6F && xmlContent[2] == (char)0xA7 && xmlContent[3] == (char)0x94) // "<?xm" == "4C 6F A7 94" in most EBCDIC encodings
+  else if (xmlContent[0] == static_cast<char>(0x4C) && xmlContent[1] == static_cast<char>(0x6F) &&
+           xmlContent[2] == static_cast<char>(0xA7) && xmlContent[3] == static_cast<char>(0x94)) // "<?xm" == "4C 6F A7 94" in most EBCDIC encodings
     supposedEncoding = "EBCDIC-CP-US"; // guessed value, real value must be read from declaration
   else
     return false;
@@ -646,4 +668,8 @@ inline void CCharsetDetection::appendCharAsAsciiUpperCase(std::string& str, cons
     str.push_back(chr - ('a' - 'A')); // convert to upper case
   else
     str.push_back(chr);
+}
+
+}
+}
 }

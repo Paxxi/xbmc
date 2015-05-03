@@ -32,7 +32,7 @@
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "windowing/WindowingFactory.h"
 
@@ -40,6 +40,7 @@
 #define MAX_REFRESH_CHANGE_DELAY 200
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 static RESOLUTION_INFO EmptyResolution;
 static RESOLUTION_INFO EmptyModifiableResolution;

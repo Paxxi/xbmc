@@ -20,12 +20,13 @@
 
 #include "DirectoryHistory.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 const std::string& CDirectoryHistory::CPathHistoryItem::GetPath(bool filter /* = false */) const
 {

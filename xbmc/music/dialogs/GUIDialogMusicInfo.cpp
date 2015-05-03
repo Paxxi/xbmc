@@ -38,13 +38,14 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "TextureCache.h"
 #include "music/MusicThumbLoader.h"
 #include "filesystem/Directory.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_IMAGE            3
 #define CONTROL_TEXTAREA         4

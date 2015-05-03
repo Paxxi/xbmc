@@ -22,7 +22,7 @@
 #include "interfaces/legacy/AddonUtils.h"
 #include "network/httprequesthandler/python/HTTPPythonRequest.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace XBMCAddon
 {
@@ -58,7 +58,7 @@ namespace XBMCAddon
       if (seq.empty())
         return;
 
-      String msg = StringUtils::Join(seq, "");
+      String msg = KODI::UTILS::TEXT::StringUtils::Join(seq, "");
       write(msg);
     }
 

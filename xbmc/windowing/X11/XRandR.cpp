@@ -27,7 +27,7 @@
 #include "system.h"
 #include "PlatformInclude.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "../xbmc/utils/log.h"
 #include "threads/SystemClock.h"
 #include "CompileInfo.h"
@@ -37,6 +37,7 @@
 #include <sys/wait.h>
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CXRandR::CXRandR(bool query)

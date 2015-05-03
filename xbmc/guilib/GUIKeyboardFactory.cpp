@@ -27,13 +27,15 @@
 #include "GUIWindowManager.h"
 #include "settings/Settings.h"
 #include "utils/md5.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "dialogs/GUIDialogKeyboardGeneric.h"
 #if defined(TARGET_DARWIN_IOS)
 #include "osx/ios/IOSKeyboard.h"
 #include "windowing/WindowingFactory.h"
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 CGUIKeyboard *CGUIKeyboardFactory::g_activedKeyboard = NULL;
 FILTERING CGUIKeyboardFactory::m_filtering = FILTERING_NONE;

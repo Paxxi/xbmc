@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "utils/SortUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "sqlitedataset.h"
 #include "DatabaseManager.h"
 #include "DbUrl.h"
@@ -38,6 +38,7 @@
 
 using namespace AUTOPTR;
 using namespace dbiplus;
+using namespace KODI::UTILS::TEXT;
 
 #define MAX_COMPRESS_COUNT 20
 

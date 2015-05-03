@@ -21,11 +21,12 @@
 #include "MusicAlbumInfo.h"
 #include "addons/Scraper.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace std;
 using namespace MUSIC_GRABBER;
+using namespace KODI::UTILS::TEXT;
 
 CMusicAlbumInfo::CMusicAlbumInfo(const std::string& strAlbumInfo, const CScraperUrl& strAlbumURL):
   m_strTitle2(strAlbumInfo)

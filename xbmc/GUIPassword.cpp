@@ -35,8 +35,10 @@
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "view/ViewStateSettings.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CGUIPassword::CGUIPassword(void)
 {

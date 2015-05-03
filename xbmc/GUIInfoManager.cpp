@@ -51,9 +51,9 @@
 #include "settings/SkinSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/StereoscopicsManager.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/CPUInfo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/MathUtils.h"
 #include "utils/SeekHandler.h"
 #include "URL.h"
@@ -104,6 +104,7 @@ using namespace ADDON;
 using namespace PVR;
 using namespace INFO;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CGUIInfoManager::CGUIInfoManager(void) :
     Observable()

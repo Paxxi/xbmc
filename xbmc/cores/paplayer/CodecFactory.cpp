@@ -22,11 +22,12 @@
 #include "CodecFactory.h"
 #include "URL.h"
 #include "DVDPlayerCodec.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "addons/AddonManager.h"
 #include "addons/AudioDecoder.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 ICodec* CodecFactory::CreateCodec(const std::string &strFileType)
 {

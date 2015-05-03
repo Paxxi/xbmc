@@ -22,8 +22,8 @@
 
 #include "PosixDirectory.h"
 #include "utils/AliasShortcutUtils.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "linux/XTimeUtils.h"
@@ -34,6 +34,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CPosixDirectory::CPosixDirectory(void)
 {}

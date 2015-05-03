@@ -43,7 +43,7 @@
 #include "utils/URIUtils.h"
 #include "Autorun.h"
 #include "interfaces/AnnouncementManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ContextMenuManager.h"
 
 #define CONTROL_BTNVIEWASICONS      2
@@ -54,6 +54,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTNSLIDESHOW   6
 #define CONTROL_BTNSLIDESHOW_RECURSIVE   7

@@ -33,7 +33,7 @@
 #include "music/tags/MusicInfoTag.h"
 #include "utils/log.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 
 #include "PVRChannelGroupsContainer.h"
@@ -44,6 +44,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRChannelGroup::CPVRChannelGroup(void) :
     m_bRadio(false),

@@ -22,7 +22,7 @@
 #include "FileItem.h"
 #include "music/MusicDatabase.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace XFILE
 {
@@ -84,7 +84,7 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
       continue;
 
     CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(OverviewChildren[i].label)));
-    std::string strDir = StringUtils::Format("%s/", OverviewChildren[i].id.c_str());
+    std::string strDir = KODI::UTILS::TEXT::StringUtils::Format("%s/", OverviewChildren[i].id.c_str());
     pItem->SetPath(BuildPath() + strDir);
     pItem->m_bIsFolder = true;
     pItem->SetCanQueue(false);

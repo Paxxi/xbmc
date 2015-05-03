@@ -220,7 +220,8 @@
 #include "utils/SaveFileStateJob.h"
 #include "utils/AlarmClock.h"
 #include "utils/RssReader.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/RegExp.h"
 #include "utils/Weather.h"
 #include "DatabaseManager.h"
 #include "input/InputManager.h"
@@ -266,6 +267,7 @@ using namespace EPG;
 using namespace PERIPHERALS;
 
 using namespace XbmcThreads;
+using namespace KODI::UTILS::TEXT;
 
 // uncomment this if you want to use release libs in the debug build.
 // Atm this saves you 7 mb of memory

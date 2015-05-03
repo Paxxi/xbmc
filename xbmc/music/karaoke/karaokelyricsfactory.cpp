@@ -20,7 +20,7 @@
 
 // C++ Implementation: karaokelyricsfactory
 
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 
@@ -48,8 +48,8 @@ bool CheckAndCreateLyrics( const std::string & songName, CKaraokeLyrics ** lyric
   }
 
   // MIDI/KAR files keep lyrics inside
-  if (StringUtils::StartsWith(ext, ".mid") ||
-      StringUtils::StartsWith(ext, ".kar"))
+  if (KODI::UTILS::TEXT::StringUtils::StartsWith(ext, ".mid") ||
+      KODI::UTILS::TEXT::StringUtils::StartsWith(ext, ".kar"))
   {
     if ( lyricptr )
       *lyricptr = new CKaraokeLyricsTextKAR( songName );

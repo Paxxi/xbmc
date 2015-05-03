@@ -24,9 +24,11 @@
 #include "SettingDefinitions.h"
 #include "SettingsManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CSetting::CSetting(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : ISetting(id, settingsManager),

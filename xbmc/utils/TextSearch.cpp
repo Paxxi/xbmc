@@ -19,9 +19,15 @@
  */
 
 #include "TextSearch.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 CTextSearch::CTextSearch(const std::string &strSearchTerms, bool bCaseSensitive /* = false */, TextSearchDefault defaultSearchMode /* = SEARCH_DEFAULT_OR */)
 {
@@ -163,4 +169,8 @@ void CTextSearch::ExtractSearchTerms(const std::string &strSearchTerm, TextSearc
 
     StringUtils::TrimLeft(strParsedSearchTerm);
   }
+}
+
+}
+}
 }

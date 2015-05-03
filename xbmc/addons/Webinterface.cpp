@@ -21,10 +21,11 @@
 #include "Webinterface.h"
 #include "addons/AddonManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CWebinterface::CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type /* = WebinterfaceTypeStatic */, const std::string &entryPoint /* = "WEBINTERFACE_DEFAULT_ENTRY_POINT" */)
   : CAddon(props),

@@ -30,12 +30,13 @@
 #include <vector>
 #include "settings/MediaSourceSettings.h"
 #include "Util.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "settings/Settings.h"
 
 using namespace XFILE;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 bool CFileUtils::DeleteItem(const std::string &strPath, bool force)
 {

@@ -26,7 +26,7 @@
 #include "settings/Settings.h"
 #include "FileItem.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
@@ -57,7 +57,7 @@ std::string CDirectoryNodeSeasons::GetLocalizedName() const
     return "";
   }
   default:
-    std::string season = StringUtils::Format(g_localizeStrings.Get(20358).c_str(), GetID()); // Season <season>
+    std::string season = KODI::UTILS::TEXT::StringUtils::Format(g_localizeStrings.Get(20358).c_str(), GetID()); // Season <season>
     return season;
   }
 }

@@ -37,7 +37,7 @@
 #include "settings/Settings.h"
 #include <memory>
 #include "utils/AutoPtrHandle.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "utils/Log.h"
@@ -201,7 +201,7 @@ static DWORD VP3DeviceID [] = {
 
 static std::string GUIDToString(const GUID& guid)
 {
-  std::string buffer = StringUtils::Format("%08X-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"
+  std::string buffer = KODI::UTILS::TEXT::StringUtils::Format("%08X-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"
               , guid.Data1, guid.Data2, guid.Data3
               , guid.Data4[0], guid.Data4[1]
               , guid.Data4[2], guid.Data4[3], guid.Data4[4]

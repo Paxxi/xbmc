@@ -28,7 +28,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "network/DNSNameCache.h"
 #include "threads/SystemClock.h"
 
@@ -54,6 +54,7 @@
 #define CONTEXT_CACHED   2    //context cached and therefore already mounted (no new mount needed)
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CNfsConnection::CNfsConnection()
 : m_pNfsContext(NULL)

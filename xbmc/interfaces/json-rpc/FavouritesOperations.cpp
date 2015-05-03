@@ -21,8 +21,8 @@
 #include "FavouritesOperations.h"
 #include "filesystem/FavouritesDirectory.h"
 #include "input/ButtonTranslator.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
 #include "guilib/WindowIDs.h"
@@ -31,6 +31,7 @@
 using namespace std;
 using namespace JSONRPC;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

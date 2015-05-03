@@ -25,7 +25,7 @@
 #include "utils/log.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "interfaces/info/SkinVariable.h"
 
 using namespace std;
@@ -468,6 +468,8 @@ CGUIIncludes::ResolveParamsResult CGUIIncludes::ResolveParameters(const std::str
 
 std::string CGUIIncludes::ResolveConstant(const std::string &constant) const
 {
+  using namespace KODI::UTILS::TEXT;
+
   vector<string> values = StringUtils::Split(constant, ",");
   for (vector<string>::iterator i = values.begin(); i != values.end(); ++i)
   {

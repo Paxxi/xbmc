@@ -45,14 +45,14 @@
 #define WIN32_LEAN_AND_MEAN 1
 #endif // WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #endif
 #if defined(TARGET_DARWIN)
 #include "osx/DarwinUtils.h"
 #include "osx/CocoaInterface.h"
 #endif
 #include "powermanagement/PowerManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XMLUtils.h"
 #if defined(TARGET_ANDROID)
 #include "android/jni/Build.h"
@@ -73,6 +73,8 @@
 #elif defined(TARGET_LINUX)
 #include <linux/version.h>
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 /* Expand macro before stringify */
 #define STR_MACRO(x) #x

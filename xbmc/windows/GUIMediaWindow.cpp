@@ -65,8 +65,8 @@
 #include "utils/FileUtils.h"
 #include "utils/LabelFormatter.h"
 #include "utils/log.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoInfoTag.h"
@@ -89,6 +89,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CGUIMediaWindow::CGUIMediaWindow(int id, const char *xmlFile)
     : CGUIWindow(id, xmlFile)

@@ -50,7 +50,7 @@
 #include "settings/Settings.h"
 #include "input/InputManager.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 
 #include "utils/JobManager.h"
@@ -63,6 +63,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 #define ACTION_COPY                     1
 #define ACTION_MOVE                     2

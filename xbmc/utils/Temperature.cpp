@@ -22,7 +22,7 @@
 
 #include "Temperature.h"
 #include "utils/Archive.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CTemperature::CTemperature()
 {
@@ -483,5 +483,5 @@ std::string CTemperature::ToString(Unit temperatureUnit) const
   if (!IsValid())
     return "";
 
-  return StringUtils::Format("%2.0f", To(temperatureUnit));
+  return KODI::UTILS::TEXT::StringUtils::Format("%2.0f", To(temperatureUnit));
 }

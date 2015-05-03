@@ -63,8 +63,6 @@ struct AxisState {
   void reset() { val = rest; }
 };
 
-class CRegExp;
-
 // Class to manage all connected joysticks
 // Note: 'index' always refers to indices specific to this class,
 //       whereas 'ids' always refer to SDL instance id's

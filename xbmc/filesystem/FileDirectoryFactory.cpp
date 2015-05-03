@@ -43,7 +43,7 @@
 #include "ZipManager.h"
 #include "settings/AdvancedSettings.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "addons/AddonManager.h"
 #include "addons/AudioDecoder.h"
@@ -51,6 +51,7 @@
 using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CFileDirectoryFactory::CFileDirectoryFactory(void)

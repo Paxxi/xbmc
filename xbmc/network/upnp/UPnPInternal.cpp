@@ -26,7 +26,7 @@
 #include "Util.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "filesystem/File.h"
@@ -47,6 +47,7 @@
 
 using namespace MUSIC_INFO;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 namespace UPNP
 {

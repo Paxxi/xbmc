@@ -38,7 +38,7 @@
 #include "pvr/addons/PVRClients.h"
 #include "settings/Settings.h"
 #include "storage/MediaManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define BUTTON_OK                 4
 #define BUTTON_APPLY              5
@@ -56,6 +56,7 @@
 #define BUTTON_RADIO_TV           34
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogPVRChannelManager::CGUIDialogPVRChannelManager(void) :
     CGUIDialog(WINDOW_DIALOG_PVR_CHANNEL_MANAGER, "DialogPVRChannelManager.xml"),

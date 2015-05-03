@@ -54,7 +54,7 @@
 #include "storage/MediaManager.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/LegacyPathTranslation.h"
 #include "utils/log.h"
@@ -73,6 +73,7 @@ using namespace std;
 using namespace AUTOPTR;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS::TEXT;
 using ADDON::AddonPtr;
 
 #define RECENTLY_PLAYED_LIMIT 25

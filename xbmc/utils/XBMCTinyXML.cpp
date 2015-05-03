@@ -20,13 +20,15 @@
 
 #include "XBMCTinyXML.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
-#include "utils/CharsetDetection.h"
-#include "utils/Utf8Utils.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/CharsetDetection.h"
+#include "utils/text/Utf8Utils.h"
 #include "LangInfo.h"
-#include "RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/log.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define MAX_ENTITY_LENGTH 8 // size of largest entity "&#xNNNN;"
 #define BUFFER_SIZE 4096

@@ -30,10 +30,11 @@
 #include "LangInfo.h"
 #include "utils/log.h"
 #include "utils/SystemInfo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "addons/AddonManager.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTNREFRESH             2
 #define CONTROL_SELECTLOCATION         3

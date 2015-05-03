@@ -31,13 +31,14 @@
 #include "settings/Settings.h"
 
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/addons/PVRClients.h"
 #include "PVRRecordings.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRRecordings::CPVRRecordings(void) :
     m_bIsUpdating(false),

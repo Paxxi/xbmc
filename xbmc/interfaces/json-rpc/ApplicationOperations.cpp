@@ -28,10 +28,11 @@
 #include "GUIInfoManager.h"
 #include "system.h"
 #include "CompileInfo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <string.h>
 
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CApplicationOperations::GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

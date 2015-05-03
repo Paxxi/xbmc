@@ -24,7 +24,7 @@
 #include "settings/Settings.h"
 #include "guilib/GUIWindowManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "filesystem/File.h"
 
@@ -34,6 +34,7 @@
 #include "pvr/addons/PVRClients.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRChannelGroups::CPVRChannelGroups(bool bRadio) :
     m_bRadio(bRadio)

@@ -26,7 +26,7 @@
 #include "threads/SystemClock.h"
 #include "VideoDatabase.h"
 #include "video/windows/GUIWindowVideoBase.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "addons/AddonManager.h"
 #include "GUIInfoManager.h"
 #include "Util.h"
@@ -51,7 +51,7 @@
 #include "settings/MediaSettings.h"
 #include "settings/MediaSourceSettings.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
@@ -72,6 +72,7 @@ using namespace dbiplus;
 using namespace XFILE;
 using namespace VIDEO;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 //********************************************************************************************************************************
 CVideoDatabase::CVideoDatabase(void)

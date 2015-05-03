@@ -19,7 +19,7 @@
  */
 
 #include "stdio_utf8.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 
 int remove_utf8(const char* __filename)
 {

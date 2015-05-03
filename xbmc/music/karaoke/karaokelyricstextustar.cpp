@@ -26,7 +26,7 @@
 #include "filesystem/File.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "karaokelyricstextustar.h"
 
 
@@ -159,7 +159,7 @@ bool CKaraokeLyricsTextUStar::Load()
     else if ( key == "GAP" )
       startoffsetms = atoi( value.c_str() );
     else if ( key == "RELATIVE" )
-      relative = StringUtils::EqualsNoCase(value, "YES");
+      relative = KODI::UTILS::TEXT::StringUtils::EqualsNoCase(value, "YES");
     else if ( key == "LANGUAGE" || key == "EDITION" || key == "GENRE" || key == "YEAR" || key == "MP3" )
     {
       ; // do nothing

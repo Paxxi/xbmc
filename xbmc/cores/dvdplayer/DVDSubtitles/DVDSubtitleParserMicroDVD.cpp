@@ -21,12 +21,13 @@
 #include "DVDSubtitleParserMicroDVD.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "DVDStreamInfo.h"
 #include "utils/log.h"
 #include "DVDSubtitleTagMicroDVD.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CDVDSubtitleParserMicroDVD::CDVDSubtitleParserMicroDVD(CDVDSubtitleStream* stream, const string& filename)
     : CDVDSubtitleParserText(stream, filename), m_framerate( DVD_TIME_BASE / 25.0 )

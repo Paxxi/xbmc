@@ -30,7 +30,7 @@
 #include "music/Artist.h"
 #include "utils/URIUtils.h"
 #include "utils/Crc32.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "filesystem/StackDirectory.h"
 #include "settings/AdvancedSettings.h"
 

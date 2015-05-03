@@ -24,7 +24,7 @@
 #include "Weather.h"
 #include "filesystem/ZipManager.h"
 #include "XMLUtils.h"
-#include "utils/POUtils.h"
+#include "utils/text/POUtils.h"
 #include "utils/Temperature.h"
 #include "network/Network.h"
 #include "Application.h"
@@ -37,17 +37,18 @@
 #include "guilib/WindowIDs.h"
 #include "guilib/LocalizeStrings.h"
 #include "filesystem/Directory.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URIUtils.h"
 #include "log.h"
 #include "addons/AddonManager.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
-#include "CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "addons/GUIDialogAddonSettings.h"
 
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define LOCALIZED_TOKEN_FIRSTID    370
 #define LOCALIZED_TOKEN_LASTID     395

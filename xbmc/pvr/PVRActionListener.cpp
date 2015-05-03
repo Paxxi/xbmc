@@ -31,12 +31,13 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRActionListener::CPVRActionListener()
 {

@@ -19,7 +19,7 @@
  */
 
 #include "system.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "input/XBMC_keysym.h"
 #include "input/XBMC_vkeys.h"
 #include "input/XBMC_keytable.h"
@@ -252,7 +252,7 @@ bool KeyTableLookupName(const char* keyname, XBMCKEYTABLE* keytable)
 
   // We need the button name to be in lowercase
   std::string lkeyname = keyname;
-  StringUtils::ToLower(lkeyname);
+  KODI::UTILS::TEXT::StringUtils::ToLower(lkeyname);
 
   // Look up the key name in XBMCKeyTable
   for (int i = 0; i < XBMCKeyTableSize; i++)

@@ -63,10 +63,10 @@
 #include "PlatformDefs.h"
 #include "NetworkLinux.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CNetworkInterfaceLinux::CNetworkInterfaceLinux(CNetworkLinux* network, std::string interfaceName, char interfaceMacAddrRaw[6]):

@@ -28,7 +28,7 @@
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
 #include "guilib/TextureManager.h"
@@ -52,6 +52,7 @@
 #define CONTROL_LABELFILES      12
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

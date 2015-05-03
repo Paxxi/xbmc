@@ -19,7 +19,7 @@
  */
 
 #include "Crc32.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 uint32_t  crc_tab[256] =
 {
@@ -113,7 +113,7 @@ void Crc32::Compute(const std::string& strValue)
 void Crc32::ComputeFromLowerCase(const std::string& strValue)
 {
   std::string strLower = strValue;
-  StringUtils::ToLower(strLower);
+  KODI::UTILS::TEXT::StringUtils::ToLower(strLower);
   Compute(strLower.c_str(), strLower.size());
 }
 

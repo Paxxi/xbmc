@@ -22,14 +22,16 @@
 #include "DllLoader.h"
 #include "DllLoaderContainer.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 
 #include "dll_tracker_library.h"
 #include "dll_tracker_file.h"
 #include "exports/emu_kernel32.h"
 #include "exports/emu_msvcrt.h"
+
+using namespace KODI::UTILS::TEXT;
 
 extern "C" FILE _iob[];
 extern "C" FARPROC WINAPI dllWin32GetProcAddress(HMODULE hModule, LPCSTR function);

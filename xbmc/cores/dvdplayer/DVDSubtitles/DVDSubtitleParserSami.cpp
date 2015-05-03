@@ -21,13 +21,14 @@
 #include "DVDSubtitleParserSami.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "DVDStreamInfo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "DVDSubtitleTagSami.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CDVDSubtitleParserSami::CDVDSubtitleParserSami(CDVDSubtitleStream* pStream, const string& filename)
     : CDVDSubtitleParserText(pStream, filename)

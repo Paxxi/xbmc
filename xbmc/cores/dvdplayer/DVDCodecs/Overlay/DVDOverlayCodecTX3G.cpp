@@ -25,7 +25,7 @@
 #include "DVDCodecs/DVDCodecs.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/auto_buffer.h"
 
 // 3GPP/TX3G (aka MPEG-4 Timed Text) Subtitle support
@@ -224,7 +224,7 @@ int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
 
     // invert the order from above so we bracket the text correctly.
     if (bgnColorIndex == charIndex && textColorRGBA != m_textColor)
-      strUTF8 += StringUtils::Format("[COLOR %8x]", textColorRGBA);
+      strUTF8 += KODI::UTILS::TEXT::StringUtils::Format("[COLOR %8x]", textColorRGBA);
     // we do not support underline
     //if (bgnStyles & UNDERLINE)
     //  strUTF8.append("[U]");

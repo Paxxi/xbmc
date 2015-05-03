@@ -32,7 +32,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "storage/MediaManager.h"
 #include "addons/AddonManager.h"
 #include "addons/AudioEncoder.h"
@@ -40,6 +40,7 @@
 using namespace ADDON;
 using namespace MUSIC_INFO;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CCDDARipJob::CCDDARipJob(const std::string& input,
                          const std::string& output,

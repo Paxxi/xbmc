@@ -23,7 +23,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "climits"
 
 #include <algorithm>
@@ -145,7 +145,7 @@ void CDirectoryCache::ClearSubPaths(const std::string& strPath)
   iCache i = m_cache.begin();
   while (i != m_cache.end())
   {
-    if (StringUtils::StartsWith(i->first, storedPath))
+    if (KODI::UTILS::TEXT::StringUtils::StartsWith(i->first, storedPath))
       Delete(i++);
     else
       i++;

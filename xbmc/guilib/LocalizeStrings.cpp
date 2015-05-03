@@ -21,15 +21,17 @@
 #include "system.h"
 #include "LocalizeStrings.h"
 #include "addons/LanguageResource.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/XMLUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/POUtils.h"
+#include "utils/text/POUtils.h"
 #include "filesystem/Directory.h"
 #include "threads/SingleLock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CLocalizeStrings::CLocalizeStrings(void)
 {

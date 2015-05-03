@@ -20,7 +20,7 @@
 
 #include "GUIDialogSongInfo.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "dialogs/GUIDialogFileBrowser.h"
 #include "GUIPassword.h"
 #include "GUIUserMessages.h"
@@ -42,6 +42,7 @@
 #include "GUIDialogMusicInfo.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_OK        10
 #define CONTROL_CANCEL    11

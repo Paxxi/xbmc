@@ -21,7 +21,7 @@
 #include "SettingUpdate.h"
 #include "SettingDefinitions.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 CSettingUpdate::CSettingUpdate()
@@ -65,9 +65,9 @@ bool CSettingUpdate::Deserialize(const TiXmlNode *node)
 
 bool CSettingUpdate::setType(const std::string &type)
 {
-  if (StringUtils::EqualsNoCase(type, "change"))
+  if (KODI::UTILS::TEXT::StringUtils::EqualsNoCase(type, "change"))
     m_type = SettingUpdateTypeChange;
-  else if (StringUtils::EqualsNoCase(type, "rename"))
+  else if (KODI::UTILS::TEXT::StringUtils::EqualsNoCase(type, "rename"))
     m_type = SettingUpdateTypeRename;
   else
     return false;

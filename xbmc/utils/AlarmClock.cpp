@@ -24,8 +24,9 @@
 #include "threads/SingleLock.h"
 #include "log.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CAlarmClock::CAlarmClock() : CThread("AlarmClock"), m_bIsRunning(false)

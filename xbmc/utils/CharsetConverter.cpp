@@ -20,15 +20,15 @@
 
 #include "CharsetConverter.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <fribidi/fribidi.h>
 #include "LangInfo.h"
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
-#include "utils/Utf8Utils.h"
-#include "log.h"
+#include "utils/text/Utf8Utils.h"
+#include "utils/log.h"
 
 #include <errno.h>
 #include <iconv.h>
@@ -79,6 +79,13 @@
     #endif
   #endif
 #endif
+
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 #define NO_ICONV ((iconv_t)-1)
 
@@ -253,10 +260,10 @@ std::string CConverterType::ResolveSpecialCharset(enum SpecialCharset charset)
   case KaraokeCharset:
     {
       CSetting* karaokeSetting = CSettings::Get().GetSetting("karaoke.charset");
-      if (karaokeSetting == NULL || ((CSettingString*)karaokeSetting)->GetValue() == "DEFAULT")
+      if (karaokeSetting == nullptr || static_cast<CSettingString*>(karaokeSetting)->GetValue() == "DEFAULT")
         return g_langInfo.GetGuiCharSet();
 
-      return ((CSettingString*)karaokeSetting)->GetValue();
+      return static_cast<CSettingString*>(karaokeSetting)->GetValue();
     }
   case NotSpecialCharset:
   default:
@@ -394,12 +401,12 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
 
   //input buffer for iconv() is the buffer from strSource
   size_t      inBufSize  = (strSource.length() + 1) * sizeof(typename INPUT::value_type);
-  const char* inBuf      = (const char*)strSource.c_str();
+  const char* inBuf      = reinterpret_cast<const char*>(strSource.c_str());
 
   //allocate output buffer for iconv()
   size_t      outBufSize = (strSource.length() + 1) * sizeof(typename OUTPUT::value_type) * multiplier;
-  char*       outBuf     = (char*)malloc(outBufSize);
-  if (outBuf == NULL)
+  char*       outBuf     = static_cast<char*>(malloc(outBufSize));
+  if (outBuf == nullptr)
   {
       CLog::Log(LOGSEVERE, "%s: malloc failed", __FUNCTION__);
       return false;
@@ -416,7 +423,7 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
     //iconv() will update inBufStart, inBytesAvail, outBufStart and outBytesAvail
     returnV = iconv(type, charPtrPtrAdapter(&inBufStart), &inBytesAvail, &outBufStart, &outBytesAvail);
 
-    if (returnV == (size_t)-1)
+    if (returnV == static_cast<size_t>(-1))
     {
       if (errno == E2BIG) //output buffer is not big enough
       {
@@ -425,7 +432,7 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
 
         //make buffer twice as big
         outBufSize   *= 2;
-        char* newBuf  = (char*)realloc(outBuf, outBufSize);
+        char* newBuf  = static_cast<char*>(realloc(outBuf, outBufSize));
         if (!newBuf)
         {
           CLog::Log(LOGSEVERE, "%s realloc failed with errno=%d(%s)",
@@ -448,7 +455,7 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
 
         //skip invalid byte
         inBufStart++;
-        inBytesAvail--;
+        --inBytesAvail;
         //continue in the loop and convert the rest
         continue;
       }
@@ -469,18 +476,18 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
   }
 
   //complete the conversion (reset buffers), otherwise the current data will prefix the data on the next call
-  if (iconv(type, NULL, NULL, &outBufStart, &outBytesAvail) == (size_t)-1)
+  if (iconv(type, nullptr, nullptr, &outBufStart, &outBytesAvail) == static_cast<size_t>(-1))
     CLog::Log(LOGERROR, "%s failed cleanup errno=%d(%s)", __FUNCTION__, errno, strerror(errno));
 
-  if (returnV == (size_t)-1)
+  if (returnV == static_cast<size_t>(-1))
   {
     free(outBuf);
     return false;
   }
   //we're done
 
-  const typename OUTPUT::size_type sizeInChars = (typename OUTPUT::size_type) (outBufSize - outBytesAvail) / sizeof(typename OUTPUT::value_type);
-  typename OUTPUT::const_pointer strPtr = (typename OUTPUT::const_pointer) outBuf;
+  const typename OUTPUT::size_type sizeInChars = static_cast<typename OUTPUT::size_type>(outBufSize - outBytesAvail) / sizeof(typename OUTPUT::value_type);
+  typename OUTPUT::const_pointer strPtr = reinterpret_cast<typename OUTPUT::const_pointer>(outBuf);
   /* Make sure that all buffer is assigned and string is stopped at end of buffer */
   if (strPtr[sizeInChars-1] == 0 && strSource[strSource.length()-1] != 0)
     strDest.assign(strPtr, sizeInChars-1);
@@ -515,8 +522,8 @@ bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::u32strin
     
     const size_t lineLen = lineEnd - lineStart;
 
-    FriBidiChar* visual = (FriBidiChar*) malloc((lineLen + 1) * sizeof(FriBidiChar));
-    if (visual == NULL)
+    FriBidiChar* visual = static_cast<FriBidiChar*>(malloc((lineLen + 1) * sizeof(FriBidiChar)));
+    if (visual == nullptr)
     {
       free(visual);
       CLog::Log(LOGSEVERE, "%s: can't allocate memory", __FUNCTION__);
@@ -525,12 +532,12 @@ bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(const std::u32strin
 
     bool bidiFailed = false;
     FriBidiCharType baseCopy = base; // preserve same value for all lines, required because fribidi_log2vis will modify parameter value
-    if (fribidi_log2vis((const FriBidiChar*)(stringSrc.c_str() + lineStart), lineLen, &baseCopy, visual, NULL, NULL, NULL))
+    if (fribidi_log2vis(static_cast<const FriBidiChar*>(stringSrc.c_str() + lineStart), lineLen, &baseCopy, visual, nullptr, nullptr, nullptr))
     {
       // Removes bidirectional marks
-      const int newLen = fribidi_remove_bidi_marks(visual, lineLen, NULL, NULL, NULL);
+      const int newLen = fribidi_remove_bidi_marks(visual, lineLen, nullptr, nullptr, nullptr);
       if (newLen > 0)
-        stringDst.append((const char32_t*)visual, (size_t)newLen);
+        stringDst.append(static_cast<const char32_t*>(visual), static_cast<size_t>(newLen));
       else if (newLen < 0)
         bidiFailed = failOnBadString;
     }
@@ -588,7 +595,7 @@ CCharsetConverter::CCharsetConverter()
 
 void CCharsetConverter::OnSettingChanged(const CSetting* setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string& settingId = setting->GetId();
@@ -888,6 +895,10 @@ void CCharsetConverter::SettingOptionsCharsetsFiller(const CSetting* setting, st
   sort(vecCharsets.begin(), vecCharsets.end(), sortstringbyname());
 
   list.push_back(make_pair(g_localizeStrings.Get(13278), "DEFAULT")); // "Default"
-  for (int i = 0; i < (int) vecCharsets.size(); ++i)
+  for (int i = 0; i < static_cast<int>(vecCharsets.size()); ++i)
     list.push_back(make_pair(vecCharsets[i], g_charsetConverter.getCharsetNameByLabel(vecCharsets[i])));
+}
+
+}
+}
 }

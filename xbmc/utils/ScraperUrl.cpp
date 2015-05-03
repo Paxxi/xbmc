@@ -22,9 +22,9 @@
 #include "ScraperUrl.h"
 #include "settings/AdvancedSettings.h"
 #include "HTMLUtil.h"
-#include "CharsetConverter.h"
-#include "utils/CharsetDetection.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/CharsetDetection.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "filesystem/CurlFile.h"
 #include "filesystem/ZipFile.h"
@@ -37,6 +37,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CScraperUrl::CScraperUrl(const std::string& strUrl)
 {

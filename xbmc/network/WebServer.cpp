@@ -39,7 +39,7 @@
 #include "utils/Base64.h"
 #include "utils/log.h"
 #include "utils/Mime.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
 
@@ -63,6 +63,7 @@
 #define HEADER_NEWLINE        "\r\n"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 typedef struct ConnectionHandler
 {

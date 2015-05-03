@@ -18,16 +18,16 @@
  *
  */
 
-/* TODO: gtest/gtest.h needs to come in before utils/RegExp.h.
+/* TODO: gtest/gtest.h needs to come in before utils/text/RegExp.h.
  * Investigate why.
  */
 #include "gtest/gtest.h"
 
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/log.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "CompileInfo.h"
 
 TEST(TestRegExp, RegFind)

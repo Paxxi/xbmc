@@ -22,8 +22,10 @@
 #include "LangInfo.h"
 #include "Util.h"
 #include "utils/log.h" 
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define MAKECODE(a, b, c, d)  ((((long)(a)) << 24) | (((long)(b)) << 16) | (((long)(c)) << 8) | (long)(d))
 #define MAKETWOCHARCODE(a, b) ((((long)(a)) << 8) | (long)(b)) 

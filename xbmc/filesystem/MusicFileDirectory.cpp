@@ -22,11 +22,12 @@
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 
 using namespace MUSIC_INFO;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CMusicFileDirectory::CMusicFileDirectory(void)
 {

@@ -25,7 +25,7 @@
 
 #include "CDDARipper.h"
 #include "CDDARipJob.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "filesystem/CDDADirectory.h"
 #include "music/tags/MusicInfoTagLoaderFactory.h"
@@ -54,6 +54,7 @@ using namespace std;
 using namespace ADDON;
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 CCDDARipper& CCDDARipper::GetInstance()
 {

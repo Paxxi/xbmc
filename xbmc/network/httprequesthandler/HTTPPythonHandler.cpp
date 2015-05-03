@@ -29,8 +29,10 @@
 #include "network/httprequesthandler/python/HTTPPythonInvoker.h"
 #include "network/httprequesthandler/python/HTTPPythonWsgiInvoker.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define MAX_STRING_POST_SIZE 20000
 

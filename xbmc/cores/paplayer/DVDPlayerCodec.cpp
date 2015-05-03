@@ -30,7 +30,7 @@
 #include "music/tags/TagLoaderTagLib.h"
 #include "utils/log.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 DVDPlayerCodec::DVDPlayerCodec()
 {
@@ -56,7 +56,7 @@ DVDPlayerCodec::~DVDPlayerCodec()
 void DVDPlayerCodec::SetContentType(const std::string &strContent)
 {
   m_strContentType = strContent;
-  StringUtils::ToLower(m_strContentType);
+  KODI::UTILS::TEXT::StringUtils::ToLower(m_strContentType);
 }
 
 bool DVDPlayerCodec::Init(const std::string &strFile, unsigned int filecache)

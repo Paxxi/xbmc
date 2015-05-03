@@ -25,8 +25,10 @@
 #include "music/MusicDatabase.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "video/VideoDatabase.h"
+
+using namespace KODI::UTILS::TEXT;
 
 MediaType DatabaseUtils::MediaTypeFromVideoContentType(int videoContentType)
 {

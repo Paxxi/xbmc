@@ -21,12 +21,14 @@
 #include "Application.h"
 #include "Addon.h"
 #include "AddonCallbacksCodec.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 extern "C" {
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 }
+
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

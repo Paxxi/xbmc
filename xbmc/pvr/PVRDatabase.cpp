@@ -24,7 +24,7 @@
 #include "settings/VideoSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "PVRManager.h"
 #include "channels/PVRChannelGroupsContainer.h"
@@ -34,6 +34,7 @@
 using namespace dbiplus;
 using namespace PVR;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 #define PVRDB_DEBUGGING 0
 

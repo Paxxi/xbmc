@@ -22,12 +22,13 @@
 #include "Database.h"
 #include "XBDateTime.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 typedef struct
 {

@@ -29,7 +29,7 @@
 #include "playlists/SmartPlayList.h"
 #include "utils/JSONVariantWriter.h"
 #include "utils/JSONVariantParser.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace JSONRPC
 {
@@ -92,8 +92,8 @@ namespace JSONRPC
     {
       std::string method = parameterObject["sort"]["method"].asString();
       std::string order = parameterObject["sort"]["order"].asString();
-      StringUtils::ToLower(method);
-      StringUtils::ToLower(order);
+      KODI::UTILS::TEXT::StringUtils::ToLower(method);
+      KODI::UTILS::TEXT::StringUtils::ToLower(order);
 
       sortAttributes = SortAttributeNone;
       if (parameterObject["sort"]["ignorearticle"].asBoolean())

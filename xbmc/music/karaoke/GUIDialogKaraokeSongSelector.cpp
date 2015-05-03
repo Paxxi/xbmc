@@ -24,7 +24,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define CONTROL_LABEL_SONGNUMBER    401
 #define CONTROL_LABEL_SONGNAME      402
@@ -168,7 +168,7 @@ void CGUIDialogKaraokeSongSelector::UpdateData()
   if ( m_updateData )
   {
     // Update on-screen labels
-    std::string message = StringUtils::Format("%06d", m_selectedNumber);
+    std::string message = KODI::UTILS::TEXT::StringUtils::Format("%06d", m_selectedNumber);
     message = g_localizeStrings.Get(179) + ": " + message; // Translated "Song"
 
     SET_CONTROL_LABEL(CONTROL_LABEL_SONGNUMBER, message);

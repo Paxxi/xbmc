@@ -23,6 +23,13 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
+
 class CUtf8Utils
 {
 public:
@@ -53,3 +60,6 @@ public:
 private:
   static size_t SizeOfUtf8Char(const char* const str);
 };
+}
+}
+}

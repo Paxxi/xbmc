@@ -27,11 +27,12 @@
 #include "interfaces/generic/ILanguageInvoker.h"
 #include "interfaces/generic/LanguageInvokerThread.h"
 #include "threads/SingleLock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CScriptInvocationManager::CScriptInvocationManager()
   : m_nextId(0)

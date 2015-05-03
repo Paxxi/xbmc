@@ -29,7 +29,7 @@
 #include "dll_tracker.h" // for python unload hack
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "URL.h"
 
@@ -164,7 +164,7 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
   std::string localLibs = getenv("XBMC_ANDROID_LIBS");
   vecEnv.insert(vecEnv.begin(),localLibs);
 #else
-  vecEnv = StringUtils::Split(ENV_PATH, ';');
+  vecEnv = KODI::UTILS::TEXT::StringUtils::Split(ENV_PATH, ';');
 #endif
   LibraryLoader* pDll = NULL;
 

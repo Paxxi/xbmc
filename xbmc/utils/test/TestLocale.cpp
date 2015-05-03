@@ -21,7 +21,7 @@
 #include <gtest/gtest.h>
 
 #include "utils/Locale.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 static const std::string TerritorySeparator = "_";
 static const std::string CodesetSeparator = ".";

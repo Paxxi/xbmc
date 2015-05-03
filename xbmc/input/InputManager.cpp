@@ -59,7 +59,7 @@
 #include "peripherals/devices/PeripheralImon.h"
 #include "XBMC_vkeys.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "settings/Settings.h"
 
@@ -73,6 +73,7 @@
 using EVENTSERVER::CEventServer;
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using PERIPHERALS::CPeripherals;
 
 CInputManager& CInputManager::Get()

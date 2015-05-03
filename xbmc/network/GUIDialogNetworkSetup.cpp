@@ -23,9 +23,11 @@
 #include "guilib/GUIWindowManager.h"
 #include "guilib/GUIEditControl.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "guilib/LocalizeStrings.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_PROTOCOL        10
 #define CONTROL_SERVER_ADDRESS  11

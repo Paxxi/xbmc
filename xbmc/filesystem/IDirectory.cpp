@@ -25,9 +25,10 @@
 #include "URL.h"
 #include "PasswordManager.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 IDirectory::IDirectory(void)
 {

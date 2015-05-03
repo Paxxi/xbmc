@@ -44,6 +44,7 @@
 using namespace PERIPHERALS;
 using namespace ANNOUNCEMENT;
 using namespace CEC;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define CEC_LIB_SUPPORTED_VERSION 0x2100

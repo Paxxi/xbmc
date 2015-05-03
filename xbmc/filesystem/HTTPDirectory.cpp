@@ -22,16 +22,17 @@
 #include "URL.h"
 #include "CurlFile.h"
 #include "FileItem.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/HTMLUtil.h"
 #include "climits"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CHTTPDirectory::CHTTPDirectory(void){}
 CHTTPDirectory::~CHTTPDirectory(void){}

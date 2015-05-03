@@ -21,7 +21,7 @@
 #include "GUIDialogSmartPlaylistEditor.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "GUIDialogSmartPlaylistRule.h"
 #include "guilib/GUIWindowManager.h"
@@ -32,6 +32,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define CONTROL_HEADING         2

@@ -23,7 +23,7 @@
 
 #include "GroupUtils.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "video/VideoDbUrl.h"
 #include "video/VideoInfoTag.h"
@@ -80,7 +80,7 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
       pItem->GetVideoInfoTag()->m_iDbId = set->first;
       pItem->GetVideoInfoTag()->m_type = MediaTypeVideoCollection;
 
-      std::string basePath = StringUtils::Format("videodb://movies/sets/%i/", set->first);
+      std::string basePath = KODI::UTILS::TEXT::StringUtils::Format("videodb://movies/sets/%i/", set->first);
       CVideoDbUrl videoUrl;
       if (!videoUrl.FromString(basePath))
         pItem->SetPath(basePath);

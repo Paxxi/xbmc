@@ -39,7 +39,7 @@
 #include "windows/GUIWindowPVRBase.h"
 #include "utils/log.h"
 #include "utils/Stopwatch.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/Atomics.h"
 #include "utils/JobManager.h"
 #include "interfaces/AnnouncementManager.h"
@@ -69,6 +69,7 @@ using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS::TEXT;
 
 int CPVRManager::m_pvrWindowIds[10] = {
     WINDOW_TV_CHANNELS,

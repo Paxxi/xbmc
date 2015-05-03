@@ -20,10 +20,12 @@
 
 #include "XMLUtils.h"
 #include "URL.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 #ifdef TARGET_WINDOWS
 #include "PlatformDefs.h" //for strcasecmp
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& hexValue)
 {

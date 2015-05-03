@@ -21,6 +21,13 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
+
 class StringValidation
 {
 public:
@@ -34,3 +41,6 @@ public:
 private:
   StringValidation() { }
 };
+}
+}
+}

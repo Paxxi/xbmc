@@ -37,11 +37,11 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Autorun.h"
 #include "cdrip/CDDARipper.h"
 #include "cores/IPlayer.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ContextMenuManager.h"
 
 #define CONTROL_BTNVIEWASICONS     2
@@ -58,6 +58,7 @@
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;
 #endif
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowMusicSongs::CGUIWindowMusicSongs(void)
     : CGUIWindowMusicBase(WINDOW_MUSIC_FILES, "MyMusicSongs.xml")

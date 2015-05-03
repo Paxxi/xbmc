@@ -22,7 +22,7 @@
 
 #include "Speed.h"
 #include "utils/Archive.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CSpeed::CSpeed()
 {
@@ -589,5 +589,5 @@ std::string CSpeed::ToString(Unit speedUnit) const
   if (!IsValid())
     return "";
 
-  return StringUtils::Format("%2.0f", To(speedUnit));
+  return KODI::UTILS::TEXT::StringUtils::Format("%2.0f", To(speedUnit));
 }

@@ -28,10 +28,11 @@
 #include "settings/lib/Setting.h"
 #include "settings/lib/SettingSection.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CSettingsOperations::GetSections(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

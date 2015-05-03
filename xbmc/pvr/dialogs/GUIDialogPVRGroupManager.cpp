@@ -27,12 +27,13 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIRadioButtonControl.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_LIST_CHANNELS_LEFT    11
 #define CONTROL_LIST_CHANNELS_RIGHT   12

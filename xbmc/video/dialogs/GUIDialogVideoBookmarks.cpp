@@ -41,7 +41,7 @@
 #include "utils/Crc32.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
@@ -55,6 +55,7 @@
 #include "settings/Settings.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 #define BOOKMARK_THUMB_WIDTH g_advancedSettings.GetThumbSize()
 

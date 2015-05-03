@@ -26,10 +26,11 @@
 #include "music/tags/MusicInfoTag.h"
 #include "video/VideoInfoTag.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "filesystem/CurlFile.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 map<string, string> fillMimeTypes()
 {

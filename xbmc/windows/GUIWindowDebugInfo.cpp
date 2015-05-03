@@ -33,9 +33,11 @@
 #include "guilib/GUIControlProfiler.h"
 #include "GUIInfoManager.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <climits>
+
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowDebugInfo::CGUIWindowDebugInfo(void)
     : CGUIDialog(WINDOW_DEBUG_INFO, "")

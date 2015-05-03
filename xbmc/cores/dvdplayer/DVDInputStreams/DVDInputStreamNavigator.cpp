@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "guilib/Geometry.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #if defined(TARGET_DARWIN)
 #include "osx/CocoaInterface.h"
@@ -1045,7 +1045,7 @@ void CDVDInputStreamNavigator::SetAudioStreamName(DVDNavStreamInfo &info, const 
     info.name += temp;
   }
 
-  StringUtils::TrimLeft(info.name);
+  KODI::UTILS::TEXT::StringUtils::TrimLeft(info.name);
 
 }
 

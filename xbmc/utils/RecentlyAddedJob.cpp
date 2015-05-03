@@ -29,10 +29,12 @@
 #include "music/MusicDatabase.h"
 #include "music/tags/MusicInfoTag.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #include "music/MusicThumbLoader.h"
 #include "video/VideoThumbLoader.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define NUM_ITEMS 10
 

@@ -20,17 +20,19 @@
 
 #include "ZipDirectory.h"
 #include "utils/log.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #include "Util.h"
 #include "URL.h"
 #include "ZipManager.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <vector>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
+
 namespace XFILE
 {
   CZipDirectory::CZipDirectory()

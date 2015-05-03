@@ -29,7 +29,7 @@
 #include "utils/HttpParser.h"
 #include "utils/HttpResponse.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define WS_HTTP_METHOD          "GET"
 #define WS_HTTP_TAG             "HTTP/"
@@ -107,10 +107,10 @@ bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &respo
   value = header.getValue(WS_HEADER_PROTOCOL_LC);
   if (value && strlen(value) > 0)
   {
-    vector<string> protocols = StringUtils::Split(value, ",");
+    vector<string> protocols = KODI::UTILS::TEXT::StringUtils::Split(value, ",");
     for (vector<string>::iterator protocol = protocols.begin(); protocol != protocols.end(); ++protocol)
     {
-      StringUtils::Trim(*protocol);
+      KODI::UTILS::TEXT::StringUtils::Trim(*protocol);
       if (*protocol == WS_PROTOCOL_JSONRPC)
       {
         websocketProtocol = WS_PROTOCOL_JSONRPC;

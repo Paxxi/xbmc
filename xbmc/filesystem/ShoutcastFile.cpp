@@ -28,9 +28,9 @@
 #include "ShoutcastFile.h"
 #include "guilib/GUIWindowManager.h"
 #include "URL.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/HTMLUtil.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/TimeUtils.h"
 #include "ApplicationMessenger.h"
 #include "utils/log.h"
@@ -39,6 +39,7 @@
 
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 CShoutcastFile::CShoutcastFile() :
   IFile(), CThread("ShoutcastFile")

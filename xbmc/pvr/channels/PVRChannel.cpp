@@ -23,7 +23,7 @@
 #include "utils/log.h"
 #include "Util.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 
 #include "pvr/channels/PVRChannelGroupInternal.h"
@@ -37,6 +37,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 bool CPVRChannel::operator==(const CPVRChannel &right) const
 {

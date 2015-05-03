@@ -21,7 +21,7 @@
 #include "Application.h"
 #include "PVRGUIInfo.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "GUIInfoManager.h"
 #include "Util.h"
 #include "threads/SingleLock.h"
@@ -37,6 +37,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRGUIInfo::CPVRGUIInfo(void) :
     CThread("PVRGUIInfo")

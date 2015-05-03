@@ -22,7 +22,7 @@
 #include "GUIWindowMusicPlaylistEditor.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Autorun.h"
 #include "dialogs/GUIDialogFileBrowser.h"
 #include "filesystem/PlaylistFileDirectory.h"
@@ -38,6 +38,8 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "ContextMenuManager.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_LABELFILES        12
 

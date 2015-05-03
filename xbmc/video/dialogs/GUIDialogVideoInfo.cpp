@@ -23,7 +23,7 @@
 #include "guilib/GUIWindow.h"
 #include "Util.h"
 #include "guilib/GUIImage.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/windows/GUIWindowVideoNav.h"
 #include "dialogs/GUIDialogFileBrowser.h"
@@ -64,6 +64,7 @@
 using namespace std;
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_IMAGE                3
 #define CONTROL_TEXTAREA             4

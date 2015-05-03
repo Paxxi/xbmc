@@ -23,7 +23,7 @@
 #include "Util.h"
 #include "URL.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "guilib/LocalizeStrings.h"
 
@@ -36,6 +36,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRDirectory::CPVRDirectory()
 {

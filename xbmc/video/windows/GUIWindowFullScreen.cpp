@@ -50,7 +50,7 @@
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "XBDateTime.h"
 #include "input/ButtonTranslator.h"
 #include "windowing/WindowingFactory.h"
@@ -63,6 +63,8 @@
 #if defined(TARGET_DARWIN)
 #include "linux/LinuxResourceCounter.h"
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 #define BLUE_BAR                          0
 #define LABEL_ROW1                       10

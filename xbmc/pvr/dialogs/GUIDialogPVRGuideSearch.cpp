@@ -23,7 +23,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIEditControl.h"
 #include "guilib/GUIWindowManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "addons/include/xbmc_pvr_types.h"
 #include "pvr/PVRManager.h"
@@ -31,6 +31,7 @@
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_EDIT_SEARCH       9
 #define CONTROL_BTN_INC_DESC      10

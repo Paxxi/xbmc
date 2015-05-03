@@ -27,13 +27,14 @@
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <cassert>
 #ifdef TARGET_POSIX
 #include <dirent.h>
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 map<std::string, std::string> CSpecialProtocol::m_pathMap;

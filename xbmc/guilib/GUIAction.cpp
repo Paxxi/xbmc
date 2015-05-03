@@ -19,12 +19,13 @@
  */
 
 #include "GUIAction.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "GUIWindowManager.h"
 #include "GUIControl.h"
 #include "GUIInfoManager.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIAction::CGUIAction()
 {

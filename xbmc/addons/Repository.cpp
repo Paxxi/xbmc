@@ -29,7 +29,7 @@
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include "utils/JobManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "FileItem.h"
@@ -39,6 +39,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 AddonPtr CRepository::Clone() const
 {

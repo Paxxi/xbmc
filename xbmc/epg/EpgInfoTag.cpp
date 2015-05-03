@@ -30,13 +30,14 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "addons/include/xbmc_pvr_types.h"
 
 using namespace std;
 using namespace EPG;
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CEpgInfoTagPtr CEpgInfoTag::CreateDefaultTag()
 {

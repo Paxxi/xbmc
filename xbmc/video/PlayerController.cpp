@@ -37,7 +37,9 @@
 #endif
 #include "Application.h"
 #include "utils/LangCodeExpander.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CPlayerController::CPlayerController()
 {

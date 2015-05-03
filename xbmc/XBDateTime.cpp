@@ -24,7 +24,7 @@
 #include "LangInfo.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Archive.h"
 #ifdef TARGET_POSIX
 #include "XTimeUtils.h"
@@ -32,6 +32,8 @@
 #else
 #include <Windows.h>
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 #define SECONDS_PER_DAY 86400UL
 #define SECONDS_PER_HOUR 3600UL

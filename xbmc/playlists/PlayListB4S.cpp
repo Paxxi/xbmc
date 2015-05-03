@@ -25,13 +25,14 @@
 #include "music/tags/MusicInfoTag.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 /* ------------------------ example b4s playlist file ---------------------------------
  <?xml version="1.0" encoding='UTF-8' standalone="yes"?>

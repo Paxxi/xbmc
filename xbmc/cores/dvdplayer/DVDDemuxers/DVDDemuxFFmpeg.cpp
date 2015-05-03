@@ -44,7 +44,7 @@
 #include "filesystem/Directory.h"
 #include "utils/log.h"
 #include "threads/SystemClock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "cores/FFmpeg.h"
 

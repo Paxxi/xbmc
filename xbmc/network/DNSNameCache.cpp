@@ -21,11 +21,13 @@
 #include "DNSNameCache.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
+using namespace KODI::UTILS::TEXT;
 
 CDNSNameCache g_DNSCache;
 

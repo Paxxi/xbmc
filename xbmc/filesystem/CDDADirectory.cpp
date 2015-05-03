@@ -27,10 +27,11 @@
 #include "FileItem.h"
 #include "File.h"
 #include "storage/MediaManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE;
 using namespace MEDIA_DETECT;
+using namespace KODI::UTILS::TEXT;
 
 CCDDADirectory::CCDDADirectory(void)
 {

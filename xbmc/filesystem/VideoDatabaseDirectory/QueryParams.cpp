@@ -20,7 +20,7 @@
 
 #include "QueryParams.h"
 #include "video/VideoDatabase.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 

@@ -34,7 +34,7 @@
 #include "input/Key.h"
 #include "utils/JobManager.h"
 #include "utils/FileOperationJob.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "addons/AddonInstaller.h"
@@ -53,6 +53,7 @@
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
   : CGUIDialog(WINDOW_DIALOG_ADDON_INFO, "DialogAddonInfo.xml"),

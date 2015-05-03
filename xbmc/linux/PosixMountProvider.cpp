@@ -21,9 +21,11 @@
 #include <cstdlib>
 
 #include "PosixMountProvider.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CPosixMountProvider::CPosixMountProvider()
 {

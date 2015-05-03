@@ -22,7 +22,7 @@
 #include "filesystem/File.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
@@ -74,7 +74,7 @@ bool CUPnPSettings::Load(const std::string &file)
   }
 
   TiXmlElement *pRootElement = doc.RootElement();
-  if (pRootElement == NULL || !StringUtils::EqualsNoCase(pRootElement->Value(), XML_UPNP))
+  if (pRootElement == NULL || !KODI::UTILS::TEXT::StringUtils::EqualsNoCase(pRootElement->Value(), XML_UPNP))
   {
     CLog::Log(LOGERROR, "CUPnPSettings: error loading %s, no <upnpserver> node", file.c_str());
     return false;

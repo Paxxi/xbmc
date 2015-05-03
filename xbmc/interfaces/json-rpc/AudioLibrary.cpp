@@ -22,7 +22,7 @@
 #include "music/MusicDatabase.h"
 #include "FileItem.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "music/tags/MusicInfoTag.h"
 #include "music/Artist.h"
@@ -37,6 +37,7 @@
 using namespace MUSIC_INFO;
 using namespace JSONRPC;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CAudioLibrary::GetArtists(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

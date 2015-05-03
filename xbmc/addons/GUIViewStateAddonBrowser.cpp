@@ -28,7 +28,7 @@
 #include "addons/AddonManager.h"
 #include "addons/AddonInstaller.h"
 #include "AddonDatabase.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE;
 using namespace ADDON;

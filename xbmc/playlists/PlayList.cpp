@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "interfaces/AnnouncementManager.h"
 
 #include <cassert>
@@ -471,7 +471,7 @@ bool CPlayList::Expand(int position)
   // remove any item that points back to itself
   for(int i = 0;i<playlist->size();i++)
   {
-    if(StringUtils::EqualsNoCase((*playlist)[i]->GetPath(), item->GetPath()))
+    if(KODI::UTILS::TEXT::StringUtils::EqualsNoCase((*playlist)[i]->GetPath(), item->GetPath()))
     {
       playlist->Remove(i);
       i--;

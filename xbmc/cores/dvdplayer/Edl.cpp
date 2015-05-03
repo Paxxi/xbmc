@@ -19,7 +19,7 @@
  */
 
 #include "Edl.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 #include "settings/AdvancedSettings.h"
@@ -30,13 +30,13 @@
 #include "pvr/PVRManager.h"
 
 using namespace std;
+using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define COMSKIP_HEADER "FILE PROCESSING COMPLETE"
 #define VIDEOREDO_HEADER "<Version>2"
 #define VIDEOREDO_TAG_CUT "<Cut>"
 #define VIDEOREDO_TAG_SCENE "<SceneMarker "
-
-using namespace XFILE;
 
 CEdl::CEdl()
 {

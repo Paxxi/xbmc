@@ -21,15 +21,15 @@
 #include "GUIListItem.h"
 #include "GUIListItemLayout.h"
 #include "utils/Archive.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 
 using namespace std;
 
 bool CGUIListItem::icompare::operator()(const std::string &s1, const std::string &s2) const
 {
-  return StringUtils::CompareNoCase(s1, s2) < 0;
+  return KODI::UTILS::TEXT::StringUtils::CompareNoCase(s1, s2) < 0;
 }
 
 CGUIListItem::CGUIListItem(const CGUIListItem& item)

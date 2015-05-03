@@ -31,13 +31,14 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <assert.h>
 
 using namespace ADDON;
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 #define DEFAULT_INFO_STRING_VALUE "unknown"
 

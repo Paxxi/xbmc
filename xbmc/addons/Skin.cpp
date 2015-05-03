@@ -32,7 +32,7 @@
 #include "settings/lib/Setting.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ApplicationMessenger.h"
 
 // fallback for new skin resolution code
@@ -40,6 +40,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 std::shared_ptr<ADDON::CSkinInfo> g_SkinInfo;
 

@@ -28,7 +28,7 @@
 #include "filesystem/File.h"
 #include "pictures/Picture.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "FileItem.h"
 #include "music/MusicThumbLoader.h"
@@ -36,6 +36,8 @@
 #if defined(HAS_OMXPLAYER)
 #include "cores/omxplayer/OMXImage.h"
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 CTextureCacheJob::CTextureCacheJob(const std::string &url, const std::string &oldHash):
   m_url(url),

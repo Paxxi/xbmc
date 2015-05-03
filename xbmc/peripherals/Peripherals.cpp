@@ -44,13 +44,14 @@
 #include "guilib/LocalizeStrings.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "GUIUserMessages.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 #include "input/Key.h"
 #include "settings/lib/Setting.h"
 
 using namespace PERIPHERALS;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CPeripherals::CPeripherals(void)

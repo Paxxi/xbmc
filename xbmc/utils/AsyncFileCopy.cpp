@@ -24,8 +24,10 @@
 #include "guilib/GUIWindowManager.h"
 #include "log.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CAsyncFileCopy::CAsyncFileCopy() : CThread("AsyncFileCopy")
 {

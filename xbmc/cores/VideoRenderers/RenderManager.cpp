@@ -29,7 +29,7 @@
 #include "utils/MathUtils.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "Application.h"
 #include "ApplicationMessenger.h"
@@ -63,6 +63,8 @@
 #endif
 
 #define MAXPRESENTDELAY 0.500
+
+using namespace KODI::UTILS::TEXT;
 
 /* at any point we want an exclusive lock on rendermanager */
 /* we must make sure we don't have a graphiccontext lock */

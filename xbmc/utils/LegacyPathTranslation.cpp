@@ -19,7 +19,7 @@
  */
 
 #include "LegacyPathTranslation.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 
 typedef struct Translator {
@@ -105,9 +105,9 @@ std::string CLegacyPathTranslation::TranslatePath(const std::string &legacyPath,
   std::string newPath = legacyPath;
   for (size_t index = 0; index < translationMapSize; index++)
   {
-    if (StringUtils::StartsWithNoCase(newPath, translationMap[index].legacyPath))
+    if (KODI::UTILS::TEXT::StringUtils::StartsWithNoCase(newPath, translationMap[index].legacyPath))
     {
-      StringUtils::Replace(newPath, translationMap[index].legacyPath, translationMap[index].newPath);
+      KODI::UTILS::TEXT::StringUtils::Replace(newPath, translationMap[index].legacyPath, translationMap[index].newPath);
       break;
     }
   }

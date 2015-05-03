@@ -22,9 +22,11 @@
 #include "settings/AdvancedSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "PosixMountProvider.h"
+
+using namespace KODI::UTILS::TEXT;
 
 void CDeviceKitDiskDeviceOldAPI::Update()
 {

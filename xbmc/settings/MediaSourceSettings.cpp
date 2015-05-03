@@ -24,7 +24,7 @@
 #include "filesystem/File.h"
 #include "profiles/ProfilesManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
@@ -36,6 +36,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CMediaSourceSettings::CMediaSourceSettings()
 {

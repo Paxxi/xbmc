@@ -26,12 +26,13 @@
 #include "ApplicationMessenger.h"
 #include "TextureCache.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 using namespace JSONRPC;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CAddonsOperations::GetAddons(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

@@ -60,7 +60,7 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "video/VideoInfoTag.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "music/infoscanner/MusicInfoScanner.h"
 #include "cores/IPlayer.h"
@@ -73,6 +73,7 @@ using namespace MUSICDATABASEDIRECTORY;
 using namespace PLAYLIST;
 using namespace MUSIC_GRABBER;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTNVIEWASICONS  2
 #define CONTROL_BTNSORTBY       3

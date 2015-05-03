@@ -25,8 +25,8 @@
 #include "NetworkWin32.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "win32/WIN32Util.h"
 
 // undefine if you want to build without the wlan stuff
@@ -40,6 +40,7 @@
 
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CNetworkInterfaceWin32::CNetworkInterfaceWin32(CNetworkWin32* network, IP_ADAPTER_INFO adapter):
    m_adaptername(adapter.Description)

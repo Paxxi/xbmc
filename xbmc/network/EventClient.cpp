@@ -36,10 +36,11 @@
 #include "guilib/GraphicContext.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace EVENTCLIENT;
 using namespace EVENTPACKET;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 

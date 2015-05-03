@@ -37,7 +37,7 @@
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include "utils/md5.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "Util.h"
 #include "music/MusicDatabase.h"
@@ -45,6 +45,8 @@
 #include "guilib/GUIWindowManager.h"
 #include "xbmc/GUIUserMessages.h"
 #include "utils/FileUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.server")
 

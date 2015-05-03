@@ -52,7 +52,7 @@
 #include "storage/MediaManager.h"
 #include "utils/FileUtils.h"
 #include "utils/LangCodeExpander.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "CallbackHandler.h"
 #include "AddonUtils.h"
 

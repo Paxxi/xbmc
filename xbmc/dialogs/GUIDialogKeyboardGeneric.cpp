@@ -30,8 +30,8 @@
 #include "GUIDialogOK.h"
 #include "GUIDialogKeyboardGeneric.h"
 #include "settings/Settings.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "ApplicationMessenger.h"
 #include "windowing/WindowingFactory.h"
 
@@ -57,6 +57,8 @@
 #define CTL_BUTTON_SPACE       32
 
 #define SEARCH_DELAY         1000
+
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
 : CGUIDialog(WINDOW_DIALOG_KEYBOARD, "DialogKeyboard.xml")

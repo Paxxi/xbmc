@@ -22,7 +22,7 @@
 #include "DVDClock.h"
 #include "DVDCodecs/DVDCodecUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <cmath>
 
 #define MAXERR DVD_MSEC_TO_TIME(2.5)
@@ -368,9 +368,9 @@ std::string CPullupCorrection::GetPatternStr()
   std::string patternstr;
 
   for (unsigned int i = 0; i < m_pattern.size(); i++)
-    patternstr += StringUtils::Format("%.2f ", m_pattern[i]);
+    patternstr += KODI::UTILS::TEXT::StringUtils::Format("%.2f ", m_pattern[i]);
 
-  StringUtils::Trim(patternstr);
+  KODI::UTILS::TEXT::StringUtils::Trim(patternstr);
 
   return patternstr;
 }

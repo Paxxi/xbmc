@@ -26,6 +26,7 @@
 
 using namespace std;
 using namespace PERIPHERALS;
+using namespace KODI::UTILS::TEXT;
 
 #define PERIPHERAL_DEFAULT_RESCAN_INTERVAL 5000
 
