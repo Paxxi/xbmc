@@ -22,9 +22,9 @@
 #include "filesystem/File.h"
 #include "URL.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
-#include "utils/RegExp.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/RegExp.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "settings/AdvancedSettings.h"
@@ -33,6 +33,7 @@
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define M3U_START_MARKER "#EXTM3U"
 #define M3U_INFO_MARKER  "#EXTINF"

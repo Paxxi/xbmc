@@ -26,7 +26,7 @@
 #include "utils/log.h"
 #include "utils/HttpParser.h"
 #include "utils/Base64.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/HttpResponse.h"
 
 #define MASK_FIN      0x80

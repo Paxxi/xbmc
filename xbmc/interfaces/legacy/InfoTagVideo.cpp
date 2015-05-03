@@ -19,8 +19,10 @@
  */
 
 #include "InfoTagVideo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
+
+using namespace KODI::UTILS::TEXT;
 
 namespace XBMCAddon
 {

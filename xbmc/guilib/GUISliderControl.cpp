@@ -22,8 +22,10 @@
 #include "GUIInfoManager.h"
 #include "input/Key.h"
 #include "utils/MathUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "GUIWindowManager.h"
+
+using namespace KODI::UTILS::TEXT;
 
 static const SliderAction actions[] = {
   {"seek",    "PlayerControl(SeekPercentage(%2f))", PLAYER_PROGRESS, false},

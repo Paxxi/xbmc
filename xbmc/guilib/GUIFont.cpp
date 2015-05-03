@@ -26,7 +26,7 @@
 #include "utils/TimeUtils.h"
 #include "utils/MathUtils.h"
 
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 
 #define ROUND(x) (float)(MathUtils::round_int(x))
 

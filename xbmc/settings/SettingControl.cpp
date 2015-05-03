@@ -23,9 +23,11 @@
 #include "SettingControl.h"
 #include "settings/lib/SettingDefinitions.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define SHOW_ADDONS_ALL               "all"
 #define SHOW_ADDONS_INSTALLED         "installed"

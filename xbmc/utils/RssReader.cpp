@@ -23,8 +23,8 @@
 #include "RssReader.h"
 #include "utils/HTMLUtil.h"
 #include "Application.h"
-#include "CharsetConverter.h"
-#include "StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "filesystem/File.h"
 #include "filesystem/CurlFile.h"
@@ -45,6 +45,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

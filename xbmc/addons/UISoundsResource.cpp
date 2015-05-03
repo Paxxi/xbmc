@@ -20,7 +20,7 @@
 #include "UISoundsResource.h"
 #include "guilib/GUIAudioManager.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 
@@ -34,7 +34,7 @@ AddonPtr CUISoundsResource::Clone() const
 
 bool CUISoundsResource::IsAllowed(const std::string& file) const
 {
-  return StringUtils::EqualsNoCase(file, "sounds.xml")
+  return KODI::UTILS::TEXT::StringUtils::EqualsNoCase(file, "sounds.xml")
       || URIUtils::HasExtension(file, ".wav");
 }
 

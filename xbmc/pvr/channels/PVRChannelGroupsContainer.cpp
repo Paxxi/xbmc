@@ -22,11 +22,11 @@
 #include "URL.h"
 #include "dialogs/GUIDialogOK.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "pvr/PVRManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PVR;
 

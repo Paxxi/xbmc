@@ -24,7 +24,9 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CGUIColorManager g_colorManager;
 

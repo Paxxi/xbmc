@@ -24,7 +24,7 @@
 #include "MusicInfoTagLoaderCDDA.h"
 #include "MusicInfoTagLoaderShn.h"
 #include "MusicInfoTagLoaderDatabase.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 

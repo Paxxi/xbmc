@@ -40,7 +40,7 @@
 #include "cores/dvdplayer/DVDFileInfo.h"
 #include "video/VideoInfoScanner.h"
 #include "music/MusicDatabase.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace XFILE;

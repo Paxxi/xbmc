@@ -22,7 +22,7 @@
 #include "JSONServiceDescription.h"
 #include "utils/log.h"
 #include "utils/JSONVariantParser.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "JSONRPC.h"
 #include "PlayerOperations.h"
 #include "PlaylistOperations.h"

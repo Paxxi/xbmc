@@ -22,7 +22,7 @@
 #include "SettingDefinitions.h"
 #include "SettingsManager.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 template<class T> void addISetting(const TiXmlNode *node, const T &item, std::vector<T> &items)
@@ -44,7 +44,7 @@ template<class T> void addISetting(const TiXmlNode *node, const T &item, std::ve
       {
         for (typename std::vector<T>::iterator it = items.begin(); it != items.end(); ++it)
         {
-          if (!StringUtils::EqualsNoCase((*it)->GetId(), positionId))
+          if (!KODI::UTILS::TEXT::StringUtils::EqualsNoCase((*it)->GetId(), positionId))
             continue;
 
           typename std::vector<T>::iterator positionIt = it;

@@ -38,7 +38,7 @@
 #include "Application.h"
 #include "ApplicationMessenger.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifdef HAS_PERFORMANCE_SAMPLE
 #include "utils/PerformanceSample.h"

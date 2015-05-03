@@ -23,9 +23,10 @@
 #include "GUIControlFactory.h"
 #include "GUIInfoManager.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIStaticItem::CGUIStaticItem(const TiXmlElement *item, int parentID) : CFileItem()
 {

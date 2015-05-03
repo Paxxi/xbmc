@@ -26,7 +26,7 @@
 #include "pvr/recordings/PVRRecordings.h"
 #include "pvr/addons/PVRClients.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 
 using namespace std;

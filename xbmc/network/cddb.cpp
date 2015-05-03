@@ -35,11 +35,11 @@
 #include "CompileInfo.h"
 #include "network/DNSNameCache.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 #include "GUIInfoManager.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 
 #include <sys/socket.h>
@@ -50,6 +50,7 @@ using namespace std;
 using namespace MEDIA_DETECT;
 using namespace AUTOPTR;
 using namespace CDDB;
+using namespace KODI::UTILS::TEXT;
 
 //-------------------------------------------------------------------------------------------------------------------
 Xcddb::Xcddb()

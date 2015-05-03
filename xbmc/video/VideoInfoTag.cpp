@@ -23,7 +23,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "utils/Archive.h"
 #include "TextureDatabase.h"
@@ -33,6 +33,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 void CVideoInfoTag::Reset()
 {

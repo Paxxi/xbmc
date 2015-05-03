@@ -57,8 +57,8 @@
 #include "CueDocument.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
 #include "FileItem.h"
@@ -68,6 +68,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 // Stuff for read CUE data from different sources.
 class CueReader

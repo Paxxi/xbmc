@@ -40,7 +40,7 @@
 #include "settings/AdvancedSettings.h"
 #include "FileItem.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/Variant.h"
 #include "video/VideoDatabase.h"
@@ -70,7 +70,7 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   std::string strDirectory=url.GetFileName();
   URIUtils::RemoveSlashAtEnd(strDirectory);
 
-  vector<string> Path = StringUtils::Split(strDirectory, '/');
+  vector<string> Path = KODI::UTILS::TEXT::StringUtils::Split(strDirectory, '/');
   Path.insert(Path.begin(), "");
 
   CDirectoryNode* pNode=NULL;

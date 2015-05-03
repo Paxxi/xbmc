@@ -29,7 +29,7 @@
 #include "settings/Settings.h"
 #include "settings/lib/Setting.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CSeekHandler::CSeekHandler()
 : m_seekDelay(500),

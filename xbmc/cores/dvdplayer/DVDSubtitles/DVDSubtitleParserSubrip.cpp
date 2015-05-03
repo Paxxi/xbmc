@@ -21,7 +21,7 @@
 #include "DVDSubtitleParserSubrip.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "DVDSubtitleTagSami.h"
 
 using namespace std;
@@ -51,7 +51,7 @@ bool CDVDSubtitleParserSubrip::Open(CDVDStreamInfo &hints)
   while (m_pStream->ReadLine(line, sizeof(line)))
   {
     strLine = line;
-    StringUtils::Trim(strLine);
+    KODI::UTILS::TEXT::StringUtils::Trim(strLine);
 
     if (strLine.length() > 0)
     {
@@ -76,7 +76,7 @@ bool CDVDSubtitleParserSubrip::Open(CDVDStreamInfo &hints)
         while (m_pStream->ReadLine(line, sizeof(line)))
         {
           strLine = line;
-          StringUtils::Trim(strLine);
+          KODI::UTILS::TEXT::StringUtils::Trim(strLine);
 
           // empty line, next subtitle is about to start
           if (strLine.length() <= 0) break;

@@ -22,7 +22,7 @@
 
 #include "UrlOptions.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 
 using namespace std;
@@ -132,7 +132,7 @@ void CUrlOptions::AddOptions(const std::string &options)
   }
 
   // split the options by & and process them one by one
-  vector<string> optionList = StringUtils::Split(strOptions, "&");
+  vector<string> optionList = KODI::UTILS::TEXT::StringUtils::Split(strOptions, "&");
   for (vector<string>::const_iterator option = optionList.begin(); option != optionList.end(); ++option)
   {
     if (option->empty())

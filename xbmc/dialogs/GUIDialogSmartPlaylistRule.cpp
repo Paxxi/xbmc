@@ -31,7 +31,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "storage/MediaManager.h"
 #include "utils/LabelFormatter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #define CONTROL_FIELD           15
 #define CONTROL_OPERATOR        16

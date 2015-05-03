@@ -29,7 +29,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/MediaSettings.h"
 #include "URL.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <cassert>
 #include <netinet/in.h>
@@ -37,6 +37,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 bool URIUtils::IsInPath(const std::string &uri, const std::string &baseURI)
 {

@@ -29,9 +29,11 @@
 #include "utils/TimeUtils.h"
 #include "cores/AudioEngine/Utils/AEDeviceInfo.h"
 #include <Mmreg.h>
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #pragma comment(lib, "Avrt.lib")
+
+using namespace KODI::UTILS::TEXT;
 
 const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);

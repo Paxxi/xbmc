@@ -26,8 +26,10 @@
 #include "filesystem/ImageFile.h"
 #include "network/WebServer.h"
 #include "utils/Mime.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define TRANSFORMATION_OPTION_WIDTH   "width"
 #define TRANSFORMATION_OPTION_HEIGHT  "height"

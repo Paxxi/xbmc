@@ -41,17 +41,18 @@
 #include "TagLibVFSStream.h"
 #include "MusicInfoTag.h"
 #include "ReplayGain.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/Base64.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace std;
 using namespace TagLib;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 template<class T>
 class TagStringHandler : public T

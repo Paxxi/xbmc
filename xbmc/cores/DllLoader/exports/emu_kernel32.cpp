@@ -27,7 +27,7 @@
 
 #ifndef TARGET_POSIX
 #include <process.h>
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #endif
 
 #include "../dll_tracker.h"

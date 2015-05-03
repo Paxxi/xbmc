@@ -334,6 +334,9 @@
     <Filter Include="interfaces\legacy\wsgi">
       <UniqueIdentifier>{4750236a-887e-40c1-af3e-1e095f5960e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils\text">
+      <UniqueIdentifier>{ee95809d-14ad-4bdf-97cd-820848a50ebe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1375,9 +1378,6 @@
     <ClCompile Include="..\..\xbmc\utils\BitstreamStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\CPUInfo.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -1426,9 +1426,6 @@
     <ClCompile Include="..\..\xbmc\utils\PerformanceStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\RegExp.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\RingBuffer.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -1454,9 +1451,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\StreamUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\StringUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\SystemInfo.cpp">
@@ -1644,9 +1638,6 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxPVRClient.cpp">
       <Filter>cores\dvdplayer\DVDDemuxers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\TextSearch.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\win32\stdio_utf8.cpp">
       <Filter>win32</Filter>
@@ -2129,9 +2120,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\XbmcContext.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\POUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\XbmcContext.cpp" />
     <ClCompile Include="..\..\xbmc\network\ZeroconfBrowser.cpp">
       <Filter>network</Filter>
@@ -2293,9 +2281,6 @@
       <Filter>network</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\SeekHandler.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\DatabaseUtils.cpp">
@@ -2832,9 +2817,6 @@
     <ClCompile Include="..\..\xbmc\interfaces\python\ContextItemAddonInvoker.cpp">
       <Filter>interfaces\python</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\StringValidation.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\windowing\WinEvents.cpp">
       <Filter>windowing</Filter>
     </ClCompile>
@@ -2872,9 +2854,6 @@
     <ClCompile Include="..\..\xbmc\settings\lib\SettingUpdate.cpp">
       <Filter>settings\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\CharsetDetection.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.cpp">
       <Filter>cores\VideoRenderers</Filter>
     </ClCompile>
@@ -2889,9 +2868,6 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\listproviders\StaticProvider.cpp">
       <Filter>listproviders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Utf8Utils.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\XSLTUtils.cpp">
       <Filter>utils</Filter>
@@ -3086,6 +3062,33 @@
     <ClCompile Include="..\..\xbmc\filesystem\NFSDirectory.cpp" />
     <ClCompile Include="..\..\xbmc\test\TestUtil.cpp">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\CharsetConverter.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\CharsetDetection.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\POUtils.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\RegExp.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\StringUtils.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\StringValidation.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\TextSearch.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\text\Utf8Utils.cpp">
+      <Filter>utils\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4282,9 +4285,6 @@
     <ClInclude Include="..\..\xbmc\utils\BitstreamStats.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\CPUInfo.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4345,9 +4345,6 @@
     <ClInclude Include="..\..\xbmc\utils\PerformanceStats.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\RegExp.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\RingBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4373,9 +4370,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\StreamUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\StringUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\SystemInfo.h">
@@ -4581,9 +4575,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxPVRClient.h">
       <Filter>cores\dvdplayer\DVDDemuxers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\TextSearch.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\win32\stdio_utf8.h">
       <Filter>win32</Filter>
@@ -5087,9 +5078,6 @@
     <ClInclude Include="..\..\xbmc\network\httprequesthandler\HTTPJsonRpcHandler.h">
       <Filter>network\httprequesthandler</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\POUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\network\ZeroconfBrowser.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -5275,9 +5263,6 @@
       <Filter>network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\SeekHandler.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\SortUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\DatabaseUtils.h">
@@ -5695,9 +5680,6 @@
     <ClInclude Include="..\..\xbmc\interfaces\python\ContextItemAddonInvoker.h">
       <Filter>interfaces\python</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\StringValidation.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\uXstrings.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -5754,9 +5736,6 @@
     <ClInclude Include="..\..\xbmc\settings\lib\ISettingControlCreator.h">
       <Filter>settings\lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\CharsetDetection.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.h">
       <Filter>cores\VideoRenderers</Filter>
     </ClInclude>
@@ -5771,9 +5750,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\listproviders\StaticProvider.h">
       <Filter>listproviders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Utf8Utils.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\XSLTUtils.h">
       <Filter>utils</Filter>
@@ -5944,7 +5920,7 @@
     <ClInclude Include="..\..\xbmc\addons\LanguageResource.h">
       <Filter>addons</Filter>
     </ClInclude>
-     <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
+    <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
       <Filter>addons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ResourceFile.h">
@@ -5970,6 +5946,33 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\music\EmbeddedArt.h">
       <Filter>music</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\CharsetConverter.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\CharsetDetection.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\POUtils.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\RegExp.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\StringUtils.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\StringValidation.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\TextSearch.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\text\Utf8Utils.h">
+      <Filter>utils\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\SortUtils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

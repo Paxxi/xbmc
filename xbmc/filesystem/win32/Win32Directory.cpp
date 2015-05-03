@@ -23,7 +23,7 @@
 #include "FileItem.h"
 #include "win32/WIN32Util.h"
 #include "utils/SystemInfo.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "URL.h"
 #include "utils/log.h"
 

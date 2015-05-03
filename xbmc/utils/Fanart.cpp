@@ -25,7 +25,9 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 #include "URIUtils.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 const unsigned int CFanart::max_fanart_colors=3;
 

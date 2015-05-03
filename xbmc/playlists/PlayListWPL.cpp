@@ -24,13 +24,14 @@
 #include "settings/AdvancedSettings.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 /* ------------------------ example wpl playlist file ---------------------------------
   <?wpl version="1.0"?>

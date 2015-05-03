@@ -55,7 +55,7 @@
 #endif
 
 #ifdef TARGET_WINDOWS
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include <algorithm>
 #include <intrin.h>
 #include <Pdh.h>
@@ -95,9 +95,10 @@
 
 #include "log.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 // In milliseconds
 #define MINIMUM_TIME_BETWEEN_READS 500

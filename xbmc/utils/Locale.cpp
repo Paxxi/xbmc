@@ -19,7 +19,9 @@
  */
 
 #include "Locale.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 const CLocale CLocale::Empty;
 

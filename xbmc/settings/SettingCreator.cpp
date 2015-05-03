@@ -21,13 +21,13 @@
 #include "SettingCreator.h"
 #include "settings/SettingAddon.h"
 #include "settings/SettingPath.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CSetting* CSettingCreator::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = NULL */) const
 {
-  if (StringUtils::EqualsNoCase(settingType, "addon"))
+  if (KODI::UTILS::TEXT::StringUtils::EqualsNoCase(settingType, "addon"))
     return new CSettingAddon(settingId, settingsManager);
-  else if (StringUtils::EqualsNoCase(settingType, "path"))
+  else if (KODI::UTILS::TEXT::StringUtils::EqualsNoCase(settingType, "path"))
     return new CSettingPath(settingId, settingsManager);
 
   return NULL;

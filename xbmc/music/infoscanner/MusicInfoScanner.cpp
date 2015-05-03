@@ -42,7 +42,7 @@
 #include "settings/Settings.h"
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"

@@ -19,8 +19,8 @@
  */
 
 #include "GUILabelControl.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 
@@ -239,8 +239,8 @@ std::string CGUILabelControl::ShortenPath(const std::string &path)
   std::string workPath(path);
   // remove trailing slashes
   if (workPath.size() > 3)
-    if (!StringUtils::EndsWith(workPath, "://") &&
-        !StringUtils::EndsWith(workPath, ":\\"))
+    if (!KODI::UTILS::TEXT::StringUtils::EndsWith(workPath, "://") &&
+        !KODI::UTILS::TEXT::StringUtils::EndsWith(workPath, ":\\"))
       if (nPos == workPath.size() - 1)
       {
         workPath.erase(workPath.size() - 1);

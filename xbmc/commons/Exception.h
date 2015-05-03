@@ -24,10 +24,12 @@
 // This include should be moved to commons but even as it is,
 // it wont cause a linker circular dependency since it's just
 // a header.
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 //---------------------------------------------------------
 #include "ilog.h"
 #include <stdarg.h>
+
+using namespace KODI::UTILS::TEXT;
 
 #ifdef __GNUC__
 // The 'this' pointer counts as a parameter on member methods.

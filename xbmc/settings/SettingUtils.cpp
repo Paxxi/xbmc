@@ -20,7 +20,7 @@
 
 #include "SettingUtils.h"
 #include "settings/lib/Setting.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 std::vector<CVariant> CSettingUtils::GetList(const CSettingList *settingList)
 {
@@ -81,7 +81,8 @@ bool CSettingUtils::ValuesToList(const CSettingList *setting, const std::vector<
   bool ret = true;
   for (std::vector<CVariant>::const_iterator itValue = values.begin(); itValue != values.end(); ++itValue)
   {
-    CSetting *settingValue = setting->GetDefinition()->Clone(StringUtils::Format("%s.%d", setting->GetId().c_str(), index++));
+    CSetting *settingValue = setting->GetDefinition()->Clone(
+      KODI::UTILS::TEXT::StringUtils::Format("%s.%d", setting->GetId().c_str(), index++));
     if (settingValue == NULL)
       return false;
 

@@ -25,7 +25,7 @@
 #include "addons/GUIDialogAddonSettings.h"
 #include "guilib/GUIWindowManager.h"
 #include "GUIUserMessages.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace ADDON;
 

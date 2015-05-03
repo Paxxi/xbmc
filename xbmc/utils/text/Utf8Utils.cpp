@@ -20,6 +20,12 @@
 
 #include "Utf8Utils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 CUtf8Utils::utf8CheckResult CUtf8Utils::checkStrForUtf8(const std::string& str)
 {
@@ -98,7 +104,7 @@ inline size_t CUtf8Utils::SizeOfUtf8Char(const char* const str)
   if (!str)
     return 0;
 
-  const unsigned char* const strU = (const unsigned char*)str;
+  const unsigned char* const strU = reinterpret_cast<const unsigned char*>(str);
   const unsigned char chr = strU[0];
 
   /* this is an implementation of http://www.unicode.org/versions/Unicode6.2.0/ch03.pdf#G27506 */
@@ -157,4 +163,7 @@ inline size_t CUtf8Utils::SizeOfUtf8Char(const char* const str)
     return 4; // valid UTF-8 4 bytes sequence
 
   return 0; // invalid UTF-8 char sequence
+}
+}
+}
 }

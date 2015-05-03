@@ -22,10 +22,11 @@
 #include "GUIFont.h"
 #include "GUIControl.h"
 #include "GUIColorManager.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIString::CGUIString(iString start, iString end, bool carriageReturn)
 {

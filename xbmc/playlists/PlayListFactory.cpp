@@ -26,9 +26,10 @@
 #include "PlayListURL.h"
 #include "PlayListXML.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 CPlayList* CPlayListFactory::Create(const std::string& filename)
 {

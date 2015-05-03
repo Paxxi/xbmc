@@ -39,7 +39,7 @@
 #include "URL.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "playlists/PlayList.h"
 #include "GUIUserMessages.h"
 

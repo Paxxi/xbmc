@@ -22,7 +22,7 @@
 #include "iso9660.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "FileItem.h"
 
@@ -52,7 +52,7 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
   std::string strDirectory = url.GetFileName();
   if (strDirectory != "")
   {
-    strSearchMask = StringUtils::Format("\\%s", strDirectory.c_str());
+    strSearchMask = KODI::UTILS::TEXT::StringUtils::Format("\\%s", strDirectory.c_str());
   }
   else
   {

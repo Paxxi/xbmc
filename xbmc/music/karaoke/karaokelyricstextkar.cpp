@@ -20,11 +20,11 @@
 
 // C++ Implementation: karaokelyricstextkar
 
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "filesystem/File.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/Utf8Utils.h"
+#include "utils/text/Utf8Utils.h"
 #include <math.h>
 
 #include "karaokelyricstextkar.h"
@@ -585,7 +585,8 @@ std::string CKaraokeLyricsTextKAR::convertText( const char * data )
   std::string strUTF8;
 
   // Use some heuristics; need to replace by real detection stuff later
-  if (CUtf8Utils::isValidUtf8(data) || CSettings::Get().GetString("karaoke.charset") == "DEFAULT")
+  if (KODI::UTILS::TEXT::CUtf8Utils::isValidUtf8(data) ||
+      CSettings::Get().GetString("karaoke.charset") == "DEFAULT")
     strUTF8 = data;
   else
     g_charsetConverter.ToUtf8( CSettings::Get().GetString("karaoke.charset"), data, strUTF8 );

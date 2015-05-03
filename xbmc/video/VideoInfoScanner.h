@@ -22,7 +22,11 @@
 #include "addons/Scraper.h"
 #include "NfoFile.h"
 
+namespace KODI { namespace UTILS { namespace TEXT
+{
 class CRegExp;
+} } }
+
 class CFileItem;
 class CFileItemList;
 
@@ -164,14 +168,14 @@ namespace VIDEO
      \param defaultSeason Season to use if not found in reg.
      \return true on success (2 matches), false on failure (fewer than 2 matches)
      */
-    bool GetEpisodeAndSeasonFromRegExp(CRegExp &reg, EPISODE &episodeInfo, int defaultSeason);
+    bool GetEpisodeAndSeasonFromRegExp(KODI::UTILS::TEXT::CRegExp &reg, EPISODE &episodeInfo, int defaultSeason);
 
     /*! \brief Extract episode air-date from a processed regexp
      \param reg Regular expression object with at least 3 matches
      \param episodeInfo Episode information to fill in.
      \return true on success (3 matches), false on failure (fewer than 3 matches)
      */
-    bool GetAirDateFromRegExp(CRegExp &reg, EPISODE &episodeInfo);
+    bool GetAirDateFromRegExp(KODI::UTILS::TEXT::CRegExp &reg, EPISODE &episodeInfo);
 
     /*! \brief Fetch thumbs for actors
      Updates each actor with their thumb (local or online)

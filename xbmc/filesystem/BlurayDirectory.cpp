@@ -22,7 +22,7 @@
 #include "BlurayDirectory.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URL.h"
 #include "DllLibbluray.h"
 #include "FileItem.h"
@@ -30,6 +30,8 @@
 #include "guilib/LocalizeStrings.h"
 
 #include <cassert>
+
+using namespace KODI::UTILS::TEXT;
 
 namespace XFILE
 {

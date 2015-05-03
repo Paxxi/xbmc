@@ -37,11 +37,11 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Autorun.h"
 #include "cdrip/CDDARipper.h"
 #include "cores/IPlayer.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ContextMenuManager.h"
 
 #define CONTROL_BTNVIEWASICONS     2

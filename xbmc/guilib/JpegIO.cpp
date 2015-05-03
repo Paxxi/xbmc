@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "XBTF.h"
 #include "JpegIO.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <setjmp.h>
 
 #define EXIF_TAG_ORIENTATION    0x0112
@@ -534,7 +534,7 @@ bool CJpegIO::CreateThumbnailFromSurface(unsigned char* buffer, unsigned int wid
 // override libjpeg's error function to avoid an exit() call
 void CJpegIO::jpeg_error_exit(j_common_ptr cinfo)
 {
-  std::string msg = StringUtils::Format("Error %i: %s",cinfo->err->msg_code, cinfo->err->jpeg_message_table[cinfo->err->msg_code]);
+  std::string msg = KODI::UTILS::TEXT::StringUtils::Format("Error %i: %s",cinfo->err->msg_code, cinfo->err->jpeg_message_table[cinfo->err->msg_code]);
   CLog::Log(LOGWARNING, "JpegIO: %s", msg.c_str());
 
   my_error_mgr *myerr = (my_error_mgr*)cinfo->err;

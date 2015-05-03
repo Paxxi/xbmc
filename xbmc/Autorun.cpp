@@ -40,7 +40,7 @@
 #include "storage/MediaManager.h"
 #include "video/VideoDatabase.h"
 #include "dialogs/GUIDialogYesNo.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #ifdef HAS_CDDA_RIPPER

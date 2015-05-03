@@ -39,7 +39,7 @@
 #include "windows/GUIWindowPVRBase.h"
 #include "utils/log.h"
 #include "utils/Stopwatch.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/Atomics.h"
 #include "utils/JobManager.h"
 #include "interfaces/AnnouncementManager.h"

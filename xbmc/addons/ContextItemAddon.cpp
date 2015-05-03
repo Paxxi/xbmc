@@ -25,11 +25,12 @@
 #include "GUIInfoManager.h"
 #include "interfaces/info/InfoBool.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

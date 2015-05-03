@@ -32,7 +32,7 @@
 #include "pvr/recordings/PVRRecordings.h"
 #include "pvr/timers/PVRTimers.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 #include "pvr/addons/PVRClients.h"
 #include "video/windows/GUIWindowVideoNav.h"

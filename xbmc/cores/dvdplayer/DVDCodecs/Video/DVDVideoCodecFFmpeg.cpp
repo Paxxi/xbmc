@@ -59,7 +59,7 @@
 #ifdef TARGET_DARWIN_OSX
 #include "VDA.h"
 #endif
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 extern "C" {
 #include "libavutil/opt.h"
@@ -69,6 +69,7 @@ extern "C" {
 }
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 enum DecoderState
 {

@@ -22,7 +22,7 @@
 #include "system.h"
 #include "threads/SingleLock.h"
 #include "threads/Thread.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "CompileInfo.h"
 
 static const char* const levelNames[] =

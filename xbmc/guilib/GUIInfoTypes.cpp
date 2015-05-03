@@ -25,10 +25,11 @@
 #include "LocalizeStrings.h"
 #include "GUIColorManager.h"
 #include "GUIListItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "addons/Skin.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 using ADDON::CAddonMgr;
 
 CGUIInfoBool::CGUIInfoBool(bool value)

@@ -23,19 +23,20 @@
 #include "LabelFormatter.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "RegExp.h"
+#include "utils/text/RegExp.h"
 #include "Util.h"
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "pictures/PictureInfoTag.h"
 #include "FileItem.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "URIUtils.h"
 #include "guilib/LocalizeStrings.h"
 
 #include <cassert>
 
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 /* LabelFormatter
  * ==============

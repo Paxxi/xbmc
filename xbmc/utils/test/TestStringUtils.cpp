@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <algorithm>
 
 #include "gtest/gtest.h"

@@ -32,7 +32,7 @@
 #include "settings/lib/Setting.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ApplicationMessenger.h"
 
 // fallback for new skin resolution code

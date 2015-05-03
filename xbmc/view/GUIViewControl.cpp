@@ -21,7 +21,7 @@
 #include "GUIViewControl.h"
 #include "guilib/GUIWindowManager.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
 #include "GUIInfoManager.h"
@@ -318,7 +318,7 @@ void CGUIViewControl::UpdateViewAsControl(const std::string &viewLabel)
   for (unsigned int i = 0; i < m_visibleViews.size(); i++)
   {
     IGUIContainer *view = (IGUIContainer *)m_visibleViews[i];
-    std::string label = StringUtils::Format(g_localizeStrings.Get(534).c_str(), view->GetLabel().c_str()); // View: %s
+    std::string label = KODI::UTILS::TEXT::StringUtils::Format(g_localizeStrings.Get(534).c_str(), view->GetLabel().c_str()); // View: %s
     labels.push_back(make_pair(label, i));
   }
   CGUIMessage msg(GUI_MSG_SET_LABELS, m_parentWindow, m_viewAsControl, m_currentView);
@@ -326,7 +326,7 @@ void CGUIViewControl::UpdateViewAsControl(const std::string &viewLabel)
   g_windowManager.SendMessage(msg, m_parentWindow);
 
   // otherwise it's just a normal button
-  std::string label = StringUtils::Format(g_localizeStrings.Get(534).c_str(), viewLabel.c_str()); // View: %s
+  std::string label = KODI::UTILS::TEXT::StringUtils::Format(g_localizeStrings.Get(534).c_str(), viewLabel.c_str()); // View: %s
   CGUIMessage msgSet(GUI_MSG_LABEL_SET, m_parentWindow, m_viewAsControl);
   msgSet.SetLabel(label);
   g_windowManager.SendMessage(msgSet, m_parentWindow);

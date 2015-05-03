@@ -21,12 +21,12 @@
 #include "PlayListPLS.h"
 #include "PlayListFactory.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "filesystem/File.h"
 #include "settings/AdvancedSettings.h"
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
@@ -35,6 +35,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 #define START_PLAYLIST_MARKER "[playlist]" // may be case-insentive (equivalent to .ini file on win32)
 #define PLAYLIST_NAME     "PlaylistName"

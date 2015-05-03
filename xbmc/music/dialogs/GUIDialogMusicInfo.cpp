@@ -38,7 +38,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "TextureCache.h"
 #include "music/MusicThumbLoader.h"
 #include "filesystem/Directory.h"

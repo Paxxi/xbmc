@@ -25,10 +25,11 @@
 #include "DVDClock.h"
 #include "Util.h"
 #include "utils/AutoPtrHandle.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace AUTOPTR;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CDVDOverlayCodecSSA::CDVDOverlayCodecSSA() : CDVDOverlayCodec("SSA Subtitle Decoder")
 {

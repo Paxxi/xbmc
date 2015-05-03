@@ -28,7 +28,7 @@
 #include "guilib/GUIControlGroupList.h"
 #include "guilib/GUISettingsSliderControl.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "storage/MediaManager.h"
 #include "guilib/GUILabelControl.h"
 #include "guilib/GUIRadioButtonControl.h"

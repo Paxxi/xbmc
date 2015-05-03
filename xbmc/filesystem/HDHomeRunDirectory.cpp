@@ -22,10 +22,11 @@
 #include "URL.h"
 #include "FileItem.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "DllHDHomeRun.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 // -------------------------------------------

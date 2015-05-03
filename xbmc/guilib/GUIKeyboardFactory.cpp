@@ -27,7 +27,7 @@
 #include "GUIWindowManager.h"
 #include "settings/Settings.h"
 #include "utils/md5.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "dialogs/GUIDialogKeyboardGeneric.h"
 #if defined(TARGET_DARWIN_IOS)

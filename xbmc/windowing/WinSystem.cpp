@@ -23,12 +23,13 @@
 #include "settings/DisplaySettings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #if HAS_GLES
 #include "guilib/GUIFontTTFGL.h"
 #endif
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CWinSystemBase::CWinSystemBase()
 {

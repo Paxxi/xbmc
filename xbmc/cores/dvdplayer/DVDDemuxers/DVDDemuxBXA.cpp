@@ -21,7 +21,7 @@
 #include "DVDInputStreams/DVDInputStream.h"
 #include "DVDDemuxBXA.h"
 #include "DVDDemuxUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "../DVDClock.h"
 
 // AirTunes audio Demuxer.
@@ -41,7 +41,7 @@ public:
   {}
   void GetStreamInfo(string& strInfo)
   {
-    strInfo = StringUtils::Format("%s", m_codec.c_str());
+    strInfo = KODI::UTILS::TEXT::StringUtils::Format("%s", m_codec.c_str());
   }
 };
 

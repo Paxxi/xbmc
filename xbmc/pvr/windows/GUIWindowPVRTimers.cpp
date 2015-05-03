@@ -31,7 +31,7 @@
 #include "pvr/timers/PVRTimers.h"
 #include "pvr/addons/PVRClients.h"
 #include "threads/SingleLock.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PVR;
 

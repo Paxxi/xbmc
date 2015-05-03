@@ -21,9 +21,10 @@
 #include "DVDSubtitleParserVplayer.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CDVDSubtitleParserVplayer::CDVDSubtitleParserVplayer(CDVDSubtitleStream* pStream, const string& strFile)
     : CDVDSubtitleParserText(pStream, strFile), m_framerate(DVD_TIME_BASE)

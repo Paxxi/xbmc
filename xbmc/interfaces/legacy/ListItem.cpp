@@ -29,7 +29,7 @@
 #include "pictures/PictureInfoTag.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 namespace XBMCAddon

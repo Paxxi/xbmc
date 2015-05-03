@@ -22,6 +22,12 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 class CCharsetDetection
 {
@@ -104,3 +110,6 @@ private:
 
   static const std::string m_HtmlWhitespaceChars;
 };
+}
+}
+}

@@ -19,7 +19,7 @@
  */
 
 #include "utils/XMLUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "XBDateTime.h"
 
 #include "gtest/gtest.h"

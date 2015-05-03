@@ -26,7 +26,7 @@
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "test/TestUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <errno.h>
 

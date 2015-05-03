@@ -21,7 +21,7 @@
 #include "WsgiInputStream.h"
 #include "interfaces/legacy/AddonUtils.h"
 #include "network/httprequesthandler/python/HTTPPythonRequest.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace XBMCAddon
 {
@@ -85,7 +85,7 @@ namespace XBMCAddon
       String line = read(size);
 
       // remove any trailing \r\n
-      StringUtils::TrimRight(line, "\r\n");
+      KODI::UTILS::TEXT::StringUtils::TrimRight(line, "\r\n");
 
       return line;
     }

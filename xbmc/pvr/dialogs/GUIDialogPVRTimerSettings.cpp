@@ -30,7 +30,7 @@
 #include "settings/lib/SettingsManager.h"
 #include "settings/windows/GUIControlSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PVR;
 

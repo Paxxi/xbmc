@@ -23,8 +23,10 @@
 #include "addons/Webinterface.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 #define WEBSERVER_DIRECTORY_SEPARATOR "/"
 

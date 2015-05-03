@@ -23,7 +23,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIEditControl.h"
 #include "guilib/GUIWindowManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "addons/include/xbmc_pvr_types.h"
 #include "pvr/PVRManager.h"

@@ -23,7 +23,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogSelect.h"
 #include "input/Key.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CAutorunMediaJob::CAutorunMediaJob(const std::string &label, const std::string &path):
   m_path(path),

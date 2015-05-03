@@ -28,7 +28,7 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 #include "utils/HTMLUtil.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "utils/log.h"
@@ -39,6 +39,7 @@
 using namespace XFILE;
 using namespace std;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 namespace {
 

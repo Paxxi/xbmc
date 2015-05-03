@@ -25,7 +25,7 @@
 #include "HDHomeRunFile.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "Util.h"
 #include "DllHDHomeRun.h"
@@ -58,7 +58,7 @@ bool CHomeRunFile::Exists(const CURL& url)
    * The filename starts with "tuner" and has no extension. This check will cover off requests
    * for *.tbn, *.jpg, *.jpeg, *.edl etc. that do not exist.
    */
-  return StringUtils::StartsWith(path, "tuner") &&
+  return KODI::UTILS::TEXT::StringUtils::StartsWith(path, "tuner") &&
         !URIUtils::HasExtension(path);
 }
 

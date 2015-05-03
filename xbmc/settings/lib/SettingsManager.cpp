@@ -23,10 +23,12 @@
 #include "SettingSection.h"
 #include "Setting.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 #include <algorithm>
+
+using namespace KODI::UTILS::TEXT;
 
 CSettingsManager::CSettingsManager()
   : m_initialized(false), m_loaded(false)

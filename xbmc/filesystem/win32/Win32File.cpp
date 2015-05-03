@@ -24,7 +24,7 @@
 #include "utils/win32/Win32Log.h"
 #include "utils/SystemInfo.h"
 #include "utils/auto_buffer.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1

@@ -21,15 +21,15 @@
 #include "ScraperParser.h"
 
 #include "addons/AddonManager.h"
-#include "RegExp.h"
+#include "utils/text/RegExp.h"
 #include "HTMLUtil.h"
 #include "addons/Scraper.h"
 #include "URL.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "log.h"
-#include "CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XSLTUtils.h"
 #include "utils/XMLUtils.h"
 #include <sstream>
@@ -38,6 +38,7 @@
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CScraperParser::CScraperParser()
 {

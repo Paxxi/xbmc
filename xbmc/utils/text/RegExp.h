@@ -19,13 +19,17 @@
  *
  */
 
-#ifndef REGEXP_H
-#define REGEXP_H
-
 #include <string>
 #include <vector>
 
-namespace PCRE {
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
+namespace PCRE 
+{
 struct real_pcre_jit_stack; // forward declaration for PCRE without JIT
 typedef struct real_pcre_jit_stack pcre_jit_stack;
 #ifdef TARGET_WINDOWS
@@ -178,5 +182,7 @@ private:
 
 typedef std::vector<CRegExp> VECCREGEXP;
 
-#endif
+}
+}
+}
 

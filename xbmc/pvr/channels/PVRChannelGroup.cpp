@@ -33,7 +33,7 @@
 #include "music/tags/MusicInfoTag.h"
 #include "utils/log.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 
 #include "PVRChannelGroupsContainer.h"

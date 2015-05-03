@@ -19,7 +19,7 @@
  */
 
 #include "InfoBool.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace INFO
 {
@@ -30,6 +30,6 @@ namespace INFO
       m_expression(expression),
       m_dirty(true)
   {
-    StringUtils::ToLower(m_expression);
+    KODI::UTILS::TEXT::StringUtils::ToLower(m_expression);
   }
 }

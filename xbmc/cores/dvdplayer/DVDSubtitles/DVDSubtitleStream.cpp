@@ -21,12 +21,13 @@
 #include "DVDSubtitleStream.h"
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStream.h"
-#include "utils/CharsetConverter.h"
-#include "utils/Utf8Utils.h"
-#include "utils/CharsetDetection.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/Utf8Utils.h"
+#include "utils/text/CharsetDetection.h"
 #include "filesystem/File.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 using XFILE::auto_buffer;
 
 CDVDSubtitleStream::CDVDSubtitleStream()

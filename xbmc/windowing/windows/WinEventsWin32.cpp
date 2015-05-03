@@ -50,8 +50,8 @@
 #include "network/Zeroconf.h"
 #include "network/ZeroconfBrowser.h"
 #include "GUIUserMessages.h"
-#include "utils/CharsetConverter.h"
-#include "utils/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
 #include "Util.h"
 
 #ifdef TARGET_WINDOWS

@@ -26,13 +26,14 @@
 #include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 //
 // multipath://{path1}/{path2}/{path3}/.../{path-N}

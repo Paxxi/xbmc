@@ -62,7 +62,7 @@
 #include "settings/MediaSettings.h"
 #include "settings/MediaSourceSettings.h"
 #include "settings/SkinSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoLibraryQueue.h"
 #include "Util.h"

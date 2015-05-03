@@ -25,7 +25,7 @@
 #include "threads/SingleLock.h"
 #include "utils/RssManager.h"
 #include "utils/RssReader.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 

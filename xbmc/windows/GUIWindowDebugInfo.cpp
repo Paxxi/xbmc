@@ -33,7 +33,7 @@
 #include "guilib/GUIControlProfiler.h"
 #include "GUIInfoManager.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <climits>
 

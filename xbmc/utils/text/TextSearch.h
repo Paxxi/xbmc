@@ -22,6 +22,13 @@
 #include <string>
 #include <vector>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
+
 typedef enum TextSearchDefault
 {
   SEARCH_DEFAULT_AND = 0,
@@ -47,3 +54,6 @@ private:
   std::vector<std::string>  m_OR;
   std::vector<std::string>  m_NOT;
 };
+}
+}
+}

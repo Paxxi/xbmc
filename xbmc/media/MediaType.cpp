@@ -20,7 +20,7 @@
 
 #include "MediaType.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 static std::map<std::string, MediaTypes::MediaTypeInfo> fillDefaultMediaTypes()
 {
@@ -87,7 +87,7 @@ bool MediaTypes::IsContainer(const MediaType &mediaType)
 std::map<std::string, MediaTypes::MediaTypeInfo>::const_iterator MediaTypes::findMediaType(const std::string &mediaType)
 {
   std::string strMediaType = mediaType;
-  StringUtils::ToLower(strMediaType);
+  KODI::UTILS::TEXT::StringUtils::ToLower(strMediaType);
 
   std::map<std::string, MediaTypeInfo>::const_iterator it = m_mediaTypes.find(strMediaType);
   if (it != m_mediaTypes.end())

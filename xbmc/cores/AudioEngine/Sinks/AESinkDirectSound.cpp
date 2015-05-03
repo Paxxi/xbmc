@@ -34,8 +34,10 @@
 #include <Functiondiscoverykeys_devpkey.h>
 #include <Rpc.h>
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #pragma comment(lib, "Rpcrt4.lib")
+
+using namespace KODI::UTILS::TEXT;
 
 extern HWND g_hWnd;
 

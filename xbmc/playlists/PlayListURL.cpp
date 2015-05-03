@@ -21,10 +21,11 @@
 #include "PlayListURL.h"
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 // example url file
 //[DEFAULT]

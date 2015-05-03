@@ -43,7 +43,7 @@
 #include "utils/URIUtils.h"
 #include "Autorun.h"
 #include "interfaces/AnnouncementManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "ContextMenuManager.h"
 
 #define CONTROL_BTNVIEWASICONS      2

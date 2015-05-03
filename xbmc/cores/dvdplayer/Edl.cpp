@@ -19,7 +19,7 @@
  */
 
 #include "Edl.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 #include "settings/AdvancedSettings.h"

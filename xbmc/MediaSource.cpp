@@ -24,10 +24,11 @@
 #include "URL.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 bool CMediaSource::IsWritable() const
 {

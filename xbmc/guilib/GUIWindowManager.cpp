@@ -34,7 +34,7 @@
 #include "windowing/WindowingFactory.h"
 #include "utils/Variant.h"
 #include "input/Key.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "windows/GUIWindowHome.h"
 #include "settings/windows/GUIWindowSettings.h"

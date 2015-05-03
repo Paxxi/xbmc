@@ -42,10 +42,10 @@
 #include "storage/DetectDVDType.h"
 #endif
 #include "threads/SingleLock.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/FileUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 

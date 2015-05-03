@@ -20,7 +20,7 @@
 
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "settings/Settings.h"

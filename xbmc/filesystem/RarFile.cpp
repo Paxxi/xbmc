@@ -22,7 +22,7 @@
 #include "RarFile.h"
 #include <sys/stat.h>
 #include "Util.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "Directory.h"
@@ -31,7 +31,7 @@
 #include "FileItem.h"
 #include "utils/log.h"
 #include "UnrarXLib/rar.hpp"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifndef TARGET_POSIX
 #include <process.h>

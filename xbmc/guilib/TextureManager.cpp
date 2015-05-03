@@ -25,7 +25,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "addons/Skin.h"
 #ifdef _DEBUG_TEXTURES
 #include "utils/TimeUtils.h"
@@ -41,6 +41,7 @@
 #endif
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 
 /************************************************************************/

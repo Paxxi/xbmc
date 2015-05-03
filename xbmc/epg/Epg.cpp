@@ -30,7 +30,7 @@
 #include "pvr/PVRManager.h"
 #include "pvr/addons/PVRClients.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "../addons/include/xbmc_epg_types.h"
 

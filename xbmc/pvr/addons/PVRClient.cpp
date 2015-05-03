@@ -31,7 +31,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <assert.h>
 

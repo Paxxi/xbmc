@@ -30,11 +30,12 @@
 #include "filesystem/File.h"
 #include "filesystem/FileDirectoryFactory.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CFileOperationJob::CFileOperationJob()
   : m_action(ActionCopy),

@@ -24,11 +24,12 @@
 #include "utils/URIUtils.h"
 #include "CurlFile.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/CharsetConverter.h"
 #include "climits"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CFTPDirectory::CFTPDirectory(void){}
 CFTPDirectory::~CFTPDirectory(void){}

@@ -45,7 +45,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "settings/lib/Setting.h"
 #include "storage/MediaManager.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace ADDON;
 

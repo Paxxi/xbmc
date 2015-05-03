@@ -22,13 +22,14 @@
 #include "addons/AddonManager.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "XBDateTime.h"
 #include "dbwrappers/dataset.h"
 #include "addons/ContextItemAddon.h"
 
 using namespace ADDON;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CAddonDatabase::CAddonDatabase()
 {

@@ -32,7 +32,7 @@
 #include "storage/MediaManager.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
 #include "DllPaths_win32.h"
 #include "FileSystem/File.h"
@@ -41,7 +41,7 @@
 #include "utils/SystemInfo.h"
 #include "utils/Environment.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "win32/crts_caller.h"
 
 #include <cassert>

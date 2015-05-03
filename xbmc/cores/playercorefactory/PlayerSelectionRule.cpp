@@ -24,9 +24,11 @@
 #include "utils/StreamDetails.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CPlayerSelectionRule::CPlayerSelectionRule(TiXmlElement* pRule)
 {

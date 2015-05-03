@@ -21,12 +21,12 @@
 #include "GUIBaseContainer.h"
 #include "GUIControlFactory.h"
 #include "GUIWindowManager.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "GUIInfoManager.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
 #include "utils/SortUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "FileItem.h"
 #include "input/Key.h"
 #include "utils/MathUtils.h"
@@ -35,6 +35,7 @@
 #include "settings/Settings.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 #define HOLD_TIME_START 100
 #define HOLD_TIME_END   3000

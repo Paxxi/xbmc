@@ -19,7 +19,7 @@
  */
 
 #include "commons/ilog.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace XbmcCommons
 {
@@ -30,7 +30,7 @@ namespace XbmcCommons
     strData.reserve(16384);
     va_list va;
     va_start(va, format);
-    strData = StringUtils::FormatV(format,va);
+    strData = KODI::UTILS::TEXT::StringUtils::FormatV(format,va);
     va_end(va);
 
     log(loglevel, strData.c_str());

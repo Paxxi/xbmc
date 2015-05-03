@@ -46,11 +46,17 @@
 #include <stdio.h>
 #include <memory.h>
 #include <algorithm>
-#include "utils/RegExp.h" // don't move or std functions end up in PCRE namespace
+#include "utils/text/RegExp.h" // don't move or std functions end up in PCRE namespace
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 
 using namespace std;
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 const char* ADDON_GUID_RE = "^(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}$";
 
@@ -330,16 +336,16 @@ wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
 
 int compareWchar (const void* a, const void* b)
 {
-  if (*(wchar_t*)a <  *(wchar_t*)b)
+  if (*static_cast<const wchar_t*>(a) <  *static_cast<const wchar_t*>(b))
     return -1;
-  else if (*(wchar_t*)a >  *(wchar_t*)b)
+  else if (*static_cast<const wchar_t*>(a) >  *static_cast<const wchar_t*>(b))
     return 1;
   return 0;
 }
 
 wchar_t tolowerUnicode(const wchar_t& c)
 {
-  wchar_t* p = (wchar_t*) bsearch (&c, unicode_uppers, sizeof(unicode_uppers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar);
+  wchar_t* p = static_cast<wchar_t*>(bsearch (&c, unicode_uppers, sizeof(unicode_uppers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar));
   if (p)
     return *(unicode_lowers + (p - unicode_uppers));
 
@@ -348,7 +354,7 @@ wchar_t tolowerUnicode(const wchar_t& c)
 
 wchar_t toupperUnicode(const wchar_t& c)
 {
-  wchar_t* p = (wchar_t*) bsearch (&c, unicode_lowers, sizeof(unicode_lowers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar);
+  wchar_t* p = static_cast<wchar_t*>(bsearch (&c, unicode_lowers, sizeof(unicode_lowers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar));
   if (p)
     return *(unicode_uppers + (p - unicode_lowers));
 
@@ -443,7 +449,7 @@ int StringUtils::CompareNoCase(const char *s1, const char *s2)
 
 string StringUtils::Left(const string &str, size_t count)
 {
-  count = max((size_t)0, min(count, str.size()));
+  count = max(static_cast<size_t>(0), min(count, str.size()));
   return str.substr(0, count);
 }
 
@@ -462,7 +468,7 @@ string StringUtils::Mid(const string &str, size_t first, size_t count /* = strin
 
 string StringUtils::Right(const string &str, size_t count)
 {
-  count = max((size_t)0, min(count, str.size()));
+  count = max(static_cast<size_t>(0), min(count, str.size()));
   return str.substr(str.size() - count);
 }
 
@@ -762,8 +768,8 @@ int StringUtils::FindNumber(const std::string& strInput, const std::string &strF
 // and 0 if they are identical (essentially calculates left - right)
 int64_t StringUtils::AlphaNumericCompare(const wchar_t *left, const wchar_t *right)
 {
-  wchar_t *l = (wchar_t *)left;
-  wchar_t *r = (wchar_t *)right;
+  wchar_t *l = const_cast<wchar_t *>(left);
+  wchar_t *r = const_cast<wchar_t *>(right);
   wchar_t *ld, *rd;
   wchar_t lc, rc;
   int64_t lnum, rnum;
@@ -883,13 +889,13 @@ bool StringUtils::IsNaturalNumber(const std::string& str)
 {
   size_t i = 0, n = 0;
   // allow whitespace,digits,whitespace
-  while (i < str.size() && isspace((unsigned char) str[i]))
+  while (i < str.size() && isspace(static_cast<unsigned char>(str[i])))
     i++;
-  while (i < str.size() && isdigit((unsigned char) str[i]))
+  while (i < str.size() && isdigit(static_cast<unsigned char>(str[i])))
   {
     i++; n++;
   }
-  while (i < str.size() && isspace((unsigned char) str[i]))
+  while (i < str.size() && isspace(static_cast<unsigned char>(str[i])))
     i++;
   return i == str.size() && n > 0;
 }
@@ -898,15 +904,15 @@ bool StringUtils::IsInteger(const std::string& str)
 {
   size_t i = 0, n = 0;
   // allow whitespace,-,digits,whitespace
-  while (i < str.size() && isspace((unsigned char) str[i]))
+  while (i < str.size() && isspace(static_cast<unsigned char>(str[i])))
     i++;
   if (i < str.size() && str[i] == '-')
     i++;
-  while (i < str.size() && isdigit((unsigned char) str[i]))
+  while (i < str.size() && isdigit(static_cast<unsigned char>(str[i])))
   {
     i++; n++;
   }
-  while (i < str.size() && isspace((unsigned char) str[i]))
+  while (i < str.size() && isspace(static_cast<unsigned char>(str[i])))
     i++;
   return i == str.size() && n > 0;
 }
@@ -943,7 +949,7 @@ std::string StringUtils::SizeToString(int64_t size)
   std::string strLabel;
   const char prefixes[] = {' ', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'};
   unsigned int i = 0;
-  double s = (double)size;
+  double s = static_cast<double>(size);
   while (i < ARRAY_SIZE(prefixes) && s >= 1000.0)
   {
     s /= 1024.0;
@@ -993,12 +999,12 @@ int IsUTF8Letter(const unsigned char *str)
 size_t StringUtils::FindWords(const char *str, const char *wordLowerCase)
 {
   // NOTE: This assumes word is lowercase!
-  unsigned char *s = (unsigned char *)str;
+  unsigned char *s = reinterpret_cast<unsigned char*>(const_cast<char*>(str));
   do
   {
     // start with a compare
     unsigned char *c = s;
-    unsigned char *w = (unsigned char *)wordLowerCase;
+    unsigned char *w = reinterpret_cast<unsigned char*>(const_cast<char*>(wordLowerCase));;
     bool same = true;
     while (same && *c && *w)
     {
@@ -1010,7 +1016,7 @@ size_t StringUtils::FindWords(const char *str, const char *wordLowerCase)
         same = false;
     }
     if (same && *w == 0)  // only the same if word has been exhausted
-      return (const char *)s - str;
+      return reinterpret_cast<const char *>(s) - str;
 
     // otherwise, skip current word (composed by latin letters) or number
     int l;
@@ -1050,7 +1056,7 @@ int StringUtils::FindEndBracket(const std::string &str, char opener, char closer
     }
   }
 
-  return (int)std::string::npos;
+  return static_cast<int>(std::string::npos);
 }
 
 void StringUtils::WordToDigits(std::string &word)
@@ -1084,7 +1090,7 @@ std::string StringUtils::CreateUUID()
   if (!m_uuidInitialized)
   {
     /* use current time as the seed for rand()*/
-    srand(time(NULL));
+    srand(time(nullptr));
     m_uuidInitialized = true;
   }
 
@@ -1226,4 +1232,7 @@ void StringUtils::Tokenize(const std::string& input, std::vector<std::string>& t
     // Skip delimiters.  Note the "not_of"
     dataPos = input.find_first_not_of(delimiter, nextDelimPos);
   }
+}
+}
+}
 }

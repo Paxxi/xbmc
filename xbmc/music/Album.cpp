@@ -21,7 +21,7 @@
 #include "Album.h"
 #include "music/tags/MusicInfoTag.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "utils/MathUtils.h"
 #include "FileItem.h"
@@ -30,6 +30,7 @@
 
 using namespace std;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 typedef struct ReleaseTypeInfo {
   CAlbum::ReleaseType type;

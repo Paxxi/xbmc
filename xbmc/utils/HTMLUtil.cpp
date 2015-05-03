@@ -19,12 +19,12 @@
  */
 
 #include "HTMLUtil.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include <wctype.h>
 
 using namespace std;
 using namespace HTML;
-
+using namespace KODI::UTILS::TEXT;
 
 CHTMLUtil::CHTMLUtil(void)
 {}

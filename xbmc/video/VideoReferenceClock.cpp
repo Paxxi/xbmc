@@ -23,7 +23,7 @@
 #include "utils/MathUtils.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 #include "guilib/GraphicContext.h"
 #include "video/videosync/VideoSync.h"

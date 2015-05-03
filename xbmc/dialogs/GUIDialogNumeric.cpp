@@ -24,7 +24,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "GUIDialogOK.h"
 #include "input/XBMC_vkeys.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "interfaces/AnnouncementManager.h"
@@ -38,6 +38,7 @@
 #define CONTROL_NEXT          22
 #define CONTROL_BACKSPACE     23
 
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogNumeric::CGUIDialogNumeric(void)
     : CGUIDialog(WINDOW_DIALOG_NUMERIC, "DialogNumeric.xml")

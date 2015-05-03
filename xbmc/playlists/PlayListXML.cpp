@@ -21,15 +21,16 @@
 #include "PlayListXML.h"
 #include "filesystem/File.h"
 #include "Util.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 #include "utils/Variant.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 /*
  Playlist example (must be stored with .pxml extension):

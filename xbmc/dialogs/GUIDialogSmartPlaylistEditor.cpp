@@ -21,7 +21,7 @@
 #include "GUIDialogSmartPlaylistEditor.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "GUIDialogSmartPlaylistRule.h"
 #include "guilib/GUIWindowManager.h"

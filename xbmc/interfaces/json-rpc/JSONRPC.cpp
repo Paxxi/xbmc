@@ -30,7 +30,7 @@
 #include "playlists/SmartPlayList.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
 #include "TextureDatabase.h"
 

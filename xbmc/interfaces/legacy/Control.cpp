@@ -41,7 +41,7 @@
 #include "listproviders/StaticProvider.h"
 
 #include "utils/XBMCTinyXML.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 namespace XBMCAddon
 {

@@ -24,7 +24,9 @@
 #include <ctype.h>
 
 #include "AddonVersion.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

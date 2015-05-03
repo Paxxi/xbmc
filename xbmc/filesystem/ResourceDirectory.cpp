@@ -23,7 +23,7 @@
 #include "URL.h"
 #include "filesystem/Directory.h"
 #include "filesystem/ResourceFile.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
@@ -47,7 +47,7 @@ bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     for (int i = 0; i < items.Size(); i++)
     {
       CFileItemPtr item = items[i];
-      if (StringUtils::StartsWith(item->GetPath(), translatedPath))
+      if (KODI::UTILS::TEXT::StringUtils::StartsWith(item->GetPath(), translatedPath))
         item->SetPath(URIUtils::AddFileToFolder(pathToUrl, item->GetPath().substr(translatedPath.size())));
     }
 

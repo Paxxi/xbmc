@@ -23,8 +23,10 @@
 #include "XBDateTime.h"
 #include "dbwrappers/dataset.h"
 #include "URL.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/Variant.h"
+
+using namespace KODI::UTILS::TEXT;
 
 enum TextureField
 {

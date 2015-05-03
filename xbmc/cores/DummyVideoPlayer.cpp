@@ -28,7 +28,7 @@
 #include "settings/AdvancedSettings.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 CDummyVideoPlayer::CDummyVideoPlayer(IPlayerCallback& callback)
     : IPlayer(callback),

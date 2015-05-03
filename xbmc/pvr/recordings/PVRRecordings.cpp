@@ -31,7 +31,7 @@
 #include "settings/Settings.h"
 
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/addons/PVRClients.h"

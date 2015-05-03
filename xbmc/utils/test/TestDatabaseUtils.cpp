@@ -23,7 +23,7 @@
 #include "music/MusicDatabase.h"
 #include "dbwrappers/qry_dat.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include "gtest/gtest.h"
 

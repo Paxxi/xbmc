@@ -24,7 +24,7 @@
 #include "filesystem/File.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "guilib/GUITextLayout.h"
 #include "guilib/GUIFontManager.h"
@@ -32,6 +32,7 @@
 #include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlayText.h"
 
 using namespace OVERLAY;
+using namespace KODI::UTILS::TEXT;
 
 static color_t color[8] = { 0xFFFFFF00
                           , 0xFFFFFFFF

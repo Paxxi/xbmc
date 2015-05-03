@@ -23,7 +23,7 @@
 #include "pvr/recordings/PVRRecordings.h"
 #include "settings/MediaSettings.h"
 #include "network/upnp/UPnP.h"
-#include "StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Variant.h"
 #include "URIUtils.h"
 #include "URL.h"
@@ -35,6 +35,8 @@
 #include "guilib/GUIWindowManager.h"
 #include "GUIUserMessages.h"
 #include "music/MusicDatabase.h"
+
+using namespace KODI::UTILS::TEXT;
 
 bool CSaveFileStateJob::DoWork()
 {

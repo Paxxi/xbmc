@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  *      Copyright (C) 2012-2013 Team XBMC
  *      http://xbmc.org
@@ -21,6 +23,13 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+
+namespace KODI
+{
+namespace UTILS
+{
+namespace TEXT
+{
 
 typedef enum
 {
@@ -170,3 +179,6 @@ protected:
   // Variable to hold all data of currently processed entry.
   CPOEntry m_Entry;
 };
+}
+}
+}

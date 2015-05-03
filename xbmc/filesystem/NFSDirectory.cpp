@@ -32,10 +32,12 @@
 #include "FileItem.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 using namespace XFILE;
 using namespace std;
+using namespace KODI::UTILS::TEXT;
+
 #include <limits.h>
 #include <nfsc/libnfs-raw-mount.h>
 #include <nfsc/libnfs-raw-nfs.h>

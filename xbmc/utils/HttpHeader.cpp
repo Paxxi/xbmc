@@ -19,7 +19,9 @@
  */
 
 #include "HttpHeader.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 // header white space characters according to RFC 2616
 const char* const CHttpHeader::m_whitespaceChars = " \t";

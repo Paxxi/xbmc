@@ -42,9 +42,9 @@
 #include "DllLibCurl.h"
 #include "ShoutcastFile.h"
 #include "SpecialProtocol.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 using namespace XFILE;
 using namespace XCURL;

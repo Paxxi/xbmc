@@ -22,12 +22,13 @@
 #include "GUIInfoManager.h"
 #include "utils/log.h"
 #include "addons/Skin.h" // for the effect time adjustments
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Tween.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CAnimEffect::CAnimEffect(const TiXmlElement *node, EFFECT_TYPE effect)
 {

@@ -30,7 +30,7 @@
 #ifdef TARGET_WINDOWS
 #include "my_ntddcdrm.h"
 #include "WIN32Util.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #endif
 #if defined(TARGET_LINUX)
 #include <linux/limits.h>

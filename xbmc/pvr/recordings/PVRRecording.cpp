@@ -24,9 +24,9 @@
 #include "settings/AdvancedSettings.h"
 #include "PVRRecordings.h"
 #include "pvr/addons/PVRClients.h"
-#include "utils/StringUtils.h"
-#include "utils/RegExp.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
+#include "utils/text/RegExp.h"
+#include "utils/text/StringUtils.h"
 #include "video/VideoDatabase.h"
 
 #include "epg/Epg.h"
