@@ -27,7 +27,7 @@
 #include "FileItem.h"
 #include "File.h"
 #include "storage/MediaManager.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE;
 using namespace MEDIA_DETECT;

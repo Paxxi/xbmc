@@ -29,7 +29,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "ContextMenuManager.h"
 
 using namespace KODI::UTILS::TEXT;

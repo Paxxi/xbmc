@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "interfaces/AnnouncementManager.h"
 
 #include <cassert>

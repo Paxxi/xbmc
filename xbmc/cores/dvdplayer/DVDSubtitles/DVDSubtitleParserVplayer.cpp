@@ -21,7 +21,7 @@
 #include "DVDSubtitleParserVplayer.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 
 using namespace std;
 using namespace KODI::UTILS::TEXT;

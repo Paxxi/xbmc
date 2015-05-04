@@ -21,8 +21,8 @@
 #include "DVDSubtitleTagSami.h"
 #include "DVDSubtitleStream.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
-#include "utils/text/RegExp.h"
-#include "utils/text/StringUtils.h"
+#include "utils/RegExp.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 

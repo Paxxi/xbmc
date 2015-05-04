@@ -24,7 +24,7 @@
 
 #include "DetectDVDType.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/log.h"
 #include "cdioSupport.h"
 #include "filesystem/iso9660.h"

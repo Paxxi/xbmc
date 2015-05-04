@@ -19,7 +19,7 @@
  */
 #include "PluginSource.h"
 #include "AddonManager.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace KODI::UTILS::TEXT;

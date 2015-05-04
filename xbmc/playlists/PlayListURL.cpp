@@ -21,7 +21,7 @@
 #include "PlayListURL.h"
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;

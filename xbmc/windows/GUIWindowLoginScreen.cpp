@@ -34,7 +34,7 @@
 #include "interfaces/Builtins.h"
 #include "utils/log.h"
 #include "utils/Weather.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "network/Network.h"
 #include "addons/Skin.h"
 #include "guilib/GUIMessage.h"

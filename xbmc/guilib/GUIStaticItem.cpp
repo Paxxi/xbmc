@@ -23,7 +23,7 @@
 #include "GUIControlFactory.h"
 #include "GUIInfoManager.h"
 #include "utils/Variant.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace KODI::UTILS::TEXT;

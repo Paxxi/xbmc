@@ -22,7 +22,7 @@
 
 #include "IHTTPRequestHandler.h"
 #include "network/WebServer.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 IHTTPRequestHandler::IHTTPRequestHandler()
   : m_request(),

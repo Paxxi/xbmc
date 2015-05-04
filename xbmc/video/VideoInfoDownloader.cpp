@@ -20,7 +20,7 @@
 
 #include "VideoInfoDownloader.h"
 #include "utils/XMLUtils.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "NfoFile.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "dialogs/GUIDialogOK.h"

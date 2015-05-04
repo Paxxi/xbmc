@@ -28,7 +28,7 @@
 #ifdef HAS_SYSINFO
 #include "utils/SystemInfo.h"
 #endif
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "storage/MediaManager.h"
 
 using namespace KODI::UTILS::TEXT;

@@ -25,8 +25,8 @@
 #include "XBDateTime.h"
 #include "Util.h"
 #include "utils/Variant.h"
-#include "utils/text/CharsetConverter.h"
-#include "utils/text/StringUtils.h"
+#include "utils/CharsetConverter.h"
+#include "utils/StringUtils.h"
 #include "utils/Archive.h"
 
 using namespace std;

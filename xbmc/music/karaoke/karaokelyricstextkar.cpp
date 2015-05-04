@@ -20,11 +20,11 @@
 
 // C++ Implementation: karaokelyricstextkar
 
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "filesystem/File.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/text/Utf8Utils.h"
+#include "utils/Utf8Utils.h"
 #include <math.h>
 
 #include "karaokelyricstextkar.h"

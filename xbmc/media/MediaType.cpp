@@ -20,7 +20,7 @@
 
 #include "MediaType.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 static std::map<std::string, MediaTypes::MediaTypeInfo> fillDefaultMediaTypes()
 {

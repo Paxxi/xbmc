@@ -63,7 +63,7 @@
 #include "PlatformDefs.h"
 #include "NetworkLinux.h"
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/log.h"
 
 using namespace KODI::UTILS::TEXT;

@@ -29,7 +29,7 @@
 #include "playlists/SmartPlayList.h"
 #include "utils/JSONVariantWriter.h"
 #include "utils/JSONVariantParser.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 namespace JSONRPC
 {

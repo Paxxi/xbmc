@@ -20,10 +20,10 @@
 
 #include <stdlib.h>
 #include "utils/log.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "CompileInfo.h"
 
 #include "test/TestUtils.h"

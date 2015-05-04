@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "DllLibCurl.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 
 using namespace XFILE;
 using namespace XCURL;

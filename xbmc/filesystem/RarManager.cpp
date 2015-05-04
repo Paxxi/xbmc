@@ -21,7 +21,7 @@
 #include "system.h"
 #include "RarManager.h"
 #include "Util.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #include "threads/SingleLock.h"
 #include "Directory.h"
@@ -35,7 +35,7 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "guilib/GUIWindowManager.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include <set>
 

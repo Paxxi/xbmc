@@ -26,7 +26,7 @@
 #include <tinyxml.h>
 #include "utils/log.h"
 #include "utils/MathUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "threads/SystemClock.h"
 #include "GUIInfoManager.h"

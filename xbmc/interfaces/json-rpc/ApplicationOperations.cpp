@@ -28,7 +28,7 @@
 #include "GUIInfoManager.h"
 #include "system.h"
 #include "CompileInfo.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <string.h>
 
 using namespace JSONRPC;

@@ -24,7 +24,7 @@
 
 #include "Win32InterfaceForCLog.h"
 #include "win32/WIN32Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/auto_buffer.h"
 
 #ifndef WIN32_LEAN_AND_MEAN

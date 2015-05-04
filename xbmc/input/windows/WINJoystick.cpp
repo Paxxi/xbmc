@@ -23,7 +23,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/lib/Setting.h"
 #include "utils/log.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 
 #include <math.h>
 #include <memory>

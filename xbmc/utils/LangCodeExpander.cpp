@@ -22,7 +22,7 @@
 #include "LangInfo.h"
 #include "Util.h"
 #include "utils/log.h" 
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 using namespace KODI::UTILS::TEXT;

@@ -19,7 +19,7 @@
  */
 
 #include "system.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "input/XBMC_keysym.h"
 #include "input/XBMC_vkeys.h"
 #include "input/XBMC_keytable.h"

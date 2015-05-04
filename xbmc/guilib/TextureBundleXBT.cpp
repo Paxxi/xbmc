@@ -29,10 +29,10 @@
 #include "filesystem/SpecialProtocol.h"
 #include "utils/EndianSwap.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "XBTF.h"
 #include <lzo/lzo1x.h>
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #ifdef TARGET_WINDOWS
 #pragma comment(lib,"liblzo2.lib")

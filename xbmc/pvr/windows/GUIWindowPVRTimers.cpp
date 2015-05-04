@@ -31,7 +31,7 @@
 #include "pvr/timers/PVRTimers.h"
 #include "pvr/addons/PVRClients.h"
 #include "threads/SingleLock.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace PVR;
 using namespace KODI::UTILS::TEXT;

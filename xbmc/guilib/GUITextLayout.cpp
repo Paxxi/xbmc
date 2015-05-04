@@ -22,8 +22,8 @@
 #include "GUIFont.h"
 #include "GUIControl.h"
 #include "GUIColorManager.h"
-#include "utils/text/CharsetConverter.h"
-#include "utils/text/StringUtils.h"
+#include "utils/CharsetConverter.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace KODI::UTILS::TEXT;

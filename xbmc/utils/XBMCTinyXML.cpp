@@ -20,12 +20,12 @@
 
 #include "XBMCTinyXML.h"
 #include "filesystem/File.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/CharsetConverter.h"
-#include "utils/text/CharsetDetection.h"
-#include "utils/text/Utf8Utils.h"
+#include "utils/StringUtils.h"
+#include "utils/CharsetConverter.h"
+#include "utils/CharsetDetection.h"
+#include "utils/Utf8Utils.h"
 #include "LangInfo.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "utils/log.h"
 
 using namespace KODI::UTILS::TEXT;

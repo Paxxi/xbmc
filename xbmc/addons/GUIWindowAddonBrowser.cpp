@@ -42,7 +42,7 @@
 #include "threads/SingleLock.h"
 #include "settings/Settings.h"
 #include "settings/MediaSourceSettings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "AddonDatabase.h"
 #include "settings/AdvancedSettings.h"
 #include "storage/MediaManager.h"

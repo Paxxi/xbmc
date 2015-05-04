@@ -32,7 +32,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "commons/Exception.h"
 

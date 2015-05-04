@@ -20,7 +20,7 @@
 
 #include "SettingUtils.h"
 #include "settings/lib/Setting.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 std::vector<CVariant> CSettingUtils::GetList(const CSettingList *settingList)
 {

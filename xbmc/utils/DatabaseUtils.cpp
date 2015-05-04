@@ -25,7 +25,7 @@
 #include "music/MusicDatabase.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "video/VideoDatabase.h"
 
 using namespace KODI::UTILS::TEXT;

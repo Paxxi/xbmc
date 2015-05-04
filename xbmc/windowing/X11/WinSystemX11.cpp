@@ -35,7 +35,7 @@
 #include "threads/SingleLock.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "utils/TimeUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/Settings.h"
 #include "windowing/WindowingFactory.h"
 #include "CompileInfo.h"

@@ -25,7 +25,7 @@
 #include "profiles/ProfilesManager.h"
 #include "utils/log.h"
 #include "utils/XMLUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 
 using namespace XFILE;

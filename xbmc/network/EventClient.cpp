@@ -36,7 +36,7 @@
 #include "guilib/GraphicContext.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace EVENTCLIENT;
 using namespace EVENTPACKET;

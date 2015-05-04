@@ -24,7 +24,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include "PVRTimers.h"
 #include "pvr/PVRManager.h"

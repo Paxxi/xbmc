@@ -21,7 +21,7 @@
 #include "DirectoryNodeAlbumRecentlyAdded.h"
 #include "music/MusicDatabase.h"
 #include "FileItem.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 

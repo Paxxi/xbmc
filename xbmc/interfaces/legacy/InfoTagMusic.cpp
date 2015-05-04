@@ -19,7 +19,7 @@
  */
 
 #include "InfoTagMusic.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace KODI::UTILS::TEXT;

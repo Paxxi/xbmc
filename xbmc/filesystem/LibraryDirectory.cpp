@@ -24,7 +24,7 @@
 #include "profiles/ProfilesManager.h"
 #include "SmartPlaylistDirectory.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "guilib/GUIControlFactory.h" // for label parsing
 #include "guilib/TextureManager.h"

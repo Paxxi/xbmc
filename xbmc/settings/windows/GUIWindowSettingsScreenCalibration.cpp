@@ -33,7 +33,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "windowing/WindowingFactory.h"
 
 using namespace std;

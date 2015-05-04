@@ -25,7 +25,7 @@
 #include "LocalizeStrings.h"
 #include "GUIColorManager.h"
 #include "GUIListItem.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "addons/Skin.h"
 
 using namespace std;

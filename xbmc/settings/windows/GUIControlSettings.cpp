@@ -45,7 +45,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "settings/lib/Setting.h"
 #include "storage/MediaManager.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace ADDON;
 using namespace KODI::UTILS::TEXT;

@@ -21,7 +21,7 @@
 #include "HttpRangeUtils.h"
 #include "Util.h"
 #include "network/httprequesthandler/IHTTPRequestHandler.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
 #include <algorithm>

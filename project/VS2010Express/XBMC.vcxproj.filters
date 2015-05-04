@@ -334,9 +334,6 @@
     <Filter Include="interfaces\legacy\wsgi">
       <UniqueIdentifier>{4750236a-887e-40c1-af3e-1e095f5960e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utils\text">
-      <UniqueIdentifier>{ee95809d-14ad-4bdf-97cd-820848a50ebe}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -3063,31 +3060,40 @@
     <ClCompile Include="..\..\xbmc\test\TestUtil.cpp">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\CharsetConverter.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\CharsetDetection.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\POUtils.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\RegExp.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\StringUtils.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\StringValidation.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\TextSearch.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\Utf8Utils.cpp">
-      <Filter>utils\text</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\BitstreamConverter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\CharsetDetection.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\POUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\RegExp.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\ScreenshotAML.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\StringUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\StringValidation.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\SysfsUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\TextSearch.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\Utf8Utils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5680,9 +5686,6 @@
     <ClInclude Include="..\..\xbmc\interfaces\python\ContextItemAddonInvoker.h">
       <Filter>interfaces\python</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\uXstrings.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\IFileItemListModifier.h" />
     <ClInclude Include="..\..\xbmc\playlists\SmartPlaylistFileItemListModifier.h">
       <Filter>playlists</Filter>
@@ -5947,31 +5950,43 @@
     <ClInclude Include="..\..\xbmc\music\EmbeddedArt.h">
       <Filter>music</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\CharsetConverter.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\CharsetDetection.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\POUtils.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\RegExp.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\StringUtils.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\StringValidation.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\TextSearch.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\text\Utf8Utils.h">
-      <Filter>utils\text</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\SortUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\BitstreamConverter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\CharsetDetection.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\IArchivable.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\POUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\RegExp.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\ScreenshotAML.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\StringUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\StringValidation.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\SysfsUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\TextSearch.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\Utf8Utils.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,7 +21,7 @@
 #include "cores/FFmpeg.h"
 #include "utils/log.h"
 #include "threads/SharedSection.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "threads/Thread.h"
 #include "settings/AdvancedSettings.h"
 #include <map>

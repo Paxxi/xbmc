@@ -44,7 +44,7 @@
 #include "TextureCache.h"
 #include "video/windows/GUIWindowVideoBase.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #ifdef TARGET_WINDOWS
 #include "WIN32Util.h"

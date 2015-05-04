@@ -21,7 +21,7 @@
 #include "DirectoryNodeTop100.h"
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace XFILE::MUSICDATABASEDIRECTORY;

@@ -23,8 +23,8 @@
 #include <dbghelp.h>
 #include "Util.h"
 #include "WIN32Util.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/StringUtils.h"
+#include "utils/CharsetConverter.h"
 #include "utils/URIUtils.h"
 
 using namespace KODI::UTILS::TEXT;

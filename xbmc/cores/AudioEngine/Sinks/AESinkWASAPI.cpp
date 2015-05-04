@@ -29,7 +29,7 @@
 #include "utils/TimeUtils.h"
 #include "cores/AudioEngine/Utils/AEDeviceInfo.h"
 #include <Mmreg.h>
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #pragma comment(lib, "Avrt.lib")
 

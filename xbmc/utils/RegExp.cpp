@@ -23,8 +23,8 @@
 #include <algorithm> 
 #include "RegExp.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/Utf8Utils.h"
+#include "utils/StringUtils.h"
+#include "utils/Utf8Utils.h"
 
 namespace KODI
 {

@@ -24,8 +24,8 @@
 #include "utils/URIUtils.h"
 #include "CurlFile.h"
 #include "FileItem.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/StringUtils.h"
+#include "utils/CharsetConverter.h"
 #include "climits"
 
 using namespace XFILE;

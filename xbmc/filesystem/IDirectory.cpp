@@ -25,7 +25,7 @@
 #include "URL.h"
 #include "PasswordManager.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE;
 using namespace KODI::UTILS::TEXT;

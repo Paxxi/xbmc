@@ -19,7 +19,7 @@
  */
 
 #include "utils/fstrcmp.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include "gtest/gtest.h"
 

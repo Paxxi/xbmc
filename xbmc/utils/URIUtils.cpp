@@ -29,7 +29,7 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/MediaSettings.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include <cassert>
 #include <netinet/in.h>

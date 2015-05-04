@@ -32,7 +32,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "storage/MediaManager.h"
 #include "addons/AddonManager.h"
 #include "addons/AudioEncoder.h"

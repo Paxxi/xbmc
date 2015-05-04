@@ -34,7 +34,7 @@
 #include "input/Key.h"
 #include "utils/JobManager.h"
 #include "utils/FileOperationJob.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "addons/AddonInstaller.h"

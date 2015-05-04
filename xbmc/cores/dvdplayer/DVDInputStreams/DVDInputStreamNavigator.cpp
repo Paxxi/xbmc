@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "guilib/Geometry.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #if defined(TARGET_DARWIN)
 #include "osx/CocoaInterface.h"

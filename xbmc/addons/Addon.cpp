@@ -36,7 +36,7 @@
 #include "freebsd/FreeBSDGNUReplacements.h"
 #endif
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "Util.h"

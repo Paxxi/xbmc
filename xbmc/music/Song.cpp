@@ -23,7 +23,7 @@
 #include "utils/Variant.h"
 #include "FileItem.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace MUSIC_INFO;

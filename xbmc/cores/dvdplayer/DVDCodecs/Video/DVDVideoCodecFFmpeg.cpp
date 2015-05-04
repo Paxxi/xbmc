@@ -59,7 +59,7 @@
 #ifdef TARGET_DARWIN_OSX
 #include "VDA.h"
 #endif
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 extern "C" {
 #include "libavutil/opt.h"

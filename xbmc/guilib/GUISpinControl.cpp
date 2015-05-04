@@ -20,7 +20,7 @@
 
 #include "GUISpinControl.h"
 #include "input/Key.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <stdio.h>
 
 using namespace std;

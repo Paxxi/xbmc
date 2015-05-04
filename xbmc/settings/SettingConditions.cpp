@@ -35,7 +35,7 @@
 #include "profiles/ProfilesManager.h"
 #include "pvr/PVRManager.h"
 #include "settings/SettingAddon.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #if defined(HAS_LIBAMCODEC)
 #include "utils/AMLUtils.h"
 #endif // defined(HAS_LIBAMCODEC)

@@ -29,8 +29,8 @@
 #include "Application.h"
 #include "filesystem/MusicDatabaseFile.h"
 #include "FileItem.h"
-#include "utils/text/RegExp.h"
-#include "utils/text/StringUtils.h"
+#include "utils/RegExp.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "utils/XMLUtils.h"
@@ -38,7 +38,7 @@
 #include "cores/AudioEngine/AEFactory.h"
 #include "input/InputManager.h"
 #if defined(TARGET_WINDOWS)
-  #include "utils/text/CharsetConverter.h"
+  #include "utils/CharsetConverter.h"
   #include "Windows.h"
 #endif
 #if defined(TARGET_ANDROID)

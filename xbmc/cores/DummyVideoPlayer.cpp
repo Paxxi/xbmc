@@ -28,7 +28,7 @@
 #include "settings/AdvancedSettings.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 

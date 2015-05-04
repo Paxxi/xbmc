@@ -26,7 +26,7 @@
 #include "PlayListURL.h"
 #include "PlayListXML.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace PLAYLIST;
 using namespace KODI::UTILS::TEXT;

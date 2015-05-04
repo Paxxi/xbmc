@@ -46,7 +46,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <algorithm>
-#include "utils/text/RegExp.h" // don't move or std functions end up in PCRE namespace
+#include "utils/RegExp.h" // don't move or std functions end up in PCRE namespace
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 

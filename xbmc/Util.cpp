@@ -58,13 +58,13 @@
 #include "filesystem/UPnPDirectory.h"
 #endif
 #include "profiles/ProfilesManager.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/TextureManager.h"
 #include "utils/fstrcmp.h"
 #include "storage/MediaManager.h"
 #ifdef TARGET_WINDOWS
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include <shlobj.h>
 #include "WIN32Util.h"
 #endif
@@ -75,7 +75,7 @@
 #include "filesystem/File.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #ifdef HAS_IRSERVERSUITE
   #include "input/windows/IRServerSuite.h"

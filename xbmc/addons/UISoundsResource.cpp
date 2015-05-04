@@ -20,7 +20,7 @@
 #include "UISoundsResource.h"
 #include "guilib/GUIAudioManager.h"
 #include "settings/Settings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 

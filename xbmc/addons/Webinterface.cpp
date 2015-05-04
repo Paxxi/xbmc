@@ -21,7 +21,7 @@
 #include "Webinterface.h"
 #include "addons/AddonManager.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace ADDON;

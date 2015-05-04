@@ -19,7 +19,7 @@
  */
 
 #include "InfoBool.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 namespace INFO
 {

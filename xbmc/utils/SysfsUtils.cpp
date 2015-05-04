@@ -20,7 +20,7 @@
 
 #include "SysfsUtils.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include <unistd.h>
 #include <stdio.h>

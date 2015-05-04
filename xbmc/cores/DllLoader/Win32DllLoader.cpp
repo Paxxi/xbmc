@@ -22,9 +22,9 @@
 #include "DllLoader.h"
 #include "DllLoaderContainer.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 
 #include "dll_tracker_library.h"
 #include "dll_tracker_file.h"

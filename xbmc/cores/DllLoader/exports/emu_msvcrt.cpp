@@ -68,7 +68,7 @@
 #include "utils/log.h"
 #include "threads/SingleLock.h"
 #ifndef TARGET_POSIX
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #endif
 #if defined(TARGET_ANDROID)
@@ -77,7 +77,7 @@
 #include <dlfcn.h>
 #endif
 #include "utils/Environment.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace XFILE;

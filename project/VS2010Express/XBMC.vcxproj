@@ -1015,27 +1015,29 @@
     <ClInclude Include="..\..\xbmc\settings\windows\GUIWindowTestPattern.h" />
     <ClInclude Include="..\..\xbmc\utils\ActorProtocol.h" />
     <ClInclude Include="..\..\xbmc\utils\auto_buffer.h" />
+    <ClInclude Include="..\..\xbmc\utils\BitstreamConverter.h" />
     <ClInclude Include="..\..\xbmc\utils\BooleanLogic.h" />
+    <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h" />
+    <ClInclude Include="..\..\xbmc\utils\CharsetDetection.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpRangeUtils.h" />
+    <ClInclude Include="..\..\xbmc\utils\IArchivable.h" />
     <ClInclude Include="..\..\xbmc\utils\IRssObserver.h" />
     <ClInclude Include="..\..\xbmc\utils\IXmlDeserializable.h" />
     <ClInclude Include="..\..\xbmc\utils\LegacyPathTranslation.h" />
     <ClInclude Include="..\..\xbmc\utils\Locale.h" />
     <ClInclude Include="..\..\xbmc\utils\params_check_macros.h" />
+    <ClInclude Include="..\..\xbmc\utils\POUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\ProgressJob.h" />
+    <ClInclude Include="..\..\xbmc\utils\RegExp.h" />
     <ClInclude Include="..\..\xbmc\utils\RssManager.h" />
-    <ClInclude Include="..\..\xbmc\utils\SortUtils.h" />
+    <ClInclude Include="..\..\xbmc\utils\ScreenshotAML.h" />
     <ClInclude Include="..\..\xbmc\utils\Speed.h" />
+    <ClInclude Include="..\..\xbmc\utils\StringUtils.h" />
+    <ClInclude Include="..\..\xbmc\utils\StringValidation.h" />
+    <ClInclude Include="..\..\xbmc\utils\SysfsUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\Temperature.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\CharsetConverter.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\CharsetDetection.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\POUtils.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\RegExp.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\StringUtils.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\StringValidation.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\TextSearch.h" />
-    <ClInclude Include="..\..\xbmc\utils\text\Utf8Utils.h" />
-    <ClInclude Include="..\..\xbmc\utils\uXstrings.h" />
+    <ClInclude Include="..\..\xbmc\utils\TextSearch.h" />
+    <ClInclude Include="..\..\xbmc\utils\Utf8Utils.h" />
     <ClInclude Include="..\..\xbmc\utils\Vector.h" />
     <ClInclude Include="..\..\xbmc\utils\win32\Win32InterfaceForCLog.h" />
     <ClInclude Include="..\..\xbmc\utils\win32\Win32Log.h" />
@@ -1147,14 +1149,22 @@
     <ClCompile Include="..\..\xbmc\ThumbLoader.cpp" />
     <ClCompile Include="..\..\xbmc\utils\ActorProtocol.cpp" />
     <ClCompile Include="..\..\xbmc\utils\auto_buffer.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\BitstreamConverter.cpp" />
     <ClCompile Include="..\..\xbmc\utils\BooleanLogic.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\CharsetDetection.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpRangeUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\LegacyPathTranslation.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Locale.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\POUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\ProgressJob.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\RegExp.cpp" />
     <ClCompile Include="..\..\xbmc\utils\RssManager.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\ScreenshotAML.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Speed.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\StringUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\StringValidation.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\SysfsUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Temperature.cpp" />
     <ClCompile Include="..\..\xbmc\utils\test\TestHttpRangeUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -1168,14 +1178,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\text\CharsetConverter.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\CharsetDetection.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\POUtils.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\RegExp.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\StringUtils.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\StringValidation.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\TextSearch.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\text\Utf8Utils.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\TextSearch.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\Utf8Utils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Vector.cpp" />
     <ClCompile Include="..\..\xbmc\utils\win32\Win32InterfaceForCLog.cpp" />
     <ClCompile Include="..\..\xbmc\utils\win32\Win32Log.cpp" />
@@ -1238,6 +1242,7 @@
     <ClCompile Include="..\..\xbmc\utils\ScraperParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\ScraperUrl.cpp" />
     <ClCompile Include="..\..\xbmc\utils\SeekHandler.cpp" />
+    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Splash.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Stopwatch.cpp" />
     <ClCompile Include="..\..\xbmc\utils\StreamDetails.cpp" />
@@ -2091,6 +2096,7 @@
     <ClInclude Include="..\..\xbmc\utils\ScraperParser.h" />
     <ClInclude Include="..\..\xbmc\utils\ScraperUrl.h" />
     <ClInclude Include="..\..\xbmc\utils\SeekHandler.h" />
+    <ClInclude Include="..\..\xbmc\utils\SortUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\Splash.h" />
     <ClInclude Include="..\..\xbmc\utils\Stopwatch.h" />
     <ClInclude Include="..\..\xbmc\utils\StreamDetails.h" />

@@ -22,7 +22,7 @@
 
 #include "Temperature.h"
 #include "utils/Archive.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 CTemperature::CTemperature()
 {

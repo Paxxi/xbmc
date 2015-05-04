@@ -24,7 +24,7 @@
 #include "threads/SingleLock.h"
 #include "log.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 using namespace std;

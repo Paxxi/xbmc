@@ -34,7 +34,7 @@
 #include "settings/Settings.h"
 #include "settings/MediaSettings.h"
 #include "utils/AutoPtrHandle.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "RenderFlags.h"

@@ -22,7 +22,7 @@
 #include "addons/AddonManager.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "XBDateTime.h"
 #include "dbwrappers/dataset.h"
 #include "addons/ContextItemAddon.h"

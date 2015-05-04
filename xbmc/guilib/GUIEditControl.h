@@ -30,7 +30,7 @@
 
 #include "GUIButtonControl.h"
 #include "utils/Stopwatch.h"
-#include "utils/text/StringValidation.h"
+#include "utils/StringValidation.h"
 
 
 /*!

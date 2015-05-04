@@ -24,9 +24,9 @@
 #include "KeyboardLayout.h"
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 using namespace KODI::UTILS::TEXT;

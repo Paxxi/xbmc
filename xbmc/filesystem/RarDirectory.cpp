@@ -24,7 +24,7 @@
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "FileItem.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 namespace XFILE
 {

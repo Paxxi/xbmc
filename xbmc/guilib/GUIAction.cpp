@@ -19,7 +19,7 @@
  */
 
 #include "GUIAction.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "GUIWindowManager.h"
 #include "GUIControl.h"
 #include "GUIInfoManager.h"

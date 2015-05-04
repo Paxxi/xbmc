@@ -28,7 +28,7 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 #include "utils/HTMLUtil.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "utils/log.h"

@@ -22,7 +22,7 @@
 
 #include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Archive.h"
 #include "Util.h"
@@ -53,7 +53,7 @@
 #include "URL.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "utils/log.h"
 #include "utils/Variant.h"
 #include "music/karaoke/karaokelyricsfactory.h"

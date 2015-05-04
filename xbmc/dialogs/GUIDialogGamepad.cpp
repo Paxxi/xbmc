@@ -20,11 +20,11 @@
 
 #include "GUIDialogGamepad.h"
 #include "utils/md5.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "guilib/GUIAudioManager.h"
 #include "guilib/GUIWindowManager.h"
 #include "GUIDialogOK.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 

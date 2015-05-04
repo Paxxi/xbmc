@@ -20,7 +20,7 @@
  */
 
 #include "IDirectory.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include <string>
 
 namespace XFILE

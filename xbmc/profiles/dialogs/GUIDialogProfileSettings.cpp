@@ -34,7 +34,7 @@
 #include "settings/lib/Setting.h"
 #include "storage/MediaManager.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 using namespace KODI::UTILS::TEXT;

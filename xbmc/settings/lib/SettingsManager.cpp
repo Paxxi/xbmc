@@ -23,7 +23,7 @@
 #include "SettingSection.h"
 #include "Setting.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 #include <algorithm>

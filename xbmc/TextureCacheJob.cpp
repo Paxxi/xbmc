@@ -28,7 +28,7 @@
 #include "filesystem/File.h"
 #include "pictures/Picture.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 #include "FileItem.h"
 #include "music/MusicThumbLoader.h"

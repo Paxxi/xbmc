@@ -22,7 +22,7 @@
 #include "music/MusicDatabase.h"
 #include "FileItem.h"
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "music/tags/MusicInfoTag.h"
 #include "music/Artist.h"

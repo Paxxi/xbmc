@@ -20,7 +20,7 @@
 
 #include "LanguageHook.h"
 #include "swig.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "interfaces/legacy/AddonString.h"
 
 #include <string>

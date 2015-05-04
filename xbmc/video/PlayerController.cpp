@@ -37,7 +37,7 @@
 #endif
 #include "Application.h"
 #include "utils/LangCodeExpander.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 

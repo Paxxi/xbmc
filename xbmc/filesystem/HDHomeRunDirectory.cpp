@@ -22,7 +22,7 @@
 #include "URL.h"
 #include "FileItem.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "DllHDHomeRun.h"
 
 using namespace XFILE;

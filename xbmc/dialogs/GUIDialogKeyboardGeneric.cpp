@@ -30,8 +30,8 @@
 #include "GUIDialogOK.h"
 #include "GUIDialogKeyboardGeneric.h"
 #include "settings/Settings.h"
-#include "utils/text/RegExp.h"
-#include "utils/text/StringUtils.h"
+#include "utils/RegExp.h"
+#include "utils/StringUtils.h"
 #include "ApplicationMessenger.h"
 #include "windowing/WindowingFactory.h"
 

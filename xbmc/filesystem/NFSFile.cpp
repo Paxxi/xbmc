@@ -28,7 +28,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "network/DNSNameCache.h"
 #include "threads/SystemClock.h"
 

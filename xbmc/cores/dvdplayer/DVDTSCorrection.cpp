@@ -22,7 +22,7 @@
 #include "DVDClock.h"
 #include "DVDCodecs/DVDCodecUtils.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <cmath>
 
 #define MAXERR DVD_MSEC_TO_TIME(2.5)

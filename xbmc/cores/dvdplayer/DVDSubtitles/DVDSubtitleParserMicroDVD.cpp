@@ -21,7 +21,7 @@
 #include "DVDSubtitleParserMicroDVD.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "DVDClock.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "DVDStreamInfo.h"
 #include "utils/log.h"
 #include "DVDSubtitleTagMicroDVD.h"

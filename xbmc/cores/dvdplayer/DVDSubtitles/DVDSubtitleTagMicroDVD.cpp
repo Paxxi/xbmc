@@ -20,7 +20,7 @@
 
 #include "DVDSubtitleTagMicroDVD.h"
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 void CDVDSubtitleTagMicroDVD::ConvertLine(CDVDOverlayText* pOverlay, const char* line, int len)
 {

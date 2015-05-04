@@ -34,7 +34,7 @@
 #endif
 
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "XBDateTime.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"

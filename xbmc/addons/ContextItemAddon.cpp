@@ -25,7 +25,7 @@
 #include "GUIInfoManager.h"
 #include "interfaces/info/InfoBool.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include <boost/lexical_cast.hpp>
 

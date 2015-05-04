@@ -54,7 +54,7 @@
 #include "storage/MediaManager.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/LegacyPathTranslation.h"
 #include "utils/log.h"

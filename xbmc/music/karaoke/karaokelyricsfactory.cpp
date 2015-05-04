@@ -20,7 +20,7 @@
 
 // C++ Implementation: karaokelyricsfactory
 
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 

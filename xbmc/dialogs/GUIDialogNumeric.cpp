@@ -24,7 +24,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "GUIDialogOK.h"
 #include "input/XBMC_vkeys.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "interfaces/AnnouncementManager.h"

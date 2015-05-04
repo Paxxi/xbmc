@@ -38,7 +38,7 @@
 #include "pvr/addons/PVRClients.h"
 #include "settings/Settings.h"
 #include "storage/MediaManager.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #define BUTTON_OK                 4
 #define BUTTON_APPLY              5

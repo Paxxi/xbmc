@@ -30,7 +30,7 @@
 #include <vector>
 #include "settings/MediaSourceSettings.h"
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 #include "settings/Settings.h"
 

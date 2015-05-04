@@ -37,7 +37,7 @@
 #include "settings/Settings.h"
 #include <memory>
 #include "utils/AutoPtrHandle.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "utils/Log.h"

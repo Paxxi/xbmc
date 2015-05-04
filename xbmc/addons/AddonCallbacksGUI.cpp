@@ -28,7 +28,7 @@
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
 #include "utils/TimeUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
 #include "guilib/TextureManager.h"

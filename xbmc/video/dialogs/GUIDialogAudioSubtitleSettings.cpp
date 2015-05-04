@@ -39,7 +39,7 @@
 #include "settings/lib/SettingsManager.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 

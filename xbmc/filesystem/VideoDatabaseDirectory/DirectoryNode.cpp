@@ -40,7 +40,7 @@
 #include "settings/AdvancedSettings.h"
 #include "FileItem.h"
 #include "filesystem/File.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/Variant.h"
 #include "video/VideoDatabase.h"

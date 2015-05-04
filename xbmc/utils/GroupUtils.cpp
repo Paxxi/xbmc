@@ -23,7 +23,7 @@
 
 #include "GroupUtils.h"
 #include "FileItem.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "video/VideoDbUrl.h"
 #include "video/VideoInfoTag.h"

@@ -24,8 +24,8 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/lib/Setting.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/RegExp.h"
+#include "utils/StringUtils.h"
+#include "utils/RegExp.h"
 
 #include <math.h>
 

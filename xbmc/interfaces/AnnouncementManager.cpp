@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include "utils/log.h"
 #include "utils/Variant.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "FileItem.h"
 #include "music/tags/MusicInfoTag.h"
 #include "music/MusicDatabase.h"

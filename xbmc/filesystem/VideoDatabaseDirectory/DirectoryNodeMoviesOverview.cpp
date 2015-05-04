@@ -23,7 +23,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "video/VideoDatabase.h"
 #include "video/VideoDbUrl.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 using namespace std;

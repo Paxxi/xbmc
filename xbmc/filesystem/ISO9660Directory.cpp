@@ -22,7 +22,7 @@
 #include "iso9660.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 #include "FileItem.h"
 

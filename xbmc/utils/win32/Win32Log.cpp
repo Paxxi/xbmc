@@ -19,8 +19,8 @@
 */
 
 #include "Win32Log.h"
-#include "utils/text/StringUtils.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/StringUtils.h"
+#include "utils/CharsetConverter.h"
 
 using namespace KODI::UTILS::TEXT;
 

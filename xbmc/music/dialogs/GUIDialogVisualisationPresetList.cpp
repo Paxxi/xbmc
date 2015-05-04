@@ -25,7 +25,7 @@
 #include "FileItem.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #define CONTROL_HEADER_LABEL   2
 #define CONTROL_NONE_AVAILABLE 4

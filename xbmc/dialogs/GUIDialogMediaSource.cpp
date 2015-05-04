@@ -26,7 +26,7 @@
 #include "input/Key.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "filesystem/Directory.h"
 #include "filesystem/PluginDirectory.h"
 #include "filesystem/PVRDirectory.h"
@@ -37,7 +37,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "PasswordManager.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #if defined(TARGET_ANDROID)
 #include "android/activity/XBMCApp.h"

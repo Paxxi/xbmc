@@ -27,7 +27,7 @@
 #include "system.h"
 #include "PlatformInclude.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "../xbmc/utils/log.h"
 #include "threads/SystemClock.h"
 #include "CompileInfo.h"

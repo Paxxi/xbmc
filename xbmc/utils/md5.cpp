@@ -19,7 +19,7 @@
  */
 
 #include "md5.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 typedef unsigned char md5byte;
 

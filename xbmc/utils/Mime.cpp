@@ -26,7 +26,7 @@
 #include "music/tags/MusicInfoTag.h"
 #include "video/VideoInfoTag.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "filesystem/CurlFile.h"
 
 using namespace std;

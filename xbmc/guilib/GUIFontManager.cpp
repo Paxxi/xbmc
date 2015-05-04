@@ -32,7 +32,7 @@
 #include "settings/lib/Setting.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "windowing/WindowingFactory.h"
 #include "FileItem.h"
 #include "URL.h"

@@ -29,9 +29,9 @@
 #ifdef TARGET_WINDOWS
 #include "utils/SystemInfo.h"
 #include "win32/WIN32Util.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #endif
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 

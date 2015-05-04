@@ -21,7 +21,7 @@
 #include "MusicDbUrl.h"
 #include "filesystem/MusicDatabaseDirectory.h"
 #include "playlists/SmartPlayList.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
 using namespace std;

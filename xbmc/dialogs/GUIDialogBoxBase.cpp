@@ -22,7 +22,7 @@
 #include "GUIDialogBoxBase.h"
 #include "guilib/LocalizeStrings.h"
 #include "threads/SingleLock.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 using namespace std;

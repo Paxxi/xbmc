@@ -22,7 +22,7 @@
 #include "GUIWindowManager.h"
 #include "input/Key.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 

@@ -22,7 +22,7 @@
 
 #include <math.h>
 
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "settings/DisplaySettings.h"
 #include "settings/Settings.h"
 #include "guilib/GUITextLayout.h"
@@ -34,7 +34,7 @@
 #include "addons/Skin.h"
 #include "utils/MathUtils.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace KODI::UTILS::TEXT;
 

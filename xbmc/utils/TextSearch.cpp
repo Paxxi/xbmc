@@ -19,7 +19,7 @@
  */
 
 #include "TextSearch.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 namespace KODI

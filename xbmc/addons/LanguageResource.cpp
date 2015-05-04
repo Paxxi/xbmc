@@ -24,7 +24,7 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIWindowManager.h"
 #include "settings/Settings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #define LANGUAGE_SETTING        "locale.language"
 #define LANGUAGE_ADDON_PREFIX   "resource.language."

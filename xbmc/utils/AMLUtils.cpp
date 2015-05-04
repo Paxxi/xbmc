@@ -33,6 +33,8 @@
 #include "utils/AMLUtils.h"
 #include "guilib/gui3d.h"
 
+using namespace KODI::UTILS::TEXT;
+
 bool aml_present()
 {
   static int has_aml = -1;

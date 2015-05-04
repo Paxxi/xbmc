@@ -22,7 +22,7 @@
 #include "FileItem.h"
 #include "music/MusicDatabase.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 namespace XFILE
 {

@@ -23,7 +23,7 @@
 #include "FileItem.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #define CONTROL_HEADING       1
 #define CONTROL_LIST          3

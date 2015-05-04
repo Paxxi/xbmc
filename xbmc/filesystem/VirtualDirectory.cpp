@@ -24,7 +24,7 @@
 #include "URL.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "Directory.h"
 #include "DirectoryCache.h"
 #include "SourcesDirectory.h"

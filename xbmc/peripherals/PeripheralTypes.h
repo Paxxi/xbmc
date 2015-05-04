@@ -26,7 +26,7 @@
 #ifdef TARGET_WINDOWS
 #include "PlatformDefs.h"
 #endif
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 class CSetting;
 

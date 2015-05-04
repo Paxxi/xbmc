@@ -26,7 +26,7 @@
 #include "ApplicationMessenger.h"
 #include "TextureCache.h"
 #include "filesystem/File.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace JSONRPC;

@@ -36,7 +36,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "ApplicationMessenger.h"
 #include "Application.h"
 #include "URL.h"

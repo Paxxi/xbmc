@@ -60,7 +60,7 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "video/VideoInfoTag.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 #include "music/infoscanner/MusicInfoScanner.h"
 #include "cores/IPlayer.h"

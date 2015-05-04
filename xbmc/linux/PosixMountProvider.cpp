@@ -21,7 +21,7 @@
 #include <cstdlib>
 
 #include "PosixMountProvider.h"
-#include "utils/text/RegExp.h"
+#include "utils/RegExp.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 

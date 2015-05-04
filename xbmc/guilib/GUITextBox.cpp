@@ -22,7 +22,7 @@
 #include "GUIInfoManager.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/MathUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include <algorithm>
 

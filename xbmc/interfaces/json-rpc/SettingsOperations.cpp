@@ -28,7 +28,7 @@
 #include "settings/lib/Setting.h"
 #include "settings/lib/SettingSection.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace JSONRPC;

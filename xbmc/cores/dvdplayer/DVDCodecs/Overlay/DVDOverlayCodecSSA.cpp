@@ -25,7 +25,7 @@
 #include "DVDClock.h"
 #include "Util.h"
 #include "utils/AutoPtrHandle.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace AUTOPTR;
 using namespace std;

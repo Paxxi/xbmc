@@ -22,7 +22,7 @@
 
 #include "Speed.h"
 #include "utils/Archive.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 CSpeed::CSpeed()
 {

@@ -29,7 +29,7 @@
 #include "utils/Variant.h"
 #include "guilib/GUIWindowManager.h"
 #include "Application.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace ANNOUNCEMENT;
 using namespace KODI::UTILS::TEXT;

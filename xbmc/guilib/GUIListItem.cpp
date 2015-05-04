@@ -21,8 +21,8 @@
 #include "GUIListItem.h"
 #include "GUIListItemLayout.h"
 #include "utils/Archive.h"
-#include "utils/text/CharsetConverter.h"
-#include "utils/text/StringUtils.h"
+#include "utils/CharsetConverter.h"
+#include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
 using namespace std;

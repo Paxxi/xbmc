@@ -22,7 +22,7 @@
 #include "GUIInfoManager.h"
 #include "input/Key.h"
 #include "utils/MathUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "GUIWindowManager.h"
 
 using namespace KODI::UTILS::TEXT;

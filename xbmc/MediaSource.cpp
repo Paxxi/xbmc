@@ -24,7 +24,7 @@
 #include "URL.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace XFILE;

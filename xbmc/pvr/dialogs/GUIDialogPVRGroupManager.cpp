@@ -27,7 +27,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIRadioButtonControl.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"

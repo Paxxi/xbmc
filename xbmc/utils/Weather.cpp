@@ -24,7 +24,7 @@
 #include "Weather.h"
 #include "filesystem/ZipManager.h"
 #include "XMLUtils.h"
-#include "utils/text/POUtils.h"
+#include "utils/POUtils.h"
 #include "utils/Temperature.h"
 #include "network/Network.h"
 #include "Application.h"
@@ -37,12 +37,12 @@
 #include "guilib/WindowIDs.h"
 #include "guilib/LocalizeStrings.h"
 #include "filesystem/Directory.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URIUtils.h"
 #include "log.h"
 #include "addons/AddonManager.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 #include "addons/GUIDialogAddonSettings.h"
 
 using namespace std;

@@ -29,7 +29,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/RssReader.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using namespace XFILE;

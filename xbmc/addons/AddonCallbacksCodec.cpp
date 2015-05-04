@@ -21,7 +21,7 @@
 #include "Application.h"
 #include "Addon.h"
 #include "AddonCallbacksCodec.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 extern "C" {
 #include "libavcodec/avcodec.h"

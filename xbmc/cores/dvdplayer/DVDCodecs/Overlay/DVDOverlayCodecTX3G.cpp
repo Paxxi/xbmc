@@ -25,7 +25,7 @@
 #include "DVDCodecs/DVDCodecs.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/auto_buffer.h"
 
 // 3GPP/TX3G (aka MPEG-4 Timed Text) Subtitle support

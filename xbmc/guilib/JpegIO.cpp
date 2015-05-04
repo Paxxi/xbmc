@@ -27,7 +27,7 @@
 #include "utils/log.h"
 #include "XBTF.h"
 #include "JpegIO.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <setjmp.h>
 
 #define EXIF_TAG_ORIENTATION    0x0112

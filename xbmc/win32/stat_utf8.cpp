@@ -19,7 +19,7 @@
  */
 
 #include "stat_utf8.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 
 int stat64_utf8(const char* __file, struct stat64* __buf)
 {

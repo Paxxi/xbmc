@@ -29,7 +29,7 @@
 #include "dll_tracker.h" // for python unload hack
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "utils/log.h"
 #include "URL.h"
 

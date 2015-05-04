@@ -19,7 +19,7 @@
  */
 
 #include "HTMLUtil.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <wctype.h>
 
 using namespace std;

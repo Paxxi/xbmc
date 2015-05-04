@@ -21,7 +21,7 @@
 #include "SettingCreator.h"
 #include "settings/SettingAddon.h"
 #include "settings/SettingPath.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 CSetting* CSettingCreator::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = NULL */) const
 {

@@ -21,7 +21,7 @@
 #include "DNSNameCache.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>

@@ -20,7 +20,7 @@
 
 #include "XMLUtils.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #ifdef TARGET_WINDOWS
 #include "PlatformDefs.h" //for strcasecmp
 #endif

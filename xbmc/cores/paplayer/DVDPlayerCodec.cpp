@@ -30,7 +30,7 @@
 #include "music/tags/TagLoaderTagLib.h"
 #include "utils/log.h"
 #include "URL.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 
 DVDPlayerCodec::DVDPlayerCodec()
 {

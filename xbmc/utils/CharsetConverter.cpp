@@ -20,14 +20,14 @@
 
 #include "CharsetConverter.h"
 #include "Util.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include <fribidi/fribidi.h>
 #include "LangInfo.h"
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
-#include "utils/text/Utf8Utils.h"
+#include "utils/Utf8Utils.h"
 #include "utils/log.h"
 
 #include <errno.h>

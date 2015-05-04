@@ -21,7 +21,7 @@
 #include "MusicAlbumInfo.h"
 #include "addons/Scraper.h"
 #include "utils/log.h"
-#include "utils/text/StringUtils.h"
+#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
 using namespace std;

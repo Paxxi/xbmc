@@ -26,7 +26,7 @@
 #include "settings/DisplaySettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/text/CharsetConverter.h"
+#include "utils/CharsetConverter.h"
 
 #ifdef TARGET_WINDOWS
 #include <tpcshrd.h>
