@@ -43,6 +43,7 @@
 
 using namespace std;
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 map<string, CVariant> CJSONServiceDescription::m_notifications = map<string, CVariant>();
 CJSONServiceDescription::CJsonRpcMethodMap CJSONServiceDescription::m_actionMap;

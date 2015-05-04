@@ -64,6 +64,8 @@
 
 #define MAXPRESENTDELAY 0.500
 
+using namespace KODI::UTILS::TEXT;
+
 /* at any point we want an exclusive lock on rendermanager */
 /* we must make sure we don't have a graphiccontext lock */
 /* these two functions allow us to step out from that lock */

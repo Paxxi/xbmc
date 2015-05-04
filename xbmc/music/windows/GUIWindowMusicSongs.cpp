@@ -58,6 +58,7 @@
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;
 #endif
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowMusicSongs::CGUIWindowMusicSongs(void)
     : CGUIWindowMusicBase(WINDOW_MUSIC_FILES, "MyMusicSongs.xml")

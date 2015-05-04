@@ -20,13 +20,15 @@
 
 #include "SysfsUtils.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
+
+using namespace KODI::UTILS::TEXT;
 
 int SysfsUtils::SetString(const std::string& path, const std::string& valstr)
 {

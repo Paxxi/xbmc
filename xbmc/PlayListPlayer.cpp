@@ -39,6 +39,7 @@
 #include "URL.h"
 
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 CPlayListPlayer::CPlayListPlayer(void)
 {

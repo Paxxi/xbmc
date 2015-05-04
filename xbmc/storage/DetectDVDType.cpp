@@ -24,7 +24,7 @@
 
 #include "DetectDVDType.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "cdioSupport.h"
 #include "filesystem/iso9660.h"
@@ -54,6 +54,7 @@
 
 using namespace XFILE;
 using namespace MEDIA_DETECT;
+using namespace KODI::UTILS::TEXT;
 
 CCriticalSection CDetectDVDMedia::m_muReadingMedia;
 CEvent CDetectDVDMedia::m_evAutorun;

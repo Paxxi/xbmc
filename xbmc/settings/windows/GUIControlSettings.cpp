@@ -48,6 +48,7 @@
 #include "utils/text/StringUtils.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CGUIControlBaseSetting::CGUIControlBaseSetting(int id, CSetting *pSetting)
   : m_id(id),

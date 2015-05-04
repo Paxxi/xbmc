@@ -44,6 +44,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRChannelGroup::CPVRChannelGroup(void) :
     m_bRadio(false),

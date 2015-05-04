@@ -30,6 +30,8 @@
 #include "utils/log.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 namespace ADDON
 {
 

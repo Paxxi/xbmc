@@ -61,6 +61,7 @@ using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTNVIEWASICONS     2
 #define CONTROL_BTNSORTBY          3

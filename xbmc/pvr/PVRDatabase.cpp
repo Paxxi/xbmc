@@ -34,6 +34,7 @@
 using namespace dbiplus;
 using namespace PVR;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 #define PVRDB_DEBUGGING 0
 

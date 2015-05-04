@@ -46,6 +46,7 @@
 using namespace XFILE;
 using namespace std;
 using namespace VIDEO;
+using namespace KODI::UTILS::TEXT;
 
 CThumbExtractor::CThumbExtractor(const CFileItem& item,
                                  const std::string& listpath,

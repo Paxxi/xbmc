@@ -36,6 +36,7 @@
 
 using namespace ANNOUNCEMENT;
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 bool CJSONRPC::m_initialized = false;

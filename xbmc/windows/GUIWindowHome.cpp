@@ -32,6 +32,7 @@
 #include "utils/text/StringUtils.h"
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), 
                                        m_recentlyAddedRunning(false),

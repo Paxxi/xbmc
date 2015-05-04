@@ -39,6 +39,8 @@
 #include "utils/LangCodeExpander.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 CPlayerController::CPlayerController()
 {
   m_sliderAction = 0;

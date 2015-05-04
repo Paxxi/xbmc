@@ -34,6 +34,7 @@
 #include <dirent.h>
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 map<std::string, std::string> CSpecialProtocol::m_pathMap;

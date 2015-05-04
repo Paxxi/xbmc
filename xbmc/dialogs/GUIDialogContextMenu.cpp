@@ -50,6 +50,7 @@
 #include "WIN32Util.h"
 #endif
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define BACKGROUND_IMAGE       999

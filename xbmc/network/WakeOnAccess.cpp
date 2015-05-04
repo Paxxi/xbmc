@@ -43,6 +43,7 @@
 
 #include "WakeOnAccess.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define DEFAULT_NETWORK_INIT_SEC      (20)   // wait 20 sec for network after startup or resume

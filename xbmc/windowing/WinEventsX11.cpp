@@ -33,7 +33,7 @@
 #include "X11/keysymdef.h"
 #include "X11/XF86keysym.h"
 #include "utils/log.h"
-#include "utils/CharsetConverter.h"
+#include "utils/text/CharsetConverter.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/MouseStat.h"
 #include "input/InputManager.h"
@@ -45,6 +45,8 @@
 #ifdef HAS_SDL_JOYSTICK
 #include "input/SDLJoystick.h"
 #endif
+
+using namespace KODI::UTILS::TEXT;
 
 CWinEventsX11Imp* CWinEventsX11Imp::WinEvents = 0;
 

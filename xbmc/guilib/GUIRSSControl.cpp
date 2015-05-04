@@ -27,6 +27,7 @@
 #include "utils/RssReader.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CGUIRSSControl::CGUIRSSControl(int parentID, int controlID, float posX, float posY, float width, float height, const CLabelInfo& labelInfo, const CGUIInfoColor &channelColor, const CGUIInfoColor &headlineColor, std::string& strRSSTags)

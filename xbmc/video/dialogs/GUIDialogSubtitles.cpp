@@ -48,6 +48,7 @@
 
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_NAMELABEL            100
 #define CONTROL_NAMELOGO             110

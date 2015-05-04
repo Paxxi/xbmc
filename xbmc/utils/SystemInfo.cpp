@@ -74,6 +74,8 @@
 #include <linux/version.h>
 #endif
 
+using namespace KODI::UTILS::TEXT;
+
 /* Expand macro before stringify */
 #define STR_MACRO(x) #x
 #define XSTR_MACRO(x) STR_MACRO(x)

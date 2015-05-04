@@ -73,6 +73,7 @@ using namespace std;
 using namespace AUTOPTR;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS::TEXT;
 using ADDON::AddonPtr;
 
 #define RECENTLY_PLAYED_LIMIT 25

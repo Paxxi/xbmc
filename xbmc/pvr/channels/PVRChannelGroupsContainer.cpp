@@ -29,6 +29,7 @@
 #include "utils/text/StringUtils.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void) :
     m_groupsRadio(new CPVRChannelGroups(true)),

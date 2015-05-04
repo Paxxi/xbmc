@@ -98,6 +98,7 @@
 
 #include "cores/dvdplayer/DVDDemuxers/DVDDemux.h"
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #ifdef HAS_DVD_DRIVE

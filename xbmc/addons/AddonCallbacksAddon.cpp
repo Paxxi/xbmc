@@ -35,6 +35,7 @@
 #include "cores/dvdplayer/DVDCodecs/DVDCodecs.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 namespace ADDON
 {

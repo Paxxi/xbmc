@@ -32,11 +32,12 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "commons/Exception.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 void xb_smbc_log(const char* msg)
 {

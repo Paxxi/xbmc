@@ -43,7 +43,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "utils/GLUtils.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "RenderCapture.h"
 #include "RenderFormats.h"
 #include "cores/IPlayer.h"
@@ -76,6 +76,7 @@ extern "C" {
 #define PBO_OFFSET 16
 
 using namespace Shaders;
+using namespace KODI::UTILS::TEXT;
 
 static const GLubyte stipple_weave[] = {
   0x00, 0x00, 0x00, 0x00,

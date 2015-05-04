@@ -34,7 +34,7 @@
 #endif
 
 #include "Util.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "XBDateTime.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
@@ -42,6 +42,7 @@
 
 #include <algorithm>
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CLinuxTimezone::CLinuxTimezone() : m_IsDST(0)

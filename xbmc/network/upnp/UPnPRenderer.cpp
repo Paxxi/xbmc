@@ -43,6 +43,8 @@
 #include "playlists/PlayList.h"
 #include "GUIUserMessages.h"
 
+using namespace KODI::UTILS::TEXT;
+
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.renderer")
 
 using namespace ANNOUNCEMENT;

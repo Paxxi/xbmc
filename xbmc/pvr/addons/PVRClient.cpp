@@ -38,6 +38,7 @@
 using namespace ADDON;
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 #define DEFAULT_INFO_STRING_VALUE "unknown"
 

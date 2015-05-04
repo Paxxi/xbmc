@@ -25,6 +25,7 @@
 #include "utils/md5.h"
 
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CProfilesOperations::GetProfiles(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

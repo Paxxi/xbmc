@@ -35,6 +35,8 @@
 #include "windowing/WindowingFactory.h"
 #endif
 
+using namespace KODI::UTILS::TEXT;
+
 CGUIKeyboard *CGUIKeyboardFactory::g_activedKeyboard = NULL;
 FILTERING CGUIKeyboardFactory::m_filtering = FILTERING_NONE;
 

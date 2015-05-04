@@ -28,6 +28,8 @@
 #include "settings/Settings.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 IAE* CAEFactory::AE = NULL;
 static float  g_fVolume = 1.0f;
 static bool   g_bMute = false;

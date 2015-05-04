@@ -36,6 +36,8 @@
 #include "video/VideoDatabase.h"
 #include "video/VideoDbUrl.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define CONTROL_HEADING             2
 
 #define CONTROL_CLEAR_BUTTON       27

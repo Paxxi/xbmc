@@ -37,6 +37,7 @@
 #include "windowing/WindowingFactory.h"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_LABEL_ROW1  2
 #define CONTROL_LABEL_ROW2  3

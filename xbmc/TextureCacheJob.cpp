@@ -37,6 +37,8 @@
 #include "cores/omxplayer/OMXImage.h"
 #endif
 
+using namespace KODI::UTILS::TEXT;
+
 CTextureCacheJob::CTextureCacheJob(const std::string &url, const std::string &oldHash):
   m_url(url),
   m_oldHash(oldHash),

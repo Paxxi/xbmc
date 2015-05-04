@@ -70,6 +70,7 @@
 
 using namespace std;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 typedef struct
 {

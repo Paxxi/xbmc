@@ -40,6 +40,7 @@
 
 using namespace EVENTCLIENT;
 using namespace EVENTPACKET;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 

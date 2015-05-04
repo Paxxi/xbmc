@@ -25,6 +25,8 @@
 #include "input/Key.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 CAutorunMediaJob::CAutorunMediaJob(const std::string &label, const std::string &path):
   m_path(path),
   m_label(label)

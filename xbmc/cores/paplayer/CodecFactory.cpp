@@ -27,6 +27,7 @@
 #include "addons/AudioDecoder.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 ICodec* CodecFactory::CreateCodec(const std::string &strFileType)
 {

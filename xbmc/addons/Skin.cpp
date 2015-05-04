@@ -40,6 +40,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 std::shared_ptr<ADDON::CSkinInfo> g_SkinInfo;
 

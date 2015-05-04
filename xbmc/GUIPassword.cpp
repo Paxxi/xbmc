@@ -38,6 +38,8 @@
 #include "utils/text/StringUtils.h"
 #include "view/ViewStateSettings.h"
 
+using namespace KODI::UTILS::TEXT;
+
 CGUIPassword::CGUIPassword(void)
 {
   iMasterLockRetriesLeft = -1;

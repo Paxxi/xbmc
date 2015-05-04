@@ -34,6 +34,7 @@
 #include "pvr/addons/PVRClients.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CPVRChannelGroups::CPVRChannelGroups(bool bRadio) :
     m_bRadio(bRadio)

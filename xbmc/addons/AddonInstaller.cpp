@@ -46,7 +46,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
-
+using namespace KODI::UTILS::TEXT;
 
 struct find_map : public binary_function<CAddonInstaller::JobMap::value_type, unsigned int, bool>
 {

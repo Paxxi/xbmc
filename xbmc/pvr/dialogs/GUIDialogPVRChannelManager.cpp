@@ -56,6 +56,7 @@
 #define BUTTON_RADIO_TV           34
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogPVRChannelManager::CGUIDialogPVRChannelManager(void) :
     CGUIDialog(WINDOW_DIALOG_PVR_CHANNEL_MANAGER, "DialogPVRChannelManager.xml"),

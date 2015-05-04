@@ -25,6 +25,7 @@
 #include "powermanagement/PowerManager.h"
 
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CXBMCOperations::GetInfoLabels(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

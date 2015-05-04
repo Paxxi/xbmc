@@ -58,6 +58,7 @@
 #define SETTING_AUDIO_MAKE_DEFAULT             "audio.makedefault"
 
 using namespace std;
+using namespace KODI::UTILS::TEXT;
 
 CGUIDialogAudioSubtitleSettings::CGUIDialogAudioSubtitleSettings()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_AUDIO_OSD_SETTINGS, "VideoOSDSettings.xml"),

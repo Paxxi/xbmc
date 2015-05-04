@@ -46,6 +46,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_HEADING          2
 #define CONTROL_PATH            10

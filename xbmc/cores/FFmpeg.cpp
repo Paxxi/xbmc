@@ -26,6 +26,8 @@
 #include "settings/AdvancedSettings.h"
 #include <map>
 
+using namespace KODI::UTILS::TEXT;
+
 /* callback for the ffmpeg lock manager */
 int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
 {

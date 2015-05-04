@@ -54,6 +54,7 @@ using namespace std;
 using namespace ADDON;
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 CCDDARipper& CCDDARipper::GetInstance()
 {

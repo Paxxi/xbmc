@@ -72,6 +72,7 @@ using namespace dbiplus;
 using namespace XFILE;
 using namespace VIDEO;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 //********************************************************************************************************************************
 CVideoDatabase::CVideoDatabase(void)

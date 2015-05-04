@@ -36,7 +36,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "FileItem.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "threads/SingleLock.h"
@@ -51,6 +51,7 @@ struct CachedDirEntry
 };
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CSMBDirectory::CSMBDirectory(void)

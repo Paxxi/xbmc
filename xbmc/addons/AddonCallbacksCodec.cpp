@@ -28,6 +28,8 @@ extern "C" {
 #include "libavformat/avformat.h"
 }
 
+using namespace KODI::UTILS::TEXT;
+
 namespace ADDON
 {
 class CCodecIds

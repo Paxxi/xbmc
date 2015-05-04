@@ -23,7 +23,7 @@
 #include "XFileUtils.h"
 #include "XTimeUtils.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 
 #ifdef TARGET_POSIX
 #include "XHandle.h"
@@ -49,8 +49,10 @@
 #include "storage/cdioSupport.h"
 
 #include "utils/log.h"
-#include "utils/RegExp.h"
+#include "utils/text/RegExp.h"
 #include "utils/AliasShortcutUtils.h"
+
+using namespace KODI::UTILS::TEXT;
 
 HANDLE FindFirstFile(LPCSTR szPath,LPWIN32_FIND_DATA lpFindData)
 {

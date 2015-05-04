@@ -38,6 +38,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CURL::CURL(const std::string& strURL1)
 {

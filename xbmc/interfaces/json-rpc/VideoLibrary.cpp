@@ -27,6 +27,7 @@
 #include "video/VideoDatabase.h"
 
 using namespace JSONRPC;
+using namespace KODI::UTILS::TEXT;
 
 JSONRPC_STATUS CVideoLibrary::GetMovies(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

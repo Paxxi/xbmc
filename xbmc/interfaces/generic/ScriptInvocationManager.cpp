@@ -32,6 +32,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CScriptInvocationManager::CScriptInvocationManager()
   : m_nextId(0)

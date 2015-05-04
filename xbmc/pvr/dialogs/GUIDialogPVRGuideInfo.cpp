@@ -35,6 +35,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTN_FIND                4
 #define CONTROL_BTN_SWITCH              5

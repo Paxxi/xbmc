@@ -39,6 +39,8 @@
 #include "guilib/LocalizeStrings.h"
 #include "ContextMenuManager.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define CONTROL_LABELFILES        12
 
 #define CONTROL_LOAD_PLAYLIST      6

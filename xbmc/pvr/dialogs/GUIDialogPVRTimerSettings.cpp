@@ -33,6 +33,7 @@
 #include "utils/text/StringUtils.h"
 
 using namespace PVR;
+using namespace KODI::UTILS::TEXT;
 
 #define SETTING_TMR_ACTIVE              "timer.active"
 #define SETTING_TMR_CHNAME              "timer.channelname"

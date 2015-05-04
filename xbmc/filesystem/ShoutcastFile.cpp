@@ -39,6 +39,7 @@
 
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS::TEXT;
 
 CShoutcastFile::CShoutcastFile() :
   IFile(), CThread("ShoutcastFile")

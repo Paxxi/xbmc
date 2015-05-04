@@ -41,6 +41,7 @@
 using namespace std;
 using namespace MUSIC_INFO;
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 CAudioBuffer::CAudioBuffer(int iSize)
 {

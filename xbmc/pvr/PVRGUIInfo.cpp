@@ -37,6 +37,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRGUIInfo::CPVRGUIInfo(void) :
     CThread("PVRGUIInfo")

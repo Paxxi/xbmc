@@ -45,6 +45,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CGUIWindowPVRChannels::CGUIWindowPVRChannels(bool bRadio) :
   CGUIWindowPVRBase(bRadio, bRadio ? WINDOW_RADIO_CHANNELS : WINDOW_TV_CHANNELS, "MyPVRChannels.xml"),

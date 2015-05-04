@@ -47,6 +47,7 @@
 
 using namespace MUSIC_INFO;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 namespace UPNP
 {

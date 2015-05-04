@@ -32,6 +32,8 @@
 #include "utils/log.h"
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define SETTING_USERNAME            "user.name"
 #define SETTING_PASSWORD            "user.password"
 #define SETTING_PASSWORD_REMEMBER   "user.rememberpassword"

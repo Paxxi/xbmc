@@ -51,6 +51,8 @@
 #include "pvr/PVRManager.h"
 #include "ContextMenuManager.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define CONTROL_BIG_LIST               52
 #define CONTROL_LABEL_HEADER            2
 #define CONTROL_LABEL_SELECTED_PROFILE  3

@@ -40,6 +40,7 @@
 #define CONTROL_CANCEL          19
 #define CONTROL_BROWSE          20
 
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule(void)

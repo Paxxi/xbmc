@@ -33,6 +33,8 @@
 #endif
 #include "utils/text/StringUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 /* slightly modified in_ether taken from the etherboot project (http://sourceforge.net/projects/etherboot) */
 bool in_ether (const char *bufp, unsigned char *addr)
 {

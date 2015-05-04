@@ -32,6 +32,8 @@
 #include "utils/text/StringUtils.h"
 #include "ContextMenuManager.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define CONTROL_BTNVIEWASICONS 2
 #define CONTROL_BTNSORTBY      3
 #define CONTROL_BTNSORTASC     4

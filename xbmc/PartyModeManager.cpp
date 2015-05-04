@@ -39,6 +39,7 @@
 
 using namespace std;
 using namespace PLAYLIST;
+using namespace KODI::UTILS::TEXT;
 
 #define QUEUE_DEPTH       10
 

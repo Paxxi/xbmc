@@ -31,6 +31,7 @@
 #define CONTROL_NONE_AVAILABLE 4
 #define CONTROL_LIST           5
 
+using namespace KODI::UTILS::TEXT;
 using ADDON::CVisualisation;
 
 CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList(void)

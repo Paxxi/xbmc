@@ -25,7 +25,7 @@
 #include "cores/dvdplayer/DVDCodecs/DVDCodecUtils.h"
 #include "cores/dvdplayer/DVDClock.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "threads/SingleLock.h"
 #include "settings/Settings.h"
 #include "guilib/GraphicContext.h"
@@ -51,6 +51,7 @@ vaCreateSurfaces(d, w, h, f, ns, s)
 #endif
 
 using namespace VAAPI;
+using namespace KODI::UTILS::TEXT;
 #define NUM_RENDER_PICS 7
 
 //-----------------------------------------------------------------------------

@@ -37,6 +37,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRTimerInfoTag::CPVRTimerInfoTag(bool bRadio /* = false */) :
   m_strTitle(g_localizeStrings.Get(19056)), // New Timer

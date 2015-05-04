@@ -33,6 +33,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS::TEXT;
 
 CPVRRecordingUid::CPVRRecordingUid() :
     m_iClientId(PVR_INVALID_CLIENT_ID)

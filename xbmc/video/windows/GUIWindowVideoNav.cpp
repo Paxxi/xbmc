@@ -63,6 +63,7 @@
 
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define CONTROL_BTNVIEWASICONS     2

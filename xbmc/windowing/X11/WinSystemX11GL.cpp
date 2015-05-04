@@ -23,8 +23,10 @@
 
 #include "WinSystemX11GL.h"
 #include "utils/log.h"
-#include "utils/StringUtils.h"
+#include "utils/text/StringUtils.h"
 #include "Application.h"
+
+using namespace KODI::UTILS::TEXT;
 
 CWinSystemX11GL::CWinSystemX11GL()
 {

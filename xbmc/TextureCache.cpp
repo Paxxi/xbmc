@@ -32,6 +32,7 @@
 #include "utils/text/StringUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 CTextureCache &CTextureCache::Get()
 {

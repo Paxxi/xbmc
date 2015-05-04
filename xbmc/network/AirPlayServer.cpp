@@ -49,6 +49,7 @@
 #endif // HAS_ZEROCONF
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #ifdef TARGET_WINDOWS

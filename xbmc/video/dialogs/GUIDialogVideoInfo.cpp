@@ -64,6 +64,7 @@
 using namespace std;
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_IMAGE                3
 #define CONTROL_TEXTAREA             4

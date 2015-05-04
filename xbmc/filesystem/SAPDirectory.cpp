@@ -44,6 +44,7 @@
 #include <arpa/inet.h>
 #include <vector>
 
+using namespace KODI::UTILS::TEXT;
 //using namespace std; On VS2010, bind conflicts with std::bind
 
 CSAPSessions g_sapsessions;

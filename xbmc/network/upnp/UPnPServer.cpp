@@ -46,6 +46,8 @@
 #include "xbmc/GUIUserMessages.h"
 #include "utils/FileUtils.h"
 
+using namespace KODI::UTILS::TEXT;
+
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.server")
 
 using namespace std;

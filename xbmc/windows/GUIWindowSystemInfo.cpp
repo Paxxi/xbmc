@@ -31,6 +31,8 @@
 #include "utils/text/StringUtils.h"
 #include "storage/MediaManager.h"
 
+using namespace KODI::UTILS::TEXT;
+
 #define CONTROL_BT_STORAGE  94
 #define CONTROL_BT_DEFAULT  95
 #define CONTROL_BT_NETWORK  96

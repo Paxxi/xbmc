@@ -47,6 +47,8 @@
 #include "URL.h"
 #include "windowing/WindowingFactory.h"
 
+using namespace KODI::UTILS::TEXT;
+
 
 struct StereoModeMap
 {

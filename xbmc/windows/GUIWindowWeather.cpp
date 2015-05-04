@@ -34,6 +34,7 @@
 #include "addons/AddonManager.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS::TEXT;
 
 #define CONTROL_BTNREFRESH             2
 #define CONTROL_SELECTLOCATION         3

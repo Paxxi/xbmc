@@ -38,6 +38,7 @@
 #endif
 
 using namespace XFILE;
+using namespace KODI::UTILS::TEXT;
 using namespace std;
 
 #define SEEKTIMOUT 30000
