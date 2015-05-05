@@ -132,7 +132,7 @@ protected:
 
   unsigned int m_smsKeyIndex;
   unsigned int m_smsLastKey;
-  CStopWatch   m_smsTimer;
+  KODI::UTILS::TIME::CStopWatch   m_smsTimer;
 
   std::wstring m_edit;
   int          m_editOffset;

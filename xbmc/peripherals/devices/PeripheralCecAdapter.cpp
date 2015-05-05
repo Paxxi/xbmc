@@ -361,7 +361,7 @@ bool CPeripheralCecAdapter::OpenConnection(void)
 
 void CPeripheralCecAdapter::Process(void)
 {
-  CStopWatch timeout;
+  KODI::UTILS::TIME::CStopWatch timeout;
   if (!OpenConnection())
     return;
 

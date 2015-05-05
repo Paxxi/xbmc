@@ -210,12 +210,12 @@ private:
   int m_cursor;
   int m_offset;
   int m_cacheItems;
-  CStopWatch m_scrollTimer;
-  CStopWatch m_lastScrollStartTimer;
-  CStopWatch m_pageChangeTimer;
+  KODI::UTILS::TIME::CStopWatch m_scrollTimer;
+  KODI::UTILS::TIME::CStopWatch m_lastScrollStartTimer;
+  KODI::UTILS::TIME::CStopWatch m_pageChangeTimer;
 
   // letter match searching
-  CStopWatch m_matchTimer;
+  KODI::UTILS::TIME::CStopWatch m_matchTimer;
   std::string m_match;
   float m_scrollItemsPerFrame;
 

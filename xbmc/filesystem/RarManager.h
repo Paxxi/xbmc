@@ -58,7 +58,7 @@ public:
     watch.Stop();
     return false;
   }
-  CStopWatch watch;
+  KODI::UTILS::TIME::CStopWatch watch;
   int m_iIsSeekable;
 };
 

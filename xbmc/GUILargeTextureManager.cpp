@@ -31,6 +31,7 @@
 
 #include <cassert>
 
+using namespace KODI::UTILS::TIME;
 using namespace std;
 
 

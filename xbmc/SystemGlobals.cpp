@@ -66,7 +66,7 @@
 #ifdef HAS_PYTHON
   XBPython           g_pythonParser;
 #endif
-  CAlarmClock        g_alarmClock;
+KODI::UTILS::TIME::CAlarmClock g_alarmClock;
   PLAYLIST::CPlayListPlayer g_playlistPlayer;
 
 #ifdef TARGET_RASPBERRY_PI

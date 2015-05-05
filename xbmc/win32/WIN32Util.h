@@ -101,7 +101,7 @@ private:
 };
 
 
-class CWinIdleTimer : public CStopWatch
+class CWinIdleTimer : public KODI::UTILS::TIME::CStopWatch
 {
 public:
   void StartZero();

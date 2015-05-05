@@ -40,6 +40,7 @@
 #include "input/Key.h"
 #include "dialogs/GUIDialogYesNo.h"
 
+using namespace KODI::UTILS::TIME;
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.player")
 

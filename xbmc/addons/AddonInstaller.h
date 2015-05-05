@@ -153,9 +153,9 @@ private:
 
   CCriticalSection m_critSection;
   JobMap m_downloadJobs;
-  CStopWatch m_repoUpdateWatch;   ///< repository updates are done based on this counter
-  unsigned int m_repoUpdateJob;   ///< the job ID of the repository updates
-  CEvent m_repoUpdateDone;        ///< event set when the repository updates are complete
+  KODI::UTILS::TIME::CStopWatch m_repoUpdateWatch;   ///< repository updates are done based on this counter
+  unsigned int m_repoUpdateJob;                      ///< the job ID of the repository updates
+  CEvent m_repoUpdateDone;                           ///< event set when the repository updates are complete
 };
 
 class CAddonInstallJob : public CFileOperationJob

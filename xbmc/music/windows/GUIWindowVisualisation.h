@@ -34,8 +34,8 @@ public:
 protected:
   virtual EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event);
 
-  CStopWatch m_initTimer;
-  CStopWatch m_lockedTimer;
+  KODI::UTILS::TIME::CStopWatch m_initTimer;
+  KODI::UTILS::TIME::CStopWatch m_lockedTimer;
   bool m_bShowPreset;
   MUSIC_INFO::CMusicInfoTag m_tag;    // current tag info, for finding when the info manager updates
 };

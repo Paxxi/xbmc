@@ -31,10 +31,19 @@
 #include "pvr/recordings/PVRRecording.h"
 
 class CGUIDialogProgressBarHandle;
-class CStopWatch;
 class CAction;
 class CFileItemList;
 
+namespace KODI
+{
+  namespace UTILS
+  {
+    namespace TIME
+    {
+      class CStopWatch;
+    }
+  }
+}
 namespace EPG
 {
   class CEpgContainer;
@@ -666,7 +675,7 @@ namespace PVR
 
     CCriticalSection                m_managerStateMutex;
     ManagerState                    m_managerState;
-    CStopWatch                     *m_parentalTimer;
+    KODI::UTILS::TIME::CStopWatch  *m_parentalTimer;
     int                             m_openWindowId;
     std::map<std::string, std::string> m_outdatedAddons;
     static int                      m_pvrWindowIds[10];

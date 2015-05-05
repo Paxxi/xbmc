@@ -21,12 +21,14 @@
 #pragma once
 
 #include "threads/Thread.h"
-#include "utils/log.h"
 #include <queue>
-#include "memory.h"
 
 #define MSG_INTERNAL_BUFFER_SIZE 32
 
+namespace KODI
+{
+namespace UTILS
+{
 namespace Actor
 {
 
@@ -49,10 +51,10 @@ public:
   CEvent *event;
 
   void Release();
-  bool Reply(int sig, void *data = NULL, int size = 0);
+  bool Reply(int sig, void *data = nullptr, int size = 0);
 
 private:
-  Message() {isSync = false; data = NULL; event = NULL; replyMessage = NULL;};
+  Message() {isSync = false; data = nullptr; event = nullptr; replyMessage = nullptr;};
 };
 
 class Protocol
@@ -63,9 +65,9 @@ public:
   virtual ~Protocol();
   Message *GetMessage();
   void ReturnMessage(Message *msg);
-  bool SendOutMessage(int signal, void *data = NULL, int size = 0, Message *outMsg = NULL);
-  bool SendInMessage(int signal, void *data = NULL, int size = 0, Message *outMsg = NULL);
-  bool SendOutMessageSync(int signal, Message **retMsg, int timeout, void *data = NULL, int size = 0);
+  bool SendOutMessage(int signal, void *data = nullptr, int size = 0, Message *outMsg = nullptr);
+  bool SendInMessage(int signal, void *data = nullptr, int size = 0, Message *outMsg = nullptr);
+  bool SendOutMessageSync(int signal, Message **retMsg, int timeout, void *data = nullptr, int size = 0);
   bool ReceiveOutMessage(Message **msg);
   bool ReceiveInMessage(Message **msg);
   void Purge();
@@ -85,5 +87,6 @@ protected:
   std::queue<Message*> freeMessageQueue;
   bool inDefered, outDefered;
 };
-
+}
+}
 }

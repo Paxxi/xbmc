@@ -36,6 +36,7 @@
 
 using namespace std;
 using namespace KODI::UTILS::TEXT;
+using namespace KODI::UTILS::TIME;
 
 #define HOLD_TIME_START 100
 #define HOLD_TIME_END   3000

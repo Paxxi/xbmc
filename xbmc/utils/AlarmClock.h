@@ -27,6 +27,13 @@
 #include <map>
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
+
 struct SAlarmClockEvent
 {
   CStopWatch watch;
@@ -75,5 +82,7 @@ private:
   bool m_bIsRunning;
 };
 
-extern CAlarmClock g_alarmClock;
-
+}
+}
+}
+extern KODI::UTILS::TIME::CAlarmClock g_alarmClock;

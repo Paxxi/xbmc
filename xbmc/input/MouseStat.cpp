@@ -24,6 +24,8 @@
 #include "utils/TimeUtils.h"
 #include "windowing/WindowingFactory.h"
 
+using namespace KODI::UTILS::TIME;
+
 CMouseStat::CMouseStat()
 {
   m_pointerState = MOUSE_STATE_NORMAL;

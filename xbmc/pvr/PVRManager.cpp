@@ -70,6 +70,7 @@ using namespace PVR;
 using namespace EPG;
 using namespace ANNOUNCEMENT;
 using namespace KODI::UTILS::TEXT;
+using namespace KODI::UTILS::TIME;
 
 int CPVRManager::m_pvrWindowIds[10] = {
     WINDOW_TV_CHANNELS,

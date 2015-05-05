@@ -38,6 +38,13 @@
 
 #include "TimeSmoother.h"
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
+
 int64_t CurrentHostCounter(void)
 {
 #if   defined(TARGET_DARWIN)
@@ -121,4 +128,8 @@ CDateTime CTimeUtils::GetLocalTime(time_t time)
     result = time; // Use the original time as close enough.
 
   return result;
+}
+
+}
+}
 }

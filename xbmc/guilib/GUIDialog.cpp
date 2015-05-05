@@ -28,6 +28,8 @@
 #include "ApplicationMessenger.h"
 #include "input/Key.h"
 
+using namespace KODI::UTILS::TIME;
+
 CGUIDialog::CGUIDialog(int id, const std::string &xmlFile)
     : CGUIWindow(id, xmlFile)
 {

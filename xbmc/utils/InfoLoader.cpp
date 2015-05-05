@@ -23,6 +23,8 @@
 #include "JobManager.h"
 #include "TimeUtils.h"
 
+using namespace KODI::UTILS::TIME;
+
 CInfoLoader::CInfoLoader(unsigned int timeToRefresh)
 {
   m_refreshTime = 0;

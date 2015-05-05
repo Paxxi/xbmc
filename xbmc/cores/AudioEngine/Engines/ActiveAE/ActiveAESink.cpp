@@ -25,7 +25,7 @@
 #include "utils/EndianSwap.h"
 #include "ActiveAE.h"
 #include "cores/AudioEngine/AEResampleFactory.h"
-
+#include "utils/log.h"
 #include "settings/Settings.h"
 
 #include <new> // for std::bad_alloc

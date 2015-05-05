@@ -29,7 +29,7 @@
 
 namespace ActiveAE
 {
-using namespace Actor;
+using namespace KODI::UTILS::Actor;
 
 class CEngineStats;
 

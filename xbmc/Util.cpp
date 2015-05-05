@@ -1461,7 +1461,7 @@ void CUtil::InitRandomSeed()
 {
   // Init random seed
   int64_t now;
-  now = CurrentHostCounter();
+  now = KODI::UTILS::TIME::CurrentHostCounter();
   unsigned int seed = (unsigned int)now;
 //  CLog::Log(LOGDEBUG, "%s - Initializing random seed with %u", __FUNCTION__, seed);
   srand(seed);

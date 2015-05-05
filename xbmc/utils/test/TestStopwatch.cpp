@@ -23,6 +23,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS::TIME;
+
 class CTestStopWatchThread : public CThread
 {
 public:

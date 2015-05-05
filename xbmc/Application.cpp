@@ -268,6 +268,7 @@ using namespace PERIPHERALS;
 
 using namespace XbmcThreads;
 using namespace KODI::UTILS::TEXT;
+using namespace KODI::UTILS::TIME;
 
 // uncomment this if you want to use release libs in the debug build.
 // Atm this saves you 7 mb of memory

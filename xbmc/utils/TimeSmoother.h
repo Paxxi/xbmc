@@ -93,6 +93,12 @@
  we do not claim to be estimating the timestamp of the next frame time.  Such an estimate is essentially indeterminant, as
  the time to process the frame is non-constant.
  */
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
 
 class CTimeSmoother
 {
@@ -185,3 +191,6 @@ private:
   boost::circular_buffer<double> m_prevIn;  ///< \brief the previous timestamps coming in
   boost::circular_buffer<double> m_prevOut; ///< \brief the previous timestamps going out
 };
+}
+}
+}

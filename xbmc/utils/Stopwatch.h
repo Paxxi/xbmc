@@ -22,6 +22,13 @@
 
 #include <stdint.h>
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
+
 class CStopWatch
 {
 public:
@@ -110,3 +117,7 @@ private:
   bool m_isRunning;
   bool m_useFrameTime;
 };
+
+}
+}
+}

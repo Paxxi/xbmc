@@ -25,6 +25,13 @@
 #endif
 #include "utils/TimeUtils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
+
 CStopWatch::CStopWatch(bool useFrameTime /*=false*/)
 {
   m_timerPeriod      = 0.0f;
@@ -39,7 +46,7 @@ CStopWatch::CStopWatch(bool useFrameTime /*=false*/)
   if (m_useFrameTime)
     m_timerPeriod = 1.0f / 1000.0f; //frametime is in milliseconds
   else
-    m_timerPeriod = 1.0f / (float)CurrentHostFrequency();
+    m_timerPeriod = 1.0f / static_cast<float>(CurrentHostFrequency());
 #endif
 }
 
@@ -56,4 +63,8 @@ int64_t CStopWatch::GetTicks() const
 #else
   return XbmcThreads::SystemClockMillis();
 #endif
+}
+
+}
+}
 }

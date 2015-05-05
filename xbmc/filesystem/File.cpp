@@ -138,7 +138,7 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
     UINT64 llFileSize = file.GetLength();
     UINT64 llPos = 0;
 
-    CStopWatch timer;
+    KODI::UTILS::TIME::CStopWatch timer;
     timer.StartZero();
     float start = 0.0f;
     while (true)

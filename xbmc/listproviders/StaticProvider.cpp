@@ -22,6 +22,7 @@
 #include "utils/XMLUtils.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS::TIME;
 using namespace std;
 
 CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parentID)

@@ -23,6 +23,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS::TIME;
+
 TEST(TestTimeUtils, CurrentHostCounter)
 {
   std::cout << "CurrentHostCounter(): " <<

@@ -105,6 +105,7 @@ using namespace PVR;
 using namespace INFO;
 using namespace EPG;
 using namespace KODI::UTILS::TEXT;
+using namespace KODI::UTILS::TIME;
 
 CGUIInfoManager::CGUIInfoManager(void) :
     Observable()

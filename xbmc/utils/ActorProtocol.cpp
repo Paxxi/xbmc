@@ -20,7 +20,12 @@
 
 #include "ActorProtocol.h"
 
-using namespace Actor;
+namespace KODI
+{
+namespace UTILS
+{
+namespace Actor
+{
 
 void Message::Release()
 {
@@ -109,10 +114,10 @@ Message *Protocol::GetMessage()
   msg->isSync = false;
   msg->isSyncFini = false;
   msg->isSyncTimeout = false;
-  msg->event = NULL;
-  msg->data = NULL;
+  msg->event = nullptr;
+  msg->data = nullptr;
   msg->payloadSize = 0;
-  msg->replyMessage = NULL;
+  msg->replyMessage = nullptr;
   msg->origin = this;
 
   return msg;
@@ -198,7 +203,7 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, voi
       *retMsg = msg->replyMessage;
     else
     {
-      *retMsg = NULL;
+      *retMsg = nullptr;
       msg->isSyncTimeout = true;
     }
     msg->origin->Unlock();
@@ -294,4 +299,8 @@ void Protocol::PurgeOut(int signal)
     msgs.pop();
     outMessages.push(msg);
   }
+}
+
+}
+}
 }

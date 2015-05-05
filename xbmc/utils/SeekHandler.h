@@ -69,7 +69,7 @@ private:
   int        m_seekStep;
   std::map<SeekType, std::vector<int> > m_forwardSeekSteps;
   std::map<SeekType, std::vector<int> > m_backwardSeekSteps;
-  CStopWatch m_timer;
+  KODI::UTILS::TIME::CStopWatch m_timer;
 
   CCriticalSection m_critSection;
 };

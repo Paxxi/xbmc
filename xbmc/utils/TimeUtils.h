@@ -24,6 +24,14 @@
 #include <time.h>
 
 class CDateTime;
+
+namespace KODI
+{
+namespace UTILS
+{
+namespace TIME
+{
+
 class CTimeSmoother;
 
 int64_t CurrentHostCounter(void);
@@ -41,3 +49,6 @@ private:
   static CTimeSmoother frameTimer;
 };
 
+}
+}
+}
