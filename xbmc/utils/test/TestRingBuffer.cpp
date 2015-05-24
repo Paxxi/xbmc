@@ -24,7 +24,7 @@
 
 TEST(TestRingBuffer, General)
 {
-  CRingBuffer a;
+  CRingBuffer<size_t> a;
   char data[20];
   unsigned int i;
 

@@ -50,9 +50,9 @@ public:
 
 protected:
     int64_t m_nStartPosition;
-    CRingBuffer m_buffer;
-    CRingBuffer m_HistoryBuffer;
-    CRingBuffer m_forwardBuffer; // for seek cases, to store data already read
+    CRingBuffer<size_t> m_buffer;
+    CRingBuffer<size_t> m_HistoryBuffer;
+    CRingBuffer<size_t> m_forwardBuffer; // for seek cases, to store data already read
     CCriticalSection m_sync;
     CEvent m_written;
 };

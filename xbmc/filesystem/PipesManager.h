@@ -96,7 +96,7 @@ class Pipe
     bool        m_bReadyForRead;
 
     bool        m_bEof;
-    CRingBuffer m_buffer;
+    CRingBuffer<size_t> m_buffer;
     std::string  m_strPipeName;
     int         m_nRefCount;
     int         m_nOpenThreashold;

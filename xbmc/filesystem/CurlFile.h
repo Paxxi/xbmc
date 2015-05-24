@@ -111,11 +111,11 @@ namespace XFILE
           XCURL::CURL_HANDLE*    m_easyHandle;
           XCURL::CURLM*          m_multiHandle;
 
-          CRingBuffer     m_buffer;           // our ringhold buffer
-          unsigned int    m_bufferSize;
+          CRingBuffer<size_t> m_buffer;           // our ringhold buffer
+          size_t          m_bufferSize;
 
           char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer
-          unsigned int    m_overflowSize;     // size of the overflow buffer
+          size_t          m_overflowSize;     // size of the overflow buffer
           int             m_stillRunning;     // Is background url fetch still in progress
           bool            m_cancelled;
           int64_t         m_fileSize;
@@ -138,15 +138,15 @@ namespace XFILE
           size_t WriteCallback(char *buffer, size_t size, size_t nitems);
           size_t HeaderCallback(void *ptr, size_t size, size_t nmemb);
 
-          bool         Seek(int64_t pos);
-          unsigned int Read(void* lpBuf, size_t uiBufSize);
-          bool         ReadString(char *szLine, int iLineLength);
-          bool         FillBuffer(unsigned int want);
-          void         SetReadBuffer(const void* lpBuf, int64_t uiBufSize);
+          bool    Seek(int64_t pos);
+          size_t  Read(void* lpBuf, size_t uiBufSize);
+          bool    ReadString(char *szLine, int iLineLength);
+          bool    FillBuffer(size_t want);
+          void    SetReadBuffer(const void* lpBuf, int64_t uiBufSize);
 
-          void         SetResume(void);
-          long         Connect(unsigned int size);
-          void         Disconnect();
+          void    SetResume(void);
+          long    Connect(size_t size);
+          void    Disconnect();
       };
 
     protected:
@@ -159,7 +159,7 @@ namespace XFILE
     protected:
       CReadState*     m_state;
       CReadState*     m_oldState;
-      unsigned int    m_bufferSize;
+      size_t          m_bufferSize;
       int64_t         m_writeOffset;
 
       std::string     m_url;
@@ -192,9 +192,9 @@ namespace XFILE
       bool            m_skipshout;
       bool            m_postdataset;
 
-      CRingBuffer     m_buffer;           // our ringhold buffer
-      char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer
-      unsigned int    m_overflowSize;     // size of the overflow buffer
+      CRingBuffer<size_t> m_buffer;           // our ringhold buffer
+      char *               m_overflowBuffer;   // in the rare case we would overflow the above buffer
+      size_t               m_overflowSize;     // size of the overflow buffer
 
       int             m_stillRunning;     // Is background url fetch still in progress?
 

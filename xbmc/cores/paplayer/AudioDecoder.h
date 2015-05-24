@@ -77,7 +77,7 @@ public:
 
 private:
   // pcm buffer
-  CRingBuffer m_pcmBuffer;
+  CRingBuffer<size_t> m_pcmBuffer;
 
   // output buffer (for transferring data from the Pcm Buffer to the rest of the audio chain)
   float m_outputBuffer[OUTPUT_SAMPLES];

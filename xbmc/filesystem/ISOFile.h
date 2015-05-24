@@ -51,7 +51,7 @@ public:
 protected:
   bool m_bOpened;
   HANDLE m_hFile;
-  CRingBuffer m_cache;
+  CRingBuffer<size_t> m_cache;
 };
 }
 

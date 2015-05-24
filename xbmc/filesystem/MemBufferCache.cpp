@@ -188,7 +188,7 @@ int64_t MemBufferCache::Seek(int64_t iFilePosition)
   int64_t iHistoryStart = m_nStartPosition - m_HistoryBuffer.getMaxReadSize();
   if (iFilePosition < m_nStartPosition && iFilePosition >= iHistoryStart)
   {
-    CRingBuffer saveHist, saveUnRead;
+    CRingBuffer<size_t> saveHist, saveUnRead;
     int64_t nToSkip = iFilePosition - iHistoryStart;
     SEEK_CHECK_RET(m_HistoryBuffer.ReadData(saveHist, (int)nToSkip));
 

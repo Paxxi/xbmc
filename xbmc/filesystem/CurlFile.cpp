@@ -49,6 +49,7 @@
 using namespace XFILE;
 using namespace XCURL;
 
+
 #define XMIN(a,b) ((a)<(b)?(a):(b))
 #define FITS_INT(a) (((a) <= INT_MAX) && ((a) >= INT_MIN))
 

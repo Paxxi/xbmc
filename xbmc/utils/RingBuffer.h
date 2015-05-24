@@ -21,31 +21,35 @@
 
 #include "threads/CriticalSection.h"
 
+template <typename SIZE_TYPE>
 class CRingBuffer
 {
   CCriticalSection m_critSection;
   char *m_buffer;
-  unsigned int m_size;
-  unsigned int m_readPtr;
-  unsigned int m_writePtr;
-  unsigned int m_fillCount;
+  SIZE_TYPE m_size;
+  SIZE_TYPE m_readPtr;
+  SIZE_TYPE m_writePtr;
+  SIZE_TYPE m_fillCount;
 public:
   CRingBuffer();
   ~CRingBuffer();
-  bool Create(unsigned int size);
+  bool Create(SIZE_TYPE size);
   void Destroy();
   void Clear();
-  bool ReadData(char *buf, unsigned int size);
-  bool ReadData(CRingBuffer &rBuf, unsigned int size);
-  bool WriteData(const char *buf, unsigned int size);
-  bool WriteData(CRingBuffer &rBuf, unsigned int size);
+  bool ReadData(char *buf, SIZE_TYPE size);
+  bool ReadData(CRingBuffer &rBuf, SIZE_TYPE size);
+  bool WriteData(const char *buf, SIZE_TYPE size);
+  bool WriteData(CRingBuffer &rBuf, SIZE_TYPE size);
   bool SkipBytes(int skipSize);
   bool Append(CRingBuffer &rBuf);
   bool Copy(CRingBuffer &rBuf);
   char *getBuffer();
-  unsigned int getSize();
-  unsigned int getReadPtr() const;
-  unsigned int getWritePtr();
-  unsigned int getMaxReadSize();
-  unsigned int getMaxWriteSize();
+  SIZE_TYPE getSize();
+  SIZE_TYPE getReadPtr() const;
+  SIZE_TYPE getWritePtr();
+  SIZE_TYPE getMaxReadSize();
+  SIZE_TYPE getMaxWriteSize();
 };
+
+template class CRingBuffer<size_t>;
+template class CRingBuffer<unsigned int>;
