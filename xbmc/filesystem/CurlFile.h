@@ -67,7 +67,7 @@ namespace XFILE
       bool Post(const std::string& strURL, const std::string& strPostData, std::string& strHTML);
       bool Get(const std::string& strURL, std::string& strHTML);
       bool ReadData(std::string& strHTML);
-      bool Download(const std::string& strURL, const std::string& strFileName, LPDWORD pdwSize = NULL);
+      bool Download(const std::string& strURL, const std::string& strFileName, LPDWORD pdwSize = nullptr);
       bool IsInternet();
       void Cancel();
       void Reset();
@@ -90,7 +90,7 @@ namespace XFILE
       void SetRequestHeader(const std::string& header, long value);
 
       void ClearRequestHeaders();
-      void SetBufferSize(unsigned int size);
+      void SetBufferSize(size_t size);
 
       const CHttpHeader& GetHttpHeader() const { return m_state->m_httpheader; }
       std::string GetServerReportedCharset(void);
@@ -142,7 +142,7 @@ namespace XFILE
           size_t  Read(void* lpBuf, size_t uiBufSize);
           bool    ReadString(char *szLine, int iLineLength);
           bool    FillBuffer(size_t want);
-          void    SetReadBuffer(const void* lpBuf, int64_t uiBufSize);
+          void    SetReadBuffer(void* lpBuf, int64_t uiBufSize);
 
           void    SetResume(void);
           long    Connect(size_t size);

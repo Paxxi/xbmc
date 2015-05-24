@@ -51,5 +51,8 @@ public:
   SIZE_TYPE getMaxWriteSize();
 };
 
+#if defined(TARGET_WINDOWS)
+#pragma warning(disable : 4661)
+#endif
+
 template class CRingBuffer<size_t>;
-template class CRingBuffer<unsigned int>;

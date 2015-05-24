@@ -30,6 +30,7 @@
 #include <vector>
 #include <climits>
 #include <cassert>
+#include <algorithm>
 
 #ifdef TARGET_POSIX
 #include <errno.h>
@@ -50,7 +51,6 @@ using namespace XFILE;
 using namespace XCURL;
 
 
-#define XMIN(a,b) ((a)<(b)?(a):(b))
 #define FITS_INT(a) (((a) <= INT_MAX) && ((a) >= INT_MIN))
 
 curl_proxytype proxyType2CUrlProxyType[] = {
@@ -139,16 +139,17 @@ extern "C" int transfer_abort_callback(void *clientp,
 }
 
 /* fix for silly behavior of realloc */
-static inline void* realloc_simple(void *ptr, size_t size)
+template <typename T>
+static inline T* realloc_simple(T *ptr, size_t size)
 {
-  void *ptr2 = realloc(ptr, size);
+  void *ptr2 = realloc(static_cast<void*>(ptr), size);
   if(ptr && !ptr2 && size > 0)
   {
     free(ptr);
-    return NULL;
+    return nullptr;
   }
   else
-    return ptr2;
+    return static_cast<typename T*>(ptr2);
 }
 
 size_t CCurlFile::CReadState::HeaderCallback(void *ptr, size_t size, size_t nmemb)
@@ -178,7 +179,7 @@ size_t CCurlFile::CReadState::ReadCallback(char *buffer, size_t size, size_t nit
     return CURL_READFUNC_PAUSE;
   }
 
-  int64_t retSize = XMIN(m_fileSize - m_filePos, int64_t(nitems * size));
+  int64_t retSize = std::min(m_fileSize - m_filePos, int64_t(nitems * size));
   memcpy(buffer, m_readBuffer + m_filePos, retSize);
   m_filePos += retSize;
 
@@ -187,12 +188,12 @@ size_t CCurlFile::CReadState::ReadCallback(char *buffer, size_t size, size_t nit
 
 size_t CCurlFile::CReadState::WriteCallback(char *buffer, size_t size, size_t nitems)
 {
-  unsigned int amount = size * nitems;
+  size_t amount = size * nitems;
 //  CLog::Log(LOGDEBUG, "CCurlFile::WriteCallback (%p) with %i bytes, readsize = %i, writesize = %i", this, amount, m_buffer.getMaxReadSize(), m_buffer.getMaxWriteSize() - m_overflowSize);
   if (m_overflowSize)
   {
     // we have our overflow buffer - first get rid of as much as we can
-    unsigned int maxWriteable = XMIN((unsigned int)m_buffer.getMaxWriteSize(), m_overflowSize);
+    size_t maxWriteable = std::min(m_buffer.getMaxWriteSize(), m_overflowSize);
     if (maxWriteable)
     {
       if (!m_buffer.WriteData(m_overflowBuffer, maxWriteable))
@@ -205,7 +206,7 @@ size_t CCurlFile::CReadState::WriteCallback(char *buffer, size_t size, size_t ni
     }
   }
   // ok, now copy the data into our ring buffer
-  unsigned int maxWriteable = XMIN((unsigned int)m_buffer.getMaxWriteSize(), amount);
+  size_t maxWriteable = std::min(m_buffer.getMaxWriteSize(), amount);
   if (maxWriteable)
   {
     if (!m_buffer.WriteData(buffer, maxWriteable))
@@ -222,8 +223,8 @@ size_t CCurlFile::CReadState::WriteCallback(char *buffer, size_t size, size_t ni
   {
 //    CLog::Log(LOGDEBUG, "CCurlFile::WriteCallback(%p) not enough free space for %i bytes", (void*)this,  amount);
 
-    m_overflowBuffer = (char*)realloc_simple(m_overflowBuffer, amount + m_overflowSize);
-    if(m_overflowBuffer == NULL)
+    m_overflowBuffer = realloc_simple(m_overflowBuffer, amount + m_overflowSize);
+    if(m_overflowBuffer == nullptr)
     {
       CLog::Log(LOGWARNING, "CCurlFile::WriteCallback - Failed to grow overflow buffer from %i bytes to %i bytes", m_overflowSize, amount + m_overflowSize);
       return 0;
@@ -236,9 +237,9 @@ size_t CCurlFile::CReadState::WriteCallback(char *buffer, size_t size, size_t ni
 
 CCurlFile::CReadState::CReadState()
 {
-  m_easyHandle = NULL;
-  m_multiHandle = NULL;
-  m_overflowBuffer = NULL;
+  m_easyHandle = nullptr;
+  m_multiHandle = nullptr;
+  m_overflowBuffer = nullptr;
   m_overflowSize = 0;
   m_stillRunning = 0;
   m_filePos = 0;
@@ -249,8 +250,8 @@ CCurlFile::CReadState::CReadState()
   m_sendRange = true;
   m_readBuffer = 0;
   m_isPaused = false;
-  m_curlHeaderList = NULL;
-  m_curlAliasList = NULL;
+  m_curlHeaderList = nullptr;
+  m_curlAliasList = nullptr;
 }
 
 CCurlFile::CReadState::~CReadState()
@@ -369,7 +370,7 @@ void CCurlFile::CReadState::Disconnect()
 
   m_buffer.Clear();
   free(m_overflowBuffer);
-  m_overflowBuffer = NULL;
+  m_overflowBuffer = nullptr;
   m_overflowSize = 0;
   m_filePos = 0;
   m_fileSize = 0;
@@ -379,11 +380,11 @@ void CCurlFile::CReadState::Disconnect()
   /* cleanup */
   if( m_curlHeaderList )
     g_curlInterface.slist_free_all(m_curlHeaderList);
-  m_curlHeaderList = NULL;
+  m_curlHeaderList = nullptr;
 
   if( m_curlAliasList )
     g_curlInterface.slist_free_all(m_curlAliasList);
-  m_curlAliasList = NULL;
+  m_curlAliasList = nullptr;
 }
 
 
@@ -397,7 +398,7 @@ CCurlFile::~CCurlFile()
 
 CCurlFile::CCurlFile()
  : m_writeOffset(0)
- , m_overflowBuffer(NULL)
+ , m_overflowBuffer(nullptr)
  , m_overflowSize(0)
 {
   g_curlInterface.Load(); // loads the curl dll and resolves exports etc.
@@ -421,14 +422,14 @@ CCurlFile::CCurlFile()
   m_cipherlist = "";
   m_proxytype = PROXY_HTTP;
   m_state = new CReadState();
-  m_oldState = NULL;
+  m_oldState = nullptr;
   m_skipshout = false;
   m_httpresponse = -1;
   m_acceptCharset = "UTF-8,*;q=0.8"; /* prefer UTF-8 if available */
 }
 
 //Has to be called before Open()
-void CCurlFile::SetBufferSize(unsigned int size)
+void CCurlFile::SetBufferSize(size_t size)
 {
   m_bufferSize = size;
 }
@@ -436,11 +437,11 @@ void CCurlFile::SetBufferSize(unsigned int size)
 void CCurlFile::Close()
 {
   if (m_opened && m_forWrite && !m_inError)
-      Write(NULL, 0);
+      Write(nullptr, 0);
 
   m_state->Disconnect();
   delete m_oldState;
-  m_oldState = NULL;
+  m_oldState = nullptr;
 
   m_url.clear();
   m_referer.clear();
@@ -641,7 +642,7 @@ void CCurlFile::SetRequestHeaders(CReadState* state)
   if(state->m_curlHeaderList)
   {
     g_curlInterface.slist_free_all(state->m_curlHeaderList);
-    state->m_curlHeaderList = NULL;
+    state->m_curlHeaderList = nullptr;
   }
 
   MAPHTTPHEADERS::iterator it;
@@ -802,7 +803,7 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
         else if (name == "sslcipherlist")
           m_cipherlist = value;
         else if (name == "connection-timeout")
-          m_connecttimeout = strtol(value.c_str(), NULL, 10);
+          m_connecttimeout = strtol(value.c_str(), nullptr, 10);
         else
           SetRequestHeader(it->first, value);
       }
@@ -894,7 +895,7 @@ bool CCurlFile::Download(const std::string& strURL, const std::string& strFileNa
   if (strData.size() > 0)
     written = file.Write(strData.c_str(), strData.size());
 
-  if (pdwSize != NULL)
+  if (pdwSize != nullptr)
     *pdwSize = written > 0 ? written : 0;
 
   return written == static_cast<ssize_t>(strData.size());
@@ -934,7 +935,7 @@ bool CCurlFile::Open(const CURL& url)
   CLog::Log(LOGDEBUG, "CurlFile::Open(%p) %s", (void*)this, redactPath.c_str());
 
   assert(!(!m_state->m_easyHandle ^ !m_state->m_multiHandle));
-  if( m_state->m_easyHandle == NULL )
+  if( m_state->m_easyHandle == nullptr )
     g_curlInterface.easy_aquire(url2.GetProtocol().c_str(),
                                 url2.GetHostName().c_str(),
                                 &m_state->m_easyHandle,
@@ -1050,7 +1051,7 @@ bool CCurlFile::OpenForWrite(const CURL& url, bool bOverWrite)
 
   g_curlInterface.multi_add_handle(m_state->m_multiHandle, m_state->m_easyHandle);
 
-  m_state->SetReadBuffer(NULL, 0);
+  m_state->SetReadBuffer(nullptr, 0);
 
   return true;
 }
@@ -1062,7 +1063,7 @@ ssize_t CCurlFile::Write(const void* lpBuf, size_t uiBufSize)
 
   assert(m_state->m_multiHandle);
 
-  m_state->SetReadBuffer(lpBuf, uiBufSize);
+  m_state->SetReadBuffer(const_cast<void*>(lpBuf), uiBufSize);
   m_state->m_isPaused = false;
   g_curlInterface.easy_pause(m_state->m_easyHandle, CURLPAUSE_CONT);
 
@@ -1092,13 +1093,13 @@ ssize_t CCurlFile::Write(const void* lpBuf, size_t uiBufSize)
 
 bool CCurlFile::CReadState::ReadString(char *szLine, int iLineLength)
 {
-  unsigned int want = (unsigned int)iLineLength;
+  size_t want = static_cast<size_t>(iLineLength);
 
   if((m_fileSize == 0 || m_filePos < m_fileSize) && !FillBuffer(want))
     return false;
 
   // ensure only available data is considered
-  want = XMIN((unsigned int)m_buffer.getMaxReadSize(), want);
+  want = std::min(m_buffer.getMaxReadSize(), want);
 
   /* check if we finished prematurely */
   if (!m_stillRunning && (m_fileSize == 0 || m_filePos != m_fileSize) && !want)
@@ -1116,10 +1117,10 @@ bool CCurlFile::CReadState::ReadString(char *szLine, int iLineLength)
       break;
 
     pLine++;
-  } while (((pLine - 1)[0] != '\n') && ((unsigned int)(pLine - szLine) < want));
+  } while (((pLine - 1)[0] != '\n') && (static_cast<size_t>(pLine - szLine) < want));
   pLine[0] = 0;
   m_filePos += (pLine - szLine);
-  return (bool)((pLine - szLine) > 0);
+  return ((pLine - szLine) > 0);
 }
 
 bool CCurlFile::Exists(const CURL& url)
@@ -1134,16 +1135,16 @@ bool CCurlFile::Exists(const CURL& url)
   CURL url2(url);
   ParseAndCorrectUrl(url2);
 
-  assert(m_state->m_easyHandle == NULL);
+  assert(m_state->m_easyHandle == nullptr);
   g_curlInterface.easy_aquire(url2.GetProtocol().c_str(),
                               url2.GetHostName().c_str(),
-                              &m_state->m_easyHandle, NULL);
+                              &m_state->m_easyHandle, nullptr);
 
   SetCommonOptions(m_state);
   SetRequestHeaders(m_state);
   g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 5);
   g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
-  g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
+  g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, nullptr); /* will cause write failure*/
 
   if(url2.IsProtocol("ftp") || url2.IsProtocol("ftps"))
   {
@@ -1156,7 +1157,7 @@ bool CCurlFile::Exists(const CURL& url)
   }
 
   CURLcode result = g_curlInterface.easy_perform(m_state->m_easyHandle);
-  g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+  g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
 
   if (result == CURLE_WRITE_ERROR || result == CURLE_OK)
     return true;
@@ -1303,10 +1304,10 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
   CURL url2(url);
   ParseAndCorrectUrl(url2);
 
-  assert(m_state->m_easyHandle == NULL);
+  assert(m_state->m_easyHandle == nullptr);
   g_curlInterface.easy_aquire(url2.GetProtocol().c_str(),
                               url2.GetHostName().c_str(),
-                              &m_state->m_easyHandle, NULL);
+                              &m_state->m_easyHandle, nullptr);
 
   SetCommonOptions(m_state);
   SetRequestHeaders(m_state);
@@ -1356,7 +1357,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 
   if( result != CURLE_ABORTED_BY_CALLBACK && result != CURLE_OK )
   {
-    g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+    g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
     errno = ENOENT;
     CLog::Log(LOGERROR, "CCurlFile::Stat - Failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
     return -1;
@@ -1368,7 +1369,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
   {
     if (url.IsProtocol("ftp"))
     {
-      g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+      g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
       CLog::Log(LOGNOTICE, "CCurlFile::Stat - Content length failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
       errno = ENOENT;
       return -1;
@@ -1386,7 +1387,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
     if (result != CURLE_OK)
     {
       CLog::Log(LOGNOTICE, "CCurlFile::Stat - Content type failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
-      g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+      g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
       errno = ENOENT;
       return -1;
     }
@@ -1422,10 +1423,10 @@ unsigned int CCurlFile::CReadState::Read(void* lpBuf, size_t uiBufSize)
     return 0;
 
   /* ensure only available data is considered */
-  unsigned int want = (unsigned int)XMIN(m_buffer.getMaxReadSize(), uiBufSize);
+  size_t want = std::min(m_buffer.getMaxReadSize(), uiBufSize);
 
   /* xfer data to caller */
-  if (m_buffer.ReadData((char *)lpBuf, want))
+  if (m_buffer.ReadData(static_cast<char*>(lpBuf), want))
   {
     m_filePos += want;
     return want;
@@ -1459,14 +1460,14 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
     /* if there is data in overflow buffer, try to use that first */
     if (m_overflowSize)
     {
-      unsigned amount = XMIN((unsigned int)m_buffer.getMaxWriteSize(), m_overflowSize);
+      size_t amount = std::min(m_buffer.getMaxWriteSize(), m_overflowSize);
       m_buffer.WriteData(m_overflowBuffer, amount);
 
       if (amount < m_overflowSize)
         memcpy(m_overflowBuffer, m_overflowBuffer+amount,m_overflowSize-amount);
 
       m_overflowSize -= amount;
-      m_overflowBuffer = (char*)realloc_simple(m_overflowBuffer, m_overflowSize);
+      m_overflowBuffer = realloc_simple(m_overflowBuffer, m_overflowSize);
       continue;
     }
 
@@ -1634,9 +1635,9 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
   return true;
 }
 
-void CCurlFile::CReadState::SetReadBuffer(const void* lpBuf, int64_t uiBufSize)
+void CCurlFile::CReadState::SetReadBuffer(void* lpBuf, int64_t uiBufSize)
 {
-  m_readBuffer = (char*)lpBuf;
+  m_readBuffer = static_cast<char*>(lpBuf);
   m_fileSize = uiBufSize;
   m_filePos = 0;
 }
@@ -1670,7 +1671,7 @@ bool CCurlFile::GetHttpHeader(const CURL &url, CHttpHeader &headers)
   try
   {
     CCurlFile file;
-    if(file.Stat(url, NULL) == 0)
+    if(file.Stat(url, nullptr) == 0)
     {
       headers = file.GetHttpHeader();
       return true;
