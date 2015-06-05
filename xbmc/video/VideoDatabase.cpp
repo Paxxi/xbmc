@@ -4693,11 +4693,26 @@ void CVideoDatabase::UpdateTables(int iVersion)
     m_pDS->exec("DROP TABLE IF EXISTS tag");
     m_pDS->exec("ALTER TABLE tagnew RENAME TO tag");
   }
+
+  if (iVersion < 93)
+  {
+    // trim cXX fields
+    std::string valuesSql;
+    for(int i = 0; i < VIDEODB_MAX_COLUMNS; i++) {
+      valuesSql += StringUtils::Format("c%02d = TRIM(c%02d)", i, i);
+      if (i < VIDEODB_MAX_COLUMNS - 1)
+        valuesSql += ",";
+    }
+    m_pDS->exec("UPDATE episode SET " + valuesSql);
+    m_pDS->exec("UPDATE movie SET " + valuesSql);
+    m_pDS->exec("UPDATE musicvideo SET " + valuesSql);
+    m_pDS->exec("UPDATE tvshow SET " + valuesSql);
+  }
 }
 
 int CVideoDatabase::GetSchemaVersion() const
 {
-  return 92;
+  return 93;
 }
 
 void CVideoDatabase::CleanupActorLinkTablePre91(const std::string &linkTable, const std::string &linkTableIdActor, const std::string &linkTableIdMedia, int idActor, const std::string &strActor)
