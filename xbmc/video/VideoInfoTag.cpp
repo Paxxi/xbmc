@@ -870,57 +870,57 @@ unsigned int CVideoInfoTag::GetDurationFromMinuteString(const std::string &runti
   return duration*60;
 }
 
-void CVideoInfoTag::SetBasePath(std::string &basePath)
+void CVideoInfoTag::SetBasePath(std::string basePath)
 {
   m_basePath = Trim(std::move(basePath));
 }
 
-void CVideoInfoTag::SetDirector(std::vector<std::string> &director)
+void CVideoInfoTag::SetDirector(std::vector<std::string> director)
 {
   m_director = Trim(std::move(director));
 }
 
-void CVideoInfoTag::SetWritingCredits(std::vector<std::string> &writingCredits)
+void CVideoInfoTag::SetWritingCredits(std::vector<std::string> writingCredits)
 {
   m_writingCredits = Trim(std::move(writingCredits));
 }
 
-void CVideoInfoTag::SetGenre(std::vector<std::string> &genre)
+void CVideoInfoTag::SetGenre(std::vector<std::string> genre)
 {
   m_genre = Trim(std::move(genre));
 }
 
-void CVideoInfoTag::SetCountry(std::vector<std::string> &country)
+void CVideoInfoTag::SetCountry(std::vector<std::string> country)
 {
   m_country = Trim(std::move(country));
 }
 
-void CVideoInfoTag::SetTagLine(std::string &tagLine)
+void CVideoInfoTag::SetTagLine(std::string tagLine)
 {
   m_strTagLine = Trim(std::move(tagLine));
 }
 
-void CVideoInfoTag::SetPlotOutline(std::string &plotOutline)
+void CVideoInfoTag::SetPlotOutline(std::string plotOutline)
 {
   m_strPlotOutline = Trim(std::move(plotOutline));
 }
 
-void CVideoInfoTag::SetTrailer(std::string &trailer)
+void CVideoInfoTag::SetTrailer(std::string trailer)
 {
   m_strTrailer = Trim(std::move(trailer));
 }
 
-void CVideoInfoTag::SetPlot(std::string &plot)
+void CVideoInfoTag::SetPlot(std::string plot)
 {
   m_strPlot = Trim(std::move(plot));
 }
 
-void CVideoInfoTag::SetTitle(std::string &title)
+void CVideoInfoTag::SetTitle(std::string title)
 {
   m_strTitle = Trim(std::move(title));
 }
 
-void CVideoInfoTag::SetSortTitle(std::string &sortTitle)
+void CVideoInfoTag::SetSortTitle(std::string sortTitle)
 {
   m_strSortTitle = Trim(std::move(sortTitle));
 }
@@ -930,92 +930,92 @@ void CVideoInfoTag::SetPictureURL(CScraperUrl &pictureURL)
   m_strPictureURL = pictureURL;
 }
 
-void CVideoInfoTag::SetVotes(std::string &votes)
+void CVideoInfoTag::SetVotes(std::string votes)
 {
   m_strVotes = Trim(std::move(votes));
 }
 
-void CVideoInfoTag::SetArtist(std::vector<std::string> &artist)
+void CVideoInfoTag::SetArtist(std::vector<std::string> artist)
 {
   m_artist = Trim(std::move(artist));
 }
 
-void CVideoInfoTag::SetSet(std::string &set)
+void CVideoInfoTag::SetSet(std::string set)
 {
   m_strSet = Trim(std::move(set));
 }
 
-void CVideoInfoTag::SetTags(std::vector<std::string> &tags)
+void CVideoInfoTag::SetTags(std::vector<std::string> tags)
 {
   m_tags = Trim(std::move(tags));
 }
 
-void CVideoInfoTag::SetFile(std::string &file)
+void CVideoInfoTag::SetFile(std::string file)
 {
   m_strFile = Trim(std::move(file));
 }
 
-void CVideoInfoTag::SetPath(std::string &path)
+void CVideoInfoTag::SetPath(std::string path)
 {
   m_strPath = Trim(std::move(path));
 }
 
-void CVideoInfoTag::SetIMDBNumber(std::string &imdbNumber)
+void CVideoInfoTag::SetIMDBNumber(std::string imdbNumber)
 {
   m_strIMDBNumber = Trim(std::move(imdbNumber));
 }
 
-void CVideoInfoTag::SetMPAARating(std::string &mpaaRating)
+void CVideoInfoTag::SetMPAARating(std::string mpaaRating)
 {
   m_strMPAARating = Trim(std::move(mpaaRating));
 }
 
-void CVideoInfoTag::SetFileNameAndPath(std::string &fileNameAndPath)
+void CVideoInfoTag::SetFileNameAndPath(std::string fileNameAndPath)
 {
   m_strFileNameAndPath = Trim(std::move(fileNameAndPath));
 }
 
-void CVideoInfoTag::SetOriginalTitle(std::string &originalTitle)
+void CVideoInfoTag::SetOriginalTitle(std::string originalTitle)
 {
   m_strOriginalTitle = Trim(std::move(originalTitle));
 }
 
-void CVideoInfoTag::SetEpisodeGuide(std::string &episodeGuide)
+void CVideoInfoTag::SetEpisodeGuide(std::string episodeGuide)
 {
   m_strEpisodeGuide = Trim(std::move(episodeGuide));
 }
 
-void CVideoInfoTag::SetStatus(std::string &status)
+void CVideoInfoTag::SetStatus(std::string status)
 {
   m_strStatus = Trim(std::move(status));
 }
 
-void CVideoInfoTag::SetProductionCode(std::string &productionCode)
+void CVideoInfoTag::SetProductionCode(std::string productionCode)
 {
   m_strProductionCode = Trim(std::move(productionCode));
 }
 
-void CVideoInfoTag::SetShowTitle(std::string &showTitle)
+void CVideoInfoTag::SetShowTitle(std::string showTitle)
 {
   m_strShowTitle = Trim(std::move(showTitle));
 }
 
-void CVideoInfoTag::SetStudio(std::vector<std::string> &studio)
+void CVideoInfoTag::SetStudio(std::vector<std::string> studio)
 {
   m_studio = Trim(std::move(studio));
 }
 
-void CVideoInfoTag::SetAlbum(std::string &album)
+void CVideoInfoTag::SetAlbum(std::string album)
 {
   m_strAlbum = Trim(std::move(album));
 }
 
-void CVideoInfoTag::SetShowLink(std::vector<std::string> &showLink)
+void CVideoInfoTag::SetShowLink(std::vector<std::string> showLink)
 {
   m_showLink = Trim(std::move(showLink));
 }
 
-void CVideoInfoTag::SetUniqueId(std::string &uniqueId)
+void CVideoInfoTag::SetUniqueId(std::string uniqueId)
 {
   m_strUniqueId = Trim(std::move(uniqueId));
 }
