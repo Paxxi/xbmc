@@ -1002,11 +1002,11 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
 
   std::vector<std::string> director(details.m_director);
   UpdateVideoTagField(parameterObject, "director", director, updatedDetails);
-  details.SetDirector(director);
+  details.SetDirector(std::move(director));
 
   std::vector<std::string> studio(details.m_studio);
   UpdateVideoTagField(parameterObject, "studio", studio, updatedDetails);
-  details.SetStudio(studio);
+  details.SetStudio(std::move(studio));
 
   if (ParameterNotNull(parameterObject, "year"))
     details.m_iYear = (int)parameterObject["year"].asInteger();
@@ -1017,11 +1017,11 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
 
   std::vector<std::string> artist(details.m_artist);
   UpdateVideoTagField(parameterObject, "artist", artist, updatedDetails);
-  details.SetArtist(artist);
+  details.SetArtist(std::move(artist));
 
   std::vector<std::string> genre(details.m_genre);
   UpdateVideoTagField(parameterObject, "genre", genre, updatedDetails);
-  details.SetGenre(genre);
+  details.SetGenre(std::move(genre));
 
   if (ParameterNotNull(parameterObject, "track"))
     details.m_iTrack = (int)parameterObject["track"].asInteger();
@@ -1056,11 +1056,11 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
 
   std::vector<std::string> credits(details.m_writingCredits);
   UpdateVideoTagField(parameterObject, "writer", credits, updatedDetails);
-  details.SetWritingCredits(credits);
+  details.SetWritingCredits(std::move(credits));
 
   std::vector<std::string> country(details.m_country);
   UpdateVideoTagField(parameterObject, "country", country, updatedDetails);
-  details.SetCountry(country);
+  details.SetCountry(std::move(country));
 
   if (ParameterNotNull(parameterObject, "top250"))
     details.m_iTop250 = (int)parameterObject["top250"].asInteger();
@@ -1076,11 +1076,11 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
 
   std::vector<std::string> showLink(details.m_showLink);
   UpdateVideoTagField(parameterObject, "showlink", showLink, updatedDetails);
-  details.SetShowLink(showLink);
+  details.SetShowLink(std::move(showLink));
 
   std::vector<std::string> tags(details.m_tags);
   UpdateVideoTagField(parameterObject, "tag", tags, updatedDetails);
-  details.SetTags(tags);
+  details.SetTags(std::move(tags));
 
   if (ParameterNotNull(parameterObject, "thumbnail"))
   {

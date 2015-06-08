@@ -568,14 +568,10 @@ const std::string CVideoInfoTag::GetCast(bool bIncludeRole /*= false*/) const
 void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
 {
   std::string value;
-  XMLUtils::GetString(movie, "title", value);
-  SetTitle(value);
-  XMLUtils::GetString(movie, "originaltitle", value);
-  SetOriginalTitle(value);
-  XMLUtils::GetString(movie, "showtitle", value);
-  SetShowTitle(value);
-  XMLUtils::GetString(movie, "sorttitle", value);
-  SetSortTitle(value);
+  SetTitle(XMLUtils::GetString(movie, "title"));
+  SetOriginalTitle(XMLUtils::GetString(movie, "originaltitle"));
+  SetShowTitle(XMLUtils::GetString(movie, "showtitle"));
+  SetSortTitle(XMLUtils::GetString(movie, "sorttitle"));
   XMLUtils::GetFloat(movie, "rating", m_fRating);
   XMLUtils::GetFloat(movie, "epbookmark", m_fEpBookmark);
   int max_value = 10;
@@ -589,8 +585,8 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
   XMLUtils::GetInt(movie, "season", m_iSeason);
   XMLUtils::GetInt(movie, "episode", m_iEpisode);
   XMLUtils::GetInt(movie, "track", m_iTrack);
-  XMLUtils::GetString(movie, "uniqueid", value);
-  SetUniqueId(value);
+  
+  SetUniqueId(XMLUtils::GetString(movie, "uniqueid"));
   XMLUtils::GetInt(movie, "displayseason", m_iSpecialSortSeason);
   XMLUtils::GetInt(movie, "displayepisode", m_iSpecialSortEpisode);
   int after=0;
@@ -600,40 +596,27 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
     m_iSpecialSortSeason = after;
     m_iSpecialSortEpisode = 0x1000; // should be more than any realistic episode number
   }
-  XMLUtils::GetString(movie, "votes", value);
-  SetVotes(value);
-  XMLUtils::GetString(movie, "outline", value);
-  SetPlotOutline(value);
-  XMLUtils::GetString(movie, "plot", value);
-  SetPlot(value);
-  XMLUtils::GetString(movie, "tagline", value);
-  SetTagLine(value);
+  
+  SetVotes(XMLUtils::GetString(movie, "votes"));
+  SetPlotOutline(XMLUtils::GetString(movie, "outline"));
+  SetPlot(XMLUtils::GetString(movie, "plot"));
+  SetTagLine(XMLUtils::GetString(movie, "tagline"));
   if (XMLUtils::GetString(movie, "runtime", value) && !value.empty())
     m_duration = GetDurationFromMinuteString(StringUtils::Trim(value));
-  XMLUtils::GetString(movie, "mpaa", value);
-  SetMPAARating(value);
+  SetMPAARating(XMLUtils::GetString(movie, "mpaa"));
   XMLUtils::GetInt(movie, "playcount", m_playCount);
   XMLUtils::GetDate(movie, "lastplayed", m_lastPlayed);
-  XMLUtils::GetString(movie, "file", value);
-  SetFile(value);
-  XMLUtils::GetString(movie, "path", value);
-  SetPath(value);
-  XMLUtils::GetString(movie, "id", value);
-  SetIMDBNumber(value);
-  XMLUtils::GetString(movie, "filenameandpath", value);
-  SetFileNameAndPath(value);
+  SetFile(XMLUtils::GetString(movie, "file"));
+  SetPath(XMLUtils::GetString(movie, "path"));
+  SetIMDBNumber(XMLUtils::GetString(movie, "id"));
+  SetFileNameAndPath(XMLUtils::GetString(movie, "filenameandpath"));
   XMLUtils::GetDate(movie, "premiered", m_premiered);
-  XMLUtils::GetString(movie, "status", value);
-  SetStatus(value);
-  XMLUtils::GetString(movie, "code", value);
-  SetProductionCode(value);
+  SetStatus(XMLUtils::GetString(movie, "status"));
+  SetProductionCode(XMLUtils::GetString(movie, "code"));
   XMLUtils::GetDate(movie, "aired", m_firstAired);
-  XMLUtils::GetString(movie, "album", value);
-  SetAlbum(value);
-  XMLUtils::GetString(movie, "trailer", value);
-  SetTrailer(value);
-  XMLUtils::GetString(movie, "basepath", value);
-  SetBasePath(value);
+  SetAlbum(XMLUtils::GetString(movie, "album"));
+  SetTrailer(XMLUtils::GetString(movie, "trailer"));
+  SetBasePath(XMLUtils::GetString(movie, "basepath"));
 
   size_t iThumbCount = m_strPictureURL.m_url.size();
   std::string xmlAdd = m_strPictureURL.m_xml;
@@ -662,23 +645,23 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
 
   std::vector<std::string> genres(m_genre);
   XMLUtils::GetStringArray(movie, "genre", genres, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetGenre(genres);
+  SetGenre(std::move(genres));
 
   std::vector<std::string> country(m_country);
   XMLUtils::GetStringArray(movie, "country", country, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetCountry(country);
+  SetCountry(std::move(country));
 
   std::vector<std::string> credits(m_writingCredits);
   XMLUtils::GetStringArray(movie, "credits", credits, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetWritingCredits(credits);
+  SetWritingCredits(std::move(credits));
 
   std::vector<std::string> director(m_director);
   XMLUtils::GetStringArray(movie, "director", director, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetDirector(director);
+  SetDirector(std::move(director));
 
   std::vector<std::string> showLink(m_showLink);
   XMLUtils::GetStringArray(movie, "showlink", showLink, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetShowLink(showLink);
+  SetShowLink(std::move(showLink));
 
   // cast
   const TiXmlElement* node = movie->FirstChildElement("actor");
@@ -708,16 +691,15 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
     node = node->NextSiblingElement("actor");
   }
 
-  XMLUtils::GetString(movie, "set", value);
-  SetSet(value);
+  SetSet(XMLUtils::GetString(movie, "set"));
 
   std::vector<std::string> tags(m_tags);
   XMLUtils::GetStringArray(movie, "tag", tags, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetTags(tags);
+  SetTags(std::move(tags));
 
   std::vector<std::string> studio(m_studio);
   XMLUtils::GetStringArray(movie, "studio", studio, prioritise, g_advancedSettings.m_videoItemSeparator);
-  SetStudio(studio);
+  SetStudio(std::move(studio));
 
   // artists
   std::vector<std::string> artist(m_artist);
@@ -742,7 +724,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
     }
     node = node->NextSiblingElement("artist");
   }
-  SetArtist(artist);
+  SetArtist(std::move(artist));
 
   node = movie->FirstChildElement("fileinfo");
   if (node)
@@ -870,57 +852,57 @@ unsigned int CVideoInfoTag::GetDurationFromMinuteString(const std::string &runti
   return duration*60;
 }
 
-void CVideoInfoTag::SetBasePath(std::string basePath)
+void CVideoInfoTag::SetBasePath(std::string&& basePath)
 {
   m_basePath = Trim(std::move(basePath));
 }
 
-void CVideoInfoTag::SetDirector(std::vector<std::string> director)
+void CVideoInfoTag::SetDirector(std::vector<std::string>&& director)
 {
   m_director = Trim(std::move(director));
 }
 
-void CVideoInfoTag::SetWritingCredits(std::vector<std::string> writingCredits)
+void CVideoInfoTag::SetWritingCredits(std::vector<std::string>&& writingCredits)
 {
   m_writingCredits = Trim(std::move(writingCredits));
 }
 
-void CVideoInfoTag::SetGenre(std::vector<std::string> genre)
+void CVideoInfoTag::SetGenre(std::vector<std::string>&& genre)
 {
   m_genre = Trim(std::move(genre));
 }
 
-void CVideoInfoTag::SetCountry(std::vector<std::string> country)
+void CVideoInfoTag::SetCountry(std::vector<std::string>&& country)
 {
   m_country = Trim(std::move(country));
 }
 
-void CVideoInfoTag::SetTagLine(std::string tagLine)
+void CVideoInfoTag::SetTagLine(std::string&& tagLine)
 {
   m_strTagLine = Trim(std::move(tagLine));
 }
 
-void CVideoInfoTag::SetPlotOutline(std::string plotOutline)
+void CVideoInfoTag::SetPlotOutline(std::string&& plotOutline)
 {
   m_strPlotOutline = Trim(std::move(plotOutline));
 }
 
-void CVideoInfoTag::SetTrailer(std::string trailer)
+void CVideoInfoTag::SetTrailer(std::string&& trailer)
 {
   m_strTrailer = Trim(std::move(trailer));
 }
 
-void CVideoInfoTag::SetPlot(std::string plot)
+void CVideoInfoTag::SetPlot(std::string&& plot)
 {
   m_strPlot = Trim(std::move(plot));
 }
 
-void CVideoInfoTag::SetTitle(std::string title)
+void CVideoInfoTag::SetTitle(std::string&& title)
 {
   m_strTitle = Trim(std::move(title));
 }
 
-void CVideoInfoTag::SetSortTitle(std::string sortTitle)
+void CVideoInfoTag::SetSortTitle(std::string&& sortTitle)
 {
   m_strSortTitle = Trim(std::move(sortTitle));
 }
@@ -930,92 +912,92 @@ void CVideoInfoTag::SetPictureURL(CScraperUrl &pictureURL)
   m_strPictureURL = pictureURL;
 }
 
-void CVideoInfoTag::SetVotes(std::string votes)
+void CVideoInfoTag::SetVotes(std::string&& votes)
 {
   m_strVotes = Trim(std::move(votes));
 }
 
-void CVideoInfoTag::SetArtist(std::vector<std::string> artist)
+void CVideoInfoTag::SetArtist(std::vector<std::string>&& artist)
 {
   m_artist = Trim(std::move(artist));
 }
 
-void CVideoInfoTag::SetSet(std::string set)
+void CVideoInfoTag::SetSet(std::string&& set)
 {
   m_strSet = Trim(std::move(set));
 }
 
-void CVideoInfoTag::SetTags(std::vector<std::string> tags)
+void CVideoInfoTag::SetTags(std::vector<std::string>&& tags)
 {
   m_tags = Trim(std::move(tags));
 }
 
-void CVideoInfoTag::SetFile(std::string file)
+void CVideoInfoTag::SetFile(std::string&& file)
 {
   m_strFile = Trim(std::move(file));
 }
 
-void CVideoInfoTag::SetPath(std::string path)
+void CVideoInfoTag::SetPath(std::string&& path)
 {
   m_strPath = Trim(std::move(path));
 }
 
-void CVideoInfoTag::SetIMDBNumber(std::string imdbNumber)
+void CVideoInfoTag::SetIMDBNumber(std::string&& imdbNumber)
 {
   m_strIMDBNumber = Trim(std::move(imdbNumber));
 }
 
-void CVideoInfoTag::SetMPAARating(std::string mpaaRating)
+void CVideoInfoTag::SetMPAARating(std::string&& mpaaRating)
 {
   m_strMPAARating = Trim(std::move(mpaaRating));
 }
 
-void CVideoInfoTag::SetFileNameAndPath(std::string fileNameAndPath)
+void CVideoInfoTag::SetFileNameAndPath(std::string&& fileNameAndPath)
 {
   m_strFileNameAndPath = Trim(std::move(fileNameAndPath));
 }
 
-void CVideoInfoTag::SetOriginalTitle(std::string originalTitle)
+void CVideoInfoTag::SetOriginalTitle(std::string&& originalTitle)
 {
   m_strOriginalTitle = Trim(std::move(originalTitle));
 }
 
-void CVideoInfoTag::SetEpisodeGuide(std::string episodeGuide)
+void CVideoInfoTag::SetEpisodeGuide(std::string&& episodeGuide)
 {
   m_strEpisodeGuide = Trim(std::move(episodeGuide));
 }
 
-void CVideoInfoTag::SetStatus(std::string status)
+void CVideoInfoTag::SetStatus(std::string&& status)
 {
   m_strStatus = Trim(std::move(status));
 }
 
-void CVideoInfoTag::SetProductionCode(std::string productionCode)
+void CVideoInfoTag::SetProductionCode(std::string&& productionCode)
 {
   m_strProductionCode = Trim(std::move(productionCode));
 }
 
-void CVideoInfoTag::SetShowTitle(std::string showTitle)
+void CVideoInfoTag::SetShowTitle(std::string&& showTitle)
 {
   m_strShowTitle = Trim(std::move(showTitle));
 }
 
-void CVideoInfoTag::SetStudio(std::vector<std::string> studio)
+void CVideoInfoTag::SetStudio(std::vector<std::string>&& studio)
 {
   m_studio = Trim(std::move(studio));
 }
 
-void CVideoInfoTag::SetAlbum(std::string album)
+void CVideoInfoTag::SetAlbum(std::string&& album)
 {
   m_strAlbum = Trim(std::move(album));
 }
 
-void CVideoInfoTag::SetShowLink(std::vector<std::string> showLink)
+void CVideoInfoTag::SetShowLink(std::vector<std::string>&& showLink)
 {
   m_showLink = Trim(std::move(showLink));
 }
 
-void CVideoInfoTag::SetUniqueId(std::string uniqueId)
+void CVideoInfoTag::SetUniqueId(std::string&& uniqueId)
 {
   m_strUniqueId = Trim(std::move(uniqueId));
 }

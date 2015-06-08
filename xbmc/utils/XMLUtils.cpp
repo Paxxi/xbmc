@@ -140,6 +140,13 @@ bool XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag, std::st
   return true;
 }
 
+std::string XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag)
+{
+  std::string result;
+  GetString(pRootNode, strTag, result);
+  return result;
+}
+
 bool XMLUtils::HasChild(const TiXmlNode* pRootNode, const char* strTag)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);

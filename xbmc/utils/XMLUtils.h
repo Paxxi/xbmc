@@ -40,6 +40,8 @@ public:
   static bool GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue);
   static bool GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& bBoolValue);
   static bool GetString(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue);
+  
+  static std::string GetString(const TiXmlNode* pRootNode, const char* strTag);
   /*! \brief Get multiple tags, concatenating the values together.
    Transforms
      <tag>value1</tag>
