@@ -4696,7 +4696,7 @@ void CVideoDatabase::UpdateTables(int iVersion)
 
   if (iVersion < 93)
   {
-    // trim cXX fields
+    // cleanup main tables
     std::string valuesSql;
     for(int i = 0; i < VIDEODB_MAX_COLUMNS; i++) {
       valuesSql += StringUtils::Format("c%02d = TRIM(c%02d)", i, i);
@@ -4707,6 +4707,82 @@ void CVideoDatabase::UpdateTables(int iVersion)
     m_pDS->exec("UPDATE movie SET " + valuesSql);
     m_pDS->exec("UPDATE musicvideo SET " + valuesSql);
     m_pDS->exec("UPDATE tvshow SET " + valuesSql);
+
+    // cleanup additional tables
+    std::map<std::string, std::vector<std::string>> additionalTablesMap = {
+      {"actor", {"actor_link", "director_link", "writer_link"}},
+      {"studio", {"studio_link"}},
+      {"genre", {"genre_link"}},
+      {"country", {"country_link"}},
+      {"tag", {"tag_link"}}
+    };
+    for (auto& addtionalTableEntry : additionalTablesMap)
+    {
+      std::string table = addtionalTableEntry.first;
+      std::string tablePk = addtionalTableEntry.first + "_id";
+      std::map<int, std::vector<int>> objectIdsMap;
+
+      m_pDS->query(PrepareSQL("SELECT (SELECT MIN(%s) FROM %s o2 WHERE TRIM(o2.name) = TRIM(%s.name)) AS main_id, %s "
+                              "FROM %s "
+                              "WHERE TRIM(name) IN (SELECT TRIM(name) FROM %s GROUP BY TRIM(name) HAVING COUNT(1) > 1) "
+                              "AND %s <> main_id",
+                              tablePk.c_str(),
+                              table.c_str(),
+                              table.c_str(),
+                              tablePk.c_str(),
+                              table.c_str(),
+                              table.c_str(),
+                              tablePk.c_str()));
+      while (!m_pDS->eof())
+      {
+        int mainId = m_pDS->fv(0).get_asInt();
+        int id = m_pDS->fv(1).get_asInt();
+
+        std::map<int, std::vector<int>>::iterator it = objectIdsMap.find(mainId);
+        if (it != objectIdsMap.end())
+          it->second.push_back(id);
+        else
+        {
+          std::vector<int> ids = {id};
+          objectIdsMap.insert(std::make_pair(mainId, ids));
+        }
+
+        m_pDS->next();
+      }
+      m_pDS->close();
+
+      for (auto& objectIdEntry : objectIdsMap)
+      {
+        int mainId = objectIdEntry.first;
+        for (auto& id : objectIdEntry.second)
+        {
+          for (auto& subTable : addtionalTableEntry.second)
+          {
+            m_pDS->exec(PrepareSQL("UPDATE %s SET %s = %i "
+                                   "WHERE %s = %i "
+                                   "AND NOT EXISTS ( "
+                                   "  SELECT 1 FROM %s l2 "
+                                   "  WHERE l2.%s = %i "
+                                   "  AND l2.media_id = %s.media_id "
+                                   "  AND l2.media_type = %s.media_type "
+                                   ")",
+                                   subTable.c_str(),
+                                   tablePk.c_str(),
+                                   mainId,
+                                   tablePk.c_str(),
+                                   id,
+                                   subTable.c_str(),
+                                   tablePk.c_str(),
+                                   mainId,
+                                   subTable.c_str(),
+                                   subTable.c_str()));
+
+            m_pDS->exec(PrepareSQL("DELETE FROM %s WHERE %s = %i", subTable.c_str(), tablePk.c_str(), id));
+          }
+          m_pDS->exec(PrepareSQL("DELETE FROM %s WHERE %s = %i", table.c_str(), tablePk.c_str(), id));
+        }
+      }
+    }
   }
 }
 
