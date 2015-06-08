@@ -993,12 +993,8 @@ void CVideoLibrary::UpdateVideoTagField(const CVariant& parameterObject, const s
 
 void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTag& details, std::map<std::string, std::string> &artwork, std::set<std::string> &removedArtwork, std::set<std::string> &updatedDetails)
 {
-  std::string value;
   if (ParameterNotNull(parameterObject, "title"))
-  {
-    value = parameterObject["title"].asString();
-    details.SetTitle(value);
-  }
+    details.SetTitle(parameterObject["title"].asString());
   if (ParameterNotNull(parameterObject, "playcount"))
     details.m_playCount = (int)parameterObject["playcount"].asInteger();
   if (ParameterNotNull(parameterObject, "runtime"))
@@ -1015,15 +1011,9 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
   if (ParameterNotNull(parameterObject, "year"))
     details.m_iYear = (int)parameterObject["year"].asInteger();
   if (ParameterNotNull(parameterObject, "plot"))
-  {
-    value = parameterObject["plot"].asString();
-    details.SetPlot(value);
-  }
+    details.SetPlot(parameterObject["plot"].asString());
   if (ParameterNotNull(parameterObject, "album"))
-  {
-    value = parameterObject["album"].asString();
-    details.SetAlbum(value);
-  }
+    details.SetAlbum(parameterObject["album"].asString());
 
   std::vector<std::string> artist(details.m_artist);
   UpdateVideoTagField(parameterObject, "artist", artist, updatedDetails);
@@ -1038,55 +1028,31 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
   if (ParameterNotNull(parameterObject, "rating"))
     details.m_fRating = parameterObject["rating"].asFloat();
   if (ParameterNotNull(parameterObject, "mpaa"))
-  {
-    value = parameterObject["mpaa"].asString();
-    details.SetMPAARating(value);
-  }
+    details.SetMPAARating(parameterObject["mpaa"].asString());
   if (ParameterNotNull(parameterObject, "imdbnumber"))
-  {
-    value = parameterObject["imdbnumber"].asString();
-    details.SetIMDBNumber(value);
-  }
+    details.SetIMDBNumber(parameterObject["imdbnumber"].asString());
   if (ParameterNotNull(parameterObject, "premiered"))
     SetFromDBDate(parameterObject["premiered"], details.m_premiered);
   if (ParameterNotNull(parameterObject, "votes"))
-  {
-    value = parameterObject["votes"].asString();
-    details.SetVotes(value);
-  }
+    details.SetVotes(parameterObject["votes"].asString());
   if (ParameterNotNull(parameterObject, "lastplayed"))
     SetFromDBDateTime(parameterObject["lastplayed"], details.m_lastPlayed);
   if (ParameterNotNull(parameterObject, "firstaired"))
     SetFromDBDate(parameterObject["firstaired"], details.m_firstAired);
   if (ParameterNotNull(parameterObject, "productioncode"))
-  {
-    value = parameterObject["productioncode"].asString();
-    details.SetProductionCode(value);
-  }
+    details.SetProductionCode(parameterObject["productioncode"].asString());
   if (ParameterNotNull(parameterObject, "season"))
     details.m_iSeason = (int)parameterObject["season"].asInteger();
   if (ParameterNotNull(parameterObject, "episode"))
     details.m_iEpisode = (int)parameterObject["episode"].asInteger();
   if (ParameterNotNull(parameterObject, "originaltitle"))
-  {
-    value = parameterObject["originaltitle"].asString();
-    details.SetOriginalTitle(value);
-  }
+    details.SetOriginalTitle(parameterObject["originaltitle"].asString());
   if (ParameterNotNull(parameterObject, "trailer"))
-  {
-    value = parameterObject["trailer"].asString();
-    details.SetTrailer(value);
-  }
+    details.SetTrailer(parameterObject["trailer"].asString());
   if (ParameterNotNull(parameterObject, "tagline"))
-  {
-    value = parameterObject["tagline"].asString();
-    details.SetTagLine(value);
-  }
+    details.SetTagLine(parameterObject["tagline"].asString());
   if (ParameterNotNull(parameterObject, "plotoutline"))
-  {
-    value = parameterObject["plotoutline"].asString();
-    details.SetPlotOutline(value);
-  }
+    details.SetPlotOutline(parameterObject["plotoutline"].asString());
 
   std::vector<std::string> credits(details.m_writingCredits);
   UpdateVideoTagField(parameterObject, "writer", credits, updatedDetails);
@@ -1099,19 +1065,12 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
   if (ParameterNotNull(parameterObject, "top250"))
     details.m_iTop250 = (int)parameterObject["top250"].asInteger();
   if (ParameterNotNull(parameterObject, "sorttitle"))
-  {
-    value = parameterObject["sorttitle"].asString();
-    details.SetSortTitle(value);
-  }
+    details.SetSortTitle(parameterObject["sorttitle"].asString());
   if (ParameterNotNull(parameterObject, "episodeguide"))
-  {
-    value = parameterObject["episodeguide"].asString();
-    details.SetEpisodeGuide(value);
-  }
+    details.SetEpisodeGuide(parameterObject["episodeguide"].asString());
   if (ParameterNotNull(parameterObject, "set"))
   {
-    value = parameterObject["set"].asString();
-    details.SetSet(value);
+    details.SetSet(parameterObject["set"].asString());
     updatedDetails.insert("set");
   }
 
@@ -1125,13 +1084,13 @@ void CVideoLibrary::UpdateVideoTag(const CVariant &parameterObject, CVideoInfoTa
 
   if (ParameterNotNull(parameterObject, "thumbnail"))
   {
-    value = parameterObject["thumbnail"].asString();
+    std::string value = parameterObject["thumbnail"].asString();
     artwork["thumb"] = StringUtils::Trim(value);
     updatedDetails.insert("art.altered");
   }
   if (ParameterNotNull(parameterObject, "fanart"))
   {
-    value = parameterObject["fanart"].asString();
+    std::string value = parameterObject["fanart"].asString();
     artwork["fanart"] = StringUtils::Trim(value);
     updatedDetails.insert("art.altered");
   }
