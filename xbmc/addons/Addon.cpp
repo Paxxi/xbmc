@@ -46,6 +46,7 @@
 
 using XFILE::CDirectory;
 using XFILE::CFile;
+using namespace KODI::UTILS;
 using namespace std;
 
 namespace ADDON

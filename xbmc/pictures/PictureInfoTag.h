@@ -95,7 +95,7 @@ public:
   CPictureInfoTag() { Reset(); };
   void Reset();
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual void ToSortable(SortItem& sortable, Field field) const;
   const CPictureInfoTag& operator=(const CPictureInfoTag& item);
   const std::string GetInfo(int info) const;

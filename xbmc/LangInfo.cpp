@@ -42,6 +42,7 @@
 
 using namespace std;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 static std::string shortDateFormats[] = {
   // short date formats using "/"

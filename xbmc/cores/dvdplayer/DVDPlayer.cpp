@@ -83,6 +83,7 @@
 
 using namespace std;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 void CSelectionStreams::Clear(StreamType type, StreamSource source)
 {

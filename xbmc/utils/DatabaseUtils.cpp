@@ -28,6 +28,8 @@
 #include "utils/StringUtils.h"
 #include "video/VideoDatabase.h"
 
+using namespace KODI::UTILS;
+
 MediaType DatabaseUtils::MediaTypeFromVideoContentType(int videoContentType)
 {
   VIDEODB_CONTENT_TYPE type = (VIDEODB_CONTENT_TYPE)videoContentType;

@@ -60,7 +60,7 @@ public:
   virtual ~CSong(){};
   void Clear() ;
   void MergeScrapedSong(const CSong& source, bool override);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
 
   bool operator<(const CSong &song) const
   {

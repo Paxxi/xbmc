@@ -19,7 +19,14 @@
  *
  */
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
+
 namespace ANNOUNCEMENT
 {
   enum AnnouncementFlag
@@ -78,6 +85,6 @@ namespace ANNOUNCEMENT
   public:
     IAnnouncer() { };
     virtual ~IAnnouncer() { };
-    virtual void Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data) = 0;
+    virtual void Announce(AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data) = 0;
   };
 }

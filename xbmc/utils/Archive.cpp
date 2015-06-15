@@ -31,6 +31,7 @@
 #endif
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CArchive::CArchive(CFile* pFile, int mode)
 {

@@ -21,7 +21,13 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 namespace JSONRPC
 {
@@ -39,8 +45,8 @@ namespace JSONRPC
   {
   public:
     virtual ~ITransportLayer() { };
-    virtual bool PrepareDownload(const char *path, CVariant &details, std::string &protocol) = 0;
-    virtual bool Download(const char *path, CVariant &result) = 0;
+    virtual bool PrepareDownload(const char *path, KODI::UTILS::CVariant &details, std::string &protocol) = 0;
+    virtual bool Download(const char *path, KODI::UTILS::CVariant &result) = 0;
     virtual int GetCapabilities() = 0;
   };
 }

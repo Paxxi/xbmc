@@ -24,7 +24,13 @@
 #include "TextureCacheJob.h"
 #include "dbwrappers/DatabaseQuery.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class CTextureRule : public CDatabaseQueryRule
 {
@@ -113,7 +119,7 @@ public:
    */
   void ClearTextureForPath(const std::string &url, const std::string &type);
 
-  bool GetTextures(CVariant &items, const Filter &filter);
+  bool GetTextures(KODI::UTILS::CVariant &items, const Filter &filter);
 
   // rule creation
   virtual CDatabaseQueryRule *CreateRule() const;

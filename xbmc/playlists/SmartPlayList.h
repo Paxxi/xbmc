@@ -29,7 +29,13 @@
 #include "utils/XBMCTinyXML.h"
 
 class CURL;
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class CSmartPlaylistRule : public CDatabaseQueryRule
 {
@@ -102,11 +108,11 @@ public:
 
   bool Load(const CURL& url);
   bool Load(const std::string &path);
-  bool Load(const CVariant &obj);
+  bool Load(const KODI::UTILS::CVariant &obj);
   bool LoadFromXml(const std::string &xml);
   bool LoadFromJson(const std::string &json);
   bool Save(const std::string &path) const;
-  bool Save(CVariant &obj, bool full = true) const;
+  bool Save(KODI::UTILS::CVariant &obj, bool full = true) const;
   bool SaveAsJson(std::string &json, bool full = true) const;
 
   bool OpenAndReadName(const CURL &url);
@@ -185,6 +191,6 @@ private:
   std::string m_group;
   bool m_groupMixed;
 
-  CXBMCTinyXML m_xmlDoc;
+  KODI::UTILS::CXBMCTinyXML m_xmlDoc;
 };
 

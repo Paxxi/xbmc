@@ -24,6 +24,10 @@
 #include <stdint.h>
 #include <wchar.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 int64_t str2int64(const std::string &str, int64_t fallback = 0);
 int64_t str2int64(const std::wstring &str, int64_t fallback = 0);
 uint64_t str2uint64(const std::string &str, uint64_t fallback = 0);
@@ -152,3 +156,4 @@ private:
   VariantType m_type;
   VariantUnion m_data;
 };
+}}

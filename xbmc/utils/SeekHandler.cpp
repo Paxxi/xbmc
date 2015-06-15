@@ -31,6 +31,8 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CSeekHandler::CSeekHandler()
 : m_seekDelay(500),
   m_requireSeek(false),

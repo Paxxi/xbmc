@@ -140,7 +140,7 @@ public:
   void AppendGenre(const std::string &genre);
 
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& ar) const;
+  virtual void Serialize(KODI::UTILS::CVariant& ar) const;
   virtual void ToSortable(SortItem& sortable, Field field) const;
 
   void Clear();

@@ -37,6 +37,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS;
 
 class CDirectoryJob : public CJob
 {

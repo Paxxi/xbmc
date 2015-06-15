@@ -28,6 +28,8 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
+using namespace KODI::UTILS;
+
 CPlayerSelectionRule::CPlayerSelectionRule(TiXmlElement* pRule)
 {
   Initialize(pRule);

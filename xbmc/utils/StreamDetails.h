@@ -37,7 +37,7 @@ public:
 
   CStreamDetail(StreamType type) : m_eType(type), m_pParent(NULL) {};
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual bool IsWorseThan(CStreamDetail *that) { return true; };
 
   const StreamType m_eType;
@@ -52,7 +52,7 @@ class CStreamDetailVideo : public CStreamDetail
 public:
   CStreamDetailVideo();
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual bool IsWorseThan(CStreamDetail *that);
 
   int m_iWidth;
@@ -68,7 +68,7 @@ class CStreamDetailAudio : public CStreamDetail
 public:
   CStreamDetailAudio();
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual bool IsWorseThan(CStreamDetail *that);
 
   int m_iChannels;
@@ -82,7 +82,7 @@ public:
   CStreamDetailSubtitle();
   CStreamDetailSubtitle& operator=(const CStreamDetailSubtitle &that);
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual bool IsWorseThan(CStreamDetail *that);
 
   std::string m_strLanguage;
@@ -127,7 +127,7 @@ public:
   void DetermineBestStreams(void);
 
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
 
 private:
   CStreamDetail *NewStream(CStreamDetail::StreamType type);

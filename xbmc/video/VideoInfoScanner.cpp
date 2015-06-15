@@ -53,6 +53,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 namespace VIDEO
 {

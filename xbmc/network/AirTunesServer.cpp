@@ -60,6 +60,7 @@
 
 using namespace XFILE;
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS;
 
 DllLibShairplay *CAirTunesServer::m_pLibShairplay = NULL;
 CAirTunesServer *CAirTunesServer::ServerInstance = NULL;

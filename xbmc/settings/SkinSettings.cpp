@@ -35,6 +35,7 @@
 #define XML_ATTR_NAME     "name"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CSkinSettings::CSkinSettings()
 {

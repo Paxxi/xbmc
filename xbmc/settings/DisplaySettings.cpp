@@ -40,6 +40,7 @@
 #define MAX_REFRESH_CHANGE_DELAY 200
 
 using namespace std;
+using namespace KODI::UTILS;
 
 static RESOLUTION_INFO EmptyResolution;
 static RESOLUTION_INFO EmptyModifiableResolution;

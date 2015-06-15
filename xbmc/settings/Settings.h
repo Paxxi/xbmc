@@ -198,7 +198,7 @@ public:
    \param id Setting identifier
    \return List of values of the setting with the given identifier
    */
-  std::vector<CVariant> GetList(const std::string &id) const;
+  std::vector<KODI::UTILS::CVariant> GetList(const std::string &id) const;
 
   /*!
    \brief Sets the boolean value of the setting with the given identifier.
@@ -246,7 +246,7 @@ public:
    \param value Values to set
    \return True if setting the values was successful, false otherwise
    */
-  bool SetList(const std::string &id, const std::vector<CVariant> &value);
+  bool SetList(const std::string &id, const std::vector<KODI::UTILS::CVariant> &value);
 
   /*!
    \brief Loads the setting being represented by the given XML node with the

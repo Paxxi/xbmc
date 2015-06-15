@@ -34,6 +34,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 CURL::CURL(const std::string& strURL1)
 {

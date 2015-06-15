@@ -25,7 +25,7 @@
 class CJSONVariantWriter
 {
 public:
-  static std::string Write(const CVariant &value, bool compact);
+  static std::string Write(const KODI::UTILS::CVariant &value, bool compact);
 private:
-  static bool InternalWrite(yajl_gen g, const CVariant &value);
+  static bool InternalWrite(yajl_gen g, const KODI::UTILS::CVariant &value);
 };

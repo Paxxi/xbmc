@@ -35,6 +35,7 @@
 using namespace std;
 using namespace JSONRPC;
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 JSONRPC_STATUS CGUIOperations::GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

@@ -53,6 +53,7 @@
 #include "settings/Settings.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 #define BOOKMARK_THUMB_WIDTH g_advancedSettings.GetThumbSize()
 

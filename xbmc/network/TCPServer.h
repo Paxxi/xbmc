@@ -39,11 +39,11 @@ namespace JSONRPC
     static void StopServer(bool bWait);
     static bool IsRunning();
 
-    virtual bool PrepareDownload(const char *path, CVariant &details, std::string &protocol);
-    virtual bool Download(const char *path, CVariant &result);
+    virtual bool PrepareDownload(const char *path, KODI::UTILS::CVariant &details, std::string &protocol);
+    virtual bool Download(const char *path, KODI::UTILS::CVariant &result);
     virtual int GetCapabilities();
 
-    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
   protected:
     void Process();
   private:

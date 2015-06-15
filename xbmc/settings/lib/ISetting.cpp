@@ -24,6 +24,7 @@
 #include "utils/XMLUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 ISetting::ISetting(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : m_id(id),

@@ -29,6 +29,7 @@
 
 using namespace JSONRPC;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 using namespace std;
 
 JSONRPC_STATUS CPlaylistOperations::GetPlaylists(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)

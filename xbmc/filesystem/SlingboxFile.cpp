@@ -29,6 +29,7 @@
 #include "URL.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 using namespace std;
 
 CSlingboxFile::CSlingboxFile()

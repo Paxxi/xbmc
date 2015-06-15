@@ -26,6 +26,7 @@
 #include "utils/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CGUIStaticItem::CGUIStaticItem(const TiXmlElement *item, int parentID) : CFileItem()
 {

@@ -51,6 +51,7 @@ NPT_SET_LOCAL_LOGGER("xbmc.upnp.server")
 using namespace std;
 using namespace ANNOUNCEMENT;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 namespace UPNP
 {

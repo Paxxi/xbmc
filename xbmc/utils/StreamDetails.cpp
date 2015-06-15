@@ -26,6 +26,8 @@
 #include "utils/LangCodeExpander.h"
 #include "utils/Archive.h"
 
+using namespace KODI::UTILS;
+
 const float VIDEOASPECT_EPSILON = 0.025f;
 
 void CStreamDetail::Archive(CArchive &ar)

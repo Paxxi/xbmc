@@ -40,9 +40,9 @@ namespace ANNOUNCEMENT
     void RemoveAnnouncer(IAnnouncer *listener);
 
     void Announce(AnnouncementFlag flag, const char *sender, const char *message);
-    void Announce(AnnouncementFlag flag, const char *sender, const char *message, CVariant &data);
+    void Announce(AnnouncementFlag flag, const char *sender, const char *message, KODI::UTILS::CVariant &data);
     void Announce(AnnouncementFlag flag, const char *sender, const char *message, CFileItemPtr item);
-    void Announce(AnnouncementFlag flag, const char *sender, const char *message, CFileItemPtr item, CVariant &data);
+    void Announce(AnnouncementFlag flag, const char *sender, const char *message, CFileItemPtr item, KODI::UTILS::CVariant &data);
   private:
     CAnnouncementManager();
     CAnnouncementManager(const CAnnouncementManager&);

@@ -71,7 +71,7 @@ namespace PVR
     bool operator ==(const CPVRChannel &right) const;
     bool operator !=(const CPVRChannel &right) const;
 
-    virtual void Serialize(CVariant& value) const;
+    virtual void Serialize(KODI::UTILS::CVariant& value) const;
 
     /*! @name XBMC related channel methods
      */

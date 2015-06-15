@@ -32,6 +32,8 @@
 #include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
   namespace xbmcgui

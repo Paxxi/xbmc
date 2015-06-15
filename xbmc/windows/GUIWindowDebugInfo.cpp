@@ -36,6 +36,8 @@
 
 #include <climits>
 
+using namespace KODI::UTILS;
+
 CGUIWindowDebugInfo::CGUIWindowDebugInfo(void)
     : CGUIDialog(WINDOW_DEBUG_INFO, "")
 {

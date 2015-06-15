@@ -34,7 +34,13 @@
 //  Forward
 class CGUIListItemLayout;
 class CArchive;
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 /*!
  \ingroup controls
@@ -147,7 +153,7 @@ public:
 
   bool m_bIsFolder;     ///< is item a folder or a file
 
-  void SetProperty(const std::string &strKey, const CVariant &value);
+  void SetProperty(const std::string &strKey, const KODI::UTILS::CVariant &value);
 
   void IncrementProperty(const std::string &strKey, int nVal);
   void IncrementProperty(const std::string &strKey, double dVal);
@@ -162,13 +168,13 @@ public:
   void AppendProperties(const CGUIListItem &item);
 
   void Archive(CArchive& ar);
-  void Serialize(CVariant& value);
+  void Serialize(KODI::UTILS::CVariant& value);
 
   bool       HasProperty(const std::string &strKey) const;
   bool       HasProperties() const { return !m_mapProperties.empty(); };
   void       ClearProperty(const std::string &strKey);
 
-  CVariant   GetProperty(const std::string &strKey) const;
+  KODI::UTILS::CVariant   GetProperty(const std::string &strKey) const;
 
 protected:
   std::string m_strLabel2;     // text of column2
@@ -184,7 +190,7 @@ protected:
     bool operator()(const std::string &s1, const std::string &s2) const;
   };
 
-  typedef std::map<std::string, CVariant, icompare> PropertyMap;
+  typedef std::map<std::string, KODI::UTILS::CVariant, icompare> PropertyMap;
   PropertyMap m_mapProperties;
 private:
   std::wstring m_sortLabel;    // text for sorting. Need to be UTF16 for proper sorting

@@ -42,7 +42,7 @@ public:
 
     virtual ~CUPnPRenderer();
 
-    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
     void UpdateState();
 
     // Http server handler

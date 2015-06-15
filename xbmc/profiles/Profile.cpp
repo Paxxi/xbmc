@@ -22,6 +22,8 @@
 #include "GUIInfoManager.h"
 #include "utils/XMLUtils.h"
 
+using namespace KODI::UTILS;
+
 CProfile::CLock::CLock(LockType type, const std::string &password):
   code(password)
 {

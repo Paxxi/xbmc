@@ -41,32 +41,32 @@ namespace JSONRPC
   class CSettingsOperations
   {
   public:
-    static JSONRPC_STATUS GetSections(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetCategories(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetSettings(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS GetSections(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetCategories(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetSettings(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
     
-    static JSONRPC_STATUS GetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS ResetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS GetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS ResetSettingValue(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
 
   private:
     static int ParseSettingLevel(const std::string &strLevel);
 
-    static bool SerializeISetting(const ISetting* setting, CVariant &obj);
-    static bool SerializeSettingSection(const CSettingSection* setting, CVariant &obj);
-    static bool SerializeSettingCategory(const CSettingCategory* setting, CVariant &obj);
-    static bool SerializeSettingGroup(const CSettingGroup* setting, CVariant &obj);
-    static bool SerializeSetting(const CSetting* setting, CVariant &obj);
-    static bool SerializeSettingBool(const CSettingBool* setting, CVariant &obj);
-    static bool SerializeSettingInt(const CSettingInt* setting, CVariant &obj);
-    static bool SerializeSettingNumber(const CSettingNumber* setting, CVariant &obj);
-    static bool SerializeSettingString(const CSettingString* setting, CVariant &obj);
-    static bool SerializeSettingAction(const CSettingAction* setting, CVariant &obj);
-    static bool SerializeSettingList(const CSettingList* setting, CVariant &obj);
-    static bool SerializeSettingPath(const CSettingPath* setting, CVariant &obj);
-    static bool SerializeSettingAddon(const CSettingAddon* setting, CVariant &obj);
-    static bool SerializeSettingControl(const ISettingControl* control, CVariant &obj);
+    static bool SerializeISetting(const ISetting* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingSection(const CSettingSection* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingCategory(const CSettingCategory* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingGroup(const CSettingGroup* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSetting(const CSetting* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingBool(const CSettingBool* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingInt(const CSettingInt* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingNumber(const CSettingNumber* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingString(const CSettingString* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingAction(const CSettingAction* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingList(const CSettingList* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingPath(const CSettingPath* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingAddon(const CSettingAddon* setting, KODI::UTILS::CVariant &obj);
+    static bool SerializeSettingControl(const ISettingControl* control, KODI::UTILS::CVariant &obj);
 
-    static void SerializeSettingListValues(const std::vector<CVariant> &values, CVariant &obj);
+    static void SerializeSettingListValues(const std::vector<KODI::UTILS::CVariant> &values, KODI::UTILS::CVariant &obj);
   };
 }

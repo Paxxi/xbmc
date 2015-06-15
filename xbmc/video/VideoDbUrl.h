@@ -31,7 +31,7 @@ public:
 
 protected:
   virtual bool parse();
-  virtual bool validateOption(const std::string &key, const CVariant &value);
+  virtual bool validateOption(const std::string &key, const KODI::UTILS::CVariant &value);
 
 private:
   std::string m_itemType;

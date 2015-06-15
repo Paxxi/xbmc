@@ -28,17 +28,18 @@ class IParseCallback
 public:
   virtual ~IParseCallback() { }
 
-  virtual void onParsed(CVariant *variant) = 0;
+  virtual void onParsed(KODI::UTILS::CVariant *variant) = 0;
 };
 
 class CSimpleParseCallback : public IParseCallback
 {
 public:
-  virtual void onParsed(CVariant *variant) { m_parsed = *variant; }
-  CVariant &GetOutput() { return m_parsed; }
+  virtual void onParsed(KODI::UTILS::CVariant *variant) { m_parsed = *variant; }
+
+  KODI::UTILS::CVariant &GetOutput() { return m_parsed; }
 
 private:
-  CVariant m_parsed;
+  KODI::UTILS::CVariant m_parsed;
 };
 
 class CJSONVariantParser
@@ -49,7 +50,7 @@ public:
 
   void push_buffer(const unsigned char *buffer, unsigned int length);
 
-  static CVariant Parse(const unsigned char *json, unsigned int length);
+  static KODI::UTILS::CVariant Parse(const unsigned char *json, unsigned int length);
 
 private:
   static int ParseNull(void * ctx);
@@ -63,7 +64,7 @@ private:
   static int ParseArrayStart(void * ctx);
   static int ParseArrayEnd(void * ctx);
 
-  void PushObject(CVariant variant);
+  void PushObject(KODI::UTILS::CVariant variant);
   void PopObject();
 
   static yajl_callbacks callbacks;
@@ -71,8 +72,8 @@ private:
   IParseCallback *m_callback;
   yajl_handle m_handler;
 
-  CVariant m_parsedObject;
-  std::vector<CVariant *> m_parse;
+  KODI::UTILS::CVariant m_parsedObject;
+  std::vector<KODI::UTILS::CVariant *> m_parse;
   std::string m_key;
 
   enum PARSE_STATUS

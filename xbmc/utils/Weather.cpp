@@ -47,6 +47,7 @@
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define LOCALIZED_TOKEN_FIRSTID    370
 #define LOCALIZED_TOKEN_LASTID     395

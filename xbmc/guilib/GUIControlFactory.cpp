@@ -68,6 +68,7 @@
 
 using namespace std;
 using namespace EPG;
+using namespace KODI::UTILS;
 
 typedef struct
 {

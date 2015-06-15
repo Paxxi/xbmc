@@ -26,6 +26,7 @@
 #include "utils/log.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CUrlOptions::CUrlOptions()
   : m_strLead("")

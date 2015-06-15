@@ -43,6 +43,8 @@
 #include "utils/StringUtils.h"
 #include "WindowException.h"
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
   namespace xbmcgui

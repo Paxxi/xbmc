@@ -26,7 +26,10 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CGUIColorManager g_colorManager;
+
 
 CGUIColorManager::CGUIColorManager(void)
 {

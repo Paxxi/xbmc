@@ -48,6 +48,10 @@
 #undef DECLARATION
 #undef TYPECOUNT
 
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML : public TiXmlDocument
 {
 public:
@@ -75,3 +79,4 @@ protected:
   std::string m_SuggestedCharset;
   std::string m_UsedCharset;
 };
+}}

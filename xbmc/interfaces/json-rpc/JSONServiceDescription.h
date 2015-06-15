@@ -46,9 +46,9 @@ namespace JSONRPC
   public:
     JSONSchemaTypeDefinition();
     
-    bool Parse(const CVariant &value, bool isParameter = false);
-    JSONRPC_STATUS Check(const CVariant &value, CVariant &outputValue, CVariant &errorData);
-    void Print(bool isParameter, bool isGlobal, bool printDefault, bool printDescriptions, CVariant &output) const;
+    bool Parse(const KODI::UTILS::CVariant &value, bool isParameter = false);
+    JSONRPC_STATUS Check(const KODI::UTILS::CVariant &value, KODI::UTILS::CVariant &outputValue, KODI::UTILS::CVariant &errorData);
+    void Print(bool isParameter, bool isGlobal, bool printDefault, bool printDescriptions, KODI::UTILS::CVariant &output) const;
     void Set(const JSONSchemaTypeDefinitionPtr typeDefinition);
     
     std::string missingReference;
@@ -110,7 +110,7 @@ namespace JSONRPC
      \brief Default value of the parameter
      (only needed when it is optional)
      */
-    CVariant defaultValue;
+    KODI::UTILS::CVariant defaultValue;
 
     /*!
      \brief Minimum value for Integer
@@ -155,7 +155,7 @@ namespace JSONRPC
      \brief (Optional) List of allowed values
      for the type
      */
-    std::vector<CVariant> enums;
+    std::vector<KODI::UTILS::CVariant> enums;
 
     /*!
      \brief List of possible values in an array
@@ -237,8 +237,8 @@ namespace JSONRPC
   public:
     JsonRpcMethod();
   
-    bool Parse(const CVariant &value);
-    JSONRPC_STATUS Check(const CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, CVariant &outputParameters) const;
+    bool Parse(const KODI::UTILS::CVariant &value);
+    JSONRPC_STATUS Check(const KODI::UTILS::CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, KODI::UTILS::CVariant &outputParameters) const;
     
     std::string missingReference;    
     
@@ -275,9 +275,9 @@ namespace JSONRPC
     JSONSchemaTypeDefinitionPtr returns;
   
   private:
-    bool parseParameter(const CVariant &value, JSONSchemaTypeDefinitionPtr parameter);
-    bool parseReturn(const CVariant &value);
-    static JSONRPC_STATUS checkParameter(const CVariant &requestParameters, JSONSchemaTypeDefinitionPtr type, unsigned int position, CVariant &outputParameters, unsigned int &handled, CVariant &errorData);
+    bool parseParameter(const KODI::UTILS::CVariant &value, JSONSchemaTypeDefinitionPtr parameter);
+    bool parseReturn(const KODI::UTILS::CVariant &value);
+    static JSONRPC_STATUS checkParameter(const KODI::UTILS::CVariant &requestParameters, JSONSchemaTypeDefinitionPtr type, unsigned int position, KODI::UTILS::CVariant &outputParameters, unsigned int &handled, KODI::UTILS::CVariant &errorData);
   };
 
   /*! 
@@ -350,7 +350,7 @@ namespace JSONRPC
      */
     static bool AddNotification(const std::string &jsonNotification);
 
-    static bool AddEnum(const std::string &name, const std::vector<CVariant> &values, CVariant::VariantType type = CVariant::VariantTypeNull, const CVariant &defaultValue = CVariant::ConstNullVariant);
+    static bool AddEnum(const std::string &name, const std::vector<KODI::UTILS::CVariant> &values, KODI::UTILS::CVariant::VariantType type = KODI::UTILS::CVariant::VariantTypeNull, const KODI::UTILS::CVariant &defaultValue = KODI::UTILS::CVariant::ConstNullVariant);
     static bool AddEnum(const std::string &name, const std::vector<std::string> &values);
     static bool AddEnum(const std::string &name, const std::vector<int> &values);
 
@@ -370,7 +370,7 @@ namespace JSONRPC
      \param printMetadata Whether to print XBMC specific data or not
      \param filterByTransport Whether to filter by transport or not
      */
-    static JSONRPC_STATUS Print(CVariant &result, ITransportLayer *transport, IClient *client, bool printDescriptions = true, bool printMetadata = false, bool filterByTransport = true, const std::string &filterByName = "", const std::string &filterByType = "", bool printReferences = true);
+    static JSONRPC_STATUS Print(KODI::UTILS::CVariant &result, ITransportLayer *transport, IClient *client, bool printDescriptions = true, bool printMetadata = false, bool filterByTransport = true, const std::string &filterByName = "", const std::string &filterByType = "", bool printReferences = true);
 
     /*!
      \brief Checks the given parameters from the request against the
@@ -388,17 +388,17 @@ namespace JSONRPC
      actual C/C++ implementation of the method to the "methodCall" parameter and checks the
      given parameters from the request against the json schema description for the given method.
      */
-    static JSONRPC_STATUS CheckCall(const char* method, const CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, CVariant &outputParameters);
+    static JSONRPC_STATUS CheckCall(const char* method, const KODI::UTILS::CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, KODI::UTILS::CVariant &outputParameters);
     
     static JSONSchemaTypeDefinitionPtr GetType(const std::string &identification);
 
     static void Cleanup();
 
   private:
-    static bool prepareDescription(std::string &description, CVariant &descriptionObject, std::string &name);
+    static bool prepareDescription(std::string &description, KODI::UTILS::CVariant &descriptionObject, std::string &name);
     static bool addMethod(const std::string &jsonMethod, MethodCall method);
-    static void parseHeader(const CVariant &descriptionObject);
-    static bool parseJSONSchemaType(const CVariant &value, std::vector<JSONSchemaTypeDefinitionPtr>& typeDefinitions, JSONSchemaType &schemaType, std::string &missingReference);
+    static void parseHeader(const KODI::UTILS::CVariant &descriptionObject);
+    static bool parseJSONSchemaType(const KODI::UTILS::CVariant &value, std::vector<JSONSchemaTypeDefinitionPtr>& typeDefinitions, JSONSchemaType &schemaType, std::string &missingReference);
     static void addReferenceTypeDefinition(JSONSchemaTypeDefinitionPtr typeDefinition);
     static void removeReferenceTypeDefinition(const std::string &typeID);
 
@@ -423,7 +423,7 @@ namespace JSONRPC
 
     static CJsonRpcMethodMap m_actionMap;
     static std::map<std::string, JSONSchemaTypeDefinitionPtr> m_types;
-    static std::map<std::string, CVariant> m_notifications;
+    static std::map<std::string, KODI::UTILS::CVariant> m_notifications;
     static JsonRpcMethodMap m_methodMaps[];
 
     typedef enum SchemaDefinition

@@ -48,6 +48,7 @@ using namespace std;
 using namespace XFILE;
 using namespace MUSIC_GRABBER;
 using namespace VIDEO;
+using namespace KODI::UTILS;
 
 namespace ADDON
 {

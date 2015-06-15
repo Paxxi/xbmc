@@ -37,6 +37,7 @@
 using namespace XFILE;
 using namespace std;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 namespace {
 

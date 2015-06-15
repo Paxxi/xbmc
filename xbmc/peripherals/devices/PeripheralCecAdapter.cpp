@@ -40,6 +40,7 @@
 using namespace PERIPHERALS;
 using namespace ANNOUNCEMENT;
 using namespace CEC;
+using namespace KODI::UTILS;
 using namespace std;
 
 #define CEC_LIB_SUPPORTED_VERSION LIBCEC_VERSION_TO_UINT(3, 0, 0)

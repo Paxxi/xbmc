@@ -43,7 +43,7 @@ CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parent
     item = item->NextSiblingElement("item");
   }
 
-  if (XMLUtils::GetInt(element, "default", m_defaultItem))
+  if (KODI::UTILS::XMLUtils::GetInt(element, "default", m_defaultItem))
   {
     const char *always = element->FirstChildElement("default")->Attribute("always");
     if (always && strnicmp(always, "true", 4) == 0)

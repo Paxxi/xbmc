@@ -54,6 +54,7 @@
 #define DEFAULT_PLAYCOUNT_MIN_TIME 10
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #if defined(TARGET_WINDOWS)
 extern HWND g_hWnd;

@@ -35,6 +35,8 @@
 #include "GUIUserMessages.h"
 #include "music/MusicDatabase.h"
 
+using namespace KODI::UTILS;
+
 bool CSaveFileStateJob::DoWork()
 {
   std::string progressTrackingFile = m_item.GetPath();

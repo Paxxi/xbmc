@@ -29,6 +29,7 @@
 
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 using namespace std;
 
 /* ------------------------ example wpl playlist file ---------------------------------

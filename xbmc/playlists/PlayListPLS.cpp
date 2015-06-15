@@ -34,6 +34,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 #define START_PLAYLIST_MARKER "[playlist]" // may be case-insentive (equivalent to .ini file on win32)
 #define PLAYLIST_NAME     "PlaylistName"

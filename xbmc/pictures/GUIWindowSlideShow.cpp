@@ -46,6 +46,7 @@
 #include "pictures/PictureThumbLoader.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define MAX_ZOOM_FACTOR                     10
 #define MAX_PICTURE_SIZE             2048*2048

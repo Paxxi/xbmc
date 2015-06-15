@@ -40,6 +40,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 AddonPtr CRepository::Clone() const
 {

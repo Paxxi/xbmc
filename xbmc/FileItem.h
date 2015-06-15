@@ -130,7 +130,7 @@ public:
   void Reset();
   const CFileItem& operator=(const CFileItem& item);
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& value) const;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual void ToSortable(SortItem &sortable, Field field) const;
   void ToSortable(SortItem &sortable, const Fields &fields) const;
   virtual bool IsFileItem() const { return true; };

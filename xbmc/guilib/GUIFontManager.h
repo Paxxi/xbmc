@@ -35,9 +35,16 @@
 // Forward
 class CGUIFont;
 class CGUIFontTTFBase;
-class CXBMCTinyXML;
 class TiXmlNode;
 class CSetting;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CXBMCTinyXML;
+}}
+
 
 struct OrigFontInfo
 {

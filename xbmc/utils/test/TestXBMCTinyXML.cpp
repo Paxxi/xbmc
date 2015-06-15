@@ -24,6 +24,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestXBMCTinyXML, ParseFromString)
 {
   bool retval = false;

@@ -38,6 +38,7 @@
 #include "video/VideoDatabase.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CMediaSettings::CMediaSettings()
 {

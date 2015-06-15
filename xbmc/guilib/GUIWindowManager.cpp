@@ -148,6 +148,7 @@
 using namespace std;
 using namespace PVR;
 using namespace PERIPHERALS;
+using namespace KODI::UTILS;
 
 CGUIWindowManager::CGUIWindowManager(void)
 {

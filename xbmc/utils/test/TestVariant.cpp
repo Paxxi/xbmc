@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestVariant, VariantTypeInteger)
 {
   CVariant a((int)0), b((int64_t)1);

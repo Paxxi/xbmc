@@ -26,6 +26,7 @@
 #include "input/ButtonTranslator.h"
 
 using namespace JSONRPC;
+using namespace KODI::UTILS;
 
 //TODO the breakage of the screensaver should be refactored
 //to one central super duper place for getting rid of

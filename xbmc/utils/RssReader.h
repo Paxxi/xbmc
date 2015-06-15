@@ -61,7 +61,7 @@ private:
   std::vector<SYSTEMTIME *> m_vecTimeStamps;
   std::vector<int> m_vecUpdateTimes;
   int m_spacesBetweenFeeds;
-  CXBMCTinyXML m_xml;
+  KODI::UTILS::CXBMCTinyXML m_xml;
   std::list<std::string> m_tagSet;
   std::vector<std::string> m_vecUrls;
   std::vector<int> m_vecQueue;

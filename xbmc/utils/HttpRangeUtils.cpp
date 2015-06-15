@@ -26,6 +26,8 @@
 
 #include <algorithm>
 
+using namespace KODI::UTILS;
+
 #define HEADER_NEWLINE        "\r\n"
 #define HEADER_SEPARATOR      HEADER_NEWLINE HEADER_NEWLINE
 #define HEADER_BOUNDARY       "--"

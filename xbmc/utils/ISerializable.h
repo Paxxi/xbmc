@@ -19,11 +19,17 @@
  *
  */
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class ISerializable
 {
 public:
-  virtual void Serialize(CVariant& value) const = 0;
+  virtual void Serialize(KODI::UTILS::CVariant& value) const = 0;
   virtual ~ISerializable() {}
 };

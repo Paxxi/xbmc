@@ -23,7 +23,13 @@
 #include "music/Artist.h"
 #include "addons/Scraper.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML;
+}}
+
 class CScraperUrl;
 
 namespace MUSIC_GRABBER

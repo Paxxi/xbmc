@@ -123,8 +123,8 @@ protected:
   virtual void DeleteControls();
   virtual void FreeSettingsControls();
 
-  virtual void SetHeading(const CVariant &label);
-  virtual void SetDescription(const CVariant &label);
+  virtual void SetHeading(const KODI::UTILS::CVariant &label);
+  virtual void SetDescription(const KODI::UTILS::CVariant &label);
 
   virtual void OnResetSettings();
   
@@ -143,7 +143,7 @@ protected:
 
   void UpdateSettingControl(const std::string &settingId);
   void UpdateSettingControl(BaseSettingControlPtr pSettingControl);
-  void SetControlLabel(int controlId, const CVariant &label);
+  void SetControlLabel(int controlId, const KODI::UTILS::CVariant &label);
 
   BaseSettingControlPtr GetSettingControl(const std::string &setting);
   BaseSettingControlPtr GetSettingControl(int controlId);

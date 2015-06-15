@@ -25,7 +25,13 @@
 #include "addons/Scraper.h"
 #include "utils/ScraperUrl.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML;
+}}
+
 
 namespace XFILE { class CCurlFile; }
 

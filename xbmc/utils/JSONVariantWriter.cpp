@@ -23,6 +23,7 @@
 #include "JSONVariantWriter.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 string CJSONVariantWriter::Write(const CVariant &value, bool compact)
 {

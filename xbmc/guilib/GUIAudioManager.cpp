@@ -33,6 +33,7 @@
 #include "utils/log.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CGUIAudioManager g_audioManager;
 

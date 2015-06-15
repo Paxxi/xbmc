@@ -73,6 +73,7 @@ using namespace PVR;
 using namespace std;
 using namespace MUSIC_INFO;
 using namespace PERIPHERALS;
+using namespace KODI::UTILS;
 
 CDelayedMessage::CDelayedMessage(ThreadMessage& msg, unsigned int delay) : CThread("DelayedMessage")
 {

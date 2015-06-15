@@ -35,6 +35,7 @@
 #define XML_SETTINGLEVEL      "settinglevel"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CViewStateSettings::CViewStateSettings()
 {

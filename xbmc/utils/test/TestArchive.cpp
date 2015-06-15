@@ -26,6 +26,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 class TestArchive : public testing::Test
 {
 protected:

@@ -54,7 +54,7 @@ namespace JSONRPC
   class CJSONUtils
   {
   public:
-    static void MillisecondsToTimeObject(int time, CVariant &result)
+    static void MillisecondsToTimeObject(int time, KODI::UTILS::CVariant &result)
     {
       int ms = time % 1000;
       result["milliseconds"] = ms;
@@ -72,7 +72,7 @@ namespace JSONRPC
     }
 
   protected:
-    static void HandleLimits(const CVariant &parameterObject, CVariant &result, int size, int &start, int &end)
+    static void HandleLimits(const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result, int size, int &start, int &end)
     {
       if (size < 0)
         size = 0;
@@ -87,7 +87,7 @@ namespace JSONRPC
       result["limits"]["total"] = size;
     }
 
-    static bool ParseSorting(const CVariant &parameterObject, SortBy &sortBy, SortOrder &sortOrder, SortAttribute &sortAttributes)
+    static bool ParseSorting(const KODI::UTILS::CVariant &parameterObject, SortBy &sortBy, SortOrder &sortOrder, SortAttribute &sortAttributes)
     {
       std::string method = parameterObject["sort"]["method"].asString();
       std::string order = parameterObject["sort"]["order"].asString();
@@ -187,7 +187,7 @@ namespace JSONRPC
       return true;
     }
 
-    static void ParseLimits(const CVariant &parameterObject, int &limitStart, int &limitEnd)
+    static void ParseLimits(const KODI::UTILS::CVariant &parameterObject, int &limitStart, int &limitEnd)
     {
       limitStart = (int)parameterObject["limits"]["start"].asInteger();
       limitEnd = (int)parameterObject["limits"]["end"].asInteger();
@@ -204,7 +204,7 @@ namespace JSONRPC
      the given object is not an array) or for a parameter at the 
      given position (if the given object is an array).
      */
-    static inline bool ParameterExists(const CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) || (parameterObject.isArray() && parameterObject.size() > position); }
+    static inline bool ParameterExists(const KODI::UTILS::CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) || (parameterObject.isArray() && parameterObject.size() > position); }
 
     /*!
      \brief Checks if the given object contains a value
@@ -214,7 +214,7 @@ namespace JSONRPC
      \return True if the given object contains a member with 
      the given key otherwise false
      */
-    static inline bool IsValueMember(const CVariant &value, std::string key) { return value.isObject() && value.isMember(key); }
+    static inline bool IsValueMember(const KODI::UTILS::CVariant &value, std::string key) { return value.isObject() && value.isMember(key); }
     
     /*!
      \brief Returns the json value of a parameter
@@ -228,7 +228,7 @@ namespace JSONRPC
      the given object is not an array) or of the parameter at the 
      given position (if the given object is an array).
      */
-    static inline CVariant GetParameter(const CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) ? parameterObject[key] : parameterObject[position]; }
+    static inline KODI::UTILS::CVariant GetParameter(const KODI::UTILS::CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) ? parameterObject[key] : parameterObject[position]; }
     
     /*!
      \brief Returns the json value of a parameter or the given
@@ -245,7 +245,7 @@ namespace JSONRPC
      given position (if the given object is an array). If the
      parameter does not exist the given default value is returned.
      */
-    static inline CVariant GetParameter(const CVariant &parameterObject, std::string key, unsigned int position, CVariant fallback) { return IsValueMember(parameterObject, key) ? parameterObject[key] : ((parameterObject.isArray() && parameterObject.size() > position) ? parameterObject[position] : fallback); }
+    static inline KODI::UTILS::CVariant GetParameter(const KODI::UTILS::CVariant &parameterObject, std::string key, unsigned int position, KODI::UTILS::CVariant fallback) { return IsValueMember(parameterObject, key) ? parameterObject[key] : ((parameterObject.isArray() && parameterObject.size() > position) ? parameterObject[position] : fallback); }
     
     /*!
      \brief Returns the given json value as a string
@@ -254,7 +254,7 @@ namespace JSONRPC
      \return String value of the given json value or the default value
      if the given json value is no string
      */
-    static inline std::string GetString(const CVariant &value, const char* defaultValue)
+    static inline std::string GetString(const KODI::UTILS::CVariant &value, const char* defaultValue)
     {
       std::string str = defaultValue;
       if (value.isString())
@@ -376,9 +376,9 @@ namespace JSONRPC
      \param valueTye json schema type(s)
      \param jsonObject json object into which the json schema type(s) are stored
      */
-    static inline void SchemaValueTypeToJson(JSONSchemaType valueType, CVariant &jsonObject)
+    static inline void SchemaValueTypeToJson(JSONSchemaType valueType, KODI::UTILS::CVariant &jsonObject)
     {
-      jsonObject = CVariant(CVariant::VariantTypeArray);
+      jsonObject = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeArray);
       for (unsigned int value = 0x01; value <= (unsigned int)AnyValue; value *= 2)
       {
         if (HasType(valueType, (JSONSchemaType)value))
@@ -387,30 +387,30 @@ namespace JSONRPC
 
       if (jsonObject.size() == 1)
       {
-        CVariant jsonType = jsonObject[0];
+        KODI::UTILS::CVariant jsonType = jsonObject[0];
         jsonObject = jsonType;
       }
     }
 
-    static inline const char *ValueTypeToString(CVariant::VariantType valueType)
+    static inline const char *ValueTypeToString(KODI::UTILS::CVariant::VariantType valueType)
     {
       switch (valueType)
       {
-      case CVariant::VariantTypeString:
+      case KODI::UTILS::CVariant::VariantTypeString:
         return "string";
-      case CVariant::VariantTypeDouble:
+      case KODI::UTILS::CVariant::VariantTypeDouble:
         return "number";
-      case CVariant::VariantTypeInteger:
-      case CVariant::VariantTypeUnsignedInteger:
+      case KODI::UTILS::CVariant::VariantTypeInteger:
+      case KODI::UTILS::CVariant::VariantTypeUnsignedInteger:
         return "integer";
-      case CVariant::VariantTypeBoolean:
+      case KODI::UTILS::CVariant::VariantTypeBoolean:
         return "boolean";
-      case CVariant::VariantTypeArray:
+      case KODI::UTILS::CVariant::VariantTypeArray:
         return "array";
-      case CVariant::VariantTypeObject:
+      case KODI::UTILS::CVariant::VariantTypeObject:
         return "object";
-      case CVariant::VariantTypeNull:
-      case CVariant::VariantTypeConstNull:
+      case KODI::UTILS::CVariant::VariantTypeNull:
+      case KODI::UTILS::CVariant::VariantTypeConstNull:
         return "null";
       default:
         return "unknown";
@@ -426,12 +426,12 @@ namespace JSONRPC
      \param valueType Expected type of the parameter
      \return True if the specific parameter is of the given type otherwise false
      */
-    static inline bool IsParameterType(const CVariant &parameterObject, const char *key, unsigned int position, JSONSchemaType valueType)
+    static inline bool IsParameterType(const KODI::UTILS::CVariant &parameterObject, const char *key, unsigned int position, JSONSchemaType valueType)
     {
       if ((valueType & AnyValue) == AnyValue)
         return true;
 
-      CVariant parameter;
+      KODI::UTILS::CVariant parameter;
       if (IsValueMember(parameterObject, key))
         parameter = parameterObject[key];
       else if(parameterObject.isArray() && parameterObject.size() > position)
@@ -446,7 +446,7 @@ namespace JSONRPC
      \param valueType Expected type of the json value
      \return True if the given json value is of the given type otherwise false
     */
-    static inline bool IsType(const CVariant &value, JSONSchemaType valueType)
+    static inline bool IsType(const KODI::UTILS::CVariant &value, JSONSchemaType valueType)
     {
       if (HasType(valueType, AnyValue))
         return true;
@@ -472,36 +472,36 @@ namespace JSONRPC
      \param value Json value to be set
      \param valueType Type of the default value
      */
-    static inline void SetDefaultValue(CVariant &value, JSONSchemaType valueType)
+    static inline void SetDefaultValue(KODI::UTILS::CVariant &value, JSONSchemaType valueType)
     {
       switch (valueType)
       {
         case StringValue:
-          value = CVariant("");
+          value = KODI::UTILS::CVariant("");
           break;
         case NumberValue:
-          value = CVariant(CVariant::VariantTypeDouble);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeDouble);
           break;
         case IntegerValue:
-          value = CVariant(CVariant::VariantTypeInteger);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeInteger);
           break;
         case BooleanValue:
-          value = CVariant(CVariant::VariantTypeBoolean);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeBoolean);
           break;
         case ArrayValue:
-          value = CVariant(CVariant::VariantTypeArray);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeArray);
           break;
         case ObjectValue:
-          value = CVariant(CVariant::VariantTypeObject);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeObject);
           break;
         default:
-          value = CVariant(CVariant::VariantTypeNull);
+          value = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeNull);
       }
     }
 
     static inline bool HasType(JSONSchemaType typeObject, JSONSchemaType type) { return (typeObject & type) == type; }
 
-    static inline bool ParameterNotNull(const CVariant &parameterObject, std::string key) { return parameterObject.isMember(key) && !parameterObject[key].isNull(); }
+    static inline bool ParameterNotNull(const KODI::UTILS::CVariant &parameterObject, std::string key) { return parameterObject.isMember(key) && !parameterObject[key].isNull(); }
 
     /*!
      \brief Copies the values from the jsonStringArray to the stringArray.
@@ -509,17 +509,17 @@ namespace JSONRPC
      \param jsonStringArray JSON object representing a string array
      \param stringArray String array where the values are copied into (cleared)
      */
-    static void CopyStringArray(const CVariant &jsonStringArray, std::vector<std::string> &stringArray)
+    static void CopyStringArray(const KODI::UTILS::CVariant &jsonStringArray, std::vector<std::string> &stringArray)
     {
       if (!jsonStringArray.isArray())
         return;
 
       stringArray.clear();
-      for (CVariant::const_iterator_array it = jsonStringArray.begin_array(); it != jsonStringArray.end_array(); it++)
+      for (KODI::UTILS::CVariant::const_iterator_array it = jsonStringArray.begin_array(); it != jsonStringArray.end_array(); it++)
         stringArray.push_back(it->asString());
     }
 
-    static void SetFromDBDate(const CVariant &jsonDate, CDateTime &date)
+    static void SetFromDBDate(const KODI::UTILS::CVariant &jsonDate, CDateTime &date)
     {
       if (!jsonDate.isString())
         return;
@@ -530,7 +530,7 @@ namespace JSONRPC
         date.SetFromDBDate(jsonDate.asString());
     }
 
-    static void SetFromDBDateTime(const CVariant &jsonDate, CDateTime &date)
+    static void SetFromDBDateTime(const KODI::UTILS::CVariant &jsonDate, CDateTime &date)
     {
       if (!jsonDate.isString())
         return;
@@ -541,17 +541,17 @@ namespace JSONRPC
         date.SetFromDBDateTime(jsonDate.asString());
     }
 
-    static bool GetXspFiltering(const std::string &type, const CVariant &filter, std::string &xsp)
+    static bool GetXspFiltering(const std::string &type, const KODI::UTILS::CVariant &filter, std::string &xsp)
     {
       if (type.empty() || !filter.isObject())
         return false;
 
-      CVariant xspObj(CVariant::VariantTypeObject);
+      KODI::UTILS::CVariant xspObj(KODI::UTILS::CVariant::VariantTypeObject);
       xspObj["type"] = type;
 
       if (filter.isMember("field"))
       {
-        xspObj["rules"]["and"] = CVariant(CVariant::VariantTypeArray);
+        xspObj["rules"]["and"] = KODI::UTILS::CVariant(KODI::UTILS::CVariant::VariantTypeArray);
         xspObj["rules"]["and"].push_back(filter);
       }
       else

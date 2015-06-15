@@ -31,6 +31,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS;
 
 string ArrayToString(SortAttribute attributes, const CVariant &variant, const string &seperator = " / ")
 {

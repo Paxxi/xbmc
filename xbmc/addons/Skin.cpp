@@ -39,6 +39,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 std::shared_ptr<ADDON::CSkinInfo> g_SkinInfo;
 

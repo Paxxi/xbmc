@@ -50,7 +50,7 @@ namespace JSONRPC
   /*!
    \brief Function pointer for JSON-RPC methods
    */
-  typedef JSONRPC_STATUS (*MethodCall) (const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
+  typedef JSONRPC_STATUS (*MethodCall) (const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
 
   /*!
    \ingroup jsonrpc

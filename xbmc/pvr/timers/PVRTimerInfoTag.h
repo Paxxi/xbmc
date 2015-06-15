@@ -81,7 +81,7 @@ namespace PVR
     bool operator ==(const CPVRTimerInfoTag& right) const;
     bool operator !=(const CPVRTimerInfoTag& right) const;
 
-    virtual void Serialize(CVariant &value) const;
+    virtual void Serialize(KODI::UTILS::CVariant &value) const;
 
     int Compare(const CPVRTimerInfoTag &timer) const;
 

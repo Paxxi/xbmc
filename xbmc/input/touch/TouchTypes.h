@@ -26,7 +26,7 @@
  * \brief A class representing a touch consisting of an x and y coordinate and
  *        a time
  */
-class Touch : public CVector
+class Touch : public KODI::UTILS::CVector
 {
 public:
   Touch() { reset(); }

@@ -26,6 +26,8 @@
 #include "utils/JSONVariantWriter.h"
 #include "utils/log.h"
 
+using namespace KODI::UTILS;
+
 #define MAX_STRING_POST_SIZE 20000
 
 bool CHTTPJsonRpcHandler::CanHandleRequest(const HTTPRequest &request)
