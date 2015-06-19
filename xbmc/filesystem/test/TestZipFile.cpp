@@ -31,6 +31,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 class TestZipFile : public testing::Test
 {
 protected:

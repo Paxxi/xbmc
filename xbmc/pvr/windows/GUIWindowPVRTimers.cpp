@@ -34,6 +34,7 @@
 #include "utils/StringUtils.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CGUIWindowPVRTimers::CGUIWindowPVRTimers(bool bRadio) :
   CGUIWindowPVRBase(bRadio, bRadio ? WINDOW_RADIO_TIMERS : WINDOW_TV_TIMERS, "MyPVRTimers.xml")

@@ -38,6 +38,7 @@
 #pragma comment(lib, "sqlite3.lib")
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 namespace dbiplus {

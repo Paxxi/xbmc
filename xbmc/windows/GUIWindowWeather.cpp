@@ -30,6 +30,7 @@
 #include "utils/StringUtils.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 #define CONTROL_BTNREFRESH             2
 #define CONTROL_SELECTLOCATION         3

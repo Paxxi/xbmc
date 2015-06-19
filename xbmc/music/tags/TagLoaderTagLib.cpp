@@ -52,6 +52,7 @@
 using namespace std;
 using namespace TagLib;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 template<class T>
 class TagStringHandler : public T

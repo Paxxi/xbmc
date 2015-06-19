@@ -32,6 +32,7 @@
 #include "cores/dvdplayer/DVDCodecs/Overlay/DVDOverlayText.h"
 
 using namespace OVERLAY;
+using namespace KODI::UTILS;
 
 static color_t color[8] = { 0xFFFFFF00
                           , 0xFFFFFFFF

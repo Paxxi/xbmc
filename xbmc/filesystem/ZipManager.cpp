@@ -32,6 +32,7 @@
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+using namespace KODI::UTILS;
 using namespace XFILE;
 using namespace std;
 

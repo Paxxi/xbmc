@@ -22,6 +22,8 @@
 #include "input/Key.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
+
 // time to reset accelerated cursors (digital movement)
 #define MOVE_TIME_OUT 500L
 

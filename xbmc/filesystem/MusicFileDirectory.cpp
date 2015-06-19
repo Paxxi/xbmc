@@ -27,6 +27,7 @@
 
 using namespace MUSIC_INFO;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CMusicFileDirectory::CMusicFileDirectory(void)
 {

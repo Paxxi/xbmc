@@ -67,6 +67,7 @@ extern "C" FILE *fopen_utf8(const char *_Filename, const char *_Mode);
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 extern "C"
 {

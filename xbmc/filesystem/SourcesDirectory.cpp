@@ -30,6 +30,7 @@
 #include "storage/MediaManager.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CSourcesDirectory::CSourcesDirectory(void)
 {

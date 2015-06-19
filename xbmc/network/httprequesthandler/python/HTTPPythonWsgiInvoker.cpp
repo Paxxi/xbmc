@@ -79,6 +79,7 @@ namespace PythonBindings {
 }
 
 using namespace PythonBindings;
+using namespace KODI::UTILS;
 
 typedef struct
 {

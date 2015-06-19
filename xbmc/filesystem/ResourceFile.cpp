@@ -27,6 +27,7 @@
 
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CResourceFile::CResourceFile()
   : COverrideFile(false)

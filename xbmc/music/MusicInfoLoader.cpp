@@ -37,6 +37,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 // HACK until we make this threadable - specify 1 thread only for now
 CMusicInfoLoader::CMusicInfoLoader() : CBackgroundInfoLoader()

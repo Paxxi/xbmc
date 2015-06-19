@@ -22,6 +22,7 @@
 #include "utils/XMLUtils.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parentID)
@@ -43,7 +44,7 @@ CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parent
     item = item->NextSiblingElement("item");
   }
 
-  if (KODI::UTILS::XMLUtils::GetInt(element, "default", m_defaultItem))
+  if (XMLUtils::GetInt(element, "default", m_defaultItem))
   {
     const char *always = element->FirstChildElement("default")->Attribute("always");
     if (always && strnicmp(always, "true", 4) == 0)

@@ -28,6 +28,7 @@
 
 #define ZIP_CACHE_LIMIT 4*1024*1024
 
+using namespace KODI::UTILS;
 using namespace XFILE;
 using namespace std;
 

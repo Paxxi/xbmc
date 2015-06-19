@@ -27,6 +27,7 @@
 #include "utils/log.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void) :
     m_groupsRadio(new CPVRChannelGroups(true)),

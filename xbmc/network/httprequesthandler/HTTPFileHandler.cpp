@@ -25,6 +25,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 CHTTPFileHandler::CHTTPFileHandler()
   : IHTTPRequestHandler(),
     m_url(),

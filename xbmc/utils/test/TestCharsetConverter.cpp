@@ -25,6 +25,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 static const uint16_t refutf16LE1[] = { 0xff54, 0xff45, 0xff53, 0xff54,
                                         0xff3f, 0xff55, 0xff54, 0xff46,
                                         0xff11, 0xff16, 0xff2c, 0xff25,

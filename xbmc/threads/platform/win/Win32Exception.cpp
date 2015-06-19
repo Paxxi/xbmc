@@ -27,6 +27,8 @@
 #include "utils/CharsetConverter.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 #define LOG if(logger) logger->Log
 
 typedef BOOL (WINAPI *MINIDUMPWRITEDUMP)(HANDLE hProcess, DWORD dwPid, HANDLE hFile, MINIDUMP_TYPE DumpType,

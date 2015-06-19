@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestUrlOptions, Clear)
 {
   const char *key = "foo";

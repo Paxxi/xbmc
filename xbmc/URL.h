@@ -134,6 +134,6 @@ protected:
   std::string m_strFileType;
   std::string m_strOptions;
   std::string m_strProtocolOptions;
-  CUrlOptions m_options;
-  CUrlOptions m_protocolOptions;
+  KODI::UTILS::CUrlOptions m_options;
+  KODI::UTILS::CUrlOptions m_protocolOptions;
 };

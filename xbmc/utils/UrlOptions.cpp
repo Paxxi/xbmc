@@ -25,9 +25,10 @@
 #include "utils/StringUtils.h"
 #include "utils/log.h"
 
-using namespace std;
-using namespace KODI::UTILS;
-
+namespace KODI
+{
+namespace UTILS
+{
 CUrlOptions::CUrlOptions()
   : m_strLead("")
 { }
@@ -67,10 +68,10 @@ std::string CUrlOptions::GetOptionsString(bool withLeadingSeperator /* = false *
 
 void CUrlOptions::AddOption(const std::string &key, const char *value)
 {
-  if (key.empty() || value == NULL)
+  if (key.empty() || value == nullptr)
     return;
 
-  return AddOption(key, string(value));
+  return AddOption(key, std::string(value));
 }
 
 void CUrlOptions::AddOption(const std::string &key, const std::string &value)
@@ -118,7 +119,7 @@ void CUrlOptions::AddOptions(const std::string &options)
   if (options.empty())
     return;
 
-  string strOptions = options;
+  std::string strOptions = options;
 
   // if matching the preset leading str, remove from options.
   if (!m_strLead.empty() && strOptions.compare(0, m_strLead.length(), m_strLead) == 0)
@@ -133,17 +134,17 @@ void CUrlOptions::AddOptions(const std::string &options)
   }
 
   // split the options by & and process them one by one
-  vector<string> optionList = StringUtils::Split(strOptions, "&");
-  for (vector<string>::const_iterator option = optionList.begin(); option != optionList.end(); ++option)
+  std::vector<std::string> optionList = StringUtils::Split(strOptions, "&");
+  for (std::vector<std::string>::const_iterator option = optionList.begin(); option != optionList.end(); ++option)
   {
     if (option->empty())
       continue;
 
-    string key, value;
+    std::string key, value;
 
     size_t pos = option->find('=');
     key = CURL::Decode(option->substr(0, pos));
-    if (pos != string::npos)
+    if (pos != std::string::npos)
       value = CURL::Decode(option->substr(pos + 1));
 
     // the key cannot be empty
@@ -187,3 +188,5 @@ bool CUrlOptions::GetOption(const std::string &key, CVariant &value) const
   value = option->second;
   return true;
 }
+}}
+

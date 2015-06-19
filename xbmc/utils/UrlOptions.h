@@ -24,10 +24,14 @@
 
 #include "utils/Variant.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CUrlOptions
 {
 public:
-  typedef std::map<std::string, KODI::UTILS::CVariant> UrlOptions;
+  typedef std::map<std::string, CVariant> UrlOptions;
 
   CUrlOptions();
   CUrlOptions(const std::string &options, const char *strLead = "");
@@ -49,9 +53,11 @@ public:
   virtual void RemoveOption(const std::string &key);
 
   virtual bool HasOption(const std::string &key) const;
-  virtual bool GetOption(const std::string &key, KODI::UTILS::CVariant &value) const;
+  virtual bool GetOption(const std::string &key, CVariant &value) const;
 
 protected:
   UrlOptions m_options;
   std::string m_strLead;
 };
+}}
+

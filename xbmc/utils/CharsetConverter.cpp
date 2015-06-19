@@ -33,6 +33,8 @@
 #include <iconv.h>
 #include <algorithm>
 
+using namespace KODI::UTILS;
+
 #if !defined(TARGET_WINDOWS) && defined(HAVE_CONFIG_H)
   #include "config.h"
 #endif

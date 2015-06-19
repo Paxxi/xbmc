@@ -25,7 +25,7 @@
 #include "URL.h"
 #include "utils/UrlOptions.h"
 
-class CDbUrl : public CUrlOptions
+class CDbUrl : public KODI::UTILS::CUrlOptions
 {
 public:
   CDbUrl();

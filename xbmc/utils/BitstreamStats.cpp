@@ -21,6 +21,8 @@
 #include "BitstreamStats.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
+
 int64_t BitstreamStats::m_tmFreq;
 
 BitstreamStats::BitstreamStats(unsigned int nEstimatedBitrate)

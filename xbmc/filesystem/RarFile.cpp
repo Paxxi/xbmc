@@ -37,6 +37,7 @@
 #include <process.h>
 #endif
 
+using namespace KODI::UTILS;
 using namespace XFILE;
 using namespace std;
 

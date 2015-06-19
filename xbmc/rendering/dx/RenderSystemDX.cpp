@@ -41,6 +41,7 @@
   #define DXGetErrorDescription(hr) DXGetErrorDescription9(hr)
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 // Dynamic loading of Direct3DCreate9Ex to keep compatibility with 2000/XP.

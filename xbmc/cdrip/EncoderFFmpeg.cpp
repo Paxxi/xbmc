@@ -39,6 +39,7 @@
 #endif
 
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 CEncoderFFmpeg::CEncoderFFmpeg():
   m_Format    (NULL),

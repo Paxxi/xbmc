@@ -35,6 +35,7 @@
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define WEBSERVER_HOST          "localhost"
 #define WEBSERVER_PORT          23456

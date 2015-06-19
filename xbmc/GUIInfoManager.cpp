@@ -104,6 +104,7 @@ using namespace ADDON;
 using namespace PVR;
 using namespace INFO;
 using namespace EPG;
+using namespace KODI::UTILS;
 
 CGUIInfoManager::CGUIInfoManager(void) :
     Observable()

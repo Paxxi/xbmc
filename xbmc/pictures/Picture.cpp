@@ -44,6 +44,7 @@ extern "C" {
 }
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 bool CPicture::GetThumbnailFromSurface(const unsigned char* buffer, int width, int height, int stride, const std::string &thumbFile, uint8_t* &result, size_t& result_size)
 {

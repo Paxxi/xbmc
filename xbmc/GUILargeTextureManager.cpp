@@ -31,6 +31,7 @@
 
 #include <cassert>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 

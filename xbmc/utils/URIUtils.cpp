@@ -37,6 +37,11 @@
 using namespace std;
 using namespace XFILE;
 
+
+namespace KODI
+{
+namespace UTILS
+{
 bool URIUtils::IsInPath(const std::string &uri, const std::string &baseURI)
 {
   std::string uriPath = CSpecialProtocol::TranslatePath(uri);
@@ -153,7 +158,7 @@ void URIUtils::RemoveExtension(std::string& strFileName)
 }
 
 std::string URIUtils::ReplaceExtension(const std::string& strFile,
-                                      const std::string& strNewExtension)
+                                       const std::string& strNewExtension)
 {
   if(IsURL(strFile))
   {
@@ -282,7 +287,7 @@ bool URIUtils::HasEncodedFilename(const CURL& url)
 
   // For now assume only (quasi) http internet streams use URL encoding
   return CURL::IsProtocolEqual(prot2, "http")  ||
-         CURL::IsProtocolEqual(prot2, "https");
+      CURL::IsProtocolEqual(prot2, "https");
 }
 
 std::string URIUtils::GetParentPath(const std::string& strPath)
@@ -451,12 +456,12 @@ std::string URIUtils::ChangeBasePath(const std::string &fromPath, const std::str
 
   // Handle difference in URL encoded vs. not encoded
   if ( HasEncodedFilename(CURL(fromPath))
-   && !HasEncodedFilename(CURL(toPath)) )
+    && !HasEncodedFilename(CURL(toPath)) )
   {
     toFile = URLDecodePath(toFile); // Decode path
   }
   else if (!HasEncodedFilename(CURL(fromPath))
-         && HasEncodedFilename(CURL(toPath)) )
+    && HasEncodedFilename(CURL(toPath)) )
   {
     toFile = URLEncodePath(toFile); // Encode path
   }
@@ -480,7 +485,7 @@ CURL URIUtils::SubstitutePath(const CURL& url, bool reverse /* = false */)
 std::string URIUtils::SubstitutePath(const std::string& strPath, bool reverse /* = false */)
 {
   for (CAdvancedSettings::StringMapping::iterator i = g_advancedSettings.m_pathSubstitutions.begin();
-      i != g_advancedSettings.m_pathSubstitutions.end(); ++i)
+       i != g_advancedSettings.m_pathSubstitutions.end(); ++i)
   {
     std::string fromPath;
     std::string toPath;
@@ -651,7 +656,7 @@ bool URIUtils::IsHostOnLAN(const std::string& host, bool offLineCheck)
         addr_match(address, "192.168.0.0", "255.255.0.0") ||
         addr_match(address, "10.0.0.0", "255.0.0.0") ||
         addr_match(address, "172.16.0.0", "255.240.0.0")
-        )
+      )
         return true;
     }
     // check if we are on the local subnet
@@ -849,7 +854,7 @@ bool URIUtils::IsFTP(const std::string& strFile)
     return IsFTP(url.GetHostName());
 
   return IsProtocol(strFile, "ftp") ||
-         IsProtocol(strFile, "ftps");
+      IsProtocol(strFile, "ftps");
 }
 
 bool URIUtils::IsHTTP(const std::string& strFile)
@@ -865,7 +870,7 @@ bool URIUtils::IsHTTP(const std::string& strFile)
     return IsHTTP(url.GetHostName());
 
   return IsProtocol(strFile, "http") ||
-         IsProtocol(strFile, "https");
+      IsProtocol(strFile, "https");
 }
 
 bool URIUtils::IsUDP(const std::string& strFile)
@@ -911,7 +916,7 @@ bool URIUtils::IsDAV(const std::string& strFile)
     return IsDAV(url.GetHostName());
   
   return IsProtocol(strFile, "dav") ||
-         IsProtocol(strFile, "davs");
+      IsProtocol(strFile, "davs");
 }
 
 bool URIUtils::IsInternetStream(const std::string &path, bool bStrictCheck /* = false */)
@@ -931,19 +936,19 @@ bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */
 
   // Special case these
   if (url.IsProtocol("ftp") || url.IsProtocol("ftps")  ||
-      url.IsProtocol("dav") || url.IsProtocol("davs")  ||
-      url.IsProtocol("sftp"))
+    url.IsProtocol("dav") || url.IsProtocol("davs")  ||
+    url.IsProtocol("sftp"))
     return bStrictCheck;
 
   std::string protocol = url.GetTranslatedProtocol();
   if (CURL::IsProtocolEqual(protocol, "http")  || CURL::IsProtocolEqual(protocol, "https")  ||
-      CURL::IsProtocolEqual(protocol, "tcp")   || CURL::IsProtocolEqual(protocol, "udp")    ||
-      CURL::IsProtocolEqual(protocol, "rtp")   || CURL::IsProtocolEqual(protocol, "sdp")    ||
-      CURL::IsProtocolEqual(protocol, "mms")   || CURL::IsProtocolEqual(protocol, "mmst")   ||
-      CURL::IsProtocolEqual(protocol, "mmsh")  || CURL::IsProtocolEqual(protocol, "rtsp")   ||
-      CURL::IsProtocolEqual(protocol, "rtmp")  || CURL::IsProtocolEqual(protocol, "rtmpt")  ||
-      CURL::IsProtocolEqual(protocol, "rtmpe") || CURL::IsProtocolEqual(protocol, "rtmpte") ||
-      CURL::IsProtocolEqual(protocol, "rtmps"))
+    CURL::IsProtocolEqual(protocol, "tcp")   || CURL::IsProtocolEqual(protocol, "udp")    ||
+    CURL::IsProtocolEqual(protocol, "rtp")   || CURL::IsProtocolEqual(protocol, "sdp")    ||
+    CURL::IsProtocolEqual(protocol, "mms")   || CURL::IsProtocolEqual(protocol, "mmst")   ||
+    CURL::IsProtocolEqual(protocol, "mmsh")  || CURL::IsProtocolEqual(protocol, "rtsp")   ||
+    CURL::IsProtocolEqual(protocol, "rtmp")  || CURL::IsProtocolEqual(protocol, "rtmpt")  ||
+    CURL::IsProtocolEqual(protocol, "rtmpe") || CURL::IsProtocolEqual(protocol, "rtmpte") ||
+    CURL::IsProtocolEqual(protocol, "rtmps"))
     return true;
 
   return false;
@@ -970,9 +975,9 @@ bool URIUtils::IsLiveTV(const std::string& strFile)
   RemoveSlashAtEnd(strFileWithoutSlash);
 
   if (IsHDHomeRun(strFile)
-  || IsSlingbox(strFile)
-  || IsProtocol(strFile, "sap")
-  ||(StringUtils::EndsWithNoCase(strFileWithoutSlash, ".pvr") && !PathStarts(strFileWithoutSlash, "pvr://recordings")))
+    || IsSlingbox(strFile)
+    || IsProtocol(strFile, "sap")
+    ||(StringUtils::EndsWithNoCase(strFileWithoutSlash, ".pvr") && !PathStarts(strFileWithoutSlash, "pvr://recordings")))
     return true;
 
   return false;
@@ -984,7 +989,7 @@ bool URIUtils::IsPVRRecording(const std::string& strFile)
   RemoveSlashAtEnd(strFileWithoutSlash);
 
   return StringUtils::EndsWithNoCase(strFileWithoutSlash, ".pvr") &&
-         PathStarts(strFile, "pvr://recordings");
+      PathStarts(strFile, "pvr://recordings");
 }
 
 bool URIUtils::IsMusicDb(const std::string& strFile)
@@ -1031,9 +1036,9 @@ bool URIUtils::IsLibraryFolder(const std::string& strFile)
 bool URIUtils::IsLibraryContent(const std::string &strFile)
 {
   return (IsProtocol(strFile, "library") ||
-          IsProtocol(strFile, "videodb") ||
-          IsProtocol(strFile, "musicdb") ||
-          StringUtils::EndsWith(strFile, ".xsp"));
+    IsProtocol(strFile, "videodb") ||
+    IsProtocol(strFile, "musicdb") ||
+    StringUtils::EndsWith(strFile, ".xsp"));
 }
 
 bool URIUtils::IsDOSPath(const std::string &path)
@@ -1183,7 +1188,7 @@ std::string URIUtils::CanonicalizePath(const std::string& path, const char slash
 }
 
 std::string URIUtils::AddFileToFolder(const std::string& strFolder, 
-                                const std::string& strFile)
+                                      const std::string& strFile)
 {
   if (IsURL(strFolder))
   {
@@ -1354,3 +1359,4 @@ bool URIUtils::IsUsingFastSwitch(const std::string& strFile)
 {
   return IsUDP(strFile) || IsTCP(strFile) || IsPVRChannel(strFile);
 }
+}}

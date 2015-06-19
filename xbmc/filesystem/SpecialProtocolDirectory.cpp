@@ -27,6 +27,7 @@
 #include "URL.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CSpecialProtocolDirectory::CSpecialProtocolDirectory(void)
 {

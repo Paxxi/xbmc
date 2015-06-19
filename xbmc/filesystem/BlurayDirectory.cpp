@@ -31,6 +31,8 @@
 
 #include <cassert>
 
+using namespace KODI::UTILS;
+
 namespace XFILE
 {
 

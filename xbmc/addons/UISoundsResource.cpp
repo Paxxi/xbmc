@@ -23,6 +23,7 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
 
 namespace ADDON
 {

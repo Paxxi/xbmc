@@ -888,8 +888,8 @@ private:
    */
   int RunQuery(const std::string &sql);
 
-  void AppendIdLinkFilter(const char* field, const char *table, const MediaType& mediaType, const char *view, const char *viewKey, const CUrlOptions::UrlOptions& options, Filter &filter);
-  void AppendLinkFilter(const char* field, const char *table, const MediaType& mediaType, const char *view, const char *viewKey, const CUrlOptions::UrlOptions& options, Filter &filter);
+  void AppendIdLinkFilter(const char* field, const char *table, const MediaType& mediaType, const char *view, const char *viewKey, const KODI::UTILS::CUrlOptions::UrlOptions& options, Filter &filter);
+  void AppendLinkFilter(const char* field, const char *table, const MediaType& mediaType, const char *view, const char *viewKey, const KODI::UTILS::CUrlOptions::UrlOptions& options, Filter &filter);
 
   /*! \brief Determine whether the path is using lookup using folders
    \param path the path to check

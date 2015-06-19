@@ -22,6 +22,8 @@
 #include "threads/SingleLock.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
+
 #define POPUP_ICON                400
 #define POPUP_CAPTION_TEXT        401
 #define POPUP_NOTIFICATION_BUTTON 402

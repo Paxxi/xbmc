@@ -47,6 +47,7 @@
 #include "video/videosync/VideoSyncIos.h"
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")

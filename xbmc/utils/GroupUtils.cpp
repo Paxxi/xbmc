@@ -29,6 +29,7 @@
 #include "utils/URIUtils.h"
 #include "filesystem/MultiPathDirectory.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 typedef map<int, set<CFileItemPtr> > SetMap;

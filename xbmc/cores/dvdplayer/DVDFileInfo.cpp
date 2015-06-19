@@ -54,6 +54,7 @@
 #include "Util.h"
 #include "utils/LangCodeExpander.h"
 
+using namespace KODI::UTILS;
 
 bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
 {

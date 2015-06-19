@@ -48,6 +48,7 @@
 using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 using namespace std;
 
 CFileDirectoryFactory::CFileDirectoryFactory(void)

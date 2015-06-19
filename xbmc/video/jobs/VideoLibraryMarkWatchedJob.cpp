@@ -31,6 +31,8 @@
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
+using namespace KODI::UTILS;
+
 CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(const CFileItemPtr &item, bool mark)
   : m_item(item),
     m_mark(mark)

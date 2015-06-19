@@ -27,7 +27,9 @@
 #include "settings/AdvancedSettings.h"
 #include "URL.h"
 
+using namespace KODI::UTILS;
 using namespace std;
+
 namespace XFILE
 {
   CStackDirectory::CStackDirectory()

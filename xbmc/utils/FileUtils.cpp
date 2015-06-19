@@ -35,6 +35,7 @@
 #include "settings/Settings.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 using namespace std;
 
 bool CFileUtils::DeleteItem(const std::string &strPath, bool force)

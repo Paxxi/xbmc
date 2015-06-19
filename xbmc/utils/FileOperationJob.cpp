@@ -35,6 +35,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CFileOperationJob::CFileOperationJob()
   : m_action(ActionCopy),

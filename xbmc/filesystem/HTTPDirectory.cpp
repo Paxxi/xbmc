@@ -32,6 +32,7 @@
 #include "climits"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CHTTPDirectory::CHTTPDirectory(void){}
 CHTTPDirectory::~CHTTPDirectory(void){}

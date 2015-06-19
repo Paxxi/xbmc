@@ -29,6 +29,7 @@
 #include "utils/StringUtils.h"
 
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 CPlayList* CPlayListFactory::Create(const std::string& filename)
 {

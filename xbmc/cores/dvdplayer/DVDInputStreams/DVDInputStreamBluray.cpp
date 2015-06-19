@@ -43,6 +43,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 void DllLibbluray::file_close(BD_FILE_H *file)
 {

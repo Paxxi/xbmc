@@ -23,6 +23,7 @@
 #include "DbUrl.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CDbUrl::CDbUrl()

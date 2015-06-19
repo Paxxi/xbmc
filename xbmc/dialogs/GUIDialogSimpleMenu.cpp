@@ -31,6 +31,8 @@
 #include "video/VideoInfoTag.h"
 #include "URL.h"
 
+using namespace KODI::UTILS;
+
 bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item)
 {
   /* if asked to resume somewhere, we should not show anything */

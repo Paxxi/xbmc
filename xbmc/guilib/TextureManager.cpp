@@ -40,6 +40,7 @@
 #include "windowing/WindowingFactory.h" // for g_Windowing in CGUITextureManager::FreeUnusedTextures
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 

@@ -46,6 +46,7 @@
 #include "URL.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define BACKGROUND_IMAGE       999

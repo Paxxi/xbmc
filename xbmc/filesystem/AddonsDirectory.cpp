@@ -35,6 +35,7 @@
 #include "URL.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 namespace XFILE
 {

@@ -414,7 +414,7 @@ void CAESinkWASAPI::GetDelay(AEDelayStatus& status)
   EXIT_ON_FAILURE(hr, __FUNCTION__": Retrieval of IAudioClock::GetPosition failed.")
 
   status.delay = (double)(m_sinkFrames + m_bufferPtr) / m_format.m_sampleRate - (double)pos / m_clockFreq;
-  status.tick  = rescale_u64(tick, CurrentHostFrequency(), 10000000); /* convert from 100ns back to qpc ticks */
+  status.tick  = rescale_u64(tick, KODI::UTILS::CurrentHostFrequency(), 10000000); /* convert from 100ns back to qpc ticks */
   return;
 failed:
   status.SetDelay(0);

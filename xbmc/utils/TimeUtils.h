@@ -26,6 +26,10 @@
 class CDateTime;
 class CTimeSmoother;
 
+namespace KODI
+{
+namespace UTILS
+{
 int64_t CurrentHostCounter(void);
 int64_t CurrentHostFrequency(void);
 
@@ -40,4 +44,5 @@ private:
   static unsigned int frameTime;
   static CTimeSmoother frameTimer;
 };
+}}
 

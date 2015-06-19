@@ -41,6 +41,7 @@
 #include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 
+using namespace KODI::UTILS;
 using namespace XFILE;
 using namespace std;
 using namespace VIDEO;

@@ -103,6 +103,7 @@ using namespace MEDIA_DETECT;
 
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 #if !defined(TARGET_WINDOWS)
 unsigned int CUtil::s_randomSeed = time(NULL);

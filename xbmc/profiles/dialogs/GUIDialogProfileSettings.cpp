@@ -37,6 +37,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 #define CONTROL_PROFILE_IMAGE         CONTROL_SETTINGS_CUSTOM + 1
 #define CONTROL_PROFILE_NAME          CONTROL_SETTINGS_CUSTOM + 2
 #define CONTROL_PROFILE_DIRECTORY     CONTROL_SETTINGS_CUSTOM + 3

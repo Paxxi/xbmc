@@ -25,6 +25,8 @@
 #include "URL.h"
 #include "FileItem.h"
 
+using namespace KODI::UTILS;
+
 namespace XFILE
 {
   CRarDirectory::CRarDirectory()

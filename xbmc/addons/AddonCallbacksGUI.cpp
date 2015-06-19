@@ -50,6 +50,7 @@
 #define CONTROL_LABELFILES      12
 
 using namespace std;
+using namespace KODI::UTILS;
 
 namespace ADDON
 {

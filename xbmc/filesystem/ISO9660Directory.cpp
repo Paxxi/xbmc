@@ -27,6 +27,7 @@
 #include "FileItem.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CISO9660Directory::CISO9660Directory(void)
 {}

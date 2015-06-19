@@ -25,6 +25,7 @@
 #include "utils/URIUtils.h"
 
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 namespace XBMCAddon
 {

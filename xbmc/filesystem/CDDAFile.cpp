@@ -33,6 +33,7 @@
 
 using namespace MEDIA_DETECT;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CFileCDDA::CFileCDDA(void)
 {

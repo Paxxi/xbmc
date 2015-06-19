@@ -27,6 +27,8 @@
 #endif
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
+
 CStopWatch::CStopWatch(bool useFrameTime /*=false*/)
 {
   m_timerPeriod      = 0.0f;

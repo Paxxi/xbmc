@@ -29,6 +29,7 @@
 
 #include "karaokelyricstextkar.h"
 
+using namespace KODI::UTILS;
 
 // Parsed lyrics
 typedef struct

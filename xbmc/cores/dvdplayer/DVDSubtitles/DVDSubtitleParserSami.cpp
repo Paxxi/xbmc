@@ -28,6 +28,7 @@
 #include "DVDSubtitleTagSami.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CDVDSubtitleParserSami::CDVDSubtitleParserSami(CDVDSubtitleStream* pStream, const string& filename)
     : CDVDSubtitleParserText(pStream, filename)

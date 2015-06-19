@@ -37,6 +37,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define TIME_TO_BUSY_DIALOG 500
 

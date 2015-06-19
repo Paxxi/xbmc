@@ -56,6 +56,7 @@ extern HWND g_hWnd;
 
 using namespace std;
 using namespace MEDIA_DETECT;
+using namespace KODI::UTILS;
 
 CWIN32Util::CWIN32Util(void)
 {

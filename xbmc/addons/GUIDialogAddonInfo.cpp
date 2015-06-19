@@ -51,6 +51,7 @@
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
   : CGUIDialog(WINDOW_DIALOG_ADDON_INFO, "DialogAddonInfo.xml"),

@@ -32,6 +32,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define CONTROL_HEADING         2

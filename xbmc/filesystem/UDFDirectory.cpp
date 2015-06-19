@@ -28,6 +28,7 @@
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CUDFDirectory::CUDFDirectory(void)
 {

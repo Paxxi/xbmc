@@ -27,6 +27,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 bool CMediaSource::IsWritable() const
 {
