@@ -163,12 +163,12 @@ public:
   static const std::string& GetTemperatureUnitString(KODI::UTILS::CTemperature::Unit temperatureUnit);
   std::string GetTemperatureAsString(const KODI::UTILS::CTemperature& temperature) const;
 
-  CSpeed::Unit GetSpeedUnit() const;
-  void SetSpeedUnit(CSpeed::Unit speedUnit);
+  KODI::UTILS::CSpeed::Unit GetSpeedUnit() const;
+  void SetSpeedUnit(KODI::UTILS::CSpeed::Unit speedUnit);
   void SetSpeedUnit(const std::string& speedUnit);
   const std::string& GetSpeedUnitString() const;
-  static const std::string& GetSpeedUnitString(CSpeed::Unit speedUnit);
-  std::string GetSpeedAsString(const CSpeed& speed) const;
+  static const std::string& GetSpeedUnitString(KODI::UTILS::CSpeed::Unit speedUnit);
+  std::string GetSpeedAsString(const KODI::UTILS::CSpeed& speed) const;
 
   void GetRegionNames(std::vector<std::string>& array);
   void SetCurrentRegion(const std::string& strName);
@@ -222,7 +222,7 @@ protected:
     std::string m_strTimeZone;
 
     KODI::UTILS::CTemperature::Unit m_tempUnit;
-    CSpeed::Unit m_speedUnit;
+    KODI::UTILS::CSpeed::Unit m_speedUnit;
   };
 
 
@@ -249,7 +249,7 @@ protected:
   std::string m_timeFormat;
   bool m_use24HourClock;
   KODI::UTILS::CTemperature::Unit m_temperatureUnit;
-  CSpeed::Unit m_speedUnit;
+  KODI::UTILS::CSpeed::Unit m_speedUnit;
 
   std::string m_audioLanguage;
   std::string m_subtitleLanguage;

@@ -62,6 +62,6 @@ protected:
   // searching
   void OnSearchUpdate();
   void AddSearchFolder();
-  CStopWatch m_searchTimer; ///< Timer to delay a search while more characters are entered
+  KODI::UTILS::CStopWatch m_searchTimer; ///< Timer to delay a search while more characters are entered
   bool m_searchWithEdit;    ///< Whether the skin supports the new edit control searching
 };

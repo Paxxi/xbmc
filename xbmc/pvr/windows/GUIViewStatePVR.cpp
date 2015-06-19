@@ -25,6 +25,7 @@
 #include "view/ViewStateSettings.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CGUIViewStateWindowPVRChannels::CGUIViewStateWindowPVRChannels(const int windowId, const CFileItemList& items) : CGUIViewStatePVR(windowId, items)
 {

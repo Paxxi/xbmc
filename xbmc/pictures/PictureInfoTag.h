@@ -89,14 +89,14 @@
 #define SLIDE_IPTC_COUNTRY_CODE     979
 #define SLIDE_IPTC_REF_SERVICE      980
 
-class CPictureInfoTag : public IArchivable, public ISerializable, public ISortable
+class CPictureInfoTag : public IArchivable, public ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CPictureInfoTag() { Reset(); };
   void Reset();
   virtual void Archive(CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
-  virtual void ToSortable(SortItem& sortable, Field field) const;
+  virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
   const CPictureInfoTag& operator=(const CPictureInfoTag& item);
   const std::string GetInfo(int info) const;
 

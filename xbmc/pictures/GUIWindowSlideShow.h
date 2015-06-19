@@ -84,14 +84,14 @@ public:
   void RunSlideShow(const std::string &strPath, bool bRecursive = false,
                     bool bRandom = false, bool bNotRandom = false,
                     const std::string &beginSlidePath="", bool startSlideShow = true,
-                    SortBy method = SortByLabel,
-                    SortOrder order = SortOrderAscending,
-                    SortAttribute sortAttributes = SortAttributeNone,
+                    KODI::UTILS::SortBy method = KODI::UTILS::SortByLabel,
+                    KODI::UTILS::SortOrder order = KODI::UTILS::SortOrderAscending,
+                    KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone,
                     const std::string &strExtensions="");
   void AddFromPath(const std::string &strPath, bool bRecursive,
-                   SortBy method = SortByLabel, 
-                   SortOrder order = SortOrderAscending,
-                   SortAttribute sortAttributes = SortAttributeNone,
+                   KODI::UTILS::SortBy method = KODI::UTILS::SortByLabel,
+                   KODI::UTILS::SortOrder order = KODI::UTILS::SortOrderAscending,
+                   KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone,
                    const std::string &strExtensions="");
   void StartSlideShow();
   bool InSlideShow() const;
@@ -112,9 +112,9 @@ public:
 private:
   typedef std::set<std::string> path_set;  // set to track which paths we're adding
   void AddItems(const std::string &strPath, path_set *recursivePaths,
-                SortBy method = SortByLabel,
-                SortOrder order = SortOrderAscending,
-                SortAttribute sortAttributes = SortAttributeNone);
+                KODI::UTILS::SortBy method = KODI::UTILS::SortByLabel,
+                KODI::UTILS::SortOrder order = KODI::UTILS::SortOrderAscending,
+                KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone);
   bool PlayVideo();
   CSlideShowPic::DISPLAY_EFFECT GetDisplayEffect(int iSlideNumber) const;
   void RenderPause();

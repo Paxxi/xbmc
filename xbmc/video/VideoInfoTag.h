@@ -46,7 +46,7 @@ struct SActorInfo
   int        order;
 };
 
-class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
+class CVideoInfoTag : public IArchivable, public ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CVideoInfoTag() { Reset(); };
@@ -70,7 +70,7 @@ public:
   bool Save(TiXmlNode *node, const std::string &tag, bool savePathInfo = true, const TiXmlElement *additionalNode = NULL);
   virtual void Archive(CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
-  virtual void ToSortable(SortItem& sortable, Field field) const;
+  virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
   const std::string GetCast(bool bIncludeRole = false) const;
   bool HasStreamDetails() const;
   bool IsEmpty() const;

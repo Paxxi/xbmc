@@ -37,7 +37,7 @@ class CArtist;
 
 namespace MUSIC_INFO
 {
-class CMusicInfoTag : public IArchivable, public ISerializable, public ISortable
+class CMusicInfoTag : public IArchivable, public ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CMusicInfoTag(void);
@@ -141,7 +141,7 @@ public:
 
   virtual void Archive(CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& ar) const;
-  virtual void ToSortable(SortItem& sortable, Field field) const;
+  virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
 
   void Clear();
 protected:

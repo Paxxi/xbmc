@@ -91,7 +91,7 @@ enum EFileFolderType {
   \sa CFileItemList
   */
 class CFileItem :
-  public CGUIListItem, public IArchivable, public ISerializable, public ISortable
+  public CGUIListItem, public IArchivable, public ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CFileItem(void);
@@ -131,8 +131,8 @@ public:
   const CFileItem& operator=(const CFileItem& item);
   virtual void Archive(CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
-  virtual void ToSortable(SortItem &sortable, Field field) const;
-  void ToSortable(SortItem &sortable, const Fields &fields) const;
+  virtual void ToSortable(KODI::UTILS::SortItem &sortable, Field field) const;
+  void ToSortable(KODI::UTILS::SortItem &sortable, const Fields &fields) const;
   virtual bool IsFileItem() const { return true; };
 
   bool Exists(bool bUseCache = true) const;
@@ -234,9 +234,9 @@ public:
   int GetVideoContentType() const; /* return VIDEODB_CONTENT_TYPE, but don't want to include videodb in this header */
   bool IsLabelPreformated() const { return m_bLabelPreformated; }
   void SetLabelPreformated(bool bYesNo) { m_bLabelPreformated=bYesNo; }
-  bool SortsOnTop() const { return m_specialSort == SortSpecialOnTop; }
-  bool SortsOnBottom() const { return m_specialSort == SortSpecialOnBottom; }
-  void SetSpecialSort(SortSpecial sort) { m_specialSort = sort; }
+  bool SortsOnTop() const { return m_specialSort == KODI::UTILS::SortSpecialOnTop; }
+  bool SortsOnBottom() const { return m_specialSort == KODI::UTILS::SortSpecialOnBottom; }
+  void SetSpecialSort(KODI::UTILS::SortSpecial sort) { m_specialSort = sort; }
 
   inline bool HasMusicInfoTag() const
   {
@@ -478,7 +478,7 @@ private:
 
   std::string m_strPath;            ///< complete path to item
 
-  SortSpecial m_specialSort;
+  KODI::UTILS::SortSpecial m_specialSort;
   bool m_bIsParentFolder;
   bool m_bCanQueue;
   bool m_bLabelPreformated;
@@ -569,7 +569,7 @@ public:
   void Assign(const CFileItemList& itemlist, bool append = false);
   bool Copy  (const CFileItemList& item, bool copyItems = true);
   void Reserve(int iCount);
-  void Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute sortAttributes = SortAttributeNone);
+  void Sort(KODI::UTILS::SortBy sortBy, KODI::UTILS::SortOrder sortOrder, KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone);
   /* \brief Sorts the items based on the given sorting options
 
   In contrast to Sort (see above) this does not change the internal
@@ -577,7 +577,7 @@ public:
   will always execute the sorting even if the list of items has
   already been sorted with the same options before.
   */
-  void Sort(SortDescription sortDescription);
+  void Sort(KODI::UTILS::SortDescription sortDescription);
   void Randomize();
   void FillInDefaultIcons();
   int GetFolderCount() const;
@@ -597,8 +597,9 @@ public:
    */
   void Stack(bool stackFiles = true);
 
-  SortOrder GetSortOrder() const { return m_sortDescription.sortOrder; }
-  SortBy GetSortMethod() const { return m_sortDescription.sortBy; }
+  KODI::UTILS::SortOrder GetSortOrder() const { return m_sortDescription.sortOrder; }
+
+  KODI::UTILS::SortBy GetSortMethod() const { return m_sortDescription.sortBy; }
   /*! \brief load a CFileItemList out of the cache
 
    The file list may be cached based on which window we're viewing in, as different
@@ -645,11 +646,11 @@ public:
    */
   bool UpdateItem(const CFileItem *item);
 
-  void AddSortMethod(SortBy sortBy, int buttonLabel, const LABEL_MASKS &labelMasks, SortAttribute sortAttributes = SortAttributeNone);
-  void AddSortMethod(SortBy sortBy, SortAttribute sortAttributes, int buttonLabel, const LABEL_MASKS &labelMasks);
-  void AddSortMethod(SortDescription sortDescription, int buttonLabel, const LABEL_MASKS &labelMasks);
+  void AddSortMethod(KODI::UTILS::SortBy sortBy, int buttonLabel, const LABEL_MASKS &labelMasks, KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone);
+  void AddSortMethod(KODI::UTILS::SortBy sortBy, KODI::UTILS::SortAttribute sortAttributes, int buttonLabel, const LABEL_MASKS &labelMasks);
+  void AddSortMethod(KODI::UTILS::SortDescription sortDescription, int buttonLabel, const LABEL_MASKS &labelMasks);
   bool HasSortDetails() const { return m_sortDetails.size() != 0; }
-  const std::vector<GUIViewSortDetails> &GetSortDetails() const { return m_sortDetails; }
+  const std::vector<KODI::UTILS::GUIViewSortDetails> &GetSortDetails() const { return m_sortDetails; }
 
   /*! \brief Specify whether this list should be sorted with folders separate from files
    By default we sort with folders listed (and sorted separately) except for those sort modes
@@ -684,13 +685,13 @@ private:
   VECFILEITEMS m_items;
   MAPFILEITEMS m_map;
   bool m_fastLookup;
-  SortDescription m_sortDescription;
+  KODI::UTILS::SortDescription m_sortDescription;
   bool m_sortIgnoreFolders;
   CACHE_TYPE m_cacheToDisc;
   bool m_replaceListing;
   std::string m_content;
 
-  std::vector<GUIViewSortDetails> m_sortDetails;
+  std::vector<KODI::UTILS::GUIViewSortDetails> m_sortDetails;
 
   CCriticalSection m_lock;
 };

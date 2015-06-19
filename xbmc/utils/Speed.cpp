@@ -24,8 +24,10 @@
 #include "utils/Archive.h"
 #include "utils/StringUtils.h"
 
-using namespace KODI::UTILS;
-
+namespace KODI
+{
+namespace UTILS
+{
 CSpeed::CSpeed()
 {
   m_value = 0.0;
@@ -593,3 +595,4 @@ std::string CSpeed::ToString(Unit speedUnit) const
 
   return StringUtils::Format("%2.0f", To(speedUnit));
 }
+}}

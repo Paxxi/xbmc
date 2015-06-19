@@ -87,100 +87,100 @@ namespace JSONRPC
       result["limits"]["total"] = size;
     }
 
-    static bool ParseSorting(const KODI::UTILS::CVariant &parameterObject, SortBy &sortBy, SortOrder &sortOrder, SortAttribute &sortAttributes)
+    static bool ParseSorting(const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::SortBy &sortBy, KODI::UTILS::SortOrder &sortOrder, KODI::UTILS::SortAttribute &sortAttributes)
     {
       std::string method = parameterObject["sort"]["method"].asString();
       std::string order = parameterObject["sort"]["order"].asString();
       KODI::UTILS::StringUtils::ToLower(method);
       KODI::UTILS::StringUtils::ToLower(order);
 
-      sortAttributes = SortAttributeNone;
+      sortAttributes = KODI::UTILS::SortAttributeNone;
       if (parameterObject["sort"]["ignorearticle"].asBoolean())
-        sortAttributes = SortAttributeIgnoreArticle;
+        sortAttributes = KODI::UTILS::SortAttributeIgnoreArticle;
       else
-        sortAttributes = SortAttributeNone;
+        sortAttributes = KODI::UTILS::SortAttributeNone;
 
       if (order == "ascending")
-        sortOrder = SortOrderAscending;
+        sortOrder = KODI::UTILS::SortOrderAscending;
       else if (order == "descending")
-        sortOrder = SortOrderDescending;
+        sortOrder = KODI::UTILS::SortOrderDescending;
       else
         return false;
 
       if (method == "none")
-        sortBy = SortByNone;
+        sortBy = KODI::UTILS::SortByNone;
       else if (method == "label")
-        sortBy = SortByLabel;
+        sortBy = KODI::UTILS::SortByLabel;
       else if (method == "date")
-        sortBy = SortByDate;
+        sortBy = KODI::UTILS::SortByDate;
       else if (method == "size")
-        sortBy = SortBySize;
+        sortBy = KODI::UTILS::SortBySize;
       else if (method == "file")
-        sortBy = SortByFile;
+        sortBy = KODI::UTILS::SortByFile;
       else if (method == "path")
-        sortBy = SortByPath;
+        sortBy = KODI::UTILS::SortByPath;
       else if (method == "drivetype")
-        sortBy = SortByDriveType;
+        sortBy = KODI::UTILS::SortByDriveType;
       else if (method == "title")
-        sortBy = SortByTitle;
+        sortBy = KODI::UTILS::SortByTitle;
       else if (method == "track")
-        sortBy = SortByTrackNumber;
+        sortBy = KODI::UTILS::SortByTrackNumber;
       else if (method == "time")
-        sortBy = SortByTime;
+        sortBy = KODI::UTILS::SortByTime;
       else if (method == "artist")
-        sortBy = SortByArtist;
+        sortBy = KODI::UTILS::SortByArtist;
       else if (method == "album")
-        sortBy = SortByAlbum;
+        sortBy = KODI::UTILS::SortByAlbum;
       else if (method == "albumtype")
-        sortBy = SortByAlbumType;
+        sortBy = KODI::UTILS::SortByAlbumType;
       else if (method == "genre")
-        sortBy = SortByGenre;
+        sortBy = KODI::UTILS::SortByGenre;
       else if (method == "country")
-        sortBy = SortByCountry;
+        sortBy = KODI::UTILS::SortByCountry;
       else if (method == "year")
-        sortBy = SortByYear;
+        sortBy = KODI::UTILS::SortByYear;
       else if (method == "rating")
-        sortBy = SortByRating;
+        sortBy = KODI::UTILS::SortByRating;
       else if (method == "votes")
-        sortBy = SortByVotes;
+        sortBy = KODI::UTILS::SortByVotes;
       else if (method == "top250")
-        sortBy = SortByTop250;
+        sortBy = KODI::UTILS::SortByTop250;
       else if (method == "programcount")
-        sortBy = SortByProgramCount;
+        sortBy = KODI::UTILS::SortByProgramCount;
       else if (method == "playlist")
-        sortBy = SortByPlaylistOrder;
+        sortBy = KODI::UTILS::SortByPlaylistOrder;
       else if (method == "episode")
-        sortBy = SortByEpisodeNumber;
+        sortBy = KODI::UTILS::SortByEpisodeNumber;
       else if (method == "season")
-        sortBy = SortBySeason;
+        sortBy = KODI::UTILS::SortBySeason;
       else if (method == "totalepisodes")
-        sortBy = SortByNumberOfEpisodes;
+        sortBy = KODI::UTILS::SortByNumberOfEpisodes;
       else if (method == "watchedepisodes")
-        sortBy = SortByNumberOfWatchedEpisodes;
+        sortBy = KODI::UTILS::SortByNumberOfWatchedEpisodes;
       else if (method == "tvshowstatus")
-        sortBy = SortByTvShowStatus;
+        sortBy = KODI::UTILS::SortByTvShowStatus;
       else if (method == "tvshowtitle")
-        sortBy = SortByTvShowTitle;
+        sortBy = KODI::UTILS::SortByTvShowTitle;
       else if (method == "sorttitle")
-        sortBy = SortBySortTitle;
+        sortBy = KODI::UTILS::SortBySortTitle;
       else if (method == "productioncode")
-        sortBy = SortByProductionCode;
+        sortBy = KODI::UTILS::SortByProductionCode;
       else if (method == "mpaa")
-        sortBy = SortByMPAA;
+        sortBy = KODI::UTILS::SortByMPAA;
       else if (method == "studio")
-        sortBy = SortByStudio;
+        sortBy = KODI::UTILS::SortByStudio;
       else if (method == "dateadded")
-        sortBy = SortByDateAdded;
+        sortBy = KODI::UTILS::SortByDateAdded;
       else if (method == "lastplayed")
-        sortBy = SortByLastPlayed;
+        sortBy = KODI::UTILS::SortByLastPlayed;
       else if (method == "playcount")
-        sortBy = SortByPlaycount;
+        sortBy = KODI::UTILS::SortByPlaycount;
       else if (method == "listeners")
-        sortBy = SortByListeners;
+        sortBy = KODI::UTILS::SortByListeners;
       else if (method == "bitrate")
-        sortBy = SortByBitrate;
+        sortBy = KODI::UTILS::SortByBitrate;
       else if (method == "random")
-        sortBy = SortByRandom;
+        sortBy = KODI::UTILS::SortByRandom;
       else
         return false;
 

@@ -29,6 +29,7 @@
 
 using namespace XFILE;
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 CGUIViewStateAddonBrowser::CGUIViewStateAddonBrowser(const CFileItemList& items) : CGUIViewState(items)
 {

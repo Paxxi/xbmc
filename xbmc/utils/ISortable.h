@@ -23,9 +23,14 @@
 
 #include "SortUtils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class ISortable
 {
-public:
+  public:
   virtual ~ISortable() { }
-  virtual void ToSortable(SortItem& sortable, Field field) const = 0;
+virtual void ToSortable(SortItem& sortable, Field field) const = 0;
 };
+}}

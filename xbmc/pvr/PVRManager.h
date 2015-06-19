@@ -32,9 +32,16 @@
 #include "FileItem.h"
 
 class CGUIDialogProgressBarHandle;
-class CStopWatch;
 class CAction;
 class CFileItemList;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CStopWatch;
+}}
+
 
 namespace EPG
 {
@@ -667,7 +674,7 @@ namespace PVR
 
     CCriticalSection                m_managerStateMutex;
     ManagerState                    m_managerState;
-    CStopWatch                     *m_parentalTimer;
+    KODI::UTILS::CStopWatch        *m_parentalTimer;
     int                             m_openWindowId;
     std::map<std::string, std::string> m_outdatedAddons;
     static int                      m_pvrWindowIds[10];

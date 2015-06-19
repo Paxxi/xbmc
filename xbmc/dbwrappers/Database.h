@@ -31,7 +31,14 @@ namespace dbiplus {
 
 class DatabaseSettings; // forward
 class CDbUrl;
+
+namespace KODI
+{
+namespace UTILS
+{
 struct SortDescription;
+}}
+
 
 class CDatabase
 {
@@ -157,9 +164,9 @@ public:
    */
   bool CommitInsertQueries();
 
-  virtual bool GetFilter(CDbUrl &dbUrl, Filter &filter, SortDescription &sorting) { return true; }
+  virtual bool GetFilter(CDbUrl &dbUrl, Filter &filter, KODI::UTILS::SortDescription &sorting) { return true; }
   virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl);
-  virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl, SortDescription &sorting);
+  virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl, KODI::UTILS::SortDescription &sorting);
 
 protected:
   friend class CDatabaseManager;
