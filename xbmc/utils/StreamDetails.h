@@ -24,6 +24,11 @@
 #include <string>
 #include <vector>
 
+
+namespace KODI
+{
+namespace UTILS
+{
 class CStreamDetails;
 
 class CStreamDetail : public IArchivable, public ISerializable
@@ -136,3 +141,4 @@ private:
   CStreamDetailAudio *m_pBestAudio;
   CStreamDetailSubtitle *m_pBestSubtitle;
 };
+}}

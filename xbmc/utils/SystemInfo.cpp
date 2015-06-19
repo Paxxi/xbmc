@@ -76,8 +76,10 @@
 #define STR_MACRO(x) #x
 #define XSTR_MACRO(x) STR_MACRO(x)
 
-using namespace KODI::UTILS;
-
+namespace KODI
+{
+namespace UTILS
+{
 #ifdef TARGET_WINDOWS
 static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)
 {
@@ -86,17 +88,17 @@ static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)
   
   typedef NTSTATUS(__stdcall *RtlGetVersionPtr)(RTL_OSVERSIONINFOEXW* pOsInfo);
   static HMODULE hNtDll = GetModuleHandleW(L"ntdll.dll");
-  if (hNtDll != NULL)
+  if (hNtDll != nullptr)
   {
-    static RtlGetVersionPtr RtlGetVer = (RtlGetVersionPtr) GetProcAddress(hNtDll, "RtlGetVersion");
+    static RtlGetVersionPtr RtlGetVer = reinterpret_cast<RtlGetVersionPtr>(GetProcAddress(hNtDll, "RtlGetVersion"));
     if (RtlGetVer && RtlGetVer(&osVerInfo) == 0)
       return true;
   }
   // failed to get OS information directly from ntdll.dll
   // use GetVersionExW() as fallback
   // note: starting from Windows 8.1 GetVersionExW() may return unfaithful information
-  if (GetVersionExW((OSVERSIONINFOW*) &osVerInfo) != 0)
-      return true;
+  if (GetVersionExW(reinterpret_cast<OSVERSIONINFOW*>(&osVerInfo)) != 0)
+    return true;
 
   ZeroMemory(&osVerInfo, sizeof(osVerInfo));
   return false;
@@ -122,7 +124,7 @@ static std::string getValueFromOs_release(std::string key)
   std::string content(buf, len);
   delete[] buf;
 
-  // find begin of value string
+// find begin of value string
   size_t valStart = 0, seachPos;
   key += '=';
   if (content.compare(0, key.length(), key) == 0)
@@ -146,7 +148,7 @@ static std::string getValueFromOs_release(std::string key)
   if (content[valStart] == '\n')
     return "";
   
-  // find end of value string
+// find end of value string
   seachPos = valStart;
   do
   {
@@ -158,7 +160,7 @@ static std::string getValueFromOs_release(std::string key)
   if (value.empty())
     return value;
 
-  // remove quotes
+// remove quotes
   if (value[0] == '\'' || value[0] == '"')
   {
     if (value.length() < 2)
@@ -171,7 +173,7 @@ static std::string getValueFromOs_release(std::string key)
     }
   }
 
-  // unescape characters
+// unescape characters
   for (size_t slashPos = value.find('\\'); slashPos < value.length() - 1; slashPos = value.find('\\', slashPos))
   {
     if (value[slashPos + 1] == '\n')
@@ -331,12 +333,12 @@ std::string CSysInfoJob::GetSystemUpTime(bool bTotalUptime)
   if(bTotalUptime)
   {
     //Total Uptime
-    iInputMinutes = g_sysinfo.GetTotalUptime() + ((int)(XbmcThreads::SystemClockMillis() / 60000));
+    iInputMinutes = g_sysinfo.GetTotalUptime() + static_cast<int>(XbmcThreads::SystemClockMillis() / 60000);
   }
   else
   {
     //Current UpTime
-    iInputMinutes = (int)(XbmcThreads::SystemClockMillis() / 60000);
+    iInputMinutes = static_cast<int>(XbmcThreads::SystemClockMillis() / 60000);
   }
 
   SystemUpTime(iInputMinutes,iMinutes, iHours, iDays);
@@ -406,7 +408,7 @@ CSysInfo::~CSysInfo()
 
 bool CSysInfo::Load(const TiXmlNode *settings)
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
   
   const TiXmlElement *pElement = settings->FirstChildElement("general");
@@ -418,15 +420,15 @@ bool CSysInfo::Load(const TiXmlNode *settings)
 
 bool CSysInfo::Save(TiXmlNode *settings) const
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   TiXmlNode *generalNode = settings->FirstChild("general");
-  if (generalNode == NULL)
+  if (generalNode == nullptr)
   {
     TiXmlElement generalNodeNew("general");
     generalNode = settings->InsertEndChild(generalNodeNew);
-    if (generalNode == NULL)
+    if (generalNode == nullptr)
       return false;
   }
   XMLUtils::SetInt(generalNode, "systemtotaluptime", m_iSystemTimeTotalUp);
@@ -453,7 +455,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
 #ifdef TARGET_WINDOWS
     UINT uidriveType = GetDriveType(( drive + ":\\" ).c_str());
     if(uidriveType != DRIVE_UNKNOWN && uidriveType != DRIVE_NO_ROOT_DIR)
-      bRet= ( 0 != GetDiskFreeSpaceEx( ( drive + ":\\" ).c_str(), NULL, &ULTotal, &ULTotalFree) );
+      bRet= ( 0 != GetDiskFreeSpaceEx( ( drive + ":\\" ).c_str(), nullptr, &ULTotal, &ULTotalFree) );
 #elif defined(TARGET_POSIX)
     bRet = (0 != GetDiskFreeSpaceEx(drive.c_str(), NULL, &ULTotal, &ULTotalFree));
 #endif
@@ -463,7 +465,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
     ULARGE_INTEGER ULTotalTmp= { { 0 } };
     ULARGE_INTEGER ULTotalFreeTmp= { { 0 } };
 #ifdef TARGET_WINDOWS
-    char* pcBuffer= NULL;
+    char* pcBuffer= nullptr;
     DWORD dwStrLength= GetLogicalDriveStrings( 0, pcBuffer );
     if( dwStrLength != 0 )
     {
@@ -473,7 +475,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
       int iPos= 0;
       do {
         if( DRIVE_FIXED == GetDriveType( pcBuffer + iPos  ) &&
-            GetDiskFreeSpaceEx( ( pcBuffer + iPos ), NULL, &ULTotal, &ULTotalFree ) )
+          GetDiskFreeSpaceEx( ( pcBuffer + iPos ), nullptr, &ULTotal, &ULTotalFree ) )
         {
           ULTotalTmp.QuadPart+= ULTotal.QuadPart;
           ULTotalFreeTmp.QuadPart+= ULTotalFree.QuadPart;
@@ -499,12 +501,12 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
 
   if( bRet )
   {
-    iTotal = (int)( ULTotal.QuadPart / MB );
-    iTotalFree = (int)( ULTotalFree.QuadPart / MB );
+    iTotal = static_cast<int>(( ULTotal.QuadPart / MB ));
+    iTotalFree = static_cast<int>(( ULTotalFree.QuadPart / MB ));
     iTotalUsed = iTotal - iTotalFree;
     if( ULTotal.QuadPart > 0 )
     {
-      iPercentUsed = (int)( 100.0f * ( ULTotal.QuadPart - ULTotalFree.QuadPart ) / ULTotal.QuadPart + 0.5f );
+      iPercentUsed = static_cast<int>(100.0f * ( ULTotal.QuadPart - ULTotalFree.QuadPart ) / ULTotal.QuadPart + 0.5f);
     }
     else
     {
@@ -778,7 +780,7 @@ std::string CSysInfo::GetManufacturerName(void)
       wchar_t buf[400]; // more than enough
       DWORD bufSize = sizeof(buf);
       DWORD valType;
-      if (RegQueryValueExW(hKey, L"SystemManufacturer", NULL, &valType, (LPBYTE)buf, &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
+      if (RegQueryValueExW(hKey, L"SystemManufacturer", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
       {
         g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), manufName);
         size_t zeroPos = manufName.find(char(0));
@@ -787,7 +789,7 @@ std::string CSysInfo::GetManufacturerName(void)
         std::string lower(manufName);
         StringUtils::ToLower(lower);
         if (lower == "system manufacturer" || lower == "to be filled by o.e.m." || lower == "unknown" ||
-            lower == "unidentified")
+          lower == "unidentified")
           manufName.clear();
       }
       RegCloseKey(hKey);
@@ -826,7 +828,7 @@ std::string CSysInfo::GetModelName(void)
       wchar_t buf[400]; // more than enough
       DWORD bufSize = sizeof(buf);
       DWORD valType; 
-      if (RegQueryValueExW(hKey, L"SystemProductName", NULL, &valType, (LPBYTE)buf, &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
+      if (RegQueryValueExW(hKey, L"SystemProductName", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
       {
         g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), modelName);
         size_t zeroPos = modelName.find(char(0));
@@ -835,8 +837,8 @@ std::string CSysInfo::GetModelName(void)
         std::string lower(modelName);
         StringUtils::ToLower(lower);
         if (lower == "system product name" || lower == "to be filled by o.e.m." || lower == "unknown" ||
-            lower == "unidentified")
-            modelName.clear();
+          lower == "unidentified")
+          modelName.clear();
       }
       RegCloseKey(hKey);
     }
@@ -959,8 +961,8 @@ const std::string& CSysInfo::GetKernelCpuFamily(void)
     SYSTEM_INFO si;
     GetNativeSystemInfo(&si);
     if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL ||
-        si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
-        kernelCpuFamily = "x86";
+      si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
+      kernelCpuFamily = "x86";
     else if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
       kernelCpuFamily = "ARM";
 #elif defined(TARGET_DARWIN)
@@ -1023,8 +1025,8 @@ bool CSysInfo::HasInternet()
 
 std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
 {
- int percent;
- return GetHddSpaceInfo( percent, drive, shortText);
+  int percent;
+  return GetHddSpaceInfo( percent, drive, shortText);
 }
 
 std::string CSysInfo::GetHddSpaceInfo(int& percent, int drive, bool shortText)
@@ -1038,12 +1040,12 @@ std::string CSysInfo::GetHddSpaceInfo(int& percent, int drive, bool shortText)
     {
       switch(drive)
       {
-        case SYSTEM_FREE_SPACE:
-          percent = percentFree;
-          break;
-        case SYSTEM_USED_SPACE:
-          percent = percentused;
-          break;
+      case SYSTEM_FREE_SPACE:
+        percent = percentFree;
+        break;
+      case SYSTEM_USED_SPACE:
+        percent = percentused;
+        break;
       }
     }
     else
@@ -1084,12 +1086,12 @@ std::string CSysInfo::GetUserAgent()
   if (!result.empty())
     return result;
 
-  result = GetAppName() + "/" + (std::string)g_infoManager.GetLabel(SYSTEM_BUILD_VERSION_SHORT) + " (";
+  result = GetAppName() + "/" + static_cast<std::string>(g_infoManager.GetLabel(SYSTEM_BUILD_VERSION_SHORT)) + " (";
 #if defined(TARGET_WINDOWS)
   result += GetKernelName() + " " + GetKernelVersion();
   BOOL bIsWow = FALSE;
   if (IsWow64Process(GetCurrentProcess(), &bIsWow) && bIsWow)
-      result.append("; WOW64");
+    result.append("; WOW64");
   else
   {
     SYSTEM_INFO si = {};
@@ -1341,7 +1343,7 @@ std::string CSysInfo::GetBuildTargetCpuFamily(void)
 #elif defined(__mips__) || defined(mips) || defined(__mips)
   return "MIPS";
 #elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64) || \
-   defined(i386) || defined(__i386) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__) || defined(_M_IX86) || defined(_X86_)
+  defined(i386) || defined(__i386) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__) || defined(_M_IX86) || defined(_X86_)
   return "x86";
 #elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ppc__) || defined(__ppc64__) || defined(_M_PPC)
   return "PowerPC";
@@ -1385,6 +1387,7 @@ CJob *CSysInfo::GetJob() const
 
 void CSysInfo::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 {
-  m_info = ((CSysInfoJob *)job)->GetData();
+  m_info = static_cast<CSysInfoJob *>(job)->GetData();
   CInfoLoader::OnJobComplete(jobID, success, job);
 }
+}}

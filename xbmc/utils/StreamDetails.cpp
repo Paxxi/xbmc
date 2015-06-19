@@ -28,6 +28,10 @@
 
 using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 const float VIDEOASPECT_EPSILON = 0.025f;
 
 void CStreamDetail::Archive(CArchive &ar)
@@ -163,7 +167,7 @@ bool CStreamDetailSubtitle::IsWorseThan(CStreamDetail *that)
   // the best subtitle should be the one in the user's preferred language
   // If preferred language is set to "original" this is "eng"
   return m_strLanguage.empty() ||
-    g_LangCodeExpander.CompareISO639Codes(((CStreamDetailSubtitle *)that)->m_strLanguage, g_langInfo.GetSubtitleLanguage());
+      g_LangCodeExpander.CompareISO639Codes(((CStreamDetailSubtitle *)that)->m_strLanguage, g_langInfo.GetSubtitleLanguage());
 }
 
 CStreamDetailSubtitle& CStreamDetailSubtitle::operator=(const CStreamDetailSubtitle &that)
@@ -209,25 +213,25 @@ bool CStreamDetails::operator ==(const CStreamDetails &right) const
   if (this == &right) return true;
 
   if (GetVideoStreamCount()    != right.GetVideoStreamCount() ||
-      GetAudioStreamCount()    != right.GetAudioStreamCount() ||
-      GetSubtitleStreamCount() != right.GetSubtitleStreamCount())
+    GetAudioStreamCount()    != right.GetAudioStreamCount() ||
+    GetSubtitleStreamCount() != right.GetSubtitleStreamCount())
     return false;
 
   for (int iStream=1; iStream<=GetVideoStreamCount(); iStream++)
   {
     if (GetVideoCodec(iStream)    != right.GetVideoCodec(iStream)    ||
-        GetVideoWidth(iStream)    != right.GetVideoWidth(iStream)    ||
-        GetVideoHeight(iStream)   != right.GetVideoHeight(iStream)   ||
-        GetVideoDuration(iStream) != right.GetVideoDuration(iStream) ||
-        fabs(GetVideoAspect(iStream) - right.GetVideoAspect(iStream)) > VIDEOASPECT_EPSILON)
+      GetVideoWidth(iStream)    != right.GetVideoWidth(iStream)    ||
+      GetVideoHeight(iStream)   != right.GetVideoHeight(iStream)   ||
+      GetVideoDuration(iStream) != right.GetVideoDuration(iStream) ||
+      fabs(GetVideoAspect(iStream) - right.GetVideoAspect(iStream)) > VIDEOASPECT_EPSILON)
       return false;
   }
 
   for (int iStream=1; iStream<=GetAudioStreamCount(); iStream++)
   {
     if (GetAudioCodec(iStream)    != right.GetAudioCodec(iStream)    ||
-        GetAudioLanguage(iStream) != right.GetAudioLanguage(iStream) ||
-        GetAudioChannels(iStream) != right.GetAudioChannels(iStream) )
+      GetAudioLanguage(iStream) != right.GetAudioLanguage(iStream) ||
+      GetAudioChannels(iStream) != right.GetAudioChannels(iStream) )
       return false;
   }
 
@@ -598,3 +602,4 @@ std::string CStreamDetails::VideoAspectToAspectDescription(float fAspect)
     return "2.55";
   return "2.76";
 }
+}}

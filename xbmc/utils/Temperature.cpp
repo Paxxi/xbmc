@@ -24,6 +24,10 @@
 #include "utils/Archive.h"
 #include "utils/StringUtils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 CTemperature::CTemperature()
 {
   m_value=0.0f;
@@ -485,3 +489,4 @@ std::string CTemperature::ToString(Unit temperatureUnit) const
 
   return StringUtils::Format("%2.0f", To(temperatureUnit));
 }
+}}

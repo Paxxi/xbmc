@@ -25,6 +25,7 @@
 #include "utils/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 Node MusicVideoChildren[] = {
                               { NODE_TYPE_GENRE,             "genres",    135 },

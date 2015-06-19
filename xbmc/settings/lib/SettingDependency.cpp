@@ -28,6 +28,8 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 CSettingDependencyCondition::CSettingDependencyCondition(CSettingsManager *settingsManager /* = NULL */)
   : CSettingConditionItem(settingsManager),
     m_target(SettingDependencyTargetNone),

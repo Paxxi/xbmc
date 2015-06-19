@@ -73,6 +73,7 @@
 using EVENTSERVER::CEventServer;
 #endif
 
+using namespace KODI::UTILS;
 using PERIPHERALS::CPeripherals;
 
 CInputManager& CInputManager::Get()

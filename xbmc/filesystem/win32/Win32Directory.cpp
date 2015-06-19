@@ -33,6 +33,7 @@
 #include <Windows.h>
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 // check for empty string, remove trailing slash if any, convert to win32 form
 inline static std::wstring prepareWin32DirectoryName(const std::string& strPath)

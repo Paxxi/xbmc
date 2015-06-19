@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestStreamDetails, General)
 {
   CStreamDetails a;

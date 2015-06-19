@@ -21,6 +21,8 @@
 #include "Locale.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 const CLocale CLocale::Empty;
 
 CLocale::CLocale()

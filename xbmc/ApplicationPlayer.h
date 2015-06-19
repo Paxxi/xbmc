@@ -39,7 +39,14 @@ namespace PVR
 
 class CAction;
 class CPlayerOptions;
+
+namespace KODI
+{
+namespace UTILS
+{
 class CStreamDetails;
+}}
+
 
 struct SPlayerAudioStreamInfo;
 struct SPlayerVideoStreamInfo;
@@ -105,7 +112,7 @@ public:
   int   GetPreferredPlaylist() const;
   void  GetRenderFeatures(std::vector<int> &renderFeatures);
   void  GetScalingMethods(std::vector<int> &scalingMethods);
-  bool  GetStreamDetails(CStreamDetails &details);
+  bool  GetStreamDetails(KODI::UTILS::CStreamDetails &details);
   int   GetSubtitle();
   void  GetSubtitleCapabilities(std::vector<int> &subCaps);
   int   GetSubtitleCount();

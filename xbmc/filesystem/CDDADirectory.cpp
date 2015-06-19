@@ -31,6 +31,7 @@
 
 using namespace XFILE;
 using namespace MEDIA_DETECT;
+using namespace KODI::UTILS;
 
 CCDDADirectory::CCDDADirectory(void)
 {

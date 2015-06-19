@@ -178,7 +178,7 @@ public:
   int m_iIdShow;
   int m_iIdSeason;
   CFanart m_fanart;
-  CStreamDetails m_streamDetails;
+  KODI::UTILS::CStreamDetails m_streamDetails;
   CBookmark m_resumePoint;
   CDateTime m_dateAdded;
   MediaType m_type;

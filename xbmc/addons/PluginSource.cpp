@@ -21,6 +21,7 @@
 #include "AddonManager.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 namespace ADDON

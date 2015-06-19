@@ -94,6 +94,10 @@
  the time to process the frame is non-constant.
  */
 
+namespace KODI
+{
+namespace UTILS
+{
 class CTimeSmoother
 {
 public:
@@ -185,3 +189,4 @@ private:
   boost::circular_buffer<double> m_prevIn;  ///< \brief the previous timestamps coming in
   boost::circular_buffer<double> m_prevOut; ///< \brief the previous timestamps going out
 };
+}}

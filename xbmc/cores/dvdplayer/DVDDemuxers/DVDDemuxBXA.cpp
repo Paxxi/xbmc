@@ -25,7 +25,7 @@
 #include "../DVDClock.h"
 
 // AirTunes audio Demuxer.
-
+using namespace KODI::UTILS;
 using namespace std;
 
 class CDemuxStreamAudioBXA

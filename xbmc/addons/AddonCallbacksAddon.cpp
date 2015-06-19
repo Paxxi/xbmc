@@ -33,6 +33,7 @@
 #include "utils/XMLUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 namespace ADDON
 {

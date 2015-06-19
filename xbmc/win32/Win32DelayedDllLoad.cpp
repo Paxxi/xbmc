@@ -23,6 +23,8 @@
 #include "Application.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 FARPROC WINAPI delayHookNotifyFunc (unsigned dliNotify, PDelayLoadInfo pdli)
 {
   switch (dliNotify)

@@ -25,6 +25,7 @@
 #include "utils/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 CDirectoryNodeSeasons::CDirectoryNodeSeasons(const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_SEASONS, strName, pParent)

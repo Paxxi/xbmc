@@ -22,6 +22,8 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
   namespace xbmcwsgi

@@ -23,6 +23,8 @@
 #include "settings/SettingPath.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CSetting* CSettingCreator::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = NULL */) const
 {
   if (StringUtils::EqualsNoCase(settingType, "addon"))

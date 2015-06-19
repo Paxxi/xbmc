@@ -44,6 +44,7 @@
 #include <cassert>
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 // local helper
 static inline bool worthTryToConnect(const DWORD lastErr)

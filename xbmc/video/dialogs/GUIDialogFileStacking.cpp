@@ -24,6 +24,7 @@
 #include "FileItem.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define STACK_LIST 450

@@ -29,6 +29,8 @@
 #include "utils/StringUtils.h"
 #include <setjmp.h>
 
+using namespace KODI::UTILS;
+
 #define EXIF_TAG_ORIENTATION    0x0112
 
 struct my_error_mgr

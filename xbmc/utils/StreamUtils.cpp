@@ -20,6 +20,10 @@
 
 #include "StreamUtils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 int StreamUtils::GetCodecPriority(const std::string &codec)
 {
   /*
@@ -42,3 +46,4 @@ int StreamUtils::GetCodecPriority(const std::string &codec)
     return 1;
   return 0;
 }
+}}

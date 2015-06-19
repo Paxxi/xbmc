@@ -25,6 +25,8 @@
 #include "utils/StringUtils.h"
 #include "CompileInfo.h"
 
+using namespace KODI::UTILS;
+
 static const char* const levelNames[] =
 {"DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "SEVERE", "FATAL", "NONE"};
 

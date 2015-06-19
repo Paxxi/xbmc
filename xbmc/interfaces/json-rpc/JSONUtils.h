@@ -91,8 +91,8 @@ namespace JSONRPC
     {
       std::string method = parameterObject["sort"]["method"].asString();
       std::string order = parameterObject["sort"]["order"].asString();
-      StringUtils::ToLower(method);
-      StringUtils::ToLower(order);
+      KODI::UTILS::StringUtils::ToLower(method);
+      KODI::UTILS::StringUtils::ToLower(order);
 
       sortAttributes = SortAttributeNone;
       if (parameterObject["sort"]["ignorearticle"].asBoolean())

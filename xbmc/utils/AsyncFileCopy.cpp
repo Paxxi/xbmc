@@ -26,6 +26,8 @@
 #include "utils/StringUtils.h"
 #include "URL.h"
 
+using namespace KODI::UTILS;
+
 CAsyncFileCopy::CAsyncFileCopy() : CThread("AsyncFileCopy")
 {
   m_cancelled = false;

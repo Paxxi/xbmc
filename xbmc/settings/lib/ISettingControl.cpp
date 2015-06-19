@@ -24,6 +24,8 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false */)
 {
   if (node == NULL)

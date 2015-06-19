@@ -37,6 +37,8 @@
 #include "utils/StringUtils.h"
 #pragma comment(lib, "Rpcrt4.lib")
 
+using namespace KODI::UTILS;
+
 extern HWND g_hWnd;
 
 DEFINE_GUID( _KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, WAVE_FORMAT_IEEE_FLOAT, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 );

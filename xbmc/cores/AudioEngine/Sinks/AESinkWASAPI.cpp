@@ -33,6 +33,8 @@
 
 #pragma comment(lib, "Avrt.lib")
 
+using namespace KODI::UTILS;
+
 const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 const IID IID_IAudioClient = __uuidof(IAudioClient);

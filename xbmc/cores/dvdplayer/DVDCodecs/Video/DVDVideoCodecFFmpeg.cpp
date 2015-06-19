@@ -68,6 +68,7 @@ extern "C" {
 #include "libavfilter/buffersrc.h"
 }
 
+using namespace KODI::UTILS;
 using namespace std;
 
 enum DecoderState

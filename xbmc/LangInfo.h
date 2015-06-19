@@ -156,12 +156,12 @@ public:
   const std::string& GetMeridiemSymbol(MeridiemSymbol symbol) const;
   static const std::string& MeridiemSymbolToString(MeridiemSymbol symbol);
 
-  CTemperature::Unit GetTemperatureUnit() const;
-  void SetTemperatureUnit(CTemperature::Unit temperatureUnit);
+  KODI::UTILS::CTemperature::Unit GetTemperatureUnit() const;
+  void SetTemperatureUnit(KODI::UTILS::CTemperature::Unit temperatureUnit);
   void SetTemperatureUnit(const std::string& temperatureUnit);
   const std::string& GetTemperatureUnitString() const;
-  static const std::string& GetTemperatureUnitString(CTemperature::Unit temperatureUnit);
-  std::string GetTemperatureAsString(const CTemperature& temperature) const;
+  static const std::string& GetTemperatureUnitString(KODI::UTILS::CTemperature::Unit temperatureUnit);
+  std::string GetTemperatureAsString(const KODI::UTILS::CTemperature& temperature) const;
 
   CSpeed::Unit GetSpeedUnit() const;
   void SetSpeedUnit(CSpeed::Unit speedUnit);
@@ -221,7 +221,7 @@ protected:
     std::string m_strMeridiemSymbols[2];
     std::string m_strTimeZone;
 
-    CTemperature::Unit m_tempUnit;
+    KODI::UTILS::CTemperature::Unit m_tempUnit;
     CSpeed::Unit m_speedUnit;
   };
 
@@ -248,7 +248,7 @@ protected:
   std::string m_longDateFormat;
   std::string m_timeFormat;
   bool m_use24HourClock;
-  CTemperature::Unit m_temperatureUnit;
+  KODI::UTILS::CTemperature::Unit m_temperatureUnit;
   CSpeed::Unit m_speedUnit;
 
   std::string m_audioLanguage;

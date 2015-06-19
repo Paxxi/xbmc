@@ -37,6 +37,7 @@
 
 using namespace AUTOPTR;
 using namespace dbiplus;
+using namespace KODI::UTILS;
 
 #define MAX_COMPRESS_COUNT 20
 

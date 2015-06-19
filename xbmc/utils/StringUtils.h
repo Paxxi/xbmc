@@ -37,6 +37,10 @@
 #include "XBDateTime.h"
 #include "utils/params_check_macros.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class StringUtils
 {
 public:
@@ -204,3 +208,4 @@ struct sortstringbyname
     return StringUtils::CompareNoCase(strItem1, strItem2) < 0;
   }
 };
+}}

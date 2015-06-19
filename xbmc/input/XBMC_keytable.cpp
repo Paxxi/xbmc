@@ -24,6 +24,8 @@
 #include "input/XBMC_vkeys.h"
 #include "input/XBMC_keytable.h"
 
+using namespace KODI::UTILS;
+
 // The array of XBMCKEYTABLEs used in XBMC.
 // scancode, sym, unicode, ascii, vkey, keyname
 static const XBMCKEYTABLE XBMCKeyTable[] =

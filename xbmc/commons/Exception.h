@@ -28,6 +28,7 @@
 //---------------------------------------------------------
 #include "ilog.h"
 #include <stdarg.h>
+#include <string>
 
 #ifdef __GNUC__
 // The 'this' pointer counts as a parameter on member methods.
@@ -73,7 +74,7 @@ namespace XbmcCommons
      */
     inline void Set(const char* fmt, va_list& argList)
     {
-      message = StringUtils::FormatV(fmt, argList);
+      message = KODI::UTILS::StringUtils::FormatV(fmt, argList);
     }
 
     /**

@@ -53,6 +53,8 @@
 #include "linux/LinuxResourceCounter.h"
 #endif
 
+using namespace KODI::UTILS;
+
 #define BLUE_BAR                          0
 #define LABEL_ROW1                       10
 #define LABEL_ROW2                       11

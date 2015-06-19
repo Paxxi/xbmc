@@ -30,6 +30,8 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CDummyVideoPlayer::CDummyVideoPlayer(IPlayerCallback& callback)
     : IPlayer(callback),
       CThread("DummyVideoPlayer")

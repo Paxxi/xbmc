@@ -24,6 +24,8 @@
 #include "utils/Archive.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CSpeed::CSpeed()
 {
   m_value = 0.0;

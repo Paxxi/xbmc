@@ -29,6 +29,7 @@
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 #define CONTROL_EDIT_SEARCH       9
 #define CONTROL_BTN_INC_DESC      10

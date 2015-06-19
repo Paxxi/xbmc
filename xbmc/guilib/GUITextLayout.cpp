@@ -25,6 +25,7 @@
 #include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CGUIString::CGUIString(iString start, iString end, bool carriageReturn)

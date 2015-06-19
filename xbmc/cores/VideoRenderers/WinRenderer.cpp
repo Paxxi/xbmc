@@ -36,6 +36,8 @@
 #include "windowing/WindowingFactory.h"
 #include "cores/FFmpeg.h"
 
+using namespace KODI::UTILS;
+
 typedef struct {
   RenderMethod  method;
   const char   *name;

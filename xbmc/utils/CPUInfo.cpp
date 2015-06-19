@@ -99,6 +99,7 @@
 
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 // In milliseconds

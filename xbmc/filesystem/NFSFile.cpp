@@ -53,6 +53,7 @@
 #define CONTEXT_CACHED   2    //context cached and therefore already mounted (no new mount needed)
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CNfsConnection::CNfsConnection()
 : m_pNfsContext(NULL)

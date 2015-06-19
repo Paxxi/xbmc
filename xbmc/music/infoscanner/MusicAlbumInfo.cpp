@@ -25,6 +25,7 @@
 
 using namespace std;
 using namespace MUSIC_GRABBER;
+using namespace KODI::UTILS;
 
 CMusicAlbumInfo::CMusicAlbumInfo(const std::string& strAlbumInfo, const CScraperUrl& strAlbumURL):
   m_strTitle2(strAlbumInfo)

@@ -22,6 +22,8 @@
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 void CDVDSubtitleTagMicroDVD::ConvertLine(CDVDOverlayText* pOverlay, const char* line, int len)
 {
   std::string strUTF8;

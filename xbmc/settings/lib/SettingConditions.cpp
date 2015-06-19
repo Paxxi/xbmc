@@ -24,6 +24,8 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 bool CSettingConditionItem::Deserialize(const TiXmlNode *node)
 {
   if (!CBooleanLogicValue::Deserialize(node))

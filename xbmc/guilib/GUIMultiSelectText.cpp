@@ -24,6 +24,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CGUIMultiSelectTextControl::CSelectableString::CSelectableString(CGUIFont *font, const std::string &text, bool selectable, const std::string &clickAction)

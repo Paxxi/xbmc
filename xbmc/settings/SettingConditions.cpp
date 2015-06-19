@@ -44,6 +44,8 @@
 #include "osx/DarwinUtils.h"
 #endif// defined(TARGET_DARWIN_OSX)
 
+using namespace KODI::UTILS;
+
 bool AddonHasSettings(const std::string &condition, const std::string &value, const CSetting *setting)
 {
   if (setting == NULL)

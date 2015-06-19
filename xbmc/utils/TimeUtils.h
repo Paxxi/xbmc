@@ -21,15 +21,15 @@
  */
 
 #include <stdint.h>
-#include <time.h>
 
 class CDateTime;
-class CTimeSmoother;
 
 namespace KODI
 {
 namespace UTILS
 {
+class CTimeSmoother;
+
 int64_t CurrentHostCounter(void);
 int64_t CurrentHostFrequency(void);
 

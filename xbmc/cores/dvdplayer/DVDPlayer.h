@@ -277,7 +277,7 @@ public:
 
   virtual int GetSourceBitrate();
   virtual void GetVideoStreamInfo(SPlayerVideoStreamInfo &info);
-  virtual bool GetStreamDetails(CStreamDetails &details);
+  virtual bool GetStreamDetails(KODI::UTILS::CStreamDetails &details);
   virtual void GetAudioStreamInfo(int index, SPlayerAudioStreamInfo &info);
 
   virtual std::string GetPlayerState();

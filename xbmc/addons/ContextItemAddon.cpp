@@ -26,6 +26,7 @@
 #include "utils/StringUtils.h"
 #include <boost/lexical_cast.hpp>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 namespace ADDON

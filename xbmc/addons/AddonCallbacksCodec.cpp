@@ -26,6 +26,8 @@ extern "C" {
 #include "libavcodec/avcodec.h"
 }
 
+using namespace KODI::UTILS;
+
 namespace ADDON
 {
 class CCodecIds

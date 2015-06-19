@@ -120,7 +120,7 @@ namespace PERIPHERALS
     static PeripheralType GetTypeFromString(const std::string &strType)
     {
       std::string strTypeLowerCase(strType);
-      StringUtils::ToLower(strTypeLowerCase);
+      KODI::UTILS::StringUtils::ToLower(strTypeLowerCase);
 
       if (strTypeLowerCase == "bluetooth")
         return PERIPHERAL_BLUETOOTH;
@@ -162,7 +162,7 @@ namespace PERIPHERALS
     static PeripheralBusType GetBusTypeFromString(const std::string &strType)
     {
       std::string strTypeLowerCase(strType);
-      StringUtils::ToLower(strTypeLowerCase);
+      KODI::UTILS::StringUtils::ToLower(strTypeLowerCase);
 
       if (strTypeLowerCase == "usb")
         return PERIPHERAL_BUS_USB;
@@ -190,7 +190,7 @@ namespace PERIPHERALS
       if (iVal > 65536)
         iVal = 65536;
 
-      strHexString = StringUtils::Format("%04X", iVal);
+      strHexString = KODI::UTILS::StringUtils::Format("%04X", iVal);
     };
   };
 
@@ -221,7 +221,7 @@ namespace PERIPHERALS
              m_iProductId == right.m_iProductId &&
              m_type       == right.m_type &&
              m_busType    == right.m_busType &&
-             StringUtils::EqualsNoCase(m_strLocation, right.m_strLocation);
+          KODI::UTILS::StringUtils::EqualsNoCase(m_strLocation, right.m_strLocation);
     }
 
     bool operator !=(const PeripheralScanResult& right) const

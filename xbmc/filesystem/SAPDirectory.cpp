@@ -44,6 +44,7 @@
 #include <vector>
 
 //using namespace std; On VS2010, bind conflicts with std::bind
+using namespace KODI::UTILS;
 
 CSAPSessions g_sapsessions;
 

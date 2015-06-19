@@ -23,6 +23,8 @@
 #include "Application.h"
 #include "settings/MediaSettings.h"
 
+using namespace KODI::UTILS;
+
 CApplicationPlayer::CApplicationPlayer()
 {
   m_iPlayerOPSeq = 0;

@@ -82,7 +82,7 @@ public:
   bool HasTextChangeActions() const { return m_textChangeActions.HasActionsMeetingCondition(); };
 
   virtual bool HasInvalidInput() const { return m_invalidInput; }
-  virtual void SetInputValidation(StringValidation::Validator inputValidator, void *data = NULL);
+  virtual void SetInputValidation(KODI::UTILS::StringValidation::Validator inputValidator, void *data = NULL);
 
 protected:
   virtual void SetFocus(bool focus);
@@ -126,7 +126,7 @@ protected:
   CGUIAction m_textChangeActions;
 
   bool m_invalidInput;
-  StringValidation::Validator m_inputValidator;
+  KODI::UTILS::StringValidation::Validator m_inputValidator;
   void *m_inputValidatorData;
 
   unsigned int m_smsKeyIndex;

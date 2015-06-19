@@ -28,6 +28,8 @@
 #include "utils/StringUtils.h"
 #include "utils/auto_buffer.h"
 
+using namespace KODI::UTILS;
+
 // 3GPP/TX3G (aka MPEG-4 Timed Text) Subtitle support
 // 3GPP -> 3rd Generation Partnership Program
 // adapted from https://trac.handbrake.fr/browser/trunk/libhb/dectx3gsub.c;

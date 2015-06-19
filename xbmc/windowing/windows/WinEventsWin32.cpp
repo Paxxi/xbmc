@@ -52,6 +52,7 @@
 #ifdef TARGET_WINDOWS
 
 using namespace PERIPHERALS;
+using namespace KODI::UTILS;
 
 HWND g_hWnd = NULL;
 

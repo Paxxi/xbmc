@@ -487,8 +487,8 @@ public:
   int SetDetailsForSeason(const CVideoInfoTag& details, const std::map<std::string, std::string> &artwork, int idShow, int idSeason = -1);
   int SetDetailsForEpisode(const std::string& strFilenameAndPath, const CVideoInfoTag& details, const std::map<std::string, std::string> &artwork, int idShow, int idEpisode=-1);
   int SetDetailsForMusicVideo(const std::string& strFilenameAndPath, const CVideoInfoTag& details, const std::map<std::string, std::string> &artwork, int idMVideo = -1);
-  void SetStreamDetailsForFile(const CStreamDetails& details, const std::string &strFileNameAndPath);
-  void SetStreamDetailsForFileId(const CStreamDetails& details, int idFile);
+  void SetStreamDetailsForFile(const KODI::UTILS::CStreamDetails& details, const std::string &strFileNameAndPath);
+  void SetStreamDetailsForFileId(const KODI::UTILS::CStreamDetails& details, int idFile);
 
   bool SetSingleValue(VIDEODB_CONTENT_TYPE type, int dbId, int dbField, const std::string &strValue);
   bool SetSingleValue(VIDEODB_CONTENT_TYPE type, int dbId, Field dbField, const std::string &strValue);

@@ -34,6 +34,7 @@
 
 using namespace std;
 using namespace PERIPHERALS;
+using namespace KODI::UTILS;
 
 bool operator==(const XBMC_keysym& lhs, const XBMC_keysym& rhs)
 {

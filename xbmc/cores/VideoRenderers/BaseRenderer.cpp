@@ -34,6 +34,7 @@
 #include "settings/AdvancedSettings.h"
 #include "cores/VideoRenderers/RenderFlags.h"
 
+using namespace KODI::UTILS;
 
 CBaseRenderer::CBaseRenderer()
 {

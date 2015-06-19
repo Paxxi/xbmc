@@ -41,6 +41,7 @@
 
 using namespace DXVA;
 using namespace AUTOPTR;
+using namespace KODI::UTILS;
 using namespace std;
 
 DEFINE_GUID(DXVA2_VideoProcATIVectorAdaptiveDevice,   0x3C5323C1,0x6fb7,0x44f5,0x90,0x81,0x05,0x6b,0xf2,0xee,0x44,0x9d);

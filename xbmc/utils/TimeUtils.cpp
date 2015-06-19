@@ -77,6 +77,7 @@ int64_t CurrentHostFrequency(void)
 CTimeSmoother CTimeUtils::frameTimer;
 unsigned int CTimeUtils::frameTime = 0;
 
+//TODO make FPS a parameter that's passed in
 void CTimeUtils::UpdateFrameTime(bool flip, bool vsync)
 {
   unsigned int currentTime = XbmcThreads::SystemClockMillis();

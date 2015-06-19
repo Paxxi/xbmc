@@ -24,6 +24,7 @@
 #include "utils/StringUtils.h"
 
 using namespace XFILE::MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 CDirectoryNodeAlbumTop100::CDirectoryNodeAlbumTop100(const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_ALBUM_TOP100, strName, pParent)

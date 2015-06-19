@@ -46,6 +46,7 @@
 #define WS_HEADER_UPGRADE_VALUE "websocket"
 #define WS_KEY_MAGICSTRING      "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &response)

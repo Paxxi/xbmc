@@ -22,6 +22,8 @@
 #include "utils/StringUtils.h"
 #include "URL.h"
 
+using namespace KODI::UTILS;
+
 typedef struct Translator {
   const char *legacyPath;
   const char *newPath;
