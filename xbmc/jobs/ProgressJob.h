@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CGUIDialogProgress;
 class CGUIDialogProgressBarHandle;
@@ -36,9 +36,11 @@ public:
   virtual ~CProgressJob();
 
   // implementation of CJob
-  virtual const char *GetType() const { return "ProgressJob"; }
-  virtual bool operator==(const CJob* job) const { return false; }
-  virtual bool ShouldCancel(unsigned int progress, unsigned int total) const;
+  virtual const char *GetType() const override
+  { return "ProgressJob"; }
+  virtual bool operator==(const CJob* job) const override
+  { return false; }
+  virtual bool ShouldCancel(unsigned int progress, unsigned int total) const override;
 
   /*!
    \brief Executes the job showing a modal progress dialog.

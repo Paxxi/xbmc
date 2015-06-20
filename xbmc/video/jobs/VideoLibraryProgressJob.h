@@ -19,7 +19,7 @@
  *
  */
 
-#include "utils/ProgressJob.h"
+#include "jobs/ProgressJob.h"
 #include "video/jobs/VideoLibraryJob.h"
 
 /*!

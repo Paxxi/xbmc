@@ -340,6 +340,18 @@
     <Filter Include="contrib\kissfft">
       <UniqueIdentifier>{d811b1d1-5e81-4d89-9173-f02818c897ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="jobs">
+      <UniqueIdentifier>{fd23c484-3c9b-439f-a9ad-d2a4a77046b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sysinfo">
+      <UniqueIdentifier>{227f400f-e3a1-4781-b8ab-abd7207ce0f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sysinfo\test">
+      <UniqueIdentifier>{6f31542b-310b-44e4-a55a-9622313cebc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jobs\test">
+      <UniqueIdentifier>{47a80605-a51f-4508-a820-2872d58ba406}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1384,16 +1396,10 @@
     <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\CPUInfo.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Crc32.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Fanart.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\FileOperationJob.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\FileUtils.cpp">
@@ -1409,9 +1415,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\InfoLoader.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\JobManager.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp">
@@ -1438,9 +1441,6 @@
     <ClCompile Include="..\..\xbmc\utils\RssReader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\SaveFileStateJob.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\ScraperParser.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -1460,9 +1460,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\StringUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\SystemInfo.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\TimeSmoother.cpp">
@@ -2280,9 +2277,6 @@
       <Filter>dbwrappers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\PlayListPlayer.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\RecentlyAddedJob.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\input\windows\WINJoystick.cpp">
       <Filter>input\windows</Filter>
     </ClCompile>
@@ -3008,9 +3002,6 @@
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryCleaningJob.cpp">
       <Filter>video\jobs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\ProgressJob.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryProgressJob.cpp">
       <Filter>video\jobs</Filter>
     </ClCompile>
@@ -3098,6 +3089,39 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\contrib\kissfft\kiss_fftr.c">
       <Filter>contrib\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\FileOperationJob.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\JobManager.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\SaveFileStateJob.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\ProgressJob.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\RecentlyAddedJob.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\sysinfo\CPUInfo.cpp">
+      <Filter>sysinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\sysinfo\SystemInfo.cpp">
+      <Filter>sysinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\sysinfo\test\TestCPUInfo.cpp">
+      <Filter>sysinfo\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\sysinfo\test\TestSystemInfo.cpp">
+      <Filter>sysinfo\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\test\TestFileOperationJob.cpp">
+      <Filter>jobs\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\test\TestJobManager.cpp">
+      <Filter>jobs\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4297,9 +4321,6 @@
     <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\CPUInfo.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Crc32.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4307,9 +4328,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Fanart.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\FileOperationJob.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\FileUtils.h">
@@ -4328,12 +4346,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ISerializable.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Job.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\JobManager.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\LabelFormatter.h">
@@ -4363,9 +4375,6 @@
     <ClInclude Include="..\..\xbmc\utils\RssReader.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\SaveFileStateJob.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ScraperParser.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4385,9 +4394,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\StringUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\SystemInfo.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\TimeSmoother.h">
@@ -5265,9 +5271,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\PlayListPlayer.h" />
     <ClInclude Include="..\..\xbmc\BackgroundInfoLoader.h" />
-    <ClInclude Include="..\..\xbmc\utils\RecentlyAddedJob.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\input\windows\WINJoystick.h">
       <Filter>input\windows</Filter>
     </ClInclude>
@@ -5911,9 +5914,6 @@
     <ClInclude Include="..\..\xbmc\music\CueInfoLoader.h">
       <Filter>music</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\ProgressJob.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryProgressJob.h">
       <Filter>video\jobs</Filter>
     </ClInclude>
@@ -5953,7 +5953,7 @@
     <ClInclude Include="..\..\xbmc\addons\LanguageResource.h">
       <Filter>addons</Filter>
     </ClInclude>
-     <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
+    <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
       <Filter>addons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ResourceFile.h">
@@ -5991,6 +5991,30 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\contrib\kissfft\kiss_fftr.h">
       <Filter>contrib\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\FileOperationJob.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\Job.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\JobManager.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\SaveFileStateJob.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\ProgressJob.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\RecentlyAddedJob.h">
+      <Filter>jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\sysinfo\CPUInfo.h">
+      <Filter>sysinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\sysinfo\SystemInfo.h">
+      <Filter>sysinfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

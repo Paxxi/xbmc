@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2010-2013 Team XBMC
  *      http://xbmc.org
@@ -17,10 +18,8 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SAVE_FILE_STATE_H__
-#define SAVE_FILE_STATE_H__
 
-#include "Job.h"
+#include "jobs/Job.h"
 #include "FileItem.h"
 #include "video/Bookmark.h"
 #include "settings/VideoSettings.h"
@@ -44,7 +43,5 @@ public:
                     m_updatePlayCount(updatePlayCount),
                     m_videoSettings(videoSettings) {}
   virtual       ~CSaveFileStateJob() {}
-  virtual bool  DoWork();
+  virtual bool  DoWork() override;
 };
-
-#endif // SAVE_FILE_STATE_H__

@@ -21,7 +21,7 @@
 
 #include "MediaSource.h" // for VECSOURCES
 #include <map>
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include "IStorageProvider.h"
 #include "threads/CriticalSection.h"
 

@@ -19,7 +19,7 @@
  *
  */
 
-#include "Job.h"
+#include "jobs/Job.h"
 
 enum ERecentlyAddedFlag
 {
@@ -35,7 +35,7 @@ public:
   static bool UpdateVideo();
   static bool UpdateMusic();
   static bool UpdateTotal();
-  virtual bool DoWork();
+  virtual bool DoWork() override;
 private:
   int m_flag;
 };

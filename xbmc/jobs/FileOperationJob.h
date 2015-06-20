@@ -24,7 +24,9 @@
 
 #include "FileItem.h"
 #include "filesystem/File.h"
-#include "utils/ProgressJob.h"
+#include "jobs/ProgressJob.h"
+
+class CJob;
 
 class CFileOperationJob : public CProgressJob
 {
@@ -49,8 +51,9 @@ public:
 
   // implementations of CJob
   virtual bool DoWork();
-  virtual const char* GetType() const { return m_displayProgress ? "filemanager" : ""; }
-  virtual bool operator==(const CJob *job) const;
+  virtual const char* GetType() const override
+  { return m_displayProgress ? "filemanager" : ""; }
+  virtual bool operator==(const CJob *job) const override;
 
   void SetFileOperation(FileAction action, CFileItemList &items, const std::string &strDestFile);
 
@@ -68,7 +71,7 @@ private:
   public:
     CFileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time);
 
-    virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed);
+    virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed) override;
 
     bool ExecuteOperation(CFileOperationJob *base, double &current, double opWeight);
     void Debug();

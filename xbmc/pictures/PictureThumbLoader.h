@@ -19,7 +19,7 @@
  *
  */
 
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "ThumbLoader.h"
 
 class CPictureThumbLoader : public CThumbLoader, public CJobQueue

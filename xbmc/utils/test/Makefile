@@ -6,13 +6,11 @@ SRCS=	\
 	TestBase64.cpp \
 	TestBitstreamStats.cpp \
 	TestCharsetConverter.cpp \
-	TestCPUInfo.cpp \
 	TestCrc32.cpp \
 	TestCryptThreading.cpp \
 	TestDatabaseUtils.cpp \
 	TestEndianSwap.cpp \
 	Testfastmemcpy.cpp \
-	TestFileOperationJob.cpp \
 	TestFileUtils.cpp \
 	Testfstrcmp.cpp \
 	TestGlobalsHandling.cpp \
@@ -21,7 +19,6 @@ SRCS=	\
 	TestHttpParser.cpp \
 	TestHttpRangeUtils.cpp \
 	TestHttpResponse.cpp \
-	TestJobManager.cpp \
 	TestJSONVariantParser.cpp \
 	TestJSONVariantWriter.cpp \
 	TestLabelFormatter.cpp \
@@ -34,7 +31,7 @@ SRCS=	\
 	TestPerformanceSample.cpp \
 	TestPOUtils.cpp \
 	TestRegExp.cpp \
-        Testrfft.cpp \
+    Testrfft.cpp \
 	TestRingBuffer.cpp \
 	TestScraperParser.cpp \
 	TestScraperUrl.cpp \
@@ -43,7 +40,6 @@ SRCS=	\
 	TestStreamDetails.cpp \
 	TestStreamUtils.cpp \
 	TestStringUtils.cpp \
-	TestSystemInfo.cpp \
 	TestTimeSmoother.cpp \
 	TestTimeUtils.cpp \
 	TestURIUtils.cpp \

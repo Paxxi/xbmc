@@ -23,8 +23,8 @@
 #include "guilib/GUIKeyboardFactory.h"
 #include "utils/log.h"
 #include "guilib/LocalizeStrings.h"
-#include "JobManager.h"
-#include "FileOperationJob.h"
+#include "jobs/JobManager.h"
+#include "jobs/FileOperationJob.h"
 #include "URIUtils.h"
 #include "filesystem/MultiPathDirectory.h"
 #include <vector>

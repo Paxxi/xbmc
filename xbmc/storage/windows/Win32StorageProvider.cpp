@@ -22,7 +22,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "filesystem/SpecialProtocol.h"
 #include "storage/MediaManager.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/log.h"
 
 bool CWin32StorageProvider::xbevent = false;

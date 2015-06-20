@@ -29,7 +29,7 @@
 #include "EncoderFFmpeg.h"
 #include "utils/log.h"
 #include "settings/Settings.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/URIUtils.h"
 #include "addons/AddonManager.h"
 

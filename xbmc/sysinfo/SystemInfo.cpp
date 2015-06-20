@@ -34,7 +34,7 @@
 #include "Application.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/LocalizeStrings.h"
-#include "CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #include "CompileInfo.h"
 
 #ifdef TARGET_WINDOWS
@@ -84,16 +84,16 @@ static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)
   
   typedef NTSTATUS(__stdcall *RtlGetVersionPtr)(RTL_OSVERSIONINFOEXW* pOsInfo);
   static HMODULE hNtDll = GetModuleHandleW(L"ntdll.dll");
-  if (hNtDll != NULL)
+  if (hNtDll != nullptr)
   {
-    static RtlGetVersionPtr RtlGetVer = (RtlGetVersionPtr) GetProcAddress(hNtDll, "RtlGetVersion");
+    static RtlGetVersionPtr RtlGetVer = reinterpret_cast<RtlGetVersionPtr>(GetProcAddress(hNtDll, "RtlGetVersion"));
     if (RtlGetVer && RtlGetVer(&osVerInfo) == 0)
       return true;
   }
   // failed to get OS information directly from ntdll.dll
   // use GetVersionExW() as fallback
   // note: starting from Windows 8.1 GetVersionExW() may return unfaithful information
-  if (GetVersionExW((OSVERSIONINFOW*) &osVerInfo) != 0)
+  if (GetVersionExW(reinterpret_cast<OSVERSIONINFOW*>(&osVerInfo)) != 0)
       return true;
 
   ZeroMemory(&osVerInfo, sizeof(osVerInfo));
@@ -329,12 +329,12 @@ std::string CSysInfoJob::GetSystemUpTime(bool bTotalUptime)
   if(bTotalUptime)
   {
     //Total Uptime
-    iInputMinutes = g_sysinfo.GetTotalUptime() + ((int)(XbmcThreads::SystemClockMillis() / 60000));
+    iInputMinutes = g_sysinfo.GetTotalUptime() + static_cast<int>(XbmcThreads::SystemClockMillis() / 60000);
   }
   else
   {
     //Current UpTime
-    iInputMinutes = (int)(XbmcThreads::SystemClockMillis() / 60000);
+    iInputMinutes = static_cast<int>(XbmcThreads::SystemClockMillis() / 60000);
   }
 
   SystemUpTime(iInputMinutes,iMinutes, iHours, iDays);
@@ -404,7 +404,7 @@ CSysInfo::~CSysInfo()
 
 bool CSysInfo::Load(const TiXmlNode *settings)
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
   
   const TiXmlElement *pElement = settings->FirstChildElement("general");
@@ -416,15 +416,15 @@ bool CSysInfo::Load(const TiXmlNode *settings)
 
 bool CSysInfo::Save(TiXmlNode *settings) const
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   TiXmlNode *generalNode = settings->FirstChild("general");
-  if (generalNode == NULL)
+  if (generalNode == nullptr)
   {
     TiXmlElement generalNodeNew("general");
     generalNode = settings->InsertEndChild(generalNodeNew);
-    if (generalNode == NULL)
+    if (generalNode == nullptr)
       return false;
   }
   XMLUtils::SetInt(generalNode, "systemtotaluptime", m_iSystemTimeTotalUp);
@@ -451,7 +451,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
 #ifdef TARGET_WINDOWS
     UINT uidriveType = GetDriveType(( drive + ":\\" ).c_str());
     if(uidriveType != DRIVE_UNKNOWN && uidriveType != DRIVE_NO_ROOT_DIR)
-      bRet= ( 0 != GetDiskFreeSpaceEx( ( drive + ":\\" ).c_str(), NULL, &ULTotal, &ULTotalFree) );
+      bRet= ( 0 != GetDiskFreeSpaceEx( ( drive + ":\\" ).c_str(), nullptr, &ULTotal, &ULTotalFree) );
 #elif defined(TARGET_POSIX)
     bRet = (0 != GetDiskFreeSpaceEx(drive.c_str(), NULL, &ULTotal, &ULTotalFree));
 #endif
@@ -461,7 +461,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
     ULARGE_INTEGER ULTotalTmp= { { 0 } };
     ULARGE_INTEGER ULTotalFreeTmp= { { 0 } };
 #ifdef TARGET_WINDOWS
-    char* pcBuffer= NULL;
+    char* pcBuffer= nullptr;
     DWORD dwStrLength= GetLogicalDriveStrings( 0, pcBuffer );
     if( dwStrLength != 0 )
     {
@@ -471,7 +471,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
       int iPos= 0;
       do {
         if( DRIVE_FIXED == GetDriveType( pcBuffer + iPos  ) &&
-            GetDiskFreeSpaceEx( ( pcBuffer + iPos ), NULL, &ULTotal, &ULTotalFree ) )
+            GetDiskFreeSpaceEx( ( pcBuffer + iPos ), nullptr, &ULTotal, &ULTotalFree ) )
         {
           ULTotalTmp.QuadPart+= ULTotal.QuadPart;
           ULTotalFreeTmp.QuadPart+= ULTotalFree.QuadPart;
@@ -497,12 +497,12 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
 
   if( bRet )
   {
-    iTotal = (int)( ULTotal.QuadPart / MB );
-    iTotalFree = (int)( ULTotalFree.QuadPart / MB );
+    iTotal = static_cast<int>(( ULTotal.QuadPart / MB ));
+    iTotalFree = static_cast<int>(( ULTotalFree.QuadPart / MB ));
     iTotalUsed = iTotal - iTotalFree;
     if( ULTotal.QuadPart > 0 )
     {
-      iPercentUsed = (int)( 100.0f * ( ULTotal.QuadPart - ULTotalFree.QuadPart ) / ULTotal.QuadPart + 0.5f );
+      iPercentUsed = static_cast<int>(100.0f * ( ULTotal.QuadPart - ULTotalFree.QuadPart ) / ULTotal.QuadPart + 0.5f);
     }
     else
     {
@@ -776,7 +776,7 @@ std::string CSysInfo::GetManufacturerName(void)
       wchar_t buf[400]; // more than enough
       DWORD bufSize = sizeof(buf);
       DWORD valType;
-      if (RegQueryValueExW(hKey, L"SystemManufacturer", NULL, &valType, (LPBYTE)buf, &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
+      if (RegQueryValueExW(hKey, L"SystemManufacturer", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
       {
         g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), manufName);
         size_t zeroPos = manufName.find(char(0));
@@ -824,7 +824,7 @@ std::string CSysInfo::GetModelName(void)
       wchar_t buf[400]; // more than enough
       DWORD bufSize = sizeof(buf);
       DWORD valType; 
-      if (RegQueryValueExW(hKey, L"SystemProductName", NULL, &valType, (LPBYTE)buf, &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
+      if (RegQueryValueExW(hKey, L"SystemProductName", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS && valType == REG_SZ)
       {
         g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), modelName);
         size_t zeroPos = modelName.find(char(0));
@@ -1082,7 +1082,7 @@ std::string CSysInfo::GetUserAgent()
   if (!result.empty())
     return result;
 
-  result = GetAppName() + "/" + (std::string)g_infoManager.GetLabel(SYSTEM_BUILD_VERSION_SHORT) + " (";
+  result = GetAppName() + "/" + static_cast<std::string>(g_infoManager.GetLabel(SYSTEM_BUILD_VERSION_SHORT)) + " (";
 #if defined(TARGET_WINDOWS)
   result += GetKernelName() + " " + GetKernelVersion();
   BOOL bIsWow = FALSE;
@@ -1383,6 +1383,6 @@ CJob *CSysInfo::GetJob() const
 
 void CSysInfo::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 {
-  m_info = ((CSysInfoJob *)job)->GetData();
+  m_info = static_cast<CSysInfoJob *>(job)->GetData();
   CInfoLoader::OnJobComplete(jobID, success, job);
 }

@@ -22,7 +22,7 @@
 
 #include "guilib/GUIWindow.h"
 #include "interfaces/IAnnouncer.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CGUIWindowHome :
       public CGUIWindow,

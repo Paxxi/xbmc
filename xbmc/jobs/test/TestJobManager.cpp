@@ -18,9 +18,9 @@
  *
  */
 
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "settings/Settings.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 
 #include "gtest/gtest.h"
 

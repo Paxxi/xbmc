@@ -19,7 +19,7 @@
  *
  */
 #include "storage/IStorageProvider.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CWin32StorageProvider : public IStorageProvider
 {

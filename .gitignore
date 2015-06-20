@@ -546,6 +546,9 @@ lib/cpluff/stamp-h1
 /xbmc/interfaces/python/generated/
 /xbmc/interfaces/python/test/Makefile
 
+# /xbmc/jobs/
+/xbmc/jobs/Makefile
+
 # /xbmc/linux/
 /xbmc/linux/Makefile
 /xbmc/linux/sse4/Makefile
@@ -629,6 +632,9 @@ lib/cpluff/stamp-h1
 /xbmc/screensavers/rsxs-0.9/src/plasma/Makefile.in
 /xbmc/screensavers/rsxs-0.9/src/skyrocket/Makefile.in
 /xbmc/screensavers/rsxs-0.9/src/solarwinds/Makefile.in
+
+#/xbmc/sysinfo
+/xbmc/sysinfo/Makefile
 
 #/xbmc/utils
 /xbmc/utils/Makefile

@@ -53,6 +53,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/interfaces/info/info.a \
                    xbmc/interfaces/interfaces.a \
                    xbmc/interfaces/json-rpc/json-rpc.a \
+                   xbmc/jobs/jobs.a \
                    xbmc/linux/linux.a \
                    xbmc/listproviders/listproviders.a \
                    xbmc/media/media.a \
@@ -88,6 +89,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/settings/lib/settings_lib.a \
                    xbmc/settings/windows/settings_windows.a \
                    xbmc/storage/storage.a \
+                   xbmc/sysinfo/sysinfo.a \
                    xbmc/utils/utils.a \
                    xbmc/video/dialogs/videodialogs.a \
                    xbmc/video/jobs/video-jobs.a \
@@ -278,6 +280,8 @@ CHECK_DIRS = xbmc/addons/test \
              xbmc/threads/test \
              xbmc/interfaces/python/test \
              xbmc/cores/AudioEngine/Sinks/test \
+             xbmc/jobs/test \
+             xbmc/sysinfo/test \
              xbmc/test
 CHECK_LIBS = xbmc/addons/test/addonsTest.a \
              xbmc/filesystem/test/filesystemTest.a \
@@ -288,6 +292,8 @@ CHECK_LIBS = xbmc/addons/test/addonsTest.a \
              xbmc/threads/test/threadTest.a \
              xbmc/interfaces/python/test/pythonSwigTest.a \
              xbmc/cores/AudioEngine/Sinks/test/AESinkTest.a \
+             xbmc/jobs/test/jobsTest.a \
+             xbmc/sysinfo/test/sysinfoTest.a \
              xbmc/test/xbmc-test.a
 
 ifeq (@USE_WAYLAND@,1)

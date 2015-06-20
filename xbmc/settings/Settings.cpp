@@ -74,7 +74,7 @@
 #include "utils/log.h"
 #include "utils/RssManager.h"
 #include "utils/StringUtils.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/Weather.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/SeekHandler.h"

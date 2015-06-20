@@ -29,7 +29,7 @@
 #include "filesystem/Directory.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"

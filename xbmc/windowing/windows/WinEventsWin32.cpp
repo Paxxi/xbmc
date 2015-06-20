@@ -43,7 +43,7 @@
 #include "Shlobj.h"
 #include "settings/AdvancedSettings.h"
 #include "peripherals/Peripherals.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "network/Zeroconf.h"
 #include "network/ZeroconfBrowser.h"
 #include "utils/StringUtils.h"

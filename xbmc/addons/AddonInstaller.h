@@ -19,7 +19,7 @@
  *
  */
 
-#include "utils/FileOperationJob.h"
+#include "jobs/FileOperationJob.h"
 #include "addons/Addon.h"
 #include "addons/Repository.h"
 #include "utils/Stopwatch.h"

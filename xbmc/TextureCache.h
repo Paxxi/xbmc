@@ -23,7 +23,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "TextureDatabase.h"
 #include "threads/Event.h"
 

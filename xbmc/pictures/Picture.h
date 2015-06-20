@@ -18,7 +18,7 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include <string>
 #include <vector>
 

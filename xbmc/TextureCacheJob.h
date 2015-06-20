@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CBaseTexture;
 

@@ -39,7 +39,7 @@
 #include "utils/log.h"
 #include "utils/Stopwatch.h"
 #include "utils/StringUtils.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "interfaces/AnnouncementManager.h"
 #include "video/VideoDatabase.h"
 #include "network/Network.h"

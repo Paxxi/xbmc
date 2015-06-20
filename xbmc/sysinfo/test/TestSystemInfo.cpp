@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "settings/Settings.h"
 #include "GUIInfoManager.h"
 

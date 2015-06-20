@@ -50,8 +50,8 @@
 #include "utils/StringUtils.h"
 #include "utils/log.h"
 
-#include "utils/JobManager.h"
-#include "utils/FileOperationJob.h"
+#include "jobs/JobManager.h"
+#include "jobs/FileOperationJob.h"
 #include "utils/FileUtils.h"
 #include "utils/URIUtils.h"
 #include "Autorun.h"

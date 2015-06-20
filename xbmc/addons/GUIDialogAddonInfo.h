@@ -22,7 +22,7 @@
 
 #include "guilib/GUIDialog.h"
 #include "addons/IAddon.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CGUIDialogAddonInfo :
       public CGUIDialog,

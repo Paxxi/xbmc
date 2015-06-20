@@ -20,7 +20,7 @@
  *
  */
 
-#include "Job.h"
+#include "jobs/Job.h"
 #include <string>
 
 class CInfoLoader : public IJobCallback

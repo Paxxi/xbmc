@@ -34,7 +34,7 @@
 #include "input/Key.h"
 #include "settings/Settings.h"
 #include "settings/lib/Setting.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"

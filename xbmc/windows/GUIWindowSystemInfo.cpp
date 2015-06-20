@@ -25,7 +25,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "pvr/PVRManager.h"
 #ifdef HAS_SYSINFO
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #endif
 #include "utils/StringUtils.h"
 #include "storage/MediaManager.h"

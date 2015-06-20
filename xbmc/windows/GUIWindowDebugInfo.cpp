@@ -21,7 +21,7 @@
 #include "GUIWindowDebugInfo.h"
 #include "settings/AdvancedSettings.h"
 #include "addons/Skin.h"
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #include "utils/log.h"
 #include "CompileInfo.h"
 #include "input/ButtonTranslator.h"

@@ -43,7 +43,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/StringUtils.h"
 #include "AutorunMediaJob.h"
 

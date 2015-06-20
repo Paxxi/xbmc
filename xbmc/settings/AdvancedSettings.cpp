@@ -32,7 +32,7 @@
 #include "settings/Settings.h"
 #include "settings/SettingUtils.h"
 #include "utils/StringUtils.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
 #include "utils/log.h"

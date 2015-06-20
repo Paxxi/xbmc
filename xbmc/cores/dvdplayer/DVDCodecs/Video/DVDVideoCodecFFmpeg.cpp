@@ -29,7 +29,7 @@
 #include "DVDCodecs/DVDCodecs.h"
 #include "DVDCodecs/DVDCodecUtils.h"
 #if defined(TARGET_POSIX) || defined(TARGET_WINDOWS)
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #endif
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"

@@ -38,7 +38,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "osx/XBMCHelper.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "osx/CocoaInterface.h"
 #include "osx/DarwinUtils.h"
 #undef BOOL

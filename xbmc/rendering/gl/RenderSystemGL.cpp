@@ -31,7 +31,7 @@
 #include "utils/log.h"
 #include "utils/GLUtils.h"
 #include "utils/TimeUtils.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/MathUtils.h"
 #include "utils/StringUtils.h"
 

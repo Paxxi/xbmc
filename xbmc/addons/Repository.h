@@ -20,8 +20,8 @@
  */
 
 #include "Addon.h"
-#include "utils/Job.h"
-#include "utils/ProgressJob.h"
+#include "jobs/Job.h"
+#include "jobs/ProgressJob.h"
 
 namespace ADDON
 {

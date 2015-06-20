@@ -33,7 +33,7 @@
 #include "DVDClock.h"
 #include "threads/Atomics.h"
 #include "utils/BitstreamConverter.h"
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #include "utils/log.h"
 #include "settings/AdvancedSettings.h"
 

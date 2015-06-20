@@ -20,7 +20,7 @@
 
 #include "URL.h"
 #include "XBDateTime.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include "settings/lib/ISettingsHandler.h"
 #include <string>
 

@@ -23,7 +23,7 @@
 #include <string>
 #include "guilib/GUIDialog.h"
 #include "threads/CriticalSection.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 enum SUBTITLE_STORAGEMODE
 {

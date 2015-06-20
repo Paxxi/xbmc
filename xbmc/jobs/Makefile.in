@@ -1,0 +1,10 @@
+SRCS += FileOperationJob.cpp
+SRCS += JobManager.cpp
+SRCS += ProgressJob.cpp
+SRCS += RecentlyAddedJob.cpp
+SRCS += SaveFileStateJob.cpp
+
+LIB   = jobs.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(patsubst %.S,,$(SRCS))))

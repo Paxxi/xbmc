@@ -22,7 +22,7 @@
 #include "filesystem/Directory.h"
 #include "filesystem/FavouritesDirectory.h"
 #include "guilib/GUIWindowManager.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/XMLUtils.h"
 #include "utils/URIUtils.h"
 #include "threads/SingleLock.h"
