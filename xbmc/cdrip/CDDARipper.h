@@ -22,7 +22,7 @@
  */
 
 #include <string>
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 class CFileItem;
 

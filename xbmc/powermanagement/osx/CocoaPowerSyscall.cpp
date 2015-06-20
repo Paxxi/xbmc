@@ -23,7 +23,7 @@
 typedef unsigned char BYTE;
 
 #include "utils/log.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "Application.h"
 #include "powermanagement/PowerManager.h"
 #include "windowing/WindowingFactory.h"

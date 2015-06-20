@@ -37,7 +37,7 @@
 #if defined(TARGET_RASPBERRY_PI)
 #include "DllBCM.h"
 #include "OMXCore.h"
-#include "xbmc/utils/CPUInfo.h"
+#include "xbmc/sysinfo/CPUInfo.h"
 #include "threads/CriticalSection.h"
 #include "threads/Event.h"
 

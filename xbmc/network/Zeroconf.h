@@ -23,7 +23,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CCriticalSection;
 /// this class provides support for zeroconf

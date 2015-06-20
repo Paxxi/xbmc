@@ -45,7 +45,7 @@
 #include "filesystem/File.h"
 #include "guilib/GraphicContext.h"
 
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "settings/SettingPath.h"

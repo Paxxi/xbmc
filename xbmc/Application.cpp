@@ -68,7 +68,7 @@
 #ifdef HAS_FILESYSTEM_SAP
 #include "filesystem/SAPDirectory.h"
 #endif
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/TimeUtils.h"
 #include "GUILargeTextureManager.h"
 #include "TextureCache.h"
@@ -86,7 +86,7 @@
 #include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #include "utils/SeekHandler.h"
 
 #include "input/KeyboardLayoutManager.h"
@@ -193,8 +193,8 @@
 #endif
 
 #include "storage/MediaManager.h"
-#include "utils/JobManager.h"
-#include "utils/SaveFileStateJob.h"
+#include "jobs/JobManager.h"
+#include "jobs/SaveFileStateJob.h"
 #include "utils/AlarmClock.h"
 #include "utils/StringUtils.h"
 #include "DatabaseManager.h"

@@ -25,7 +25,7 @@
 #include "settings/Settings.h"
 #include "music/tags/MusicInfoTag.h"
 #include "utils/log.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 #include "cores/AudioEngine/AEFactory.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"

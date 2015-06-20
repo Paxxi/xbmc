@@ -25,7 +25,7 @@
 #endif
 #include "PlatformInclude.h"
 #include "LinuxTimezone.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #if defined(TARGET_DARWIN)
 #include "osx/OSXGNUReplacements.h"
 #endif

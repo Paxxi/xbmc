@@ -23,7 +23,7 @@
 #include "EncoderFFmpeg.h"
 #include "FileItem.h"
 #include "utils/log.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "Util.h"
 #include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "filesystem/File.h"

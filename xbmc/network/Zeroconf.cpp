@@ -34,7 +34,7 @@
 #include "threads/CriticalSection.h"
 #include "threads/SingleLock.h"
 #include "threads/Atomics.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 #ifndef HAS_ZEROCONF
 //dummy implementation used if no zeroconf is present

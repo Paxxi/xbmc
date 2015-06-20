@@ -22,7 +22,7 @@
 #include "Win32Directory.h"
 #include "FileItem.h"
 #include "win32/WIN32Util.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/CharsetConverter.h"
 #include "URL.h"
 #include "utils/log.h"

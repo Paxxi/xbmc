@@ -27,7 +27,7 @@
 #include "network/NetworkServices.h"
 #include "utils/log.h"
 #ifdef TARGET_WINDOWS
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "win32/WIN32Util.h"
 #include "utils/CharsetConverter.h"
 #endif

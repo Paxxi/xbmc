@@ -21,7 +21,7 @@
 
 #include <map>
 #include "ThumbLoader.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "FileItem.h"
 
 class CStreamDetails;

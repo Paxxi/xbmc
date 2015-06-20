@@ -24,7 +24,7 @@
 
 #include "FileItem.h"
 #include "threads/CriticalSection.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 class CGUIDialogProgressBarHandle;
 class CVideoLibraryJob;

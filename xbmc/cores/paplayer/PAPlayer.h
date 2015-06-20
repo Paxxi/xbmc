@@ -26,7 +26,7 @@
 #include "threads/Thread.h"
 #include "AudioDecoder.h"
 #include "threads/SharedSection.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 #include "cores/IAudioCallback.h"
 #include "cores/AudioEngine/Utils/AEChannelInfo.h"

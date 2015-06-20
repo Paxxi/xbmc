@@ -35,7 +35,7 @@
 #include "system.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 
 #include "threads/Atomics.h"
 

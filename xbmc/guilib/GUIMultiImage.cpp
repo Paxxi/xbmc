@@ -22,7 +22,7 @@
 #include "TextureManager.h"
 #include "filesystem/Directory.h"
 #include "utils/URIUtils.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "FileItem.h"
 #include "settings/AdvancedSettings.h"
 #include "input/Key.h"

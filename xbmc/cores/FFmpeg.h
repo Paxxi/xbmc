@@ -21,7 +21,7 @@
  */
 
 
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 
 extern "C" {
 #include "libswscale/swscale.h"

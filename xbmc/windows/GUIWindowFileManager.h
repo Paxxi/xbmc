@@ -23,7 +23,7 @@
 #include "guilib/GUIWindow.h"
 #include "filesystem/VirtualDirectory.h"
 #include "filesystem/DirectoryHistory.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 class CFileItem;
 class CFileItemList;

@@ -25,7 +25,7 @@
 #include "settings/lib/ISettingCallback.h"
 #include "threads/Event.h"
 #include "threads/Thread.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "utils/Observer.h"
 #include "interfaces/IAnnouncer.h"
 #include "pvr/recordings/PVRRecording.h"

@@ -29,7 +29,7 @@
 #include "settings/Settings.h"
 #include "ApplicationMessenger.h"
 #include "filesystem/FavouritesDirectory.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "addons/AddonManager.h"
 #include "addons/Repository.h"

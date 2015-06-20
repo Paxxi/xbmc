@@ -21,7 +21,7 @@
  */
 
 #include "threads/CriticalSection.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include "guilib/TextureManager.h"
 
 /*!

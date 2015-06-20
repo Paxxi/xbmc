@@ -28,7 +28,7 @@
 #include "MatrixGLES.h"
 #include "utils/log.h"
 #if defined(__ARM_NEON__)
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #endif
 
 

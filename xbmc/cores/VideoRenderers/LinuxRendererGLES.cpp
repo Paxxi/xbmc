@@ -57,7 +57,7 @@ extern "C" {
 
 #if defined(__ARM_NEON__)
 #include "yuv2rgb.neon.h"
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #endif
 #ifdef HAVE_VIDEOTOOLBOXDECODER
 #include "DVDCodecs/Video/DVDVideoCodecVideoToolBox.h"

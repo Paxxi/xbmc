@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/CPUInfo.h"
+#include "sysinfo/CPUInfo.h"
 #include "utils/Temperature.h"
 #include "settings/AdvancedSettings.h"
 

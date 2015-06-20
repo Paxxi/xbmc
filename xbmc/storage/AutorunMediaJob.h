@@ -20,7 +20,7 @@
  */
 #include "system.h"
 #include <string>
-#include "utils/Job.h"
+#include "jobs/Job.h"
 
 class CAutorunMediaJob : public CJob
 {

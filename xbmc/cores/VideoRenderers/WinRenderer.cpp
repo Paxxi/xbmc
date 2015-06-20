@@ -31,7 +31,7 @@
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "VideoShaders/WinVideoFilter.h"
 #include "windowing/WindowingFactory.h"
 #include "cores/FFmpeg.h"

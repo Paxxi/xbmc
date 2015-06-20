@@ -2474,6 +2474,7 @@ OUTPUT_FILES="Makefile \
     xbmc/guilib/Makefile \
     xbmc/input/linux/Makefile \
     xbmc/interfaces/Makefile \
+    xbmc/jobs/Makefile \
     xbmc/network/Makefile \
     xbmc/network/httprequesthandler/python/Makefile \
     xbmc/network/upnp/Makefile \
@@ -2487,6 +2488,7 @@ OUTPUT_FILES="Makefile \
     xbmc/linux/Makefile \
     xbmc/filesystem/Makefile \
     xbmc/screensavers/rsxs-0.9/xbmc/Makefile \
+    xbmc/sysinfo/Makefile \
     xbmc/visualizations/XBMCProjectM/Makefile \
     xbmc/visualizations/Goom/Makefile \
     xbmc/visualizations/OpenGLSpectrum/Makefile \

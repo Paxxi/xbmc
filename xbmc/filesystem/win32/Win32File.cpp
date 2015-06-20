@@ -22,7 +22,7 @@
 #include "Win32File.h"
 #include "win32/WIN32Util.h"
 #include "utils/win32/Win32Log.h"
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "utils/auto_buffer.h"
 
 #ifndef WIN32_LEAN_AND_MEAN

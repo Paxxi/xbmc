@@ -38,7 +38,7 @@
 #if defined(HAS_LIBAMCODEC)
 #include "utils/AMLUtils.h"
 #endif // defined(HAS_LIBAMCODEC)
-#include "utils/SystemInfo.h"
+#include "sysinfo/SystemInfo.h"
 #include "windowing/WindowingFactory.h"
 #if defined(TARGET_DARWIN_OSX)
 #include "osx/DarwinUtils.h"

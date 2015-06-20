@@ -24,7 +24,7 @@
 #include <string>
 #include "threads/CriticalSection.h"
 #include "threads/Thread.h"
-#include "Job.h"
+#include "jobs/Job.h"
 
 class CJobManager;
 
@@ -34,7 +34,7 @@ public:
   CJobWorker(CJobManager *manager);
   virtual ~CJobWorker();
 
-  void Process();
+  void Process() override;
 private:
   CJobManager  *m_jobManager;
 };
@@ -66,7 +66,7 @@ class CJobQueue: public IJobCallback
     void FreeJob()
     {
       delete m_job;
-      m_job = NULL;
+      m_job = nullptr;
     };
     bool operator==(const CJob *job) const
     {
@@ -138,7 +138,7 @@ public:
 
    \sa CJobManager, IJobCallback and  CJob
    */
-  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job);
+  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
 
 protected:
   /*!
@@ -195,11 +195,11 @@ class CJobManager
     void FreeJob()
     {
       delete m_job;
-      m_job = NULL;
+      m_job = nullptr;
     };
     void Cancel()
     {
-      m_callback = NULL;
+      m_callback = nullptr;
     };
     CJob         *m_job;
     unsigned int  m_id;

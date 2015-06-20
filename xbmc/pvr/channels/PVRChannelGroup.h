@@ -23,7 +23,7 @@
 #include "FileItem.h"
 #include "PVRChannel.h"
 #include "settings/lib/ISettingCallback.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 
 #include <memory>
 

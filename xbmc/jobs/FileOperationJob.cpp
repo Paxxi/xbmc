@@ -32,6 +32,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "jobs/Job.h"
 
 using namespace std;
 using namespace XFILE;
@@ -72,7 +73,7 @@ void CFileOperationJob::SetFileOperation(FileAction action, CFileItemList &items
 
   m_items.Clear();
   for (int i = 0; i < items.Size(); i++)
-    m_items.Add(CFileItemPtr(new CFileItem(*items[i])));
+    m_items.Add(std::make_shared<CFileItem>(*items[i]));
 }
 
 bool CFileOperationJob::DoWork()
@@ -80,10 +81,10 @@ bool CFileOperationJob::DoWork()
   FileOperationList ops;
   double totalTime = 0.0;
 
-  if (m_displayProgress && GetProgressDialog() == NULL)
+  if (m_displayProgress && GetProgressDialog() == nullptr)
   {
     CGUIDialogExtendedProgressBar* dialog =
-      (CGUIDialogExtendedProgressBar*)g_windowManager.GetWindow(WINDOW_DIALOG_EXT_PROGRESS);
+      static_cast<CGUIDialogExtendedProgressBar*>(g_windowManager.GetWindow(WINDOW_DIALOG_EXT_PROGRESS));
     SetProgressBar(dialog->GetHandle(GetActionString(m_action)));
   }
 
@@ -262,7 +263,7 @@ bool CFileOperationJob::CFileOperation::ExecuteOperation(CFileOperationJob *base
   base->m_currentFile = CURL(m_strFileA).GetFileNameWithoutPath();
   base->m_currentOperation = GetActionString(m_action);
 
-  if (base->ShouldCancel((unsigned int)current, 100))
+  if (base->ShouldCancel(static_cast<unsigned int>(current), 100))
     return false;
 
   base->SetText(base->GetCurrentFile());
@@ -318,7 +319,7 @@ bool CFileOperationJob::CFileOperation::ExecuteOperation(CFileOperationJob *base
     break;
   }
 
-  current += (double)m_time * opWeight;
+  current += static_cast<double>(m_time) * opWeight;
 
   return bResult;
 }
@@ -342,8 +343,8 @@ void CFileOperationJob::CFileOperation::Debug()
 
 bool CFileOperationJob::CFileOperation::OnFileCallback(void* pContext, int ipercent, float avgSpeed)
 {
-  DataHolder *data = (DataHolder *)pContext;
-  double current = data->current + ((double)ipercent * data->opWeight * (double)m_time)/ 100.0;
+  DataHolder *data = static_cast<DataHolder *>(pContext);
+  double current = data->current + (static_cast<double>(ipercent) * data->opWeight * static_cast<double>(m_time))/ 100.0;
 
   if (avgSpeed > 1000000.0f)
     data->base->m_avgSpeed = StringUtils::Format("%.1f MB/s", avgSpeed / 1000000.0f);
@@ -355,7 +356,7 @@ bool CFileOperationJob::CFileOperation::OnFileCallback(void* pContext, int iperc
                               data->base->GetCurrentFile().c_str(),
                               data->base->GetAverageSpeed().c_str());
   data->base->SetText(line);
-  return !data->base->ShouldCancel((unsigned)current, 100);
+  return !data->base->ShouldCancel(static_cast<unsigned>(current), 100);
 }
 
 bool CFileOperationJob::operator==(const CJob* job) const
@@ -364,7 +365,7 @@ bool CFileOperationJob::operator==(const CJob* job) const
     return false;
 
   const CFileOperationJob* rjob = dynamic_cast<const CFileOperationJob*>(job);
-  if (rjob == NULL)
+  if (rjob == nullptr)
     return false;
 
   if (GetAction() != rjob->GetAction() ||

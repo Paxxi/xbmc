@@ -19,7 +19,7 @@
 *
 */
 
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include "music/tags/MusicInfoTag.h"
 
 class CEncoder;

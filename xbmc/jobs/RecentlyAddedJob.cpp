@@ -44,7 +44,7 @@ bool CRecentlyAddedJob::UpdateVideo()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
 
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
 
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateVideos() - Running RecentlyAdded home screen update");
@@ -192,7 +192,7 @@ bool CRecentlyAddedJob::UpdateMusic()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
   
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
   
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateMusic() - Running RecentlyAdded home screen update");
@@ -262,7 +262,7 @@ bool CRecentlyAddedJob::UpdateMusic()
   
   if (musicdatabase.GetRecentlyAddedAlbums(albums, NUM_ITEMS))
   { 
-    for (; i < (int)albums.size(); ++i)
+    for (; i < static_cast<int>(albums.size()); ++i)
     {
       CAlbum&    album=albums[i];
       std::string value = StringUtils::Format("%i", i + 1);
@@ -299,7 +299,7 @@ bool CRecentlyAddedJob::UpdateTotal()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
   
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
   
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateTotal() - Running RecentlyAdded home screen update");

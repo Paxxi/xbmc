@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/FileOperationJob.h"
+#include "jobs/FileOperationJob.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
 #include "utils/URIUtils.h"

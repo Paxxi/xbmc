@@ -27,7 +27,7 @@
 #include "LanguageResource.h"
 #include "UISoundsResource.h"
 #include "utils/StringUtils.h"
-#include "utils/JobManager.h"
+#include "jobs/JobManager.h"
 #include "threads/SingleLock.h"
 #include "LangInfo.h"
 #include "settings/AdvancedSettings.h"

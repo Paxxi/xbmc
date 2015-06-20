@@ -30,7 +30,7 @@
 
 #include "GUIImage.h"
 #include "utils/Stopwatch.h"
-#include "utils/Job.h"
+#include "jobs/Job.h"
 #include "threads/CriticalSection.h"
 
 /*!
