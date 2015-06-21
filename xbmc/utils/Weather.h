@@ -20,7 +20,7 @@
  *
  */
 
-#include "InfoLoader.h"
+#include "jobs/InfoLoader.h"
 #include "settings/lib/ISettingCallback.h"
 #include "utils/GlobalsHandling.h"
 

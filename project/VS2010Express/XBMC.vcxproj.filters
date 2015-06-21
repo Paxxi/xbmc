@@ -1414,9 +1414,6 @@
     <ClCompile Include="..\..\xbmc\utils\HttpHeader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\InfoLoader.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -3123,6 +3120,9 @@
     <ClCompile Include="..\..\xbmc\jobs\test\TestJobManager.cpp">
       <Filter>jobs\test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\jobs\InfoLoader.cpp">
+      <Filter>jobs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -4340,9 +4340,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\HttpHeader.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\InfoLoader.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ISerializable.h">
@@ -6015,6 +6012,9 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\sysinfo\SystemInfo.h">
       <Filter>sysinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\jobs\InfoLoader.h">
+      <Filter>jobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

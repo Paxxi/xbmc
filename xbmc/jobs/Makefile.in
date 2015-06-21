@@ -1,4 +1,5 @@
 SRCS += FileOperationJob.cpp
+SRCS += InfoLoader.cpp
 SRCS += JobManager.cpp
 SRCS += ProgressJob.cpp
 SRCS += RecentlyAddedJob.cpp

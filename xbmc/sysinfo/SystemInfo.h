@@ -20,7 +20,7 @@
  *
  */
 
-#include "utils/InfoLoader.h"
+#include "jobs/InfoLoader.h"
 #include "jobs/Job.h"
 #include "settings/lib/ISubSettings.h"
 #include <string>

@@ -583,6 +583,7 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\interfaces\python\XBPython.cpp" />
     <ClCompile Include="..\..\xbmc\jobs\FileOperationJob.cpp" />
+    <ClCompile Include="..\..\xbmc\jobs\InfoLoader.cpp" />
     <ClCompile Include="..\..\xbmc\jobs\JobManager.cpp" />
     <ClCompile Include="..\..\xbmc\jobs\ProgressJob.cpp" />
     <ClCompile Include="..\..\xbmc\jobs\RecentlyAddedJob.cpp" />
@@ -994,6 +995,7 @@
     <ClInclude Include="..\..\xbmc\interfaces\python\PythonInvoker.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\pythreadstate.h" />
     <ClInclude Include="..\..\xbmc\jobs\FileOperationJob.h" />
+    <ClInclude Include="..\..\xbmc\jobs\InfoLoader.h" />
     <ClInclude Include="..\..\xbmc\jobs\Job.h" />
     <ClInclude Include="..\..\xbmc\jobs\JobManager.h" />
     <ClInclude Include="..\..\xbmc\jobs\ProgressJob.h" />
@@ -1253,7 +1255,6 @@
     <ClCompile Include="..\..\xbmc\utils\HttpHeader.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpResponse.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\InfoLoader.cpp" />
     <ClCompile Include="..\..\xbmc\utils\JSONVariantParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\JSONVariantWriter.cpp" />
     <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp" />
@@ -2097,7 +2098,6 @@
     <ClInclude Include="..\..\xbmc\utils\HttpHeader.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpParser.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpResponse.h" />
-    <ClInclude Include="..\..\xbmc\utils\InfoLoader.h" />
     <ClInclude Include="..\..\xbmc\utils\ISerializable.h" />
     <ClInclude Include="..\..\xbmc\utils\ISortable.h" />
     <ClInclude Include="..\..\xbmc\utils\JSONVariantParser.h" />
