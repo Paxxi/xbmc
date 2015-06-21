@@ -22,7 +22,7 @@
 #include "LanguageHook.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "utils/URIUtils.h"
 #include "Util.h"
 
@@ -77,7 +77,7 @@ namespace XBMCAddon
     bool rmdir(const String& path, bool force)
     {
       DelayedCallGuard dg;
-      return (force ? CFileUtils::DeleteItem(path,force) : XFILE::CDirectory::Remove(path));
+      return (force ? XFILE::CFileUtils::DeleteItem(path,force) : XFILE::CDirectory::Remove(path));
     }      
 
     Tuple<std::vector<String>, std::vector<String> > listdir(const String& path)

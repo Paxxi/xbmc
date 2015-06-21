@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/AsyncFileCopy.h"
+#include "filesystem/AsyncFileCopy.h"
 #include "filesystem/File.h"
 
 #include "test/TestUtils.h"

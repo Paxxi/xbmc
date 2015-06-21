@@ -52,7 +52,7 @@
 
 #include "jobs/JobManager.h"
 #include "jobs/FileOperationJob.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "utils/URIUtils.h"
 #include "Autorun.h"
 #include "URL.h"

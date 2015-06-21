@@ -21,6 +21,8 @@
 #include <string>
 #include "FileItem.h"
 
+namespace XFILE
+{
 class CFileUtils
 {
 public:
@@ -28,5 +30,5 @@ public:
   static bool DeleteItem(const std::string &strPath, bool force=false);
   static bool RenameFile(const std::string &strFile);
   static bool RemoteAccessAllowed(const std::string &strPath);
-  static unsigned int LoadFile(const std::string &filename, void* &outputBuffer);
 };
+}

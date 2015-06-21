@@ -1,6 +1,7 @@
 CXXFLAGS += -D__STDC_FORMAT_MACROS
 
 SRCS  = AddonsDirectory.cpp
+SRCS += AsyncFileCopy.cpp
 SRCS += CacheStrategy.cpp
 SRCS += CircularCache.cpp
 SRCS += CDDADirectory.cpp
@@ -20,6 +21,7 @@ SRCS += FileCache.cpp
 SRCS += FileDirectoryFactory.cpp
 SRCS += FileFactory.cpp
 SRCS += FileReaderFile.cpp
+SRCS += FileUtils.cpp
 SRCS += FTPDirectory.cpp
 SRCS += FTPParse.cpp
 SRCS += HDHomeRunDirectory.cpp

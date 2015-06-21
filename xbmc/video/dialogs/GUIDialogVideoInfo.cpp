@@ -57,7 +57,7 @@
 #include "filesystem/VideoDatabaseDirectory/QueryParams.h"
 #ifdef HAS_UPNP
 #endif
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 
 using namespace std;
 using namespace XFILE::VIDEODATABASEDIRECTORY;

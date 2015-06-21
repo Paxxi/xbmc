@@ -30,7 +30,7 @@
 #include "Util.h"
 #include "URL.h"
 #include "utils/URIUtils.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 
 using namespace XFILE;
 using namespace JSONRPC;

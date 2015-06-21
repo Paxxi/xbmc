@@ -35,10 +35,10 @@ public:
   bool Copy(const std::string &from, const std::string &to, const std::string &heading);
 
   /// \brief callback from CFile::Copy()
-  virtual bool OnFileCallback(void *pContext, int ipercent, float avgSpeed);
+  virtual bool OnFileCallback(void *pContext, int ipercent, float avgSpeed) override;
 
 protected:
-  virtual void Process();
+  virtual void Process() override;
 
 private:
   /// volatile variables as we access these from both threads

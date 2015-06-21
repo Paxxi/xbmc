@@ -25,12 +25,12 @@
 #include "guilib/LocalizeStrings.h"
 #include "jobs/JobManager.h"
 #include "jobs/FileOperationJob.h"
-#include "URIUtils.h"
+#include "utils/URIUtils.h"
 #include "filesystem/MultiPathDirectory.h"
 #include <vector>
 #include "settings/MediaSourceSettings.h"
 #include "Util.h"
-#include "StringUtils.h"
+#include "utils/StringUtils.h"
 #include "URL.h"
 #include "settings/Settings.h"
 
@@ -51,7 +51,7 @@ bool CFileUtils::DeleteItem(const CFileItemPtr &item, bool force)
   if (!item || item->IsParentFolder())
     return false;
 
-  CGUIDialogYesNo* pDialog = (CGUIDialogYesNo*)g_windowManager.GetWindow(WINDOW_DIALOG_YES_NO);
+  CGUIDialogYesNo* pDialog = static_cast<CGUIDialogYesNo*>(g_windowManager.GetWindow(WINDOW_DIALOG_YES_NO));
   if (!force && pDialog)
   {
     pDialog->SetHeading(122);
@@ -157,7 +157,7 @@ bool CFileUtils::RemoteAccessAllowed(const std::string &strPath)
   {
     VECSOURCES* sources = CMediaSourceSettings::Get().GetSources(SourceNames[index]);
     int sourceIndex = CUtil::GetMatchingSource(realPath, *sources, isSource);
-    if (sourceIndex >= 0 && sourceIndex < (int)sources->size() && sources->at(sourceIndex).m_iHasLock != 2 && sources->at(sourceIndex).m_allowSharing)
+    if (sourceIndex >= 0 && sourceIndex < static_cast<int>(sources->size()) && sources->at(sourceIndex).m_iHasLock != 2 && sources->at(sourceIndex).m_allowSharing)
       return true;
   }
   return false;

@@ -41,7 +41,7 @@
 #include "storage/DetectDVDType.h"
 #endif
 #include "threads/SingleLock.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"

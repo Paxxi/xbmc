@@ -44,7 +44,7 @@
 #include "video/VideoDatabase.h"
 #include "guilib/GUIWindowManager.h"
 #include "xbmc/GUIUserMessages.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.server")
 

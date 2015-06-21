@@ -20,7 +20,7 @@
 
 #include "AddonInstaller.h"
 #include "utils/log.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "utils/URIUtils.h"
 #include "Util.h"
 #include "guilib/LocalizeStrings.h"

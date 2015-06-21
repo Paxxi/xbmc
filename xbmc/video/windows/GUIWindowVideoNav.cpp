@@ -20,7 +20,7 @@
 
 #include "GUIUserMessages.h"
 #include "GUIWindowVideoNav.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "Util.h"
 #include "PlayListPlayer.h"
 #include "GUIPassword.h"

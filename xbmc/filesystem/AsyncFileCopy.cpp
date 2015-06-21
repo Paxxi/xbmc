@@ -22,7 +22,7 @@
 #include "AsyncFileCopy.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "guilib/GUIWindowManager.h"
-#include "log.h"
+#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
 
@@ -55,7 +55,7 @@ bool CAsyncFileCopy::Copy(const std::string &from, const std::string &to, const 
 
   // create our thread, which starts the file copy operation
   Create();
-  CGUIDialogProgress *dlg = (CGUIDialogProgress *)g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
+  CGUIDialogProgress *dlg = static_cast<CGUIDialogProgress *>(g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS));
   unsigned int time = XbmcThreads::SystemClockMillis();
   while (m_running)
   {

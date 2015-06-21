@@ -1,7 +1,9 @@
 SRCS= \
+  TestAsyncFileCopy.cpp \
   TestDirectory.cpp \
   TestFile.cpp \
   TestFileFactory.cpp \
+  TestFileUtils.cpp \
   TestNfsFile.cpp \
   TestRarFile.cpp \
   TestZipFile.cpp

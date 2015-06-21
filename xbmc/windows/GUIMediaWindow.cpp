@@ -60,7 +60,7 @@
 #include "settings/Settings.h"
 #include "storage/MediaManager.h"
 #include "threads/SystemClock.h"
-#include "utils/FileUtils.h"
+#include "filesystem/FileUtils.h"
 #include "utils/LabelFormatter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
@@ -1423,7 +1423,7 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
     if (!g_passwordManager.IsMasterLockUnlocked(true))
       return;
 
-  if (!CFileUtils::DeleteItem(item))
+  if (!XFILE::CFileUtils::DeleteItem(item))
     return;
   Refresh(true);
   m_viewControl.SetSelectedItem(iItem);
@@ -1437,7 +1437,7 @@ void CGUIMediaWindow::OnRenameItem(int iItem)
     if (!g_passwordManager.IsMasterLockUnlocked(true))
       return;
 
-  if (!CFileUtils::RenameFile(m_vecItems->Get(iItem)->GetPath()))
+  if (!XFILE::CFileUtils::RenameFile(m_vecItems->Get(iItem)->GetPath()))
     return;
   Refresh(true);
   m_viewControl.SetSelectedItem(iItem);

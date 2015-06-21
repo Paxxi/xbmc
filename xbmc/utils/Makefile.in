@@ -1,7 +1,6 @@
 SRCS += AlarmClock.cpp
 SRCS += AliasShortcutUtils.cpp
 SRCS += Archive.cpp
-SRCS += AsyncFileCopy.cpp
 SRCS += AutoPtrHandle.cpp
 SRCS += auto_buffer.cpp
 SRCS += Base64.cpp
@@ -18,7 +17,6 @@ SRCS += Environment.cpp
 SRCS += Fanart.cpp
 SRCS += fastmemcpy.c
 SRCS += fastmemcpy-arm.S
-SRCS += FileUtils.cpp
 SRCS += fstrcmp.c
 SRCS += GLUtils.cpp
 SRCS += GroupUtils.cpp
