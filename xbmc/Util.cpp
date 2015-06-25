@@ -83,6 +83,7 @@
 #endif
 
 #ifdef TARGET_POSIX
+#include "linux/PlatformDefs.h"
 #include <sys/types.h>
 #include <dirent.h>
 #include <unistd.h>

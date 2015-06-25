@@ -20,6 +20,9 @@
  */
 #include "PlayList.h"
 
+#include <string>
+#include <map>
+
 namespace PLAYLIST
 {
 class CPlayListM3U :

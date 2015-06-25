@@ -26,6 +26,10 @@
 #include <stdint.h>
 #include "MediaSource.h" // Definition of VECSOURCES
 
+#if defined(TARGET_POSIX)
+#include "linux/PlatformDefs.h"
+#endif
+
 #define ARRAY_SIZE(X)         (sizeof(X)/sizeof((X)[0]))
 
 // A list of filesystem types for LegalPath/FileName

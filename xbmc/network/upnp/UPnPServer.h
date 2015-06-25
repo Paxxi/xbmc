@@ -20,6 +20,9 @@
 #pragma once
 #include <Platinum/Source/Devices/MediaConnect/PltMediaConnect.h>
 #include <memory>
+#include <string>
+#include <map>
+#include <utility>
 
 #include "interfaces/IAnnouncer.h"
 
