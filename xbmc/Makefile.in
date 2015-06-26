@@ -1,4 +1,5 @@
-SRCS=Application.cpp \
+SRCS=AlarmClock.cpp \
+ 		 Application.cpp \
      ApplicationMessenger.cpp \
      ApplicationPlayer.cpp \
      AppParamParser.cpp \
@@ -53,5 +54,3 @@ GitRevision:
 
 include @abs_top_srcdir@/Makefile.include
 -include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(SRCS)))
-
-

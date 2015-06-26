@@ -1,4 +1,3 @@
-SRCS += AlarmClock.cpp
 SRCS += AliasShortcutUtils.cpp
 SRCS += Archive.cpp
 SRCS += AutoPtrHandle.cpp
@@ -69,7 +68,7 @@ SRCS += XBMCTinyXML.cpp
 SRCS += XMLUtils.cpp
 SRCS += Utf8Utils.cpp
 SRCS += XSLTUtils.cpp
-SRCS += ActorProtocol.cpp 
+SRCS += ActorProtocol.cpp
 SRCS += SysfsUtils.cpp
 
 ifeq (@USE_OPENGLES@,1)

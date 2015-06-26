@@ -20,7 +20,7 @@
 #include "ScreenSaver.h"
 #include "guilib/GraphicContext.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
-#include "utils/AlarmClock.h"
+#include "AlarmClock.h"
 #include "windowing/WindowingFactory.h"
 
 // What sound does a python screensaver make?
@@ -121,4 +121,3 @@ void CScreenSaver::Destroy()
 }
 
 } /*namespace ADDON*/
-

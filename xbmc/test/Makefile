@@ -1,4 +1,5 @@
 SRCS=	\
+  TestAlarmClock.cpp \
 	TestBasicEnvironment.cpp \
 	TestFileItem.cpp \
 	TestTextureUtils.cpp \

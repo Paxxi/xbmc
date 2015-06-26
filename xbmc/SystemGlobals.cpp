@@ -22,7 +22,7 @@
 #include "cores/DataCacheCore.h"
 #include "GUILargeTextureManager.h"
 #include "guilib/TextureManager.h"
-#include "utils/AlarmClock.h"
+#include "AlarmClock.h"
 #include "GUIInfoManager.h"
 #include "filesystem/DllLibCurl.h"
 #include "filesystem/DirectoryCache.h"
@@ -76,4 +76,3 @@
   CZipManager g_ZipManager;
 
   CDataCacheCore g_dataCacheCore;
-

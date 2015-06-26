@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/AlarmClock.h"
+#include "AlarmClock.h"
 
 #include "gtest/gtest.h"
 

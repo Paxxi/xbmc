@@ -1375,9 +1375,6 @@
     <ClCompile Include="..\..\xbmc\storage\windows\Win32StorageProvider.cpp">
       <Filter>storage\windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\AlarmClock.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\AliasShortcutUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -2323,9 +2320,6 @@
     <ClCompile Include="..\..\xbmc\test\xbmc-test.cpp">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestAlarmClock.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestAliasShortcutUtils.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
@@ -3113,6 +3107,10 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\filesystem\test\TestFileUtils.cpp">
       <Filter>filesystem\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\AlarmClock.cpp" />
+    <ClCompile Include="..\..\xbmc\test\TestAlarmClock.cpp">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4290,9 +4288,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\storage\windows\Win32StorageProvider.h">
       <Filter>storage\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\AlarmClock.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\AliasShortcutUtils.h">
       <Filter>utils</Filter>
@@ -6007,6 +6002,7 @@
     <ClInclude Include="..\..\xbmc\filesystem\FileUtils.h">
       <Filter>filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\AlarmClock.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">

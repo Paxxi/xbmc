@@ -31,7 +31,7 @@
 #include "PartyModeManager.h"
 #include "addons/Visualisation.h"
 #include "input/ButtonTranslator.h"
-#include "utils/AlarmClock.h"
+#include "AlarmClock.h"
 #include "LangInfo.h"
 #include "sysinfo/SystemInfo.h"
 #include "guilib/GUITextBox.h"
@@ -4027,7 +4027,7 @@ std::string CGUIInfoManager::GetVideoLabel(int item)
         std::string strEpisode;
         if (m_currentFile->GetVideoInfoTag()->m_iSeason == 0) // prefix episode with 'S'
           strEpisode = StringUtils::Format("S%i", m_currentFile->GetVideoInfoTag()->m_iEpisode);
-        else 
+        else
           strEpisode = StringUtils::Format("%i", m_currentFile->GetVideoInfoTag()->m_iEpisode);
         return strEpisode;
       }
