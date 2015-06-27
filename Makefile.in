@@ -11,7 +11,7 @@ EC_DIRS= \
 
 DVDPCODECS_DIRS= \
 	lib \
-	lib/libdvd 
+	lib/libdvd
 
 ifeq (@USE_LIBSTAGEFRIGHT@,1)
 DVDPCODECS_DIRS += xbmc/cores/dvdplayer/DVDCodecs/Video/libstagefrightICS
@@ -65,6 +65,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/music/windows/musicwindows.a \
                    xbmc/network/websocket/websocket.a \
                    xbmc/network/network.a \
+									 xbmc/nls/nls.a \
                    xbmc/peripherals/bus/peripheral-bus.a \
                    xbmc/peripherals/devices/peripheral-devices.a \
                    xbmc/peripherals/dialogs/peripheral-dialogs.a \
@@ -275,6 +276,7 @@ CHECK_DIRS = xbmc/addons/test \
              xbmc/filesystem/test \
              xbmc/music/tags/test \
              xbmc/network/test \
+						 xbmc/nls/test \
              xbmc/utils/test \
              xbmc/video/test \
              xbmc/threads/test \
@@ -287,6 +289,7 @@ CHECK_LIBS = xbmc/addons/test/addonsTest.a \
              xbmc/filesystem/test/filesystemTest.a \
              xbmc/music/tags/test/tagsTest.a \
              xbmc/network/test/networkTest.a \
+						 xbmc/nls/test/nlsTest.a \
              xbmc/utils/test/utilsTest.a \
              xbmc/video/test/videoTest.a \
              xbmc/threads/test/threadTest.a \

@@ -25,7 +25,7 @@
 #include "Application.h"
 #include "network/DNSNameCache.h"
 #include "filesystem/File.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "LangInfo.h"
 #include "profiles/ProfilesManager.h"
 #include "settings/lib/Setting.h"

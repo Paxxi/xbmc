@@ -352,6 +352,12 @@
     <Filter Include="jobs\test">
       <UniqueIdentifier>{47a80605-a51f-4508-a820-2872d58ba406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nls">
+      <UniqueIdentifier>{7bd1bb71-b160-46dd-9af2-eadfebcc7e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nls\test">
+      <UniqueIdentifier>{1d44b35a-db39-4cb2-a202-4dbdff54b30e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1387,9 +1393,6 @@
     <ClCompile Include="..\..\xbmc\utils\BitstreamStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Crc32.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -1593,9 +1596,6 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\windows\GUIWindowWeather.cpp">
       <Filter>windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\LangCodeExpander.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\MediaSource.cpp">
       <Filter>utils</Filter>
@@ -2332,9 +2332,6 @@
     <ClCompile Include="..\..\xbmc\utils\test\TestBitstreamStats.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestCharsetConverter.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestCPUInfo.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
@@ -2375,9 +2372,6 @@
       <Filter>utils\test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestLabelFormatter.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLangCodeExpander.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\Testlog.cpp">
@@ -2836,9 +2830,6 @@
     <ClCompile Include="..\..\xbmc\settings\lib\SettingUpdate.cpp">
       <Filter>settings\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\CharsetDetection.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.cpp">
       <Filter>cores\VideoRenderers</Filter>
     </ClCompile>
@@ -3026,12 +3017,6 @@
     <ClCompile Include="..\..\xbmc\filesystem\ResourceDirectory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Locale.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLocale.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Temperature.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -3111,6 +3096,27 @@
     <ClCompile Include="..\..\xbmc\AlarmClock.cpp" />
     <ClCompile Include="..\..\xbmc\test\TestAlarmClock.cpp">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\CharsetConverter.cpp">
+      <Filter>nls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\CharsetDetection.cpp">
+      <Filter>nls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\LangCodeExpander.cpp">
+      <Filter>nls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\Locale.cpp">
+      <Filter>nls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\test\TestCharsetConverter.cpp">
+      <Filter>nls\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\test\TestLangCodeExpander.cpp">
+      <Filter>nls\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\test\TestLocale.cpp">
+      <Filter>nls\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4301,9 +4307,6 @@
     <ClInclude Include="..\..\xbmc\utils\BitstreamStats.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Crc32.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4534,9 +4537,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\windows\GUIWindowWeather.h">
       <Filter>windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\LangCodeExpander.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\addons\AddonInstaller.h">
       <Filter>addons</Filter>
@@ -5743,9 +5743,6 @@
     <ClInclude Include="..\..\xbmc\settings\lib\ISettingControlCreator.h">
       <Filter>settings\lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\CharsetDetection.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.h">
       <Filter>cores\VideoRenderers</Filter>
     </ClInclude>
@@ -5939,9 +5936,6 @@
     <ClInclude Include="..\..\xbmc\filesystem\ResourceDirectory.h">
       <Filter>filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Locale.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\addons\AudioDecoder.h">
       <Filter>addons</Filter>
     </ClInclude>
@@ -6003,6 +5997,18 @@
       <Filter>filesystem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\AlarmClock.h" />
+    <ClInclude Include="..\..\xbmc\nls\CharsetConverter.h">
+      <Filter>nls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\nls\CharsetDetection.h">
+      <Filter>nls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\nls\LangCodeExpander.h">
+      <Filter>nls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\nls\Locale.h">
+      <Filter>nls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">

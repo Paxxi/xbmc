@@ -30,7 +30,7 @@
 
 
 #include "StringUtils.h"
-#include "CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/fstrcmp.h"
 #include "Util.h"
 #include "LangInfo.h"
@@ -237,7 +237,7 @@ string StringUtils::FormatV(const char *fmt, va_list args)
   int size = FORMAT_BLOCK_SIZE;
   va_list argCopy;
 
-  while (1) 
+  while (1)
   {
     char *cstr = reinterpret_cast<char*>(malloc(sizeof(char) * size));
     if (!cstr)
@@ -279,7 +279,7 @@ wstring StringUtils::Format(const wchar_t *fmt, ...)
   va_start(args, fmt);
   wstring str = FormatV(fmt, args);
   va_end(args);
-  
+
   return str;
 }
 
@@ -290,7 +290,7 @@ wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
 
   int size = FORMAT_BLOCK_SIZE;
   va_list argCopy;
-  
+
   while (1)
   {
     wchar_t *cstr = reinterpret_cast<wchar_t*>(malloc(sizeof(wchar_t) * size));
@@ -300,7 +300,7 @@ wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
     va_copy(argCopy, args);
     int nActual = vswprintf(cstr, size, fmt, argCopy);
     va_end(argCopy);
-    
+
     if (nActual > -1 && nActual < size) // We got a valid result
     {
       std::wstring str(cstr, nActual);
@@ -324,7 +324,7 @@ wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
       size++; // increment for null-termination
 #endif // TARGET_WINDOWS
   }
-  
+
   return L"";
 }
 
@@ -451,12 +451,12 @@ string StringUtils::Mid(const string &str, size_t first, size_t count /* = strin
 {
   if (first + count > str.size())
     count = str.size() - first;
-  
+
   if (first > str.size())
     return string();
-  
+
   assert(first + count <= str.size());
-  
+
   return str.substr(first, count);
 }
 
@@ -549,7 +549,7 @@ int StringUtils::Replace(string &str, char oldChar, char newChar)
       replacedChars++;
     }
   }
-  
+
   return replacedChars;
 }
 
@@ -560,14 +560,14 @@ int StringUtils::Replace(std::string &str, const std::string &oldStr, const std:
 
   int replacedChars = 0;
   size_t index = 0;
-  
+
   while (index < str.size() && (index = str.find(oldStr, index)) != string::npos)
   {
     str.replace(index, oldStr.size(), newStr);
     index += newStr.size();
     replacedChars++;
   }
-  
+
   return replacedChars;
 }
 
@@ -685,7 +685,7 @@ std::string StringUtils::Join(const vector<string> &strings, const std::string& 
   std::string result;
   for(vector<string>::const_iterator it = strings.begin(); it != strings.end(); ++it )
     result += (*it) + delimiter;
-  
+
   if (!result.empty())
     result.erase(result.size() - delimiter.size());
   return result;

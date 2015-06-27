@@ -68,7 +68,7 @@
 #include "utils/log.h"
 #include "threads/SingleLock.h"
 #ifndef TARGET_POSIX
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #endif
 #if defined(TARGET_ANDROID)

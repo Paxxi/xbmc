@@ -22,7 +22,7 @@
 #include "RarFile.h"
 #include <sys/stat.h>
 #include "Util.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #include "URL.h"
 #include "Directory.h"

@@ -704,6 +704,22 @@
     <ClCompile Include="..\..\xbmc\network\Zeroconf.cpp" />
     <ClCompile Include="..\..\xbmc\network\ZeroconfBrowser.cpp" />
     <ClCompile Include="..\..\xbmc\NfoFile.cpp" />
+    <ClCompile Include="..\..\xbmc\nls\CharsetConverter.cpp" />
+    <ClCompile Include="..\..\xbmc\nls\CharsetDetection.cpp" />
+    <ClCompile Include="..\..\xbmc\nls\LangCodeExpander.cpp" />
+    <ClCompile Include="..\..\xbmc\nls\Locale.cpp" />
+    <ClCompile Include="..\..\xbmc\nls\test\TestCharsetConverter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\test\TestLangCodeExpander.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\nls\test\TestLocale.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\PartyModeManager.cpp" />
     <ClCompile Include="..\..\xbmc\PasswordManager.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\bus\PeripheralBus.cpp" />
@@ -1031,6 +1047,10 @@
     <ClInclude Include="..\..\xbmc\network\httprequesthandler\python\HTTPPythonRequest.h" />
     <ClInclude Include="..\..\xbmc\network\httprequesthandler\python\HTTPPythonWsgiInvoker.h" />
     <ClInclude Include="..\..\xbmc\network\NetworkServices.h" />
+    <ClInclude Include="..\..\xbmc\nls\CharsetConverter.h" />
+    <ClInclude Include="..\..\xbmc\nls\CharsetDetection.h" />
+    <ClInclude Include="..\..\xbmc\nls\LangCodeExpander.h" />
+    <ClInclude Include="..\..\xbmc\nls\Locale.h" />
     <ClInclude Include="..\..\xbmc\peripherals\bus\virtual\PeripheralBusCEC.h" />
     <ClInclude Include="..\..\xbmc\network\upnp\UPnPSettings.h" />
     <ClInclude Include="..\..\xbmc\playlists\SmartPlaylistFileItemListModifier.h" />
@@ -1080,12 +1100,10 @@
     <ClInclude Include="..\..\xbmc\utils\ActorProtocol.h" />
     <ClInclude Include="..\..\xbmc\utils\auto_buffer.h" />
     <ClInclude Include="..\..\xbmc\utils\BooleanLogic.h" />
-    <ClInclude Include="..\..\xbmc\utils\CharsetDetection.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpRangeUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\IRssObserver.h" />
     <ClInclude Include="..\..\xbmc\utils\IXmlDeserializable.h" />
     <ClInclude Include="..\..\xbmc\utils\LegacyPathTranslation.h" />
-    <ClInclude Include="..\..\xbmc\utils\Locale.h" />
     <ClInclude Include="..\..\xbmc\utils\params_check_macros.h" />
     <ClInclude Include="..\..\xbmc\utils\rfft.h" />
     <ClInclude Include="..\..\xbmc\utils\RssManager.h" />
@@ -1206,20 +1224,14 @@
     <ClCompile Include="..\..\xbmc\utils\ActorProtocol.cpp" />
     <ClCompile Include="..\..\xbmc\utils\auto_buffer.cpp" />
     <ClCompile Include="..\..\xbmc\utils\BooleanLogic.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\CharsetDetection.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpRangeUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\LegacyPathTranslation.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Locale.cpp" />
     <ClCompile Include="..\..\xbmc\utils\rfft.cpp" />
     <ClCompile Include="..\..\xbmc\utils\RssManager.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Speed.cpp" />
     <ClCompile Include="..\..\xbmc\utils\StringValidation.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Temperature.cpp" />
     <ClCompile Include="..\..\xbmc\utils\test\TestHttpRangeUtils.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLocale.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -1255,7 +1267,6 @@
     <ClCompile Include="..\..\xbmc\utils\AutoPtrHandle.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Base64.cpp" />
     <ClCompile Include="..\..\xbmc\utils\BitstreamStats.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\CharsetConverter.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Crc32.cpp" />
     <ClCompile Include="..\..\xbmc\utils\DatabaseUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\EndianSwap.cpp" />
@@ -1273,7 +1284,6 @@
     <ClCompile Include="..\..\xbmc\utils\JSONVariantParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\JSONVariantWriter.cpp" />
     <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\LangCodeExpander.cpp" />
     <ClCompile Include="..\..\xbmc\utils\log.cpp" />
     <ClCompile Include="..\..\xbmc\utils\md5.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Observer.cpp" />
@@ -1326,10 +1336,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestLabelFormatter.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLangCodeExpander.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -1431,10 +1437,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestBitstreamStats.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestCharsetConverter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -2074,7 +2076,6 @@
     <ClInclude Include="..\..\xbmc\utils\AutoPtrHandle.h" />
     <ClInclude Include="..\..\xbmc\utils\Base64.h" />
     <ClInclude Include="..\..\xbmc\utils\BitstreamStats.h" />
-    <ClInclude Include="..\..\xbmc\utils\CharsetConverter.h" />
     <ClInclude Include="..\..\xbmc\utils\Crc32.h" />
     <ClInclude Include="..\..\xbmc\utils\DatabaseUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\EndianSwap.h" />
@@ -2091,7 +2092,6 @@
     <ClInclude Include="..\..\xbmc\utils\JSONVariantParser.h" />
     <ClInclude Include="..\..\xbmc\utils\JSONVariantWriter.h" />
     <ClInclude Include="..\..\xbmc\utils\LabelFormatter.h" />
-    <ClInclude Include="..\..\xbmc\utils\LangCodeExpander.h" />
     <ClInclude Include="..\..\xbmc\utils\log.h" />
     <ClInclude Include="..\..\xbmc\utils\MathUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\md5.h" />

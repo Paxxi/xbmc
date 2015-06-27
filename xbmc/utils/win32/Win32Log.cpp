@@ -20,7 +20,7 @@
 
 #include "Win32Log.h"
 #include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 
 void CWin32Log::LogW(int loglevel, const wchar_t* format, ...)
 {

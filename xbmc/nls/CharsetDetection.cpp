@@ -20,7 +20,7 @@
 
 #include <algorithm>
 #include "CharsetDetection.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Utf8Utils.h"
 #include "LangInfo.h"

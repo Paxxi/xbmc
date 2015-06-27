@@ -34,7 +34,7 @@
 #include "cores/VideoRenderers/OverlayRendererGUI.h"
 #endif
 #include "Application.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "utils/StringUtils.h"
 
 CPlayerController::CPlayerController()

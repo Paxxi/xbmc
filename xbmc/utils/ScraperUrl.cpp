@@ -21,8 +21,8 @@
 #include "XMLUtils.h"
 #include "ScraperUrl.h"
 #include "settings/AdvancedSettings.h"
-#include "CharsetConverter.h"
-#include "utils/CharsetDetection.h"
+#include "nls/CharsetConverter.h"
+#include "nls/CharsetDetection.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
 #include "filesystem/CurlFile.h"
@@ -268,7 +268,7 @@ bool CScraperUrl::Get(const SUrlEntry& scrURL, std::string& strHTML, XFILE::CCur
   {
     CXBMCTinyXML xmlDoc;
     xmlDoc.Parse(strHTML, reportedCharset);
-    
+
     std::string realXmlCharset(xmlDoc.GetUsedCharset());
     if (!realXmlCharset.empty())
     {
@@ -345,7 +345,7 @@ std::string CScraperUrl::GetThumbURL(const CScraperUrl::SUrlEntry &entry)
 {
   if (entry.m_spoof.empty())
     return entry.m_url;
-  
+
   return entry.m_url + "|Referer=" + CURL::Encode(entry.m_spoof);
 }
 

@@ -42,7 +42,7 @@
 #include "DllLibCurl.h"
 #include "ShoutcastFile.h"
 #include "SpecialProtocol.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 

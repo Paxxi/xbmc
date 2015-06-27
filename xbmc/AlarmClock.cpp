@@ -22,7 +22,7 @@
 #include "ApplicationMessenger.h"
 #include "guilib/LocalizeStrings.h"
 #include "threads/SingleLock.h"
-#include "log.h"
+#include "utils/log.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "utils/StringUtils.h"
 

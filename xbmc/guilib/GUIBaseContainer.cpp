@@ -19,7 +19,7 @@
  */
 
 #include "GUIBaseContainer.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "GUIInfoManager.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"

@@ -21,7 +21,7 @@
 #include "system.h"
 #include "LocalizeStrings.h"
 #include "addons/LanguageResource.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/URIUtils.h"

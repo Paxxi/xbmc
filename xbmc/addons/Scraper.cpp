@@ -24,7 +24,7 @@
 #include "AddonManager.h"
 #include "utils/ScraperParser.h"
 #include "utils/ScraperUrl.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "music/infoscanner/MusicAlbumInfo.h"
 #include "music/infoscanner/MusicArtistInfo.h"

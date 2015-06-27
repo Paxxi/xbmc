@@ -27,7 +27,7 @@
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "utils/Utf8Utils.h"
-#include "log.h"
+#include "utils/log.h"
 
 #include <errno.h>
 #include <iconv.h>

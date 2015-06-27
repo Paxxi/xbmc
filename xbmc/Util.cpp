@@ -63,7 +63,7 @@
 #include "utils/fstrcmp.h"
 #include "storage/MediaManager.h"
 #ifdef TARGET_WINDOWS
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "WIN32Util.h"
 #endif
 #if defined(TARGET_DARWIN)
@@ -87,7 +87,7 @@
 #include "cores/dvdplayer/DVDSubtitles/DVDSubtitleTagSami.h"
 #include "cores/dvdplayer/DVDSubtitles/DVDSubtitleStream.h"
 #include "URL.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "video/VideoInfoTag.h"
 #ifdef HAVE_LIBCAP
   #include <sys/capability.h>

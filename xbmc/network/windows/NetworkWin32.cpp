@@ -25,7 +25,7 @@
 #include "NetworkWin32.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "win32/WIN32Util.h"
 

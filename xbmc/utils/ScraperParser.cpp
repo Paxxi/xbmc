@@ -27,7 +27,7 @@
 #include "URL.h"
 #include "utils/StringUtils.h"
 #include "log.h"
-#include "CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/XSLTUtils.h"
 #include "utils/XMLUtils.h"
 #include <sstream>
@@ -611,4 +611,3 @@ void CScraperParser::AddDocument(const CXBMCTinyXML* doc)
     node = node->NextSibling();
   }
 }
-

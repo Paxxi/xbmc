@@ -22,7 +22,7 @@
 #include "Database.h"
 #include "XBDateTime.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"

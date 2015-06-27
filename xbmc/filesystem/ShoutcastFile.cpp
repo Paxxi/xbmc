@@ -29,7 +29,7 @@
 #include "URL.h"
 #include "utils/RegExp.h"
 #include "utils/HTMLUtil.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "ApplicationMessenger.h"
 #include "FileCache.h"
 #include <climits>

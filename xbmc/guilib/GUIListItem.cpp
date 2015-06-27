@@ -21,7 +21,7 @@
 #include "GUIListItem.h"
 #include "GUIListItemLayout.h"
 #include "utils/Archive.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 

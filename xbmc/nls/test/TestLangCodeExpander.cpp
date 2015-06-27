@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 
 #include "gtest/gtest.h"
 

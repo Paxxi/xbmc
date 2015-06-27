@@ -1,6 +1,4 @@
-#ifndef CCHARSET_CONVERTER
-#define CCHARSET_CONVERTER
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -174,5 +172,3 @@ private:
 };
 
 XBMC_GLOBAL(CCharsetConverter,g_charsetConverter);
-
-#endif

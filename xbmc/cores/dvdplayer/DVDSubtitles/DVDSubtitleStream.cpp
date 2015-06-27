@@ -23,9 +23,9 @@
 #include "DVDSubtitleStream.h"
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStream.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/Utf8Utils.h"
-#include "utils/CharsetDetection.h"
+#include "nls/CharsetDetection.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
@@ -159,4 +159,3 @@ char* CDVDSubtitleStream::ReadLine(char* buf, int iLen)
   else
     return NULL;
 }
-

@@ -24,7 +24,7 @@
 #include "PictureInfoTag.h"
 #include "XBDateTime.h"
 #include "utils/Variant.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Archive.h"
 

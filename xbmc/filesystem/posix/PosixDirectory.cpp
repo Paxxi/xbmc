@@ -22,7 +22,7 @@
 
 #include "PosixDirectory.h"
 #include "utils/AliasShortcutUtils.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"

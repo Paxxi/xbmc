@@ -21,8 +21,8 @@
 #include "XBMCTinyXML.h"
 #include "filesystem/File.h"
 #include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
-#include "utils/CharsetDetection.h"
+#include "nls/CharsetConverter.h"
+#include "nls/CharsetDetection.h"
 #include "utils/Utf8Utils.h"
 #include "LangInfo.h"
 #include "RegExp.h"
@@ -193,7 +193,7 @@ bool CXBMCTinyXML::Parse(const std::string& data, TiXmlEncoding encoding /*= TIX
   if (InternalParse(data, TIXML_ENCODING_UNKNOWN))
   {
     if (!m_SuggestedCharset.empty())
-      CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of suggested \"%s\"", __FUNCTION__, 
+      CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of suggested \"%s\"", __FUNCTION__,
                   (value.empty() ? "XML data" : ("file \"" + value + "\"").c_str()), m_SuggestedCharset.c_str());
     else if (!detectedCharset.empty())
       CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of detected \"%s\"", __FUNCTION__,

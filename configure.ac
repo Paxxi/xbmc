@@ -84,7 +84,7 @@ AC_DEFUN([XB_FIND_SONAME],
     for path in $gcc_lib_path $env_lib_path $host_lib_path; do
       lib=[`ls -- $path/lib$2.dylib 2>/dev/null`]
       if test x$lib != x; then
-        # we want the path/name that is embedded in the dylib 
+        # we want the path/name that is embedded in the dylib
         $1_FILENAME=[`otool -L $lib | grep -v lib$2.dylib | grep lib$2 | awk '{V=1; print $V}'`]
         $1_SONAME=[`basename $$1_FILENAME`]
       fi
@@ -447,7 +447,7 @@ AC_ARG_ENABLE([avahi],
   [disable Avahi support (default is enabled if libavahi-common and libavahi-client is found)])],
   [use_avahi=$enableval],
   [use_avahi=yes])
-  
+
   AC_ARG_ENABLE([mdnsembedded],
   [AS_HELP_STRING([--disable-mdnsembedded],
   [disable mDNSEmbedded support (default is auto)])],
@@ -602,7 +602,7 @@ case $host in
      use_gles=yes
      use_optical_drive=no
      use_x11=no
-     build_shared_lib=yes    
+     build_shared_lib=yes
      ;;
   i*86*-linux-gnu*|i*86*-*-linux-uclibc*)
      ARCH="i486-linux"
@@ -855,7 +855,7 @@ elif test "$use_arch" = "arm"; then
   CFLAGS="$CFLAGS -mno-apcs-stack-check"
   CXXFLAGS="$CXXFLAGS -mno-apcs-stack-check"
   if test "$use_tegra" = "yes"; then
-    # Compile for ARMv7a architecture, need to test gcc for vfpv3-d16 support 
+    # Compile for ARMv7a architecture, need to test gcc for vfpv3-d16 support
     SAVE_CFLAGS="$CFLAGS"
     CFLAGS="-mfpu=vfpv3-d16"
     AC_COMPILE_IFELSE(
@@ -864,10 +864,10 @@ elif test "$use_arch" = "arm"; then
         CXXFLAGS="$CXXFLAGS -Wno-psabi -Wa,-march=armv7a -mtune=cortex-a9 -mfpu=vfpv3-d16 -mthumb-interwork"
         use_cpu=cortex-a9],
       [ CFLAGS="$SAVE_CFLAGS -Wa,-march=armv6 -mtune=cortex-a8 -mthumb-interwork"
-        CXXFLAGS="$CXXFLAGS -Wa,-march=armv6 -mtune=cortex-a8 -mthumb-interwork"    
+        CXXFLAGS="$CXXFLAGS -Wa,-march=armv6 -mtune=cortex-a8 -mthumb-interwork"
         use_cpu=cortex-a8])
   else
-    if test "$use_neon" = "yes"; then 
+    if test "$use_neon" = "yes"; then
       CFLAGS="$CFLAGS -mfpu=neon -mvectorize-with-neon-quad"
       CXXFLAGS="$CXXFLAGS -mfpu=neon -mvectorize-with-neon-quad"
     fi
@@ -956,7 +956,7 @@ AC_CHECK_SIZEOF([wchar_t])
 AC_LANG_POP([C++])
 
 # Add top source directory for all builds so we can use config.h
-INCLUDES="-I\$(abs_top_srcdir) $INCLUDES" 
+INCLUDES="-I\$(abs_top_srcdir) $INCLUDES"
 
 # Check inotify availability
 AC_CHECK_HEADER([sys/inotify.h], AC_DEFINE([HAVE_INOTIFY],[1],[Define if we have inotify]),)
@@ -1465,7 +1465,7 @@ fi
 
 # FISHBMC
 if test "$use_fishbmc" = "no" || test "$use_gl" = "no"; then
-  AC_MSG_NOTICE($fishbmc_disabled)   
+  AC_MSG_NOTICE($fishbmc_disabled)
   DISABLE_FISHBMC=1
   use_fishbmc="no"
 else
@@ -1485,7 +1485,7 @@ fi
 
 # touch skin
 use_touch_skin=no
-if [[ -f "addons/skin.re-touched/addon.xml" ]]; then 
+if [[ -f "addons/skin.re-touched/addon.xml" ]]; then
   use_touch_skin=yes
   USE_TOUCH_SKIN=1
   AC_DEFINE([HAS_TOUCH_SKIN], [1], [Whether to build the touch skin.])
@@ -1778,7 +1778,7 @@ fi
 
 if test "$FFMPEG_FOUND" != "true"; then
   PKG_CHECK_MODULES([FFMPEG], [$FFMPEG_LIBNAMES],
-    [INCLUDES="$INCLUDES $FFMPEG_CFLAGS"; LIBS="$LIBS $FFMPEG_LIBS"; FFMPEG_FOUND="true"], 
+    [INCLUDES="$INCLUDES $FFMPEG_CFLAGS"; LIBS="$LIBS $FFMPEG_LIBS"; FFMPEG_FOUND="true"],
     [AC_MSG_ERROR("ffmpeg not found")])
 fi
 
@@ -2376,7 +2376,7 @@ else
 fi
 
 if test "x$use_airtunes" != "xno"; then
-  final_message="$final_message\n  AirTunes support (libshairplay):\tYes"  
+  final_message="$final_message\n  AirTunes support (libshairplay):\tYes"
 else
   final_message="$final_message\n  AirTunes support:\tNo"
 fi
@@ -2478,6 +2478,7 @@ OUTPUT_FILES="Makefile \
     xbmc/network/Makefile \
     xbmc/network/httprequesthandler/python/Makefile \
     xbmc/network/upnp/Makefile \
+    xbmc/nls/Makefile \
     lib/libexif/Makefile \
     lib/libhdhomerun/Makefile \
     lib/cximage-6.0/Makefile \
@@ -2703,7 +2704,7 @@ XB_CONFIG_MODULE([lib/libdvd/libdvdcss], [
     --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
     --host=$host_alias \
     --build=$build_alias \
-    --target=$target_alias \      
+    --target=$target_alias \
     --disable-doc \
     --enable-static \
     --with-pic
@@ -2715,7 +2716,7 @@ XB_CONFIG_MODULE([lib/libdvd/libdvdread], [
     --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
     --host=$host_alias \
     --build=$build_alias \
-    --target=$target_alias \      
+    --target=$target_alias \
     --enable-static \
     --disable-shared \
     --disable-strip \
@@ -2734,7 +2735,7 @@ XB_CONFIG_MODULE([lib/libdvd/libdvdnav], [
     --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
     --host=$host_alias \
     --build=$build_alias \
-    --target=$target_alias \      
+    --target=$target_alias \
     --enable-static \
     --disable-shared \
     --cc="$CC"
@@ -2764,12 +2765,12 @@ XB_CONFIG_MODULE([xbmc/visualizations/XBMCProjectM/libprojectM],[
 
 XB_CONFIG_MODULE([xbmc/visualizations/Goom/goom2k4-0],[
   ./configure  \
-    CFLAGS="$CFLAGS" \ 
+    CFLAGS="$CFLAGS" \
     CXXFLAGS="$CXXFLAGS" \
     --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
     --host=$host_alias \
     --build=$build_alias \
-    --target=$target_alias \      
+    --target=$target_alias \
     --disable-shared \
     --enable-static \
     --with-pic
@@ -2790,13 +2791,13 @@ XB_CONFIG_MODULE([xbmc/screensavers/rsxs-0.9/], [
   ./configure \
     CC="$CC" \
     CXX="$CXX" \
-    CFLAGS="$TEMPCFLAGS" \ 
+    CFLAGS="$TEMPCFLAGS" \
     CXXFLAGS="$CXXFLAGS" \
     `if test "$host_vendor" = "apple"; then echo --with-png=${prefix} --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib; fi` \
     --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
     --host=$host_alias \
     --build=$build_alias \
-    --target=$target_alias \      
+    --target=$target_alias \
     --without-xscreensaver \
     --disable-sound \
     --disable-cyclone \
@@ -2818,7 +2819,7 @@ XB_CONFIG_MODULE([lib/cpluff], [
     --host=$host_alias \
     --build=$build_alias \
     --target=$target_alias CFLAGS="$CFLAGS" CC="$CC" CXX="$CXX" LDFLAGS="$LDFLAGS" LIBS=""
-    #LDFLAGS="$LDFLAGS -Wl,-read_only_relocs,suppress"    
+    #LDFLAGS="$LDFLAGS -Wl,-read_only_relocs,suppress"
 ], [0])
 
 XB_CONFIG_MODULE([lib/gtest], [

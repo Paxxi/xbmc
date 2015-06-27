@@ -25,7 +25,7 @@
 #include "utils/URIUtils.h"
 #ifdef TARGET_WINDOWS
 #include "WIN32Util.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #endif
 #include "guilib/GUIWindowManager.h"
 #ifdef HAS_DVD_DRIVE

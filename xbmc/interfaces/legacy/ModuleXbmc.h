@@ -22,7 +22,7 @@
 #include "Tuple.h"
 //#include "Monitor.h"
 
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "swighelper.h"
 #include <vector>
 
@@ -48,7 +48,7 @@ namespace XBMCAddon
      *           XBMC loglevel == 0 (NORMAL, shows LOGNOTICE, LOGERROR, LOGSEVERE and LOGFATAL)\n
      *           XBMC loglevel == 1 (DEBUG, shows all)\n
      *           See pydocs for valid values for level.\n
-     *           
+     *
      *           example:
      *             - xbmc.log(msg='This is a test string.', level=xbmc.LOGDEBUG));
      */
@@ -71,9 +71,9 @@ namespace XBMCAddon
 
     /**
      * executescript(script) -- Execute a python script.
-     * 
+     *
      * script         : string - script filename to execute.
-     * 
+     *
      * example:
      *   - xbmc.executescript('special://home/scripts/update.py')
      */
@@ -81,11 +81,11 @@ namespace XBMCAddon
 
     /**
      * executebuiltin(function) -- Execute a built in XBMC function.
-     * 
+     *
      * function       : string - builtin function to execute.
-     * 
+     *
      * List of functions - http://kodi.wiki/view/List_of_Built_In_Functions
-     * 
+     *
      * example:
      *   - xbmc.executebuiltin('RunXBE(c:\\avalaunch.xbe)')
      */
@@ -93,11 +93,11 @@ namespace XBMCAddon
 
     /**
      * executeJSONRPC(jsonrpccommand) -- Execute an JSONRPC command.
-     * 
+     *
      * jsonrpccommand    : string - jsonrpc command to execute.
-     * 
-     * List of commands - 
-     * 
+     *
+     * List of commands -
+     *
      * example:
      *   - response = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "JSONRPC.Introspect", "id": 1 }')
      */
@@ -105,14 +105,14 @@ namespace XBMCAddon
 
     /**
      * sleep(time) -- Sleeps for 'time' msec.
-     * 
+     *
      * time           : integer - number of msec to sleep.
-     * 
+     *
      * *Note, This is useful if you have for example a Player class that is waiting\n
      *        for onPlayBackEnded() calls.\n
-     * 
+     *
      * Throws: PyExc_TypeError, if time is not an integer.
-     * 
+     *
      * example:
      *   - xbmc.sleep(2000) # sleeps for 2 seconds
      */
@@ -120,12 +120,12 @@ namespace XBMCAddon
 
     /**
      * getLocalizedString(id) -- Returns a localized 'unicode string'.
-     * 
+     *
      * id             : integer - id# for string you want to localize.
-     * 
+     *
      * *Note, See strings.xml in \language\{yourlanguage}\ for which id\n
      *        you need for a string.
-     * 
+     *
      * example:
      *   - locstr = xbmc.getLocalizedString(6)
      */
@@ -133,9 +133,9 @@ namespace XBMCAddon
 
     /**
      * getSkinDir() -- Returns the active skin directory as a string.
-     * 
+     *
      * *Note, This is not the full path like 'special://home/addons/MediaCenter', but only 'MediaCenter'.
-     * 
+     *
      * example:
      *   - skindir = xbmc.getSkinDir()
      */
@@ -159,7 +159,7 @@ namespace XBMCAddon
 
     /**
      * getIPAddress() -- Returns the current ip address as a string.
-     * 
+     *
      * example:
      *   - ip = xbmc.getIPAddress()
      */
@@ -167,13 +167,13 @@ namespace XBMCAddon
 
     /**
      * getDVDState() -- Returns the dvd state as an integer.
-     * 
+     *
      * return values are:
      *   -  1 : xbmc.DRIVE_NOT_READY
      *   - 16 : xbmc.TRAY_OPEN
      *   - 64 : xbmc.TRAY_CLOSED_NO_MEDIA
      *   - 96 : xbmc.TRAY_CLOSED_MEDIA_PRESENT
-     * 
+     *
      * example:
      *   - dvdstate = xbmc.getDVDState()
      */
@@ -181,7 +181,7 @@ namespace XBMCAddon
 
     /**
      * getFreeMem() -- Returns the amount of free memory in MB as an integer.
-     * 
+     *
      * example:
      *   - freemem = xbmc.getFreeMem()
      */
@@ -189,11 +189,11 @@ namespace XBMCAddon
 
     /**
      * getInfoLabel(infotag) -- Returns an InfoLabel as a string.
-     * 
+     *
      * infotag        : string - infoTag for value you want returned.
-     * 
+     *
      * List of InfoTags - http://kodi.wiki/view/InfoLabels
-     * 
+     *
      * example:
      *   - label = xbmc.getInfoLabel('Weather.Conditions')
      */
@@ -202,11 +202,11 @@ namespace XBMCAddon
     /**
      * getInfoImage(infotag) -- Returns a filename including path to the InfoImage's
      *                          thumbnail as a string.
-     * 
+     *
      * infotag        : string - infotag for value you want returned.
-     * 
+     *
      * List of InfoTags - http://kodi.wiki/view/InfoLabels
-     * 
+     *
      * example:
      *   - filename = xbmc.getInfoImage('Weather.Conditions')
      */
@@ -214,10 +214,10 @@ namespace XBMCAddon
 
     /**
      * playSFX(filename,[useCached]) -- Plays a wav file by filename
-     * 
+     *
      * filename       : string - filename of the wav file to play.\n
      * useCached      : [opt] bool - False = Dump any previously cached wav associated with filename
-     * 
+     *
      * example:
      *   - xbmc.playSFX('special://xbmc/scripts/dingdong.wav')\n
      *   - xbmc.playSFX('special://xbmc/scripts/dingdong.wav',False)
@@ -231,12 +231,12 @@ namespace XBMCAddon
      *   - xbmc.stopSFX()
      */
     void stopSFX();
-    
+
     /**
      * enableNavSounds(yesNo) -- Enables/Disables nav sounds
-     * 
+     *
      * yesNo          : integer - enable (True) or disable (False) nav sounds
-     * 
+     *
      * example:
      *   - xbmc.enableNavSounds(True)
      */
@@ -244,14 +244,14 @@ namespace XBMCAddon
 
     /**
      * getCondVisibility(condition) -- Returns True (1) or False (0) as a bool.
-     * 
+     *
      * condition      : string - condition to check.
-     * 
+     *
      * List of Conditions - http://kodi.wiki/view/List_of_Boolean_Conditions
-     * 
+     *
      * *Note, You can combine two (or more) of the above settings by using "+" as an AND operator,\n
      * "|" as an OR operator, "!" as a NOT operator, and "[" and "]" to bracket expressions.\n
-     * 
+     *
      * example:
      *   - visible = xbmc.getCondVisibility('[Control.IsVisible(41) + !Control.IsVisible(12)]')
      */
@@ -259,7 +259,7 @@ namespace XBMCAddon
 
     /**
      * getGlobalIdleTime() -- Returns the elapsed idle time in seconds as an integer.
-     * 
+     *
      * example:
      *   - t = xbmc.getGlobalIdleTime()
      */
@@ -267,9 +267,9 @@ namespace XBMCAddon
 
     /**
      * getCacheThumbName(path) -- Returns a thumb cache filename.
-     * 
+     *
      * path           : string or unicode - path to file
-     * 
+     *
      * example:
      *   - thumb = xbmc.getCacheThumbName('f:\\videos\\movie.avi')
      */
@@ -277,16 +277,16 @@ namespace XBMCAddon
 
     /**
      * makeLegalFilename(filename[, fatX]) -- Returns a legal filename or path as a string.
-     * 
+     *
      * filename       : string or unicode - filename/path to make legal\n
      * fatX           : [opt] bool - True=Xbox file system(Default)\n
-     * 
+     *
      * *Note, If fatX is true you should pass a full path. If fatX is false only pass
      *        the basename of the path.
-     * 
+     *
      *        You can use the above as keywords for arguments and skip certain optional arguments.\n
      *        Once you use a keyword, all following arguments require the keyword.
-     * 
+     *
      * example:
      *   - filename = xbmc.makeLegalFilename('F:\Trailers\Ice Age: The Meltdown.avi')
      */
@@ -294,13 +294,13 @@ namespace XBMCAddon
 
     /**
      * translatePath(path) -- Returns the translated path.
-     * 
+     *
      * path           : string or unicode - Path to format
-     * 
+     *
      * *Note, Only useful if you are coding for both Linux and Windows.\n
      *        e.g. Converts 'special://masterprofile/script_data' -> '/home/user/XBMC/UserData/script_data'
      *        on Linux.
-     * 
+     *
      * example:
      *   - fpath = xbmc.translatePath('special://masterprofile/script_data')
      */
@@ -308,10 +308,10 @@ namespace XBMCAddon
 
     /**
      * getCleanMovieTitle(path[, usefoldername]) -- Returns a clean movie title and year string if available.
-     * 
+     *
      * path           : string or unicode - String to clean\n
      * bool           : [opt] bool - use folder names (defaults to false)
-     * 
+     *
      * example:
      *   - title, year = xbmc.getCleanMovieTitle('/path/to/moviefolder/test.avi', True)
      */
@@ -319,12 +319,12 @@ namespace XBMCAddon
 
     /**
      * validatePath(path) -- Returns the validated path.
-     * 
+     *
      * path           : string or unicode - Path to format
-     * 
+     *
      * *Note, Only useful if you are coding for both Linux and Windows for fixing slash problems.\n
      *        e.g. Corrects 'Z://something' -> 'Z:\something'\n
-     * 
+     *
      * example:
      *   - fpath = xbmc.validatePath(somepath)
      */
@@ -332,13 +332,13 @@ namespace XBMCAddon
 
     /**
      * getRegion(id) -- Returns your regions setting as a string for the specified id.
-     * 
+     *
      * id             : string - id of setting to return
-     * 
+     *
      * *Note, choices are (dateshort, datelong, time, meridiem, tempunit, speedunit)
-     * 
+     *
      *        You can use the above as keywords for arguments.
-     * 
+     *
      * example:
      *   - date_long_format = xbmc.getRegion('datelong')
      */
@@ -346,15 +346,15 @@ namespace XBMCAddon
 
     /**
      * getSupportedMedia(media) -- Returns the supported file types for the specific media as a string.
-     * 
+     *
      * media          : string - media type
-     * 
+     *
      * *Note, media type can be (video, music, picture).
-     * 
+     *
      *        The return value is a pipe separated string of filetypes (eg. '.mov|.avi').
-     * 
+     *
      *        You can use the above as keywords for arguments.
-     * 
+     *
      * example:
      *   - mTypes = xbmc.getSupportedMedia('video')
      */
@@ -362,13 +362,13 @@ namespace XBMCAddon
 
     /**
      * skinHasImage(image) -- Returns True if the image file exists in the skin.
-     * 
+     *
      * image          : string - image filename
-     * 
+     *
      * *Note, If the media resides in a subfolder include it. (eg. home-myfiles\\home-myfiles2.png)
-     * 
+     *
      *        You can use the above as keywords for arguments.
-     * 
+     *
      * example:
      *   - exists = xbmc.skinHasImage('ButtonFocusedTexture.png')
      */
@@ -376,7 +376,7 @@ namespace XBMCAddon
 
     /**
      * startServer(typ, bStart, bWait) -- start or stop a server.
-     * 
+     *
      * typ          : integer - use SERVER_* constants\n
      * bStart       : bool - start (True) or stop (False) a server\n
      * bWait        : [opt] bool - wait on stop before returning (not supported by all servers)\n
@@ -389,7 +389,7 @@ namespace XBMCAddon
 
     /**
      * audioSuspend() -- Suspend Audio engine.
-     * 
+     *
      * example:
      *   - xbmc.audioSuspend()
      */
@@ -397,10 +397,10 @@ namespace XBMCAddon
 
     /**
      * audioResume() -- Resume Audio engine.
-     * 
+     *
      * example:
      *   xbmc.audioResume()
-     */  
+     */
     void audioResume();
 
     /**
@@ -416,7 +416,7 @@ namespace XBMCAddon
     * example:
     *   - language = xbmc.convertLanguage(English, xbmc.ISO_639_2)
     */
-    String convertLanguage(const char* language, int format); 
+    String convertLanguage(const char* language, int format);
 
     SWIG_CONSTANT_FROM_GETTER(int,SERVER_WEBSERVER);
     SWIG_CONSTANT_FROM_GETTER(int,SERVER_AIRPLAYSERVER);

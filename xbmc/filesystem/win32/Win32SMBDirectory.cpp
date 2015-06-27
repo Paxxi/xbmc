@@ -24,7 +24,7 @@
 #include "FileItem.h"
 #include "win32/WIN32Util.h"
 #include "sysinfo/SystemInfo.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "URL.h"
 #include "utils/win32/Win32Log.h"
 #include "PasswordManager.h"

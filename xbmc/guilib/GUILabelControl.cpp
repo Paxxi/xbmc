@@ -19,7 +19,7 @@
  */
 
 #include "GUILabelControl.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 
 using namespace std;

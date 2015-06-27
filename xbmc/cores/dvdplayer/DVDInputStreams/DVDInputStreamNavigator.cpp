@@ -19,7 +19,7 @@
  */
 
 #include "DVDInputStreamNavigator.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "../DVDDemuxSPU.h"
 #include "DVDStateSerializer.h"
 #include "settings/Settings.h"

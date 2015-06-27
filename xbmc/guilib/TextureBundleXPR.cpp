@@ -26,7 +26,7 @@
 #include "utils/log.h"
 #ifndef TARGET_POSIX
 #include <sys/stat.h>
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #endif
 #include <lzo/lzo1x.h>
 #include "addons/Skin.h"

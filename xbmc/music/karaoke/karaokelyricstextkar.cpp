@@ -20,7 +20,7 @@
 
 // C++ Implementation: karaokelyricstextkar
 
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "filesystem/File.h"
 #include "settings/Settings.h"
 #include "utils/log.h"

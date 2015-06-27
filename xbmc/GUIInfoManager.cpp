@@ -51,7 +51,7 @@
 #include "settings/SkinSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/StereoscopicsManager.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "sysinfo/CPUInfo.h"
 #include "utils/StringUtils.h"
 #include "utils/MathUtils.h"

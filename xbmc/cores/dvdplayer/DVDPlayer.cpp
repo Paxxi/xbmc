@@ -34,7 +34,7 @@
 
 #include "DVDFileInfo.h"
 
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 

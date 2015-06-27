@@ -24,7 +24,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "filesystem/SpecialProtocol.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 
 #include "dll_tracker_library.h"
 #include "dll_tracker_file.h"

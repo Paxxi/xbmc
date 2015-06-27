@@ -32,7 +32,7 @@
 #include "storage/MediaManager.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "powermanagement/PowerManager.h"
 #include "sysinfo/SystemInfo.h"

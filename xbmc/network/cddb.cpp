@@ -39,7 +39,7 @@
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 #include "GUIInfoManager.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 
 #include <sys/socket.h>
@@ -224,7 +224,7 @@ bool Xcddb::queryCDinfo(CCdInfo* pInfo, int inexact_list_select)
 
   //##########################################################
   // Read the data from cddb
-  Recv(false); //erstmal den Müll abholen
+  Recv(false); //erstmal den Mï¿½ll abholen
   if ( !Send(read_buffer.c_str()) )
   {
     CLog::Log(LOGERROR, "Xcddb::queryCDinfo_inexaxt_list_select Error sending \"%s\"", read_buffer.c_str());

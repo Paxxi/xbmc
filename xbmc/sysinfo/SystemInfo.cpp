@@ -43,7 +43,7 @@
 #define WIN32_LEAN_AND_MEAN 1
 #endif // WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #endif
 #if defined(TARGET_DARWIN)
 #include "osx/DarwinUtils.h"

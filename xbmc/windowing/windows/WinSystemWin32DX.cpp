@@ -22,7 +22,7 @@
 #include "WinSystemWin32DX.h"
 #include "settings/Settings.h"
 #include "guilib/gui3d.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 
 #ifdef HAS_DX
 

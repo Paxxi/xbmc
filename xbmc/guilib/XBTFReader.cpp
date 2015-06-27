@@ -21,7 +21,7 @@
 #include <sys/stat.h>
 #include "XBTFReader.h"
 #include "utils/EndianSwap.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include <stdio.h>
 #ifdef TARGET_WINDOWS
 #include "FileSystem/SpecialProtocol.h"

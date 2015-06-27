@@ -22,7 +22,7 @@
 #include "GUIFont.h"
 #include "GUIControl.h"
 #include "GUIColorManager.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 
 using namespace std;

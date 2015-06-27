@@ -21,7 +21,7 @@
 #include "APKDirectory.h"
 #include "APKFile.h"
 #include "FileItem.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"

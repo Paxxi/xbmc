@@ -57,7 +57,7 @@
 #include "GUIInfoManager.h"
 #include "input/Key.h"
 #include "addons/Skin.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/XMLUtils.h"
 #include "GUIFontManager.h"
 #include "GUIColorManager.h"

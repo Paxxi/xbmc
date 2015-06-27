@@ -22,7 +22,7 @@
 #include "ZipManager.h"
 #include "URL.h"
 #include "File.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/EndianSwap.h"
 #include "utils/URIUtils.h"

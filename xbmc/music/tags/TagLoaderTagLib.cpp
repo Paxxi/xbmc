@@ -45,7 +45,7 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/Base64.h"
 #include "settings/AdvancedSettings.h"
 

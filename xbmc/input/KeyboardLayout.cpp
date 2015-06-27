@@ -23,7 +23,7 @@
 
 #include "KeyboardLayout.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"

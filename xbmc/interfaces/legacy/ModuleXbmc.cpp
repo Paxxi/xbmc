@@ -48,7 +48,7 @@
 #include "Util.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "storage/MediaManager.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "utils/StringUtils.h"
 #include "AddonUtils.h"
 

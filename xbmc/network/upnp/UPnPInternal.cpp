@@ -41,7 +41,7 @@
 #include "ThumbLoader.h"
 #include "utils/URIUtils.h"
 #include "settings/Settings.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 
 #include <algorithm>
 

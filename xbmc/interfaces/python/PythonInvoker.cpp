@@ -44,7 +44,7 @@
 #include "interfaces/python/XBPython.h"
 #include "threads/SingleLock.h"
 #if defined(TARGET_WINDOWS)
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #endif // defined(TARGET_WINDOWS)
 #include "utils/log.h"
 #include "utils/StringUtils.h"

@@ -3,7 +3,6 @@ SRCS=	\
 	TestArchive.cpp \
 	TestBase64.cpp \
 	TestBitstreamStats.cpp \
-	TestCharsetConverter.cpp \
 	TestCrc32.cpp \
 	TestCryptThreading.cpp \
 	TestDatabaseUtils.cpp \
@@ -19,8 +18,6 @@ SRCS=	\
 	TestJSONVariantParser.cpp \
 	TestJSONVariantWriter.cpp \
 	TestLabelFormatter.cpp \
-	TestLangCodeExpander.cpp \
-	TestLocale.cpp \
 	Testlog.cpp \
 	TestMathUtils.cpp \
 	Testmd5.cpp \
@@ -28,7 +25,7 @@ SRCS=	\
 	TestPerformanceSample.cpp \
 	TestPOUtils.cpp \
 	TestRegExp.cpp \
-    Testrfft.cpp \
+	Testrfft.cpp \
 	TestRingBuffer.cpp \
 	TestScraperParser.cpp \
 	TestScraperUrl.cpp \

@@ -19,7 +19,7 @@
  */
 
 #include "settings/Settings.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/Utf8Utils.h"
 #include "system.h"
 

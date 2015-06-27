@@ -20,7 +20,7 @@
 
 #include "GUIEditControl.h"
 #include "GUIWindowManager.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "GUIKeyboardFactory.h"
 #include "dialogs/GUIDialogNumeric.h"
 #include "input/XBMC_vkeys.h"

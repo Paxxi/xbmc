@@ -24,7 +24,7 @@
 #include "Util.h"
 #include "XBDateTime.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 

@@ -58,7 +58,7 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
 #include "FileItem.h"

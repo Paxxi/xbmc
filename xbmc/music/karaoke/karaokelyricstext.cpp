@@ -22,7 +22,7 @@
 
 #include <math.h>
 
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "settings/DisplaySettings.h"
 #include "settings/Settings.h"
 #include "guilib/GUITextLayout.h"

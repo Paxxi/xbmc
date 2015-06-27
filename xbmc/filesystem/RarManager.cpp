@@ -21,7 +21,7 @@
 #include "system.h"
 #include "RarManager.h"
 #include "Util.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/URIUtils.h"
 #include "threads/SingleLock.h"
 #include "Directory.h"

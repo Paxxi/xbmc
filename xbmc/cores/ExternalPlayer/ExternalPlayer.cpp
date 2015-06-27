@@ -38,7 +38,7 @@
 #include "cores/AudioEngine/AEFactory.h"
 #include "input/InputManager.h"
 #if defined(TARGET_WINDOWS)
-  #include "utils/CharsetConverter.h"
+  #include "nls/CharsetConverter.h"
   #include "Windows.h"
 #endif
 #if defined(TARGET_ANDROID)

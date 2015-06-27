@@ -52,7 +52,7 @@
 #include "cores/FFmpeg.h"
 #include "TextureCache.h"
 #include "Util.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 
 
 bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)

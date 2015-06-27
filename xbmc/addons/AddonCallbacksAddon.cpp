@@ -28,7 +28,7 @@
 #include "filesystem/Directory.h"
 #include "FileItem.h"
 #include "network/Network.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 

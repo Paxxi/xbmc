@@ -55,7 +55,7 @@
 #endif
 
 #ifdef TARGET_WINDOWS
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include <algorithm>
 #include <intrin.h>
 #include <Pdh.h>

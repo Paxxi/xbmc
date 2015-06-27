@@ -23,7 +23,7 @@
 #include "RssReader.h"
 #include "utils/HTMLUtil.h"
 #include "Application.h"
-#include "CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "URL.h"
 #include "filesystem/File.h"
 #include "filesystem/CurlFile.h"

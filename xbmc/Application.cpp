@@ -39,7 +39,7 @@
 #include "video/Bookmark.h"
 #include "video/VideoLibraryQueue.h"
 #include "guilib/GUIControlProfiler.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "GUIInfoManager.h"
 #include "playlists/PlayListFactory.h"
 #include "guilib/GUIFontManager.h"
@@ -219,7 +219,7 @@
 #endif
 
 #include "cores/FFmpeg.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 
 using namespace std;
 using namespace ADDON;

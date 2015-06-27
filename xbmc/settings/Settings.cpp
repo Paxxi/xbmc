@@ -70,7 +70,7 @@
 #include "settings/SkinSettings.h"
 #include "settings/lib/SettingsManager.h"
 #include "threads/SingleLock.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/RssManager.h"
 #include "utils/StringUtils.h"

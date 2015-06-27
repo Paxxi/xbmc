@@ -27,7 +27,7 @@
 #include "filesystem/DllLibCurl.h"
 #include "filesystem/DirectoryCache.h"
 #include "GUIPassword.h"
-#include "utils/LangCodeExpander.h"
+#include "nls/LangCodeExpander.h"
 #include "PartyModeManager.h"
 #include "PlayListPlayer.h"
 #include "guilib/LocalizeStrings.h"

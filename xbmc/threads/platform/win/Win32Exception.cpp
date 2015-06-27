@@ -24,7 +24,7 @@
 #include "Util.h"
 #include "WIN32Util.h"
 #include "utils/StringUtils.h"
-#include "utils/CharsetConverter.h"
+#include "nls/CharsetConverter.h"
 #include "utils/URIUtils.h"
 
 #define LOG if(logger) logger->Log
