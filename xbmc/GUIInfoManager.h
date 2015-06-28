@@ -31,7 +31,7 @@
 #include "inttypes.h"
 #include "XBDateTime.h"
 #include "utils/Observer.h"
-#include "utils/Temperature.h"
+#include "weather/Temperature.h"
 #include "interfaces/info/InfoBool.h"
 #include "interfaces/info/SkinVariable.h"
 #include "cores/IPlayer.h"

@@ -21,7 +21,7 @@
 #include <cstdlib>
 
 #include "CPUInfo.h"
-#include "utils/Temperature.h"
+#include "weather/Temperature.h"
 #include <string>
 #include <string.h>
 

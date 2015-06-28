@@ -1,0 +1,8 @@
+SRCS += Speed.cpp
+SRCS += Temperature.cpp
+SRCS += Weather.cpp
+
+LIB   = weather.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(patsubst %.S,,$(SRCS))))

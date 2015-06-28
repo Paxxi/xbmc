@@ -358,6 +358,9 @@
     <Filter Include="nls\test">
       <UniqueIdentifier>{1d44b35a-db39-4cb2-a202-4dbdff54b30e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="weather">
+      <UniqueIdentifier>{30512e2f-14b5-4598-8f4c-12446e65bc39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1463,9 +1466,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Variant.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Weather.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\XMLUtils.cpp">
@@ -3017,12 +3017,6 @@
     <ClCompile Include="..\..\xbmc\filesystem\ResourceDirectory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Temperature.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Speed.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\input\KeyboardLayoutManager.cpp">
       <Filter>input</Filter>
     </ClCompile>
@@ -3117,6 +3111,15 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\nls\test\TestLocale.cpp">
       <Filter>nls\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\weather\Speed.cpp">
+      <Filter>weather</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\weather\Temperature.cpp">
+      <Filter>weather</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\weather\Weather.cpp">
+      <Filter>weather</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4386,9 +4389,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Variant.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Weather.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\XMLUtils.h">
@@ -5939,12 +5939,6 @@
     <ClInclude Include="..\..\xbmc\addons\AudioDecoder.h">
       <Filter>addons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Temperature.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Speed.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\input\KeyboardLayoutManager.h">
       <Filter>input</Filter>
     </ClInclude>
@@ -6008,6 +6002,15 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\nls\Locale.h">
       <Filter>nls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\weather\Speed.h">
+      <Filter>weather</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\weather\Temperature.h">
+      <Filter>weather</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\weather\Weather.h">
+      <Filter>weather</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

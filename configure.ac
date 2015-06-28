@@ -2495,6 +2495,7 @@ OUTPUT_FILES="Makefile \
     xbmc/visualizations/OpenGLSpectrum/Makefile \
     xbmc/visualizations/fishBMC/Makefile \
     xbmc/visualizations/WaveForm/Makefile \
+    xbmc/weather/Makefile \
     xbmc/windowing/Makefile \
     xbmc/windowing/egl/Makefile \
     lib/addons/library.xbmc.addon/Makefile \

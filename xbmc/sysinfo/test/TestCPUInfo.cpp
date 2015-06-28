@@ -19,7 +19,7 @@
  */
 
 #include "sysinfo/CPUInfo.h"
-#include "utils/Temperature.h"
+#include "weather/Temperature.h"
 #include "settings/AdvancedSettings.h"
 
 #ifdef TARGET_POSIX

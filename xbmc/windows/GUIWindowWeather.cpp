@@ -22,7 +22,7 @@
 #include "GUIUserMessages.h"
 #include "dialogs/GUIDialogOK.h"
 #include "GUIWindowWeather.h"
-#include "utils/Weather.h"
+#include "weather/Weather.h"
 #include "utils/URIUtils.h"
 #ifdef HAS_PYTHON
 #endif

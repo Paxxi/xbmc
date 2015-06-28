@@ -28,7 +28,7 @@
 #include "settings/Settings.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
-#include "utils/Weather.h"
+#include "weather/Weather.h"
 #include "interfaces/Builtins.h"
 #include "interfaces/AnnouncementManager.h"
 #include "guilib/LocalizeStrings.h"
@@ -79,7 +79,7 @@ void CPowerManager::Initialize()
   std::unique_ptr<IPowerSyscall> currPowerManager;
   int bestCount = -1;
   int currCount = -1;
-  
+
   std::list< std::pair< std::function<bool()>,
                         std::function<IPowerSyscall*()> > > powerManagers =
   {

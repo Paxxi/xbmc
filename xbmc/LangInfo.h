@@ -23,8 +23,8 @@
 #include "settings/lib/ISettingsHandler.h"
 #include "utils/GlobalsHandling.h"
 #include "nls/Locale.h"
-#include "utils/Speed.h"
-#include "utils/Temperature.h"
+#include "weather/Speed.h"
+#include "weather/Temperature.h"
 
 #include <map>
 #include <memory>

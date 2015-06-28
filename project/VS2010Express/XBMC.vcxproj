@@ -1107,9 +1107,7 @@
     <ClInclude Include="..\..\xbmc\utils\params_check_macros.h" />
     <ClInclude Include="..\..\xbmc\utils\rfft.h" />
     <ClInclude Include="..\..\xbmc\utils\RssManager.h" />
-    <ClInclude Include="..\..\xbmc\utils\Speed.h" />
     <ClInclude Include="..\..\xbmc\utils\StringValidation.h" />
-    <ClInclude Include="..\..\xbmc\utils\Temperature.h" />
     <ClInclude Include="..\..\xbmc\utils\Utf8Utils.h" />
     <ClInclude Include="..\..\xbmc\utils\uXstrings.h" />
     <ClInclude Include="..\..\xbmc\utils\Vector.h" />
@@ -1228,9 +1226,7 @@
     <ClCompile Include="..\..\xbmc\utils\LegacyPathTranslation.cpp" />
     <ClCompile Include="..\..\xbmc\utils\rfft.cpp" />
     <ClCompile Include="..\..\xbmc\utils\RssManager.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Speed.cpp" />
     <ClCompile Include="..\..\xbmc\utils\StringValidation.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Temperature.cpp" />
     <ClCompile Include="..\..\xbmc\utils\test\TestHttpRangeUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -1465,7 +1461,6 @@
     <ClCompile Include="..\..\xbmc\utils\URIUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\UrlOptions.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Variant.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Weather.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Environment.cpp" />
     <ClCompile Include="..\..\xbmc\utils\XBMCTinyXML.cpp" />
     <ClCompile Include="..\..\xbmc\utils\XMLUtils.cpp" />
@@ -1497,6 +1492,9 @@
     <ClCompile Include="..\..\xbmc\view\GUIViewState.cpp" />
     <ClCompile Include="..\..\xbmc\view\ViewDatabase.cpp" />
     <ClCompile Include="..\..\xbmc\view\ViewStateSettings.cpp" />
+    <ClCompile Include="..\..\xbmc\weather\Speed.cpp" />
+    <ClCompile Include="..\..\xbmc\weather\Temperature.cpp" />
+    <ClCompile Include="..\..\xbmc\weather\Weather.cpp" />
     <ClCompile Include="..\..\xbmc\win32\crts_caller.cpp" />
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -2122,7 +2120,6 @@
     <ClInclude Include="..\..\xbmc\utils\URIUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\UrlOptions.h" />
     <ClInclude Include="..\..\xbmc\utils\Variant.h" />
-    <ClInclude Include="..\..\xbmc\utils\Weather.h" />
     <ClInclude Include="..\..\xbmc\utils\Environment.h" />
     <ClInclude Include="..\..\xbmc\utils\XBMCTinyXML.h" />
     <ClInclude Include="..\..\xbmc\utils\XMLUtils.h" />
@@ -2155,6 +2152,9 @@
     <ClInclude Include="..\..\xbmc\view\ViewDatabase.h" />
     <ClInclude Include="..\..\xbmc\view\ViewState.h" />
     <ClInclude Include="..\..\xbmc\view\ViewStateSettings.h" />
+    <ClInclude Include="..\..\xbmc\weather\Speed.h" />
+    <ClInclude Include="..\..\xbmc\weather\Temperature.h" />
+    <ClInclude Include="..\..\xbmc\weather\Weather.h" />
     <ClInclude Include="..\..\xbmc\win32\crts_caller.h" />
     <ClInclude Include="..\..\xbmc\win32\IMMNotificationClient.h" />
     <ClInclude Include="..\..\xbmc\win32\pch.h" />

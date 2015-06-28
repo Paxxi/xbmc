@@ -75,7 +75,7 @@
 #include "utils/RssManager.h"
 #include "utils/StringUtils.h"
 #include "sysinfo/SystemInfo.h"
-#include "utils/Weather.h"
+#include "weather/Weather.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/SeekHandler.h"
 #include "view/ViewStateSettings.h"

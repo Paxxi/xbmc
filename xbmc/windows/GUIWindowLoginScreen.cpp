@@ -32,7 +32,7 @@
 #endif
 #include "interfaces/Builtins.h"
 #include "utils/log.h"
-#include "utils/Weather.h"
+#include "weather/Weather.h"
 #include "utils/StringUtils.h"
 #include "network/Network.h"
 #include "addons/Skin.h"

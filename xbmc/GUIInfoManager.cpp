@@ -27,7 +27,7 @@
 #include "Application.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
-#include "utils/Weather.h"
+#include "weather/Weather.h"
 #include "PartyModeManager.h"
 #include "addons/Visualisation.h"
 #include "input/ButtonTranslator.h"
