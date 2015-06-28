@@ -24,7 +24,7 @@
 #include "DVDClock.h"
 #include "DVDStreamInfo.h"
 #include "AMLCodec.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #include "utils/BitstreamConverter.h"
 #include "utils/log.h"
 

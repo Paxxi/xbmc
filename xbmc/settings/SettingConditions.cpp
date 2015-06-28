@@ -36,7 +36,7 @@
 #include "pvr/PVRManager.h"
 #include "settings/SettingAddon.h"
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif // defined(HAS_LIBAMCODEC)
 #include "sysinfo/SystemInfo.h"
 #include "windowing/WindowingFactory.h"

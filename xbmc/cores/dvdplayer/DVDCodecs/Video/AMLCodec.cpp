@@ -30,7 +30,7 @@
 #include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/SysfsUtils.h"

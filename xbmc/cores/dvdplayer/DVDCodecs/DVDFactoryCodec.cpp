@@ -43,7 +43,7 @@
 #include "Video/MMALCodec.h"
 #include "Video/DVDVideoCodecStageFright.h"
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #include "Video/DVDVideoCodecAmlogic.h"
 #endif
 #if defined(TARGET_ANDROID)

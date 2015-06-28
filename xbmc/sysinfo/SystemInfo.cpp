@@ -54,7 +54,7 @@
 #include "utils/XMLUtils.h"
 #if defined(TARGET_ANDROID)
 #include "android/jni/Build.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif
 
 /* Platform identification */

@@ -25,7 +25,7 @@
 
 #include "threads/CriticalSection.h"
 #include "threads/Thread.h"
-#include "utils/IRssObserver.h"
+#include "network/rss/IRssObserver.h"
 #include "utils/XBMCTinyXML.h"
 
 class CRssReader : public CThread

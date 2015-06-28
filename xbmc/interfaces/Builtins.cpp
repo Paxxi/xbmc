@@ -53,7 +53,7 @@
 #include "network/NetworkServices.h"
 #include "utils/log.h"
 #include "storage/MediaManager.h"
-#include "utils/RssManager.h"
+#include "network/rss/RssManager.h"
 #include "utils/JSONVariantParser.h"
 #include "PartyModeManager.h"
 #include "profiles/ProfilesManager.h"

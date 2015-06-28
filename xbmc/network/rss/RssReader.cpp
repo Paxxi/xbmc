@@ -34,7 +34,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIRSSControl.h"
 #include "threads/SingleLock.h"
-#include "log.h"
+#include "utils/log.h"
 
 #define RSS_COLOR_BODY      0
 #define RSS_COLOR_HEADLINE  1

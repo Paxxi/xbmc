@@ -1,0 +1,10 @@
+SRCS=GLUtils.cpp
+
+ifeq (@USE_OPENGLES@,1)
+SRCS += AMLUtils.cpp
+endif
+
+LIB=renderingUtils.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(SRCS)))

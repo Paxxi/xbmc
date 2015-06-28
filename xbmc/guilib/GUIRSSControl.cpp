@@ -21,8 +21,8 @@
 #include "GUIRSSControl.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
-#include "utils/RssManager.h"
-#include "utils/RssReader.h"
+#include "network/rss/RssManager.h"
+#include "network/rss/RssReader.h"
 #include "utils/StringUtils.h"
 
 using namespace std;

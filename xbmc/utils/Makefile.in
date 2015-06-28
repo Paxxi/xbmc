@@ -15,7 +15,6 @@ SRCS += Fanart.cpp
 SRCS += fastmemcpy.c
 SRCS += fastmemcpy-arm.S
 SRCS += fstrcmp.c
-SRCS += GLUtils.cpp
 SRCS += GroupUtils.cpp
 SRCS += HTMLUtil.cpp
 SRCS += HttpHeader.cpp
@@ -37,8 +36,6 @@ SRCS += POUtils.cpp
 SRCS += RegExp.cpp
 SRCS += rfft.cpp
 SRCS += RingBuffer.cpp
-SRCS += RssManager.cpp
-SRCS += RssReader.cpp
 SRCS += ScraperParser.cpp
 SRCS += ScraperUrl.cpp
 SRCS += Screenshot.cpp
@@ -63,10 +60,6 @@ SRCS += Utf8Utils.cpp
 SRCS += XSLTUtils.cpp
 SRCS += ActorProtocol.cpp
 SRCS += SysfsUtils.cpp
-
-ifeq (@USE_OPENGLES@,1)
-SRCS += AMLUtils.cpp
-endif
 
 ifeq (@USE_LIBAMCODEC@,1)
 SRCS += ScreenshotAML.cpp

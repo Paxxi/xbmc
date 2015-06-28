@@ -361,6 +361,9 @@
     <Filter Include="weather">
       <UniqueIdentifier>{30512e2f-14b5-4598-8f4c-12446e65bc39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="network\rss">
+      <UniqueIdentifier>{f2e8353d-f4b2-43e5-924d-6c5474978a19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1430,9 +1433,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\RingBuffer.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\RssReader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\ScraperParser.cpp">
@@ -2663,9 +2663,6 @@
     <ClCompile Include="..\..\xbmc\settings\windows\GUIWindowTestPattern.cpp">
       <Filter>settings\windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\RssManager.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\settings\SkinSettings.cpp">
       <Filter>settings</Filter>
     </ClCompile>
@@ -3120,6 +3117,12 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\weather\Weather.cpp">
       <Filter>weather</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\network\rss\RssManager.cpp">
+      <Filter>network\rss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\network\rss\RssReader.cpp">
+      <Filter>network\rss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4355,9 +4358,6 @@
     <ClInclude Include="..\..\xbmc\utils\RingBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\RssReader.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ScraperParser.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -5532,12 +5532,6 @@
     <ClInclude Include="..\..\xbmc\settings\windows\GUIWindowTestPattern.h">
       <Filter>settings\windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\IRssObserver.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\RssManager.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\settings\SkinSettings.h">
       <Filter>settings</Filter>
     </ClInclude>
@@ -6011,6 +6005,15 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\weather\Weather.h">
       <Filter>weather</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\network\rss\IRssObserver.h">
+      <Filter>network\rss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\network\rss\RssManager.h">
+      <Filter>network\rss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\network\rss\RssReader.h">
+      <Filter>network\rss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

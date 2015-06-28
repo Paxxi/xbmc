@@ -30,7 +30,7 @@
 #include "utils/log.h"
 #include "utils/SysfsUtils.h"
 #include "utils/StringUtils.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #include "guilib/gui3d.h"
 
 bool aml_present()

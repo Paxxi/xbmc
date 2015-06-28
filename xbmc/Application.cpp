@@ -215,7 +215,7 @@
 #endif
 
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif
 
 #include "cores/FFmpeg.h"

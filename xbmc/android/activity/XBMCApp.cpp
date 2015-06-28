@@ -73,7 +73,7 @@
 #include "android/jni/MediaStore.h"
 #include "android/jni/Build.h"
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif
 #include "android/jni/Window.h"
 #include "android/jni/WindowManager.h"

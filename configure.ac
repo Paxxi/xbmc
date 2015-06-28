@@ -2477,6 +2477,7 @@ OUTPUT_FILES="Makefile \
     xbmc/jobs/Makefile \
     xbmc/network/Makefile \
     xbmc/network/httprequesthandler/python/Makefile \
+    xbmc/network/rss/Makefile \
     xbmc/network/upnp/Makefile \
     xbmc/nls/Makefile \
     lib/libexif/Makefile \
@@ -2488,6 +2489,7 @@ OUTPUT_FILES="Makefile \
     xbmc/freebsd/Makefile \
     xbmc/linux/Makefile \
     xbmc/filesystem/Makefile \
+    xbmc/rendering/utils/Makefile \
     xbmc/screensavers/rsxs-0.9/xbmc/Makefile \
     xbmc/sysinfo/Makefile \
     xbmc/visualizations/XBMCProjectM/Makefile \

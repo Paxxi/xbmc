@@ -27,7 +27,7 @@
 
 #include "VideoFilterShader.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "ConvolutionKernels.h"
 
 #if defined(HAS_GL)

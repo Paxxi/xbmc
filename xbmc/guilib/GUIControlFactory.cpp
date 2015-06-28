@@ -61,7 +61,7 @@
 #include "utils/XMLUtils.h"
 #include "GUIFontManager.h"
 #include "GUIColorManager.h"
-#include "utils/RssManager.h"
+#include "network/rss/RssManager.h"
 #include "utils/StringUtils.h"
 #include "GUIAction.h"
 #include "Util.h"

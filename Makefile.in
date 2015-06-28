@@ -63,6 +63,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/music/music.a \
                    xbmc/music/tags/musictags.a \
                    xbmc/music/windows/musicwindows.a \
+									 xbmc/network/rss/rss.a \
                    xbmc/network/websocket/websocket.a \
                    xbmc/network/network.a \
 									 xbmc/nls/nls.a \
@@ -85,6 +86,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/pvr/timers/pvrtimers.a \
                    xbmc/pvr/windows/pvrwindows.a \
                    xbmc/rendering/rendering.a \
+									 xbmc/rendering/utils/renderingUtils.a \
                    xbmc/settings/settings.a \
                    xbmc/settings/dialogs/settings_dialogs.a \
                    xbmc/settings/lib/settings_lib.a \

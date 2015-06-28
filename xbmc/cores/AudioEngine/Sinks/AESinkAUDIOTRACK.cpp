@@ -24,7 +24,7 @@
 #include "android/activity/XBMCApp.h"
 #include "settings/Settings.h"
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif
 #include "utils/log.h"
 

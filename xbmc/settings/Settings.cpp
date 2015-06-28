@@ -54,7 +54,7 @@
 #include "linux/RBP.h"
 #endif
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif // defined(HAS_LIBAMCODEC)
 #include "peripherals/Peripherals.h"
 #include "powermanagement/PowerManager.h"
@@ -72,7 +72,7 @@
 #include "threads/SingleLock.h"
 #include "nls/CharsetConverter.h"
 #include "utils/log.h"
-#include "utils/RssManager.h"
+#include "network/rss/RssManager.h"
 #include "utils/StringUtils.h"
 #include "sysinfo/SystemInfo.h"
 #include "weather/Weather.h"
@@ -127,7 +127,7 @@ bool CSettings::Initialize()
 
   m_settingsManager->SetInitialized();
 
-  InitializeISettingsHandlers();  
+  InitializeISettingsHandlers();
   InitializeISubSettings();
   InitializeISettingCallbacks();
 
@@ -435,7 +435,7 @@ bool CSettings::Initialize(const std::string &file)
   }
 
   CLog::Log(LOGDEBUG, "CSettings: loaded settings definition from %s", file.c_str());
-  
+
   TiXmlElement *root = xmlDoc.RootElement();
   if (root == NULL)
     return false;
@@ -711,7 +711,7 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("videoscreen.monitor");
   settingSet.insert("videoscreen.preferedstereoscopicmode");
   m_settingsManager->RegisterCallback(&CDisplaySettings::Get(), settingSet);
-  
+
   settingSet.clear();
   settingSet.insert("videoplayer.seekdelay");
   settingSet.insert("videoplayer.seeksteps");
@@ -867,7 +867,7 @@ bool CSettings::Reset()
   // try to delete the settings file
   if (XFILE::CFile::Exists(settingsFile, false) && !XFILE::CFile::Delete(settingsFile))
     CLog::Log(LOGWARNING, "Unable to delete old settings file at %s", settingsFile.c_str());
-  
+
   // unload any loaded settings
   Unload();
 

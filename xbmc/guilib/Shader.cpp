@@ -25,7 +25,7 @@
 #include "Shader.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 
 #ifdef HAS_GLES
 #define GLchar char

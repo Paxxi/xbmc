@@ -22,7 +22,7 @@
 #include "Texture.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "guilib/TextureManager.h"
 #include "utils/URIUtils.h"
 

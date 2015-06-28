@@ -26,7 +26,7 @@
 #include "android/activity/XBMCApp.h"
 #include "utils/StringUtils.h"
 #include "utils/SysfsUtils.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 
 bool CEGLNativeTypeAmlAndroid::CheckCompatibility()
 {

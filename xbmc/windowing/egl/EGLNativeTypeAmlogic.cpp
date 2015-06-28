@@ -20,7 +20,7 @@
 
 #include "EGLNativeTypeAmlogic.h"
 #include "guilib/gui3d.h"
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #include "utils/StringUtils.h"
 #include "utils/SysfsUtils.h"
 

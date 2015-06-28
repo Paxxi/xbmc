@@ -37,7 +37,7 @@
 #include "settings/Settings.h"
 #include "utils/MathUtils.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "RenderManager.h"
 
 #if defined(HAS_GL) || HAS_GLES == 2

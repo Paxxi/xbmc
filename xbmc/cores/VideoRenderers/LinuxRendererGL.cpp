@@ -42,7 +42,7 @@
 #include "guilib/MatrixGLES.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "utils/StringUtils.h"
 #include "RenderCapture.h"
 #include "RenderFormats.h"

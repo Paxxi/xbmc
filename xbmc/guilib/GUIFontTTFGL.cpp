@@ -27,7 +27,7 @@
 #include "GraphicContext.h"
 #include "gui3d.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/MatrixGLES.h"
 

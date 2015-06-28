@@ -27,7 +27,7 @@
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
 #if defined(HAS_GL) || defined(HAS_GLES)
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #endif
 #include "cores/VideoRenderers/RenderFormats.h"
 

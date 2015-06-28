@@ -24,7 +24,7 @@
 #endif
 #include "Texture.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "utils/MathUtils.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/GraphicContext.h"

@@ -30,7 +30,7 @@
 
 #include "GUIControl.h"
 #include "GUILabel.h"
-#include "utils/IRssObserver.h"
+#include "network/rss/IRssObserver.h"
 
 typedef uint32_t color_t;
 typedef std::vector<color_t> vecColors;

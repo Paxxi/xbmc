@@ -31,7 +31,7 @@
 #if defined(HAS_LINUX_EVENTS)
 
 #if defined(HAS_LIBAMCODEC)
-#include "utils/AMLUtils.h"
+#include "rendering/utils/AMLUtils.h"
 #endif
 
 #include <linux/version.h>

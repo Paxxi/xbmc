@@ -29,7 +29,7 @@
 #include "guilib/MatrixGLES.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
-#include "utils/GLUtils.h"
+#include "rendering/utils/GLUtils.h"
 #include "utils/TimeUtils.h"
 #include "sysinfo/SystemInfo.h"
 #include "utils/MathUtils.h"

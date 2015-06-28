@@ -28,7 +28,7 @@
 #include "settings/lib/Setting.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
-#include "utils/RssReader.h"
+#include "network/rss/RssReader.h"
 #include "utils/StringUtils.h"
 
 using namespace std;
