@@ -44,6 +44,7 @@
 #include "utils/StringUtils.h"
 #include "windowing/WindowingFactory.h"
 
+using namespace KODI::UTILS;
 
 struct StereoModeMap
 {

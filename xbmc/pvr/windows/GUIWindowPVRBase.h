@@ -54,7 +54,7 @@ namespace PVR
     EPG_SELECT_ACTION_PLAY_RECORDING = 4,
   };
 
-  class CGUIWindowPVRBase : public CGUIMediaWindow, public Observer
+  class CGUIWindowPVRBase : public CGUIMediaWindow, public KODI::UTILS::Observer
   {
   public:
     virtual ~CGUIWindowPVRBase(void);
@@ -68,7 +68,7 @@ namespace PVR
     virtual bool OnBack(int actionID);
     virtual bool OpenGroupSelectionDialog(void);
     virtual void ResetObservers(void) {};
-    virtual void Notify(const Observable &obs, const ObservableMessage msg);
+    virtual void Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg);
     virtual void SetInvalid();
 
     static std::string GetSelectedItemPath(bool bRadio);

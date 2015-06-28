@@ -30,6 +30,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 class Testlog : public testing::Test
 {
 protected:

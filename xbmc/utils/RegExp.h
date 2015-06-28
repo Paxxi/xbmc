@@ -19,9 +19,6 @@
  *
  */
 
-#ifndef REGEXP_H
-#define REGEXP_H
-
 #include <string>
 #include <vector>
 
@@ -39,6 +36,10 @@ typedef struct real_pcre_jit_stack pcre_jit_stack;
 #include <pcre.h>
 }
 
+namespace KODI
+{
+namespace UTILS
+{
 class CRegExp
 {
 public:
@@ -51,7 +52,7 @@ public:
   enum utf8Mode
   {
     autoUtf8  = -1, // analyze regexp for UTF-8 multi-byte chars, for Unicode codes > 0xFF
-                    // or explicit Unicode properties (\p, \P and \X), enable UTF-8 mode if any of them are found
+    // or explicit Unicode properties (\p, \P and \X), enable UTF-8 mode if any of them are found
     asciiOnly =  0, // process regexp and strings as single-byte encoded strings
     forceUtf8 =  1  // enable UTF-8 mode (with Unicode properties)
   };
@@ -177,6 +178,4 @@ private:
 };
 
 typedef std::vector<CRegExp> VECCREGEXP;
-
-#endif
-
+}}

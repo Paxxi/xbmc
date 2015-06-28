@@ -30,6 +30,8 @@
 #include "utils/StringUtils.h"
 #include "CompileInfo.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestRegExp, RegFind)
 {
   CRegExp regex;

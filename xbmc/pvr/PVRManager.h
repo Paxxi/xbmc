@@ -95,7 +95,7 @@ namespace PVR
 
   typedef std::shared_ptr<PVR::CPVRChannelGroup> CPVRChannelGroupPtr;
 
-  class CPVRManager : public ISettingCallback, private CThread, public Observable, public ANNOUNCEMENT::IAnnouncer
+  class CPVRManager : public ISettingCallback, private CThread, public KODI::UTILS::Observable, public ANNOUNCEMENT::IAnnouncer
   {
     friend class CPVRClients;
 

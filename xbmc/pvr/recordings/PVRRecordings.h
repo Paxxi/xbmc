@@ -28,7 +28,7 @@
 
 namespace PVR
 {
-  class CPVRRecordings : public Observable
+  class CPVRRecordings : public KODI::UTILS::Observable
   {
   private:
     typedef std::map<CPVRRecordingUid, CPVRRecordingPtr> PVR_RECORDINGMAP;

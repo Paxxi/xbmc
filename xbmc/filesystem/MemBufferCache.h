@@ -26,6 +26,8 @@
 #include "threads/Event.h"
 #include "utils/RingBuffer.h"
 
+using namespace KODI::UTILS;
+
 /**
   @author Team XBMC
 */

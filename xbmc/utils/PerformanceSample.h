@@ -1,6 +1,4 @@
-#ifndef __PERFORMANCE_SAMPLE__
-#define __PERFORMANCE_SAMPLE__
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -32,6 +30,10 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 #ifndef NO_PERFORMANCE_MEASURE
 #define MEASURE_FUNCTION CPerformanceSample aSample(__FUNCTION__,true);
 #define BEGIN_MEASURE_BLOCK(n) { CPerformanceSample aSample(n,true);
@@ -64,5 +66,5 @@ protected:
   int64_t m_tmStart;
   static int64_t m_tmFreq;
 };
+}}
 
-#endif

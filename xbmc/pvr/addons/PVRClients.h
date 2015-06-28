@@ -46,7 +46,7 @@ namespace PVR
   typedef std::map< int, PVR_STREAM_PROPERTIES >      STREAMPROPS;
 
   class CPVRClients : public ADDON::IAddonMgrCallback,
-                      public Observer,
+                      public KODI::UTILS::Observer,
                       private CThread
   {
     friend class CPVRGUIInfo;

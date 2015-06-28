@@ -1,6 +1,4 @@
-#ifndef PERFORMANCESTATS_H
-#define PERFORMANCESTATS_H
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -26,6 +24,10 @@
 #include "PlatformDefs.h"
 #include "threads/CriticalSection.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class PerformanceCounter
 {
 public:
@@ -35,7 +37,7 @@ public:
   int64_t    m_samples;
 
   PerformanceCounter(double dTime=0.0, double dUser=0.0, double dSys=0.0, int64_t nSamples=1LL) :
-     m_time(dTime), m_user(dUser), m_sys(dSys), m_samples(nSamples) { }
+    m_time(dTime), m_user(dUser), m_sys(dSys), m_samples(nSamples) { }
   virtual ~PerformanceCounter() { }
 };
 
@@ -54,5 +56,4 @@ protected:
   CCriticalSection                            m_lock;
   std::map<std::string, PerformanceCounter*>  m_mapStats;
 };
-
-#endif
+}}

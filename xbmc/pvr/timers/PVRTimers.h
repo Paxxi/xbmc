@@ -34,8 +34,8 @@ namespace PVR
 {
   class CGUIDialogPVRTimerSettings;
 
-  class CPVRTimers : public Observer,
-                     public Observable
+  class CPVRTimers : public KODI::UTILS::Observer,
+                     public KODI::UTILS::Observable
   {
   public:
     CPVRTimers(void);
@@ -170,7 +170,7 @@ namespace PVR
      */
     void UpdateChannels(void);
 
-    void Notify(const Observable &obs, const ObservableMessage msg);
+    void Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg);
 
     /*!
      * Get a timer tag given it's unique ID

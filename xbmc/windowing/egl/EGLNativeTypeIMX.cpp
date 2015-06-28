@@ -40,6 +40,8 @@
 #include "cores/AudioEngine/AEFactory.h"
 #include <fstream>
 
+using namespace KODI::UTILS;
+
 CEGLNativeTypeIMX::CEGLNativeTypeIMX()
   : m_sar(0.0f)
   , m_display(NULL)
@@ -433,4 +435,3 @@ bool CEGLNativeTypeIMX::ModeToResolution(std::string mode, RESOLUTION_INFO *res)
 
   return res->iWidth > 0 && res->iHeight> 0;
 }
-

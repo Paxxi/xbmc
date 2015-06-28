@@ -726,7 +726,7 @@ private:
  \ingroup strings
  \brief
  */
-class CGUIInfoManager : public IMsgTargetCallback, public Observable
+class CGUIInfoManager : public IMsgTargetCallback, public KODI::UTILS::Observable
 {
 public:
   CGUIInfoManager(void);

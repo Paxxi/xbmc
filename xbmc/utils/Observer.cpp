@@ -26,6 +26,10 @@
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 Observer::~Observer(void)
 {
   StopObserving();
@@ -61,7 +65,7 @@ void Observer::UnregisterObservable(Observable *obs)
 }
 
 Observable::Observable() :
-    m_bObservableChanged(false)
+  m_bObservableChanged(false)
 {
 }
 
@@ -128,7 +132,7 @@ void Observable::NotifyObservers(const ObservableMessage message /* = Observable
   }
 
   if (bNotify)
-    SendMessage(*this, message);
+  SendMessage(*this, message);
 }
 
 void Observable::SetChanged(bool SetTo)
@@ -142,7 +146,7 @@ void Observable::SendMessage(const Observable& obs, const ObservableMessage mess
   CSingleLock lock(obs.m_obsCritSection);
   for(int ptr = obs.m_observers.size() - 1; ptr >= 0; ptr--)
   {
-    if (ptr < (int)obs.m_observers.size())
+    if (ptr < static_cast<int>(obs.m_observers.size()))
     {
       Observer *observer = obs.m_observers.at(ptr);
       if (observer)
@@ -154,3 +158,4 @@ void Observable::SendMessage(const Observable& obs, const ObservableMessage mess
     }
   }
 }
+}}

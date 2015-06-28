@@ -20,21 +20,25 @@
 
 #include "system.h"
 #include "PerformanceSample.h"
-#include "TimeUtils.h"
+#include "utils/TimeUtils.h"
 
 #ifdef TARGET_POSIX
 #include "linux/PlatformInclude.h"
-#include "log.h"
+#include "utils/log.h"
 #endif
 
 #ifdef HAS_PERFORMANCE_SAMPLE
 #include "Application.h"
-#include "PerformanceStats.h"
+#include "utils/PerformanceStats.h"
 #endif
+#include "PerformanceStats.h"
 
-using namespace KODI::UTILS;
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 int64_t CPerformanceSample::m_tmFreq;
 
 CPerformanceSample::CPerformanceSample(const string &statName, bool bCheckWhenDone) : m_statName(statName)
@@ -66,7 +70,7 @@ void CPerformanceSample::CheckPoint()
 #ifdef HAS_PERFORMANCE_SAMPLE
   int64_t tmNow;
   tmNow = CurrentHostCounter();
-  double elapsed = (double)(tmNow - m_tmStart) / (double)m_tmFreq;
+  double elapsed = static_cast<double>(tmNow - m_tmStart) / static_cast<double>(m_tmFreq);
 
   double dUser=0.0, dSys=0.0;
 #ifdef TARGET_POSIX
@@ -75,10 +79,10 @@ void CPerformanceSample::CheckPoint()
     CLog::Log(LOGERROR,"error %d in getrusage", errno);
   else
   {
-    dUser = ( ((double)usage.ru_utime.tv_sec + (double)usage.ru_utime.tv_usec / 1000000.0) -
-              ((double)m_usage.ru_utime.tv_sec + (double)m_usage.ru_utime.tv_usec / 1000000.0) );
-    dSys  = ( ((double)usage.ru_stime.tv_sec + (double)usage.ru_stime.tv_usec / 1000000.0) -
-              ((double)m_usage.ru_stime.tv_sec + (double)m_usage.ru_stime.tv_usec / 1000000.0) );
+    dUser = ( (static_cast<double>(usage.ru_utime.tv_sec) + static_cast<double>(usage.ru_utime.tv_usec) / 1000000.0) -
+              (static_cast<double>(m_usage.ru_utime.tv_sec) + static_cast<double>(m_usage.ru_utime.tv_usec) / 1000000.0) );
+    dSys  = ( (static_cast<double>(usage.ru_stime.tv_sec) + static_cast<double>(usage.ru_stime.tv_usec) / 1000000.0) -
+              (static_cast<double>(m_usage.ru_stime.tv_sec) + static_cast<double>(m_usage.ru_stime.tv_usec) / 1000000.0) );
   }
 #endif
 
@@ -103,11 +107,8 @@ double CPerformanceSample::GetEstimatedError()
   }
 
   tmEnd = CurrentHostCounter();
-  double elapsed = (double)(tmEnd - tmStart) / (double)m_tmFreq;
+  double elapsed = static_cast<double>(tmEnd - tmStart) / static_cast<double>(m_tmFreq);
 
   return (elapsed / 100000.0) * 2.0; // one measure at start time and another when done.
 }
-
-
-
-
+}}

@@ -24,6 +24,7 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
 
 TEST(TestPOUtils, General)
 {

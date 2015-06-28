@@ -28,6 +28,8 @@
 #include "utils/StringUtils.h"
 #include "utils/TimeUtils.h"
 
+using namespace KODI::UTILS;
+
 static void EnumerateDevices(CADeviceList &list)
 {
   std::string defaultDeviceName;
@@ -236,7 +238,7 @@ bool CAESinkDARWINOSX::Initialize(AEAudioFormat &format, std::string &device)
 
   /* Update our AE format */
   format.m_sampleRate    = outputFormat.mSampleRate;
-  
+
   m_outputBufferIndex = requestedStreamIndex;
   m_outputBitstream   = passthrough == PassthroughModeBitstream;
 
@@ -269,7 +271,7 @@ bool CAESinkDARWINOSX::Initialize(AEAudioFormat &format, std::string &device)
   // update the channel map based on the new stream format
   if (passthrough == PassthroughModeNone)
     devEnum.GetAEChannelMap(format.m_channelLayout, numOutputChannels);
-   
+
   /* TODO: Should we use the virtual format to determine our data format? */
   format.m_frameSize     = format.m_channelLayout.Count() * (CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3);
   format.m_frames        = m_device.GetBufferSize();
@@ -389,7 +391,7 @@ unsigned int CAESinkDARWINOSX::AddPackets(uint8_t **data, unsigned int frames, u
     if (!m_started && timer.IsTimePast())
     {
       CLog::Log(LOGERROR, "%s engine didn't start in %d ms!", __FUNCTION__, timeout);
-      return INT_MAX;    
+      return INT_MAX;
     }
   }
 
@@ -440,7 +442,7 @@ inline void LogLevel(unsigned int got, unsigned int wanted)
     {
       CLog::Log(LOGWARNING, "DARWINOSX: %sflow (%u vs %u bytes)", got > wanted ? "over" : "under", got, wanted);
       lastReported = got;
-    }    
+    }
   }
   else
     lastReported = INT_MAX; // indicate we were good at least once

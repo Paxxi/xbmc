@@ -65,7 +65,7 @@ namespace PVR
   typedef std::shared_ptr<PVR::CPVRChannelGroup> CPVRChannelGroupPtr;
 
   /** A group of channels */
-  class CPVRChannelGroup : public Observable,
+  class CPVRChannelGroup : public KODI::UTILS::Observable,
                            public IJobCallback,
                            public ISettingCallback
 

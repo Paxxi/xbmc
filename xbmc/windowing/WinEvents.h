@@ -28,14 +28,14 @@
 
 typedef bool (* PHANDLE_EVENT_FUNC)(XBMC_Event& newEvent);
 
-class IWinEvents : public Observer
+class IWinEvents : public KODI::UTILS::Observer
 {
   public:
     virtual       ~IWinEvents() {};
     virtual bool  MessagePump()   = 0;
     virtual size_t GetQueueSize()  = 0;
     virtual void  MessagePush(XBMC_Event* ev) {};
-    virtual void  Notify(const Observable &obs, const ObservableMessage msg) {};
+    virtual void  Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg) {};
 };
 class CWinEvents
 {

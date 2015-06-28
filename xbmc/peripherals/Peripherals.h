@@ -39,7 +39,7 @@ namespace PERIPHERALS
   #define g_peripherals CPeripherals::Get()
 
   class CPeripherals :  public ISettingCallback,
-                        public Observable
+                        public KODI::UTILS::Observable
   {
   public:
     static CPeripherals &Get(void);
@@ -206,7 +206,7 @@ namespace PERIPHERALS
       return false;
 #endif
     }
-    
+
     virtual void OnSettingChanged(const CSetting *setting);
     virtual void OnSettingAction(const CSetting *setting);
 

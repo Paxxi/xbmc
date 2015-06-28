@@ -52,7 +52,6 @@ struct AxisConfig {
 };
 
 typedef std::vector<AxisConfig> AxesConfig; // [<axis, isTrigger, rest state value>]
-class CRegExp;
 
 // Class to manage all connected joysticks
 class CJoystick

@@ -32,6 +32,7 @@
 #ifdef HAS_SDL_JOYSTICK
 #include <SDL2/SDL.h>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CJoystick::CJoystick()
@@ -165,7 +166,7 @@ void CJoystick::Update()
       {
         hatIdx = MapHat(joy, h);
         m_HatState = hatval;
-        break; 
+        break;
       }
     }
 
@@ -295,8 +296,8 @@ bool CJoystick::GetButton(std::string &joyName, int& id, bool consider_repeat)
 }
 
 bool CJoystick::GetAxis(std::string &joyName, int& id) const
-{ 
-  if (!IsEnabled() || !IsAxisActive()) 
+{
+  if (!IsEnabled() || !IsAxisActive())
     return false;
 
   SDL_Joystick *joy;
@@ -438,7 +439,7 @@ void CJoystick::ApplyAxesConfigs()
     axesCount += SDL_JoystickNumAxes(it->second);
   }
 }
-  
+
 int CJoystick::JoystickIndex(const std::string &joyName) const
 {
   int i = 0;

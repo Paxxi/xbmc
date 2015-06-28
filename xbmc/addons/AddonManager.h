@@ -68,7 +68,7 @@ namespace ADDON
   * otherwise. Services the generic callbacks available
   * to all addon variants.
   */
-  class CAddonMgr : public Observable
+  class CAddonMgr : public KODI::UTILS::Observable
   {
   public:
     static CAddonMgr &Get();
@@ -95,7 +95,7 @@ namespace ADDON
     bool GetAddons(const TYPE &type, VECADDONS &addons, bool enabled = true);
     bool GetAllAddons(VECADDONS &addons, bool enabled = true);
     void AddToUpdateableAddons(AddonPtr &pAddon);
-    void RemoveFromUpdateableAddons(AddonPtr &pAddon);    
+    void RemoveFromUpdateableAddons(AddonPtr &pAddon);
     bool ReloadSettings(const std::string &id);
     /*! \brief Get all addons with available updates
      \param addons List to fill with all outdated addons

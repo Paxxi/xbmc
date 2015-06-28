@@ -32,6 +32,8 @@
 #include "IFile.h"
 #include "utils/RingBuffer.h"
 
+using namespace KODI::UTILS;
+
 namespace XFILE
 {
 

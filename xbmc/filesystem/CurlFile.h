@@ -25,6 +25,8 @@
 #include <string>
 #include "utils/HttpHeader.h"
 
+using namespace KODI::UTILS;
+
 namespace XCURL
 {
   typedef void CURL_HANDLE;
@@ -45,7 +47,7 @@ namespace XFILE
         PROXY_SOCKS5,
         PROXY_SOCKS5_REMOTE,
       } ProxyType;
-    
+
       CCurlFile();
       virtual ~CCurlFile();
       virtual bool Open(const CURL& url);

@@ -25,6 +25,7 @@
 #include "utils/RingBuffer.h"
 #include "cores/AudioEngine/Utils/AEChannelInfo.h"
 
+using namespace KODI::UTILS;
 class CFileItem;
 
 #define PACKET_SIZE 3840    // audio packet size - we keep 1 in reserve for gapless playback

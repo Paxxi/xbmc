@@ -496,7 +496,7 @@ protected:
   CInertialScrollingHandler *m_pInertialScrollingHandler;
   CNetwork    *m_network;
 #ifdef HAS_PERFORMANCE_SAMPLE
-  CPerformanceStats m_perfStats;
+  KODI::UTILS::CPerformanceStats m_perfStats;
 #endif
 
   ReplayGainSettings m_replayGainSettings;

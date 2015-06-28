@@ -32,6 +32,8 @@
 #endif
 #include "osx/CocoaInterface.h"
 
+using namespace KODI::UTILS;
+
 bool CDarwinStorageProvider::m_event = false;
 
 CDarwinStorageProvider::CDarwinStorageProvider()

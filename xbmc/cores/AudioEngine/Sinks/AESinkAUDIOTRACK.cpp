@@ -32,6 +32,7 @@
 #include "android/jni/AudioManager.h"
 #include "android/jni/AudioTrack.h"
 
+using namespace KODI::UTILS;
 using namespace jni;
 
 #if 0 //defined(__ARM_NEON__)
@@ -287,7 +288,7 @@ void CAESinkAUDIOTRACK::Deinitialize()
   m_at_jni->stop();
   m_at_jni->flush();
   m_at_jni->release();
-  
+
   m_frames_written = 0;
 
   delete m_at_jni;
@@ -419,4 +420,3 @@ void CAESinkAUDIOTRACK::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 
   list.push_back(m_info);
 }
-

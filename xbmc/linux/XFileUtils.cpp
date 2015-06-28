@@ -52,6 +52,8 @@
 #include "utils/RegExp.h"
 #include "utils/AliasShortcutUtils.h"
 
+using namespace KODI::UTILS;
+
 HANDLE FindFirstFile(LPCSTR szPath,LPWIN32_FIND_DATA lpFindData)
 {
   if (lpFindData == NULL || szPath == NULL)
@@ -289,7 +291,7 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
   HANDLE result = new CXHandle(CXHandle::HND_FILE);
   result->fd = fd;
 
-#if (defined(TARGET_LINUX) || defined(TARGET_FREEBSD)) && defined(HAS_DVD_DRIVE) 
+#if (defined(TARGET_LINUX) || defined(TARGET_FREEBSD)) && defined(HAS_DVD_DRIVE)
   // special case for opening the cdrom device
   if (strcmp(lpFileName, MEDIA_DETECT::CLibcdio::GetInstance()->GetDeviceFileName())==0)
     result->m_bCDROM = true;
@@ -470,7 +472,7 @@ BOOL CopyFile(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFailIfExi
   }
 
   // Done
-  if (sf != -1)  
+  if (sf != -1)
     close(sf);
   if (df != -1)
     close(df);
@@ -785,4 +787,3 @@ DWORD  GetCurrentDirectory(DWORD nBufferLength, LPSTR lpBuffer)
     return strlen(lpBuffer);
 }
 #endif
-

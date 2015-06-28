@@ -18,12 +18,16 @@
  *
  */
 
-#include "utils/POUtils.h"
+#include "POUtils.h"
 #include "URL.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
 #include <stdlib.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 CPODocument::CPODocument()
 {
   m_CursorPos = 0;
@@ -48,7 +52,7 @@ bool CPODocument::LoadFile(const std::string &pofilename)
     CLog::Log(LOGERROR, "%s: can't load file \"%s\" or file is too small", __FUNCTION__,  pofilename.c_str());
     return false;
   }
-  
+
   m_strBuffer = '\n';
   m_strBuffer.append(buf.get(), buf.size());
   buf.clear();
@@ -138,7 +142,7 @@ void CPODocument::ParseEntry(bool bisSourceLang)
     else
     {
       CLog::Log(LOGERROR, "POParser: missing msgstr line in entry. Failed entry: %s",
-                m_Entry.Content.c_str());
+                        m_Entry.Content.c_str());
       m_Entry.msgStr.Str.clear();
     }
     return;
@@ -166,7 +170,7 @@ void CPODocument::ParseEntry(bool bisSourceLang)
   if (m_Entry.msgStrPlural.size() == 0)
   {
     CLog::Log(LOGERROR, "POParser: msgstr[] plural lines have zero valid strings. "
-                        "Failed entry: %s", m_Entry.Content.c_str());
+                      "Failed entry: %s", m_Entry.Content.c_str());
     m_Entry.msgStrPlural.resize(1); // Put 1 element with an empty string into the vector
   }
 
@@ -178,7 +182,7 @@ const std::string& CPODocument::GetPlurMsgstr(size_t plural) const
   if (m_Entry.msgStrPlural.size() < plural+1)
   {
     CLog::Log(LOGERROR, "POParser: msgstr[%i] plural field requested, but not found in PO file. "
-                        "Failed entry: %s", static_cast<int>(plural), m_Entry.Content.c_str());
+                      "Failed entry: %s", static_cast<int>(plural), m_Entry.Content.c_str());
     plural = m_Entry.msgStrPlural.size()-1;
   }
   return m_Entry.msgStrPlural[plural].Str;
@@ -201,33 +205,33 @@ std::string CPODocument::UnescapeString(const std::string &strInput)
       if (it == strInput.end())
       {
         CLog::Log(LOGERROR,
-                  "POParser: warning, unhandled escape character "
-                  "at line-end. Problematic entry: %s",
-                  m_Entry.Content.c_str());
+                          "POParser: warning, unhandled escape character "
+                          "at line-end. Problematic entry: %s",
+                          m_Entry.Content.c_str());
         break;
       }
       switch (*it++)
       {
-        case 'a':  oescchar = '\a'; break;
-        case 'b':  oescchar = '\b'; break;
-        case 'v':  oescchar = '\v'; break;
-        case 'n':  oescchar = '\n'; break;
-        case 't':  oescchar = '\t'; break;
-        case 'r':  oescchar = '\r'; break;
-        case '"':  oescchar = '"' ; break;
-        case '0':  oescchar = '\0'; break;
-        case 'f':  oescchar = '\f'; break;
-        case '?':  oescchar = '\?'; break;
-        case '\'': oescchar = '\''; break;
-        case '\\': oescchar = '\\'; break;
+      case 'a':  oescchar = '\a'; break;
+      case 'b':  oescchar = '\b'; break;
+      case 'v':  oescchar = '\v'; break;
+      case 'n':  oescchar = '\n'; break;
+      case 't':  oescchar = '\t'; break;
+      case 'r':  oescchar = '\r'; break;
+      case '"':  oescchar = '"' ; break;
+      case '0':  oescchar = '\0'; break;
+      case 'f':  oescchar = '\f'; break;
+      case '?':  oescchar = '\?'; break;
+      case '\'': oescchar = '\''; break;
+      case '\\': oescchar = '\\'; break;
 
-        default: 
-        {
-          CLog::Log(LOGERROR,
-                    "POParser: warning, unhandled escape character. Problematic entry: %s",
-                    m_Entry.Content.c_str());
-          continue;
-        }
+      default:
+      {
+        CLog::Log(LOGERROR,
+                          "POParser: warning, unhandled escape character. Problematic entry: %s",
+                          m_Entry.Content.c_str());
+        continue;
+      }
       }
     }
     strOutput.push_back(oescchar);
@@ -252,14 +256,14 @@ bool CPODocument::ParseNumID()
   if (isdigit(m_Entry.Content.at(m_Entry.xIDPos))) // verify if the first char is digit
   {
     // we check for the numeric id for the fist 10 chars (uint32)
-    m_Entry.xID = strtol(&m_Entry.Content[m_Entry.xIDPos], NULL, 10);
+    m_Entry.xID = strtol(&m_Entry.Content[m_Entry.xIDPos], nullptr, 10);
     return true;
   }
 
   CLog::Log(LOGERROR, "POParser: found numeric id descriptor, but no valid id can be read, "
-                      "entry was handled as normal msgid entry");
+                    "entry was handled as normal msgid entry");
   CLog::Log(LOGERROR, "POParser: The problematic entry: %s",
-            m_Entry.Content.c_str());
+                    m_Entry.Content.c_str());
   return false;
 }
 
@@ -277,7 +281,7 @@ void CPODocument::GetString(CStrEntry &strEntry)
 
     // check syntax, if it really is a valid quoted string line
     if (nextLFPos-startPos < 2 ||  m_Entry.Content[startPos] != '\"' ||
-        m_Entry.Content[nextLFPos-1] != '\"')
+      m_Entry.Content[nextLFPos-1] != '\"')
       break;
 
     strEntry.Str.append(m_Entry.Content, startPos+1, nextLFPos-2-startPos);
@@ -295,10 +299,10 @@ void CPODocument::ConvertLineEnds(const std::string &filename)
 
   if (foundPos+1 >= m_strBuffer.size() || m_strBuffer[foundPos+1] != '\n')
     CLog::Log(LOGDEBUG, "POParser: PO file has Mac Style Line Endings. "
-              "Converted in memory to Linux LF for file: %s", filename.c_str());
+                      "Converted in memory to Linux LF for file: %s", filename.c_str());
   else
     CLog::Log(LOGDEBUG, "POParser: PO file has Win Style Line Endings. "
-              "Converted in memory to Linux LF for file: %s", filename.c_str());
+                      "Converted in memory to Linux LF for file: %s", filename.c_str());
 
   std::string strTemp;
   strTemp.reserve(m_strBuffer.size());
@@ -315,3 +319,4 @@ void CPODocument::ConvertLineEnds(const std::string &filename)
   m_strBuffer.swap(strTemp);
   m_POfilelength = m_strBuffer.size();
 }
+}}

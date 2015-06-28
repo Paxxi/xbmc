@@ -21,6 +21,10 @@
 
 #include "threads/CriticalSection.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CRingBuffer
 {
   CCriticalSection m_critSection;
@@ -49,3 +53,4 @@ public:
   unsigned int getMaxReadSize();
   unsigned int getMaxWriteSize();
 };
+}}

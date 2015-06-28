@@ -43,8 +43,8 @@ namespace EPG
     unsigned int channelID;
   };
 
-  class CEpgContainer : public Observer,
-                        public Observable,
+  class CEpgContainer : public KODI::UTILS::Observer,
+                        public KODI::UTILS::Observable,
                         public ISettingCallback,
                         private CThread
   {
@@ -118,7 +118,7 @@ namespace EPG
      * @param obs The observable that sent the update.
      * @param msg The update message.
      */
-    virtual void Notify(const Observable &obs, const ObservableMessage msg);
+    virtual void Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg);
 
     virtual void OnSettingChanged(const CSetting *setting);
 

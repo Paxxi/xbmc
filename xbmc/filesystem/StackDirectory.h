@@ -23,6 +23,8 @@
 #include "utils/RegExp.h"
 #include <string>
 
+using namespace KODI::UTILS;
+
 namespace XFILE
 {
   class CStackDirectory : public IDirectory

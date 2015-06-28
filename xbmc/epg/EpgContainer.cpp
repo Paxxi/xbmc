@@ -124,7 +124,7 @@ void CEpgContainer::Clear(bool bClearDb /* = false */)
   }
 
   SetChanged();
-  NotifyObservers(ObservableMessageEpgContainer);
+  NotifyObservers(KODI::UTILS::ObservableMessageEpgContainer);
 
   if (bThreadRunning)
     Start();
@@ -179,7 +179,7 @@ bool CEpgContainer::Stop(void)
   return true;
 }
 
-void CEpgContainer::Notify(const Observable &obs, const ObservableMessage msg)
+void CEpgContainer::Notify(const Observable &obs, const KODI::UTILS::ObservableMessage msg)
 {
   SetChanged();
   NotifyObservers(msg);
@@ -420,7 +420,7 @@ CEpg *CEpgContainer::CreateChannelEpg(CPVRChannelPtr channel)
     CDateTime::GetCurrentDateTime().GetAsUTCDateTime().GetAsTime(m_iNextEpgUpdate);
   }
 
-  NotifyObservers(ObservableMessageEpgContainer);
+  NotifyObservers(KODI::UTILS::ObservableMessageEpgContainer);
 
   return epg;
 }
@@ -642,7 +642,7 @@ bool CEpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
   if (iUpdatedTables > 0)
   {
     SetChanged();
-    NotifyObservers(ObservableMessageEpgContainer);
+    NotifyObservers(KODI::UTILS::ObservableMessageEpgContainer);
   }
 
   CSingleLock lock(m_critSection);
@@ -742,7 +742,7 @@ bool CEpgContainer::CheckPlayingEvents(void)
   if (bFoundChanges)
   {
     SetChanged();
-    NotifyObservers(ObservableMessageEpgActiveItem);
+    NotifyObservers(KODI::UTILS::ObservableMessageEpgActiveItem);
   }
   return bReturn;
 }

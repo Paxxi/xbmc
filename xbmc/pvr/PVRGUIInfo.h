@@ -37,7 +37,7 @@ namespace PVR
   class CPVRRecording;
 
   class CPVRGUIInfo : private CThread,
-                      private Observer
+                      private KODI::UTILS::Observer
   {
   public:
     CPVRGUIInfo(void);
@@ -46,7 +46,7 @@ namespace PVR
     void Start(void);
     void Stop(void);
 
-    void Notify(const Observable &obs, const ObservableMessage msg);
+    void Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg);
 
     bool TranslateBoolInfo(DWORD dwInfo) const;
     bool TranslateCharInfo(DWORD dwInfo, std::string &strValue) const;

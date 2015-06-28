@@ -35,6 +35,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 static const char * typeWL[] = { "vfat", "exfat", "sdcardfs", "fuse", "ntfs", "fat32", "ext3", "ext4", "esdfs" };
 static const char * mountWL[] = { "/mnt", "/Removable", "/storage" };
 static const char * mountBL[] = {

@@ -32,7 +32,7 @@
 class TiXmlNode;
 
 class CDisplaySettings : public ISettingCallback, public ISubSettings,
-                         public Observable
+                         public KODI::UTILS::Observable
 {
 public:
   static CDisplaySettings& Get();

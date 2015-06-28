@@ -31,7 +31,14 @@
 
 class CDVDOverlayText;
 class CDVDSubtitleStream;
+
+namespace KODI
+{
+namespace UTILS
+{
 class CRegExp;
+}}
+
 
 class CDVDSubtitleTagSami
 {
@@ -62,8 +69,8 @@ public:
   std::vector<SLangclass> m_Langclass;
 
 private:
-  CRegExp *m_tags;
-  CRegExp *m_tagOptions;
+  KODI::UTILS::CRegExp *m_tags;
+  KODI::UTILS::CRegExp *m_tagOptions;
   bool m_flag[4];
 };
 

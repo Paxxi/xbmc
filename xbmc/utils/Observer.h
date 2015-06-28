@@ -23,6 +23,10 @@
 #include "threads/CriticalSection.h"
 #include <vector>
 
+namespace KODI
+{
+namespace UTILS
+{
 class Observable;
 class ObservableMessageJob;
 
@@ -144,3 +148,4 @@ protected:
   std::vector<Observer *> m_observers;          /*!< all observers */
   CCriticalSection        m_obsCritSection;     /*!< mutex */
 };
+}}

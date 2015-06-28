@@ -53,7 +53,7 @@ namespace PVR
   } pvr_channel_num;
 
   /** PVR Channel class */
-  class CPVRChannel : public Observable, public ISerializable, public KODI::UTILS::ISortable
+  class CPVRChannel : public KODI::UTILS::Observable, public ISerializable, public KODI::UTILS::ISortable
   {
     friend class CPVRDatabase;
     friend class CPVRChannelGroupInternal;

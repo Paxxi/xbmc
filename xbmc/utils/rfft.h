@@ -22,6 +22,10 @@
 #include "contrib/kissfft/kiss_fftr.h"
 #include <vector>
 
+namespace KODI
+{
+namespace UTILS
+{
 //! \brief Class performing a RFFT of interleaved stereo data.
 class RFFT
 {
@@ -47,3 +51,4 @@ protected:
   bool m_windowed;     //!< Whether or not a Hann window is applied.
   kiss_fftr_cfg m_cfg; //!< FFT plan
 };
+}}

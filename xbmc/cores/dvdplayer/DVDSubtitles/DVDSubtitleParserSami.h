@@ -22,7 +22,6 @@
 
 #include "DVDSubtitleParser.h"
 class CDVDOverlayText;
-class CRegExp;
 
 class CDVDSubtitleParserSami : public CDVDSubtitleParserText
 {

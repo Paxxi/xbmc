@@ -34,6 +34,8 @@
 #include "ApplicationMessenger.h"
 #include "windowing/WindowingFactory.h"
 
+using namespace KODI::UTILS;
+
 #define BUTTON_ID_OFFSET      100
 #define BUTTONS_PER_ROW        20
 #define BUTTONS_MAX_ROWS        4

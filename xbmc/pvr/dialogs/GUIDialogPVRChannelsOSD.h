@@ -29,7 +29,7 @@ class CFileItemList;
 
 namespace PVR
 {
-  class CGUIDialogPVRChannelsOSD : public CGUIDialog, public Observer
+  class CGUIDialogPVRChannelsOSD : public CGUIDialog, public KODI::UTILS::Observer
   {
   public:
     CGUIDialogPVRChannelsOSD(void);
@@ -38,7 +38,7 @@ namespace PVR
     virtual bool OnAction(const CAction &action);
     virtual void OnWindowLoaded();
     virtual void OnWindowUnload();
-    virtual void Notify(const Observable &obs, const ObservableMessage msg);
+    virtual void Notify(const KODI::UTILS::Observable &obs, const KODI::UTILS::ObservableMessage msg);
 
   protected:
     virtual void OnInitWindow();
@@ -64,4 +64,3 @@ namespace PVR
     std::string GetLastSelectedItemPath(int iGroupID) const;
   };
 }
-

@@ -36,6 +36,7 @@
 
 using namespace XFILE;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 CShoutcastFile::CShoutcastFile() :
   IFile(), CThread("ShoutcastFile")
@@ -151,7 +152,7 @@ bool CShoutcastFile::ExtractTagInfo(const char* buf)
   }
   else
     g_charsetConverter.unknownToUTF8(strBuffer);
-  
+
   bool result=false;
 
   std::wstring wBuffer, wConverted;

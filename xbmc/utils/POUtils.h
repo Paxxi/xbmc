@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2012-2013 Team XBMC
  *      http://xbmc.org
@@ -22,6 +23,10 @@
 #include <vector>
 #include <stdint.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 typedef enum
 {
   ID_FOUND = 0, // We have an entry with a numeric (previously XML) identification number.
@@ -170,3 +175,4 @@ protected:
   // Variable to hold all data of currently processed entry.
   CPOEntry m_Entry;
 };
+}}

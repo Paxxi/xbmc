@@ -35,7 +35,7 @@ namespace PVR
 /** EPG container for CEpgInfoTag instances */
 namespace EPG
 {
-  class CEpg : public Observable
+  class CEpg : public KODI::UTILS::Observable
   {
     friend class CEpgDatabase;
 

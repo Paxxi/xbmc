@@ -30,7 +30,7 @@ namespace PVR
 
   /** XBMC's internal group, the group containing all channels */
 
-  class CPVRChannelGroupInternal : public CPVRChannelGroup, public Observer
+  class CPVRChannelGroupInternal : public CPVRChannelGroup, public KODI::UTILS::Observer
   {
     friend class CPVRChannelGroups;
     friend class CPVRDatabase;
@@ -46,7 +46,7 @@ namespace PVR
 
     virtual ~CPVRChannelGroupInternal(void);
 
-    virtual void Notify(const Observable &obs, const ObservableMessage msg);
+    virtual void Notify(const Observable &obs, const KODI::UTILS::ObservableMessage msg);
 
     /**
      * @brief The amount of channels in this container.

@@ -25,6 +25,7 @@
 #include "DVDStreamInfo.h"
 #include "DVDSubtitleTagMicroDVD.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CDVDSubtitleParserMPL2::CDVDSubtitleParserMPL2(CDVDSubtitleStream* stream, const string& filename)
@@ -77,4 +78,3 @@ bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo &hints)
 
   return true;
 }
-

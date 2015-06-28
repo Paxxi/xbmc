@@ -22,12 +22,13 @@
 
 #include "gtest/gtest.h"
 
-#if defined(TARGET_WINDOWS) && !defined(_USE_MATH_DEFINES)  
+#if defined(TARGET_WINDOWS) && !defined(_USE_MATH_DEFINES)
 #define _USE_MATH_DEFINES
 #endif
 
 #include <math.h>
 
+using namespace KODI::UTILS;
 
 TEST(TestRFFT, SimpleSignal)
 {

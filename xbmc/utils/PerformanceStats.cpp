@@ -19,11 +19,15 @@
  */
 
 #include "PerformanceStats.h"
-#include "PerformanceSample.h"
-#include "log.h"
+#include "utils/PerformanceSample.h"
+#include "utils/log.h"
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 CPerformanceStats::CPerformanceStats()
 {
 }
@@ -66,13 +70,12 @@ void CPerformanceStats::DumpStats()
   map<string, PerformanceCounter*>::iterator iter = m_mapStats.begin();
   while (iter != m_mapStats.end())
   {
-    double dAvg = iter->second->m_time / (double)iter->second->m_samples;
-    double dAvgUser = iter->second->m_user / (double)iter->second->m_samples;
-    double dAvgSys  = iter->second->m_sys / (double)iter->second->m_samples;
+    double dAvg = iter->second->m_time / static_cast<double>(iter->second->m_samples);
+    double dAvgUser = iter->second->m_user / static_cast<double>(iter->second->m_samples);
+    double dAvgSys  = iter->second->m_sys / static_cast<double>(iter->second->m_samples);
     CLog::Log(LOGINFO, "%s - counter <%s>. avg duration: <%f sec>, avg user: <%f>, avg sys: <%f> (%" PRIu64" samples)",
-      __FUNCTION__, iter->first.c_str(), dAvg, dAvgUser, dAvgSys, iter->second->m_samples);
+                     __FUNCTION__, iter->first.c_str(), dAvg, dAvgUser, dAvgSys, iter->second->m_samples);
     ++iter;
   }
 }
-
-
+}}

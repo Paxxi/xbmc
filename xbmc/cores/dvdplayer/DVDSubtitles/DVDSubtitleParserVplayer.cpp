@@ -23,6 +23,7 @@
 #include "DVDClock.h"
 #include "utils/RegExp.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CDVDSubtitleParserVplayer::CDVDSubtitleParserVplayer(CDVDSubtitleStream* pStream, const string& strFile)
@@ -95,4 +96,3 @@ bool CDVDSubtitleParserVplayer::Open(CDVDStreamInfo &hints)
 
   return true;
 }
-

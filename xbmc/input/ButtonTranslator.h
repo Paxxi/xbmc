@@ -38,8 +38,15 @@ class CKey;
 class CAction;
 class TiXmlNode;
 struct AxisConfig;
-class CRegExp;
 typedef std::vector<AxisConfig> AxesConfig; // [<axis, isTrigger, rest state value>]
+
+namespace KODI
+{
+namespace UTILS
+{
+class CRegExp;
+}}
+
 
 struct CButtonAction
 {
@@ -116,7 +123,7 @@ private:
   int GetActionCode(int window, int action);
   int GetActionCode(int window, const CKey &key, std::string &strAction) const;
 #if defined(HAS_SDL_JOYSTICK) || defined(HAS_EVENT_SERVER)
-  typedef std::set<std::shared_ptr<CRegExp> > JoystickFamily;
+  typedef std::set<std::shared_ptr<KODI::UTILS::CRegExp> > JoystickFamily;
   typedef std::map<std::string, JoystickFamily> JoystickFamilyMap;
   typedef std::map<int, std::string> ActionMap; // <button/axis, action>
   typedef std::map<int, ActionMap > WindowMap; // <window, actionMap>
@@ -152,8 +159,8 @@ private:
   void MapJoystickFamily(TiXmlNode *pFamily);
   void MapJoystickActions(int windowID, TiXmlNode *pJoystick);
   std::string JoynameToRegex(const std::string& joyName) const;
-  bool AddFamilyRegex(JoystickFamily* family, std::shared_ptr<CRegExp> regex);
-  void MergeMap(std::shared_ptr<CRegExp> joyName, JoystickMap *joystick, int windowID, const ActionMap &actionMap);
+  bool AddFamilyRegex(JoystickFamily* family, std::shared_ptr<KODI::UTILS::CRegExp> regex);
+  void MergeMap(std::shared_ptr<KODI::UTILS::CRegExp> joyName, JoystickMap *joystick, int windowID, const ActionMap &actionMap);
   JoystickMap::const_iterator FindWindowMap(const std::string& joyName, const JoystickMap &maps) const;
   JoystickFamilyMap::const_iterator FindJoystickFamily(const std::string& joyName) const;
   JoystickFamilyMap m_joystickFamilies;

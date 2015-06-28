@@ -31,6 +31,8 @@
 #include "utils/SysfsUtils.h"
 #include "utils/RegExp.h"
 
+using namespace KODI::UTILS;
+
 bool CEGLNativeTypeRKAndroid::CheckCompatibility()
 {
   if (StringUtils::StartsWithNoCase(CJNIBuild::HARDWARE, "rk3"))  // Rockchip
@@ -228,4 +230,3 @@ bool CEGLNativeTypeRKAndroid::SetDisplayResolution(const char *resolution)
 
   return true;
 }
-
