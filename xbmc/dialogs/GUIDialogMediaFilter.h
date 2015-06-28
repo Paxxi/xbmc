@@ -25,7 +25,7 @@
 #include "dbwrappers/Database.h"
 #include "dbwrappers/DatabaseQuery.h"
 #include "settings/dialogs/GUIDialogSettingsManualBase.h"
-#include "utils/DatabaseUtils.h"
+#include "dbwrappers/DatabaseUtils.h"
 
 class CDbUrl;
 class CSetting;

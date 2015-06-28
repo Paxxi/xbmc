@@ -55,7 +55,7 @@
 #include "sysinfo/CPUInfo.h"
 #include "utils/StringUtils.h"
 #include "utils/MathUtils.h"
-#include "utils/SeekHandler.h"
+#include "cores/SeekHandler.h"
 #include "URL.h"
 #include "addons/Skin.h"
 #include <memory>

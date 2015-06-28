@@ -2472,6 +2472,7 @@ OUTPUT_FILES="Makefile \
     xbmc/music/karaoke/Makefile \
     xbmc/osx/Makefile \
     xbmc/guilib/Makefile \
+    xbmc/guilib/utils/Makefile \
     xbmc/input/linux/Makefile \
     xbmc/interfaces/Makefile \
     xbmc/jobs/Makefile \
@@ -2490,7 +2491,9 @@ OUTPUT_FILES="Makefile \
     xbmc/linux/Makefile \
     xbmc/filesystem/Makefile \
     xbmc/rendering/utils/Makefile \
+    xbmc/scraper/Makefile \
     xbmc/screensavers/rsxs-0.9/xbmc/Makefile \
+    xbmc/screenshot/Makefile \
     xbmc/sysinfo/Makefile \
     xbmc/visualizations/XBMCProjectM/Makefile \
     xbmc/visualizations/Goom/Makefile \

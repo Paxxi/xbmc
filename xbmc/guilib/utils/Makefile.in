@@ -1,0 +1,8 @@
+SRCS += GroupUtils.cpp
+SRCS += LabelFormatter.cpp
+SRCS += SortUtils.cpp
+
+LIB   = guilibUtils.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(patsubst %.S,,$(SRCS))))

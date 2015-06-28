@@ -22,9 +22,9 @@
 #include <string>
 #include <vector>
 #include "XBDateTime.h"
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 #include "utils/Fanart.h"
-#include "utils/ISortable.h"
+#include "guilib/utils/ISortable.h"
 #include "utils/StreamDetails.h"
 #include "video/Bookmark.h"
 

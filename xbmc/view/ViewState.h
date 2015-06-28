@@ -19,7 +19,7 @@
  *
  */
 
-#include "utils/SortUtils.h"
+#include "guilib/utils/SortUtils.h"
 
 #define DEFAULT_VIEW_AUTO (VIEW_TYPE_AUTO << 16)
 #define DEFAULT_VIEW_LIST (VIEW_TYPE_LIST << 16)

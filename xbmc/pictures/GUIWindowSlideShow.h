@@ -27,7 +27,7 @@
 #include "threads/Event.h"
 #include "SlideShowPicture.h"
 #include "DllImageLib.h"
-#include "utils/SortUtils.h"
+#include "guilib/utils/SortUtils.h"
 
 class CFileItemList;
 class CVariant;

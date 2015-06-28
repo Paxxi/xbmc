@@ -25,7 +25,7 @@
 #include "Application.h"
 #include "PlayListPlayer.h"
 #include "PartyModeManager.h"
-#include "utils/LabelFormatter.h"
+#include "guilib/utils/LabelFormatter.h"
 #include "music/tags/MusicInfoTag.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/GUIKeyboardFactory.h"

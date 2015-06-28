@@ -1,0 +1,10 @@
+SRCS += Screenshot.cpp
+
+ifeq (@USE_LIBAMCODEC@,1)
+SRCS += ScreenshotAML.cpp
+endif
+
+LIB   = screenshot.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(patsubst %.S,,$(SRCS))))

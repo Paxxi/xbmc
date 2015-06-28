@@ -24,9 +24,9 @@
 #include "Application.h"
 #include "interfaces/Builtins.h"
 #include "utils/Variant.h"
-#include "utils/Splash.h"
+#include "Splash.h"
 #include "LangInfo.h"
-#include "utils/Screenshot.h"
+#include "screenshot/Screenshot.h"
 #include "Util.h"
 #include "URL.h"
 #include "guilib/TextureManager.h"
@@ -87,7 +87,7 @@
 #include "settings/MediaSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "sysinfo/CPUInfo.h"
-#include "utils/SeekHandler.h"
+#include "cores/SeekHandler.h"
 
 #include "input/KeyboardLayoutManager.h"
 

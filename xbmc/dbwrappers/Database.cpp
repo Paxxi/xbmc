@@ -25,7 +25,7 @@
 #include "profiles/ProfilesManager.h"
 #include "utils/AutoPtrHandle.h"
 #include "utils/log.h"
-#include "utils/SortUtils.h"
+#include "guilib/utils/SortUtils.h"
 #include "utils/StringUtils.h"
 #include "sqlitedataset.h"
 #include "DatabaseManager.h"

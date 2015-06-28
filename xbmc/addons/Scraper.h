@@ -20,8 +20,8 @@
  */
 #include "addons/Addon.h"
 #include "XBDateTime.h"
-#include "utils/ScraperUrl.h"
-#include "utils/ScraperParser.h"
+#include "scraper/ScraperUrl.h"
+#include "scraper/ScraperParser.h"
 #include "video/Episode.h"
 
 class CAlbum;

@@ -23,14 +23,14 @@
 #include "LabelFormatter.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "RegExp.h"
+#include "utils/RegExp.h"
 #include "Util.h"
 #include "video/VideoInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "pictures/PictureInfoTag.h"
 #include "FileItem.h"
-#include "StringUtils.h"
-#include "URIUtils.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 #include "guilib/LocalizeStrings.h"
 
 #include <cassert>
@@ -343,7 +343,7 @@ void CLabelFormatter::SplitMask(unsigned int label, const std::string &mask)
   while ((findStart = reg.RegFind(work.c_str())) >= 0)
   { // we've found a match
     m_staticContent[label].push_back(work.substr(0, findStart));
-    m_dynamicContent[label].push_back(CMaskString("", 
+    m_dynamicContent[label].push_back(CMaskString("",
           reg.GetMatch(1)[0], ""));
     work = work.substr(findStart + reg.GetFindLen());
   }
@@ -429,4 +429,3 @@ void CLabelFormatter::FillMusicMaskContent(const char mask, const std::string &v
     break;
   }
 }
-

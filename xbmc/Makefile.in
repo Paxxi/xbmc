@@ -25,6 +25,7 @@ SRCS=AlarmClock.cpp \
      PlayListPlayer.cpp \
      PartyModeManager.cpp \
      SectionLoader.cpp \
+		 Splash.cpp \
      SystemGlobals.cpp \
      TextureCache.cpp \
      TextureCacheJob.cpp \

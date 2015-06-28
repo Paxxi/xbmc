@@ -77,7 +77,7 @@
 #include "sysinfo/SystemInfo.h"
 #include "weather/Weather.h"
 #include "utils/XBMCTinyXML.h"
-#include "utils/SeekHandler.h"
+#include "cores/SeekHandler.h"
 #include "view/ViewStateSettings.h"
 #include "input/InputManager.h"
 

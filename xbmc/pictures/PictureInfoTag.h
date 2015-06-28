@@ -20,7 +20,7 @@
  */
 
 #include "utils/ISerializable.h"
-#include "utils/ISortable.h"
+#include "guilib/utils/ISortable.h"
 #include "utils/IArchivable.h"
 #include "DllLibExif.h"
 #include "XBDateTime.h"

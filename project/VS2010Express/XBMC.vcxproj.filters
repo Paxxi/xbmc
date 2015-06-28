@@ -364,6 +364,24 @@
     <Filter Include="network\rss">
       <UniqueIdentifier>{f2e8353d-f4b2-43e5-924d-6c5474978a19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scraper">
+      <UniqueIdentifier>{13e75660-bfd0-4ebc-9246-ad65fa65398d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scraper\test">
+      <UniqueIdentifier>{43e5606b-6c65-4981-90a4-bb40e6ae3b67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dbwrappers\test">
+      <UniqueIdentifier>{48660e90-a6b4-43c6-bad7-700bd72f7d9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="screenshot">
+      <UniqueIdentifier>{6b449a82-98d8-42a0-a104-8c91a76f1d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guilib\utils">
+      <UniqueIdentifier>{487fb5a1-86b3-43d1-ba45-fb23929def46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guilib\utils\test">
+      <UniqueIdentifier>{187cd0a7-525c-4ee1-84c6-d7813308c4d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1414,9 +1432,6 @@
     <ClCompile Include="..\..\xbmc\utils\HttpHeader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\log.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -1433,15 +1448,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\RingBuffer.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\ScraperParser.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\ScraperUrl.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Splash.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\Stopwatch.cpp">
@@ -2208,9 +2214,6 @@
     <ClCompile Include="..\..\xbmc\video\VideoDatabase.cpp">
       <Filter>video</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\Screenshot.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\ApplicationMessenger.cpp" />
     <ClCompile Include="..\..\xbmc\Autorun.cpp" />
     <ClCompile Include="..\..\xbmc\AutoSwitch.cpp" />
@@ -2277,15 +2280,6 @@
     <ClCompile Include="..\..\xbmc\network\AirTunesServer.cpp">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\SeekHandler.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\DatabaseUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\music\karaoke\karaokevideobackground.cpp">
       <Filter>music\karaoke</Filter>
     </ClCompile>
@@ -2338,9 +2332,6 @@
     <ClCompile Include="..\..\xbmc\utils\test\TestCrc32.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestDatabaseUtils.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestEndianSwap.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
@@ -2371,9 +2362,6 @@
     <ClCompile Include="..\..\xbmc\utils\test\TestJSONVariantWriter.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLabelFormatter.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\Testlog.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
@@ -2396,15 +2384,6 @@
       <Filter>utils\test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestRingBuffer.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestScraperParser.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestScraperUrl.cpp">
-      <Filter>utils\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestSortUtils.cpp">
       <Filter>utils\test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestStopwatch.cpp">
@@ -2604,9 +2583,6 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\filesystem\HTTPFile.cpp">
       <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\GroupUtils.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\AudioEngine\Utils\AELimiter.cpp">
       <Filter>cores\AudioEngine\Utils</Filter>
@@ -3123,6 +3099,46 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\network\rss\RssReader.cpp">
       <Filter>network\rss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\scraper\ScraperParser.cpp">
+      <Filter>scraper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\scraper\ScraperUrl.cpp">
+      <Filter>scraper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\scraper\test\TestScraperParser.cpp">
+      <Filter>scraper\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\scraper\test\TestScraperUrl.cpp">
+      <Filter>scraper\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\Splash.cpp" />
+    <ClCompile Include="..\..\xbmc\cores\SeekHandler.cpp">
+      <Filter>cores</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\dbwrappers\DatabaseUtils.cpp">
+      <Filter>dbwrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\dbwrappers\test\TestDatabaseUtils.cpp">
+      <Filter>dbwrappers\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\screenshot\Screenshot.cpp">
+      <Filter>screenshot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\GroupUtils.cpp">
+      <Filter>guilib\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\LabelFormatter.cpp">
+      <Filter>guilib\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\SortUtils.cpp">
+      <Filter>guilib\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestLabelFormatter.cpp">
+      <Filter>guilib\utils\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestSortUtils.cpp">
+      <Filter>guilib\utils\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4334,9 +4350,6 @@
     <ClInclude Include="..\..\xbmc\utils\ISerializable.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\LabelFormatter.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\log.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -4356,15 +4369,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\RingBuffer.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\ScraperParser.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\ScraperUrl.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Splash.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Stopwatch.h">
@@ -5263,18 +5267,6 @@
     <ClInclude Include="..\..\xbmc\network\DllLibShairplay.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\SeekHandler.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\SortUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\DatabaseUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\ISortable.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\guilib\GUIKeyboard.h">
       <Filter>guilib</Filter>
     </ClInclude>
@@ -5456,9 +5448,6 @@
     <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxBXA.h">
       <Filter>cores\dvdplayer\DVDDemuxers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\Screenshot.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\dialogs\GUIDialogMediaFilter.h">
       <Filter>dialogs</Filter>
     </ClInclude>
@@ -5467,9 +5456,6 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\HTTPFile.h">
       <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\utils\GroupUtils.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\AudioEngine\Utils\AELimiter.h">
       <Filter>cores\AudioEngine\Utils</Filter>
@@ -6014,6 +6000,34 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\network\rss\RssReader.h">
       <Filter>network\rss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\scraper\ScraperParser.h">
+      <Filter>scraper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\scraper\ScraperUrl.h">
+      <Filter>scraper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\Splash.h" />
+    <ClInclude Include="..\..\xbmc\cores\SeekHandler.h">
+      <Filter>cores</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\dbwrappers\DatabaseUtils.h">
+      <Filter>dbwrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\screenshot\Screenshot.h">
+      <Filter>screenshot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guilib\utils\GroupUtils.h">
+      <Filter>guilib\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guilib\utils\ISortable.h">
+      <Filter>guilib\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guilib\utils\LabelFormatter.h">
+      <Filter>guilib\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guilib\utils\SortUtils.h">
+      <Filter>guilib\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

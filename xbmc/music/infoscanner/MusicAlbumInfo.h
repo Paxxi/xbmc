@@ -23,7 +23,7 @@
 #include "music/Song.h"
 #include "music/Album.h"
 #include "addons/Scraper.h"
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 
 class CXBMCTinyXML;
 

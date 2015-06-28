@@ -8,14 +8,12 @@ SRCS += BitstreamStats.cpp
 SRCS += BooleanLogic.cpp
 SRCS += Crc32.cpp
 SRCS += CryptThreading.cpp
-SRCS += DatabaseUtils.cpp
 SRCS += EndianSwap.cpp
 SRCS += Environment.cpp
 SRCS += Fanart.cpp
 SRCS += fastmemcpy.c
 SRCS += fastmemcpy-arm.S
 SRCS += fstrcmp.c
-SRCS += GroupUtils.cpp
 SRCS += HTMLUtil.cpp
 SRCS += HttpHeader.cpp
 SRCS += HttpParser.cpp
@@ -23,7 +21,6 @@ SRCS += HttpRangeUtils.cpp
 SRCS += HttpResponse.cpp
 SRCS += JSONVariantParser.cpp
 SRCS += JSONVariantWriter.cpp
-SRCS += LabelFormatter.cpp
 SRCS += LegacyPathTranslation.cpp
 SRCS += log.cpp
 SRCS += md5.cpp
@@ -36,12 +33,8 @@ SRCS += POUtils.cpp
 SRCS += RegExp.cpp
 SRCS += rfft.cpp
 SRCS += RingBuffer.cpp
-SRCS += ScraperParser.cpp
-SRCS += ScraperUrl.cpp
-SRCS += Screenshot.cpp
 SRCS += SeekHandler.cpp
 SRCS += SortUtils.cpp
-SRCS += Splash.cpp
 SRCS += Stopwatch.cpp
 SRCS += StreamDetails.cpp
 SRCS += StreamUtils.cpp
@@ -60,10 +53,6 @@ SRCS += Utf8Utils.cpp
 SRCS += XSLTUtils.cpp
 SRCS += ActorProtocol.cpp
 SRCS += SysfsUtils.cpp
-
-ifeq (@USE_LIBAMCODEC@,1)
-SRCS += ScreenshotAML.cpp
-endif
 
 LIB   = utils.a
 

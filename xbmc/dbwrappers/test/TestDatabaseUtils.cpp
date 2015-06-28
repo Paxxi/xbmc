@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/DatabaseUtils.h"
+#include "dbwrappers/DatabaseUtils.h"
 #include "video/VideoDatabase.h"
 #include "music/MusicDatabase.h"
 #include "dbwrappers/qry_dat.h"

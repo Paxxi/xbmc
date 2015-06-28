@@ -53,7 +53,7 @@
 #include "settings/windows/GUIControlSettings.h"
 
 #if defined(HAS_LIBAMCODEC)
-#include "utils/ScreenshotAML.h"
+#include "screenshot/ScreenshotAML.h"
 #endif
 
 using namespace std;
@@ -171,7 +171,7 @@ bool CScreenshotSurface::capture()
   }
 
   delete [] surface;
-  
+
 #if defined(HAS_LIBAMCODEC)
   // Captures the current visible videobuffer and blend it into m_buffer (captured overlay)
   CScreenshotAML::CaptureVideoFrame(m_buffer, m_width, m_height);

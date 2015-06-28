@@ -28,7 +28,7 @@
 #include <vector>
 #include "Artist.h"
 #include "Song.h"
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 
 class TiXmlNode;
 class CFileItem;

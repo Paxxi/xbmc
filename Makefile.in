@@ -48,6 +48,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/filesystem/VideoDatabaseDirectory/videodatabasedirectory.a \
                    xbmc/filesystem/filesystem.a \
                    xbmc/guilib/guilib.a \
+									 xbmc/guilib/utils/guilibUtils.a \
                    xbmc/input/input.a \
                    xbmc/interfaces/generic/interfaces-generic.a \
                    xbmc/interfaces/info/info.a \
@@ -87,6 +88,8 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/pvr/windows/pvrwindows.a \
                    xbmc/rendering/rendering.a \
 									 xbmc/rendering/utils/renderingUtils.a \
+									 xbmc/scraper/scraper.a \
+									 xbmc/screenshot/screenshot.a \
                    xbmc/settings/settings.a \
                    xbmc/settings/dialogs/settings_dialogs.a \
                    xbmc/settings/lib/settings_lib.a \
@@ -276,7 +279,9 @@ GTEST_INCLUDES = -I$(GTEST_DIR)/include
 GTEST_LIBS = $(GTEST_DIR)/lib/.libs/libgtest.a
 
 CHECK_DIRS = xbmc/addons/test \
+						 xbmc/dbwrappers/test \
              xbmc/filesystem/test \
+						 xbmc/guilib/utils/test \
              xbmc/music/tags/test \
              xbmc/network/test \
 						 xbmc/nls/test \
@@ -286,10 +291,13 @@ CHECK_DIRS = xbmc/addons/test \
              xbmc/interfaces/python/test \
              xbmc/cores/AudioEngine/Sinks/test \
              xbmc/jobs/test \
+						 xbmc/scraper/test \
              xbmc/sysinfo/test \
              xbmc/test
 CHECK_LIBS = xbmc/addons/test/addonsTest.a \
+						 xbmc/dbwrappers/test/dbwrappersTest.a \
              xbmc/filesystem/test/filesystemTest.a \
+						 xbmc/guilib/utils/test/guilibUtilsTest.a \
              xbmc/music/tags/test/tagsTest.a \
              xbmc/network/test/networkTest.a \
 						 xbmc/nls/test/nlsTest.a \
@@ -299,6 +307,7 @@ CHECK_LIBS = xbmc/addons/test/addonsTest.a \
              xbmc/interfaces/python/test/pythonSwigTest.a \
              xbmc/cores/AudioEngine/Sinks/test/AESinkTest.a \
              xbmc/jobs/test/jobsTest.a \
+						 xbmc/scraper/test/scraperTest.a \
              xbmc/sysinfo/test/sysinfoTest.a \
              xbmc/test/xbmc-test.a
 

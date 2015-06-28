@@ -20,7 +20,7 @@
 
 #include "system.h"
 #if defined(HAS_LIBAMCODEC)
-#include "utils/ScreenshotAML.h"
+#include "ScreenshotAML.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

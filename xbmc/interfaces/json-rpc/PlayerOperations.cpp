@@ -42,7 +42,7 @@
 #include "cores/IPlayer.h"
 #include "cores/playercorefactory/PlayerCoreConfig.h"
 #include "cores/playercorefactory/PlayerCoreFactory.h"
-#include "utils/SeekHandler.h"
+#include "cores/SeekHandler.h"
 
 using namespace JSONRPC;
 using namespace PLAYLIST;

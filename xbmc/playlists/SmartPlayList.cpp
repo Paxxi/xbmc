@@ -23,7 +23,7 @@
 #include "filesystem/File.h"
 #include "filesystem/SmartPlaylistDirectory.h"
 #include "guilib/LocalizeStrings.h"
-#include "utils/DatabaseUtils.h"
+#include "dbwrappers/DatabaseUtils.h"
 #include "utils/JSONVariantParser.h"
 #include "utils/JSONVariantWriter.h"
 #include "utils/log.h"

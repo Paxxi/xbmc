@@ -1,6 +1,7 @@
 SRCS = DummyVideoPlayer.cpp
 SRCS += FFmpeg.cpp
 SRCS += DataCacheCore.cpp
+SRCS += SeekHandler.cpp
 
 LIB = cores.a
 

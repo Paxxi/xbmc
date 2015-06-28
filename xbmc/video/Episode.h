@@ -18,7 +18,7 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 #include "XBDateTime.h"
 
 // single episode information

@@ -18,7 +18,7 @@
  *
  */
 
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 
 #include "gtest/gtest.h"
 

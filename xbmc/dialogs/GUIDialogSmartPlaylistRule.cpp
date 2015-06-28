@@ -30,7 +30,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "settings/MediaSourceSettings.h"
 #include "storage/MediaManager.h"
-#include "utils/LabelFormatter.h"
+#include "guilib/utils/LabelFormatter.h"
 #include "utils/StringUtils.h"
 
 #define CONTROL_FIELD           15

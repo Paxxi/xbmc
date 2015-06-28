@@ -19,7 +19,7 @@
  *
  */
 
-#include "SortUtils.h"
+#include "guilib/utils/SortUtils.h"
 
 class CFileItemList;
 

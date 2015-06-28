@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "utils/ScraperUrl.h"
+#include "scraper/ScraperUrl.h"
 #include "utils/Fanart.h"
 
 class TiXmlNode;

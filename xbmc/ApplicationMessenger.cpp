@@ -40,7 +40,7 @@
 #include "guilib/GUIKeyboardFactory.h"
 #include "guilib/Resolution.h"
 #include "GUIInfoManager.h"
-#include "utils/Splash.h"
+#include "Splash.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "cores/AudioEngine/AEFactory.h"
 #include "music/tags/MusicInfoTag.h"
@@ -188,7 +188,7 @@ void CApplicationMessenger::SendMessage(ThreadMessage& message, bool wait)
                  //
   if (waitEvent) // ... it just so happens we have a spare reference to the
                  //  waitEvent ... just for such contingencies :)
-  { 
+  {
     // ensure the thread doesn't hold the graphics lock
     CSingleExit exit(g_graphicsContext);
     waitEvent->Wait();
@@ -809,14 +809,14 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
           g_application.GetSplash()->Show(pMsg->strParam);
       }
       break;
-      
+
     case TMSG_DISPLAY_SETUP:
     {
       *((bool*)pMsg->lpVoid) = g_application.InitWindow();
       g_application.SetRenderGUI(true);
     }
     break;
-    
+
     case TMSG_DISPLAY_DESTROY:
     {
       *((bool*)pMsg->lpVoid) = g_application.DestroyWindow();
@@ -1347,22 +1347,22 @@ void CApplicationMessenger::SetSplashMessage(int stringID)
 bool CApplicationMessenger::SetupDisplay()
 {
   bool result;
-  
+
   ThreadMessage tMsg = {TMSG_DISPLAY_SETUP};
   tMsg.lpVoid = (void*)&result;
   SendMessage(tMsg, true);
-  
+
   return result;
 }
 
 bool CApplicationMessenger::DestroyDisplay()
 {
   bool result;
-  
+
   ThreadMessage tMsg = {TMSG_DISPLAY_DESTROY};
   tMsg.lpVoid = (void*)&result;
   SendMessage(tMsg, true);
-  
+
   return result;
 }
 

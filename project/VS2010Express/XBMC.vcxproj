@@ -248,6 +248,7 @@
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDInputStreams\DVDInputStreamBluray.cpp" />
     <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDInputStreams\DVDInputStreamPVRManager.cpp" />
     <ClCompile Include="..\..\xbmc\cores\FFmpeg.cpp" />
+    <ClCompile Include="..\..\xbmc\cores\SeekHandler.cpp" />
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.cpp" />
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\RenderCapture.cpp" />
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\VideoShaders\WinVideoFilter.cpp" />
@@ -255,10 +256,15 @@
     <ClCompile Include="..\..\xbmc\DbUrl.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\Database.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\DatabaseQuery.cpp" />
+    <ClCompile Include="..\..\xbmc\dbwrappers\DatabaseUtils.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\dataset.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\mysqldataset.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\qry_dat.cpp" />
     <ClCompile Include="..\..\xbmc\dbwrappers\sqlitedataset.cpp" />
+    <ClCompile Include="..\..\xbmc\dbwrappers\test\TestDatabaseUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\dialogs\GUIDialogBoxBase.cpp" />
     <ClCompile Include="..\..\xbmc\dialogs\GUIDialogBusy.cpp" />
     <ClCompile Include="..\..\xbmc\dialogs\GUIDialogButtonMenu.cpp" />
@@ -499,6 +505,17 @@
     <ClCompile Include="..\..\xbmc\guilib\TextureBundleXPR.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\TextureDX.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\TextureManager.cpp" />
+    <ClCompile Include="..\..\xbmc\guilib\utils\GroupUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\guilib\utils\LabelFormatter.cpp" />
+    <ClCompile Include="..\..\xbmc\guilib\utils\SortUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestLabelFormatter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestSortUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\guilib\VisibleEffect.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\XBTF.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\XBTFReader.cpp" />
@@ -802,6 +819,17 @@
     <ClCompile Include="..\..\xbmc\rendering\dx\GUIWindowTestPatternDX.cpp" />
     <ClCompile Include="..\..\xbmc\rendering\dx\RenderSystemDX.cpp" />
     <ClCompile Include="..\..\xbmc\rendering\RenderSystem.cpp" />
+    <ClCompile Include="..\..\xbmc\scraper\ScraperParser.cpp" />
+    <ClCompile Include="..\..\xbmc\scraper\ScraperUrl.cpp" />
+    <ClCompile Include="..\..\xbmc\scraper\test\TestScraperParser.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\scraper\test\TestScraperUrl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\screenshot\Screenshot.cpp" />
     <ClCompile Include="..\..\xbmc\SectionLoader.cpp" />
     <ClCompile Include="..\..\xbmc\settings\AdvancedSettings.cpp" />
     <ClCompile Include="..\..\xbmc\settings\dialogs\GUIDialogContentSettings.cpp" />
@@ -835,6 +863,7 @@
     <ClCompile Include="..\..\xbmc\settings\windows\GUIWindowSettingsCategory.cpp" />
     <ClCompile Include="..\..\xbmc\settings\windows\GUIWindowSettingsScreenCalibration.cpp" />
     <ClCompile Include="..\..\xbmc\settings\windows\GUIWindowTestPattern.cpp" />
+    <ClCompile Include="..\..\xbmc\Splash.cpp" />
     <ClCompile Include="..\..\xbmc\storage\AutorunMediaJob.cpp" />
     <ClCompile Include="..\..\xbmc\storage\cdioSupport.cpp" />
     <ClCompile Include="..\..\xbmc\storage\IoSupport.cpp" />
@@ -933,7 +962,9 @@
     <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxCC.h" />
     <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxCDDA.h" />
     <ClInclude Include="..\..\xbmc\cores\FFmpeg.h" />
+    <ClInclude Include="..\..\xbmc\cores\SeekHandler.h" />
     <ClInclude Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.h" />
+    <ClInclude Include="..\..\xbmc\dbwrappers\DatabaseUtils.h" />
     <ClInclude Include="..\..\xbmc\dialogs\GUIDialogKeyboardGeneric.h" />
     <ClInclude Include="..\..\xbmc\DbUrl.h" />
     <ClInclude Include="..\..\xbmc\dialogs\GUIDialogMediaFilter.h" />
@@ -962,6 +993,10 @@
     <ClInclude Include="..\..\xbmc\guilib\iimage.h" />
     <ClInclude Include="..\..\xbmc\guilib\imagefactory.h" />
     <ClInclude Include="..\..\xbmc\guilib\ISliderCallback.h" />
+    <ClInclude Include="..\..\xbmc\guilib\utils\GroupUtils.h" />
+    <ClInclude Include="..\..\xbmc\guilib\utils\ISortable.h" />
+    <ClInclude Include="..\..\xbmc\guilib\utils\LabelFormatter.h" />
+    <ClInclude Include="..\..\xbmc\guilib\utils\SortUtils.h" />
     <ClInclude Include="..\..\xbmc\IFileItemListModifier.h" />
     <ClInclude Include="..\..\xbmc\input\InputManager.h" />
     <ClInclude Include="..\..\xbmc\input\Key.h" />
@@ -1064,6 +1099,9 @@
     <ClInclude Include="..\..\xbmc\profiles\Profile.h" />
     <ClInclude Include="..\..\xbmc\profiles\ProfilesManager.h" />
     <ClInclude Include="..\..\xbmc\profiles\windows\GUIWindowSettingsProfile.h" />
+    <ClInclude Include="..\..\xbmc\scraper\ScraperParser.h" />
+    <ClInclude Include="..\..\xbmc\scraper\ScraperUrl.h" />
+    <ClInclude Include="..\..\xbmc\screenshot\Screenshot.h" />
     <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogContentSettings.h" />
     <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogSettingsBase.h" />
     <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogSettingsManagerBase.h" />
@@ -1100,6 +1138,7 @@
     <ClInclude Include="..\..\xbmc\settings\windows\GUIWindowSettingsCategory.h" />
     <ClInclude Include="..\..\xbmc\settings\windows\GUIWindowSettingsScreenCalibration.h" />
     <ClInclude Include="..\..\xbmc\settings\windows\GUIWindowTestPattern.h" />
+    <ClInclude Include="..\..\xbmc\Splash.h" />
     <ClInclude Include="..\..\xbmc\sysinfo\CPUInfo.h" />
     <ClInclude Include="..\..\xbmc\sysinfo\SystemInfo.h" />
     <ClInclude Include="..\..\xbmc\utils\ActorProtocol.h" />
@@ -1259,14 +1298,12 @@
     <ClCompile Include="..\..\xbmc\ThumbnailCache.cpp" />
     <ClCompile Include="..\..\xbmc\URL.cpp" />
     <ClCompile Include="..\..\xbmc\Util.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Screenshot.cpp" />
     <ClCompile Include="..\..\xbmc\utils\AliasShortcutUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Archive.cpp" />
     <ClCompile Include="..\..\xbmc\utils\AutoPtrHandle.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Base64.cpp" />
     <ClCompile Include="..\..\xbmc\utils\BitstreamStats.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Crc32.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\DatabaseUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\EndianSwap.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Fanart.cpp" />
     <ClCompile Include="..\..\xbmc\utils\fstrcmp.c">
@@ -1274,14 +1311,12 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug Testsuite|Win32'">CompileAsCpp</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\GroupUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HTMLUtil.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpHeader.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\HttpResponse.cpp" />
     <ClCompile Include="..\..\xbmc\utils\JSONVariantParser.cpp" />
     <ClCompile Include="..\..\xbmc\utils\JSONVariantWriter.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\LabelFormatter.cpp" />
     <ClCompile Include="..\..\xbmc\utils\log.cpp" />
     <ClCompile Include="..\..\xbmc\utils\md5.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Observer.cpp" />
@@ -1291,11 +1326,6 @@
     <ClCompile Include="..\..\xbmc\utils\POUtils.cpp" />
     <ClCompile Include="..\..\xbmc\utils\RegExp.cpp" />
     <ClCompile Include="..\..\xbmc\utils\RingBuffer.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\ScraperParser.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\ScraperUrl.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\SeekHandler.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\SortUtils.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Splash.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Stopwatch.cpp" />
     <ClCompile Include="..\..\xbmc\utils\StreamDetails.cpp" />
     <ClCompile Include="..\..\xbmc\utils\StreamUtils.cpp" />
@@ -1332,10 +1362,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestLabelFormatter.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\Testlog.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -1365,18 +1391,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestRingBuffer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestScraperParser.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestScraperUrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestSortUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -1442,10 +1456,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\utils\test\TestCrc32.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\utils\test\TestDatabaseUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -2069,28 +2079,23 @@
     <ClInclude Include="..\..\xbmc\ThumbnailCache.h" />
     <ClInclude Include="..\..\xbmc\URL.h" />
     <ClInclude Include="..\..\xbmc\Util.h" />
-    <ClInclude Include="..\..\xbmc\utils\Screenshot.h" />
     <ClInclude Include="..\..\xbmc\utils\AliasShortcutUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\Archive.h" />
     <ClInclude Include="..\..\xbmc\utils\AutoPtrHandle.h" />
     <ClInclude Include="..\..\xbmc\utils\Base64.h" />
     <ClInclude Include="..\..\xbmc\utils\BitstreamStats.h" />
     <ClInclude Include="..\..\xbmc\utils\Crc32.h" />
-    <ClInclude Include="..\..\xbmc\utils\DatabaseUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\EndianSwap.h" />
     <ClInclude Include="..\..\xbmc\utils\Fanart.h" />
     <ClInclude Include="..\..\xbmc\utils\fstrcmp.h" />
     <ClInclude Include="..\..\xbmc\utils\GlobalsHandling.h" />
-    <ClInclude Include="..\..\xbmc\utils\GroupUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\HTMLUtil.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpHeader.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpParser.h" />
     <ClInclude Include="..\..\xbmc\utils\HttpResponse.h" />
     <ClInclude Include="..\..\xbmc\utils\ISerializable.h" />
-    <ClInclude Include="..\..\xbmc\utils\ISortable.h" />
     <ClInclude Include="..\..\xbmc\utils\JSONVariantParser.h" />
     <ClInclude Include="..\..\xbmc\utils\JSONVariantWriter.h" />
-    <ClInclude Include="..\..\xbmc\utils\LabelFormatter.h" />
     <ClInclude Include="..\..\xbmc\utils\log.h" />
     <ClInclude Include="..\..\xbmc\utils\MathUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\md5.h" />
@@ -2101,11 +2106,6 @@
     <ClInclude Include="..\..\xbmc\utils\POUtils.h" />
     <ClInclude Include="..\..\xbmc\utils\RegExp.h" />
     <ClInclude Include="..\..\xbmc\utils\RingBuffer.h" />
-    <ClInclude Include="..\..\xbmc\utils\ScraperParser.h" />
-    <ClInclude Include="..\..\xbmc\utils\ScraperUrl.h" />
-    <ClInclude Include="..\..\xbmc\utils\SeekHandler.h" />
-    <ClInclude Include="..\..\xbmc\utils\SortUtils.h" />
-    <ClInclude Include="..\..\xbmc\utils\Splash.h" />
     <ClInclude Include="..\..\xbmc\utils\Stopwatch.h" />
     <ClInclude Include="..\..\xbmc\utils\StreamDetails.h" />
     <ClInclude Include="..\..\xbmc\utils\StreamUtils.h" />

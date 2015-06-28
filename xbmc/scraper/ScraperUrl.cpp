@@ -18,7 +18,7 @@
  *
  */
 
-#include "XMLUtils.h"
+#include "utils/XMLUtils.h"
 #include "ScraperUrl.h"
 #include "settings/AdvancedSettings.h"
 #include "nls/CharsetConverter.h"
@@ -27,7 +27,7 @@
 #include "URL.h"
 #include "filesystem/CurlFile.h"
 #include "filesystem/ZipFile.h"
-#include "URIUtils.h"
+#include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/Mime.h"
 #include "utils/log.h"

@@ -61,7 +61,7 @@
 #include "storage/MediaManager.h"
 #include "Autorun.h"
 #include "URL.h"
-#include "utils/GroupUtils.h"
+#include "guilib/utils/GroupUtils.h"
 #include "TextureDatabase.h"
 
 using namespace std;
@@ -168,7 +168,7 @@ bool CGUIWindowVideoBase::OnMessage(CGUIMessage& message)
           }
 
           // not playing video, or playback speed == 1
-          return OnResumeItem(iItem);          
+          return OnResumeItem(iItem);
         }
         else if (iAction == ACTION_DELETE_ITEM)
         {
@@ -369,7 +369,7 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItem *item, const ScraperPtr &info2, boo
     bHasInfo = true;
     movieDetails = *item->GetVideoInfoTag();
   }
-  
+
   bool needsRefresh = false;
   if (bHasInfo)
   {
@@ -870,7 +870,7 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action)
   // Reset the current start offset. The actual resume
   // option is set in the switch, based on the action passed.
   item->m_lStartOffset = 0;
-  
+
   switch (action)
   {
   case SELECT_ACTION_CHOOSE:
@@ -926,7 +926,7 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action)
   return OnClick(iItem);
 }
 
-bool CGUIWindowVideoBase::OnInfo(int iItem) 
+bool CGUIWindowVideoBase::OnInfo(int iItem)
 {
   if (iItem < 0 || iItem >= m_vecItems->Size())
     return false;
@@ -1112,7 +1112,7 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
         buttons.Add(CONTEXT_BUTTON_RESUME_ITEM, GetResumeString(*(item.get())));     // Resume Video
       }
       //if the item isn't a folder or script, is a member of a list rather than a single item
-      //and we're not on the last element of the list, 
+      //and we're not on the last element of the list,
       //then add add either 'play from here' or 'play only this' depending on default behaviour
       if (!(item->m_bIsFolder || item->IsScript()) && m_vecItems->Size() > 1 && itemNumber < m_vecItems->Size()-1)
       {
@@ -1155,7 +1155,7 @@ bool CGUIWindowVideoBase::OnPlayStackPart(int iItem)
     {
       std::string resumeString = CGUIWindowVideoBase::GetResumeString(*(parts[selectedFile - 1].get()));
       stack->m_lStartOffset = 0;
-      if (!resumeString.empty()) 
+      if (!resumeString.empty())
       {
         CContextButtons choices;
         choices.Add(SELECT_ACTION_RESUME, resumeString);
@@ -1201,7 +1201,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     }
   case CONTEXT_BUTTON_PLAY_PART:
     {
-      if (OnPlayStackPart(itemNumber)) 
+      if (OnPlayStackPart(itemNumber))
       {
         // call CGUIMediaWindow::OnClick() as otherwise autoresume will kick in
         CGUIMediaWindow::OnClick(itemNumber);
@@ -1907,7 +1907,7 @@ bool CGUIWindowVideoBase::OnUnAssignContent(const std::string &path, int header,
     }
   }
   db.Close();
-  
+
   return false;
 }
 
@@ -1921,7 +1921,7 @@ void CGUIWindowVideoBase::OnAssignContent(const std::string &path)
   ADDON::ScraperPtr info = db.GetScraperForPath(path, settings);
 
   ADDON::ScraperPtr info2(info);
-  
+
   if (CGUIDialogContentSettings::Show(info, settings))
   {
     if(settings.exclude || (!info && info2))

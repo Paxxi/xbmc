@@ -25,7 +25,7 @@
 #include <memory>
 
 #include "dbwrappers/DatabaseQuery.h"
-#include "utils/SortUtils.h"
+#include "guilib/utils/SortUtils.h"
 #include "utils/XBMCTinyXML.h"
 
 class CURL;

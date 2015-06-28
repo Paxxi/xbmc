@@ -19,7 +19,7 @@
  *
  */
 
-#include "utils/DatabaseUtils.h"
+#include "dbwrappers/DatabaseUtils.h"
 #include "JSONRPC.h"
 #include "FileItemHandler.h"
 

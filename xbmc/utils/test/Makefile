@@ -17,7 +17,6 @@ SRCS=	\
 	TestHttpResponse.cpp \
 	TestJSONVariantParser.cpp \
 	TestJSONVariantWriter.cpp \
-	TestLabelFormatter.cpp \
 	Testlog.cpp \
 	TestMathUtils.cpp \
 	Testmd5.cpp \
@@ -27,8 +26,6 @@ SRCS=	\
 	TestRegExp.cpp \
 	Testrfft.cpp \
 	TestRingBuffer.cpp \
-	TestScraperParser.cpp \
-	TestScraperUrl.cpp \
 	TestSortUtils.cpp \
 	TestStopwatch.cpp \
 	TestStreamDetails.cpp \

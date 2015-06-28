@@ -32,7 +32,7 @@ class CArtist;
 #include "music/EmbeddedArt.h"
 #include "utils/IArchivable.h"
 #include "utils/ISerializable.h"
-#include "utils/ISortable.h"
+#include "guilib/utils/ISortable.h"
 
 
 namespace MUSIC_INFO
