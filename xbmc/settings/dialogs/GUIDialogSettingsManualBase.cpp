@@ -28,6 +28,7 @@
 #include "utils/StringUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CGUIDialogSettingsManualBase::CGUIDialogSettingsManualBase(int windowId, const std::string &xmlFile)
     : CGUIDialogSettingsManagerBase(windowId, xmlFile),

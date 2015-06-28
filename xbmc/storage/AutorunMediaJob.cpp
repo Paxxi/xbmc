@@ -24,6 +24,8 @@
 #include "dialogs/GUIDialogSelect.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CAutorunMediaJob::CAutorunMediaJob(const std::string &label, const std::string &path):
   m_path(path),
   m_label(label)

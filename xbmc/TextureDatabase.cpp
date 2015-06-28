@@ -27,6 +27,8 @@
 #include "utils/Variant.h"
 #include "dbwrappers/DatabaseUtils.h"
 
+using namespace KODI::UTILS;
+
 enum TextureField
 {
   TF_None = 0,

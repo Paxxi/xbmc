@@ -23,6 +23,10 @@
 
 #include "utils/IArchivable.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CTemperature : public IArchivable
 {
 public:
@@ -111,4 +115,4 @@ protected:
   double m_value; // we store as fahrenheit
   bool m_valid;
 };
-
+}}

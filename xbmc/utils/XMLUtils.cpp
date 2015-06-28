@@ -25,11 +25,15 @@
 #include "PlatformDefs.h" //for strcasecmp
 #endif
 
+namespace KODI
+{
+namespace UTILS
+{
 bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& hexValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
   if (!pNode || !pNode->FirstChild()) return false;
-  return sscanf(pNode->FirstChild()->Value(), "%x", (uint32_t*)&hexValue) == 1;
+  return sscanf(pNode->FirstChild()->Value(), "%x", static_cast<uint32_t*>(&hexValue)) == 1;
 }
 
 
@@ -91,7 +95,7 @@ bool XMLUtils::GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& v
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
   if (!pNode || !pNode->FirstChild()) return false;
-  value = (float)atof(pNode->FirstChild()->Value());
+  value = static_cast<float>(atof(pNode->FirstChild()->Value()));
   return true;
 }
 
@@ -130,7 +134,7 @@ bool XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag, std::st
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
-  if (pNode != NULL)
+  if (pNode != nullptr)
   {
     strStringValue = pNode->ValueStr();
     if (encoded && strcasecmp(encoded,"yes") == 0)
@@ -153,7 +157,7 @@ bool XMLUtils::HasChild(const TiXmlNode* pRootNode, const char* strTag)
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
   if (!pElement) return false;
   const TiXmlNode* pNode = pElement->FirstChild();
-  return (pNode != NULL);
+  return (pNode != nullptr);
 }
 
 bool XMLUtils::GetAdditiveString(const TiXmlNode* pRootNode, const char* strTag,
@@ -171,8 +175,8 @@ bool XMLUtils::GetAdditiveString(const TiXmlNode* pRootNode, const char* strTag,
     {
       bResult = true;
       strTemp = node->FirstChild()->Value();
-      const char* clear=node->Attribute("clear");
-      if (strStringValue.empty() || (clear && strcasecmp(clear,"true")==0))
+      const char* clearStr = node->Attribute("clear");
+      if (strStringValue.empty() || (clearStr && strcasecmp(clearStr,"true")==0))
         strStringValue = strTemp;
       else
         strStringValue += strSeparator+strTemp;
@@ -229,7 +233,7 @@ bool XMLUtils::GetPath(const TiXmlNode* pRootNode, const char* strTag, std::stri
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
-  if (pNode != NULL)
+  if (pNode != nullptr)
   {
     strStringValue = pNode->Value();
     if (encoded && strcasecmp(encoded,"yes") == 0)
@@ -348,4 +352,6 @@ void XMLUtils::SetDate(TiXmlNode* pRootNode, const char *strTag, const CDateTime
 void XMLUtils::SetDateTime(TiXmlNode* pRootNode, const char *strTag, const CDateTime& dateTime)
 {
   SetString(pRootNode, strTag, dateTime.IsValid() ? dateTime.GetAsDBDateTime() : "");
+}
+}
 }

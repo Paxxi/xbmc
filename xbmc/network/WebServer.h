@@ -41,8 +41,8 @@ public:
   virtual ~CWebServer() { }
 
   // implementation of JSONRPC::ITransportLayer
-  virtual bool PrepareDownload(const char *path, CVariant &details, std::string &protocol);
-  virtual bool Download(const char *path, CVariant &result);
+  virtual bool PrepareDownload(const char *path, KODI::UTILS::CVariant &details, std::string &protocol);
+  virtual bool Download(const char *path, KODI::UTILS::CVariant &result);
   virtual int GetCapabilities();
 
   bool Start(int port, const std::string &username, const std::string &password);

@@ -28,6 +28,7 @@
 #include "utils/XMLUtils.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CAnimEffect::CAnimEffect(const TiXmlElement *node, EFFECT_TYPE effect)
 {

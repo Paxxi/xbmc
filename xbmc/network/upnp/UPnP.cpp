@@ -51,6 +51,7 @@
 
 using namespace std;
 using namespace UPNP;
+using namespace KODI::UTILS;
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp")
 

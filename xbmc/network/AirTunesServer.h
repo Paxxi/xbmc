@@ -42,7 +42,7 @@
 class CAirTunesServer : public ANNOUNCEMENT::IAnnouncer
 {
 public:
-  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
 
   static bool StartServer(int port, bool nonlocal, bool usePassword, const std::string &password="");
   static void StopServer(bool bWait);

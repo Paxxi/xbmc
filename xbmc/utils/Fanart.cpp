@@ -27,6 +27,8 @@
 #include "URIUtils.h"
 #include "StringUtils.h"
 
+using namespace KODI::UTILS;
+
 const unsigned int CFanart::max_fanart_colors=3;
 
 

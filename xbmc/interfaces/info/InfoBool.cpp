@@ -30,6 +30,6 @@ namespace INFO
       m_expression(expression),
       m_dirty(true)
   {
-    StringUtils::ToLower(m_expression);
+    KODI::UTILS::StringUtils::ToLower(m_expression);
   }
 }

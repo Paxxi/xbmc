@@ -33,6 +33,8 @@
 #include <mmdeviceapi.h>
 #include "win32/IMMNotificationClient.h"
 
+using namespace KODI::UTILS;
+
 #ifndef _DEBUG
 #define XBMC_TRACK_EXCEPTIONS
 #endif

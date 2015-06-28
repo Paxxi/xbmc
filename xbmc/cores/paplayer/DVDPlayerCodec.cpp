@@ -32,6 +32,8 @@
 #include "URL.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 DVDPlayerCodec::DVDPlayerCodec()
 {
   m_CodecName = "DVDPlayer";

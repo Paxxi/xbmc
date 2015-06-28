@@ -29,6 +29,7 @@
 #include "utils/StringUtils.h"
 #include "filesystem/CurlFile.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 map<string, string> fillMimeTypes()

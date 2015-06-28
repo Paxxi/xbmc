@@ -25,6 +25,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CMultiPathFile::CMultiPathFile(void)
   : COverrideFile(false)

@@ -26,6 +26,7 @@
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CDVDInputStreamFile::CDVDInputStreamFile() : CDVDInputStream(DVDSTREAM_TYPE_FILE)
 {

@@ -27,6 +27,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestFileOperationJob, ActionCopy)
 {
   XFILE::CFile *tmpfile;

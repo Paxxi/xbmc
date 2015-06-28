@@ -26,8 +26,8 @@
 class CAddOnTransport : public JSONRPC::ITransportLayer
 {
 public:
-  virtual bool PrepareDownload(const char *path, CVariant &details, std::string &protocol) { return false; }
-  virtual bool Download(const char *path, CVariant& result) { return false; }
+  virtual bool PrepareDownload(const char *path, KODI::UTILS::CVariant &details, std::string &protocol) { return false; }
+  virtual bool Download(const char *path, KODI::UTILS::CVariant& result) { return false; }
   virtual int GetCapabilities() { return JSONRPC::Response; }
 
   class CAddOnClient : public JSONRPC::IClient

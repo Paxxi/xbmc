@@ -37,6 +37,7 @@
 #include "commons/Exception.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 using namespace std;
 
 //////////////////////////////////////////////////////////////////////

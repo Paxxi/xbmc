@@ -23,6 +23,10 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CUtf8Utils
 {
 public:
@@ -30,7 +34,7 @@ public:
   {
     plainAscii = -1, // only US-ASCII characters (valid for UTF-8 too)
     hiAscii    =  0, // non-UTF-8 sequence with high ASCII characters 
-                     // (possible single-byte national encoding like WINDOWS-1251, multi-byte encoding like UTF-32 or invalid UTF-8)
+    // (possible single-byte national encoding like WINDOWS-1251, multi-byte encoding like UTF-32 or invalid UTF-8)
     utf8string =  1  // valid UTF-8 sequences, but not US-ASCII only
   };
   
@@ -53,3 +57,4 @@ public:
 private:
   static size_t SizeOfUtf8Char(const char* const str);
 };
+}}

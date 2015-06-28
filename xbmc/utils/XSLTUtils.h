@@ -24,6 +24,10 @@
 #include <libxslt/xslt.h>
 #include <libxslt/xsltutils.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 class XSLTUtils
 {
 public:
@@ -60,3 +64,4 @@ private:
   xmlDocPtr m_xmlStylesheet;
   xsltStylesheetPtr m_xsltStylesheet;
 };
+}}

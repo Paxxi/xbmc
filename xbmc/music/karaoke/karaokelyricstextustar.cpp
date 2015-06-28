@@ -29,6 +29,7 @@
 #include "utils/StringUtils.h"
 #include "karaokelyricstextustar.h"
 
+using namespace KODI::UTILS;
 
 CKaraokeLyricsTextUStar::CKaraokeLyricsTextUStar( const std::string & lyricsFile )
   : CKaraokeLyricsText()

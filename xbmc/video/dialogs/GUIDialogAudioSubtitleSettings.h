@@ -59,8 +59,8 @@ protected:
   static void AudioStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SubtitleStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   
-  static std::string SettingFormatterDelay(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
-  static std::string SettingFormatterPercentAsDecibel(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+  static std::string SettingFormatterDelay(const CSettingControlSlider *control, const KODI::UTILS::CVariant &value, const KODI::UTILS::CVariant &minimum, const KODI::UTILS::CVariant &step, const KODI::UTILS::CVariant &maximum);
+  static std::string SettingFormatterPercentAsDecibel(const CSettingControlSlider *control, const KODI::UTILS::CVariant &value, const KODI::UTILS::CVariant &minimum, const KODI::UTILS::CVariant &step, const KODI::UTILS::CVariant &maximum);
 
   float m_volume;
   int m_audioStream;

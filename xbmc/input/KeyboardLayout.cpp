@@ -28,6 +28,8 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 CKeyboardLayout::CKeyboardLayout()
 { }
 

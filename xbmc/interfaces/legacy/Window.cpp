@@ -30,6 +30,8 @@
 #include "utils/Variant.h"
 #include "WindowException.h"
 
+using namespace KODI::UTILS;
+
 #define ACTIVE_WINDOW g_windowManager.GetActiveWindow()
 
 

@@ -33,6 +33,7 @@
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
 #include "threads/SingleLock.h"
+using namespace KODI::UTILS;
 using namespace XFILE;
 using namespace std;
 #include <limits.h>

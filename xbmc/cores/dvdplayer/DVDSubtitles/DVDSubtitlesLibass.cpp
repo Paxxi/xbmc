@@ -30,6 +30,7 @@
 #include "guilib/GraphicContext.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 static void libass_log(int level, const char *fmt, va_list args, void *data)
 {

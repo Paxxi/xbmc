@@ -34,6 +34,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 CVideoDatabaseDirectory::CVideoDatabaseDirectory(void)
 {

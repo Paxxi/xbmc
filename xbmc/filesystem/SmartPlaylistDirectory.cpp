@@ -32,6 +32,8 @@
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
+using namespace KODI::UTILS;
+
 #define PROPERTY_PATH_DB            "path.db"
 #define PROPERTY_SORT_ORDER         "sort.order"
 #define PROPERTY_SORT_ASCENDING     "sort.ascending"

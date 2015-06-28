@@ -84,7 +84,7 @@ namespace EPG
     bool operator ==(const CEpgInfoTag& right) const;
     bool operator !=(const CEpgInfoTag& right) const;
 
-    virtual void Serialize(CVariant &value) const;
+    virtual void Serialize(KODI::UTILS::CVariant &value) const;
 
     /*!
      * @brief Check if this event is currently active.

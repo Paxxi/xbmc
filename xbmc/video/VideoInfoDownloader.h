@@ -28,7 +28,13 @@
 #include <string>
 
 // forward declarations
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML;
+}}
+
 class CGUIDialogProgress;
 
 namespace ADDON

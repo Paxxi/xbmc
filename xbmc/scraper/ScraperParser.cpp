@@ -36,6 +36,7 @@
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CScraperParser::CScraperParser()
 {
@@ -342,7 +343,7 @@ void CScraperParser::ParseXSLT(const std::string& input, std::string& dest, TiXm
   TiXmlElement* pSheet = element->FirstChildElement();
   if (pSheet)
   {
-    XSLTUtils xsltUtils;
+    KODI::UTILS::XSLTUtils xsltUtils;
     std::string strXslt;
     strXslt << *pSheet;
     ReplaceBuffers(strXslt);

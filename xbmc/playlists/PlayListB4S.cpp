@@ -30,6 +30,7 @@
 
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 using namespace std;
 
 /* ------------------------ example b4s playlist file ---------------------------------

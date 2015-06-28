@@ -27,6 +27,7 @@
 #include "utils/Utf8Utils.h"
 
 using namespace PCRE;
+using namespace KODI::UTILS;
 
 #ifndef PCRE_UCP
 #define PCRE_UCP 0

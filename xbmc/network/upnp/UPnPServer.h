@@ -37,7 +37,7 @@ class CUPnPServer : public PLT_MediaConnect,
 public:
     CUPnPServer(const char* friendly_name, const char* uuid = NULL, int port = 0);
     ~CUPnPServer();
-    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
 
     // PLT_MediaServer methods
     virtual NPT_Result OnBrowseMetadata(PLT_ActionReference&          action,

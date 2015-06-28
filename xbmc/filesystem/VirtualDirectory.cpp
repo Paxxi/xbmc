@@ -30,6 +30,7 @@
 #include "FileItem.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 namespace XFILE
 {

@@ -20,6 +20,8 @@
 
 #include "JSONVariantParser.h"
 
+using namespace KODI::UTILS;
+
 yajl_callbacks CJSONVariantParser::callbacks = {
   CJSONVariantParser::ParseNull,
   CJSONVariantParser::ParseBoolean,

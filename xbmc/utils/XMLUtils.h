@@ -27,6 +27,11 @@
 
 class CDateTime;
 
+
+namespace KODI
+{
+namespace UTILS
+{
 class XMLUtils
 {
 public:
@@ -102,4 +107,5 @@ public:
 
   static const int path_version = 1;
 };
-
+}
+}

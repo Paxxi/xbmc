@@ -60,6 +60,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 #define ACTION_COPY                     1
 #define ACTION_MOVE                     2

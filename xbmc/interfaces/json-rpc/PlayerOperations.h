@@ -43,39 +43,39 @@ namespace JSONRPC
   class CPlayerOperations : CFileItemHandler
   {
   public:
-    static JSONRPC_STATUS GetActivePlayers(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetPlayers(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetItem(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS GetActivePlayers(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetPlayers(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetItem(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
 
-    static JSONRPC_STATUS PlayPause(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS Stop(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetSpeed(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS Seek(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS PlayPause(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Stop(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetSpeed(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Seek(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
 
-    static JSONRPC_STATUS Move(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS Zoom(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS Rotate(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS Move(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Zoom(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Rotate(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
     
-    static JSONRPC_STATUS Open(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GoTo(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetShuffle(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetRepeat(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetPartymode(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS Open(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GoTo(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetShuffle(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetRepeat(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetPartymode(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
     
-    static JSONRPC_STATUS SetAudioStream(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetSubtitle(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS SetAudioStream(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetSubtitle(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
   private:
     static int GetActivePlayers();
-    static PlayerType GetPlayer(const CVariant &player);
+    static PlayerType GetPlayer(const KODI::UTILS::CVariant &player);
     static int GetPlaylist(PlayerType player);
     static JSONRPC_STATUS StartSlideshow(const std::string& path, bool recursive, bool random, const std::string &firstPicturePath = "");
     static void SendSlideshowAction(int actionID);
     static void OnPlaylistChanged();
-    static JSONRPC_STATUS GetPropertyValue(PlayerType player, const std::string &property, CVariant &result);
+    static JSONRPC_STATUS GetPropertyValue(PlayerType player, const std::string &property, KODI::UTILS::CVariant &result);
 
-    static int ParseRepeatState(const CVariant &repeat);
-    static double ParseTimeInSeconds(const CVariant &time);
+    static int ParseRepeatState(const KODI::UTILS::CVariant &repeat);
+    static double ParseTimeInSeconds(const KODI::UTILS::CVariant &time);
     static bool IsPVRChannel();
     static EPG::CEpgInfoTagPtr GetCurrentEpg();
   };

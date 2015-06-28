@@ -30,6 +30,8 @@
 #include "dbwrappers/dataset.h"
 #include "SortFileItem.h"
 
+using namespace KODI::UTILS;
+
 CViewDatabase::CViewDatabase(void)
 { }
 

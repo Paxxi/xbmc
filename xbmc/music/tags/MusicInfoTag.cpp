@@ -27,6 +27,7 @@
 #include "utils/Archive.h"
 
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 EmbeddedArtInfo::EmbeddedArtInfo(size_t siz, const std::string &mim)
 {

@@ -30,6 +30,7 @@
 #include "karaokelyricstextustar.h"
 #include "karaokelyricsfactory.h"
 
+using namespace KODI::UTILS;
 
 // A helper function to have all the checks in a single place
 bool CheckAndCreateLyrics( const std::string & songName, CKaraokeLyrics ** lyricptr )

@@ -30,6 +30,7 @@
 #include "utils/log.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CZeroconfDirectory::CZeroconfDirectory()
 {

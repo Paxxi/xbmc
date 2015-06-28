@@ -64,6 +64,8 @@
 #include "settings/VideoSettings.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CDVDVideoCodec* CDVDFactoryCodec::OpenCodec(CDVDVideoCodec* pCodec, CDVDStreamInfo &hints, CDVDCodecOptions &options )
 {
   try

@@ -63,6 +63,7 @@
 #define HEADER_NEWLINE        "\r\n"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 typedef struct ConnectionHandler
 {

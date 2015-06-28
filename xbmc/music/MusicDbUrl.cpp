@@ -27,6 +27,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace XFILE::MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 CMusicDbUrl::CMusicDbUrl()
   : CDbUrl()

@@ -27,6 +27,7 @@
 #include "utils/StringUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 IDirectory::IDirectory(void)
 {

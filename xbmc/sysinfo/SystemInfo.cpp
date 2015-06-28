@@ -76,6 +76,10 @@
 #define STR_MACRO(x) #x
 #define XSTR_MACRO(x) STR_MACRO(x)
 
+namespace KODI
+{
+namespace UTILS
+{
 #ifdef TARGET_WINDOWS
 static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)
 {
@@ -120,7 +124,7 @@ static std::string getValueFromOs_release(std::string key)
   std::string content(buf, len);
   delete[] buf;
 
-  // find begin of value string
+// find begin of value string
   size_t valStart = 0, seachPos;
   key += '=';
   if (content.compare(0, key.length(), key) == 0)
@@ -144,7 +148,7 @@ static std::string getValueFromOs_release(std::string key)
   if (content[valStart] == '\n')
     return "";
   
-  // find end of value string
+// find end of value string
   seachPos = valStart;
   do
   {
@@ -156,7 +160,7 @@ static std::string getValueFromOs_release(std::string key)
   if (value.empty())
     return value;
 
-  // remove quotes
+// remove quotes
   if (value[0] == '\'' || value[0] == '"')
   {
     if (value.length() < 2)
@@ -169,7 +173,7 @@ static std::string getValueFromOs_release(std::string key)
     }
   }
 
-  // unescape characters
+// unescape characters
   for (size_t slashPos = value.find('\\'); slashPos < value.length() - 1; slashPos = value.find('\\', slashPos))
   {
     if (value[slashPos + 1] == '\n')
@@ -471,7 +475,7 @@ bool CSysInfo::GetDiskSpace(const std::string& drive,int& iTotal, int& iTotalFre
       int iPos= 0;
       do {
         if( DRIVE_FIXED == GetDriveType( pcBuffer + iPos  ) &&
-            GetDiskFreeSpaceEx( ( pcBuffer + iPos ), nullptr, &ULTotal, &ULTotalFree ) )
+            GetDiskFreeSpaceEx( ( pcBuffer + iPos ), NULL, &ULTotal, &ULTotalFree ) )
         {
           ULTotalTmp.QuadPart+= ULTotal.QuadPart;
           ULTotalFreeTmp.QuadPart+= ULTotalFree.QuadPart;
@@ -1386,3 +1390,4 @@ void CSysInfo::OnJobComplete(unsigned int jobID, bool success, CJob *job)
   m_info = static_cast<CSysInfoJob *>(job)->GetData();
   CInfoLoader::OnJobComplete(jobID, success, job);
 }
+}}

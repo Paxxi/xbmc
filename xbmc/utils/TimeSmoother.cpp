@@ -26,13 +26,17 @@
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 CTimeSmoother::CTimeSmoother()
-: m_diffs(num_diffs),
-  m_periods(num_periods),
-  m_period(0),
-  m_lastFrameTime(0),
-  m_prevIn(num_stamps),
-  m_prevOut(num_stamps)
+  : m_diffs(num_diffs),
+    m_periods(num_periods),
+    m_period(0),
+    m_lastFrameTime(0),
+    m_prevIn(num_stamps),
+    m_prevOut(num_stamps)
 {
 }
 
@@ -88,7 +92,7 @@ unsigned int CTimeSmoother::GetNextFrameTime(unsigned int currentTime)
     if (frameTime >= UINT_MAX)
       frameTime = fmod(frameTime, UINT_MAX);
     m_lastFrameTime = frameTime;
-    return (unsigned int)floor(frameTime + 0.5);
+    return static_cast<unsigned int>(floor(frameTime + 0.5));
   }
   return currentTime;
 }
@@ -156,7 +160,7 @@ void CTimeSmoother::GetConvergent(double value, unsigned int &num, unsigned int 
   unsigned int maxLoops = 3 * maxnumden;
   while (maxLoops--)
   {
-    unsigned int f = (unsigned int)floor(value);
+    unsigned int f = static_cast<unsigned int>(floor(value));
     if (value - f >= 1)
       break; // value out of range of unsigned int
     unsigned int new_n = f * num   + old_n;
@@ -165,7 +169,7 @@ void CTimeSmoother::GetConvergent(double value, unsigned int &num, unsigned int 
       break;
     old_n = num; old_d = denom;
     num = new_n; denom = new_d;
-    if ((double)f == value)
+    if (static_cast<double>(f) == value)
       break;
     value = 1/(value - f);
   }
@@ -196,8 +200,8 @@ void CTimeSmoother::GetGCDMultipliers(const vector<double> &data, vector<unsigne
     }
   }
   vector<unsigned int>::const_iterator k = std::max_element(num.begin(), num.end());
-  for (unsigned int i = 0; i < num.size(); ++i)
-    multipliers.push_back(denom[i] * (*k) / num[i]);
+  for (unsigned int l = 0; l < num.size(); ++l)
+    multipliers.push_back(denom[l] * (*k) / num[l]);
 }
 
 void CTimeSmoother::GetIntRepresentation(const boost::circular_buffer<double> &data, vector<unsigned int> &intData, const vector<double> &bins, const vector<unsigned int> &intBins)
@@ -248,3 +252,4 @@ double CTimeSmoother::EstimateFrameTime(unsigned int currentTime)
   }
   return currentTime;
 }
+}}

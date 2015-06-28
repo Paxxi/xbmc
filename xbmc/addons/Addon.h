@@ -73,7 +73,7 @@ public:
            && (*this).version == rhs.version;
   }
   
-  void Serialize(CVariant &variant) const;
+  void Serialize(KODI::UTILS::CVariant &variant) const;
 
   std::string id;
   TYPE type;
@@ -228,15 +228,15 @@ protected:
    \return true if settings are loaded, false otherwise
    \sa SettingsToXML
    */
-  bool SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults = false);
+  bool SettingsFromXML(const KODI::UTILS::CXBMCTinyXML &doc, bool loadDefaults = false);
 
   /*! \brief Parse settings into an XML document
    \param doc XML document to receive the settings
    \sa SettingsFromXML
    */
-  void SettingsToXML(CXBMCTinyXML &doc) const;
+  void SettingsToXML(KODI::UTILS::CXBMCTinyXML &doc) const;
 
-  CXBMCTinyXML      m_addonXmlDoc;
+  KODI::UTILS::CXBMCTinyXML      m_addonXmlDoc;
   std::string       m_strLibName;
   bool              m_settingsLoaded;
   bool              m_userSettingsLoaded;

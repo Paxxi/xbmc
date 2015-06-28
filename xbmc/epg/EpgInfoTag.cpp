@@ -35,6 +35,7 @@
 
 using namespace EPG;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CEpgInfoTagPtr CEpgInfoTag::CreateDefaultTag()
 {

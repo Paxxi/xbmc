@@ -30,6 +30,7 @@
 
 using namespace std;
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 typedef struct ReleaseTypeInfo {
   CAlbum::ReleaseType type;

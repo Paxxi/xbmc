@@ -46,6 +46,7 @@
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.renderer")
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS;
 
 namespace UPNP
 {

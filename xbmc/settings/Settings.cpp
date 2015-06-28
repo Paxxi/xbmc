@@ -85,6 +85,7 @@
 #define SETTINGS_XML_ROOT   "settings"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CSettings::CSettings()
   : m_initialized(false)

@@ -27,6 +27,8 @@
 #include "utils/log.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 #define KEYBOARD_LAYOUTS_PATH   "special://xbmc/system/keyboardlayouts"
 
 CKeyboardLayoutManager::~CKeyboardLayoutManager()

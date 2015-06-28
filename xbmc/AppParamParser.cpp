@@ -35,6 +35,8 @@
 #endif
 #include <stdlib.h>
 
+using namespace KODI::UTILS;
+
 CAppParamParser::CAppParamParser()
 {
   m_testmode = false;

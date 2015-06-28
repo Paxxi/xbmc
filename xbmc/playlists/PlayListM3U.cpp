@@ -31,6 +31,7 @@
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define M3U_START_MARKER "#EXTM3U"
 #define M3U_INFO_MARKER  "#EXTINF"

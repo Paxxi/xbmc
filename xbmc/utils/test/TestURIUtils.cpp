@@ -26,6 +26,7 @@
 #include "gtest/gtest.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 class TestURIUtils : public testing::Test
 {

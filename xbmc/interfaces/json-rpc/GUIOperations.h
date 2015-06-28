@@ -26,16 +26,16 @@ namespace JSONRPC
   class CGUIOperations
   {
   public:
-    static JSONRPC_STATUS GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
 
-    static JSONRPC_STATUS ActivateWindow(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS ActivateWindow(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
 
-    static JSONRPC_STATUS ShowNotification(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetFullscreen(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetStereoscopicMode(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetStereoscopicModes(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result);
+    static JSONRPC_STATUS ShowNotification(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetFullscreen(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetStereoscopicMode(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetStereoscopicModes(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result);
   private:
-    static JSONRPC_STATUS GetPropertyValue(const std::string &property, CVariant &result);
-    static CVariant GetStereoModeObjectFromGuiMode(const RENDER_STEREO_MODE &mode);
+    static JSONRPC_STATUS GetPropertyValue(const std::string &property, KODI::UTILS::CVariant &result);
+    static KODI::UTILS::CVariant GetStereoModeObjectFromGuiMode(const RENDER_STEREO_MODE &mode);
   };
 }

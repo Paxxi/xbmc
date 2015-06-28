@@ -27,8 +27,15 @@
 #define DATABASEQUERY_RULE_VALUE_SEPARATOR  " / "
 
 class CDatabase;
-class CVariant;
 class TiXmlNode;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CVariant;
+}}
+
 
 class CDatabaseQueryRule
 {
@@ -65,9 +72,9 @@ public:
                   };
 
   virtual bool Load(const TiXmlNode *node, const std::string &encoding = "UTF-8");
-  virtual bool Load(const CVariant &obj);
+  virtual bool Load(const KODI::UTILS::CVariant &obj);
   virtual bool Save(TiXmlNode *parent) const;
-  virtual bool Save(CVariant &obj) const;
+  virtual bool Save(KODI::UTILS::CVariant &obj) const;
 
   static std::string          GetLocalizedOperator(SEARCH_OPERATOR oper);
   static void                 GetAvailableOperators(std::vector<std::string> &operatorList);
@@ -124,9 +131,9 @@ public:
 
   void clear();
   virtual bool Load(const TiXmlNode *node, const std::string &encoding = "UTF-8") { return false; }
-  virtual bool Load(const CVariant &obj, const IDatabaseQueryRuleFactory *factory);
+  virtual bool Load(const KODI::UTILS::CVariant &obj, const IDatabaseQueryRuleFactory *factory);
   virtual bool Save(TiXmlNode *parent) const;
-  virtual bool Save(CVariant &obj) const;
+  virtual bool Save(KODI::UTILS::CVariant &obj) const;
 
   std::string GetWhereClause(const CDatabase &db, const std::string& strType) const;
   std::string TranslateCombinationType() const;

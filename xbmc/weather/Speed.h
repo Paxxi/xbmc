@@ -23,6 +23,10 @@
 
 #include "utils/IArchivable.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CSpeed : public IArchivable
 {
 public:
@@ -96,7 +100,7 @@ public:
   CSpeed operator ++(int);
   CSpeed operator --(int);
 
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(CArchive& ar) override;
 
   bool IsValid() const;
 
@@ -124,4 +128,5 @@ protected:
   double m_value; // we store in m/s
   bool m_valid;
 };
+}}
 

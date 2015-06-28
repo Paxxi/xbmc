@@ -32,6 +32,7 @@
 
 using namespace dbiplus;
 using namespace EPG;
+using namespace KODI::UTILS;
 
 bool CEpgDatabase::Open(void)
 {

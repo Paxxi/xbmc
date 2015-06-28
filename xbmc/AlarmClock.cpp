@@ -26,6 +26,7 @@
 #include "dialogs/GUIDialogKaiToast.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CAlarmClock::CAlarmClock() : CThread("AlarmClock"), m_bIsRunning(false)

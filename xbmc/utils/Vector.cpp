@@ -22,9 +22,14 @@
 
 #include "Vector.h"
 
-CVector::CVector()
+namespace KODI
 {
-  reset();
+namespace UTILS
+{
+CVector::CVector()
+  : x{0.0f}
+  , y{0.0f}
+{
 }
 
 CVector::CVector(float xCoord, float yCoord)
@@ -38,12 +43,12 @@ void CVector::reset()
   y = 0.0f;
 }
 
-const CVector CVector::operator+(const CVector &other) const
+CVector CVector::operator+(const CVector &other) const
 {
   return CVector(x + other.x, y + other.y);
 }
 
-const CVector CVector::operator-(const CVector &other) const
+CVector CVector::operator-(const CVector &other) const
 {
   return CVector(x - other.x, y - other.y);
 }
@@ -73,3 +78,4 @@ float CVector::length() const
 {
   return sqrt(pow(x, 2) + pow(y, 2));
 }
+}}

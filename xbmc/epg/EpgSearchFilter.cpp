@@ -32,6 +32,7 @@
 
 using namespace EPG;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 void EpgSearchFilter::Reset()
 {

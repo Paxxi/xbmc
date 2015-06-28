@@ -32,9 +32,16 @@
 #include "FileItem.h"
 
 class CGUIDialogProgressBarHandle;
-class CStopWatch;
 class CAction;
 class CFileItemList;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CStopWatch;
+}}
+
 
 namespace EPG
 {
@@ -110,7 +117,7 @@ namespace PVR
      */
     virtual ~CPVRManager(void);
 
-    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+    virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
 
     /*!
      * @brief Get the instance of the PVRManager.
@@ -667,7 +674,7 @@ namespace PVR
 
     CCriticalSection                m_managerStateMutex;
     ManagerState                    m_managerState;
-    CStopWatch                     *m_parentalTimer;
+    KODI::UTILS::CStopWatch        *m_parentalTimer;
     int                             m_openWindowId;
     std::map<std::string, std::string> m_outdatedAddons;
     static int                      m_pvrWindowIds[10];

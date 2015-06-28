@@ -32,7 +32,10 @@
 
 #define MAX_KNOWN_ATTRIBUTES  46
 
-
+namespace KODI
+{
+namespace UTILS
+{
 class CSysData
 {
 public:
@@ -154,4 +157,6 @@ private:
 };
 
 extern CSysInfo g_sysinfo;
+
+}}
 

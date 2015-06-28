@@ -42,6 +42,7 @@
 #include "utils/URIUtils.h"
 
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 #define CONTROL_BTNVIEWASICONS     2
 #define CONTROL_BTNSORTBY          3

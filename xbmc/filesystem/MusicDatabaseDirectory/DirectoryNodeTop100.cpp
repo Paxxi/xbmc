@@ -25,6 +25,7 @@
 
 using namespace std;
 using namespace XFILE::MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 Node Top100Children[] = {
                           { NODE_TYPE_SONG_TOP100,  "songs",   10504 },

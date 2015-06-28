@@ -30,6 +30,7 @@
 using namespace std;
 using namespace JSONRPC;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

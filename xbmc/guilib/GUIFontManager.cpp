@@ -40,6 +40,7 @@
 #endif
 
 using namespace std;
+using namespace KODI::UTILS;
 
 GUIFontManager::GUIFontManager(void)
 {

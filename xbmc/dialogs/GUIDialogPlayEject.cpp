@@ -24,6 +24,8 @@
 #include "utils/log.h"
 #include "utils/XMLUtils.h"
 
+using namespace KODI::UTILS;
+
 #define ID_BUTTON_PLAY      11
 #define ID_BUTTON_EJECT     10
 

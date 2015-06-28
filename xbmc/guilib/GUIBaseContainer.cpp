@@ -32,6 +32,7 @@
 #include "listproviders/IListProvider.h"
 #include "settings/Settings.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define HOLD_TIME_START 100

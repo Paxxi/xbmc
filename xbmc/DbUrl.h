@@ -25,7 +25,7 @@
 #include "URL.h"
 #include "utils/UrlOptions.h"
 
-class CDbUrl : public CUrlOptions
+class CDbUrl : public KODI::UTILS::CUrlOptions
 {
 public:
   CDbUrl();
@@ -51,7 +51,7 @@ public:
 
 protected:
   virtual bool parse() = 0;
-  virtual bool validateOption(const std::string &key, const CVariant &value);
+  virtual bool validateOption(const std::string &key, const KODI::UTILS::CVariant &value);
   
   CURL m_url;
   std::string m_type;

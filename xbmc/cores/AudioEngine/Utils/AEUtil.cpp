@@ -31,6 +31,7 @@ extern "C" {
 #include "libavutil/channel_layout.h"
 }
 
+using namespace KODI::UTILS;
 using namespace std;
 
 /* declare the rng seed and initialize it */

@@ -34,6 +34,7 @@
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CPVRActionListener::CPVRActionListener()
 {

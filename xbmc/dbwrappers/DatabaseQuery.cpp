@@ -28,6 +28,7 @@
 #include "utils/XBMCTinyXML.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 typedef struct
 {

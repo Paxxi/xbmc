@@ -149,7 +149,7 @@ private:
 
   CCriticalSection m_critSection;
   JobMap m_downloadJobs;
-  CStopWatch m_repoUpdateWatch;   ///< repository updates are done based on this counter
+  KODI::UTILS::CStopWatch m_repoUpdateWatch;   ///< repository updates are done based on this counter
   ADDON::CRepositoryUpdateJob* m_repoUpdateJob;
   CEvent m_repoUpdateDone;        ///< event set when the repository updates are complete
 };

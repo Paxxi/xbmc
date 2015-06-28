@@ -24,6 +24,10 @@
 
 #include "utils/Variant.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CUrlOptions
 {
 public:
@@ -55,3 +59,5 @@ protected:
   UrlOptions m_options;
   std::string m_strLead;
 };
+}}
+

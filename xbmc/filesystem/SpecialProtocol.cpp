@@ -34,6 +34,7 @@
 #include "utils/StringUtils.h"
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 map<std::string, std::string> CSpecialProtocol::m_pathMap;

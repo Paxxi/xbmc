@@ -26,6 +26,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestDirectory, General)
 {
   std::string tmppath1, tmppath2, tmppath3;

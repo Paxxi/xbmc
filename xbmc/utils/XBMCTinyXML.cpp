@@ -31,23 +31,27 @@
 #define MAX_ENTITY_LENGTH 8 // size of largest entity "&#xNNNN;"
 #define BUFFER_SIZE 4096
 
+namespace KODI
+{
+namespace UTILS
+{
 CXBMCTinyXML::CXBMCTinyXML()
-: TiXmlDocument()
+  : TiXmlDocument()
 {
 }
 
 CXBMCTinyXML::CXBMCTinyXML(const char *documentName)
-: TiXmlDocument(documentName)
+  : TiXmlDocument(documentName)
 {
 }
 
 CXBMCTinyXML::CXBMCTinyXML(const std::string& documentName)
-: TiXmlDocument(documentName)
+  : TiXmlDocument(documentName)
 {
 }
 
 CXBMCTinyXML::CXBMCTinyXML(const std::string& documentName, const std::string& documentCharset)
-: TiXmlDocument(documentName), m_SuggestedCharset(documentCharset)
+  : TiXmlDocument(documentName), m_SuggestedCharset(documentCharset)
 {
   StringUtils::ToUpper(m_SuggestedCharset);
 }
@@ -193,7 +197,7 @@ bool CXBMCTinyXML::Parse(const std::string& data, TiXmlEncoding encoding /*= TIX
   if (InternalParse(data, TIXML_ENCODING_UNKNOWN))
   {
     if (!m_SuggestedCharset.empty())
-      CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of suggested \"%s\"", __FUNCTION__,
+      CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of suggested \"%s\"", __FUNCTION__, 
                   (value.empty() ? "XML data" : ("file \"" + value + "\"").c_str()), m_SuggestedCharset.c_str());
     else if (!detectedCharset.empty())
       CLog::Log(LOGWARNING, "%s: Processed %s as unknown encoding instead of detected \"%s\"", __FUNCTION__,
@@ -274,3 +278,4 @@ bool CXBMCTinyXML::Test()
   }
   return false;
 }
+}}

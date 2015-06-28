@@ -27,6 +27,7 @@
 #include "dbwrappers/dataset.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS;
 using namespace std;
 
 CAddonDatabase::CAddonDatabase()

@@ -62,6 +62,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 static CProfile EmptyProfile;
 

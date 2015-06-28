@@ -26,6 +26,8 @@
 #include "LangInfo.h"
 #include "utils/log.h"
 
+using namespace KODI::UTILS;
+
 /* XML declaration can be virtually any size (with many-many whitespaces) 
  * but for in real world we don't need to process megabytes of data
  * so limit search for XML declaration to reasonable value */

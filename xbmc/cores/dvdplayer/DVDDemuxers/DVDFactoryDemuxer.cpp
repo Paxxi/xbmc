@@ -35,6 +35,7 @@
 
 using namespace std;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream, bool fileinfo)
 {

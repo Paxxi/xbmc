@@ -27,6 +27,7 @@
 #endif
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 
 Pipe::Pipe(const std::string &name, int nMaxSize)

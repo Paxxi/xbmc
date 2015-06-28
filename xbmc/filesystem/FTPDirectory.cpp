@@ -29,6 +29,7 @@
 #include "climits"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CFTPDirectory::CFTPDirectory(void){}
 CFTPDirectory::~CFTPDirectory(void){}

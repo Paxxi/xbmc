@@ -39,6 +39,7 @@
 #include "GUIDialogMusicInfo.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define CONTROL_OK        10
 #define CONTROL_CANCEL    11

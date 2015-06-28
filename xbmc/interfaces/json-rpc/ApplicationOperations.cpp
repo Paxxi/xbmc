@@ -28,6 +28,7 @@
 #include <string.h>
 
 using namespace JSONRPC;
+using namespace KODI::UTILS;
 
 JSONRPC_STATUS CApplicationOperations::GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

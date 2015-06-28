@@ -47,6 +47,7 @@
 
 using namespace std;
 using namespace XFILE::VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 //  Constructor is protected use ParseURL()
 CDirectoryNode::CDirectoryNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)

@@ -25,6 +25,7 @@
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CMusicDatabaseFile::CMusicDatabaseFile(void)
 {

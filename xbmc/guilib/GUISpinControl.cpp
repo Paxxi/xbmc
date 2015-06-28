@@ -23,6 +23,7 @@
 #include "utils/StringUtils.h"
 #include <stdio.h>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define SPIN_BUTTON_DOWN 1

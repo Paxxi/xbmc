@@ -35,6 +35,7 @@
 
 using namespace std;
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS;
 
 CAnnouncementManager::CAnnouncementManager()
 { }

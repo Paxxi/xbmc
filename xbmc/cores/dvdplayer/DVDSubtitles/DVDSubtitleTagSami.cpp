@@ -24,6 +24,8 @@
 #include "utils/RegExp.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CDVDSubtitleTagSami::~CDVDSubtitleTagSami()
 {
   delete m_tags;

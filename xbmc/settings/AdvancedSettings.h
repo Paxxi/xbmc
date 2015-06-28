@@ -27,7 +27,13 @@
 #include "settings/lib/ISettingsHandler.h"
 #include "utils/GlobalsHandling.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class TiXmlElement;
 namespace ADDON
@@ -404,7 +410,7 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
 
   private:
     std::string m_musicExtensions;
-    void setExtraLogLevel(const std::vector<CVariant> &components);
+    void setExtraLogLevel(const std::vector<KODI::UTILS::CVariant> &components);
 };
 
 XBMC_GLOBAL(CAdvancedSettings,g_advancedSettings);

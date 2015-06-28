@@ -33,6 +33,7 @@
 #include "PVRRecordings.h"
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CPVRRecordings::CPVRRecordings(void) :
     m_bIsUpdating(false),

@@ -46,6 +46,6 @@ namespace XFILE
      */
     TiXmlElement *LoadXML(const std::string &xmlFile);
 
-    CXBMCTinyXML m_doc;
+    KODI::UTILS::CXBMCTinyXML m_doc;
   };
 }

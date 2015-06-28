@@ -25,10 +25,16 @@
 
 class CFileItem;
 class CDVDDemux;
-class CStreamDetails;
-class CStreamDetailSubtitle;
 class CDVDInputStream;
 class CTextureDetails;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CStreamDetails;
+class CStreamDetailSubtitle;
+}}
 
 class CDVDFileInfo
 {
@@ -36,21 +42,21 @@ public:
   // Extract a thumbnail immage from the media at strPath, optionally populating a streamdetails class with the data
   static bool ExtractThumb(const std::string &strPath,
                            CTextureDetails &details,
-                           CStreamDetails *pStreamDetails, int pos=-1);
+                           KODI::UTILS::CStreamDetails *pStreamDetails, int pos=-1);
 
   // Probe the files streams and store the info in the VideoInfoTag
   static bool GetFileStreamDetails(CFileItem *pItem);
-  static bool DemuxerToStreamDetails(CDVDInputStream* pInputStream, CDVDDemux *pDemux, CStreamDetails &details, const std::string &path = "");
+  static bool DemuxerToStreamDetails(CDVDInputStream* pInputStream, CDVDDemux *pDemux, KODI::UTILS::CStreamDetails &details, const std::string &path = "");
 
   /** \brief Probe the file's internal and external streams and store the info in the StreamDetails parameter.
   *   \param[out] details The file's StreamDetails consisting of internal streams and external subtitle streams.
   */
-  static bool DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDemux *pDemuxer, const std::vector<CStreamDetailSubtitle> &subs, CStreamDetails &details);
+  static bool DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDemux *pDemuxer, const std::vector<KODI::UTILS::CStreamDetailSubtitle> &subs, KODI::UTILS::CStreamDetails &details);
 
   static bool GetFileDuration(const std::string &path, int &duration);
 
   /** \brief Probe the streams of an external subtitle file and store the info in the StreamDetails parameter.
   *   \param[out] details The external subtitle file's StreamDetails.
   */
-  static bool AddExternalSubtitleToDetails(const std::string &path, CStreamDetails &details, const std::string& filename, const std::string& subfilename = "");
+  static bool AddExternalSubtitleToDetails(const std::string &path, KODI::UTILS::CStreamDetails &details, const std::string& filename, const std::string& subfilename = "");
 };

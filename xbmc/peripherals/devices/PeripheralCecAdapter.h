@@ -90,7 +90,7 @@ namespace PERIPHERALS
     CPeripheralCecAdapter(const PeripheralScanResult& scanResult);
     virtual ~CPeripheralCecAdapter(void);
 
-    void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+    void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
 
     // audio control
     bool HasAudioControl(void);

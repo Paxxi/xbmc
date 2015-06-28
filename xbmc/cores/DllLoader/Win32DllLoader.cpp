@@ -31,6 +31,8 @@
 #include "exports/emu_kernel32.h"
 #include "exports/emu_msvcrt.h"
 
+using namespace KODI::UTILS;
+
 extern "C" FILE _iob[];
 extern "C" FARPROC WINAPI dllWin32GetProcAddress(HMODULE hModule, LPCSTR function);
 

@@ -26,6 +26,8 @@
 #include "settings/MediaSourceSettings.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
   : CHTTPFileHandler(request)
 {

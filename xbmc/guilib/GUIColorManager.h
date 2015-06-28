@@ -37,7 +37,13 @@
 #include <string>
 #include <stdint.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML;
+}}
+
 
 typedef uint32_t color_t;
 
@@ -54,7 +60,7 @@ public:
   void Clear();
 
 protected:
-  bool LoadXML(CXBMCTinyXML &xmlDoc);
+  bool LoadXML(KODI::UTILS::CXBMCTinyXML &xmlDoc);
 
   std::map<std::string, color_t> m_colors;
   typedef std::map<std::string, color_t>::iterator iColor;

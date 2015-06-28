@@ -38,6 +38,8 @@
 
 #define A(x) interceptor->x
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
   namespace xbmcgui

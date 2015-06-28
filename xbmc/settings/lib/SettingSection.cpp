@@ -25,6 +25,8 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
+using namespace KODI::UTILS;
+
 template<class T> void addISetting(const TiXmlNode *node, const T &item, std::vector<T> &items)
 {
   if (node != NULL)

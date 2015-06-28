@@ -54,8 +54,15 @@ class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
 // forward
 class TiXmlNode;
 class TiXmlElement;
+
+namespace KODI
+{
+namespace UTILS
+{
 class CXBMCTinyXML;
 class CVariant;
+}}
+
 
 class COrigin
 {
@@ -175,13 +182,13 @@ public:
    \param value value to set, may be a string, integer, boolean or double.
    \sa GetProperty
    */
-  void SetProperty(const std::string &key, const CVariant &value);
+  void SetProperty(const std::string &key, const KODI::UTILS::CVariant &value);
 
   /*! \brief Retreive a property
    \param key name of the property to retrieve
    \return value of the property, empty if it doesn't exist
    */
-  CVariant GetProperty(const std::string &key) const;
+  KODI::UTILS::CVariant GetProperty(const std::string &key) const;
 
   /*! \brief Clear a all the window's properties
    \sa SetProperty, HasProperty, GetProperty
@@ -275,7 +282,7 @@ protected:
   int m_exclusiveMouseControl; ///< \brief id of child control that wishes to receive all mouse events \sa GUI_MSG_EXCLUSIVE_MOUSE
 
 private:
-  std::map<std::string, CVariant, icompare> m_mapProperties;
+  std::map<std::string, KODI::UTILS::CVariant, icompare> m_mapProperties;
   std::map<INFO::InfoPtr, bool> m_xmlIncludeConditions; ///< \brief used to store conditions used to resolve includes for this window
 };
 

@@ -36,6 +36,8 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 typedef struct
 {
   unsigned int   text;

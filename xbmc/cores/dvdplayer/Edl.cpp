@@ -30,6 +30,7 @@
 #include "pvr/PVRManager.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 #define COMSKIP_HEADER "FILE PROCESSING COMPLETE"
 #define VIDEOREDO_HEADER "<Version>2"

@@ -29,7 +29,9 @@
 
 #include <vector>
 
+using namespace KODI::UTILS;
 using namespace std;
+
 namespace XFILE
 {
   CZipDirectory::CZipDirectory()

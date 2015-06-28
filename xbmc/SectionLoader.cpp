@@ -26,6 +26,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 #define g_sectionLoader XBMC_GLOBAL_USE(CSectionLoader)

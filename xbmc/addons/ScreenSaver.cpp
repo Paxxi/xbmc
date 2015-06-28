@@ -23,6 +23,8 @@
 #include "AlarmClock.h"
 #include "windowing/WindowingFactory.h"
 
+using namespace KODI::UTILS;
+
 // What sound does a python screensaver make?
 #define SCRIPT_ALARM "sssssscreensaver"
 

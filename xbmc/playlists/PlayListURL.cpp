@@ -25,6 +25,7 @@
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 // example url file
 //[DEFAULT]

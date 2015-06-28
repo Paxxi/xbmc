@@ -23,6 +23,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestSortUtils, Sort_SortBy)
 {
   SortItems items;

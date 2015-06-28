@@ -28,6 +28,7 @@
 #include "guilib/LocalizeStrings.h"
 
 using namespace PERIPHERALS;
+using namespace KODI::UTILS;
 using namespace std;
 
 struct SortBySettingsOrder

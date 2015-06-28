@@ -23,6 +23,7 @@
 #include "utils/log.h"   
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 /*
  * Return true if pElement value is equal value without namespace.

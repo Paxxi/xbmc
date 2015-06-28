@@ -30,6 +30,8 @@
 #include "DVDStateSerializer.h"
 #include <sstream>
 
+using namespace KODI::UTILS;
+
 bool CDVDStateSerializer::test( const dvd_state_t *state  )
 {
   dvd_state_t state2;

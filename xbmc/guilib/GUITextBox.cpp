@@ -26,6 +26,7 @@
 
 #include <algorithm>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CGUITextBox::CGUITextBox(int parentID, int controlID, float posX, float posY, float width, float height,

@@ -38,7 +38,7 @@
 #pragma comment (lib,"Wlanapi.lib")
 #endif
 
-
+using namespace KODI::UTILS;
 using namespace std;
 
 CNetworkInterfaceWin32::CNetworkInterfaceWin32(CNetworkWin32* network, IP_ADAPTER_INFO adapter):

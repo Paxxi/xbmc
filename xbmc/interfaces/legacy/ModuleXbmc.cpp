@@ -60,6 +60,8 @@
 #include <vector>
 #include "utils/log.h"
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
 

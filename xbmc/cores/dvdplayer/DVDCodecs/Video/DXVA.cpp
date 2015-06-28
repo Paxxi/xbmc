@@ -46,6 +46,7 @@
 
 using namespace DXVA;
 using namespace AUTOPTR;
+using namespace KODI::UTILS;
 using namespace std;
 
 static void RelBufferS(void *opaque, uint8_t *data)

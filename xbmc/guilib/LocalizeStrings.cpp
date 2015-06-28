@@ -30,6 +30,8 @@
 #include "threads/SingleLock.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CLocalizeStrings::CLocalizeStrings(void)
 {
 

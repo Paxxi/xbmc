@@ -29,6 +29,7 @@
 #include "interfaces/info/SkinVariable.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CGUIIncludes::CGUIIncludes()
 {

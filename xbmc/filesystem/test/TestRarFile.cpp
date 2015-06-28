@@ -32,6 +32,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 #ifndef S_IFLNK
 #define S_IFLNK 0120000
 #endif

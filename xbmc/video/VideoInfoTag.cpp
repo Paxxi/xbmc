@@ -32,6 +32,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS;
 
 void CVideoInfoTag::Reset()
 {

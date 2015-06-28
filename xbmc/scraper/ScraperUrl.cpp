@@ -36,6 +36,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CScraperUrl::CScraperUrl(const std::string& strUrl)
 {

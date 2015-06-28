@@ -50,6 +50,7 @@
 #include "interfaces/python/PythonInvoker.h"
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::UTILS;
 
 XBPython::XBPython()
 {

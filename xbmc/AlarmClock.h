@@ -29,7 +29,7 @@
 
 struct SAlarmClockEvent
 {
-  CStopWatch watch;
+  KODI::UTILS::CStopWatch watch;
   double m_fSecs;
   std::string m_strCommand;
   bool m_loop;

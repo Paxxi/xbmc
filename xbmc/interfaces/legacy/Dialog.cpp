@@ -34,6 +34,8 @@
 #include "ApplicationMessenger.h"
 #include "Dialog.h"
 
+using namespace KODI::UTILS;
+
 #define ACTIVE_WINDOW g_windowManager.GetActiveWindow()
 
 namespace XBMCAddon

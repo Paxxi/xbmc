@@ -37,6 +37,7 @@
 #include "guilib/LocalizeStrings.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define CONTROL_PROFILES 2
 #define CONTROL_LASTLOADED_PROFILE 3

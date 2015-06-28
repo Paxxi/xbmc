@@ -29,6 +29,7 @@
 #include "utils/Archive.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 void CPictureInfoTag::Reset()
 {

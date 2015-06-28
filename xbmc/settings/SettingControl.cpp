@@ -27,6 +27,8 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
+using namespace KODI::UTILS;
+
 #define SHOW_ADDONS_ALL               "all"
 #define SHOW_ADDONS_INSTALLED         "installed"
 #define SHOW_ADDONS_INSTALLABLE       "installable"

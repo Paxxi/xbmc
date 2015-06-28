@@ -98,7 +98,7 @@ namespace XFILE
       NODE_TYPE m_Type;
       std::string m_strName;
       CDirectoryNode* m_pParent;
-      CUrlOptions m_options;
+      KODI::UTILS::CUrlOptions m_options;
     };
   }
 }

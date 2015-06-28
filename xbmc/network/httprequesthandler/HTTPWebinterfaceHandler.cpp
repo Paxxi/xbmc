@@ -26,6 +26,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 #define WEBSERVER_DIRECTORY_SEPARATOR "/"
 
 CHTTPWebinterfaceHandler::CHTTPWebinterfaceHandler(const HTTPRequest &request)

@@ -33,6 +33,8 @@
 #include <Windows.h>
 #endif
 
+using namespace KODI::UTILS;
+
 #define SECONDS_PER_DAY 86400UL
 #define SECONDS_PER_HOUR 3600UL
 #define SECONDS_PER_MINUTE 60UL

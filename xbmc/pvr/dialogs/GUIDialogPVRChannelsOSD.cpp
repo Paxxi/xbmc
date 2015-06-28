@@ -38,6 +38,7 @@
 
 using namespace PVR;
 using namespace EPG;
+using namespace KODI::UTILS;
 
 #define CONTROL_LIST                  11
 

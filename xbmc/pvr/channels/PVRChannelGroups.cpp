@@ -34,6 +34,7 @@
 #include <algorithm>
 
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CPVRChannelGroups::CPVRChannelGroups(bool bRadio) :
     m_bRadio(bRadio)

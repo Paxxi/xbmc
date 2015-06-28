@@ -51,6 +51,7 @@
 
 using namespace PERIPHERALS;
 using namespace XFILE;
+using namespace KODI::UTILS;
 using namespace std;
 
 CPeripherals::CPeripherals(void)

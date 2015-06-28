@@ -23,6 +23,8 @@
 #include "utils/TimeUtils.h"
 #include "input/Key.h"
 
+using namespace KODI::UTILS;
+
 CGUISelectButtonControl::CGUISelectButtonControl(int parentID, int controlID,
     float posX, float posY,
     float width, float height,

@@ -39,6 +39,7 @@
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
 
 CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, const std::string& file, const std::string& content)
 {

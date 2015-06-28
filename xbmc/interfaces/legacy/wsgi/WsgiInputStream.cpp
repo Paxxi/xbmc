@@ -22,6 +22,8 @@
 #include "network/httprequesthandler/python/HTTPPythonRequest.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 namespace XBMCAddon
 {
   namespace xbmcwsgi

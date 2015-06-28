@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestStreamUtils, General)
 {
   EXPECT_EQ(0, StreamUtils::GetCodecPriority(""));

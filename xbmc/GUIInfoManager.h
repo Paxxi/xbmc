@@ -819,7 +819,7 @@ public:
   bool ToggleShowInfo() { m_playerShowInfo = !m_playerShowInfo; return m_playerShowInfo; };
 
   std::string GetSystemHeatInfo(int info);
-  CTemperature GetGPUTemperature();
+  KODI::UTILS::CTemperature GetGPUTemperature();
 
   void UpdateFPS();
   void UpdateAVInfo();
@@ -931,8 +931,8 @@ protected:
   // fan stuff
   unsigned int m_lastSysHeatInfoTime;
   int m_fanSpeed;
-  CTemperature m_gpuTemp;
-  CTemperature m_cpuTemp;
+  KODI::UTILS::CTemperature m_gpuTemp;
+  KODI::UTILS::CTemperature m_cpuTemp;
 
   //Fullscreen OSD Stuff
   unsigned int m_AfterSeekTimeout;

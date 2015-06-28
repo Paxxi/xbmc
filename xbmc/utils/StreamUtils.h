@@ -21,8 +21,14 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 class StreamUtils
 {
 public:
   static int GetCodecPriority(const std::string &codec);
 };
+}}
+

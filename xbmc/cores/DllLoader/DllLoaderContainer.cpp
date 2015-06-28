@@ -56,6 +56,7 @@
 
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 LibraryLoader* DllLoaderContainer::m_dlls[64] = {};
 int        DllLoaderContainer::m_iNrOfDlls = 0;

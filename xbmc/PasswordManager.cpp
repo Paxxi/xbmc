@@ -28,6 +28,7 @@
 #include "filesystem/File.h"
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CPasswordManager &CPasswordManager::GetInstance()
 {

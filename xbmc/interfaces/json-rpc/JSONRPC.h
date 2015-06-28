@@ -62,20 +62,20 @@ namespace JSONRPC
      */
     static std::string MethodCall(const std::string &inputString, ITransportLayer *transport, IClient *client);
 
-    static JSONRPC_STATUS Introspect(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS Version(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS Permission(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS Ping(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS GetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS SetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
-    static JSONRPC_STATUS NotifyAll(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result);
+    static JSONRPC_STATUS Introspect(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Version(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Permission(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS Ping(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS GetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS SetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
+    static JSONRPC_STATUS NotifyAll(const std::string &method, ITransportLayer *transport, IClient *client, const KODI::UTILS::CVariant& parameterObject, KODI::UTILS::CVariant &result);
   
   private:
     static void setup();
-    static bool HandleMethodCall(const CVariant& request, CVariant& response, ITransportLayer *transport, IClient *client);
-    static inline bool IsProperJSONRPC(const CVariant& inputroot);
+    static bool HandleMethodCall(const KODI::UTILS::CVariant& request, KODI::UTILS::CVariant& response, ITransportLayer *transport, IClient *client);
+    static inline bool IsProperJSONRPC(const KODI::UTILS::CVariant& inputroot);
 
-    inline static void BuildResponse(const CVariant& request, JSONRPC_STATUS code, const CVariant& result, CVariant& response);
+    inline static void BuildResponse(const KODI::UTILS::CVariant& request, JSONRPC_STATUS code, const KODI::UTILS::CVariant& result, KODI::UTILS::CVariant& response);
 
     static bool m_initialized;
   };

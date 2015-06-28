@@ -47,6 +47,7 @@
 using namespace JSONRPC;
 using namespace PLAYLIST;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 JSONRPC_STATUS CPlayerOperations::GetActivePlayers(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

@@ -32,6 +32,7 @@
 #include "PerformanceStats.h"
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 int64_t CPerformanceSample::m_tmFreq;

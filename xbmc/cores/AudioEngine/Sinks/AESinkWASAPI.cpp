@@ -33,6 +33,8 @@
 
 #pragma comment(lib, "Avrt.lib")
 
+using namespace KODI::UTILS;
+
 const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 const IID IID_IAudioClient = __uuidof(IAudioClient);
@@ -414,7 +416,7 @@ void CAESinkWASAPI::GetDelay(AEDelayStatus& status)
   EXIT_ON_FAILURE(hr, __FUNCTION__": Retrieval of IAudioClock::GetPosition failed.")
 
   status.delay = (double)(m_sinkFrames + m_bufferPtr) / m_format.m_sampleRate - (double)pos / m_clockFreq;
-  status.tick  = rescale_u64(tick, CurrentHostFrequency(), 10000000); /* convert from 100ns back to qpc ticks */
+  status.tick  = rescale_u64(tick, KODI::UTILS::CurrentHostFrequency(), 10000000); /* convert from 100ns back to qpc ticks */
   return;
 failed:
   status.SetDelay(0);

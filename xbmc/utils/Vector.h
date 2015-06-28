@@ -19,6 +19,10 @@
  *
  */
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVector
 {
 public:
@@ -28,8 +32,8 @@ public:
   
   virtual void reset();
   
-  const CVector operator+(const CVector &other) const;
-  const CVector operator-(const CVector &other) const;
+  CVector operator+(const CVector &other) const;
+  CVector operator-(const CVector &other) const;
   CVector& operator+=(const CVector &other);
   CVector& operator-=(const CVector &other);
   
@@ -39,3 +43,4 @@ public:
   float x;
   float y;
 };
+}}

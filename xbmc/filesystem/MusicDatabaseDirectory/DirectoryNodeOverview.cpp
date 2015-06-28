@@ -24,6 +24,8 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 namespace XFILE
 {
   namespace MUSICDATABASEDIRECTORY

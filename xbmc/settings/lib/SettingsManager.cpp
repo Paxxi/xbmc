@@ -28,6 +28,8 @@
 
 #include <algorithm>
 
+using namespace KODI::UTILS;
+
 CSettingsManager::CSettingsManager()
   : m_initialized(false), m_loaded(false)
 { }

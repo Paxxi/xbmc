@@ -33,10 +33,10 @@
 #include <cassert>
 #include <algorithm>
 
-//using namespace std;
 using namespace MUSIC_INFO;
 using namespace XFILE;
 using namespace PLAYLIST;
+using namespace KODI::UTILS;
 
 CPlayList::CPlayList(int id)
   : m_id(id)

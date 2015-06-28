@@ -36,6 +36,8 @@
 #pragma comment(lib,"liblzo2.lib")
 #endif
 
+using namespace KODI::UTILS;
+
 CTextureBundleXBT::CTextureBundleXBT(void)
 {
   m_themeBundle = false;

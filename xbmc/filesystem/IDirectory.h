@@ -142,7 +142,7 @@ protected:
    \return true if keyboard input has been received. False if it hasn't.
    \sa ProcessRequirements
    */
-  bool GetKeyboardInput(const CVariant &heading, std::string &input);
+  bool GetKeyboardInput(const KODI::UTILS::CVariant &heading, std::string &input);
 
   /*! \brief Show an error dialog on failure of GetDirectory call
    Call this method from the GetDirectory method to set an error message to be shown to the user
@@ -152,7 +152,8 @@ protected:
    \param line3 the first line to be displayed (integer or string).
    \sa ProcessRequirements
    */
-  void SetErrorDialog(const CVariant &heading, const CVariant &line1, const CVariant &line2 = 0, const CVariant &line3 = 0);
+  void SetErrorDialog(const KODI::UTILS::CVariant &heading, const KODI::UTILS::CVariant &line1,
+                      const KODI::UTILS::CVariant &line2 = 0, const KODI::UTILS::CVariant &line3 = 0);
 
   /*! \brief Prompt the user for authentication of a URL.
    Call this method from the GetDirectory method when authentication is required from the user, before returning
@@ -167,6 +168,6 @@ protected:
 
   int m_flags; ///< Directory flags - see DIR_FLAG
 
-  CVariant m_requirements;
+  KODI::UTILS::CVariant m_requirements;
 };
 }

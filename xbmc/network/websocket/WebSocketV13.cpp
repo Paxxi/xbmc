@@ -45,6 +45,7 @@
 #define WS_PROTOCOL_JSONRPC     "jsonrpc.xbmc.org"
 #define WS_HEADER_UPGRADE_VALUE "websocket"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &response)

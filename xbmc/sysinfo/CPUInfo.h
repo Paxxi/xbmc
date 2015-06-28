@@ -31,7 +31,14 @@ typedef void* HANDLE;
 typedef HANDLE PDH_HQUERY;
 typedef HANDLE PDH_HCOUNTER;
 #endif
+
+namespace KODI
+{
+namespace UTILS
+{
 class CTemperature;
+}}
+
 
 #define CPU_FEATURE_MMX      1 << 0
 #define CPU_FEATURE_MMX2     1 << 1
@@ -84,7 +91,7 @@ public:
   int getUsedPercentage();
   int getCPUCount() const { return m_cpuCount; }
   float getCPUFrequency();
-  bool getTemperature(CTemperature& temperature);
+  bool getTemperature(KODI::UTILS::CTemperature& temperature);
   std::string& getCPUModel() { return m_cpuModel; }
   std::string& getCPUBogoMips() { return m_cpuBogoMips; }
   std::string& getCPUHardware() { return m_cpuHardware; }

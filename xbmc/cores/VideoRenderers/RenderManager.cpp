@@ -62,6 +62,8 @@
   #include "../dvdplayer/DVDCodecs/Video/VAAPI.h"
 #endif
 
+using namespace KODI::UTILS;
+
 #define MAXPRESENTDELAY 0.500
 
 /* at any point we want an exclusive lock on rendermanager */

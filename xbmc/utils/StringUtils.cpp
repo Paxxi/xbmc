@@ -52,6 +52,10 @@
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 const char* ADDON_GUID_RE = "^(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}$";
 
 /* empty string for use in returns by ref */
@@ -985,7 +989,7 @@ int IsUTF8Letter(const unsigned char *str)
   // check latin extended B table: http://en.wikipedia.org/wiki/Latin_Extended-B
   // and International Phonetic Alphabet: http://en.wikipedia.org/wiki/IPA_Extensions_(Unicode_block)
   if (((ch == 0xC8 || ch == 0xC9) && ch2 >= 0x80 && ch2 <= 0xBF)
-      || (ch == 0xCA && ch2 >= 0x80 && ch2 <= 0xAF))
+    || (ch == 0xCA && ch2 >= 0x80 && ch2 <= 0xAF))
     return 2;
   return -1;
 }
@@ -1227,3 +1231,4 @@ void StringUtils::Tokenize(const std::string& input, std::vector<std::string>& t
     dataPos = input.find_first_not_of(delimiter, nextDelimPos);
   }
 }
+}}

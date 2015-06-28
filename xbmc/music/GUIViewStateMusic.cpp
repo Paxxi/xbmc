@@ -35,6 +35,7 @@
 
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 int CGUIViewStateWindowMusic::GetPlaylist()
 {

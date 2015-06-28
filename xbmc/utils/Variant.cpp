@@ -24,6 +24,12 @@
 
 #include "Variant.h"
 
+using namespace std;
+
+namespace KODI
+{
+namespace UTILS
+{
 #ifndef strtoll
 #ifdef TARGET_WINDOWS
 #define strtoll  _strtoi64
@@ -37,8 +43,6 @@
 #define wcstoull(str, endptr, base) (uint64_t)wcstod(str, endptr)
 #endif // TARGET_WINDOWS
 #endif // strtoll
-
-using namespace std;
 
 string trimRight(const string &str)
 {
@@ -136,33 +140,33 @@ CVariant::CVariant(VariantType type)
 
   switch (type)
   {
-    case VariantTypeInteger:
-      m_data.integer = 0;
-      break;
-    case VariantTypeUnsignedInteger:
-      m_data.unsignedinteger = 0;
-      break;
-    case VariantTypeBoolean:
-      m_data.boolean = false;
-      break;
-    case VariantTypeDouble:
-      m_data.dvalue = 0.0;
-      break;
-    case VariantTypeString:
-      m_data.string = new string();
-      break;
-    case VariantTypeWideString:
-      m_data.wstring = new wstring();
-      break;
-    case VariantTypeArray:
-      m_data.array = new VariantArray();
-      break;
-    case VariantTypeObject:
-      m_data.map = new VariantMap();
-      break;
-    default:
-      memset(&m_data, 0, sizeof(m_data));
-      break;
+  case VariantTypeInteger:
+    m_data.integer = 0;
+    break;
+  case VariantTypeUnsignedInteger:
+    m_data.unsignedinteger = 0;
+    break;
+  case VariantTypeBoolean:
+    m_data.boolean = false;
+    break;
+  case VariantTypeDouble:
+    m_data.dvalue = 0.0;
+    break;
+  case VariantTypeString:
+    m_data.string = new string();
+    break;
+  case VariantTypeWideString:
+    m_data.wstring = new wstring();
+    break;
+  case VariantTypeArray:
+    m_data.array = new VariantArray();
+    break;
+  case VariantTypeObject:
+    m_data.map = new VariantMap();
+    break;
+  default:
+    memset(&m_data, 0, sizeof(m_data));
+    break;
   }
 }
 
@@ -345,18 +349,18 @@ int64_t CVariant::asInteger(int64_t fallback) const
 {
   switch (m_type)
   {
-    case VariantTypeInteger:
-      return m_data.integer;
-    case VariantTypeUnsignedInteger:
-      return (int64_t)m_data.unsignedinteger;
-    case VariantTypeDouble:
-      return (int64_t)m_data.dvalue;
-    case VariantTypeString:
-      return str2int64(*m_data.string, fallback);
-    case VariantTypeWideString:
-      return str2int64(*m_data.wstring, fallback);
-    default:
-      return fallback;
+  case VariantTypeInteger:
+    return m_data.integer;
+  case VariantTypeUnsignedInteger:
+    return (int64_t)m_data.unsignedinteger;
+  case VariantTypeDouble:
+    return (int64_t)m_data.dvalue;
+  case VariantTypeString:
+    return str2int64(*m_data.string, fallback);
+  case VariantTypeWideString:
+    return str2int64(*m_data.wstring, fallback);
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -366,18 +370,18 @@ uint64_t CVariant::asUnsignedInteger(uint64_t fallback) const
 {
   switch (m_type)
   {
-    case VariantTypeUnsignedInteger:
-      return m_data.unsignedinteger;
-    case VariantTypeInteger:
-      return (uint64_t)m_data.integer;
-    case VariantTypeDouble:
-      return (uint64_t)m_data.dvalue;
-    case VariantTypeString:
-      return str2uint64(*m_data.string, fallback);
-    case VariantTypeWideString:
-      return str2uint64(*m_data.wstring, fallback);
-    default:
-      return fallback;
+  case VariantTypeUnsignedInteger:
+    return m_data.unsignedinteger;
+  case VariantTypeInteger:
+    return (uint64_t)m_data.integer;
+  case VariantTypeDouble:
+    return (uint64_t)m_data.dvalue;
+  case VariantTypeString:
+    return str2uint64(*m_data.string, fallback);
+  case VariantTypeWideString:
+    return str2uint64(*m_data.wstring, fallback);
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -387,18 +391,18 @@ double CVariant::asDouble(double fallback) const
 {
   switch (m_type)
   {
-    case VariantTypeDouble:
-      return m_data.dvalue;
-    case VariantTypeInteger:
-      return (double)m_data.integer;
-    case VariantTypeUnsignedInteger:
-      return (double)m_data.unsignedinteger;
-    case VariantTypeString:
-      return str2double(*m_data.string, fallback);
-    case VariantTypeWideString:
-      return str2double(*m_data.wstring, fallback);
-    default:
-      return fallback;
+  case VariantTypeDouble:
+    return m_data.dvalue;
+  case VariantTypeInteger:
+    return (double)m_data.integer;
+  case VariantTypeUnsignedInteger:
+    return (double)m_data.unsignedinteger;
+  case VariantTypeString:
+    return str2double(*m_data.string, fallback);
+  case VariantTypeWideString:
+    return str2double(*m_data.wstring, fallback);
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -408,18 +412,18 @@ float CVariant::asFloat(float fallback) const
 {
   switch (m_type)
   {
-    case VariantTypeDouble:
-      return (float)m_data.dvalue;
-    case VariantTypeInteger:
-      return (float)m_data.integer;
-    case VariantTypeUnsignedInteger:
-      return (float)m_data.unsignedinteger;
-    case VariantTypeString:
-      return (float)str2double(*m_data.string, fallback);
-    case VariantTypeWideString:
-      return (float)str2double(*m_data.wstring, fallback);
-    default:
-      return fallback;
+  case VariantTypeDouble:
+    return (float)m_data.dvalue;
+  case VariantTypeInteger:
+    return (float)m_data.integer;
+  case VariantTypeUnsignedInteger:
+    return (float)m_data.unsignedinteger;
+  case VariantTypeString:
+    return (float)str2double(*m_data.string, fallback);
+  case VariantTypeWideString:
+    return (float)str2double(*m_data.wstring, fallback);
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -429,24 +433,24 @@ bool CVariant::asBoolean(bool fallback) const
 {
   switch (m_type)
   {
-    case VariantTypeBoolean:
-      return m_data.boolean;
-    case VariantTypeInteger:
-      return (m_data.integer != 0);
-    case VariantTypeUnsignedInteger:
-      return (m_data.unsignedinteger != 0);
-    case VariantTypeDouble:
-      return (m_data.dvalue != 0);
-    case VariantTypeString:
-      if (m_data.string->empty() || m_data.string->compare("0") == 0 || m_data.string->compare("false") == 0)
-        return false;
-      return true;
-    case VariantTypeWideString:
-      if (m_data.wstring->empty() || m_data.wstring->compare(L"0") == 0 || m_data.wstring->compare(L"false") == 0)
-        return false;
-      return true;
-    default:
-      return fallback;
+  case VariantTypeBoolean:
+    return m_data.boolean;
+  case VariantTypeInteger:
+    return (m_data.integer != 0);
+  case VariantTypeUnsignedInteger:
+    return (m_data.unsignedinteger != 0);
+  case VariantTypeDouble:
+    return (m_data.dvalue != 0);
+  case VariantTypeString:
+    if (m_data.string->empty() || m_data.string->compare("0") == 0 || m_data.string->compare("false") == 0)
+      return false;
+    return true;
+  case VariantTypeWideString:
+    if (m_data.wstring->empty() || m_data.wstring->compare(L"0") == 0 || m_data.wstring->compare(L"false") == 0)
+      return false;
+    return true;
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -456,25 +460,25 @@ std::string CVariant::asString(const std::string &fallback /* = "" */) const
 {
   switch (m_type)
   {
-    case VariantTypeString:
-      return *m_data.string;
-    case VariantTypeBoolean:
-      return m_data.boolean ? "true" : "false";
-    case VariantTypeInteger:
-    case VariantTypeUnsignedInteger:
-    case VariantTypeDouble:
-    {
-      std::ostringstream strStream;
-      if (m_type == VariantTypeInteger)
-        strStream << m_data.integer;
-      else if (m_type == VariantTypeUnsignedInteger)
-        strStream << m_data.unsignedinteger;
-      else
-        strStream << m_data.dvalue;
-      return strStream.str();
-    }
-    default:
-      return fallback;
+  case VariantTypeString:
+    return *m_data.string;
+  case VariantTypeBoolean:
+    return m_data.boolean ? "true" : "false";
+  case VariantTypeInteger:
+  case VariantTypeUnsignedInteger:
+  case VariantTypeDouble:
+  {
+    std::ostringstream strStream;
+    if (m_type == VariantTypeInteger)
+      strStream << m_data.integer;
+    else if (m_type == VariantTypeUnsignedInteger)
+      strStream << m_data.unsignedinteger;
+    else
+      strStream << m_data.dvalue;
+    return strStream.str();
+  }
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -484,25 +488,25 @@ std::wstring CVariant::asWideString(const std::wstring &fallback /* = L"" */) co
 {
   switch (m_type)
   {
-    case VariantTypeWideString:
-      return *m_data.wstring;
-    case VariantTypeBoolean:
-      return m_data.boolean ? L"true" : L"false";
-    case VariantTypeInteger:
-    case VariantTypeUnsignedInteger:
-    case VariantTypeDouble:
-    {
-      std::wostringstream strStream;
-      if (m_type == VariantTypeInteger)
-        strStream << m_data.integer;
-      else if (m_type == VariantTypeUnsignedInteger)
-        strStream << m_data.unsignedinteger;
-      else
-        strStream << m_data.dvalue;
-      return strStream.str();
-    }
-    default:
-      return fallback;
+  case VariantTypeWideString:
+    return *m_data.wstring;
+  case VariantTypeBoolean:
+    return m_data.boolean ? L"true" : L"false";
+  case VariantTypeInteger:
+  case VariantTypeUnsignedInteger:
+  case VariantTypeDouble:
+  {
+    std::wostringstream strStream;
+    if (m_type == VariantTypeInteger)
+      strStream << m_data.integer;
+    else if (m_type == VariantTypeUnsignedInteger)
+      strStream << m_data.unsignedinteger;
+    else
+      strStream << m_data.dvalue;
+    return strStream.str();
+  }
+  default:
+    return fallback;
   }
   
   return fallback;
@@ -792,3 +796,4 @@ bool CVariant::isMember(const std::string &key) const
 
   return false;
 }
+}}

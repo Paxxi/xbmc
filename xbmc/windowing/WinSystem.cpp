@@ -28,6 +28,7 @@
 #include "guilib/GUIFontTTFGL.h"
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CWinSystemBase::CWinSystemBase()

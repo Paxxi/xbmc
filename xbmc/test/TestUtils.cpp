@@ -33,6 +33,8 @@
 #include <ctime>
 #endif
 
+using namespace KODI::UTILS;
+
 class CTempFile : public XFILE::CFile
 {
 public:

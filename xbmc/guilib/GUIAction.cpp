@@ -24,6 +24,7 @@
 #include "GUIControl.h"
 #include "GUIInfoManager.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CGUIAction::CGUIAction()

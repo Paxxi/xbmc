@@ -30,7 +30,13 @@ namespace XFILE
 {
   class CFile;
 }
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 class IArchivable;
 
 class CArchive
@@ -66,7 +72,7 @@ public:
   CArchive& operator<<(const std::wstring& wstr);
   CArchive& operator<<(const SYSTEMTIME& time);
   CArchive& operator<<(IArchivable& obj);
-  CArchive& operator<<(const CVariant& variant);
+  CArchive& operator<<(const KODI::UTILS::CVariant& variant);
   CArchive& operator<<(const std::vector<std::string>& strArray);
   CArchive& operator<<(const std::vector<int>& iArray);
 
@@ -135,7 +141,7 @@ public:
   CArchive& operator>>(std::wstring& wstr);
   CArchive& operator>>(SYSTEMTIME& time);
   CArchive& operator>>(IArchivable& obj);
-  CArchive& operator>>(CVariant& variant);
+  CArchive& operator>>(KODI::UTILS::CVariant& variant);
   CArchive& operator>>(std::vector<std::string>& strArray);
   CArchive& operator>>(std::vector<int>& iArray);
 

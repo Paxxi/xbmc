@@ -35,7 +35,13 @@
 #define SETTING_XML_ATTR_SEPARATOR_POSITION  "separatorposition"
 #define SETTING_XML_ATTR_HIDE_SEPARATOR      "hideseparator"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class CSettingControlCreator : public ISettingControlCreator
 {
@@ -190,7 +196,9 @@ protected:
 };
 
 class CSettingControlSlider;
-typedef std::string (*SettingControlSliderFormatter)(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+typedef std::string (*SettingControlSliderFormatter)(const CSettingControlSlider *control, const KODI::UTILS::CVariant &value,
+                                                     const KODI::UTILS::CVariant &minimum, const KODI::UTILS::CVariant &step,
+                                                     const KODI::UTILS::CVariant &maximum);
 
 class CSettingControlSlider : public ISettingControl
 {

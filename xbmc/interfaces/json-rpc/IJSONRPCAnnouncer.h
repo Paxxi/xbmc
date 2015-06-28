@@ -30,9 +30,9 @@ namespace JSONRPC
     virtual ~IJSONRPCAnnouncer() { }
 
   protected:
-    static std::string AnnouncementToJSONRPC(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *method, const CVariant &data, bool compactOutput)
+    static std::string AnnouncementToJSONRPC(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *method, const KODI::UTILS::CVariant &data, bool compactOutput)
     {
-      CVariant root;
+      KODI::UTILS::CVariant root;
       root["jsonrpc"] = "2.0";
 
       std::string namespaceMethod = ANNOUNCEMENT::AnnouncementFlagToString(flag);

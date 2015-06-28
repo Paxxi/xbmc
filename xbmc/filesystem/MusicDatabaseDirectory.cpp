@@ -33,6 +33,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
+using namespace KODI::UTILS;
 
 CMusicDatabaseDirectory::CMusicDatabaseDirectory(void)
 {

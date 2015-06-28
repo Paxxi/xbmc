@@ -38,7 +38,7 @@
 
 
 using namespace XFILE;
-
+using namespace KODI::UTILS;
 
 CWin32File::CWin32File() : m_smbFile(false)
 {

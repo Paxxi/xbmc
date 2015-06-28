@@ -36,6 +36,8 @@
 #include "utils/XMLUtils.h"
 #include "Util.h"
 
+using namespace KODI::UTILS;
+
 namespace ADDON
 {
   template<class TheDll, typename TheStruct, typename TheProps>

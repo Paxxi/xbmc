@@ -26,6 +26,8 @@
 #include "utils/Variant.h"
 #include "threads/CriticalSection.h"
 
+using namespace KODI::UTILS;
+
 #define DIALOG_MAX_LINES 3
 #define DIALOG_MAX_CHOICES 2
 

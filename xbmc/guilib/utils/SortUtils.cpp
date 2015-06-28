@@ -32,6 +32,10 @@
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 string ArrayToString(SortAttribute attributes, const CVariant &variant, const string &seperator = " / ")
 {
   vector<string> strArray;
@@ -142,7 +146,7 @@ string ByArtist(SortAttribute attributes, const SortItem &values)
 
   const CVariant &year = values.at(FieldYear);
   if (g_advancedSettings.m_bMusicLibraryAlbumsSortByArtistThenYear &&
-      !year.isNull())
+    !year.isNull())
     label += StringUtils::Format(" %i", (int)year.asInteger());
 
   const CVariant &album = values.at(FieldAlbum);
@@ -266,7 +270,7 @@ string ByEpisodeNumber(SortAttribute attributes, const SortItem &values)
   const CVariant &episodeSpecial = values.at(FieldEpisodeNumberSpecialSort);
   const CVariant &seasonSpecial = values.at(FieldSeasonSpecialSort);
   if (!episodeSpecial.isNull() && !seasonSpecial.isNull() &&
-     (episodeSpecial.asInteger() > 0 || seasonSpecial.asInteger() > 0))
+    (episodeSpecial.asInteger() > 0 || seasonSpecial.asInteger() > 0))
     num = ((uint64_t)seasonSpecial.asInteger() << 32) + (episodeSpecial.asInteger() << 16) - ((2 << 15) - values.at(FieldEpisodeNumber).asInteger());
   else
     num = ((uint64_t)values.at(FieldSeason).asInteger() << 32) + (values.at(FieldEpisodeNumber).asInteger() << 16);
@@ -411,7 +415,7 @@ bool preliminarySort(const SortItem &left, const SortItem &right, bool handleFol
     // or right should be sorted on bottom
     // => left is sorted above right
     if (leftSortSpecial == SortSpecialOnTop ||
-        rightSortSpecial == SortSpecialOnBottom)
+      rightSortSpecial == SortSpecialOnBottom)
     {
       result = true;
       return true;
@@ -433,7 +437,7 @@ bool preliminarySort(const SortItem &left, const SortItem &right, bool handleFol
     itLeft = left.find(FieldFolder);
     itRight = right.find(FieldFolder);
     if (itLeft != left.end() && itRight != right.end() &&
-        itLeft->second.asBoolean() != itRight->second.asBoolean())
+      itLeft->second.asBoolean() != itRight->second.asBoolean())
     {
       result = itLeft->second.asBoolean();
       return true;
@@ -906,3 +910,4 @@ int SortUtils::GetSortLabel(SortBy sortBy)
   }
   return 16018; // None
 }
+}}

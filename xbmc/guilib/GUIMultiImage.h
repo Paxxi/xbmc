@@ -84,7 +84,7 @@ protected:
   CGUIInfoLabel m_texturePath;
   std::string m_currentPath;
   unsigned int m_currentImage;
-  CStopWatch m_imageTimer;
+  KODI::UTILS::CStopWatch m_imageTimer;
   unsigned int m_timePerImage;
   unsigned int m_timeToPauseAtEnd;
   bool m_randomized;

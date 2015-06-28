@@ -32,6 +32,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 #define MAX_STRING_POST_SIZE 20000
 
 CHTTPPythonHandler::CHTTPPythonHandler()

@@ -68,6 +68,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 // Stuff for read CUE data from different sources.
 class CueReader

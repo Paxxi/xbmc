@@ -28,6 +28,7 @@
 #include "utils/StringUtils.h"
 #include "addons/Skin.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 using ADDON::CAddonMgr;
 

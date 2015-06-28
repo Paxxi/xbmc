@@ -52,6 +52,8 @@ extern "C" {
 #include "libavutil/opt.h"
 }
 
+using namespace KODI::UTILS;
+
 struct StereoModeConversionMap
 {
   const char*          name;

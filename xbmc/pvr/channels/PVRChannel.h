@@ -53,7 +53,7 @@ namespace PVR
   } pvr_channel_num;
 
   /** PVR Channel class */
-  class CPVRChannel : public Observable, public ISerializable, public ISortable
+  class CPVRChannel : public Observable, public ISerializable, public KODI::UTILS::ISortable
   {
     friend class CPVRDatabase;
     friend class CPVRChannelGroupInternal;
@@ -71,7 +71,7 @@ namespace PVR
     bool operator ==(const CPVRChannel &right) const;
     bool operator !=(const CPVRChannel &right) const;
 
-    virtual void Serialize(CVariant& value) const;
+    virtual void Serialize(KODI::UTILS::CVariant& value) const;
 
     /*! @name XBMC related channel methods
      */
@@ -330,7 +330,7 @@ namespace PVR
      */
     std::string Path(void) const;
 
-    virtual void ToSortable(SortItem& sortable, Field field) const;
+    virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
 
     /*!
      * @brief Update the path this channel got added to the internal group

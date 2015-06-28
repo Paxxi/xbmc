@@ -22,6 +22,8 @@
 #include "CompileInfo.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 CHTTPPythonInvoker::CHTTPPythonInvoker(ILanguageInvocationHandler* invocationHandler, HTTPPythonRequest* request)
   : CPythonInvoker(invocationHandler),
     m_request(request),

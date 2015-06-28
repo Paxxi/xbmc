@@ -23,6 +23,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "input/ButtonTranslator.h"
 
+using namespace KODI::UTILS;
 using namespace PERIPHERALS;
 using namespace std;
 

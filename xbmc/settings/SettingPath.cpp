@@ -25,6 +25,8 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
+using namespace KODI::UTILS;
+
 #define XML_ELM_DEFAULT     "default"
 #define XML_ELM_CONSTRAINTS "constraints"
 

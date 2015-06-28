@@ -38,14 +38,18 @@
 
 #include "TimeSmoother.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 int64_t CurrentHostCounter(void)
 {
 #if   defined(TARGET_DARWIN)
-  return( (int64_t)CVGetCurrentHostTime() );
+  return( static_cast<int64_t>(CVGetCurrentHostTime()) );
 #elif defined(TARGET_WINDOWS)
   LARGE_INTEGER PerformanceCount;
   QueryPerformanceCounter(&PerformanceCount);
-  return( (int64_t)PerformanceCount.QuadPart );
+  return static_cast<int64_t>(PerformanceCount.QuadPart);
 #else
   struct timespec now;
 #ifdef CLOCK_MONOTONIC_RAW
@@ -53,18 +57,18 @@ int64_t CurrentHostCounter(void)
 #else
   clock_gettime(CLOCK_MONOTONIC, &now);
 #endif // CLOCK_MONOTONIC_RAW
-  return( ((int64_t)now.tv_sec * 1000000000L) + now.tv_nsec );
+  return( (static_cast<int64_t>(now.tv_sec) * 1000000000L) + now.tv_nsec );
 #endif
 }
 
 int64_t CurrentHostFrequency(void)
 {
 #if defined(TARGET_DARWIN)
-  return( (int64_t)CVGetHostClockFrequency() );
+  return( static_cast<int64_t>(CVGetHostClockFrequency()) );
 #elif defined(TARGET_WINDOWS)
   LARGE_INTEGER Frequency;
   QueryPerformanceFrequency(&Frequency);
-  return( (int64_t)Frequency.QuadPart );
+  return static_cast<int64_t>(Frequency.QuadPart);
 #else
   return( (int64_t)1000000000L );
 #endif
@@ -73,6 +77,7 @@ int64_t CurrentHostFrequency(void)
 CTimeSmoother CTimeUtils::frameTimer;
 unsigned int CTimeUtils::frameTime = 0;
 
+//TODO make FPS a parameter that's passed in
 void CTimeUtils::UpdateFrameTime(bool flip, bool vsync)
 {
   unsigned int currentTime = XbmcThreads::SystemClockMillis();
@@ -81,7 +86,7 @@ void CTimeUtils::UpdateFrameTime(bool flip, bool vsync)
     unsigned int last = frameTime;
     while (frameTime < currentTime)
     {
-      frameTime += (unsigned int)(1000 / g_graphicsContext.GetFPS());
+      frameTime += static_cast<unsigned int>(1000 / g_graphicsContext.GetFPS());
       // observe wrap around
       if (frameTime < last)
         break;
@@ -122,3 +127,5 @@ CDateTime CTimeUtils::GetLocalTime(time_t time)
 
   return result;
 }
+}}
+

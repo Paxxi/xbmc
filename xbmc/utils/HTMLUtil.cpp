@@ -24,6 +24,7 @@
 
 using namespace std;
 using namespace HTML;
+using namespace KODI::UTILS;
 
 
 CHTMLUtil::CHTMLUtil(void)

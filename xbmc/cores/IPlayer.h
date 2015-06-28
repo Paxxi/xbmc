@@ -30,8 +30,15 @@
 
 struct TextCacheStruct_t;
 class TiXmlElement;
-class CStreamDetails;
 class CAction;
+
+namespace KODI
+{
+namespace UTILS
+{
+class CStreamDetails;
+}}
+
 
 namespace PVR
 {
@@ -214,7 +221,7 @@ public:
   virtual int64_t GetTotalTime() { return 0; }
   virtual void GetVideoStreamInfo(SPlayerVideoStreamInfo &info){};
   virtual int GetSourceBitrate(){ return 0;}
-  virtual bool GetStreamDetails(CStreamDetails &details){ return false;}
+  virtual bool GetStreamDetails(KODI::UTILS::CStreamDetails &details){ return false;}
   virtual void ToFFRW(int iSpeed = 0){};
   // Skip to next track/item inside the current media (if supported).
   virtual bool SkipNext(){return false;}

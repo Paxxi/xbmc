@@ -34,6 +34,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace PVR;
+using namespace KODI::UTILS;
 
 CPVRDirectory::CPVRDirectory()
 {

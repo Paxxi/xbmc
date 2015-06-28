@@ -40,7 +40,7 @@ class CAirPlayServer : public CThread, public ANNOUNCEMENT::IAnnouncer
 {
 public:
   // IAnnouncer IF
-  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const KODI::UTILS::CVariant &data);
 
   //AirPlayServer impl.
   static bool StartServer(int port, bool nonlocal);

@@ -49,7 +49,7 @@ public:
     bool GetDetails(T& details,const char* document=NULL, bool prioritise=false)
   {
 
-    CXBMCTinyXML doc;
+    KODI::UTILS::CXBMCTinyXML doc;
     if (document)
       doc.Parse(document, TIXML_ENCODING_UNKNOWN);
     else if (m_headPos < m_doc.size())

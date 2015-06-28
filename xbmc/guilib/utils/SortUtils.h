@@ -27,6 +27,10 @@
 #include "SortFileItem.h"
 #include "guilib/utils/LabelFormatter.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 typedef enum {
   SortOrderNone = 0,
   SortOrderAscending,
@@ -152,3 +156,4 @@ private:
   static std::map<SortBy, SortPreparator> m_preparators;
   static std::map<SortBy, Fields> m_sortingFields;
 };
+}}

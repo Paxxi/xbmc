@@ -29,6 +29,7 @@
 #include "view/ViewStateSettings.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CGUIViewStateWindowPrograms::CGUIViewStateWindowPrograms(const CFileItemList& items) : CGUIViewState(items)
 {

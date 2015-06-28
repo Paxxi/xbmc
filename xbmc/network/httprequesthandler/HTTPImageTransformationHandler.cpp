@@ -29,6 +29,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
+
 #define TRANSFORMATION_OPTION_WIDTH   "width"
 #define TRANSFORMATION_OPTION_HEIGHT  "height"
 

@@ -30,6 +30,7 @@
 #include "utils/URIUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CDAVDirectory::CDAVDirectory(void) {}
 CDAVDirectory::~CDAVDirectory(void) {}

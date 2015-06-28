@@ -23,6 +23,7 @@
 #include "DbUrl.h"
 #include "utils/URIUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CDbUrl::CDbUrl()
@@ -136,7 +137,7 @@ void CDbUrl::RemoveOption(const std::string &key)
   updateOptions(); 
 }
 
-bool CDbUrl::validateOption(const std::string &key, const CVariant &value)
+bool CDbUrl::validateOption(const std::string &key, const KODI::UTILS::CVariant &value)
 {
   if (key.empty())
     return false;

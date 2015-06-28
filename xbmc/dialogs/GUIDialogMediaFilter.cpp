@@ -113,6 +113,7 @@ static const CGUIDialogMediaFilter::Filter filterList[] = {
 #define NUM_FILTERS sizeof(filterList) / sizeof(CGUIDialogMediaFilter::Filter)
 
 using namespace std;
+using namespace KODI::UTILS;
 
 CGUIDialogMediaFilter::CGUIDialogMediaFilter()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_MEDIA_FILTER, "DialogMediaFilter.xml"),

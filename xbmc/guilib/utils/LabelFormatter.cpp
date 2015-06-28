@@ -36,6 +36,7 @@
 #include <cassert>
 
 using namespace MUSIC_INFO;
+using namespace KODI::UTILS;
 
 /* LabelFormatter
  * ==============

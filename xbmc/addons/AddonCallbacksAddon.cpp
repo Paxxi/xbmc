@@ -33,6 +33,7 @@
 #include "utils/XMLUtils.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 namespace ADDON
 {
@@ -195,8 +196,8 @@ bool CAddonCallbacksAddon::GetAddonSetting(void *addonData, const char *strSetti
       const TiXmlElement *setting = category->FirstChildElement("setting");
       while (setting)
       {
-        const std::string   id = XMLUtils::GetAttribute(setting, "id");
-        const std::string type = XMLUtils::GetAttribute(setting, "type");
+        const std::string   id = KODI::UTILS::XMLUtils::GetAttribute(setting, "id");
+        const std::string type = KODI::UTILS::XMLUtils::GetAttribute(setting, "type");
 
         if (id == strSettingName && !type.empty())
         {

@@ -30,6 +30,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CDirectoryCache::CDir::CDir(DIR_CACHE_TYPE cacheType)
 {

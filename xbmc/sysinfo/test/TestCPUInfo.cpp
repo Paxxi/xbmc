@@ -28,6 +28,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestCPUInfo, getUsedPercentage)
 {
   EXPECT_GE(g_cpuInfo.getUsedPercentage(), 0);

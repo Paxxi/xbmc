@@ -26,6 +26,7 @@
 #include "utils/StringUtils.h"
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
+using namespace KODI::UTILS;
 using namespace std;
 
 Node MovieChildren[] = {

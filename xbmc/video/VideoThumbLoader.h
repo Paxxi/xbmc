@@ -24,7 +24,13 @@
 #include "jobs/JobManager.h"
 #include "FileItem.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CStreamDetails;
+}}
+
 class CVideoDatabase;
 
 /*!

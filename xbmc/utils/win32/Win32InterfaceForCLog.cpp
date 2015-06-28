@@ -32,6 +32,8 @@
 #endif // WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
+using namespace KODI::UTILS;
+
 CWin32InterfaceForCLog::CWin32InterfaceForCLog() :
   m_hFile(INVALID_HANDLE_VALUE)
 { }

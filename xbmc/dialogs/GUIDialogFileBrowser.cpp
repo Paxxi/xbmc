@@ -47,6 +47,7 @@
 #include "URL.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 #define CONTROL_LIST          450
 #define CONTROL_THUMBS        451

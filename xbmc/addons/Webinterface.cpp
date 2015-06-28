@@ -25,6 +25,7 @@
 #include "utils/URIUtils.h"
 
 using namespace ADDON;
+using namespace KODI::UTILS;
 
 CWebinterface::CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type /* = WebinterfaceTypeStatic */, const std::string &entryPoint /* = "WEBINTERFACE_DEFAULT_ENTRY_POINT" */)
   : CAddon(props),

@@ -35,6 +35,7 @@
 #include <string>
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 using namespace std;
 
 static int RTMP_level=0;

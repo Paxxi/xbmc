@@ -24,6 +24,10 @@
 
 class CURL;
 
+namespace KODI
+{
+namespace UTILS
+{
 class URIUtils
 {
 public:
@@ -63,7 +67,7 @@ public:
 
   static void RemoveExtension(std::string& strFileName);
   static std::string ReplaceExtension(const std::string& strFile,
-                                     const std::string& strNewExtension);
+                                      const std::string& strNewExtension);
   static void Split(const std::string& strFileNameAndPath, 
                     std::string& strPath, std::string& strFileName);
   static std::vector<std::string> SplitPath(const std::string& strPath);
@@ -225,4 +229,6 @@ public:
 private:
   static std::string resolvePath(const std::string &path);
 };
+}}
+
 

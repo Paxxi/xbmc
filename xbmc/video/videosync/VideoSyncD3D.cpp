@@ -32,6 +32,8 @@
 #include "video/videosync/VideoSyncD3D.h"
 #include "guilib/GraphicContext.h"
 
+using namespace KODI::UTILS;
+
 void CVideoSyncD3D::OnDestroyDevice()
 {
   if (!m_displayLost)

@@ -22,6 +22,8 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 static std::map<std::string, MediaTypes::MediaTypeInfo> fillDefaultMediaTypes()
 {
   std::map<std::string, MediaTypes::MediaTypeInfo> mediaTypes;

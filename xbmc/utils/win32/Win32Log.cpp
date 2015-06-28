@@ -22,6 +22,8 @@
 #include "utils/StringUtils.h"
 #include "nls/CharsetConverter.h"
 
+using namespace KODI::UTILS;
+
 void CWin32Log::LogW(int loglevel, const wchar_t* format, ...)
 {
   if (IsLogLevelLogged(loglevel))

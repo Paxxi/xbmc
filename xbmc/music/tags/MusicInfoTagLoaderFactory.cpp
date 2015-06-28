@@ -32,7 +32,7 @@
 #include "addons/AudioDecoder.h"
 
 using namespace ADDON;
-
+using namespace KODI::UTILS;
 using namespace MUSIC_INFO;
 
 CMusicInfoTagLoaderFactory::CMusicInfoTagLoaderFactory()

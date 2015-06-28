@@ -52,6 +52,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace KODI::UTILS;
 using XFILE::CDirectory;
 
 #define CONTROL_SETTINGS_AREA           2

@@ -23,6 +23,10 @@
 
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 CTextSearch::CTextSearch(const std::string &strSearchTerms, bool bCaseSensitive /* = false */, TextSearchDefault defaultSearchMode /* = SEARCH_DEFAULT_OR */)
 {
   m_bCaseSensitive = bCaseSensitive;
@@ -164,3 +168,4 @@ void CTextSearch::ExtractSearchTerms(const std::string &strSearchTerm, TextSearc
     StringUtils::TrimLeft(strParsedSearchTerm);
   }
 }
+}}

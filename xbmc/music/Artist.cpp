@@ -25,6 +25,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace KODI::UTILS;
 
 void CArtist::MergeScrapedArtist(const CArtist& source, bool override /* = true */)
 {

@@ -32,7 +32,7 @@
 class CViewState
 {
 public:
-  CViewState(int viewMode, SortBy sortMethod, SortOrder sortOrder, SortAttribute sortAttributes = SortAttributeNone)
+  CViewState(int viewMode, KODI::UTILS::SortBy sortMethod, KODI::UTILS::SortOrder sortOrder, KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone)
   {
     m_viewMode = viewMode;
     m_sortDescription.sortBy = sortMethod;
@@ -42,10 +42,10 @@ public:
   CViewState()
   {
     m_viewMode = 0;
-    m_sortDescription.sortBy = SortByLabel;
-    m_sortDescription.sortOrder = SortOrderAscending;
+    m_sortDescription.sortBy = KODI::UTILS::SortByLabel;
+    m_sortDescription.sortOrder = KODI::UTILS::SortOrderAscending;
   };
 
   int m_viewMode;
-  SortDescription m_sortDescription;
+  KODI::UTILS::SortDescription m_sortDescription;
 };

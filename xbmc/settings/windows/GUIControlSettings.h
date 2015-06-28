@@ -38,7 +38,13 @@ class CSettingString;
 class CSettingPath;
 
 class CFileItemList;
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 class CGUIControlBaseSetting
 {
@@ -191,7 +197,8 @@ public:
   virtual void Update(bool updateDisplayOnly = false);
   virtual void Clear() { m_pSlider = NULL; }
 
-  static std::string GetText(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+  static std::string GetText(const CSettingControlSlider *control, const KODI::UTILS::CVariant &value, const KODI::UTILS::CVariant &minimum,
+                             const KODI::UTILS::CVariant &step, const KODI::UTILS::CVariant &maximum);
 
 private:
   CGUISettingsSliderControl *m_pSlider;

@@ -26,6 +26,8 @@
 #include "AddonVersion.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 namespace ADDON
 {
   AddonVersion::AddonVersion(const std::string& version)

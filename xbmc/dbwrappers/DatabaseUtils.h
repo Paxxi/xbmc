@@ -27,7 +27,13 @@
 
 #include "media/MediaType.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CVariant;
+}
+}
 
 namespace dbiplus
 {
@@ -138,7 +144,7 @@ typedef enum {
   DatabaseQueryPartOrderBy,
 } DatabaseQueryPart;
 
-typedef std::map<Field, CVariant> DatabaseResult;
+typedef std::map<Field, KODI::UTILS::CVariant> DatabaseResult;
 typedef std::vector<DatabaseResult> DatabaseResults;
 
 class DatabaseUtils
@@ -151,7 +157,7 @@ public:
   static int GetFieldIndex(Field field, const MediaType &mediaType);
   static bool GetSelectFields(const Fields &fields, const MediaType &mediaType, FieldList &selectFields);
   
-  static bool GetFieldValue(const dbiplus::field_value &fieldValue, CVariant &variantValue);
+  static bool GetFieldValue(const dbiplus::field_value &fieldValue, KODI::UTILS::CVariant &variantValue);
   static bool GetDatabaseResults(const MediaType &mediaType, const FieldList &fields, const std::unique_ptr<dbiplus::Dataset> &dataset, DatabaseResults &results);
 
   static std::string BuildLimitClause(int end, int start = 0);

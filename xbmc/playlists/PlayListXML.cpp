@@ -29,6 +29,7 @@
 
 using namespace PLAYLIST;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 /*
  Playlist example (must be stored with .pxml extension):

@@ -22,6 +22,8 @@
 #include "settings/lib/Setting.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 std::vector<CVariant> CSettingUtils::GetList(const CSettingList *settingList)
 {
   return ListToValues(settingList, settingList->GetValue());

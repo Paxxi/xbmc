@@ -31,6 +31,7 @@
 
 using namespace XFILE;
 using namespace XCURL;
+using namespace KODI::UTILS;
 
 CDAVFile::CDAVFile(void)
   : CCurlFile()
