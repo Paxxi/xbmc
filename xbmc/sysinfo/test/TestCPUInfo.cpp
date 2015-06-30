@@ -28,7 +28,7 @@
 
 #include "gtest/gtest.h"
 
-using namespace KODI::UTILS;
+using namespace KODI::WEATHER;
 
 TEST(TestCPUInfo, getUsedPercentage)
 {

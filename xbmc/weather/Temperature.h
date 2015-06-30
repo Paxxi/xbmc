@@ -25,9 +25,9 @@
 
 namespace KODI
 {
-namespace UTILS
+namespace WEATHER
 {
-class CTemperature : public IArchivable
+class CTemperature : public UTILS::IArchivable
 {
 public:
   CTemperature();
@@ -92,7 +92,7 @@ public:
   CTemperature operator ++(int);
   CTemperature operator --(int);
 
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(UTILS::CArchive& ar);
 
   bool IsValid() const;
   void SetValid(bool valid) { m_valid = valid; }

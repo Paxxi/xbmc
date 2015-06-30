@@ -219,7 +219,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
   SetTag("genre"       , m_strGenre);
   SetTag("title"       , m_strTitle);
   SetTag("track"       , m_strTrack);
-  SetTag("encoder"     , CSysInfo::GetAppName() + " FFmpeg Encoder");
+  SetTag("encoder"     , KODI::SYSINFO::CSysInfo::GetAppName() + " FFmpeg Encoder");
 
   /* write the header */
   if (avformat_write_header(m_Format, NULL) != 0)

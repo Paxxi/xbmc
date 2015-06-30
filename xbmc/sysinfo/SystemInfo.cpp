@@ -72,13 +72,15 @@
 #include <linux/version.h>
 #endif
 
+using namespace KODI::UTILS;
+
 /* Expand macro before stringify */
 #define STR_MACRO(x) #x
 #define XSTR_MACRO(x) STR_MACRO(x)
 
 namespace KODI
 {
-namespace UTILS
+namespace SYSINFO
 {
 #ifdef TARGET_WINDOWS
 static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)

@@ -29,6 +29,10 @@
 
 class TiXmlElement;
 
+namespace KODI
+{
+namespace WEATHER
+{
 #define WEATHER_LABEL_LOCATION   10
 #define WEATHER_IMAGE_CURRENT_ICON 21
 #define WEATHER_LABEL_CURRENT_COND 22
@@ -119,14 +123,14 @@ private:
     struct nocase_compare : public std::binary_function<unsigned char,unsigned char,bool>
     {
       bool operator() (const unsigned char& c1, const unsigned char& c2) const {
-          return tolower (c1) < tolower (c2);
+        return tolower (c1) < tolower (c2);
       }
     };
     bool operator() (const std::string & s1, const std::string & s2) const {
       return std::lexicographical_compare
-        (s1.begin (), s1.end (),
-        s2.begin (), s2.end (),
-        nocase_compare ());
+          (s1.begin (), s1.end (),
+           s2.begin (), s2.end (),
+           nocase_compare ());
     }
   };
 
@@ -168,6 +172,7 @@ private:
 
   CWeatherInfo m_info;
 };
+}}
 
-XBMC_GLOBAL_REF(CWeather, g_weatherManager);
-#define g_weatherManager XBMC_GLOBAL_USE(CWeather)
+XBMC_GLOBAL_REF(KODI::WEATHER::CWeather, g_weatherManager);
+#define g_weatherManager XBMC_GLOBAL_USE(KODI::WEATHER::CWeather)

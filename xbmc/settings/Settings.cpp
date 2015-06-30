@@ -86,6 +86,7 @@
 
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::WEATHER;
 
 CSettings::CSettings()
   : m_initialized(false)

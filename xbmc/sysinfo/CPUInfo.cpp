@@ -100,8 +100,13 @@
 #include "utils/StringUtils.h"
 
 using namespace KODI::UTILS;
+using namespace KODI::WEATHER;
 using namespace std;
 
+namespace KODI
+{
+namespace SYSINFO
+{
 // In milliseconds
 #define MINIMUM_TIME_BETWEEN_READS 500
 
@@ -174,7 +179,7 @@ CCPUInfo::CCPUInfo(void)
         DWORD bufSize = sizeof(buf);
         DWORD valType;
         if (RegQueryValueExW(hCpuKey, L"ProcessorNameString", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS &&
-            valType == REG_SZ)
+          valType == REG_SZ)
         {
           g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), cpuCore.m_strModel);
           cpuCore.m_strModel = cpuCore.m_strModel.substr(0, cpuCore.m_strModel.find(char(0))); // remove extra null terminations
@@ -183,7 +188,7 @@ CCPUInfo::CCPUInfo(void)
         }
         bufSize = sizeof(buf);
         if (RegQueryValueExW(hCpuKey, L"VendorIdentifier", nullptr, &valType, reinterpret_cast<LPBYTE>(buf), &bufSize) == ERROR_SUCCESS &&
-            valType == REG_SZ)
+          valType == REG_SZ)
         {
           g_charsetConverter.wToUTF8(std::wstring(buf, bufSize / sizeof(wchar_t)), cpuCore.m_strVendor);
           cpuCore.m_strVendor = cpuCore.m_strVendor.substr(0, cpuCore.m_strVendor.find(char(0))); // remove extra null terminations
@@ -191,7 +196,7 @@ CCPUInfo::CCPUInfo(void)
         DWORD mhzVal;
         bufSize = sizeof(mhzVal);
         if (RegQueryValueExW(hCpuKey, L"~MHz", nullptr, &valType, reinterpret_cast<LPBYTE>(&mhzVal), &bufSize) == ERROR_SUCCESS &&
-            valType == REG_DWORD)
+          valType == REG_DWORD)
           cpuCore.m_fSpeed = double(mhzVal);
 
         RegCloseKey(hCpuKey);
@@ -523,7 +528,7 @@ float CCPUInfo::getCPUFrequency()
     PDH_RAW_COUNTER cnt;
     DWORD cntType;
     if (PdhGetRawCounterValue(m_cpuFreqCounter, &cntType, &cnt) == ERROR_SUCCESS &&
-        (cnt.CStatus == PDH_CSTATUS_VALID_DATA || cnt.CStatus == PDH_CSTATUS_NEW_DATA))
+      (cnt.CStatus == PDH_CSTATUS_VALID_DATA || cnt.CStatus == PDH_CSTATUS_NEW_DATA))
     {
       return float(cnt.FirstValue);
     }
@@ -600,15 +605,15 @@ bool CCPUInfo::getTemperature(CTemperature& temperature)
   }
   else
   {
-    // procfs is deprecated in the linux kernel, we should move away from
-    // using it for temperature data.  It doesn't seem that sysfs has a
-    // general enough interface to bother implementing ATM.
+  // procfs is deprecated in the linux kernel, we should move away from
+  // using it for temperature data.  It doesn't seem that sysfs has a
+  // general enough interface to bother implementing ATM.
     
     rewind(m_fProcTemperature);
     fflush(m_fProcTemperature);
     ret = fscanf(m_fProcTemperature, "temperature: %d %c", &value, &scale);
     
-    // read from the temperature file of the new kernels
+  // read from the temperature file of the new kernels
     if (!ret)
     {
       ret = fscanf(m_fProcTemperature, "%d", &value);
@@ -652,7 +657,7 @@ const CoreInfo &CCPUInfo::GetCoreInfo(int nCoreId)
 }
 
 bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
-    unsigned long long& system, unsigned long long& idle, unsigned long long& io)
+                            unsigned long long& system, unsigned long long& idle, unsigned long long& io)
 {
 
 #ifdef TARGET_WINDOWS
@@ -677,12 +682,12 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       PDH_RAW_COUNTER cnt;
       DWORD cntType;
       if (curCore.m_coreCounter && PdhGetRawCounterValue(curCore.m_coreCounter, &cntType, &cnt) == ERROR_SUCCESS &&
-          (cnt.CStatus == PDH_CSTATUS_VALID_DATA || cnt.CStatus == PDH_CSTATUS_NEW_DATA))
+        (cnt.CStatus == PDH_CSTATUS_VALID_DATA || cnt.CStatus == PDH_CSTATUS_NEW_DATA))
       {
         const LONGLONG coreTotal = cnt.SecondValue,
-                       coreIdle  = cnt.FirstValue;
+            coreIdle  = cnt.FirstValue;
         const LONGLONG deltaTotal = coreTotal - curCore.m_total,
-                       deltaIdle  = coreIdle - curCore.m_idle;
+            deltaIdle  = coreIdle - curCore.m_idle;
         const double load = (double(deltaTotal - deltaIdle) * 100.0) / double(deltaTotal);
         
         // win32 has some problems with calculation of load if load close to zero
@@ -879,10 +884,10 @@ void CCPUInfo::ReadCPUFeatures()
   }
 
 #elif defined(TARGET_DARWIN)
-  #if defined(__ppc__)
+#if defined(__ppc__)
     m_cpuFeatures |= CPU_FEATURE_ALTIVEC;
-  #elif defined(TARGET_DARWIN_IOS)
-  #else
+#elif defined(TARGET_DARWIN_IOS)
+#else
     size_t len = 512 - 1; // '-1' for trailing space
     char buffer[512] ={0};
 
@@ -912,9 +917,9 @@ void CCPUInfo::ReadCPUFeatures()
     }
     else
       m_cpuFeatures |= CPU_FEATURE_MMX;
-  #endif
+#endif
 #elif defined(LINUX)
-// empty on purpose, the implementation is in the constructor
+  // empty on purpose, the implementation is in the constructor
 #elif !defined(__powerpc__) && !defined(__ppc__) && !defined(__arm__)
   m_cpuFeatures |= CPU_FEATURE_MMX;
 #elif defined(__powerpc__) || defined(__ppc__)
@@ -936,8 +941,8 @@ bool CCPUInfo::HasNeon()
   if (has_neon == -1)
   {
     has_neon = 0;
-    // why are we not looking at the Features in
-    // /proc/cpuinfo for neon ?
+  // why are we not looking at the Features in
+  // /proc/cpuinfo for neon ?
     int fd = open("/proc/self/auxv", O_RDONLY);
     if (fd >= 0)
     {
@@ -958,5 +963,6 @@ bool CCPUInfo::HasNeon()
 
   return has_neon == 1;
 }
+}}
 
-CCPUInfo g_cpuInfo;
+KODI::SYSINFO::CCPUInfo g_cpuInfo;

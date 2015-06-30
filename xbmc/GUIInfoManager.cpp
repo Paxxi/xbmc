@@ -105,6 +105,8 @@ using namespace PVR;
 using namespace INFO;
 using namespace EPG;
 using namespace KODI::UTILS;
+using namespace KODI::WEATHER;
+using namespace KODI::SYSINFO;
 
 CGUIInfoManager::CGUIInfoManager(void) :
     Observable()

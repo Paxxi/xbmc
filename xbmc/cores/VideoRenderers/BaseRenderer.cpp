@@ -747,7 +747,7 @@ void CBaseRenderer::SettingOptionsRenderMethodsFiller(const CSetting *setting, s
   list.push_back(make_pair(g_localizeStrings.Get(13416), RENDER_METHOD_AUTO));
 
 #ifdef HAS_DX
-  if (CSysInfo::IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
+  if (KODI::SYSINFO::CSysInfo::IsWindowsVersionAtLeast(KODI::SYSINFO::CSysInfo::WindowsVersionWin7))
     list.push_back(make_pair(g_localizeStrings.Get(16326), RENDER_METHOD_DXVAHD));
   list.push_back(make_pair(g_localizeStrings.Get(16319), RENDER_METHOD_DXVA));
   list.push_back(make_pair(g_localizeStrings.Get(13431), RENDER_METHOD_D3D_PS));

@@ -418,7 +418,7 @@ unsigned int CWinRenderer::PreInit()
   ||  m_iRequestedMethod == RENDER_METHOD_DXVA
   ||  m_iRequestedMethod == RENDER_METHOD_DXVAHD)
   {
-    if (m_iRequestedMethod != RENDER_METHOD_DXVA && CSysInfo::IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
+    if (m_iRequestedMethod != RENDER_METHOD_DXVA && KODI::SYSINFO::CSysInfo::IsWindowsVersionAtLeast(KODI::SYSINFO::CSysInfo::WindowsVersionWin7))
     {
       m_processor = new DXVA::CProcessorHD();
       if (!m_processor->PreInit())

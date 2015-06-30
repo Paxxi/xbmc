@@ -122,7 +122,7 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   WIN32_FIND_DATAW findData = {};
   CURL authUrl(url); // ConnectAndAuthenticate may update url with username and password
 
-  if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
+  if (g_sysinfo.IsWindowsVersionAtLeast(KODI::SYSINFO::CSysInfo::WindowsVersionWin7))
     hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
   else
     hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoStandard, &findData, FindExSearchNameMatch, NULL, 0);
@@ -135,7 +135,7 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
     if (ConnectAndAuthenticate(authUrl, (m_flags & DIR_FLAG_ALLOW_PROMPT) != 0))
     {
-      if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
+      if (g_sysinfo.IsWindowsVersionAtLeast(KODI::SYSINFO::CSysInfo::WindowsVersionWin7))
         hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
       else
         hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoStandard, &findData, FindExSearchNameMatch, NULL, 0);

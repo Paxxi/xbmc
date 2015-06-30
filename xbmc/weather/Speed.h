@@ -25,9 +25,9 @@
 
 namespace KODI
 {
-namespace UTILS
+namespace WEATHER
 {
-class CSpeed : public IArchivable
+class CSpeed : public UTILS::IArchivable
 {
 public:
   CSpeed();
@@ -100,7 +100,7 @@ public:
   CSpeed operator ++(int);
   CSpeed operator --(int);
 
-  virtual void Archive(CArchive& ar) override;
+  virtual void Archive(UTILS::CArchive& ar) override;
 
   bool IsValid() const;
 

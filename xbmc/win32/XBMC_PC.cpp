@@ -76,7 +76,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   SetUnhandledExceptionFilter( CreateMiniDump );
 
   // check if Kodi is already running
-  std::string appName = CSysInfo::GetAppName();
+  std::string appName = KODI::SYSINFO::CSysInfo::GetAppName();
   CreateMutex(NULL, FALSE, (appName + " Media Center").c_str());
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {

@@ -241,6 +241,7 @@ using namespace PVR;
 using namespace EPG;
 using namespace PERIPHERALS;
 using namespace KODI::UTILS;
+using namespace KODI::SYSINFO;
 
 using namespace XbmcThreads;
 

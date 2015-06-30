@@ -23,6 +23,7 @@
 #include "jobs/InfoLoader.h"
 #include "jobs/Job.h"
 #include "settings/lib/ISubSettings.h"
+#include "utils/GlobalsHandling.h"
 #include <string>
 
 #define KB  (1024)          // 1 KiloByte (1KB)   1024 Byte (2^10 Byte)
@@ -34,7 +35,7 @@
 
 namespace KODI
 {
-namespace UTILS
+namespace SYSINFO
 {
 class CSysData
 {
@@ -156,7 +157,8 @@ private:
   void Reset();
 };
 
-extern CSysInfo g_sysinfo;
-
 }}
+
+XBMC_GLOBAL_REF(KODI::SYSINFO::CSysInfo, g_sysinfo);
+#define g_sysinfo XBMC_GLOBAL_USE(KODI::SYSINFO::CSysInfo)
 

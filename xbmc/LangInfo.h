@@ -156,19 +156,19 @@ public:
   const std::string& GetMeridiemSymbol(MeridiemSymbol symbol) const;
   static const std::string& MeridiemSymbolToString(MeridiemSymbol symbol);
 
-  KODI::UTILS::CTemperature::Unit GetTemperatureUnit() const;
-  void SetTemperatureUnit(KODI::UTILS::CTemperature::Unit temperatureUnit);
+  KODI::WEATHER::CTemperature::Unit GetTemperatureUnit() const;
+  void SetTemperatureUnit(KODI::WEATHER::CTemperature::Unit temperatureUnit);
   void SetTemperatureUnit(const std::string& temperatureUnit);
   const std::string& GetTemperatureUnitString() const;
-  static const std::string& GetTemperatureUnitString(KODI::UTILS::CTemperature::Unit temperatureUnit);
-  std::string GetTemperatureAsString(const KODI::UTILS::CTemperature& temperature) const;
+  static const std::string& GetTemperatureUnitString(KODI::WEATHER::CTemperature::Unit temperatureUnit);
+  std::string GetTemperatureAsString(const KODI::WEATHER::CTemperature& temperature) const;
 
-  KODI::UTILS::CSpeed::Unit GetSpeedUnit() const;
-  void SetSpeedUnit(KODI::UTILS::CSpeed::Unit speedUnit);
+  KODI::WEATHER::CSpeed::Unit GetSpeedUnit() const;
+  void SetSpeedUnit(KODI::WEATHER::CSpeed::Unit speedUnit);
   void SetSpeedUnit(const std::string& speedUnit);
   const std::string& GetSpeedUnitString() const;
-  static const std::string& GetSpeedUnitString(KODI::UTILS::CSpeed::Unit speedUnit);
-  std::string GetSpeedAsString(const KODI::UTILS::CSpeed& speed) const;
+  static const std::string& GetSpeedUnitString(KODI::WEATHER::CSpeed::Unit speedUnit);
+  std::string GetSpeedAsString(const KODI::WEATHER::CSpeed& speed) const;
 
   void GetRegionNames(std::vector<std::string>& array);
   void SetCurrentRegion(const std::string& strName);
@@ -221,8 +221,8 @@ protected:
     std::string m_strMeridiemSymbols[2];
     std::string m_strTimeZone;
 
-    KODI::UTILS::CTemperature::Unit m_tempUnit;
-    KODI::UTILS::CSpeed::Unit m_speedUnit;
+    KODI::WEATHER::CTemperature::Unit m_tempUnit;
+    KODI::WEATHER::CSpeed::Unit m_speedUnit;
   };
 
 
@@ -248,8 +248,8 @@ protected:
   std::string m_longDateFormat;
   std::string m_timeFormat;
   bool m_use24HourClock;
-  KODI::UTILS::CTemperature::Unit m_temperatureUnit;
-  KODI::UTILS::CSpeed::Unit m_speedUnit;
+  KODI::WEATHER::CTemperature::Unit m_temperatureUnit;
+  KODI::WEATHER::CSpeed::Unit m_speedUnit;
 
   std::string m_audioLanguage;
   std::string m_subtitleLanguage;

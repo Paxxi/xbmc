@@ -473,7 +473,7 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
   // get maximum information about file from search function
   HANDLE hSearch;
   WIN32_FIND_DATAW findData;
-  if (CSysInfo::IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
+  if (KODI::SYSINFO::CSysInfo::IsWindowsVersionAtLeast(KODI::SYSINFO::CSysInfo::WindowsVersionWin7))
     hSearch = FindFirstFileExW(pathnameW.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, 0);
   else
     hSearch = FindFirstFileExW(pathnameW.c_str(), FindExInfoStandard, &findData, FindExSearchNameMatch, NULL, 0);

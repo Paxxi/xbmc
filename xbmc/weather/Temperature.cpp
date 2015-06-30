@@ -24,9 +24,11 @@
 #include "utils/Archive.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::UTILS;
+
 namespace KODI
 {
-namespace UTILS
+namespace WEATHER
 {
 CTemperature::CTemperature()
 {

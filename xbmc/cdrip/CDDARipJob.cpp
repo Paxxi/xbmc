@@ -205,7 +205,7 @@ CEncoder* CCDDARipJob::SetupEncoder(CFile& reader)
   // we have to set the tags before we init the Encoder
   std::string strTrack = StringUtils::Format("%li", strtol(m_input.substr(13, m_input.size() - 13 - 5).c_str(),NULL,10));
 
-  encoder->SetComment(std::string("Ripped with ") + CSysInfo::GetAppName());
+  encoder->SetComment(std::string("Ripped with ") + KODI::SYSINFO::CSysInfo::GetAppName());
   encoder->SetArtist(StringUtils::Join(m_tag.GetArtist(),
                                       g_advancedSettings.m_musicItemSeparator));
   encoder->SetTitle(m_tag.GetTitle());
