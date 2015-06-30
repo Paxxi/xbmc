@@ -22,7 +22,7 @@
 #include "VideoInfoTag.h"
 #include "addons/Scraper.h"
 #include "Bookmark.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 #include "video/VideoDbUrl.h"
 
 #include <memory>

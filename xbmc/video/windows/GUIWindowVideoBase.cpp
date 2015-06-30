@@ -61,7 +61,7 @@
 #include "storage/MediaManager.h"
 #include "Autorun.h"
 #include "URL.h"
-#include "guilib/utils/GroupUtils.h"
+#include "presentation/GroupUtils.h"
 #include "TextureDatabase.h"
 
 using namespace std;

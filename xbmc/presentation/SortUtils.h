@@ -25,7 +25,7 @@
 
 #include "dbwrappers/DatabaseUtils.h"
 #include "SortFileItem.h"
-#include "guilib/utils/LabelFormatter.h"
+#include "presentation/LabelFormatter.h"
 
 namespace KODI
 {

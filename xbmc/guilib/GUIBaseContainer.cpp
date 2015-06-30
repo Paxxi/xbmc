@@ -23,7 +23,7 @@
 #include "GUIInfoManager.h"
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 #include "utils/StringUtils.h"
 #include "FileItem.h"
 #include "input/Key.h"

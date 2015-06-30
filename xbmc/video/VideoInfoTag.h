@@ -24,7 +24,7 @@
 #include "XBDateTime.h"
 #include "scraper/ScraperUrl.h"
 #include "utils/Fanart.h"
-#include "guilib/utils/ISortable.h"
+#include "presentation/ISortable.h"
 #include "utils/StreamDetails.h"
 #include "video/Bookmark.h"
 

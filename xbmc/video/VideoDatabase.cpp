@@ -56,12 +56,12 @@
 #include "TextureCache.h"
 #include "interfaces/AnnouncementManager.h"
 #include "dbwrappers/dataset.h"
-#include "guilib/utils/LabelFormatter.h"
+#include "presentation/LabelFormatter.h"
 #include "XBDateTime.h"
 #include "URL.h"
 #include "video/VideoDbUrl.h"
 #include "playlists/SmartPlayList.h"
-#include "guilib/utils/GroupUtils.h"
+#include "presentation/GroupUtils.h"
 #include "Application.h"
 
 using namespace std;

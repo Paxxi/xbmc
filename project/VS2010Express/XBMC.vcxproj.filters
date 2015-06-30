@@ -376,11 +376,11 @@
     <Filter Include="screenshot">
       <UniqueIdentifier>{6b449a82-98d8-42a0-a104-8c91a76f1d52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="guilib\utils">
-      <UniqueIdentifier>{487fb5a1-86b3-43d1-ba45-fb23929def46}</UniqueIdentifier>
+    <Filter Include="presentation">
+      <UniqueIdentifier>{44bc8b15-48fb-4d93-956a-196f54b37b07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="guilib\utils\test">
-      <UniqueIdentifier>{187cd0a7-525c-4ee1-84c6-d7813308c4d8}</UniqueIdentifier>
+    <Filter Include="presentation\test">
+      <UniqueIdentifier>{343c9861-db13-43c4-852f-6905768ae645}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -3125,20 +3125,20 @@
     <ClCompile Include="..\..\xbmc\screenshot\Screenshot.cpp">
       <Filter>screenshot</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\GroupUtils.cpp">
-      <Filter>guilib\utils</Filter>
+    <ClCompile Include="..\..\xbmc\presentation\GroupUtils.cpp">
+      <Filter>presentation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\LabelFormatter.cpp">
-      <Filter>guilib\utils</Filter>
+    <ClCompile Include="..\..\xbmc\presentation\LabelFormatter.cpp">
+      <Filter>presentation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\SortUtils.cpp">
-      <Filter>guilib\utils</Filter>
+    <ClCompile Include="..\..\xbmc\presentation\SortUtils.cpp">
+      <Filter>presentation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestLabelFormatter.cpp">
-      <Filter>guilib\utils\test</Filter>
+    <ClCompile Include="..\..\xbmc\presentation\test\TestLabelFormatter.cpp">
+      <Filter>presentation\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestSortUtils.cpp">
-      <Filter>guilib\utils\test</Filter>
+    <ClCompile Include="..\..\xbmc\presentation\test\TestSortUtils.cpp">
+      <Filter>presentation\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6017,20 +6017,20 @@
     <ClInclude Include="..\..\xbmc\screenshot\Screenshot.h">
       <Filter>screenshot</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\guilib\utils\GroupUtils.h">
-      <Filter>guilib\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\guilib\utils\ISortable.h">
-      <Filter>guilib\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\guilib\utils\LabelFormatter.h">
-      <Filter>guilib\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\guilib\utils\SortUtils.h">
-      <Filter>guilib\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\IArchivable.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\presentation\GroupUtils.h">
+      <Filter>presentation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\presentation\LabelFormatter.h">
+      <Filter>presentation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\presentation\SortUtils.h">
+      <Filter>presentation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\presentation\ISortable.h">
+      <Filter>presentation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

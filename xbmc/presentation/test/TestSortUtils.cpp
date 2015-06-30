@@ -18,7 +18,7 @@
  *
  */
 
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 #include "utils/Variant.h"
 
 #include "gtest/gtest.h"

@@ -1,8 +1,8 @@
 SRCS=	\
 	TestLabelFormatter.cpp \
-	TestSortUtils.cpp 
+	TestSortUtils.cpp
 
-LIB=guilibUtilsTest.a
+LIB=presentationTest.a
 
 INCLUDES += -I../../../lib/gtest/include
 

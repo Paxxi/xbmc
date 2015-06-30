@@ -25,7 +25,7 @@
 #include "dbwrappers/Database.h"
 #include "Album.h"
 #include "addons/Scraper.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 #include "MusicDbUrl.h"
 
 class CArtist;

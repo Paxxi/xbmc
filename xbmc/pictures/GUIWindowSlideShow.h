@@ -27,7 +27,7 @@
 #include "threads/Event.h"
 #include "SlideShowPicture.h"
 #include "DllImageLib.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 
 class CFileItemList;
 namespace KODI

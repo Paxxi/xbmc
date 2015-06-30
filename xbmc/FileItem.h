@@ -27,9 +27,9 @@
 #include "guilib/GUIListItem.h"
 #include "utils/IArchivable.h"
 #include "utils/ISerializable.h"
-#include "guilib/utils/ISortable.h"
+#include "presentation/ISortable.h"
 #include "XBDateTime.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/SortUtils.h"
 #include "GUIPassword.h"
 #include "threads/CriticalSection.h"
 

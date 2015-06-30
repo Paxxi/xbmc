@@ -18,7 +18,7 @@
  *
  */
 
-#include "guilib/utils/LabelFormatter.h"
+#include "presentation/LabelFormatter.h"
 #include "filesystem/File.h"
 #include "settings/Settings.h"
 #include "FileItem.h"

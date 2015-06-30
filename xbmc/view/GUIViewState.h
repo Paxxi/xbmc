@@ -20,8 +20,8 @@
  *
  */
 
-#include "guilib/utils/LabelFormatter.h"
-#include "guilib/utils/SortUtils.h"
+#include "presentation/LabelFormatter.h"
+#include "presentation/SortUtils.h"
 #include "MediaSource.h"
 
 class CViewState; // forward

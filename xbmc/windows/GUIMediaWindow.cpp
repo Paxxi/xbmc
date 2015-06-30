@@ -61,7 +61,7 @@
 #include "storage/MediaManager.h"
 #include "threads/SystemClock.h"
 #include "filesystem/FileUtils.h"
-#include "guilib/utils/LabelFormatter.h"
+#include "presentation/LabelFormatter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"

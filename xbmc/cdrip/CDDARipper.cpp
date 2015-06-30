@@ -28,7 +28,7 @@
 #include "Util.h"
 #include "filesystem/CDDADirectory.h"
 #include "music/tags/MusicInfoTagLoaderFactory.h"
-#include "guilib/utils/LabelFormatter.h"
+#include "presentation/LabelFormatter.h"
 #include "music/tags/MusicInfoTag.h"
 #include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogOK.h"

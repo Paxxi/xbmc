@@ -505,17 +505,6 @@
     <ClCompile Include="..\..\xbmc\guilib\TextureBundleXPR.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\TextureDX.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\TextureManager.cpp" />
-    <ClCompile Include="..\..\xbmc\guilib\utils\GroupUtils.cpp" />
-    <ClCompile Include="..\..\xbmc\guilib\utils\LabelFormatter.cpp" />
-    <ClCompile Include="..\..\xbmc\guilib\utils\SortUtils.cpp" />
-    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestLabelFormatter.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\guilib\utils\test\TestSortUtils.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\guilib\VisibleEffect.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\XBTF.cpp" />
     <ClCompile Include="..\..\xbmc\guilib\XBTFReader.cpp" />
@@ -779,6 +768,17 @@
     <ClCompile Include="..\..\xbmc\powermanagement\DPMSSupport.cpp" />
     <ClCompile Include="..\..\xbmc\powermanagement\PowerManager.cpp" />
     <ClCompile Include="..\..\xbmc\powermanagement\windows\Win32PowerSyscall.cpp" />
+    <ClCompile Include="..\..\xbmc\presentation\GroupUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\presentation\LabelFormatter.cpp" />
+    <ClCompile Include="..\..\xbmc\presentation\SortUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\presentation\test\TestLabelFormatter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\presentation\test\TestSortUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\profiles\dialogs\GUIDialogLockSettings.cpp" />
     <ClCompile Include="..\..\xbmc\profiles\dialogs\GUIDialogProfileSettings.cpp" />
     <ClCompile Include="..\..\xbmc\profiles\Profile.cpp" />
@@ -993,10 +993,6 @@
     <ClInclude Include="..\..\xbmc\guilib\iimage.h" />
     <ClInclude Include="..\..\xbmc\guilib\imagefactory.h" />
     <ClInclude Include="..\..\xbmc\guilib\ISliderCallback.h" />
-    <ClInclude Include="..\..\xbmc\guilib\utils\GroupUtils.h" />
-    <ClInclude Include="..\..\xbmc\guilib\utils\ISortable.h" />
-    <ClInclude Include="..\..\xbmc\guilib\utils\LabelFormatter.h" />
-    <ClInclude Include="..\..\xbmc\guilib\utils\SortUtils.h" />
     <ClInclude Include="..\..\xbmc\IFileItemListModifier.h" />
     <ClInclude Include="..\..\xbmc\input\InputManager.h" />
     <ClInclude Include="..\..\xbmc\input\Key.h" />
@@ -1094,6 +1090,10 @@
     <ClInclude Include="..\..\xbmc\peripherals\bus\virtual\PeripheralBusCEC.h" />
     <ClInclude Include="..\..\xbmc\network\upnp\UPnPSettings.h" />
     <ClInclude Include="..\..\xbmc\playlists\SmartPlaylistFileItemListModifier.h" />
+    <ClInclude Include="..\..\xbmc\presentation\GroupUtils.h" />
+    <ClInclude Include="..\..\xbmc\presentation\ISortable.h" />
+    <ClInclude Include="..\..\xbmc\presentation\LabelFormatter.h" />
+    <ClInclude Include="..\..\xbmc\presentation\SortUtils.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogLockSettings.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogProfileSettings.h" />
     <ClInclude Include="..\..\xbmc\profiles\Profile.h" />
