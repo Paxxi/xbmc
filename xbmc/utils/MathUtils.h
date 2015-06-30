@@ -45,12 +45,16 @@
  See http://ldesoras.free.fr/doc/articles/rounding_en.pdf for an explanation
  of the technique used on x86.
  */
+namespace KODI
+{
+namespace UTILS
+{
 namespace MathUtils
 {
-  // GCC does something stupid with optimization on release builds if we try
-  // to assert in these functions
+// GCC does something stupid with optimization on release builds if we try
+// to assert in these functions
 
-  /*! \brief Round to nearest integer.
+/*! \brief Round to nearest integer.
    This routine does fast rounding to the nearest integer.
    In the case (k + 0.5 for any integer k) we round up to k+1, and in all other
    instances we should return the nearest integer.
@@ -60,13 +64,13 @@ namespace MathUtils
    Make sure MathUtils::test() returns true for each implementation.
    \sa truncate_int, test
   */
-  inline int round_int(double x)
-  {
-    assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-    assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+inline int round_int(double x)
+{
+  assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
+  assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
 
 #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
-    /* This implementation warrants some further explanation.
+  /* This implementation warrants some further explanation.
      *
      * First, a couple of notes on rounding:
      * 1) C casts from float/double to integer round towards zero.
@@ -118,21 +122,21 @@ namespace MathUtils
     return ((unsigned int) (x + 0x80000000.8p0)) - 0x80000000;
 
 #else
-    const float round_to_nearest = 0.5f;
-    int i;
+  const float round_to_nearest = 0.5f;
+  int i;
 #if defined(__SSE2__)
     const float round_dn_to_nearest = 0.4999999f;
     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
 
 #elif defined(TARGET_WINDOWS)
-    __asm
-    {
-      fld x
-      fadd st, st (0)
-      fadd round_to_nearest
-      fistp i
-      sar i, 1
-    }
+  __asm
+      {
+        fld x
+        fadd st, st (0)
+        fadd round_to_nearest
+        fistp i
+        sar i, 1
+      }
 
 #else
     __asm__ __volatile__ (
@@ -144,48 +148,48 @@ namespace MathUtils
     );
 
 #endif
-    return i;
+  return i;
 #endif
-  }
+}
 
-  /*! \brief Truncate to nearest integer.
+/*! \brief Truncate to nearest integer.
    This routine does fast truncation to an integer.
    It should simply drop the fractional portion of the floating point number.
 
    Make sure MathUtils::test() returns true for each implementation.
    \sa round_int, test
   */
-  inline int truncate_int(double x)
-  {
-    assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-    assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
-    return static_cast<int>(x);
-  }
+inline int truncate_int(double x)
+{
+  assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
+  assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+  return static_cast<int>(x);
+}
 
-  inline int64_t abs(int64_t a)
-  {
-    return (a < 0) ? -a : a;
-  }
+inline int64_t abs(int64_t a)
+{
+  return (a < 0) ? -a : a;
+}
 
-  inline unsigned bitcount(unsigned v)
-  {
-    unsigned c = 0;
-    for (c = 0; v; c++)
-      v &= v - 1; // clear the least significant bit set
-    return c;
-  }
+inline unsigned bitcount(unsigned v)
+{
+  unsigned c = 0;
+  for (c = 0; v; c++)
+    v &= v - 1; // clear the least significant bit set
+  return c;
+}
 
-  inline void hack()
-  {
-    // stupid hack to keep compiler from dropping these
-    // functions as unused
-    MathUtils::round_int(0.0);
-    MathUtils::truncate_int(0.0);
-    MathUtils::abs(0);
-  }
+inline void hack()
+{
+  // stupid hack to keep compiler from dropping these
+  // functions as unused
+  MathUtils::round_int(0.0);
+  MathUtils::truncate_int(0.0);
+  MathUtils::abs(0);
+}
 
 #if 0
-  /*! \brief test routine for round_int and truncate_int
+/*! \brief test routine for round_int and truncate_int
    Must return true on all platforms.
    */
   inline bool test()
@@ -202,4 +206,4 @@ namespace MathUtils
   }
 #endif
 } // namespace MathUtils
-
+}}

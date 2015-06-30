@@ -32,7 +32,7 @@ namespace JSONRPC
   class CFileItemHandler : public CJSONUtils
   {
   protected:
-    static void FillDetails(const ISerializable *info, const CFileItemPtr &item, std::set<std::string> &fields, KODI::UTILS::CVariant &result, CThumbLoader *thumbLoader = NULL);
+    static void FillDetails(const KODI::UTILS::ISerializable *info, const CFileItemPtr &item, std::set<std::string> &fields, KODI::UTILS::CVariant &result, CThumbLoader *thumbLoader = NULL);
     static void HandleFileItemList(const char *ID, bool allowFile, const char *resultname, CFileItemList &items, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result, bool sortLimit = true);
     static void HandleFileItemList(const char *ID, bool allowFile, const char *resultname, CFileItemList &items, const KODI::UTILS::CVariant &parameterObject, KODI::UTILS::CVariant &result, int size, bool sortLimit = true);
     static void HandleFileItem(const char *ID, bool allowFile, const char *resultname, CFileItemPtr item, const KODI::UTILS::CVariant &parameterObject, const KODI::UTILS::CVariant &validFields, KODI::UTILS::CVariant &result, bool append = true, CThumbLoader *thumbLoader = NULL);

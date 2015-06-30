@@ -66,7 +66,6 @@
 #include "CueInfoLoader.h"
 
 using namespace std;
-using namespace AUTOPTR;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
 using namespace KODI::UTILS;
@@ -5299,7 +5298,7 @@ void CMusicDatabase::ImportKaraokeInfo(const std::string & inputFile)
     if (NULL == m_pDB.get()) return;
 
     XFILE::CFile file;
-    XFILE::auto_buffer buf;
+    auto_buffer buf;
 
     if (file.LoadFile(inputFile, buf) <= 0)
     {

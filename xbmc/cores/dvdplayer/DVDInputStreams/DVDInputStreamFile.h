@@ -34,7 +34,7 @@ public:
   virtual bool Pause(double dTime) { return false; };
   virtual bool IsEOF();
   virtual int64_t GetLength();
-  virtual BitstreamStats GetBitstreamStats() const ;
+  virtual KODI::UTILS::BitstreamStats GetBitstreamStats() const ;
   virtual int GetBlockSize();
   virtual void SetReadRate(unsigned rate);
   virtual bool GetCacheStatus(XFILE::SCacheStatus *status);

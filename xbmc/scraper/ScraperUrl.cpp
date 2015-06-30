@@ -209,7 +209,7 @@ bool CScraperUrl::Get(const SUrlEntry& scrURL, std::string& strHTML, XFILE::CCur
     if (XFILE::CFile::Exists(strCachePath))
     {
       XFILE::CFile file;
-      XFILE::auto_buffer buffer;
+      auto_buffer buffer;
       if (file.LoadFile(strCachePath, buffer) > 0)
       {
         strHTML.assign(buffer.get(), buffer.length());

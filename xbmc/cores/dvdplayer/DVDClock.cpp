@@ -25,6 +25,8 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 
+using namespace KODI::UTILS;
+
 int64_t CDVDClock::m_systemOffset;
 int64_t CDVDClock::m_systemFrequency;
 CCriticalSection CDVDClock::m_systemsection;

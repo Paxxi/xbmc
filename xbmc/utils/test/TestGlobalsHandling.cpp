@@ -22,8 +22,8 @@
 
 #include "gtest/gtest.h"
 
-using namespace xbmcutil;
-using namespace test;
+using namespace KODI::UTILS::TEST;
+using namespace KODI::UTILS;
 
 bool TestGlobalPattern1::ctorCalled = false;
 bool TestGlobalPattern1::dtorCalled = false;

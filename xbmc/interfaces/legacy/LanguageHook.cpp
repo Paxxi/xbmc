@@ -29,7 +29,7 @@ namespace XBMCAddon
 
   static XbmcThreads::ThreadLocal<LanguageHook> addonLanguageHookTls;
   static bool threadLocalInitilialized = false;
-  static xbmcutil::InitFlag initer(threadLocalInitilialized);
+  static KODI::UTILS::InitFlag initer(threadLocalInitilialized);
 
   void LanguageHook::SetLanguageHook(LanguageHook* languageHook)
   {

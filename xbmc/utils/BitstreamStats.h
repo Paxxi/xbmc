@@ -1,6 +1,4 @@
-#ifndef BITSTREAM_STATS__H__
-#define BITSTREAM_STATS__H__
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -28,6 +26,10 @@
 #include <stdint.h>
 #endif
 
+namespace KODI
+{
+namespace UTILS
+{
 class BitstreamStats
 {
 public:
@@ -56,6 +58,4 @@ private:
   int64_t m_tmStart;
   static int64_t m_tmFreq;
 };
-
-#endif
-
+}}

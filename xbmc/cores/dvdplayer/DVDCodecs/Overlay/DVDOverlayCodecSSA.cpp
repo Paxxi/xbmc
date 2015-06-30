@@ -27,7 +27,6 @@
 #include "utils/AutoPtrHandle.h"
 #include "utils/StringUtils.h"
 
-using namespace AUTOPTR;
 using namespace KODI::UTILS;
 using namespace std;
 

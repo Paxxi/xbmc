@@ -27,7 +27,7 @@
 
 namespace MUSIC_INFO
 {
-  class EmbeddedArtInfo : public IArchivable
+  class EmbeddedArtInfo : public KODI::UTILS::IArchivable
   {
   public:
     EmbeddedArtInfo() { }
@@ -35,7 +35,7 @@ namespace MUSIC_INFO
     ~EmbeddedArtInfo() { }
 
     // implementation of IArchivable
-    virtual void Archive(CArchive& ar);
+    virtual void Archive(KODI::UTILS::CArchive& ar);
 
     void set(size_t size, const std::string &mime);
     void clear();

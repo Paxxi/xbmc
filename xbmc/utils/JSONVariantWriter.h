@@ -22,10 +22,15 @@
 #include "Variant.h"
 #include <yajl/yajl_gen.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CJSONVariantWriter
 {
 public:
-  static std::string Write(const KODI::UTILS::CVariant &value, bool compact);
+  static std::string Write(const CVariant &value, bool compact);
 private:
-  static bool InternalWrite(yajl_gen g, const KODI::UTILS::CVariant &value);
+  static bool InternalWrite(yajl_gen g, const CVariant &value);
 };
+}}

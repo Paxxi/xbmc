@@ -21,8 +21,11 @@
 #include "HttpHeader.h"
 #include "utils/StringUtils.h"
 
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 // header white space characters according to RFC 2616
 const char* const CHttpHeader::m_whitespaceChars = " \t";
 
@@ -221,7 +224,7 @@ std::string CHttpHeader::GetCharset(void) const
         if (len != std::string::npos)
           len -= pos;
         std::string charset(strValue, pos, len);  // intentionally ignoring possible ';' inside quoted string
-                                                  // as we don't support any charset with ';' in name
+        // as we don't support any charset with ';' in name
         StringUtils::Trim(charset, m_whitespaceChars);
         if (!charset.empty())
         {
@@ -252,3 +255,4 @@ void CHttpHeader::Clear()
   m_headerdone = false;
   m_lastHeaderLine.clear();
 }
+}}

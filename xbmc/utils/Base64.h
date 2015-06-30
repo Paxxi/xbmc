@@ -21,6 +21,10 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 class Base64
 {
 public:
@@ -36,3 +40,4 @@ public:
 private:
   static const std::string m_characters;
 };
+}}

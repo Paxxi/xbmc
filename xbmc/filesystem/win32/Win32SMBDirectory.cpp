@@ -430,7 +430,7 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
     return false;
   }
 
-  XUTILS::auto_buffer buf(size_t(32 * 1024));
+  auto_buffer buf(size_t(32 * 1024));
   bool errorFlag = false;
   do
   {

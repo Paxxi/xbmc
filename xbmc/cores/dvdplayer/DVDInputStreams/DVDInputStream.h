@@ -176,7 +176,7 @@ public:
 
   bool IsStreamType(DVDStreamType type) const { return m_streamType == type; }
   virtual bool IsEOF() = 0;
-  virtual BitstreamStats GetBitstreamStats() const { return m_stats; }
+  virtual KODI::UTILS::BitstreamStats GetBitstreamStats() const { return m_stats; }
 
   void SetFileItem(const CFileItem& item);
 
@@ -184,7 +184,7 @@ protected:
   DVDStreamType m_streamType;
   std::string m_strFileName;
   CURL m_url;
-  BitstreamStats m_stats;
+  KODI::UTILS::BitstreamStats m_stats;
   std::string m_content;
   CFileItem m_item;
 };

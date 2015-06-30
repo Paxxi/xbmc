@@ -42,6 +42,7 @@
 #define PROPDIVMAX   40.0
 #define INTEGRAL    200.0
 
+using namespace KODI::UTILS;
 using namespace std;
 
 void CPTSInputQueue::Add(int64_t bytes, double pts)

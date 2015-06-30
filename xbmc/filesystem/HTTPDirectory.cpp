@@ -100,7 +100,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       if (fileCharset.empty())
         g_charsetConverter.unknownToUTF8(strNameTemp);
       g_charsetConverter.utf8ToW(strNameTemp, wName, false);
-      HTML::CHTMLUtil::ConvertHTMLToW(wName, wConverted);
+      CHTMLUtil::ConvertHTMLToW(wName, wConverted);
       g_charsetConverter.wToUTF8(wConverted, strNameTemp);
       URIUtils::RemoveSlashAtEnd(strNameTemp);
 
@@ -121,7 +121,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       if (fileCharset.empty())
         g_charsetConverter.unknownToUTF8(strLinkTemp);
       g_charsetConverter.utf8ToW(strLinkTemp, wLink, false);
-      HTML::CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
+      CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
       g_charsetConverter.wToUTF8(wConverted, strLinkTemp);
 
       if (StringUtils::EndsWith(strNameTemp, "..>") &&
@@ -142,7 +142,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         if (fileCharset.empty())
           g_charsetConverter.unknownToUTF8(strLinkBase);
         g_charsetConverter.utf8ToW(strLinkBase, wLink, false);
-        HTML::CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
+        CHTMLUtil::ConvertHTMLToW(wLink, wConverted);
         g_charsetConverter.wToUTF8(wConverted, strLinkBase);
 
         url2.SetFileName(strBasePath + strLinkBase);

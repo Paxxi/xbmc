@@ -146,10 +146,14 @@ struct ThreadMessageCallback
 };
 
 class CApplicationMessenger;
-namespace xbmcutil
+
+namespace KODI
 {
-   template<class T> class GlobalsSingleton;
-}
+namespace UTILS
+{
+template<class T> class GlobalsSingleton;
+}}
+
 
 class CApplicationMessenger
 {
@@ -266,7 +270,7 @@ public:
   virtual ~CApplicationMessenger();
 private:
   // private construction, and no assignements; use the provided singleton methods
-   friend class xbmcutil::GlobalsSingleton<CApplicationMessenger>;
+   friend class KODI::UTILS::GlobalsSingleton<CApplicationMessenger>;
   CApplicationMessenger();
   CApplicationMessenger(const CApplicationMessenger&);
   CApplicationMessenger const& operator=(CApplicationMessenger const&);

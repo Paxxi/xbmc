@@ -89,12 +89,12 @@
 #define SLIDE_IPTC_COUNTRY_CODE     979
 #define SLIDE_IPTC_REF_SERVICE      980
 
-class CPictureInfoTag : public IArchivable, public ISerializable, public KODI::UTILS::ISortable
+class CPictureInfoTag : public KODI::UTILS::IArchivable, public KODI::UTILS::ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CPictureInfoTag() { Reset(); };
   void Reset();
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(KODI::UTILS::CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
   const CPictureInfoTag& operator=(const CPictureInfoTag& item);
@@ -115,7 +115,7 @@ public:
    */
   const CDateTime& GetDateTimeTaken() const;
 private:
-  void GetStringFromArchive(CArchive &ar, char *string, size_t length);
+  void GetStringFromArchive(KODI::UTILS::CArchive &ar, char *string, size_t length);
   ExifInfo_t m_exifInfo;
   IPTCInfo_t m_iptcInfo;
   bool       m_isLoaded;             // Set to true if metadata has been loaded from the picture file successfully

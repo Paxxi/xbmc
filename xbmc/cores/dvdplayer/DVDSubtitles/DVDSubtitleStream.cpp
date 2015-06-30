@@ -32,7 +32,6 @@
 
 using namespace std;
 using namespace KODI::UTILS;
-using XFILE::auto_buffer;
 
 CDVDSubtitleStream::CDVDSubtitleStream()
 {

@@ -35,7 +35,6 @@
 #include "mysqldataset.h"
 #endif
 
-using namespace AUTOPTR;
 using namespace dbiplus;
 using namespace KODI::UTILS;
 

@@ -803,12 +803,12 @@ unsigned int CActiveAESink::OutputSamples(CSampleBuffer* samples)
   case SKIP_SWAP:
     break;
   case NEED_BYTESWAP:
-    Endian_Swap16_buf((uint16_t *)buffer[0], (uint16_t *)buffer[0], frames * samples->pkt->config.channels);
+    KODI::UTILS::Endian_Swap16_buf((uint16_t *)buffer[0], (uint16_t *)buffer[0], frames * samples->pkt->config.channels);
     break;
   case CHECK_SWAP:
     SwapInit(samples);
     if (m_swapState == NEED_BYTESWAP)
-      Endian_Swap16_buf((uint16_t *)buffer[0], (uint16_t *)buffer[0], frames * samples->pkt->config.channels);
+      KODI::UTILS::Endian_Swap16_buf((uint16_t *)buffer[0], (uint16_t *)buffer[0], frames * samples->pkt->config.channels);
     break;
   default:
     break;

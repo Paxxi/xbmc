@@ -29,6 +29,8 @@
 
 #include "karaokelyricstextlrc.h"
 
+using namespace KODI::UTILS;
+
 enum ParserState
 {
   PARSER_INIT,    // looking for time
@@ -62,7 +64,7 @@ bool CKaraokeLyricsTextLRC::Load()
   // Clear the lyrics array
   clearLyrics();
 
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
   if (file.LoadFile(m_lyricsFile, buf) <= 0)
   {
     CLog::Log(LOGERROR, "%s: can't load \"%s\" file", __FUNCTION__, m_lyricsFile.c_str());

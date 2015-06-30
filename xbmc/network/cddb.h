@@ -92,7 +92,7 @@ public:
 
 protected:
   std::string m_strNull;
-  AUTOPTR::CAutoPtrSocket m_cddb_socket;
+  KODI::UTILS::CAutoPtrSocket m_cddb_socket;
   const static int recv_buffer = 4096;
   int m_lastError;
   std::map<int, std::string> m_mapTitles;

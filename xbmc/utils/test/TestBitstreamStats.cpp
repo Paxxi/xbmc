@@ -23,6 +23,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 #define BITS (256 * 8)
 #define BYTES (256)
 

@@ -48,6 +48,7 @@
 #pragma comment(lib, "freetype246MT.lib")
 #endif
 
+using namespace KODI::UTILS;
 using namespace std;
 
 
@@ -69,7 +70,7 @@ public:
       FT_Done_FreeType(m_library);
   }
 
-  FT_Face GetFont(const std::string &filename, float size, float aspect, XUTILS::auto_buffer& memoryBuf)
+  FT_Face GetFont(const std::string &filename, float size, float aspect, auto_buffer& memoryBuf)
   {
     // don't have it yet - create it
     if (!m_library)

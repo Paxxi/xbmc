@@ -22,7 +22,9 @@
 
 #include <string>
 
-namespace HTML
+namespace KODI
+{
+namespace UTILS
 {
 class CHTMLUtil
 {
@@ -32,4 +34,4 @@ public:
   static void RemoveTags(std::string& strHTML);
   static void ConvertHTMLToW(const std::wstring& strHTML, std::wstring& strStripped);
 };
-}
+}}

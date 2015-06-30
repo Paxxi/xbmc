@@ -45,7 +45,7 @@ protected:
   CSettingsManager *m_settingsManager;
 };
 
-class CSettingConditionItem : public CBooleanLogicValue, public ISettingCondition
+class CSettingConditionItem : public KODI::UTILS::CBooleanLogicValue, public ISettingCondition
 {
 public:
   CSettingConditionItem(CSettingsManager *settingsManager = NULL)
@@ -62,7 +62,7 @@ protected:
   std::string m_setting;
 };
 
-class CSettingConditionCombination : public CBooleanLogicOperation, public ISettingCondition
+class CSettingConditionCombination : public KODI::UTILS::CBooleanLogicOperation, public ISettingCondition
 {
 public:
   CSettingConditionCombination(CSettingsManager *settingsManager = NULL)
@@ -73,11 +73,11 @@ public:
   virtual bool Check() const;
 
 private:
-  virtual CBooleanLogicOperation* newOperation() { return new CSettingConditionCombination(m_settingsManager); }
-  virtual CBooleanLogicValue* newValue() { return new CSettingConditionItem(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicOperation* newOperation() { return new CSettingConditionCombination(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicValue* newValue() { return new CSettingConditionItem(m_settingsManager); }
 };
 
-class CSettingCondition : public CBooleanLogic, public ISettingCondition
+class CSettingCondition : public KODI::UTILS::CBooleanLogic, public ISettingCondition
 {
 public:
   CSettingCondition(CSettingsManager *settingsManager = NULL);

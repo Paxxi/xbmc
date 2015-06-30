@@ -91,7 +91,7 @@ enum EFileFolderType {
   \sa CFileItemList
   */
 class CFileItem :
-  public CGUIListItem, public IArchivable, public ISerializable, public KODI::UTILS::ISortable
+  public CGUIListItem, public KODI::UTILS::IArchivable, public KODI::UTILS::ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CFileItem(void);
@@ -129,7 +129,7 @@ public:
    */
   void Reset();
   const CFileItem& operator=(const CFileItem& item);
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(KODI::UTILS::CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual void ToSortable(KODI::UTILS::SortItem &sortable, Field field) const;
   void ToSortable(KODI::UTILS::SortItem &sortable, const Fields &fields) const;
@@ -547,7 +547,7 @@ public:
   CFileItemList();
   explicit CFileItemList(const std::string& strPath);
   virtual ~CFileItemList();
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(KODI::UTILS::CArchive& ar);
   CFileItemPtr operator[] (int iItem);
   const CFileItemPtr operator[] (int iItem) const;
   CFileItemPtr operator[] (const std::string& strPath);

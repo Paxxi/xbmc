@@ -23,6 +23,7 @@
 #include "filesystem/CurlFile.h"
 
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 CDVDInputStreamHttp::CDVDInputStreamHttp() : CDVDInputStream(DVDSTREAM_TYPE_HTTP)
 {

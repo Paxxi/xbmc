@@ -27,6 +27,10 @@
 
 #include "AliasShortcutUtils.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 bool IsAliasShortcut(const std::string& path)
 {
   bool  rtn = false;
@@ -41,7 +45,7 @@ bool IsAliasShortcut(const std::string& path)
 #elif defined(TARGET_POSIX)
   // Linux does not use alias or shortcut methods
 #elif defined(TARGET_WINDOWS)
-/* Needs testing under Windows platform so ignore shortcuts for now
+  /* Needs testing under Windows platform so ignore shortcuts for now
     if (CUtil::GetExtension(path) == ".lnk")
     {
       rtn = true;
@@ -59,7 +63,7 @@ void TranslateAliasShortcut(std::string& path)
   // Linux does not use alias or shortcut methods
 
 #elif defined(TARGET_WINDOWS)
-/* Needs testing under Windows platform so ignore shortcuts for now
+  /* Needs testing under Windows platform so ignore shortcuts for now
   CComPtr<IShellLink> ipShellLink;
 
   // Get a pointer to the IShellLink interface
@@ -100,3 +104,4 @@ void TranslateAliasShortcut(std::string& path)
 */
 #endif
 }
+}}

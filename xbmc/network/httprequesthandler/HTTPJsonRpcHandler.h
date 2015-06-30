@@ -35,7 +35,7 @@ public:
 
   virtual int HandleRequest();
 
-  virtual HttpResponseRanges GetResponseData() const;
+  virtual KODI::UTILS::HttpResponseRanges GetResponseData() const;
 
   virtual int GetPriority() const { return 5; }
 
@@ -53,7 +53,7 @@ protected:
 private:
   std::string m_requestData;
   std::string m_responseData;
-  CHttpResponseRange m_responseRange;
+  KODI::UTILS::CHttpResponseRange m_responseRange;
 
   class CHTTPClient : public JSONRPC::IClient
   {

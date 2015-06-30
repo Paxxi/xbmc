@@ -21,6 +21,10 @@
 
 class TiXmlNode;
 
+namespace KODI
+{
+namespace UTILS
+{
 class IXmlDeserializable
 {
 public:
@@ -28,3 +32,5 @@ public:
 
   virtual bool Deserialize(const TiXmlNode *node) = 0;
 };
+}}
+

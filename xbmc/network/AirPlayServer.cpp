@@ -611,7 +611,7 @@ void CAirPlayServer::CTCPClient::ComposeAuthRequestAnswer(std::string& responseH
 {
   int16_t random=rand();
   std::string randomStr = StringUtils::Format("%i", random);
-  m_authNonce=XBMC::XBMC_MD5::GetMD5(randomStr);
+  m_authNonce = XBMC_MD5::GetMD5(randomStr);
   responseHeader = StringUtils::Format(AUTH_REQUIRED, m_authNonce.c_str());
   responseBody.clear();
 }
@@ -629,11 +629,11 @@ std::string calcResponse(const std::string& username,
   std::string HA1;
   std::string HA2;
 
-  HA1 = XBMC::XBMC_MD5::GetMD5(username + ":" + realm + ":" + password);
-  HA2 = XBMC::XBMC_MD5::GetMD5(method + ":" + digestUri);
+  HA1 = XBMC_MD5::GetMD5(username + ":" + realm + ":" + password);
+  HA2 = XBMC_MD5::GetMD5(method + ":" + digestUri);
   StringUtils::ToLower(HA1);
   StringUtils::ToLower(HA2);
-  response = XBMC::XBMC_MD5::GetMD5(HA1 + ":" + nonce + ":" + HA2);
+  response = XBMC_MD5::GetMD5(HA1 + ":" + nonce + ":" + HA2);
   StringUtils::ToLower(response);
   return response;
 }

@@ -42,6 +42,7 @@
 
 #define LENGTH_MIN    0x2
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CWebSocketFrame::CWebSocketFrame(const char* data, uint64_t length)

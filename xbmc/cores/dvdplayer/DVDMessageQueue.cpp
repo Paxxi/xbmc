@@ -24,6 +24,7 @@
 #include "DVDClock.h"
 #include "utils/MathUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CDVDMessageQueue::CDVDMessageQueue(const string &owner) : m_hEvent(true), m_owner(owner)

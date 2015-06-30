@@ -48,7 +48,6 @@
 
 using namespace std;
 using namespace MEDIA_DETECT;
-using namespace AUTOPTR;
 using namespace CDDB;
 using namespace KODI::UTILS;
 

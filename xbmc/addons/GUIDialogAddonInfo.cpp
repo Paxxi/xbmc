@@ -414,7 +414,7 @@ void CGUIDialogAddonInfo::OnJobComplete(unsigned int jobID, bool success,
   else
   {
     CFile file;
-    XFILE::auto_buffer buf;
+    auto_buffer buf;
     if (file.LoadFile("special://temp/" +
       URIUtils::GetFileName(((CFileOperationJob*)job)->GetItems()[0]->GetPath()), buf) > 0)
     {

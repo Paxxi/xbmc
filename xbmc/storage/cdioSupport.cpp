@@ -35,6 +35,7 @@
 #pragma comment(lib, "libcdio.dll.lib")
 #endif
 
+using namespace KODI::UTILS;
 using namespace MEDIA_DETECT;
 
 std::shared_ptr<CLibcdio> CLibcdio::m_pInstance;

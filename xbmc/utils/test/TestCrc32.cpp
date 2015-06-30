@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 static const char refdata[] = "abcdefghijklmnopqrstuvwxyz"
                               "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                               "01234567890!@#$%^&*()";

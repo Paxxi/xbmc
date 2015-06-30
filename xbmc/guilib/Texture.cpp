@@ -236,7 +236,7 @@ bool CBaseTexture::LoadFromFileInternal(const std::string& texturePath, unsigned
 
   // Read image into memory to use our vfs
   XFILE::CFile file;
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
 
   if (file.LoadFile(texturePath, buf) <= 0)
     return false;

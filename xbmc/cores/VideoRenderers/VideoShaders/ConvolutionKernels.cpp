@@ -25,6 +25,8 @@
 #include "ConvolutionKernels.h"
 #include "utils/MathUtils.h"
 
+using namespace KODI::UTILS;
+
 #ifndef M_PI
   #define M_PI       3.14159265358979323846
 #endif

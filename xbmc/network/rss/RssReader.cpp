@@ -42,6 +42,7 @@
 
 using namespace std;
 using namespace XFILE;
+using namespace KODI::UTILS;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -254,7 +255,7 @@ void CRssReader::AddString(std::wstring aString, int aColour, int iFeed)
 
 void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
 {
-  HTML::CHTMLUtil html;
+  CHTMLUtil html;
 
   TiXmlElement * itemNode = channelXmlNode->FirstChildElement("item");
   map <std::string, std::wstring> mTagElements;

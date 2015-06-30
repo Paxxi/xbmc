@@ -35,6 +35,8 @@
 #include "windowing/WindowingFactory.h"
 #endif
 
+using namespace KODI::UTILS;
+
 CGUIKeyboard *CGUIKeyboardFactory::g_activedKeyboard = NULL;
 FILTERING CGUIKeyboardFactory::m_filtering = FILTERING_NONE;
 
@@ -173,7 +175,7 @@ bool CGUIKeyboardFactory::ShowAndVerifyNewPassword(std::string& newPassword, con
   // check the password
   if (checkInput == userInput)
   {
-    newPassword = XBMC::XBMC_MD5::GetMD5(userInput);
+    newPassword = XBMC_MD5::GetMD5(userInput);
     StringUtils::ToLower(newPassword);
     return true;
   }
@@ -212,7 +214,7 @@ int CGUIKeyboardFactory::ShowAndVerifyPassword(std::string& strPassword, const s
 
   if (!strPassword.empty())
   {
-    std::string md5pword2 = XBMC::XBMC_MD5::GetMD5(strUserInput);
+    std::string md5pword2 = XBMC_MD5::GetMD5(strUserInput);
     if (StringUtils::EqualsNoCase(strPassword, md5pword2))
       return 0;     // user entered correct password
     else return 1;  // user must have entered an incorrect password
@@ -221,7 +223,7 @@ int CGUIKeyboardFactory::ShowAndVerifyPassword(std::string& strPassword, const s
   {
     if (!strUserInput.empty())
     {
-      strPassword = XBMC::XBMC_MD5::GetMD5(strUserInput);
+      strPassword = XBMC_MD5::GetMD5(strUserInput);
       StringUtils::ToLower(strPassword);
       return 0; // user entered correct password
     }

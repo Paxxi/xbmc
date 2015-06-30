@@ -24,6 +24,8 @@
 #include "DVDClock.h" // for DVD_TIME_BASE
 #include "../../../utils/HttpHeader.h"
 
+using namespace KODI::UTILS;
+
 #define ICY_NOTICE1           "icy-notice1" // string
 #define ICY_NOTICE2           "icy-notice2" // string
 #define ICY_NAME              "icy-name"    // string

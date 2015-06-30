@@ -84,7 +84,7 @@ public:
   explicit CSettingDependencyConditionCombination(CSettingsManager *settingsManager = NULL)
     : CSettingConditionCombination(settingsManager)
   { }
-  CSettingDependencyConditionCombination(BooleanLogicOperation op, CSettingsManager *settingsManager = NULL)
+  CSettingDependencyConditionCombination(KODI::UTILS::BooleanLogicOperation op, CSettingsManager *settingsManager = NULL)
     : CSettingConditionCombination(settingsManager)
   {
     SetOperation(op);
@@ -99,8 +99,8 @@ public:
   CSettingDependencyConditionCombination* Add(CSettingDependencyConditionCombinationPtr operation);
 
 private:
-  virtual CBooleanLogicOperation* newOperation() { return new CSettingDependencyConditionCombination(m_settingsManager); }
-  virtual CBooleanLogicValue* newValue() { return new CSettingDependencyCondition(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicOperation* newOperation() { return new CSettingDependencyConditionCombination(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicValue* newValue() { return new CSettingDependencyCondition(m_settingsManager); }
 
   std::set<std::string> m_settings;
 };

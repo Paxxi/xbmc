@@ -33,21 +33,24 @@
 #endif
 
 // --------------------- Helper Functions ---------------------
-
+namespace KODI
+{
+namespace UTILS
+{
 #ifdef TARGET_WINDOWS
 
 std::wstring CEnvironment::win32ConvertUtf8ToW(const std::string &text, bool *resultSuccessful /* = NULL*/)  
 {
   if (text.empty())
   {
-    if (resultSuccessful != NULL)
+    if (resultSuccessful != nullptr)
       *resultSuccessful = true;
     return L"";
   }
-  if (resultSuccessful != NULL)
+  if (resultSuccessful != nullptr)
     *resultSuccessful = false;
 
-  int bufSize = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.c_str(), -1, NULL, 0);
+  int bufSize = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.c_str(), -1, nullptr, 0);
   if (bufSize == 0)
     return L"";
   wchar_t *converted = new wchar_t[bufSize];
@@ -60,7 +63,7 @@ std::wstring CEnvironment::win32ConvertUtf8ToW(const std::string &text, bool *re
   std::wstring Wret (converted);
   delete[] converted;
 
-  if (resultSuccessful != NULL)
+  if (resultSuccessful != nullptr)
     *resultSuccessful = true;
   return Wret;
 }
@@ -69,18 +72,18 @@ std::string CEnvironment::win32ConvertWToUtf8(const std::wstring &text, bool *re
 {
   if (text.empty())
   {
-    if (resultSuccessful != NULL)
+    if (resultSuccessful != nullptr)
       *resultSuccessful = true;
     return "";
   }
-  if (resultSuccessful != NULL)
+  if (resultSuccessful != nullptr)
     *resultSuccessful = false;
 
-  int bufSize = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.c_str(), -1, NULL, 0, NULL, NULL);
+  int bufSize = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.c_str(), -1, nullptr, 0, nullptr, nullptr);
   if (bufSize == 0)
     return "";
   char * converted = new char[bufSize];
-  if (WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.c_str(), -1, converted, bufSize, NULL, NULL) != bufSize)
+  if (WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.c_str(), -1, converted, bufSize, nullptr, nullptr) != bufSize)
   {
     delete[] converted;
     return "";
@@ -89,7 +92,7 @@ std::string CEnvironment::win32ConvertWToUtf8(const std::wstring &text, bool *re
   std::string ret(converted);
   delete[] converted;
   
-  if (resultSuccessful != NULL)
+  if (resultSuccessful != nullptr)
     *resultSuccessful = true;
   return ret;
 }
@@ -135,45 +138,45 @@ int CEnvironment::win32_setenv(const std::string &name, const std::string &value
     EnvString = Wname + L"=" + Wvalue;
 
   static const wchar_t *modulesList[] =
-  {
-  /*{ L"msvcrt20.dll" }, // Visual C++ 2.0 / 2.1 / 2.2
+      {
+        /*{ L"msvcrt20.dll" }, // Visual C++ 2.0 / 2.1 / 2.2
     { L"msvcrt40.dll" }, // Visual C++ 4.0 / 4.1 */ // too old and no UNICODE support - ignoring
-    { L"msvcrt.dll" },   // Visual Studio 6.0 / MinGW[-w64]
-    { L"msvcr70.dll" },  // Visual Studio 2002
-    { L"msvcr71.dll" },  // Visual Studio 2003
-    { L"msvcr80.dll" },  // Visual Studio 2005
-    { L"msvcr90.dll" },  // Visual Studio 2008
-    { L"msvcr100.dll" }, // Visual Studio 2010
+        { L"msvcrt.dll" },   // Visual Studio 6.0 / MinGW[-w64]
+        { L"msvcr70.dll" },  // Visual Studio 2002
+        { L"msvcr71.dll" },  // Visual Studio 2003
+        { L"msvcr80.dll" },  // Visual Studio 2005
+        { L"msvcr90.dll" },  // Visual Studio 2008
+        { L"msvcr100.dll" }, // Visual Studio 2010
 #ifdef _DEBUG
-    { L"msvcr100d.dll" },// Visual Studio 2010 (debug)
+        { L"msvcr100d.dll" },// Visual Studio 2010 (debug)
 #endif
-    { L"msvcr110.dll" }, // Visual Studio 2012
+        { L"msvcr110.dll" }, // Visual Studio 2012
 #ifdef _DEBUG
-    { L"msvcr110d.dll" },// Visual Studio 2012 (debug)
+        { L"msvcr110d.dll" },// Visual Studio 2012 (debug)
 #endif
-    { L"msvcr120.dll" }, // Visual Studio 2013
+        { L"msvcr120.dll" }, // Visual Studio 2013
 #ifdef _DEBUG
-    { L"msvcr120d.dll" },// Visual Studio 2013 (debug)
+        { L"msvcr120d.dll" },// Visual Studio 2013 (debug)
 #endif
-    { NULL }             // Terminating NULL for list
-  };
+        { NULL }             // Terminating NULL for list
+      };
   
   // Check all modules each function run, because modules can be loaded/unloaded at runtime
   for (int i = 0; modulesList[i]; i++)
   {
     HMODULE hModule;
-    if (!GetModuleHandleExW(0, modulesList[i], &hModule) || hModule == NULL) // Flag 0 ensures that module will be kept loaded until it'll be freed
+    if (!GetModuleHandleExW(0, modulesList[i], &hModule) || hModule == nullptr) // Flag 0 ensures that module will be kept loaded until it'll be freed
       continue; // Module not loaded
 
-    wputenvPtr wputenvFunc = (wputenvPtr) GetProcAddress(hModule, "_wputenv");
-    if (wputenvFunc != NULL && wputenvFunc(EnvString.c_str()) != 0)
+    wputenvPtr wputenvFunc = reinterpret_cast<wputenvPtr>(GetProcAddress(hModule, "_wputenv"));
+    if (wputenvFunc != nullptr && wputenvFunc(EnvString.c_str()) != 0)
       retValue |= 2; // At lest one external runtime library Environment update failed
     FreeLibrary(hModule);
   }
 
   // Update process Environment used for current process and for future new child processes
   if (action == deleteVariable || value.empty())
-    retValue += SetEnvironmentVariableW(Wname.c_str(), NULL) ? 0 : 4; // 4 if failed
+    retValue += SetEnvironmentVariableW(Wname.c_str(), nullptr) ? 0 : 4; // 4 if failed
   else
     retValue += SetEnvironmentVariableW(Wname.c_str(), Wvalue.c_str()) ? 0 : 4; // 4 if failed
   
@@ -205,12 +208,12 @@ std::string CEnvironment::getenv(const std::string &name)
     return "";
 
   wchar_t * wStr = ::_wgetenv(Wname.c_str());
-  if (wStr != NULL)
+  if (wStr != nullptr)
     return win32ConvertWToUtf8(wStr);
 
   // Not found in Environment of runtime library 
   // Try Environment of process as fallback
-  unsigned int varSize = GetEnvironmentVariableW(Wname.c_str(), NULL, 0);
+  unsigned int varSize = GetEnvironmentVariableW(Wname.c_str(), nullptr, 0);
   if (varSize == 0)
     return ""; // Not found
   wchar_t * valBuf = new wchar_t[varSize];
@@ -259,4 +262,4 @@ int CEnvironment::putenv(const std::string &envstring)
 
   return setenv(name, value);
 }
-
+}}

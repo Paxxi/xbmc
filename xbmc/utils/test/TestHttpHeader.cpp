@@ -22,6 +22,8 @@
 #include "utils/HttpHeader.h"
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 #define CHECK_CNT_TYPE_NAME "Content-Type"
 #define CHECK_CONTENT_TYPE_HTML "text/html"
 #define CHECK_CONTENT_TYPE_HTML_CHRS "text/html; charset=WINDOWS-1251"

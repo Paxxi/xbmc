@@ -46,8 +46,8 @@ public:
   virtual bool Check() const;
 
 private:
-  virtual CBooleanLogicOperation* newOperation() { return new CSettingCategoryAccessConditionCombination(m_settingsManager); }
-  virtual CBooleanLogicValue* newValue() { return new CSettingCategoryAccessCondition(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicOperation* newOperation() { return new CSettingCategoryAccessConditionCombination(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicValue* newValue() { return new CSettingCategoryAccessCondition(m_settingsManager); }
 };
 
 class CSettingCategoryAccess : public CSettingCondition

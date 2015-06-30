@@ -23,6 +23,10 @@
 #include <string>
 #include <stdint.h>
 
+namespace KODI
+{
+namespace UTILS
+{
 class Crc32
 {
 public:
@@ -40,4 +44,4 @@ public:
 private:
   uint32_t m_crc;
 };
-
+}}

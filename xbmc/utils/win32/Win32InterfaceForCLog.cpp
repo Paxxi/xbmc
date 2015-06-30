@@ -103,7 +103,7 @@ void CWin32InterfaceForCLog::PrintDebugString(const std::string& debugString)
 #ifdef _DEBUG
   ::OutputDebugStringW(L"Debug Print: ");
   int bufSize = MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(), NULL, 0);
-  XUTILS::auto_buffer buf(sizeof(wchar_t) * (bufSize + 1)); // '+1' for extra safety
+  auto_buffer buf(sizeof(wchar_t) * (bufSize + 1)); // '+1' for extra safety
   if (MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(), (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t)) == bufSize)
     ::OutputDebugStringW(std::wstring((wchar_t*)buf.get(), bufSize).c_str());
   else

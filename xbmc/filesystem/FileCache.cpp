@@ -33,7 +33,7 @@
 #include <cassert>
 #include <algorithm>
 
-using namespace AUTOPTR;
+using namespace KODI::UTILS;
 using namespace XFILE;
 
 #define READ_CACHE_CHUNK_SIZE (64*1024)

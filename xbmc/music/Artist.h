@@ -94,7 +94,7 @@ public:
   std::vector<std::string> yearsActive;
   std::string strPath;
   CScraperUrl thumbURL;
-  CFanart fanart;
+  KODI::UTILS::CFanart fanart;
   std::vector<std::pair<std::string,std::string> > discography;
 };
 

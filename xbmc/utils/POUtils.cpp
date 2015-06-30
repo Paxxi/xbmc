@@ -46,7 +46,7 @@ bool CPODocument::LoadFile(const std::string &pofilename)
     return false;
 
   XFILE::CFile file;
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
   if (file.LoadFile(poFileUrl, buf) < 18) // at least a size of a minimalistic header
   {
     CLog::Log(LOGERROR, "%s: can't load file \"%s\" or file is too small", __FUNCTION__,  pofilename.c_str());

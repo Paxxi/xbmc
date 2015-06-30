@@ -626,7 +626,7 @@ std::string CGUIEditControl::GetLabel2() const
   std::string text;
   g_charsetConverter.wToUTF8(m_text2, text);
   if (m_inputType == INPUT_TYPE_PASSWORD_MD5 && !m_isMD5)
-    return XBMC::XBMC_MD5::GetMD5(text);
+    return XBMC_MD5::GetMD5(text);
   return text;
 }
 

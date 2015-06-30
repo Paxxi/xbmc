@@ -24,6 +24,10 @@
 #include <string>
 #include <vector>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CHttpRange
 {
 public:
@@ -69,7 +73,7 @@ public:
   void SetData(const void* data, uint64_t length);
   void SetData(const void* data, uint64_t firstPosition, uint64_t lastPosition);
 
-  virtual bool IsValid() const;
+  virtual bool IsValid() const override;
 
 protected:
   const void* m_data;
@@ -196,4 +200,4 @@ public:
   */
   static std::string GenerateMultipartBoundaryEnd(const std::string& multipartBoundary);
 };
-
+}}

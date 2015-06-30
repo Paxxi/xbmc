@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -20,9 +21,6 @@
 
  /* Endian_SwapXX functions taken from SDL (SDL_endian.h) */
 
-#ifndef __ENDIAN_SWAP_H__
-#define __ENDIAN_SWAP_H__
-
 /* Include config.h to define (or not) WORDS_BIGENDIAN
    File created by configure */
 #if defined(TARGET_POSIX)
@@ -35,6 +33,10 @@
 #endif
 
 
+namespace KODI
+{
+namespace UTILS
+{
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
@@ -59,30 +61,30 @@ static __inline__ uint32_t Endian_Swap32(uint32_t x)
         return result;
 }
 #else
-static __inline__ uint16_t Endian_Swap16(uint16_t x) {
-        return((x<<8)|(x>>8));
-}
+  static __inline__ uint16_t Endian_Swap16(uint16_t x) {
+    return((x<<8)|(x>>8));
+  }
 
-static __inline__ uint32_t Endian_Swap32(uint32_t x) {
-        return((x<<24)|((x<<8)&0x00FF0000)|((x>>8)&0x0000FF00)|(x>>24));
-}
+  static __inline__ uint32_t Endian_Swap32(uint32_t x) {
+    return((x<<24)|((x<<8)&0x00FF0000)|((x>>8)&0x0000FF00)|(x>>24));
+  }
 #endif
 
-static __inline__ uint64_t Endian_Swap64(uint64_t x) {
-        uint32_t hi, lo;
+  static __inline__ uint64_t Endian_Swap64(uint64_t x) {
+    uint32_t hi, lo;
 
-        /* Separate into high and low 32-bit values and swap them */
-        lo = (uint32_t)(x&0xFFFFFFFF);
-        x >>= 32;
-        hi = (uint32_t)(x&0xFFFFFFFF);
-        x = Endian_Swap32(lo);
-        x <<= 32;
-        x |= Endian_Swap32(hi);
-        return(x);
+    /* Separate into high and low 32-bit values and swap them */
+    lo = (uint32_t)(x&0xFFFFFFFF);
+    x >>= 32;
+    hi = (uint32_t)(x&0xFFFFFFFF);
+    x = Endian_Swap32(lo);
+    x <<= 32;
+    x |= Endian_Swap32(hi);
+    return(x);
 
-}
+  }
 
-void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w);
+  void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w);
 
 #ifndef WORDS_BIGENDIAN
 #define Endian_SwapLE16(X) (X)
@@ -100,9 +102,8 @@ void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w);
 #define Endian_SwapBE64(X) (X)
 #endif
 
-/* Ends C function definitions when using C++ */
+  /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
-
-#endif  /* __ENDIAN_SWAP_H__ */
+}}

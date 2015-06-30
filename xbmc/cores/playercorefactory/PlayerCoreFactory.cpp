@@ -36,7 +36,6 @@
 
 #define PLAYERCOREFACTORY_XML "playercorefactory.xml"
 
-using namespace AUTOPTR;
 using namespace KODI::UTILS;
 
 CPlayerCoreFactory::CPlayerCoreFactory()

@@ -54,7 +54,7 @@ class CKaraokeLyricsTextKAR : public CKaraokeLyricsText
     std::string     m_midiFile;
 
     // MIDI in-memory information
-    XUTILS::auto_buffer m_midiData;
+    KODI::UTILS::auto_buffer m_midiData;
     size_t        m_midiOffset;
     bool          m_reportedInvalidVarField;
 };

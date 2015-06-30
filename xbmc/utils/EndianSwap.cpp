@@ -20,6 +20,10 @@
 
 #include "EndianSwap.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 /* based on libavformat/spdif.c */
 void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w)
 {
@@ -39,4 +43,4 @@ void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w)
   for (; i < w; i++)
     dst[i + 0] = Endian_Swap16(src[i + 0]);
 }
-
+}}

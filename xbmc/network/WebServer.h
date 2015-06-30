@@ -57,7 +57,7 @@ public:
   static int GetRequestHeaderValues(struct MHD_Connection *connection, enum MHD_ValueKind kind, std::map<std::string, std::string> &headerValues);
   static int GetRequestHeaderValues(struct MHD_Connection *connection, enum MHD_ValueKind kind, std::multimap<std::string, std::string> &headerValues);
 
-  static bool GetRequestedRanges(struct MHD_Connection *connection, uint64_t totalLength, CHttpRanges &ranges);
+  static bool GetRequestedRanges(struct MHD_Connection *connection, uint64_t totalLength, KODI::UTILS::CHttpRanges &ranges);
 
 private:
   struct MHD_Daemon* StartMHD(unsigned int flags, int port);

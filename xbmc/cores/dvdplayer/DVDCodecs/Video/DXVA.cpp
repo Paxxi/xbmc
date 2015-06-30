@@ -45,7 +45,6 @@
 #define ALLOW_ADDING_SURFACES 0
 
 using namespace DXVA;
-using namespace AUTOPTR;
 using namespace KODI::UTILS;
 using namespace std;
 

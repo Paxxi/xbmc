@@ -24,11 +24,14 @@
 #include "Fanart.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
-#include "URIUtils.h"
-#include "StringUtils.h"
+#include "utils/URIUtils.h"
+#include "utils/StringUtils.h"
 
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 const unsigned int CFanart::max_fanart_colors=3;
 
 
@@ -116,7 +119,7 @@ std::string CFanart::GetPreviewURL(unsigned int index) const
 const std::string CFanart::GetColor(unsigned int index) const
 {
   if (index >= max_fanart_colors || m_fanart.size() == 0 ||
-      m_fanart[0].strColors.size() < index*9+8)
+    m_fanart[0].strColors.size() < index*9+8)
     return "FFFFFFFF";
 
   // format is AARRGGBB,AARRGGBB etc.
@@ -158,7 +161,7 @@ bool CFanart::ParseColors(const std::string &colorsIn, std::string &colorsOut)
   { // need conversion
     colorsOut.clear();
     std::vector<std::string> strColors = StringUtils::Split(colorsIn, "|");
-    for (int i = 0; i < std::min((int)strColors.size()-1, (int)max_fanart_colors); i++)
+    for (int i = 0; i < std::min(static_cast<int>(strColors.size())-1, static_cast<int>(max_fanart_colors)); i++)
     { // split up each color
       std::vector<std::string> strTriplets = StringUtils::Split(strColors[i+1], ",");
       if (strTriplets.size() == 3)
@@ -175,3 +178,4 @@ bool CFanart::ParseColors(const std::string &colorsIn, std::string &colorsOut)
   }
   return true;
 }
+}}

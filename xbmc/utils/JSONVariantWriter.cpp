@@ -23,29 +23,32 @@
 #include "JSONVariantWriter.h"
 
 using namespace std;
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 string CJSONVariantWriter::Write(const CVariant &value, bool compact)
 {
   string output;
 
-  yajl_gen g = yajl_gen_alloc(NULL);
+  yajl_gen g = yajl_gen_alloc(nullptr);
   yajl_gen_config(g, yajl_gen_beautify, compact ? 0 : 1);
   yajl_gen_config(g, yajl_gen_indent_string, "\t");
 
   // Set locale to classic ("C") to ensure valid JSON numbers
 #ifndef TARGET_WINDOWS
-  const char *currentLocale = setlocale(LC_NUMERIC, NULL);
+  const char *currentLocale = setlocale(LC_NUMERIC, nullptr);
   std::string backupLocale;
-  if (currentLocale != NULL && (currentLocale[0] != 'C' || currentLocale[1] != 0))
+  if (currentLocale != nullptr && (currentLocale[0] != 'C' || currentLocale[1] != 0))
   {
     backupLocale = currentLocale;
     setlocale(LC_NUMERIC, "C");
   }
 #else  // TARGET_WINDOWS
-  const wchar_t* const currentLocale = _wsetlocale(LC_NUMERIC, NULL);
+  const wchar_t* const currentLocale = _wsetlocale(LC_NUMERIC, nullptr);
   std::wstring backupLocale;
-  if (currentLocale != NULL && (currentLocale[0] != L'C' || currentLocale[1] != 0))
+  if (currentLocale != nullptr && (currentLocale[0] != L'C' || currentLocale[1] != 0))
   {
     backupLocale = currentLocale;
     _wsetlocale(LC_NUMERIC, L"C");
@@ -58,7 +61,7 @@ string CJSONVariantWriter::Write(const CVariant &value, bool compact)
 
     size_t length;
     yajl_gen_get_buf(g, &buffer, &length);
-    output = string((const char *)buffer, length);
+    output = string(reinterpret_cast<const char *>(buffer), length);
   }
 
   // Re-set locale to what it was before using yajl
@@ -83,10 +86,10 @@ bool CJSONVariantWriter::InternalWrite(yajl_gen g, const CVariant &value)
   switch (value.type())
   {
   case CVariant::VariantTypeInteger:
-    success = yajl_gen_status_ok == yajl_gen_integer(g, (long long int)value.asInteger());
+    success = yajl_gen_status_ok == yajl_gen_integer(g, static_cast<long long int>(value.asInteger()));
     break;
   case CVariant::VariantTypeUnsignedInteger:
-    success = yajl_gen_status_ok == yajl_gen_integer(g, (long long int)value.asUnsignedInteger());
+    success = yajl_gen_status_ok == yajl_gen_integer(g, static_cast<long long int>(value.asUnsignedInteger()));
     break;
   case CVariant::VariantTypeDouble:
     success = yajl_gen_status_ok == yajl_gen_double(g, value.asDouble());
@@ -95,7 +98,7 @@ bool CJSONVariantWriter::InternalWrite(yajl_gen g, const CVariant &value)
     success = yajl_gen_status_ok == yajl_gen_bool(g, value.asBoolean() ? 1 : 0);
     break;
   case CVariant::VariantTypeString:
-    success = yajl_gen_status_ok == yajl_gen_string(g, (const unsigned char*)value.c_str(), (size_t)value.size());
+    success = yajl_gen_status_ok == yajl_gen_string(g, reinterpret_cast<const unsigned char*>(value.c_str()), static_cast<size_t>(value.size()));
     break;
   case CVariant::VariantTypeArray:
     success = yajl_gen_status_ok == yajl_gen_array_open(g);
@@ -112,7 +115,7 @@ bool CJSONVariantWriter::InternalWrite(yajl_gen g, const CVariant &value)
 
     for (CVariant::const_iterator_map itr = value.begin_map(); itr != value.end_map() && success; ++itr)
     {
-      success &= yajl_gen_status_ok == yajl_gen_string(g, (const unsigned char*)itr->first.c_str(), (size_t)itr->first.length());
+      success &= yajl_gen_status_ok == yajl_gen_string(g, reinterpret_cast<const unsigned char*>(itr->first.c_str()), static_cast<size_t>(itr->first.length()));
       if (success)
         success &= InternalWrite(g, itr->second);
     }
@@ -130,3 +133,4 @@ bool CJSONVariantWriter::InternalWrite(yajl_gen g, const CVariant &value)
 
   return success;
 }
+}}

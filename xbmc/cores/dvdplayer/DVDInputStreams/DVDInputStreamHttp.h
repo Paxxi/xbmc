@@ -40,11 +40,11 @@ public:
   virtual bool IsEOF();
   virtual int64_t GetLength();
 
-  CHttpHeader* GetHttpHeader();
+  KODI::UTILS::CHttpHeader* GetHttpHeader();
 
 protected:
   XFILE::CCurlFile* m_pFile;
-  CHttpHeader m_httpHeader;
+  KODI::UTILS::CHttpHeader m_httpHeader;
   bool m_eof;
 };
 

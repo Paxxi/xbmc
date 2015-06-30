@@ -1,9 +1,4 @@
-// Fanart.h
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(FANART_H_)
-#define FANART_H_
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -27,8 +22,10 @@
 #include <string>
 #include <vector>
 
-#pragma once
-
+namespace KODI
+{
+namespace UTILS
+{
 ///
 /// /brief CFanart is the core of fanart support and contains all fanart data for a specific show
 ///
@@ -116,5 +113,4 @@ private:
   /// std::vector that stores all our fanart data
   std::vector<SFanartData> m_fanart;
 };
-
-#endif
+}}

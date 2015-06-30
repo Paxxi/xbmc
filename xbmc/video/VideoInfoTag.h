@@ -28,7 +28,13 @@
 #include "utils/StreamDetails.h"
 #include "video/Bookmark.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class CArchive;
+}}
+
 class TiXmlNode;
 class TiXmlElement;
 
@@ -46,7 +52,7 @@ struct SActorInfo
   int        order;
 };
 
-class CVideoInfoTag : public IArchivable, public ISerializable, public KODI::UTILS::ISortable
+class CVideoInfoTag : public KODI::UTILS::IArchivable, public KODI::UTILS::ISerializable, public KODI::UTILS::ISortable
 {
 public:
   CVideoInfoTag() { Reset(); };
@@ -68,7 +74,7 @@ public:
    */
   bool Load(const TiXmlElement *element, bool append = false, bool prioritise = false);
   bool Save(TiXmlNode *node, const std::string &tag, bool savePathInfo = true, const TiXmlElement *additionalNode = NULL);
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(KODI::UTILS::CArchive& ar);
   virtual void Serialize(KODI::UTILS::CVariant& value) const;
   virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
   const std::string GetCast(bool bIncludeRole = false) const;
@@ -177,7 +183,7 @@ public:
   int m_iBookmarkId;
   int m_iIdShow;
   int m_iIdSeason;
-  CFanart m_fanart;
+  KODI::UTILS::CFanart m_fanart;
   KODI::UTILS::CStreamDetails m_streamDetails;
   CBookmark m_resumePoint;
   CDateTime m_dateAdded;

@@ -498,7 +498,7 @@ std::string CUtil::GetFileMD5(const std::string& strPath)
   std::string result;
   if (file.Open(strPath))
   {
-    XBMC::XBMC_MD5 md5;
+    XBMC_MD5 md5;
     char temp[1024];
     while (true)
     {

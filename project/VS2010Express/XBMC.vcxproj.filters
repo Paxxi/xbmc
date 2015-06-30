@@ -6029,6 +6029,9 @@
     <ClInclude Include="..\..\xbmc\guilib\utils\SortUtils.h">
       <Filter>guilib\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\IArchivable.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">

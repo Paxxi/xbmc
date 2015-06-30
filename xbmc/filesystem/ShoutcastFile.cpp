@@ -157,7 +157,7 @@ bool CShoutcastFile::ExtractTagInfo(const char* buf)
 
   std::wstring wBuffer, wConverted;
   g_charsetConverter.utf8ToW(strBuffer, wBuffer, false);
-  HTML::CHTMLUtil::ConvertHTMLToW(wBuffer, wConverted);
+  CHTMLUtil::ConvertHTMLToW(wBuffer, wConverted);
   g_charsetConverter.wToUTF8(wConverted, strBuffer);
 
   CRegExp reTitle(true);

@@ -190,7 +190,7 @@ protected:
   bool m_started;
   std::string m_codecname;
 
-  BitstreamStats m_videoStats;
+  KODI::UTILS::BitstreamStats m_videoStats;
 
   // classes
   CDVDStreamInfo m_hints;

@@ -27,6 +27,8 @@
 #include "utils/MathUtils.h"
 #include "utils/log.h"
 
+using namespace KODI::UTILS;
+
 class CDVDMsgGeneralSynchronizePriv
 {
 public:

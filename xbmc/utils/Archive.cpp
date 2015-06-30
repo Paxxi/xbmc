@@ -31,8 +31,11 @@
 #endif
 
 using namespace XFILE;
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 CArchive::CArchive(CFile* pFile, int mode)
 {
   m_pFile = pFile;
@@ -441,3 +444,4 @@ CArchive &CArchive::streamin_bufferwrap(uint8_t *ptr, size_t size)
   } while (size > 0);
   return *this;
 }
+}}

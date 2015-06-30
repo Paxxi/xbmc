@@ -44,5 +44,5 @@ bool CSettingRequirementConditionCombination::Check() const
 CSettingRequirement::CSettingRequirement(CSettingsManager *settingsManager /* = NULL */)
   : CSettingCondition(settingsManager)
 {
-  m_operation = CBooleanLogicOperationPtr(new CSettingRequirementConditionCombination(m_settingsManager));
+  m_operation = KODI::UTILS::CBooleanLogicOperationPtr(new CSettingRequirementConditionCombination(m_settingsManager));
 }

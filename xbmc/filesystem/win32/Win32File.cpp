@@ -180,7 +180,7 @@ ssize_t CWin32File::Read(void* lpBuf, size_t uiBufSize)
 
   if (uiBufSize == 0)
   { // allow "test" read with zero size
-    XUTILS::auto_buffer dummyBuf(255);
+    auto_buffer dummyBuf(255);
     DWORD bytesRead = 0;
     if (!ReadFile(m_hFile, dummyBuf.get(), 0, &bytesRead, NULL))
       return -1;
@@ -241,7 +241,7 @@ ssize_t CWin32File::Write(const void* lpBuf, size_t uiBufSize)
 
   if (uiBufSize == 0)
   { // allow "test" write with zero size
-    XUTILS::auto_buffer dummyBuf(255);
+    auto_buffer dummyBuf(255);
     dummyBuf.get()[0] = 0;
     DWORD bytesWritten = 0;
     if (!WriteFile(m_hFile, dummyBuf.get(), 0, &bytesWritten, NULL))

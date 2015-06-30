@@ -20,10 +20,12 @@
 
 #include "AutoPtrHandle.h"
 
-using namespace AUTOPTR;
-
+namespace KODI
+{
+namespace UTILS
+{
 CAutoPtrHandle::CAutoPtrHandle(HANDLE hHandle)
-    : m_hHandle(hHandle)
+  : m_hHandle(hHandle)
 {}
 
 CAutoPtrHandle::~CAutoPtrHandle(void)
@@ -71,7 +73,7 @@ void CAutoPtrHandle::reset()
 
 //-------------------------------------------------------------------------------
 CAutoPtrFind ::CAutoPtrFind(HANDLE hHandle)
-    : CAutoPtrHandle(hHandle)
+  : CAutoPtrHandle(hHandle)
 {}
 CAutoPtrFind::~CAutoPtrFind(void)
 {
@@ -89,7 +91,7 @@ void CAutoPtrFind::Cleanup()
 
 //-------------------------------------------------------------------------------
 CAutoPtrSocket::CAutoPtrSocket(SOCKET hSocket)
-    : m_hSocket(hSocket)
+  : m_hSocket(hSocket)
 {}
 
 CAutoPtrSocket::~CAutoPtrSocket(void)
@@ -134,3 +136,4 @@ void CAutoPtrSocket::reset()
 {
   Cleanup();
 }
+}}

@@ -260,7 +260,7 @@ bool CJpegIO::Open(const std::string &texturePath, unsigned int minx, unsigned i
   m_texturePath = texturePath;
 
   XFILE::CFile file;
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
   if (file.LoadFile(texturePath, buf) <= 0)
     return false;
 

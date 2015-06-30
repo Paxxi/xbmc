@@ -26,6 +26,10 @@
 
 #include "utils/IXmlDeserializable.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 typedef enum {
   BooleanLogicOperationOr = 0,
   BooleanLogicOperationAnd
@@ -99,3 +103,4 @@ public:
 protected:
   CBooleanLogicOperationPtr m_operation;
 };
+}}

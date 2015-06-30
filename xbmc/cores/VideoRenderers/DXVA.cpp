@@ -40,7 +40,6 @@
 #include <memory>
 
 using namespace DXVA;
-using namespace AUTOPTR;
 using namespace KODI::UTILS;
 using namespace std;
 

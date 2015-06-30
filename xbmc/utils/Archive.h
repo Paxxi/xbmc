@@ -30,13 +30,12 @@ namespace XFILE
 {
   class CFile;
 }
+
 namespace KODI
 {
 namespace UTILS
 {
 class CVariant;
-}
-}
 class IArchivable;
 
 class CArchive
@@ -200,3 +199,4 @@ private:
   void FillBuffer();
   CArchive &streamin_bufferwrap(uint8_t *ptr, size_t size);
 };
+}}

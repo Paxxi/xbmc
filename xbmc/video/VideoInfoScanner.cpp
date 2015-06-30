@@ -1763,7 +1763,7 @@ namespace VIDEO
   {
     // Create a hash based on the filenames, filesize and filedate.  Also count the number of files
     if (0 == items.Size()) return 0;
-    XBMC::XBMC_MD5 md5state;
+    XBMC_MD5 md5state;
     int count = 0;
     for (int i = 0; i < items.Size(); ++i)
     {
@@ -1794,7 +1794,7 @@ namespace VIDEO
 
   std::string CVideoInfoScanner::GetFastHash(const std::string &directory, const vector<string> &excludes) const
   {
-    XBMC::XBMC_MD5 md5state;
+    XBMC_MD5 md5state;
 
     if (excludes.size())
       md5state.append(StringUtils::Join(excludes, "|"));
@@ -1820,7 +1820,7 @@ namespace VIDEO
     items.Add(CFileItemPtr(new CFileItem(directory, true)));
     CUtil::GetRecursiveDirsListing(directory, items, DIR_FLAG_NO_FILE_DIRS | DIR_FLAG_NO_FILE_INFO);
 
-    XBMC::XBMC_MD5 md5state;
+    XBMC_MD5 md5state;
 
     if (excludes.size())
       md5state.append(StringUtils::Join(excludes, "|"));

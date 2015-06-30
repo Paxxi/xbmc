@@ -22,6 +22,10 @@
 
 #include "HttpResponse.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 #define SPACE     " "
 #define SEPARATOR ": "
 #define LINEBREAK "\r\n"
@@ -36,7 +40,7 @@ CHttpResponse::CHttpResponse(HTTP::Method method, HTTP::StatusCode status, HTTP:
   m_status = status;
   m_version = version;
 
-  m_content = NULL;
+  m_content = nullptr;
   m_contentLength = 0;
 }
 
@@ -52,7 +56,7 @@ void CHttpResponse::SetContent(const char* data, unsigned int length)
 {
   m_content = data;
 
-  if (m_content == NULL)
+  if (m_content == nullptr)
     m_contentLength = 0;
   else
     m_contentLength = length;
@@ -65,20 +69,20 @@ unsigned int CHttpResponse::Create(char *&response)
   m_buffer.append("HTTP/");
   switch (m_version)
   {
-    case HTTP::Version1_0:
-      m_buffer.append("1.0");
-      break;
+  case HTTP::Version1_0:
+    m_buffer.append("1.0");
+    break;
 
-    case HTTP::Version1_1:
-      m_buffer.append("1.1");
-      break;
+  case HTTP::Version1_1:
+    m_buffer.append("1.1");
+    break;
 
-    default:
-      return 0;
+  default:
+    return 0;
   }
 
   char statusBuffer[4];
-  sprintf(statusBuffer, "%d", (int)m_status);
+  sprintf(statusBuffer, "%d", static_cast<int>(m_status));
   m_buffer.append(SPACE);
   m_buffer.append(statusBuffer);
 
@@ -98,7 +102,7 @@ unsigned int CHttpResponse::Create(char *&response)
       hasContentLengthHeader = true;
   }
 
-  if (!hasContentLengthHeader && m_content != NULL && m_contentLength > 0)
+  if (!hasContentLengthHeader && m_content != nullptr && m_contentLength > 0)
   {
     m_buffer.append(HEADER_CONTENT_LENGTH);
     m_buffer.append(SEPARATOR);
@@ -109,10 +113,10 @@ unsigned int CHttpResponse::Create(char *&response)
   }
 
   m_buffer.append(LINEBREAK);
-  if (m_content != NULL && m_contentLength > 0)
+  if (m_content != nullptr && m_contentLength > 0)
     m_buffer.append(m_content, m_contentLength);
 
-  response = (char *)m_buffer.c_str();
+  response = const_cast<char *>(m_buffer.c_str());
   return m_buffer.size();
 }
 
@@ -177,3 +181,4 @@ std::map<HTTP::StatusCode, std::string> CHttpResponse::createStatusCodes()
 
   return map;
 }
+}}

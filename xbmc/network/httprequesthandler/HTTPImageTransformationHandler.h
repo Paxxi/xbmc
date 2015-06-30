@@ -40,7 +40,7 @@ public:
   virtual bool CanBeCached() const { return true; }
   virtual bool GetLastModifiedDate(CDateTime &lastModified) const;
 
-  virtual HttpResponseRanges GetResponseData() const { return m_responseData; }
+  virtual KODI::UTILS::HttpResponseRanges GetResponseData() const { return m_responseData; }
 
   // priority must be higher than the one of CHTTPImageHandler
   virtual int GetPriority() const { return 6; }
@@ -53,5 +53,5 @@ private:
   CDateTime m_lastModified;
 
   uint8_t* m_buffer;
-  HttpResponseRanges m_responseData;
+  KODI::UTILS::HttpResponseRanges m_responseData;
 };

@@ -30,6 +30,7 @@
 #include "utils/auto_buffer.h"
 #include "karaokelyricscdg.h"
 
+using namespace KODI::UTILS;
 
 CKaraokeLyricsCDG::CKaraokeLyricsCDG( const std::string& cdgFile )
   : CKaraokeLyrics()
@@ -146,7 +147,7 @@ void CKaraokeLyricsCDG::Render()
 
   if ( UpdateBuffer( packets_due ) )
   {
-    XUTILS::auto_buffer buf(CDG_FULL_HEIGHT * CDG_FULL_WIDTH*sizeof(DWORD));
+    auto_buffer buf(CDG_FULL_HEIGHT * CDG_FULL_WIDTH*sizeof(DWORD));
     DWORD* const pixelbuf = (DWORD*)buf.get();
 
 	  // Update our texture content
@@ -542,7 +543,7 @@ bool CKaraokeLyricsCDG::Load()
 
   m_cdgStream.clear();
 
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
   if (file.LoadFile(m_cdgFile, buf) <= 0)
   {
     CLog::Log(LOGERROR, "CDG loader: can't load CDG file \"%s\"", m_cdgFile.c_str());

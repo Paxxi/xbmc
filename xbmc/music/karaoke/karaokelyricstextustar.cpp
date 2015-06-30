@@ -48,7 +48,7 @@ std::vector< std::string > CKaraokeLyricsTextUStar::readFile(const std::string &
   std::vector< std::string > lines;
 
   XFILE::CFile file;
-  XFILE::auto_buffer buf;
+  auto_buffer buf;
 
   if (file.LoadFile(lyricsFile, buf) <= 0)
   {

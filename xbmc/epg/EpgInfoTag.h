@@ -38,7 +38,7 @@ namespace EPG
   class CEpgInfoTag;
   typedef std::shared_ptr<EPG::CEpgInfoTag> CEpgInfoTagPtr;
 
-  class CEpgInfoTag : public ISerializable
+  class CEpgInfoTag : public KODI::UTILS::ISerializable
   {
     friend class CEpg;
     friend class CEpgDatabase;

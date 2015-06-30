@@ -94,7 +94,7 @@ private:
     bool checkAuthorization(const std::string& authStr, const std::string& method, const std::string& uri);
     void Copy(const CTCPClient& client);
 
-    HttpParser* m_httpParser;
+    KODI::UTILS::HttpParser* m_httpParser;
     DllLibPlist *m_pLibPlist;//the lib
     bool m_bAuthenticated;
     int  m_lastEvent;

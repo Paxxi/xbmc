@@ -22,9 +22,12 @@
 #include <new> // for std::bad_alloc
 #include <stdlib.h> // for malloc(), realloc() and free()
 
-using namespace XUTILS;
 
-auto_buffer::auto_buffer(size_t size) : p(0), s(0)
+namespace KODI
+{
+namespace UTILS
+{
+auto_buffer::auto_buffer(size_t size) : p(nullptr), s(0)
 {
   if (!size)
     return;
@@ -69,7 +72,7 @@ auto_buffer& auto_buffer::resize(size_t newSize)
 auto_buffer& auto_buffer::clear(void)
 {
   free(p);
-  p = 0;
+  p = nullptr;
   s = 0;
   return *this;
 }
@@ -88,8 +91,8 @@ auto_buffer& auto_buffer::attach(void* pointer, size_t size)
 void* auto_buffer::detach(void)
 {
   void* returnPtr = p;
-  p = 0;
+  p = nullptr;
   s = 0;
   return returnPtr;
 }
-
+}}

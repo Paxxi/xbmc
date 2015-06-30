@@ -73,7 +73,7 @@ typedef struct HTTPRequest
   std::string pathUrl;
   HTTPMethod method;
   std::string version;
-  CHttpRanges ranges;
+  KODI::UTILS::CHttpRanges ranges;
 } HTTPRequest;
 
 typedef struct HTTPResponseDetails {
@@ -153,7 +153,7 @@ public:
    *
    * \details This is only used if the response type is one of the HTTPMemoryDownload types.
    */
-  virtual HttpResponseRanges GetResponseData() const { return HttpResponseRanges(); };
+  virtual KODI::UTILS::HttpResponseRanges GetResponseData() const { return KODI::UTILS::HttpResponseRanges(); };
 
   /*!
   * \brief Returns the URL to which the request should be redirected.

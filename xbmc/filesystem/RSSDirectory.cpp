@@ -170,7 +170,7 @@ static void ParseItemMRSS(CFileItem* item, SResources& resources, TiXmlElement* 
 
     std::string description = text;
     if(XMLUtils::GetAttribute(item_child, "type") == "html")
-      HTML::CHTMLUtil::RemoveTags(description);
+      CHTMLUtil::RemoveTags(description);
     item->SetProperty("description", description);
   }
   else if(name == "category")
@@ -294,7 +294,7 @@ static void ParseItemRSS(CFileItem* item, SResources& resources, TiXmlElement* i
   else if(name == "description")
   {
     std::string description = text;
-    HTML::CHTMLUtil::RemoveTags(description);
+    CHTMLUtil::RemoveTags(description);
     item->SetProperty("description", description);
   }
   else if(name == "guid")

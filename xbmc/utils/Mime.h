@@ -26,6 +26,10 @@ class CURL;
 
 class CFileItem;
 
+namespace KODI
+{
+namespace UTILS
+{
 class CMime
 {
 public:
@@ -54,3 +58,5 @@ public:
 private:
   static std::map<std::string, std::string> m_mimetypes;
 };
+}}
+

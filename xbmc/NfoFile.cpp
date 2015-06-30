@@ -160,7 +160,7 @@ int CNfoFile::Load(const std::string& strFile)
 {
   Close();
   XFILE::CFile file;
-  XFILE::auto_buffer buf;
+  KODI::UTILS::auto_buffer buf;
   if (file.LoadFile(strFile, buf) > 0)
   {
     m_doc.assign(buf.get(), buf.size());

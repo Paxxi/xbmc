@@ -23,7 +23,9 @@
 #include "system.h" // for HANDLE and SOCKET
 #include <stdlib.h>
 
-namespace AUTOPTR
+namespace KODI
+{
+namespace UTILS
 {
 class CAutoPtrHandle
 {
@@ -93,7 +95,7 @@ public:
   // Members
 
   T &operator[](size_t idx) const { if (!p) abort(); return p[idx]; }
-T *get() const { return (T *) p; }
+  T *get() const { return (T *) p; }
   T *release() { T *tmp = p; p = 0; return tmp; }
   void reset(T *x = 0) { delete[] p; p = x; }
 
@@ -106,5 +108,4 @@ private:
   T *p;
 };
 
-
-}
+}}

@@ -36,13 +36,18 @@
 #include "IFileTypes.h"
 #include "PlatformDefs.h"
 
+namespace KODI
+{
+namespace UTILS
+{
 class BitstreamStats;
+}}
+
 class CURL;
 
 namespace XFILE
 {
 
-using ::XUTILS::auto_buffer;
 class IFile;
 
 class IFileCallback
@@ -80,7 +85,7 @@ public:
 
   bool Open(const CURL& file, const unsigned int flags = 0);
   bool OpenForWrite(const CURL& file, bool bOverWrite = false);
-  ssize_t LoadFile(const CURL &file, auto_buffer& outputBuffer);
+  ssize_t LoadFile(const CURL &file, KODI::UTILS::auto_buffer& outputBuffer);
 
   bool Open(const std::string& strFileName, const unsigned int flags = 0);
   bool OpenForWrite(const std::string& strFileName, bool bOverWrite = false);
@@ -112,7 +117,7 @@ public:
   int GetChunkSize();
   std::string GetContentMimeType(void);
   std::string GetContentCharset(void);
-  ssize_t LoadFile(const std::string &filename, auto_buffer& outputBuffer);
+  ssize_t LoadFile(const std::string &filename, KODI::UTILS::auto_buffer& outputBuffer);
 
 
   // will return a size, that is aligned to chunk size
@@ -126,7 +131,7 @@ public:
   }
 
   bool SkipNext();
-  BitstreamStats* GetBitstreamStats() { return m_bitStreamStats; }
+  KODI::UTILS::BitstreamStats* GetBitstreamStats() { return m_bitStreamStats; }
 
   int IoControl(EIoControl request, void* param);
 
@@ -188,7 +193,7 @@ private:
   unsigned int m_flags;
   IFile* m_pFile;
   CFileStreamBuffer* m_pBuffer;
-  BitstreamStats* m_bitStreamStats;
+  KODI::UTILS::BitstreamStats* m_bitStreamStats;
 };
 
 // streambuf for file io, only supports buffered input currently

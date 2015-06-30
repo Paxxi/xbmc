@@ -29,9 +29,12 @@
 #include "utils/StringUtils.h"
 #include "filesystem/CurlFile.h"
 
-using namespace KODI::UTILS;
 using namespace std;
 
+namespace KODI
+{
+namespace UTILS
+{
 map<string, string> fillMimeTypes()
 {
   map<string, string> mimeTypes;
@@ -695,3 +698,4 @@ bool CMime::parseMimeType(const std::string& mimeType, std::string& type, std::s
 
   return true;
 }
+}}

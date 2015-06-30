@@ -22,8 +22,11 @@
 #include "utils/StringUtils.h"
 #include "URL.h"
 
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 typedef struct Translator {
   const char *legacyPath;
   const char *newPath;
@@ -116,3 +119,4 @@ std::string CLegacyPathTranslation::TranslatePath(const std::string &legacyPath,
 
   return newPath;
 }
+}}

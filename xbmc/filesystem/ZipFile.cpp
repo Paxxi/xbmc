@@ -171,7 +171,7 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
   if (mZipItem.method == 8)
   {
     static const int blockSize = 128 * 1024;
-    XUTILS::auto_buffer buf(blockSize);
+    auto_buffer buf(blockSize);
     switch (iWhence)
     {
     case SEEK_SET:

@@ -30,6 +30,8 @@
 
 #include "karaokelyrics.h"
 
+using namespace KODI::UTILS;
+
 CKaraokeLyrics::CKaraokeLyrics()
 {
   m_avOrigDelay = 0;

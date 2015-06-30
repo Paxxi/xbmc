@@ -24,6 +24,10 @@
 #include <vector>
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 class CHttpHeader
 {
 public:
@@ -62,4 +66,4 @@ protected:
   std::string m_lastHeaderLine;
   static const char* const m_whitespaceChars;
 };
-
+}}

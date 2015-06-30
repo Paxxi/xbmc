@@ -46,8 +46,8 @@ public:
   virtual bool Check() const;
 
 private:
-  virtual CBooleanLogicOperation* newOperation() { return new CSettingRequirementConditionCombination(m_settingsManager); }
-  virtual CBooleanLogicValue* newValue() { return new CSettingRequirementCondition(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicOperation* newOperation() { return new CSettingRequirementConditionCombination(m_settingsManager); }
+  virtual KODI::UTILS::CBooleanLogicValue* newValue() { return new CSettingRequirementCondition(m_settingsManager); }
 };
 
 class CSettingRequirement : public CSettingCondition

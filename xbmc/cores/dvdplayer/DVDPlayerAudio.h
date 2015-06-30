@@ -203,7 +203,7 @@ protected:
   CDVDAudio m_dvdAudio; // audio output device
   CDVDClock* m_pClock; // dvd master clock
   CDVDAudioCodec* m_pAudioCodec; // audio codec
-  BitstreamStats m_audioStats;
+  KODI::UTILS::BitstreamStats m_audioStats;
 
   int     m_speed;
   bool    m_stalled;

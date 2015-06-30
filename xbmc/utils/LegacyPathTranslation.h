@@ -21,9 +21,13 @@
 
 #include <string>
 
-typedef struct Translator Translator;
-
 class CURL;
+
+namespace KODI
+{
+namespace UTILS
+{
+typedef struct Translator Translator;
 
 /*!
  \brief Translates old internal paths into new ones
@@ -56,3 +60,4 @@ public:
 private:
   static std::string TranslatePath(const std::string &legacyPath, Translator *translationMap, size_t translationMapSize);
 };
+}}

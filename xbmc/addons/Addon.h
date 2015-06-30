@@ -49,7 +49,7 @@ void OnPostInstall(const AddonPtr& addon, bool update, bool modal);
 void OnPreUnInstall(const AddonPtr& addon);
 void OnPostUnInstall(const AddonPtr& addon);
 
-class AddonProps : public ISerializable
+class AddonProps : public KODI::UTILS::ISerializable
 {
 public:
   AddonProps(const std::string &id, TYPE type, const std::string &versionstr, const std::string &minversionstr)

@@ -21,5 +21,10 @@
 
 #include <string>
 
+namespace KODI
+{
+namespace UTILS
+{
 bool IsAliasShortcut(const std::string& path);
 void TranslateAliasShortcut(std::string &path);
+}}

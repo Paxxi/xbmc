@@ -87,7 +87,7 @@ private:
 };
 
 /// \brief DateTime class, which uses FILETIME as it's base.
-class CDateTime : public IArchivable
+class CDateTime : public KODI::UTILS::IArchivable
 {
 public:
   CDateTime();
@@ -155,7 +155,7 @@ public:
 
   operator FILETIME() const;
 
-  virtual void Archive(CArchive& ar);
+  virtual void Archive(KODI::UTILS::CArchive& ar);
 
   void Reset();
 

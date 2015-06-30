@@ -22,6 +22,8 @@
 #include "addons/AddonManager.h"
 #include "network/WebServer.h"
 
+using namespace KODI::UTILS;
+
 #define ADDON_HEADER      "<html><head><title>Add-on List</title></head><body>\n<h1>Available web interfaces:</h1>\n<ul>\n"
 
 bool CHTTPWebinterfaceAddonsHandler::CanHandleRequest(const HTTPRequest &request)

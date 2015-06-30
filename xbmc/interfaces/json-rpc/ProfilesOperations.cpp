@@ -117,7 +117,7 @@ JSONRPC_STATUS CProfilesOperations::LoadProfile(const std::string &method, ITran
     std::string md5pword2;
     std::string encryption = passwordObject["encryption"].asString();
     if (encryption == "none")
-      md5pword2 = XBMC::XBMC_MD5::GetMD5(password);
+      md5pword2 = XBMC_MD5::GetMD5(password);
     else if (encryption == "md5")
       md5pword2 = password;
 

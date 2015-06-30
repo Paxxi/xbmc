@@ -38,7 +38,7 @@ public:
 
   virtual int HandleRequest();
 
-  virtual HttpResponseRanges GetResponseData() const { return m_responseRanges; }
+  virtual KODI::UTILS::HttpResponseRanges GetResponseData() const { return m_responseRanges; }
 
   virtual std::string GetRedirectUrl() const { return m_redirectUrl; }
 
@@ -61,7 +61,7 @@ private:
 
   std::string m_requestData;
   std::string m_responseData;
-  HttpResponseRanges m_responseRanges;
+  KODI::UTILS::HttpResponseRanges m_responseRanges;
 
   std::string m_redirectUrl;
 };

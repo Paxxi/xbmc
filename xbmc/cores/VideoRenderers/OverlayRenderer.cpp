@@ -42,6 +42,7 @@
 #endif
 
 using namespace OVERLAY;
+using namespace KODI::UTILS;
 
 
 COverlay::COverlay()

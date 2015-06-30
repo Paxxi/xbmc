@@ -24,6 +24,7 @@
 #include "GUILargeTextureManager.h"
 #include "utils/MathUtils.h"
 
+using namespace KODI::UTILS;
 using namespace std;
 
 CTextureInfo::CTextureInfo()

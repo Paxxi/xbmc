@@ -23,8 +23,10 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
-using namespace KODI::UTILS;
-
+namespace KODI
+{
+namespace UTILS
+{
 bool CBooleanLogicValue::Deserialize(const TiXmlNode *node)
 {
   if (node == NULL)
@@ -139,3 +141,4 @@ bool CBooleanLogic::Deserialize(const TiXmlNode *node)
 
   return m_operation->Deserialize(node);
 }
+}}

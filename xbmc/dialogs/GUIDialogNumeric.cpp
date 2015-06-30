@@ -801,7 +801,7 @@ bool CGUIDialogNumeric::ShowAndVerifyInput(std::string& strToVerify, const std::
     return false;
   }
 
-  std::string md5pword2 = XBMC::XBMC_MD5::GetMD5(strInput);
+  std::string md5pword2 = XBMC_MD5::GetMD5(strInput);
 
   if (!bVerifyInput)
   {

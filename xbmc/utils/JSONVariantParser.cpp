@@ -20,8 +20,11 @@
 
 #include "JSONVariantParser.h"
 
-using namespace KODI::UTILS;
 
+namespace KODI
+{
+namespace UTILS
+{
 yajl_callbacks CJSONVariantParser::callbacks = {
   CJSONVariantParser::ParseNull,
   CJSONVariantParser::ParseBoolean,
@@ -40,7 +43,7 @@ CJSONVariantParser::CJSONVariantParser(IParseCallback *callback)
 {
   m_callback = callback;
 
-  m_handler = yajl_alloc(&callbacks, NULL, this);
+  m_handler = yajl_alloc(&callbacks, nullptr, this);
 
   yajl_config(m_handler, yajl_allow_comments, 1);
   yajl_config(m_handler, yajl_dont_validate_strings, 0);
@@ -71,7 +74,7 @@ CVariant CJSONVariantParser::Parse(const unsigned char *json, unsigned int lengt
 
 int CJSONVariantParser::ParseNull(void * ctx)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PushObject(CVariant::VariantTypeNull);
   parser->PopObject();
@@ -81,7 +84,7 @@ int CJSONVariantParser::ParseNull(void * ctx)
 
 int CJSONVariantParser::ParseBoolean(void * ctx, int boolean)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PushObject(CVariant(boolean != 0));
   parser->PopObject();
@@ -91,9 +94,9 @@ int CJSONVariantParser::ParseBoolean(void * ctx, int boolean)
 
 int CJSONVariantParser::ParseInteger(void * ctx, long long integerVal)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
-  parser->PushObject(CVariant((int64_t)integerVal));
+  parser->PushObject(CVariant(static_cast<int64_t>(integerVal)));
   parser->PopObject();
 
   return 1;
@@ -101,9 +104,9 @@ int CJSONVariantParser::ParseInteger(void * ctx, long long integerVal)
 
 int CJSONVariantParser::ParseDouble(void * ctx, double doubleVal)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
-  parser->PushObject(CVariant((float)doubleVal));
+  parser->PushObject(CVariant(static_cast<float>(doubleVal)));
   parser->PopObject();
 
   return 1;
@@ -111,9 +114,9 @@ int CJSONVariantParser::ParseDouble(void * ctx, double doubleVal)
 
 int CJSONVariantParser::ParseString(void * ctx, const unsigned char * stringVal, size_t stringLen)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
-  parser->PushObject(CVariant((const char *)stringVal, stringLen));
+  parser->PushObject(CVariant(reinterpret_cast<const char *>(stringVal), stringLen));
   parser->PopObject();
 
   return 1;
@@ -121,7 +124,7 @@ int CJSONVariantParser::ParseString(void * ctx, const unsigned char * stringVal,
 
 int CJSONVariantParser::ParseMapStart(void * ctx)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PushObject(CVariant::VariantTypeObject);
 
@@ -130,16 +133,16 @@ int CJSONVariantParser::ParseMapStart(void * ctx)
 
 int CJSONVariantParser::ParseMapKey(void * ctx, const unsigned char * stringVal, size_t stringLen)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
-  parser->m_key = std::string((const char *)stringVal, 0, stringLen);
+  parser->m_key = std::string(reinterpret_cast<const char *>(stringVal), 0, stringLen);
 
   return 1;
 }
 
 int CJSONVariantParser::ParseMapEnd(void * ctx)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PopObject();
 
@@ -148,7 +151,7 @@ int CJSONVariantParser::ParseMapEnd(void * ctx)
 
 int CJSONVariantParser::ParseArrayStart(void * ctx)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PushObject(CVariant::VariantTypeArray);
 
@@ -157,7 +160,7 @@ int CJSONVariantParser::ParseArrayStart(void * ctx)
 
 int CJSONVariantParser::ParseArrayEnd(void * ctx)
 {
-  CJSONVariantParser *parser = (CJSONVariantParser *)ctx;
+  CJSONVariantParser *parser = static_cast<CJSONVariantParser *>(ctx);
 
   parser->PopObject();
 
@@ -214,3 +217,4 @@ void CJSONVariantParser::PopObject()
     m_status = ParseVariable;
   }
 }
+}}

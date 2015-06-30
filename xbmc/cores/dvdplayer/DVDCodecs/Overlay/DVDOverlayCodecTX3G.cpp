@@ -117,8 +117,8 @@ int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
   int numStyleRecords = 0;
   // reserve one more style slot for broken encoders
 
-  XUTILS::auto_buffer bgnStyle(textLength+1);
-  XUTILS::auto_buffer endStyle(textLength+1);
+  auto_buffer bgnStyle(textLength+1);
+  auto_buffer endStyle(textLength+1);
 
   memset(bgnStyle.get(), 0, textLength+1);
   memset(endStyle.get(), 0, textLength+1);

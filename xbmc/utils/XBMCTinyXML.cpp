@@ -71,7 +71,7 @@ bool CXBMCTinyXML::LoadFile(const std::string& _filename, TiXmlEncoding encoding
   value = _filename.c_str();
 
   XFILE::CFile file;
-  XFILE::auto_buffer buffer;
+  auto_buffer buffer;
 
   if (file.LoadFile(value, buffer) <= 0)
   {

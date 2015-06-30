@@ -22,6 +22,8 @@
 
 #include "gtest/gtest.h"
 
+using namespace KODI::UTILS;
+
 TEST(TestEndianSwap, Endian_Swap16)
 {
   uint16_t ref, var;

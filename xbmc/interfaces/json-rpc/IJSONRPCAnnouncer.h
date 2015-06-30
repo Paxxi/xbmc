@@ -43,7 +43,7 @@ namespace JSONRPC
       root["params"]["data"] = data;
       root["params"]["sender"] = sender;
 
-      return CJSONVariantWriter::Write(root, compactOutput);
+      return KODI::UTILS::CJSONVariantWriter::Write(root, compactOutput);
     }
   };
 }

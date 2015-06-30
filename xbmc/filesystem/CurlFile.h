@@ -25,8 +25,6 @@
 #include <string>
 #include "utils/HttpHeader.h"
 
-using namespace KODI::UTILS;
-
 namespace XCURL
 {
   typedef void CURL_HANDLE;
@@ -94,11 +92,11 @@ namespace XFILE
       void ClearRequestHeaders();
       void SetBufferSize(unsigned int size);
 
-      const CHttpHeader& GetHttpHeader() const { return m_state->m_httpheader; }
+      const KODI::UTILS::CHttpHeader& GetHttpHeader() const { return m_state->m_httpheader; }
       std::string GetServerReportedCharset(void);
 
       /* static function that will get content type of a file */
-      static bool GetHttpHeader(const CURL &url, CHttpHeader &headers);
+      static bool GetHttpHeader(const CURL &url, KODI::UTILS::CHttpHeader &headers);
       static bool GetMimeType(const CURL &url, std::string &content, const std::string &useragent="");
       static bool GetContentType(const CURL &url, std::string &content, const std::string &useragent = "");
 
@@ -113,7 +111,7 @@ namespace XFILE
           XCURL::CURL_HANDLE*    m_easyHandle;
           XCURL::CURLM*          m_multiHandle;
 
-          CRingBuffer     m_buffer;           // our ringhold buffer
+          KODI::UTILS::CRingBuffer     m_buffer;           // our ringhold buffer
           unsigned int    m_bufferSize;
 
           char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer
@@ -129,7 +127,7 @@ namespace XFILE
           char*           m_readBuffer;
 
           /* returned http header */
-          CHttpHeader m_httpheader;
+          KODI::UTILS::CHttpHeader m_httpheader;
           bool        IsHeaderDone(void)
           { return m_httpheader.IsHeaderDone(); }
 
@@ -194,7 +192,7 @@ namespace XFILE
       bool            m_skipshout;
       bool            m_postdataset;
 
-      CRingBuffer     m_buffer;           // our ringhold buffer
+      KODI::UTILS::CRingBuffer     m_buffer;           // our ringhold buffer
       char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer
       unsigned int    m_overflowSize;     // size of the overflow buffer
 

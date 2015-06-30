@@ -63,7 +63,7 @@ namespace PVR
   class CPVRTimerInfoTag;
   typedef std::shared_ptr<PVR::CPVRTimerInfoTag> CPVRTimerInfoTagPtr;
 
-  class CPVRTimerInfoTag : public ISerializable
+  class CPVRTimerInfoTag : public KODI::UTILS::ISerializable
   {
     friend class CPVRTimers;
 

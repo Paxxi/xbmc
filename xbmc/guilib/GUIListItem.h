@@ -33,11 +33,11 @@
 
 //  Forward
 class CGUIListItemLayout;
-class CArchive;
 namespace KODI
 {
 namespace UTILS
 {
+class CArchive;
 class CVariant;
 }
 }
@@ -167,7 +167,7 @@ public:
    */
   void AppendProperties(const CGUIListItem &item);
 
-  void Archive(CArchive& ar);
+  void Archive(KODI::UTILS::CArchive& ar);
   void Serialize(KODI::UTILS::CVariant& value);
 
   bool       HasProperty(const std::string &strKey) const;

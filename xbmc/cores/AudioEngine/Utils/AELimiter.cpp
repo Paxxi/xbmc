@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <math.h>
 
+using namespace KODI::UTILS;
+
 CAELimiter::CAELimiter()
 {
   m_amplify = 1.0f;
