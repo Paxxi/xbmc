@@ -25,7 +25,7 @@
 
 namespace KODI
 {
-namespace UTILS
+namespace PRESENTATION
 {
 class ISortable
 {

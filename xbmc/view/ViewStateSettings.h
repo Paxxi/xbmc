@@ -58,5 +58,5 @@ private:
   SettingLevel m_settingLevel;
   CCriticalSection m_critical;
 
-  void AddViewState(const std::string& strTagName, int defaultView = DEFAULT_VIEW_LIST, KODI::UTILS::SortBy defaultSort = KODI::UTILS::SortByLabel);
+  void AddViewState(const std::string& strTagName, int defaultView = DEFAULT_VIEW_LIST, KODI::PRESENTATION::SortBy defaultSort = KODI::PRESENTATION::SortByLabel);
 };

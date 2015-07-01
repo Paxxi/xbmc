@@ -52,6 +52,7 @@ using namespace std;
 using namespace ANNOUNCEMENT;
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 namespace UPNP
 {

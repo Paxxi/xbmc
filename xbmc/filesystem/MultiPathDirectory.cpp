@@ -33,6 +33,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 //
 // multipath://{path1}/{path2}/{path3}/.../{path-N}

@@ -33,6 +33,7 @@
 #include "video/VideoDatabase.h"
 
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #define PROPERTY_PATH_DB            "path.db"
 #define PROPERTY_SORT_ORDER         "sort.order"

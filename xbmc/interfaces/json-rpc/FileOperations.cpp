@@ -35,6 +35,7 @@
 using namespace XFILE;
 using namespace JSONRPC;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 JSONRPC_STATUS CFileOperations::GetRootDirectory(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {

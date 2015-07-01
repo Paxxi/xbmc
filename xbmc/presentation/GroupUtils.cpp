@@ -32,6 +32,10 @@
 using namespace KODI::UTILS;
 using namespace std;
 
+namespace KODI
+{
+namespace PRESENTATION
+{
 typedef map<int, set<CFileItemPtr> > SetMap;
 
 bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, CFileItemList &groupedItems, GroupAttribute groupAttributes /* = GroupAttributeNone */)
@@ -51,7 +55,7 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
 
     // group by sets
     if ((groupBy & GroupBySet) &&
-        item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iSetId > 0)
+      item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iSetId > 0)
     {
       add = false;
       setMap[item->GetVideoInfoTag()->m_iSetId].insert(item);
@@ -158,3 +162,4 @@ bool GroupUtils::GroupAndSort(GroupBy groupBy, const std::string &baseDir, const
   groupedItems.Sort(sortDescription);
   return true;
 }
+}}

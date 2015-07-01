@@ -31,6 +31,7 @@
 #include "SortFileItem.h"
 
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CViewDatabase::CViewDatabase(void)
 { }

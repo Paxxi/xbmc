@@ -51,6 +51,7 @@
 using namespace ADDON;
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 using namespace std;
 
 CGUIWindowAddonBrowser::CGUIWindowAddonBrowser(void)

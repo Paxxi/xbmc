@@ -32,6 +32,7 @@
 #include <cassert>
 
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 namespace XFILE
 {

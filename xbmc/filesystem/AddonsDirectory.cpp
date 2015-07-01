@@ -36,6 +36,7 @@
 
 using namespace ADDON;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 namespace XFILE
 {

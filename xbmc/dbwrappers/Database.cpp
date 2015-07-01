@@ -37,6 +37,7 @@
 
 using namespace dbiplus;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #define MAX_COMPRESS_COUNT 20
 

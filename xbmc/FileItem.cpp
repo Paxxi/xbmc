@@ -69,6 +69,7 @@ using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CFileItem::CFileItem(const CSong& song)
 {

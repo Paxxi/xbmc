@@ -33,6 +33,7 @@
 
 using namespace std;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 void CVideoInfoTag::Reset()
 {

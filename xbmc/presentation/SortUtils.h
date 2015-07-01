@@ -29,7 +29,7 @@
 
 namespace KODI
 {
-namespace UTILS
+namespace PRESENTATION
 {
 typedef enum {
   SortOrderNone = 0,

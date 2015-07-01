@@ -26,6 +26,7 @@
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 Node MusicVideoChildren[] = {
                               { NODE_TYPE_GENRE,             "genres",    135 },

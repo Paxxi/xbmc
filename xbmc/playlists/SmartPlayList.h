@@ -45,8 +45,8 @@ public:
 
   std::string                 GetLocalizedRule() const;
 
-  static KODI::UTILS::SortBy  TranslateOrder(const char *order);
-  static std::string          TranslateOrder(KODI::UTILS::SortBy order);
+  static KODI::PRESENTATION::SortBy  TranslateOrder(const char *order);
+  static std::string          TranslateOrder(KODI::PRESENTATION::SortBy order);
   static Field                TranslateGroup(const char *group);
   static std::string          TranslateGroup(Field group);
 
@@ -55,7 +55,7 @@ public:
   static bool                 CanGroupMix(Field group);
 
   static std::vector<Field>   GetFields(const std::string &type);
-  static std::vector<KODI::UTILS::SortBy>  GetOrders(const std::string &type);
+  static std::vector<KODI::PRESENTATION::SortBy>  GetOrders(const std::string &type);
   static std::vector<Field>   GetGroups(const std::string &type);
   virtual FIELD_TYPE          GetFieldType(int field) const;
   static bool                 IsFieldBrowseable(int field);
@@ -133,16 +133,16 @@ public:
   void SetLimit(unsigned int limit) { m_limit = limit; };
   unsigned int GetLimit() const { return m_limit; };
 
-  void SetOrder(KODI::UTILS::SortBy order) { m_orderField = order; };
+  void SetOrder(KODI::PRESENTATION::SortBy order) { m_orderField = order; };
 
-  KODI::UTILS::SortBy GetOrder() const { return m_orderField; };
-  void SetOrderAscending(bool orderAscending) { m_orderDirection = orderAscending ? KODI::UTILS::SortOrderAscending : KODI::UTILS::SortOrderDescending; };
-  bool GetOrderAscending() const { return m_orderDirection != KODI::UTILS::SortOrderDescending; };
+  KODI::PRESENTATION::SortBy GetOrder() const { return m_orderField; };
+  void SetOrderAscending(bool orderAscending) { m_orderDirection = orderAscending ? KODI::PRESENTATION::SortOrderAscending : KODI::PRESENTATION::SortOrderDescending; };
+  bool GetOrderAscending() const { return m_orderDirection != KODI::PRESENTATION::SortOrderDescending; };
 
-  KODI::UTILS::SortOrder GetOrderDirection() const { return m_orderDirection; }
-  void SetOrderAttributes(KODI::UTILS::SortAttribute attributes) { m_orderAttributes = attributes; }
+  KODI::PRESENTATION::SortOrder GetOrderDirection() const { return m_orderDirection; }
+  void SetOrderAttributes(KODI::PRESENTATION::SortAttribute attributes) { m_orderAttributes = attributes; }
 
-  KODI::UTILS::SortAttribute GetOrderAttributes() const { return m_orderAttributes; }
+  KODI::PRESENTATION::SortAttribute GetOrderAttributes() const { return m_orderAttributes; }
 
   void SetGroup(const std::string &group) { m_group = group; }
   const std::string& GetGroup() const { return m_group; }
@@ -188,9 +188,9 @@ private:
 
   // order information
   unsigned int m_limit;
-  KODI::UTILS::SortBy m_orderField;
-  KODI::UTILS::SortOrder m_orderDirection;
-  KODI::UTILS::SortAttribute m_orderAttributes;
+  KODI::PRESENTATION::SortBy m_orderField;
+  KODI::PRESENTATION::SortOrder m_orderDirection;
+  KODI::PRESENTATION::SortAttribute m_orderAttributes;
   std::string m_group;
   bool m_groupMixed;
 

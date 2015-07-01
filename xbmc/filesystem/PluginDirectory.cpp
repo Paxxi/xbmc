@@ -41,6 +41,7 @@
 using namespace XFILE;
 using namespace std;
 using namespace ADDON;
+using namespace KODI::PRESENTATION;
 
 map<int, CPluginDirectory *> CPluginDirectory::globalHandles;
 int CPluginDirectory::handleCounter = 0;

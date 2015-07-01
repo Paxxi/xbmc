@@ -30,11 +30,12 @@
 
 #include <algorithm>
 
+using namespace KODI::UTILS;
 using namespace std;
 
 namespace KODI
 {
-namespace UTILS
+namespace PRESENTATION
 {
 string ArrayToString(SortAttribute attributes, const CVariant &variant, const string &seperator = " / ")
 {

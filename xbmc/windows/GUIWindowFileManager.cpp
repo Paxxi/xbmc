@@ -61,6 +61,7 @@ using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #define ACTION_COPY                     1
 #define ACTION_MOVE                     2

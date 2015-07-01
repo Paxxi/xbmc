@@ -32,6 +32,7 @@
 using namespace XFILE;
 using namespace ADDON;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CGUIViewStateWindowPictures::CGUIViewStateWindowPictures(const CFileItemList& items) : CGUIViewState(items)
 {

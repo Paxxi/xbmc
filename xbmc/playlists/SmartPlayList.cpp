@@ -37,6 +37,7 @@
 using namespace std;
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 typedef struct
 {

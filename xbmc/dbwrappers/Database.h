@@ -34,7 +34,7 @@ class CDbUrl;
 
 namespace KODI
 {
-namespace UTILS
+namespace PRESENTATION
 {
 struct SortDescription;
 }}
@@ -164,9 +164,9 @@ public:
    */
   bool CommitInsertQueries();
 
-  virtual bool GetFilter(CDbUrl &dbUrl, Filter &filter, KODI::UTILS::SortDescription &sorting) { return true; }
+  virtual bool GetFilter(CDbUrl &dbUrl, Filter &filter, KODI::PRESENTATION::SortDescription &sorting) { return true; }
   virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl);
-  virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl, KODI::UTILS::SortDescription &sorting);
+  virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl, KODI::PRESENTATION::SortDescription &sorting);
 
 protected:
   friend class CDatabaseManager;

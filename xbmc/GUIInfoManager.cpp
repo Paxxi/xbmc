@@ -107,6 +107,7 @@ using namespace EPG;
 using namespace KODI::UTILS;
 using namespace KODI::WEATHER;
 using namespace KODI::SYSINFO;
+using namespace KODI::PRESENTATION;
 
 CGUIInfoManager::CGUIInfoManager(void) :
     Observable()

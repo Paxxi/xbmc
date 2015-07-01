@@ -114,6 +114,7 @@ static const CGUIDialogMediaFilter::Filter filterList[] = {
 
 using namespace std;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CGUIDialogMediaFilter::CGUIDialogMediaFilter()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_MEDIA_FILTER, "DialogMediaFilter.xml"),

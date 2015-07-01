@@ -347,21 +347,21 @@ public:
   /////////////////////////////////////////////////
   bool GetGenresNav(const std::string& strBaseDir, CFileItemList& items, const Filter &filter = Filter(), bool countOnly = false);
   bool GetYearsNav(const std::string& strBaseDir, CFileItemList& items, const Filter &filter = Filter());
-  bool GetArtistsNav(const std::string& strBaseDir, CFileItemList& items, bool albumArtistsOnly = false, int idGenre = -1, int idAlbum = -1, int idSong = -1, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription(), bool countOnly = false);
+  bool GetArtistsNav(const std::string& strBaseDir, CFileItemList& items, bool albumArtistsOnly = false, int idGenre = -1, int idAlbum = -1, int idSong = -1, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription(), bool countOnly = false);
   bool GetCommonNav(const std::string &strBaseDir, const std::string &table, const std::string &labelField, CFileItemList &items, const Filter &filter /* = Filter() */, bool countOnly /* = false */);
   bool GetAlbumTypesNav(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), bool countOnly = false);
   bool GetMusicLabelsNav(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), bool countOnly = false);
-  bool GetAlbumsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre = -1, int idArtist = -1, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription(), bool countOnly = false);
+  bool GetAlbumsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre = -1, int idArtist = -1, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription(), bool countOnly = false);
   bool GetAlbumsByYear(const std::string &strBaseDir, CFileItemList& items, int year);
-  bool GetSongsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre, int idArtist,int idAlbum, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetSongsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre, int idArtist,int idAlbum, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   bool GetSongsByYear(const std::string& baseDir, CFileItemList& items, int year);
-  bool GetSongsByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetAlbumsByWhere(const std::string &baseDir, const Filter &filter, CFileItemList &items, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription(), bool countOnly = false);
-  bool GetArtistsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription(), bool countOnly = false);
+  bool GetSongsByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetAlbumsByWhere(const std::string &baseDir, const Filter &filter, CFileItemList &items, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription(), bool countOnly = false);
+  bool GetArtistsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription(), bool countOnly = false);
   bool GetRandomSong(CFileItem* item, int& idSong, const Filter &filter);
   int GetSongsCount(const Filter &filter = Filter());
   unsigned int GetSongIDs(const Filter &filter, std::vector<std::pair<int,int> > &songIDs);
-  virtual bool GetFilter(CDbUrl &musicUrl, Filter &filter, KODI::UTILS::SortDescription &sorting);
+  virtual bool GetFilter(CDbUrl &musicUrl, Filter &filter, KODI::PRESENTATION::SortDescription &sorting);
 
   /////////////////////////////////////////////////
   // Scraper
@@ -388,8 +388,8 @@ public:
   /////////////////////////////////////////////////
   // Filters
   /////////////////////////////////////////////////
-  bool GetItems(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetItems(const std::string &strBaseDir, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetItems(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetItems(const std::string &strBaseDir, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   std::string GetItemById(const std::string &itemType, int id);
 
   /////////////////////////////////////////////////

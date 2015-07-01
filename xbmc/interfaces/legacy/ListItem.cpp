@@ -33,6 +33,7 @@
 #include "settings/AdvancedSettings.h"
 
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 namespace XBMCAddon
 {

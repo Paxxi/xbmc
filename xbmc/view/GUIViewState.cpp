@@ -55,6 +55,7 @@ using namespace std;
 using namespace ADDON;
 using namespace PVR;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 std::string CGUIViewState::m_strPlaylistDirectory;
 VECSOURCES CGUIViewState::m_sources;

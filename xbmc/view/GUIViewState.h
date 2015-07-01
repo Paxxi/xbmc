@@ -37,15 +37,15 @@ public:
   void SaveViewAsControl(int viewAsControl);
   int GetViewAsControl() const;
 
-  KODI::UTILS::SortDescription SetNextSortMethod(int direction = 1);
+  KODI::PRESENTATION::SortDescription SetNextSortMethod(int direction = 1);
   void SetCurrentSortMethod(int method);
-  KODI::UTILS::SortDescription GetSortMethod() const;
+  KODI::PRESENTATION::SortDescription GetSortMethod() const;
   bool HasMultipleSortMethods() const;
   int GetSortMethodLabel() const;
   void GetSortMethodLabelMasks(LABEL_MASKS& masks) const;
 
-  KODI::UTILS::SortOrder SetNextSortOrder();
-  KODI::UTILS::SortOrder GetSortOrder() const;
+  KODI::PRESENTATION::SortOrder SetNextSortOrder();
+  KODI::PRESENTATION::SortOrder GetSortOrder() const;
 
   virtual bool HideExtensions();
   virtual bool HideParentDirItems();
@@ -86,19 +86,19 @@ protected:
    */
   void AddPlaylistOrder(const CFileItemList &items, LABEL_MASKS label_masks);
 
-  void AddSortMethod(KODI::UTILS::SortBy sortBy, int buttonLabel, const LABEL_MASKS &labelMasks, KODI::UTILS::SortAttribute sortAttributes = KODI::UTILS::SortAttributeNone, KODI::UTILS::SortOrder sortOrder = KODI::UTILS::SortOrderNone);
-  void AddSortMethod(KODI::UTILS::SortBy sortBy, KODI::UTILS::SortAttribute sortAttributes, int buttonLabel, const LABEL_MASKS &labelMasks, KODI::UTILS::SortOrder sortOrder = KODI::UTILS::SortOrderNone);
-  void AddSortMethod(KODI::UTILS::SortDescription sortDescription, int buttonLabel, const LABEL_MASKS &labelMasks);
-  void SetSortMethod(KODI::UTILS::SortBy sortBy, KODI::UTILS::SortOrder sortOrder = KODI::UTILS::SortOrderNone);
-  void SetSortMethod(KODI::UTILS::SortDescription sortDescription);
-  void SetSortOrder(KODI::UTILS::SortOrder sortOrder);
+  void AddSortMethod(KODI::PRESENTATION::SortBy sortBy, int buttonLabel, const LABEL_MASKS &labelMasks, KODI::PRESENTATION::SortAttribute sortAttributes = KODI::PRESENTATION::SortAttributeNone, KODI::PRESENTATION::SortOrder sortOrder = KODI::PRESENTATION::SortOrderNone);
+  void AddSortMethod(KODI::PRESENTATION::SortBy sortBy, KODI::PRESENTATION::SortAttribute sortAttributes, int buttonLabel, const LABEL_MASKS &labelMasks, KODI::PRESENTATION::SortOrder sortOrder = KODI::PRESENTATION::SortOrderNone);
+  void AddSortMethod(KODI::PRESENTATION::SortDescription sortDescription, int buttonLabel, const LABEL_MASKS &labelMasks);
+  void SetSortMethod(KODI::PRESENTATION::SortBy sortBy, KODI::PRESENTATION::SortOrder sortOrder = KODI::PRESENTATION::SortOrderNone);
+  void SetSortMethod(KODI::PRESENTATION::SortDescription sortDescription);
+  void SetSortOrder(KODI::PRESENTATION::SortOrder sortOrder);
 
   const CFileItemList& m_items;
 
   int m_currentViewAsControl;
   int m_playlist;
 
-  std::vector<KODI::UTILS::GUIViewSortDetails> m_sortMethods;
+  std::vector<KODI::PRESENTATION::GUIViewSortDetails> m_sortMethods;
   int m_currentSortMethod;
 
   static VECSOURCES m_sources;

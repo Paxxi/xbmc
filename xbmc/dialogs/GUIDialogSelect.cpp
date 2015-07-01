@@ -24,6 +24,8 @@
 #include "guilib/LocalizeStrings.h"
 #include "utils/StringUtils.h"
 
+using namespace KODI::PRESENTATION;
+
 #define CONTROL_HEADING       1
 #define CONTROL_LIST          3
 #define CONTROL_NUMBEROFFILES 2

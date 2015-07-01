@@ -109,6 +109,7 @@ using namespace std;
 using namespace XFILE;
 using namespace ADDON;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;

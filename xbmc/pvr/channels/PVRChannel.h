@@ -53,7 +53,7 @@ namespace PVR
   } pvr_channel_num;
 
   /** PVR Channel class */
-  class CPVRChannel : public KODI::UTILS::Observable, public KODI::UTILS::ISerializable, public KODI::UTILS::ISortable
+  class CPVRChannel : public KODI::UTILS::Observable, public KODI::UTILS::ISerializable, public KODI::PRESENTATION::ISortable
   {
     friend class CPVRDatabase;
     friend class CPVRChannelGroupInternal;
@@ -330,7 +330,7 @@ namespace PVR
      */
     std::string Path(void) const;
 
-    virtual void ToSortable(KODI::UTILS::SortItem& sortable, Field field) const;
+    virtual void ToSortable(KODI::PRESENTATION::SortItem& sortable, Field field) const;
 
     /*!
      * @brief Update the path this channel got added to the internal group

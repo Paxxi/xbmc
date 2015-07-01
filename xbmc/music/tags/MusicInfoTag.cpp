@@ -28,6 +28,7 @@
 
 using namespace MUSIC_INFO;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 EmbeddedArtInfo::EmbeddedArtInfo(size_t siz, const std::string &mim)
 {

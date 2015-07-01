@@ -48,6 +48,7 @@
 using namespace PVR;
 using namespace EPG;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 std::map<bool, std::string> CGUIWindowPVRBase::m_selectedItemPaths;
 

@@ -37,6 +37,7 @@
 using namespace PVR;
 using namespace EPG;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 bool CPVRChannel::operator==(const CPVRChannel &right) const
 {

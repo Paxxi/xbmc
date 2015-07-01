@@ -34,6 +34,7 @@
 using namespace PVR;
 using namespace EPG;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CGUIWindowPVRSearch::CGUIWindowPVRSearch(bool bRadio) :
   CGUIWindowPVRBase(bRadio, bRadio ? WINDOW_RADIO_SEARCH : WINDOW_TV_SEARCH, "MyPVRSearch.xml"),

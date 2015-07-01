@@ -23,6 +23,10 @@
 
 class CFileItemList;
 
+namespace KODI
+{
+namespace PRESENTATION
+{
 // can be used as a flag
 typedef enum {
   GroupByNone = 0x0,
@@ -38,5 +42,6 @@ class GroupUtils
 {
 public:
   static bool Group(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
-  static bool GroupAndSort(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, const KODI::UTILS::SortDescription &sortDescription, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
+  static bool GroupAndSort(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, const SortDescription &sortDescription, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
 };
+}}

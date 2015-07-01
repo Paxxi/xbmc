@@ -32,6 +32,7 @@
 #include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
 
+using namespace KODI::PRESENTATION;
 using namespace KODI::UTILS;
 using namespace std;
 

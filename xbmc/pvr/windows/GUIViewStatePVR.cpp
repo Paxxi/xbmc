@@ -26,6 +26,7 @@
 
 using namespace PVR;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CGUIViewStateWindowPVRChannels::CGUIViewStateWindowPVRChannels(const int windowId, const CFileItemList& items) : CGUIViewStatePVR(windowId, items)
 {

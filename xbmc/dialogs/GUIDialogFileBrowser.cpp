@@ -48,6 +48,7 @@
 
 using namespace XFILE;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #define CONTROL_LIST          450
 #define CONTROL_THUMBS        451

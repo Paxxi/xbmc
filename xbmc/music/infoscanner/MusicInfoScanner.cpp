@@ -60,6 +60,7 @@ using namespace MUSICDATABASEDIRECTORY;
 using namespace MUSIC_GRABBER;
 using namespace ADDON;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CMusicInfoScanner::CMusicInfoScanner() : CThread("MusicInfoScanner"), m_fileCountReader(this, "MusicFileCounter")
 {

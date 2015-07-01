@@ -53,6 +53,7 @@ using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 #define CONTROL_BTNSLIDESHOW   6
 #define CONTROL_BTNSLIDESHOW_RECURSIVE   7

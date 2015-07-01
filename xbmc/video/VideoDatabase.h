@@ -677,11 +677,11 @@ public:
   bool GetTagsNav(const std::string& strBaseDir, CFileItemList& items, int idContent=-1, const Filter &filter = Filter(), bool countOnly = false);
   bool GetMusicVideoAlbumsNav(const std::string& strBaseDir, CFileItemList& items, int idArtist, const Filter &filter = Filter(), bool countOnly = false);
 
-  bool GetMoviesNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idStudio=-1, int idCountry=-1, int idSet=-1, int idTag=-1, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetTvShowsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idStudio=-1, int idTag=-1, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetMoviesNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idStudio=-1, int idCountry=-1, int idSet=-1, int idTag=-1, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetTvShowsNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idStudio=-1, int idTag=-1, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   bool GetSeasonsNav(const std::string& strBaseDir, CFileItemList& items, int idActor=-1, int idDirector=-1, int idGenre=-1, int idYear=-1, int idShow=-1, bool getLinkedMovies = true);
-  bool GetEpisodesNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idShow=-1, int idSeason=-1, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetMusicVideosNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idArtist=-1, int idDirector=-1, int idStudio=-1, int idAlbum=-1, int idTag=-1, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetEpisodesNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idActor=-1, int idDirector=-1, int idShow=-1, int idSeason=-1, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetMusicVideosNav(const std::string& strBaseDir, CFileItemList& items, int idGenre=-1, int idYear=-1, int idArtist=-1, int idDirector=-1, int idStudio=-1, int idAlbum=-1, int idTag=-1, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   
   bool GetRecentlyAddedMoviesNav(const std::string& strBaseDir, CFileItemList& items, unsigned int limit=0);
   bool GetRecentlyAddedEpisodesNav(const std::string& strBaseDir, CFileItemList& items, unsigned int limit=0);
@@ -730,20 +730,20 @@ public:
   bool ImportArtFromXML(const TiXmlNode *node, std::map<std::string, std::string> &artwork);
 
   // smart playlists and main retrieval work in these functions
-  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   bool GetSetsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool ignoreSingleMovieSets = false);
-  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetSeasonsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetSeasonsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   
   // retrieve sorted and limited items
-  bool GetSortedVideos(const MediaType &mediaType, const std::string& strBaseDir, const KODI::UTILS::SortDescription &sortDescription, CFileItemList& items, const Filter &filter = Filter());
+  bool GetSortedVideos(const MediaType &mediaType, const std::string& strBaseDir, const KODI::PRESENTATION::SortDescription &sortDescription, CFileItemList& items, const Filter &filter = Filter());
 
   // retrieve a list of items
-  bool GetItems(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetItems(const std::string &strBaseDir, const std::string &mediaType, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
-  bool GetItems(const std::string &strBaseDir, VIDEODB_CONTENT_TYPE mediaType, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::UTILS::SortDescription &sortDescription = KODI::UTILS::SortDescription());
+  bool GetItems(const std::string &strBaseDir, CFileItemList &items, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetItems(const std::string &strBaseDir, const std::string &mediaType, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
+  bool GetItems(const std::string &strBaseDir, VIDEODB_CONTENT_TYPE mediaType, const std::string &itemType, CFileItemList &items, const Filter &filter = Filter(), const KODI::PRESENTATION::SortDescription &sortDescription = KODI::PRESENTATION::SortDescription());
   std::string GetItemById(const std::string &itemType, int id);
 
   // partymode
@@ -786,7 +786,7 @@ public:
   void RemoveTagFromItem(int idItem, int idTag, const std::string &type);
   void RemoveTagsFromItem(int idItem, const std::string &type);
 
-  virtual bool GetFilter(CDbUrl &videoUrl, Filter &filter, KODI::UTILS::SortDescription &sorting);
+  virtual bool GetFilter(CDbUrl &videoUrl, Filter &filter, KODI::PRESENTATION::SortDescription &sorting);
 
   int AddSeason(int showID, int season);
   int AddSet(const std::string& strSet);

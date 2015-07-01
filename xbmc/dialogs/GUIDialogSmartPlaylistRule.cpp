@@ -31,6 +31,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "storage/MediaManager.h"
 #include "presentation/LabelFormatter.h"
+#include "presentation/SortUtils.h"
 #include "utils/StringUtils.h"
 
 #define CONTROL_FIELD           15
@@ -40,6 +41,7 @@
 #define CONTROL_CANCEL          19
 #define CONTROL_BROWSE          20
 
+using namespace KODI::PRESENTATION;
 using namespace std;
 
 CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule(void)

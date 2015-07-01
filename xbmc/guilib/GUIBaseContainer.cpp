@@ -32,6 +32,7 @@
 #include "listproviders/IListProvider.h"
 #include "settings/Settings.h"
 
+using namespace KODI::PRESENTATION;
 using namespace KODI::UTILS;
 using namespace std;
 

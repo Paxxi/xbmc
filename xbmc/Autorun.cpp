@@ -51,6 +51,7 @@ using namespace XFILE;
 using namespace PLAYLIST;
 using namespace MEDIA_DETECT;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 CAutorun::CAutorun()
 {

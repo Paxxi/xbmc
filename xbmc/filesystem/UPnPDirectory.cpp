@@ -38,6 +38,7 @@ using namespace MUSIC_INFO;
 using namespace XFILE;
 using namespace UPNP;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 namespace XFILE
 {

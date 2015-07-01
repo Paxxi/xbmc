@@ -34,6 +34,7 @@
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
 using namespace KODI::UTILS;
+using namespace KODI::PRESENTATION;
 
 std::string CGUIViewStateWindowVideo::GetLockType()
 {
