@@ -22,6 +22,8 @@
 
 #include "DVDInputStream.h"
 
+class CFileItem;
+
 namespace XFILE {
 class IFile;
 class ILiveTVInterface;

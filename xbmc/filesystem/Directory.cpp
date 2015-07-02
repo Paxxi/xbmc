@@ -19,21 +19,23 @@
  */
 
 #include "Directory.h"
+
+#include "Application.h"
+#include "commons/Exception.h"
+#include "dialogs/GUIDialogBusy.h"
+#include "DirectoryCache.h"
 #include "DirectoryFactory.h"
 #include "FileDirectoryFactory.h"
-#include "commons/Exception.h"
 #include "FileItem.h"
-#include "DirectoryCache.h"
+#include "filesystem/IFileDirectory.h"
+#include "guilib/GUIWindowManager.h"
 #include "settings/Settings.h"
-#include "utils/log.h"
+#include "threads/SingleLock.h"
+#include "URL.h"
 #include "utils/Job.h"
 #include "utils/JobManager.h"
-#include "Application.h"
-#include "guilib/GUIWindowManager.h"
-#include "dialogs/GUIDialogBusy.h"
-#include "threads/SingleLock.h"
+#include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "URL.h"
 
 using namespace std;
 using namespace XFILE;

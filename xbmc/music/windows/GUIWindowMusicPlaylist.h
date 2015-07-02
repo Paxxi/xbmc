@@ -23,6 +23,8 @@
 #include "GUIWindowMusicBase.h"
 #include "BackgroundInfoLoader.h"
 
+class CFileItem;
+
 class CGUIWindowMusicPlayList : public CGUIWindowMusicBase, public IBackgroundLoaderObserver
 {
 public:

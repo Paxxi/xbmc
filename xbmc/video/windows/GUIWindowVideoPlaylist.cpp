@@ -19,23 +19,25 @@
  */
 
 #include "GUIWindowVideoPlaylist.h"
-#include "Util.h"
-#include "playlists/PlayListM3U.h"
+
 #include "Application.h"
-#include "PlayListPlayer.h"
-#include "PartyModeManager.h"
+#include "ContextMenuManager.h"
 #include "dialogs/GUIDialogSmartPlaylistEditor.h"
-#include "guilib/GUIWindowManager.h"
-#include "guilib/GUIKeyboardFactory.h"
-#include "GUIUserMessages.h"
+#include "FileItem.h"
 #include "filesystem/FavouritesDirectory.h"
-#include "settings/Settings.h"
-#include "settings/MediaSettings.h"
-#include "input/Key.h"
+#include "guilib/GUIKeyboardFactory.h"
+#include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
+#include "GUIUserMessages.h"
+#include "input/Key.h"
+#include "PartyModeManager.h"
+#include "PlayListPlayer.h"
+#include "playlists/PlayListM3U.h"
+#include "settings/MediaSettings.h"
+#include "settings/Settings.h"
+#include "Util.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "ContextMenuManager.h"
 
 using namespace PLAYLIST;
 

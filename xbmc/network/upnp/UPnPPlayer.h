@@ -23,6 +23,7 @@
 #include <string>
 
 class PLT_MediaController;
+class CFileItem;
 class CGUIDialogBusy;
 
 namespace XbmcThreads { class EndTime; }

@@ -23,22 +23,24 @@
  * - use Observable here, so we can use event driven operations later
  */
 
+#include "PVRChannelGroup.h"
+
+#include "dialogs/GUIDialogExtendedProgressBar.h"
+#include "epg/EpgContainer.h"
+#include "FileItem.h"
+#include "guilib/GUIWindowManager.h"
+#include "music/tags/MusicInfoTag.h"
+#include "pvr/addons/PVRClients.h"
+#include "pvr/PVRDatabase.h"
+#include "pvr/PVRManager.h"
+#include "PVRChannelGroupsContainer.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
-#include "guilib/GUIWindowManager.h"
-#include "dialogs/GUIDialogExtendedProgressBar.h"
-#include "music/tags/MusicInfoTag.h"
-#include "utils/log.h"
-#include "Util.h"
-#include "utils/StringUtils.h"
 #include "threads/SingleLock.h"
-
-#include "PVRChannelGroupsContainer.h"
-#include "pvr/PVRDatabase.h"
-#include "pvr/PVRManager.h"
-#include "pvr/addons/PVRClients.h"
-#include "epg/EpgContainer.h"
+#include "Util.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
 
 using namespace PVR;
 using namespace EPG;

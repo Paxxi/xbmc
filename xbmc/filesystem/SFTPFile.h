@@ -22,7 +22,6 @@
 #include "system.h"
 #ifdef HAS_FILESYSTEM_SFTP
 #include "IFile.h"
-#include "FileItem.h"
 #include "threads/CriticalSection.h"
 
 #include <libssh/libssh.h>
@@ -37,6 +36,7 @@
 #include <map>
 #include <memory>
 
+class CFileItemList;
 class CURL;
 
 #if LIBSSH_VERSION_INT < SSH_VERSION_INT(0,3,2)

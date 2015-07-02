@@ -19,9 +19,13 @@
  *
  */
 
-#include "FileItem.h"
 #include <memory>
 #include <string>
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PLAYLIST
 {

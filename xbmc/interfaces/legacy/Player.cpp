@@ -19,16 +19,18 @@
  */
 
 #include "Player.h"
+
+#include "AddonUtils.h"
+#include "Application.h"
+#include "ApplicationMessenger.h"
+#include "cores/IPlayer.h"
+#include "FileItem.h"
+#include "GUIInfoManager.h"
 #include "ListItem.h"
 #include "PlayList.h"
 #include "PlayListPlayer.h"
 #include "settings/MediaSettings.h"
-#include "Application.h"
-#include "ApplicationMessenger.h"
-#include "GUIInfoManager.h"
-#include "AddonUtils.h"
 #include "utils/log.h"
-#include "cores/IPlayer.h"
 
 namespace XBMCAddon
 {

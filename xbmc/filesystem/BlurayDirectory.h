@@ -21,8 +21,13 @@
  */
 
 #include "Directory.h"
-#include "FileItem.h"
 #include "URL.h"
+
+#include <memory>
+
+class CFileItem;
+class CFileItemList;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class  DllLibbluray;
 typedef struct bluray BLURAY;

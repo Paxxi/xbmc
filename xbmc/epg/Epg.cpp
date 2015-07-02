@@ -18,10 +18,13 @@
  *
  */
 
+#include "Epg.h"
+
 #include "addons/include/xbmc_epg_types.h"
+#include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
-#include "pvr/PVRManager.h"
 #include "pvr/addons/PVRClients.h"
+#include "pvr/PVRManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"

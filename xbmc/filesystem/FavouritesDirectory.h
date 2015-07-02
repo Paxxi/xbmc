@@ -24,6 +24,7 @@
 
 class CFileItemList;
 class CFileItem;
+class CURL;
 
 namespace XFILE
 {

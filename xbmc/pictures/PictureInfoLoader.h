@@ -22,6 +22,9 @@
 #include "BackgroundInfoLoader.h"
 #include <string>
 
+class CFileItem;
+class CFileItemList;
+
 class CPictureInfoLoader : public CBackgroundInfoLoader
 {
 public:

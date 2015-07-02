@@ -30,6 +30,8 @@
 #include <vector>
 #include <deque>
 
+class CFileItem;
+
 namespace EPG
 {
   class CEpg;

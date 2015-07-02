@@ -22,15 +22,15 @@
 #include <sstream>
 
 #include "ListItem.h"
-#include "AddonUtils.h"
 
-#include "video/VideoInfoTag.h"
+#include "AddonUtils.h"
 #include "music/tags/MusicInfoTag.h"
 #include "pictures/PictureInfoTag.h"
-#include "utils/log.h"
-#include "utils/Variant.h"
-#include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
+#include "utils/Variant.h"
+#include "video/VideoInfoTag.h"
 
 namespace XBMCAddon
 {

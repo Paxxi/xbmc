@@ -22,6 +22,7 @@
 #include "IFile.h"
 #include "ILiveTV.h"
 
+class CFileItem;
 class CSlingbox;
 
 namespace XFILE

@@ -20,10 +20,14 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 
 class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogFavourites :
       public CGUIDialog

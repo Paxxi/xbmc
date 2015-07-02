@@ -19,22 +19,23 @@
  */
 
 #include "GUIWindowSettingsProfile.h"
-#include "windows/GUIWindowFileManager.h"
-#include "profiles/Profile.h"
-#include "profiles/ProfilesManager.h"
+
 #include "Application.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogSelect.h"
-#include "profiles/dialogs/GUIDialogProfileSettings.h"
-#include "network/Network.h"
-#include "utils/URIUtils.h"
-#include "GUIPassword.h"
-#include "windows/GUIWindowLoginScreen.h"
-#include "guilib/GUIWindowManager.h"
-#include "filesystem/Directory.h"
 #include "FileItem.h"
-#include "input/Key.h"
+#include "filesystem/Directory.h"
+#include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
+#include "GUIPassword.h"
+#include "input/Key.h"
+#include "network/Network.h"
+#include "profiles/dialogs/GUIDialogProfileSettings.h"
+#include "profiles/Profile.h"
+#include "profiles/ProfilesManager.h"
+#include "utils/URIUtils.h"
+#include "windows/GUIWindowFileManager.h"
+#include "windows/GUIWindowLoginScreen.h"
 
 using namespace XFILE;
 

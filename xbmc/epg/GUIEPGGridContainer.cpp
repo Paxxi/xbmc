@@ -21,20 +21,21 @@
 #include <assert.h>
 #include <tinyxml.h>
 
+#include "GUIEPGGridContainer.h"
+
+#include "Epg.h"
+#include "FileItem.h"
 #include "GUIInfoManager.h"
 #include "guilib/DirtyRegion.h"
 #include "guilib/GUIControlFactory.h"
 #include "guilib/GUIListItem.h"
 #include "input/Key.h"
 #include "pvr/channels/PVRChannel.h"
+#include "threads/SystemClock.h"
 #include "utils/log.h"
 #include "utils/MathUtils.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
-#include "threads/SystemClock.h"
-
-#include "Epg.h"
-#include "GUIEPGGridContainer.h"
 
 using namespace PVR;
 using namespace EPG;

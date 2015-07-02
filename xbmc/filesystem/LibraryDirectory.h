@@ -22,6 +22,9 @@
 #include "IDirectory.h"
 #include "utils/XBMCTinyXML.h"
 
+class CFileItemList;
+class CURL;
+
 namespace XFILE
 {
   class CLibraryDirectory : public IDirectory

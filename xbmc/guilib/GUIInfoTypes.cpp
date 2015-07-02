@@ -19,14 +19,16 @@
  */
 
 #include "GUIInfoTypes.h"
-#include "GUIInfoManager.h"
+
 #include "addons/AddonManager.h"
-#include "utils/log.h"
-#include "LocalizeStrings.h"
-#include "GUIColorManager.h"
-#include "GUIListItem.h"
-#include "utils/StringUtils.h"
 #include "addons/Skin.h"
+#include "FileItem.h"
+#include "GUIColorManager.h"
+#include "GUIInfoManager.h"
+#include "GUIListItem.h"
+#include "LocalizeStrings.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
 
 using namespace std;
 using ADDON::CAddonMgr;

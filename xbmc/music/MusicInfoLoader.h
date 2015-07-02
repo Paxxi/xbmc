@@ -21,6 +21,7 @@
 #include "BackgroundInfoLoader.h"
 #include "MusicDatabase.h"
 
+class CFileItem;
 class CFileItemList;
 class CMusicThumbLoader;
 

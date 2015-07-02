@@ -40,6 +40,7 @@ namespace PVR
 class CAction;
 class CPlayerOptions;
 class CStreamDetails;
+class CFileItem;
 
 struct SPlayerAudioStreamInfo;
 struct SPlayerVideoStreamInfo;

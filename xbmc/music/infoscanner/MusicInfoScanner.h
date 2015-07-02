@@ -25,6 +25,7 @@
 
 class CAlbum;
 class CArtist;
+class CFileItemList;
 class CGUIDialogProgressBarHandle;
 
 namespace MUSIC_INFO

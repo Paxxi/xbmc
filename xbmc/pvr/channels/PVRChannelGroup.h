@@ -20,12 +20,16 @@
  *
  */
 
-#include "FileItem.h"
 #include "PVRChannel.h"
 #include "settings/lib/ISettingCallback.h"
 #include "utils/JobManager.h"
 
 #include <memory>
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace EPG
 {

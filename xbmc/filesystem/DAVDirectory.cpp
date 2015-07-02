@@ -20,14 +20,15 @@
 
 #include "DAVDirectory.h"
 
+#include "CurlFile.h"
 #include "DAVCommon.h"
 #include "DAVFile.h"
-#include "URL.h"
-#include "CurlFile.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
+#include "URL.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "utils/XBMCTinyXML.h"
 
 using namespace XFILE;
 

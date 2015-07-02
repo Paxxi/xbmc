@@ -19,12 +19,14 @@
  */
 
 #include "PVRChannelGroupsContainer.h"
-#include "URL.h"
+
 #include "dialogs/GUIDialogOK.h"
+#include "FileItem.h"
 #include "guilib/LocalizeStrings.h"
+#include "URL.h"
+#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/log.h"
 
 using namespace PVR;
 

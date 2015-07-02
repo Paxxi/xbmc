@@ -24,25 +24,28 @@
 #include <stdlib.h>
 
 #include "Autorun.h"
+
 #include "Application.h"
-#include "GUIPassword.h"
-#include "GUIUserMessages.h"
-#include "PlayListPlayer.h"
-#include "filesystem/StackDirectory.h"
+#include "dialogs/GUIDialogYesNo.h"
+#include "FileItem.h"
 #include "filesystem/Directory.h"
 #include "filesystem/DirectoryFactory.h"
 #include "filesystem/File.h"
-#include "profiles/ProfilesManager.h"
-#include "settings/Settings.h"
-#include "playlists/PlayList.h"
+#include "filesystem/StackDirectory.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
+#include "GUIPassword.h"
+#include "GUIUserMessages.h"
+#include "PlayListPlayer.h"
+#include "playlists/PlayList.h"
+#include "profiles/ProfilesManager.h"
+#include "settings/Settings.h"
 #include "storage/MediaManager.h"
-#include "video/VideoDatabase.h"
-#include "dialogs/GUIDialogYesNo.h"
+#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/log.h"
+#include "video/VideoDatabase.h"
+
 #ifdef HAS_CDDA_RIPPER
 #include "cdrip/CDDARipper.h"
 #endif

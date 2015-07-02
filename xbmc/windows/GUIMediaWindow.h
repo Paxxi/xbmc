@@ -20,6 +20,8 @@
  *
  */
 
+#include <memory>
+
 #include "dialogs/GUIDialogContextMenu.h"
 #include "filesystem/DirectoryHistory.h"
 #include "filesystem/VirtualDirectory.h"
@@ -28,7 +30,10 @@
 #include "view/GUIViewControl.h"
 #include "view/GUIViewState.h"
 
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 // base class for all media windows
 class CGUIMediaWindow : public CGUIWindow

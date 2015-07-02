@@ -20,9 +20,14 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 
 class CMediaSource;
+class CFileItem;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 enum CONTEXT_BUTTON { CONTEXT_BUTTON_CANCELLED = 0,
                       CONTEXT_BUTTON_LAUNCH,

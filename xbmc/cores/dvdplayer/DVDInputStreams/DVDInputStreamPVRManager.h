@@ -25,8 +25,9 @@
 */
 
 #include "DVDInputStream.h"
-#include "FileItem.h"
 #include "threads/SystemClock.h"
+
+class CFileItem;
 
 namespace XFILE {
 class IFile;

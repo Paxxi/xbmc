@@ -19,10 +19,12 @@
  */
 
 #include "GUIDialogKaraokeSongSelector.h"
+
+#include "FileItem.h"
+#include "guilib/LocalizeStrings.h"
+#include "input/Key.h"
 #include "PlayListPlayer.h"
 #include "playlists/PlayList.h"
-#include "input/Key.h"
-#include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 

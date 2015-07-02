@@ -22,6 +22,8 @@
 #include "utils/JobManager.h"
 #include "ThumbLoader.h"
 
+class CFileItem;
+
 class CPictureThumbLoader : public CThumbLoader, public CJobQueue
 {
 public:

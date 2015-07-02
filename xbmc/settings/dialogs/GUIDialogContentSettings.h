@@ -21,6 +21,7 @@
  */
 
 #include <map>
+#include <memory>
 
 #include "addons/Addon.h"
 #include "addons/Scraper.h"
@@ -30,7 +31,10 @@ namespace VIDEO
 {
   struct SScanSettings;
 }
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogContentSettings : public CGUIDialogSettingsManualBase
 {

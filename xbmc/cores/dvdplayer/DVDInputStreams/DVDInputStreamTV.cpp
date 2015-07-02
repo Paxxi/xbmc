@@ -19,6 +19,8 @@
  */
 
 #include "DVDInputStreamTV.h"
+
+#include "FileItem.h"
 #include "filesystem/SlingboxFile.h"
 #include "URL.h"
 

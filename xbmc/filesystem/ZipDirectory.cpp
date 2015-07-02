@@ -19,13 +19,14 @@
  */
 
 #include "ZipDirectory.h"
-#include "utils/CharsetConverter.h"
-#include "utils/URIUtils.h"
-#include "Util.h"
-#include "URL.h"
-#include "ZipManager.h"
+
 #include "FileItem.h"
+#include "URL.h"
+#include "Util.h"
+#include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
+#include "ZipManager.h"
 
 #include <vector>
 

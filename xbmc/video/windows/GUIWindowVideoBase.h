@@ -20,10 +20,17 @@
  *
  */
 
+#include <memory>
+
 #include "windows/GUIMediaWindow.h"
 #include "video/VideoDatabase.h"
 #include "PlayListPlayer.h"
 #include "video/VideoThumbLoader.h"
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 enum VideoSelectAction
 {

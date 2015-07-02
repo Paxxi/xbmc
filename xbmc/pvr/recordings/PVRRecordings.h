@@ -19,11 +19,16 @@
  *
  */
 
+#include <memory>
+
 #include "PVRRecording.h"
 #include "utils/Observer.h"
 #include "video/VideoDatabase.h"
-#include "FileItem.h"
 
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 #define PVR_ALL_RECORDINGS_PATH_EXTENSION "-1"
 
 namespace PVR

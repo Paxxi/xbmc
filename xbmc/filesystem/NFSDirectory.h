@@ -20,7 +20,11 @@
  */
 
 #include "IDirectory.h"
-#include "NFSFile.h"
+
+class CFileItemList;
+class CURL;
+
+struct nfsdirent;
 
 namespace XFILE
 {

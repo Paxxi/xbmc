@@ -19,27 +19,20 @@
  */
 
 #include "GUIMediaWindow.h"
-#include "Application.h"
-#include "ApplicationMessenger.h"
-#include "ContextMenuManager.h"
-#include "FileItemListModification.h"
-#include "GUIPassword.h"
-#include "GUIUserMessages.h"
-#include "PartyModeManager.h"
-#include "PlayListPlayer.h"
-#include "URL.h"
-#include "Util.h"
+
 #include "addons/AddonManager.h"
 #include "addons/GUIDialogAddonSettings.h"
 #include "addons/PluginSource.h"
-#if defined(TARGET_ANDROID)
-#include "android/activity/XBMCApp.h"
-#endif
+#include "Application.h"
+#include "ApplicationMessenger.h"
+#include "ContextMenuManager.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogMediaFilter.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "dialogs/GUIDialogSmartPlaylistEditor.h"
+#include "FileItem.h"
+#include "FileItemListModification.h"
 #include "filesystem/FavouritesDirectory.h"
 #include "filesystem/File.h"
 #include "filesystem/FileDirectoryFactory.h"
@@ -50,16 +43,22 @@
 #include "guilib/GUIKeyboardFactory.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
+#include "GUIPassword.h"
+#include "GUIUserMessages.h"
+#include "input/Key.h"
 #include "interfaces/Builtins.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
-#include "input/Key.h"
 #include "network/Network.h"
+#include "PartyModeManager.h"
+#include "PlayListPlayer.h"
 #include "playlists/PlayList.h"
 #include "profiles/ProfilesManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "storage/MediaManager.h"
 #include "threads/SystemClock.h"
+#include "URL.h"
+#include "Util.h"
 #include "utils/FileUtils.h"
 #include "utils/LabelFormatter.h"
 #include "utils/log.h"
@@ -67,6 +66,9 @@
 #include "utils/URIUtils.h"
 #include "video/VideoLibraryQueue.h"
 
+#if defined(TARGET_ANDROID)
+#include "android/activity/XBMCApp.h"
+#endif
 #define CONTROL_BTNVIEWASICONS       2
 #define CONTROL_BTNSORTBY            3
 #define CONTROL_BTNSORTASC           4

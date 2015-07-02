@@ -19,8 +19,9 @@
  *
  */
 
-#include "FileItem.h"
 #include <string>
+
+class CFileItem;
 
 class CGUIDialogSimpleMenu
 {

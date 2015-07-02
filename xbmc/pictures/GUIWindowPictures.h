@@ -24,6 +24,8 @@
 #include "PictureThumbLoader.h"
 #include "DllImageLib.h"
 
+class CFileItem;
+class CFileItemList;
 class CGUIDialogProgress;
 
 class CGUIWindowPictures : public CGUIMediaWindow, public IBackgroundLoaderObserver

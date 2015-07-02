@@ -23,6 +23,7 @@
 #include "GUIWindowMusicBase.h"
 #include "utils/Stopwatch.h"
 
+class CFileItem;
 class CFileItemList;
 
 class CGUIWindowMusicNav : public CGUIWindowMusicBase, public IBackgroundLoaderObserver

@@ -19,11 +19,17 @@
  *
  */
 
+#include <memory>
+
 #include "utils/DatabaseUtils.h"
 #include "JSONRPC.h"
 #include "FileItemHandler.h"
 
+class CFileItem;
+class CFileItemList;
 class CVideoDatabase;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace JSONRPC
 {

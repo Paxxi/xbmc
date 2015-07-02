@@ -19,13 +19,15 @@
  */
 
 #include "PlayListXML.h"
+
+#include "FileItem.h"
 #include "filesystem/File.h"
 #include "Util.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "utils/XMLUtils.h"
 #include "utils/Variant.h"
+#include "utils/XMLUtils.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;

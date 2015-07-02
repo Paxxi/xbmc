@@ -21,15 +21,14 @@
 #include "PVRChannelGroups.h"
 
 #include "FileItem.h"
-#include "settings/Settings.h"
-#include "utils/log.h"
-#include "utils/StringUtils.h"
-#include "URL.h"
-
-#include "PVRChannelGroupInternal.h"
+#include "pvr/addons/PVRClients.h"
 #include "pvr/PVRDatabase.h"
 #include "pvr/PVRManager.h"
-#include "pvr/addons/PVRClients.h"
+#include "PVRChannelGroupInternal.h"
+#include "settings/Settings.h"
+#include "URL.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
 
 #include <algorithm>
 

@@ -21,6 +21,8 @@
  */
 
 #include <set>
+#include <memory>
+
 #include "guilib/GUIWindow.h"
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
@@ -29,8 +31,11 @@
 #include "DllImageLib.h"
 #include "utils/SortUtils.h"
 
+class CFileItem;
 class CFileItemList;
 class CVariant;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIWindowSlideShow;
 

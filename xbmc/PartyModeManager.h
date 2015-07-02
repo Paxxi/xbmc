@@ -24,8 +24,11 @@
 
 #include <memory>
 
-class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
+
 namespace PLAYLIST
 {
   class CPlayList;

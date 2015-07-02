@@ -19,7 +19,9 @@
  */
 
 #include "VideoLibrary.h"
+
 #include "ApplicationMessenger.h"
+#include "FileItem.h"
 #include "TextureDatabase.h"
 #include "Util.h"
 #include "utils/StringUtils.h"

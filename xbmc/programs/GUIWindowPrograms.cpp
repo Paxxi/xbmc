@@ -18,17 +18,18 @@
  *
  */
 
-#include "system.h"
 #include "GUIWindowPrograms.h"
-#include "Util.h"
+
 #include "addons/GUIDialogAddonInfo.h"
 #include "Autorun.h"
-#include "guilib/GUIWindowManager.h"
-#include "FileItem.h"
-#include "settings/MediaSourceSettings.h"
-#include "input/Key.h"
-#include "utils/StringUtils.h"
 #include "ContextMenuManager.h"
+#include "FileItem.h"
+#include "guilib/GUIWindowManager.h"
+#include "input/Key.h"
+#include "settings/MediaSourceSettings.h"
+#include "system.h"
+#include "Util.h"
+#include "utils/StringUtils.h"
 
 #define CONTROL_BTNVIEWASICONS 2
 #define CONTROL_BTNSORTBY      3

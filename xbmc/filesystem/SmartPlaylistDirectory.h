@@ -22,6 +22,7 @@
 #include "IFileDirectory.h"
 #include <string>
 
+class CFileItemList;
 class CSmartPlaylist;
 
 namespace XFILE

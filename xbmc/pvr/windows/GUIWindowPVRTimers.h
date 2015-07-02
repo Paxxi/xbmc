@@ -22,6 +22,8 @@
 
 #include "GUIWindowPVRBase.h"
 
+class CFileItem;
+
 namespace PVR
 {
   class CGUIWindowPVRTimers : public CGUIWindowPVRBase

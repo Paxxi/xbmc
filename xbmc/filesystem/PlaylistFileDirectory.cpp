@@ -19,10 +19,12 @@
  */
 
 #include "PlaylistFileDirectory.h"
-#include "playlists/PlayListFactory.h"
+
 #include "File.h"
-#include "URL.h"
+#include "FileItem.h"
 #include "playlists/PlayList.h"
+#include "playlists/PlayListFactory.h"
+#include "URL.h"
 
 using namespace std;
 using namespace PLAYLIST;

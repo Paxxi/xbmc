@@ -23,6 +23,9 @@
 #include "GUIWindowPVRBase.h"
 #include "epg/EpgSearchFilter.h"
 
+class CFileItem;
+class CFileIList;
+
 namespace PVR
 {
   class CGUIWindowPVRSearch : public CGUIWindowPVRBase

@@ -18,16 +18,18 @@
  *
  */
 
-#include "Application.h"
 #include "PVRClient.h"
+
+#include "Application.h"
 #include "dialogs/GUIDialogYesNo.h"
-#include "pvr/PVRManager.h"
-#include "pvr/addons/PVRClients.h"
 #include "epg/Epg.h"
+#include "FileItem.h"
+#include "pvr/addons/PVRClients.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
-#include "pvr/timers/PVRTimers.h"
-#include "pvr/timers/PVRTimerInfoTag.h"
+#include "pvr/PVRManager.h"
 #include "pvr/recordings/PVRRecordings.h"
+#include "pvr/timers/PVRTimerInfoTag.h"
+#include "pvr/timers/PVRTimers.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "utils/log.h"

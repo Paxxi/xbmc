@@ -20,7 +20,9 @@
  *
  */
 
+#include <memory>
 #include <string>
+
 #include "guilib/GUIDialog.h"
 #include "threads/CriticalSection.h"
 #include "utils/JobManager.h"
@@ -33,6 +35,8 @@ enum SUBTITLE_STORAGEMODE
 
 class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogSubtitles : public CGUIDialog, CJobQueue
 {

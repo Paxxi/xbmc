@@ -23,8 +23,8 @@
 #include <Neptune/Source/Core/NptStrings.h>
 
 #include "system.h"
-#include "FileItem.h"
 #include <string>
+#include <memory>
 
 class CUPnPServer;
 class CFileItem;
@@ -34,6 +34,9 @@ class PLT_HttpRequestContext;
 class PLT_MediaItemResource;
 class PLT_MediaObject;
 class NPT_String;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
+
 namespace MUSIC_INFO {
   class CMusicInfoTag;
 }

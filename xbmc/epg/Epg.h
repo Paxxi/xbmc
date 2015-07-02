@@ -19,13 +19,14 @@
  *
  */
 
-#include "FileItem.h"
 #include "pvr/channels/PVRChannel.h"
 #include "threads/CriticalSection.h"
 #include "utils/Observer.h"
 
 #include "EpgInfoTag.h"
 #include "EpgSearchFilter.h"
+
+class CFileItemList;
 
 namespace PVR
 {

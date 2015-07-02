@@ -19,6 +19,8 @@
  */
 
 #include "GUIDialogPlayEject.h"
+
+#include "FileItem.h"
 #include "guilib/GUIWindowManager.h"
 #include "storage/MediaManager.h"
 #include "utils/log.h"

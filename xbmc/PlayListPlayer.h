@@ -28,10 +28,11 @@
 #define PLAYLIST_PICTURE 2
 
 class CAction;
-class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
+class CFileItem;
 class CFileItemList;
-
 class CVariant;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PLAYLIST
 {

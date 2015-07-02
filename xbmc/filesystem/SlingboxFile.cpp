@@ -18,15 +18,15 @@
  *
  */
 
-#include "FileItem.h"
 #include "SlingboxFile.h"
+
 #include "filesystem/File.h"
 #include "lib/SlingboxLib/SlingboxLib.h"
 #include "profiles/ProfilesManager.h"
-#include "utils/log.h"
-#include "utils/XMLUtils.h"
-#include "utils/StringUtils.h"
 #include "URL.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
+#include "utils/XMLUtils.h"
 
 using namespace XFILE;
 using namespace std;

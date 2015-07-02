@@ -20,9 +20,14 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 #include "addons/IAddon.h"
 #include "utils/Job.h"
+
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogAddonInfo :
       public CGUIDialog,

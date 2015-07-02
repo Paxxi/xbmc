@@ -18,23 +18,25 @@
  *
  */
 
-#include "threads/SystemClock.h"
 #include "PartyModeManager.h"
-#include "PlayListPlayer.h"
+
+#include "Application.h"
+#include "dialogs/GUIDialogOK.h"
+#include "dialogs/GUIDialogProgress.h"
+#include "FileItem.h"
+#include "guilib/GUIWindowManager.h"
+#include "GUIUserMessages.h"
+#include "interfaces/AnnouncementManager.h"
 #include "music/MusicDatabase.h"
 #include "music/windows/GUIWindowMusicPlaylist.h"
-#include "video/VideoDatabase.h"
+#include "PlayListPlayer.h"
+#include "playlists/PlayList.h"
 #include "playlists/SmartPlayList.h"
 #include "profiles/ProfilesManager.h"
-#include "dialogs/GUIDialogProgress.h"
-#include "GUIUserMessages.h"
-#include "guilib/GUIWindowManager.h"
-#include "dialogs/GUIDialogOK.h"
-#include "playlists/PlayList.h"
+#include "threads/SystemClock.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "Application.h"
-#include "interfaces/AnnouncementManager.h"
+#include "video/VideoDatabase.h"
 
 using namespace std;
 using namespace PLAYLIST;

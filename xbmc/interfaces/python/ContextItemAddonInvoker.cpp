@@ -30,6 +30,7 @@
 #include "ContextItemAddonInvoker.h"
 #include "utils/log.h"
 #include "interfaces/python/swig.h"
+#include "FileItem.h"
 
 
 CContextItemAddonInvoker::CContextItemAddonInvoker(

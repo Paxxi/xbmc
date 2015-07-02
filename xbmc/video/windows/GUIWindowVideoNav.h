@@ -20,9 +20,14 @@
  *
  */
 
+#include <memory>
+
 #include "GUIWindowVideoBase.h"
 
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 enum SelectFirstUnwatchedItem
 {

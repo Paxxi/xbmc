@@ -20,10 +20,19 @@
  *
  */
 
-#include "guilib/GUIDialog.h"
-#include "FileItem.h"
+#include <memory>
+#include <string>
 
+#include "guilib/GUIDialog.h"
+
+class CFileItem;
+class CFileItemList;
+class CMediaSource;
 class CVideoDatabase;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
+typedef std::vector<CMediaSource> VECSOURCES;
+typedef std::string MediaType;
 
 class CGUIDialogVideoInfo :
       public CGUIDialog

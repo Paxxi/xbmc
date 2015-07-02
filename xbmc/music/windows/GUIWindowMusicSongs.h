@@ -22,6 +22,9 @@
 #include "GUIWindowMusicBase.h"
 #include "music/MusicThumbLoader.h"
 
+class CFileItem;
+class CFileItemList;
+
 class CGUIWindowMusicSongs : public CGUIWindowMusicBase, public IBackgroundLoaderObserver
 {
 public:

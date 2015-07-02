@@ -18,9 +18,60 @@
  *
  */
 
+#include "Util.h"
+
+#include "Application.h"
+#include "cores/dvdplayer/DVDDemuxers/DVDDemux.h"
+#include "cores/dvdplayer/DVDSubtitles/DVDSubtitleStream.h"
+#include "cores/dvdplayer/DVDSubtitles/DVDSubtitleTagSami.h"
+#include "FileItem.h"
+#include "filesystem/Directory.h"
+#include "filesystem/File.h"
+#include "filesystem/MultiPathDirectory.h"
+#include "filesystem/PVRDirectory.h"
+#include "filesystem/RSSDirectory.h"
+#include "filesystem/SpecialProtocol.h"
+#include "filesystem/StackDirectory.h"
+#include "guilib/GraphicContext.h"
+#include "guilib/LocalizeStrings.h"
+#include "guilib/TextureManager.h"
 #include "network/Network.h"
-#include "threads/SystemClock.h"
+#include "profiles/ProfilesManager.h"
+#include "settings/AdvancedSettings.h"
+#include "settings/MediaSettings.h"
+#include "settings/Settings.h"
+#include "storage/MediaManager.h"
 #include "system.h"
+#include "threads/SystemClock.h"
+#include "URL.h"
+#include "utils/Environment.h"
+#include "utils/fstrcmp.h"
+#include "utils/LangCodeExpander.h"
+#include "utils/log.h"
+#include "utils/md5.h"
+#include "utils/RegExp.h"
+#include "utils/StringUtils.h"
+#include "utils/TimeUtils.h"
+#include "utils/URIUtils.h"
+#include "video/VideoInfoTag.h"
+
+#ifdef HAS_FILESYSTEM_RAR
+#include "filesystem/RarManager.h"
+#endif
+#ifdef HAS_UPNP
+#include "filesystem/UPnPDirectory.h"
+#endif
+#ifdef HAVE_LIBCAP
+  #include <sys/capability.h>
+#endif
+#ifdef TARGET_WINDOWS
+#include "utils/CharsetConverter.h"
+#include "WIN32Util.h"
+#endif
+#if defined(TARGET_DARWIN)
+#include "CompileInfo.h"
+#include "osx/DarwinUtils.h"
+#endif
 #if defined(TARGET_DARWIN)
 #include <sys/param.h>
 #include <mach-o/dyld.h>
@@ -40,60 +91,9 @@
 #if defined(TARGET_ANDROID)
 #include "android/bionic_supplement/bionic_supplement.h"
 #endif
+
 #include <stdlib.h>
 
-#include "Application.h"
-#include "Util.h"
-#include "filesystem/PVRDirectory.h"
-#include "filesystem/Directory.h"
-#include "filesystem/StackDirectory.h"
-#include "filesystem/MultiPathDirectory.h"
-#include "filesystem/SpecialProtocol.h"
-#include "filesystem/RSSDirectory.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
-#ifdef HAS_UPNP
-#include "filesystem/UPnPDirectory.h"
-#endif
-#include "profiles/ProfilesManager.h"
-#include "utils/RegExp.h"
-#include "guilib/GraphicContext.h"
-#include "guilib/TextureManager.h"
-#include "utils/fstrcmp.h"
-#include "storage/MediaManager.h"
-#ifdef TARGET_WINDOWS
-#include "utils/CharsetConverter.h"
-#include "WIN32Util.h"
-#endif
-#if defined(TARGET_DARWIN)
-#include "CompileInfo.h"
-#include "osx/DarwinUtils.h"
-#endif
-#include "filesystem/File.h"
-#include "settings/MediaSettings.h"
-#include "settings/Settings.h"
-#include "utils/StringUtils.h"
-#include "settings/AdvancedSettings.h"
-#ifdef HAS_IRSERVERSUITE
-#endif
-#include "guilib/LocalizeStrings.h"
-#include "utils/md5.h"
-#include "utils/TimeUtils.h"
-#include "utils/URIUtils.h"
-#include "utils/log.h"
-#include "utils/Environment.h"
-
-#include "cores/dvdplayer/DVDSubtitles/DVDSubtitleTagSami.h"
-#include "cores/dvdplayer/DVDSubtitles/DVDSubtitleStream.h"
-#include "URL.h"
-#include "utils/LangCodeExpander.h"
-#include "video/VideoInfoTag.h"
-#ifdef HAVE_LIBCAP
-  #include <sys/capability.h>
-#endif
-
-#include "cores/dvdplayer/DVDDemuxers/DVDDemux.h"
 
 using namespace std;
 

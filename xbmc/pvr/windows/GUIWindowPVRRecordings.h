@@ -20,9 +20,16 @@
  *
  */
 
+#include <memory>
+
 #include "GUIWindowPVRBase.h"
 #include "video/VideoThumbLoader.h"
 #include "video/VideoDatabase.h"
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PVR
 {

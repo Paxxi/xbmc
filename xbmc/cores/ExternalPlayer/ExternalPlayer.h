@@ -25,7 +25,9 @@
 #include <string>
 #include <vector>
 
+class CFileItem;
 class CGUIDialogOK;
+class TiXmlElement;
 
 class CExternalPlayer : public IPlayer, public CThread
 {

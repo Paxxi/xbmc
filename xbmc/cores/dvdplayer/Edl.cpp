@@ -19,15 +19,17 @@
  */
 
 #include "Edl.h"
-#include "utils/StringUtils.h"
-#include "utils/URIUtils.h"
+
+#include "FileItem.h"
 #include "filesystem/File.h"
+#include "PlatformDefs.h"
+#include "pvr/PVRManager.h"
+#include "pvr/recordings/PVRRecordings.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
-#include "PlatformDefs.h"
-#include "pvr/recordings/PVRRecordings.h"
-#include "pvr/PVRManager.h"
 
 using namespace std;
 

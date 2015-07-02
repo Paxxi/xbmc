@@ -21,10 +21,15 @@
  */
 
 #include <vector>
+#include <memory>
 
-#include "FileItem.h"
 #include "PVRChannelGroup.h"
 #include "threads/CriticalSection.h"
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PVR
 {

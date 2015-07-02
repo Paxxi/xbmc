@@ -18,16 +18,18 @@
  *
  */
 
-#include "DVDFactoryInputStream.h"
 #include "DVDInputStreamPVRManager.h"
+
+#include "DVDFactoryInputStream.h"
+#include "FileItem.h"
 #include "filesystem/PVRFile.h"
-#include "URL.h"
-#include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannel.h"
-#include "utils/log.h"
 #include "pvr/addons/PVRClients.h"
+#include "pvr/channels/PVRChannel.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/PVRManager.h"
 #include "settings/Settings.h"
+#include "URL.h"
+#include "utils/log.h"
 
 #include <assert.h>
 

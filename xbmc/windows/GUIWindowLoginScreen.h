@@ -20,11 +20,16 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 #include "view/GUIViewControl.h"
 #include "utils/Stopwatch.h"
 
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIWindowLoginScreen : public CGUIWindow
 {

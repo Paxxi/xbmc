@@ -18,31 +18,33 @@
  *
  */
 
-#include "system.h"
-#include "GUIUserMessages.h"
-#include "Application.h"
 #include "GUIDialogSubtitles.h"
-#include "LangInfo.h"
+
 #include "addons/AddonManager.h"
+#include "Application.h"
 #include "cores/IPlayer.h"
 #include "dialogs/GUIDialogKaiToast.h"
+#include "FileItem.h"
 #include "filesystem/AddonsDirectory.h"
+#include "filesystem/Directory.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
 #include "filesystem/StackDirectory.h"
 #include "guilib/GUIKeyboardFactory.h"
+#include "GUIUserMessages.h"
 #include "input/Key.h"
-#include "settings/Settings.h"
+#include "LangInfo.h"
 #include "settings/lib/Setting.h"
+#include "settings/Settings.h"
+#include "system.h"
+#include "URL.h"
+#include "Util.h"
 #include "utils/JobManager.h"
 #include "utils/LangCodeExpander.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "URL.h"
-#include "Util.h"
 #include "video/VideoDatabase.h"
-#include "filesystem/Directory.h"
 
 using namespace ADDON;
 using namespace XFILE;

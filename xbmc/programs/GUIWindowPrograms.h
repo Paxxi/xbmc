@@ -24,6 +24,9 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "ThumbLoader.h"
 
+class CFileItem;
+class CFileItemList;
+
 class CGUIWindowPrograms :
       public CGUIMediaWindow, public IBackgroundLoaderObserver
 {

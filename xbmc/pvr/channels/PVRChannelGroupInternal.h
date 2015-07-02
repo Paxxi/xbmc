@@ -23,6 +23,8 @@
 #include "PVRChannelGroup.h"
 #include "utils/Observer.h"
 
+class CFileItemList;
+
 namespace PVR
 {
   class CPVRChannelGroups;

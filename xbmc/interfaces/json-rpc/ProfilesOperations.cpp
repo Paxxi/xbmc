@@ -19,7 +19,9 @@
  */
 
 #include "ProfilesOperations.h"
+
 #include "ApplicationMessenger.h"
+#include "FileItem.h"
 #include "profiles/ProfilesManager.h"
 #include "utils/md5.h"
 

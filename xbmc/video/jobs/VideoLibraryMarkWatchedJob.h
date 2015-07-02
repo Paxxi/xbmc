@@ -19,9 +19,13 @@
  *
  */
 
-#include "FileItem.h"
+#include <memory>
+
 #include "video/jobs/VideoLibraryJob.h"
 
+class CFileItem;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 /*!
  \brief Video library job implementation for marking items as watched/unwatched.
  */

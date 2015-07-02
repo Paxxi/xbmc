@@ -22,6 +22,7 @@
 #include "BackgroundInfoLoader.h"
 #include <string>
 
+class CFileItem;
 class CTextureDatabase;
 
 class CThumbLoader : public CBackgroundInfoLoader

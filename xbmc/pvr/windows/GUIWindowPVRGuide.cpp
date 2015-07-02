@@ -21,16 +21,17 @@
 #include "GUIWindowPVRGuide.h"
 
 #include "ContextMenuManager.h"
+#include "epg/EpgContainer.h"
+#include "FileItem.h"
 #include "GUIUserMessages.h"
 #include "input/Key.h"
-#include "pvr/PVRManager.h"
+#include "pvr/addons/PVRClients.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
-#include "epg/EpgContainer.h"
+#include "pvr/PVRManager.h"
+#include "pvr/timers/PVRTimers.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
-#include "pvr/addons/PVRClients.h"
-#include "pvr/timers/PVRTimers.h"
 
 using namespace PVR;
 using namespace EPG;

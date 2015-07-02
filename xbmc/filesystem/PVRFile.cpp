@@ -19,14 +19,16 @@
  */
 
 #include "PVRFile.h"
+
 #include "cores/dvdplayer/DVDInputStreams/DVDInputStream.h"
-#include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannelGroupsContainer.h"
-#include "pvr/recordings/PVRRecordings.h"
+#include "FileItem.h"
 #include "pvr/addons/PVRClients.h"
+#include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/PVRManager.h"
+#include "pvr/recordings/PVRRecordings.h"
+#include "URL.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "URL.h"
 
 using namespace std;
 using namespace XFILE;

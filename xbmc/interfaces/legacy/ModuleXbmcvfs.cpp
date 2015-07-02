@@ -19,12 +19,14 @@
  */
 
 #include "ModuleXbmcvfs.h"
-#include "LanguageHook.h"
-#include "filesystem/File.h"
+
+#include "FileItem.h"
 #include "filesystem/Directory.h"
+#include "filesystem/File.h"
+#include "LanguageHook.h"
+#include "Util.h"
 #include "utils/FileUtils.h"
 #include "utils/URIUtils.h"
-#include "Util.h"
 
 namespace XBMCAddon
 {

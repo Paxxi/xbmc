@@ -19,9 +19,9 @@
  *
  */
 
-#include "FileItem.h"
 #include "PlayerCoreFactory.h"
 
+class CFileItem;
 class CRegExp;
 class TiXmlElement;
 

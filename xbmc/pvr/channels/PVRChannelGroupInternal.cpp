@@ -21,14 +21,14 @@
 #include "PVRChannelGroupInternal.h"
 
 #include "dialogs/GUIDialogOK.h"
-#include "settings/AdvancedSettings.h"
-#include "utils/log.h"
-
+#include "epg/EpgContainer.h"
+#include "FileItem.h"
+#include "pvr/addons/PVRClients.h"
 #include "pvr/PVRDatabase.h"
 #include "pvr/PVRManager.h"
-#include "epg/EpgContainer.h"
 #include "pvr/timers/PVRTimers.h"
-#include "pvr/addons/PVRClients.h"
+#include "settings/AdvancedSettings.h"
+#include "utils/log.h"
 
 #include <assert.h>
 

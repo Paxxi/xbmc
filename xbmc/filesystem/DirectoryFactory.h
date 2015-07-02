@@ -19,10 +19,12 @@
  *
  */
 
-#include "IDirectory.h"
+class CURL;
 
 namespace XFILE
 {
+
+class IDirectory;
 /*!
  \ingroup filesystem
  \brief Get access to a directory of a file system.

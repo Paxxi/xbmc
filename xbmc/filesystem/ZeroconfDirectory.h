@@ -25,6 +25,9 @@
 #define TXT_RECORD_USERNAME_KEY "u"
 #define TXT_RECORD_PASSWORD_KEY "p"
 
+class CFileItemList;
+class CURL;
+
 namespace XFILE
 {
   class CZeroconfDirectory : public IDirectory

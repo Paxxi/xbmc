@@ -20,11 +20,15 @@
  *
  */
 
+#include <memory>
+
 #include "GUIDialogBoxBase.h"
 #include "view/GUIViewControl.h"
 
 class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogSelect :
       public CGUIDialogBoxBase

@@ -23,6 +23,8 @@
 #include "GUIWindowPVRBase.h"
 #include "epg/GUIEPGGridContainer.h"
 
+class CFileItem;
+class CFileItemList;
 class CSetting;
 
 namespace PVR

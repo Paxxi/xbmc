@@ -23,12 +23,19 @@
  *
  */
 
+#include <memory>
+
 #include "windows/GUIMediaWindow.h"
 #include "music/MusicDatabase.h"
 #include "music/infoscanner/MusicInfoScraper.h"
 #include "PlayListPlayer.h"
 #include "music/MusicInfoLoader.h"
 #include "music/MusicThumbLoader.h"
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 /*!
  \ingroup windows

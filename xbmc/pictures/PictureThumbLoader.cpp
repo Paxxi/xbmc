@@ -19,19 +19,20 @@
  */
 
 #include "PictureThumbLoader.h"
-#include "Picture.h"
-#include "filesystem/File.h"
+
 #include "FileItem.h"
-#include "TextureCache.h"
 #include "filesystem/Directory.h"
+#include "filesystem/File.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "guilib/GUIWindowManager.h"
 #include "GUIUserMessages.h"
-#include "utils/URIUtils.h"
+#include "Picture.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "video/VideoThumbLoader.h"
+#include "TextureCache.h"
 #include "URL.h"
+#include "utils/URIUtils.h"
+#include "video/VideoThumbLoader.h"
 
 using namespace XFILE;
 using namespace std;

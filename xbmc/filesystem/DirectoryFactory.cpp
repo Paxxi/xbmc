@@ -21,29 +21,38 @@
 #if (defined HAVE_CONFIG_H) && (!defined TARGET_WINDOWS)
   #include "config.h"
 #endif
-#include <stdlib.h>
-#include "network/Network.h"
-#include "system.h"
 #include "DirectoryFactory.h"
-#include "SpecialProtocolDirectory.h"
-#include "MultiPathDirectory.h"
-#include "StackDirectory.h"
+
+#include "AddonsDirectory.h"
+#include "Application.h"
+#include "DAVDirectory.h"
+#include "FavouritesDirectory.h"
 #include "FileDirectoryFactory.h"
-#include "PlaylistDirectory.h"
+#include "FileItem.h"
+#include "filesystem/IDirectory.h"
+#include "FTPDirectory.h"
+#include "HDHomeRunDirectory.h"
+#include "HTTPDirectory.h"
+#include "LibraryDirectory.h"
+#include "MultiPathDirectory.h"
 #include "MusicDatabaseDirectory.h"
 #include "MusicSearchDirectory.h"
-#include "VideoDatabaseDirectory.h"
-#include "FavouritesDirectory.h"
-#include "LibraryDirectory.h"
-#include "AddonsDirectory.h"
-#include "SourcesDirectory.h"
-#include "FTPDirectory.h"
-#include "HTTPDirectory.h"
-#include "DAVDirectory.h"
-#include "UDFDirectory.h"
-#include "Application.h"
-#include "utils/log.h"
+#include "network/Network.h"
 #include "network/WakeOnAccess.h"
+#include "PlaylistDirectory.h"
+#include "PluginDirectory.h"
+#include "ResourceDirectory.h"
+#include "RSSDirectory.h"
+#include "SlingboxDirectory.h"
+#include "SourcesDirectory.h"
+#include "SpecialProtocolDirectory.h"
+#include "StackDirectory.h"
+#include "system.h"
+#include "UDFDirectory.h"
+#include "URL.h"
+#include "utils/log.h"
+#include "VideoDatabaseDirectory.h"
+#include "ZipDirectory.h"
 
 #ifdef TARGET_POSIX
 #include "posix/PosixDirectory.h"
@@ -60,7 +69,6 @@
 #ifdef HAS_FILESYSTEM_CDDA
 #include "CDDADirectory.h"
 #endif
-#include "PluginDirectory.h"
 #ifdef HAS_FILESYSTEM
 #include "ISO9660Directory.h"
 #endif
@@ -76,15 +84,9 @@
 #if defined(TARGET_ANDROID)
 #include "APKDirectory.h"
 #endif
-#include "ZipDirectory.h"
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarDirectory.h"
 #endif
-#include "HDHomeRunDirectory.h"
-#include "SlingboxDirectory.h"
-#include "FileItem.h"
-#include "URL.h"
-#include "RSSDirectory.h"
 #ifdef HAS_ZEROCONF
 #include "ZeroconfDirectory.h"
 #endif
@@ -100,7 +102,6 @@
 #if defined(TARGET_ANDROID)
 #include "AndroidAppDirectory.h"
 #endif
-#include "ResourceDirectory.h"
 
 using namespace XFILE;
 

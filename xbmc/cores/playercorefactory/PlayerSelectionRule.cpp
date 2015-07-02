@@ -18,15 +18,17 @@
  *
  */
 
-#include "URL.h"
 #include "PlayerSelectionRule.h"
-#include "video/VideoInfoTag.h"
-#include "utils/StreamDetails.h"
+
+#include "FileItem.h"
 #include "settings/Settings.h"
+#include "URL.h"
 #include "utils/log.h"
 #include "utils/RegExp.h"
+#include "utils/StreamDetails.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+#include "video/VideoInfoTag.h"
 
 CPlayerSelectionRule::CPlayerSelectionRule(TiXmlElement* pRule)
 {

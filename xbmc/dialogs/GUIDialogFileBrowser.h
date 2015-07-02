@@ -20,6 +20,8 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 #include "filesystem/VirtualDirectory.h"
 #include "filesystem/DirectoryHistory.h"
@@ -28,6 +30,8 @@
 
 class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIDialogFileBrowser : public CGUIDialog, public IBackgroundLoaderObserver
 {

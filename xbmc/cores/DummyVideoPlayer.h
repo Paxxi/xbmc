@@ -23,6 +23,8 @@
 #include "IPlayer.h"
 #include "threads/Thread.h"
 
+class CFileItem;
+
 class CDummyVideoPlayer : public IPlayer, public CThread
 {
 public:

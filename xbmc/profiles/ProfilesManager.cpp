@@ -18,34 +18,36 @@
  *
  */
 
-#include "system.h"
 #include "ProfilesManager.h"
+
 #include "Application.h"
 #include "DatabaseManager.h"
-#include "FileItem.h"
-#include "GUIInfoManager.h"
-#include "PasswordManager.h"
-#include "Util.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogYesNo.h"
+#include "FileItem.h"
 #include "filesystem/Directory.h"
 #include "filesystem/DirectoryCache.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
+#include "GUIInfoManager.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "input/ButtonTranslator.h"
 #include "input/InputManager.h"
+#include "PasswordManager.h"
 #include "settings/Settings.h"
-#if !defined(TARGET_WINDOWS) && defined(HAS_DVD_DRIVE)
-#include "storage/DetectDVDType.h"
-#endif
+#include "system.h"
 #include "threads/SingleLock.h"
+#include "Util.h"
 #include "utils/FileUtils.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
+
+#if !defined(TARGET_WINDOWS) && defined(HAS_DVD_DRIVE)
+#include "storage/DetectDVDType.h"
+#endif
 
 // TODO
 // eventually the profile should dictate where special://masterprofile/ is

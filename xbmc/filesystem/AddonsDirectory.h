@@ -22,7 +22,12 @@
 #include "IDirectory.h"
 #include "addons/AddonManager.h"
 
+#include <memory>
+
 class CURL;
+class CFileItem;
+class CFileItemList;
+
 typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace XFILE 

@@ -22,17 +22,18 @@
 
 #include "Application.h"
 #include "ApplicationMessenger.h"
-#include "GUIUserMessages.h"
 #include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogSelect.h"
-#include "pvr/PVRManager.h"
+#include "FileItem.h"
 #include "guilib/GUIWindowManager.h"
-#include "settings/Settings.h"
-#include "pvr/channels/PVRChannelGroups.h"
+#include "GUIUserMessages.h"
 #include "pvr/channels/PVRChannelGroupInternal.h"
+#include "pvr/channels/PVRChannelGroups.h"
+#include "pvr/PVRManager.h"
 #include "pvr/recordings/PVRRecordings.h"
 #include "pvr/timers/PVRTimers.h"
+#include "settings/Settings.h"
 
 #include <assert.h>
 

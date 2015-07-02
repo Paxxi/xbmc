@@ -21,22 +21,25 @@
 #include "system.h"
 
 #ifdef HAS_FILESYSTEM_NFS
+#include "NFSDirectory.h"
+
 #include "DllLibNfs.h"
+#include "FileItem.h"
+#include "filesystem/NFSFile.h"  
+#include "threads/SingleLock.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
+
+#include <limits.h>
+#include <nfsc/libnfs-raw-nfs.h>
 
 #ifdef TARGET_WINDOWS
 #include <sys\stat.h>
 #endif
 
-#include "NFSDirectory.h"
-#include "FileItem.h"
-#include "utils/log.h"
-#include "utils/URIUtils.h"
-#include "utils/StringUtils.h"
-#include "threads/SingleLock.h"
 using namespace XFILE;
 using namespace std;
-#include <limits.h>
-#include <nfsc/libnfs-raw-nfs.h>
 
 CNFSDirectory::CNFSDirectory(void)
 {

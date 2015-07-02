@@ -19,11 +19,18 @@
  *
  */
 
+#include <memory>
+
 #include "XBDateTime.h"
-#include "FileItem.h"
 #include "guilib/GUIControl.h"
 #include "guilib/GUIListItemLayout.h"
 #include "guilib/IGUIContainer.h"
+
+namespace PVR
+{
+  class CPVRChannel;
+  typedef std::shared_ptr<CPVRChannel> CPVRChannelPtr;
+}
 
 namespace EPG
 {

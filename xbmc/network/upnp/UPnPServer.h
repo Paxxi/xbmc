@@ -19,13 +19,17 @@
  */
 #pragma once
 #include <Platinum/Source/Devices/MediaConnect/PltMediaConnect.h>
+#include <memory>
 
 #include "interfaces/IAnnouncer.h"
-#include "FileItem.h"
 
+class CFileItem;
+class CFileItemList;
 class CThumbLoader;
 class PLT_MediaObject;
 class PLT_HttpRequestContext;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace UPNP
 {

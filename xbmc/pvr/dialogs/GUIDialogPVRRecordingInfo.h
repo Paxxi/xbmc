@@ -19,7 +19,13 @@
  *
  */
 
+#include<memory> 
+
 #include "guilib/GUIDialog.h"
+
+class CFileItem;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PVR
 {

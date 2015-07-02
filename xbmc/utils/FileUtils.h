@@ -19,7 +19,10 @@
  *
  */
 #include <string>
-#include "FileItem.h"
+#include <memory>
+
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CFileUtils
 {

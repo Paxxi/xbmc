@@ -19,9 +19,24 @@
  */
 
 
-#include "system.h"
-#include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
+
+#include "addons/AddonManager.h"
+#include "addons/AudioDecoder.h"
+#include "Directory.h"
+#include "File.h"
+#include "FileItem.h"
+#include "filesystem/IFileDirectory.h"
+#include "PlaylistFileDirectory.h"
+#include "playlists/PlayListFactory.h"
+#include "playlists/SmartPlayList.h"
+#include "SmartPlaylistDirectory.h"
+#include "system.h"
+#include "URL.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
+#include "ZipDirectory.h"
+
 #ifdef HAS_FILESYSTEM
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
@@ -32,18 +47,6 @@
 #if defined(TARGET_ANDROID)
 #include "APKDirectory.h"
 #endif
-#include "ZipDirectory.h"
-#include "SmartPlaylistDirectory.h"
-#include "playlists/SmartPlayList.h"
-#include "PlaylistFileDirectory.h"
-#include "playlists/PlayListFactory.h"
-#include "Directory.h"
-#include "File.h"
-#include "FileItem.h"
-#include "utils/StringUtils.h"
-#include "URL.h"
-#include "addons/AddonManager.h"
-#include "addons/AudioDecoder.h"
 
 using namespace ADDON;
 using namespace XFILE;

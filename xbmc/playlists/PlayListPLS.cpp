@@ -19,17 +19,19 @@
  */
 
 #include "PlayListPLS.h"
+
+#include "FileItem.h"
+#include "filesystem/File.h"
+#include "music/tags/MusicInfoTag.h"
 #include "PlayListFactory.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
-#include "filesystem/File.h"
-#include "video/VideoInfoTag.h"
-#include "music/tags/MusicInfoTag.h"
 #include "utils/CharsetConverter.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+#include "video/VideoInfoTag.h"
 
 using namespace std;
 using namespace XFILE;

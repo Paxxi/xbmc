@@ -20,6 +20,7 @@
  */
 
 #include <map>
+#include <memory>
 
 #include "addons/include/xbmc_pvr_types.h"
 #include "settings/lib/ISettingCallback.h"
@@ -29,12 +30,15 @@
 #include "utils/Observer.h"
 #include "interfaces/IAnnouncer.h"
 #include "pvr/recordings/PVRRecording.h"
-#include "FileItem.h"
 
 class CGUIDialogProgressBarHandle;
 class CStopWatch;
 class CAction;
+
+class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace EPG
 {

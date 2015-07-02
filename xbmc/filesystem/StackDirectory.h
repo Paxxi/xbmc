@@ -20,8 +20,14 @@
  */
 
 #include "IDirectory.h"
-#include "utils/RegExp.h"
 #include <string>
+#include <vector>
+
+class CFileItemList;
+class CRegExp;
+class CURL;
+
+typedef std::vector<CRegExp> VECCREGEXP;
 
 namespace XFILE
 {

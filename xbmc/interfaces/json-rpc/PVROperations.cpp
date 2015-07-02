@@ -20,13 +20,14 @@
 
 #include "PVROperations.h"
 
-#include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannelGroupsContainer.h"
-#include "pvr/channels/PVRChannel.h"
-#include "pvr/timers/PVRTimers.h"
-#include "pvr/recordings/PVRRecordings.h"
 #include "epg/Epg.h"
 #include "epg/EpgContainer.h"
+#include "FileItem.h"
+#include "pvr/channels/PVRChannel.h"
+#include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/PVRManager.h"
+#include "pvr/recordings/PVRRecordings.h"
+#include "pvr/timers/PVRTimers.h"
 
 using namespace std;
 using namespace JSONRPC;

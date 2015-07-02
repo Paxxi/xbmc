@@ -18,12 +18,13 @@
  *
  */
 
-#include "threads/SystemClock.h"
 #include "SFTPFile.h"
 #ifdef HAS_FILESYSTEM_SFTP
+#include "FileItem.h"
 #include "threads/SingleLock.h"
-#include "utils/log.h"
+#include "threads/SystemClock.h"
 #include "URL.h"
+#include "utils/log.h"
 #include <fcntl.h>
 #include <sstream>
 

@@ -20,12 +20,16 @@
  *
  */
 
+#include <memory>
+
 #include "addons/Addon.h"
 #include "windows/GUIMediaWindow.h"
 #include "ThumbLoader.h"
 
 class CFileItem;
 class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 class CGUIWindowAddonBrowser : public CGUIMediaWindow
 {

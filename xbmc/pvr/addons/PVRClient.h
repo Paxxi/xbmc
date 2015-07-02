@@ -26,6 +26,8 @@
 #include "pvr/channels/PVRChannel.h"
 #include "pvr/recordings/PVRRecordings.h"
 
+class CFileItem;
+
 namespace EPG
 {
   class CEpg;

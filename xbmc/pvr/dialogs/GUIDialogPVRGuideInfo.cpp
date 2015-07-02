@@ -19,19 +19,20 @@
  */
 
 #include "GUIDialogPVRGuideInfo.h"
+
 #include "Application.h"
-#include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogYesNo.h"
-#include "guilib/LocalizeStrings.h"
-#include "utils/StringUtils.h"
-
-#include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannelGroupsContainer.h"
 #include "epg/EpgInfoTag.h"
-#include "pvr/timers/PVRTimers.h"
+#include "FileItem.h"
+#include "guilib/GUIWindowManager.h"
+#include "guilib/LocalizeStrings.h"
+#include "pvr/channels/PVRChannelGroupsContainer.h"
+#include "pvr/PVRManager.h"
 #include "pvr/timers/PVRTimerInfoTag.h"
+#include "pvr/timers/PVRTimers.h"
 #include "pvr/windows/GUIWindowPVRBase.h"
+#include "utils/StringUtils.h"
 
 using namespace PVR;
 using namespace EPG;

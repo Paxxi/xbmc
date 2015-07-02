@@ -19,19 +19,21 @@
  */
 
 #include "PlayList.h"
-#include "PlayListFactory.h"
-#include <sstream>
-#include "video/VideoInfoTag.h"
-#include "music/tags/MusicInfoTag.h"
+
+#include "FileItem.h"
 #include "filesystem/File.h"
+#include "interfaces/AnnouncementManager.h"
+#include "music/tags/MusicInfoTag.h"
+#include "PlayListFactory.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
-#include "interfaces/AnnouncementManager.h"
+#include "video/VideoInfoTag.h"
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
+#include <sstream>
 
 //using namespace std;
 using namespace MUSIC_INFO;

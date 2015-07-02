@@ -19,15 +19,16 @@
  */
 
 #include "ZeroconfDirectory.h"
-#include <stdexcept>
-#include <cassert>
 
-#include "URL.h"
-#include "utils/URIUtils.h"
+#include "Directory.h"
 #include "FileItem.h"
 #include "network/ZeroconfBrowser.h"
-#include "Directory.h"
+#include "URL.h"
 #include "utils/log.h"
+#include "utils/URIUtils.h"
+
+#include <stdexcept>
+#include <cassert>
 
 using namespace XFILE;
 

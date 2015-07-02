@@ -27,6 +27,7 @@
 #include <set>
 
 class CFileItem;
+class CFileItemList;
 
 namespace XFILE
 {

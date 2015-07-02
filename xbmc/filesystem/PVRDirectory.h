@@ -21,7 +21,9 @@
 
 #include "IDirectory.h"
 
+class CFileItemList;
 class CPVRSession;
+class CURL;
 
 namespace XFILE {
 

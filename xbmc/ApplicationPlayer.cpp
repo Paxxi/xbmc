@@ -19,8 +19,10 @@
  */
 
 #include "ApplicationPlayer.h"
-#include "cores/IPlayer.h"
+
 #include "Application.h"
+#include "cores/IPlayer.h"
+#include "FileItem.h"
 #include "settings/MediaSettings.h"
 
 CApplicationPlayer::CApplicationPlayer()

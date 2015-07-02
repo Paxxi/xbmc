@@ -19,29 +19,30 @@
  */
 #include <Platinum/Source/Platinum/Platinum.h>
 
-#include "network/Network.h"
 #include "UPnPRenderer.h"
-#include "UPnP.h"
-#include "UPnPInternal.h"
+
 #include "Application.h"
 #include "ApplicationMessenger.h"
 #include "FileItem.h"
 #include "filesystem/SpecialProtocol.h"
 #include "GUIInfoManager.h"
 #include "guilib/GUIWindowManager.h"
+#include "GUIUserMessages.h"
 #include "input/Key.h"
+#include "interfaces/AnnouncementManager.h"
+#include "network/Network.h"
 #include "pictures/GUIWindowSlideShow.h"
 #include "pictures/PictureInfoTag.h"
-#include "interfaces/AnnouncementManager.h"
+#include "playlists/PlayList.h"
 #include "settings/Settings.h"
 #include "TextureDatabase.h"
 #include "ThumbLoader.h"
+#include "UPnP.h"
+#include "UPnPInternal.h"
 #include "URL.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "utils/StringUtils.h"
-#include "playlists/PlayList.h"
-#include "GUIUserMessages.h"
 
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.renderer")
 

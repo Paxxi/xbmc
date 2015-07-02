@@ -21,6 +21,9 @@
 
 #include "IFileDirectory.h"
 
+class CFileItemList;
+class CURL;
+
 namespace XFILE
 {
   class CZipDirectory : public IFileDirectory

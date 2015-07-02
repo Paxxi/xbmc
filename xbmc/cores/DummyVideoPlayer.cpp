@@ -18,17 +18,19 @@
  *
  */
  
-#include "threads/SystemClock.h"
-#include "system.h"
 #include "DummyVideoPlayer.h"
+
+#include "Application.h"
+#include "FileItem.h"
+#include "guilib/GUIFont.h" // for XBFONT_* defines
 #include "guilib/GUIFontManager.h"
 #include "guilib/GUITextLayout.h"
-#include "guilib/GUIFont.h" // for XBFONT_* defines
-#include "Application.h"
 #include "settings/AdvancedSettings.h"
-#include "windowing/WindowingFactory.h"
+#include "system.h"
+#include "threads/SystemClock.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "windowing/WindowingFactory.h"
 
 CDummyVideoPlayer::CDummyVideoPlayer(IPlayerCallback& callback)
     : IPlayer(callback),

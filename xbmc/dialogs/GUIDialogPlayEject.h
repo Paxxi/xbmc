@@ -19,8 +19,9 @@
  *
  */
 
-#include "FileItem.h"
 #include "GUIDialogYesNo.h"
+
+class CFileItem;
 
 class CGUIDialogPlayEject : public CGUIDialogYesNo
 {

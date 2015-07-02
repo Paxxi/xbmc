@@ -18,23 +18,25 @@
  *
  */
 
-#include "threads/SystemClock.h"
 #include "PlayListPlayer.h"
+
 #include "Application.h"
-#include "PartyModeManager.h"
-#include "settings/AdvancedSettings.h"
-#include "GUIUserMessages.h"
-#include "guilib/GUIWindowManager.h"
+#include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogOK.h"
+#include "FileItem.h"
+#include "guilib/GUIWindowManager.h"
+#include "guilib/LocalizeStrings.h"
+#include "GUIUserMessages.h"
+#include "input/Key.h"
+#include "interfaces/AnnouncementManager.h"
+#include "music/tags/MusicInfoTag.h"
+#include "PartyModeManager.h"
 #include "playlists/PlayList.h"
+#include "settings/AdvancedSettings.h"
+#include "threads/SystemClock.h"
+#include "URL.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "music/tags/MusicInfoTag.h"
-#include "dialogs/GUIDialogKaiToast.h"
-#include "guilib/LocalizeStrings.h"
-#include "interfaces/AnnouncementManager.h"
-#include "input/Key.h"
-#include "URL.h"
 
 using namespace PLAYLIST;
 

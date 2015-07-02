@@ -22,7 +22,9 @@
 
 #include "guilib/GUIDialog.h"
 
+class CFileItem;
 class CFileItemList;
+
 
 class CGUIDialogPictureInfo :
       public CGUIDialog

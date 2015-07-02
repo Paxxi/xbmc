@@ -19,12 +19,15 @@
  */
 
 #include "FavouritesOperations.h"
+
+#include "FileItem.h"
 #include "filesystem/FavouritesDirectory.h"
-#include "input/ButtonTranslator.h"
-#include "utils/StringUtils.h"
-#include "Util.h"
-#include "utils/URIUtils.h"
 #include "guilib/WindowIDs.h"
+#include "input/ButtonTranslator.h"
+#include "Util.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
+
 #include <vector>
 
 using namespace std;

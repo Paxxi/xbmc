@@ -20,8 +20,11 @@
  */
 
 #include "IDirectory.h"
-#include "utils/XBMCTinyXML.h"
-#include "FileItem.h"
+
+class CURL;
+class CFileItem;
+class CFileItemList;
+class TiXmlElement;
 
 namespace XFILE
 {

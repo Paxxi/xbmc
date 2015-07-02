@@ -18,21 +18,24 @@
  *
  */
 #include "FileUtils.h"
-#include "guilib/GUIWindowManager.h"
+
 #include "dialogs/GUIDialogYesNo.h"
+#include "FileItem.h"
+#include "FileOperationJob.h"
+#include "filesystem/MultiPathDirectory.h"
 #include "guilib/GUIKeyboardFactory.h"
-#include "utils/log.h"
+#include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "JobManager.h"
-#include "FileOperationJob.h"
-#include "URIUtils.h"
-#include "filesystem/MultiPathDirectory.h"
-#include <vector>
 #include "settings/MediaSourceSettings.h"
-#include "Util.h"
-#include "StringUtils.h"
-#include "URL.h"
 #include "settings/Settings.h"
+#include "StringUtils.h"
+#include "URIUtils.h"
+#include "URL.h"
+#include "Util.h"
+#include "utils/log.h"
+
+#include <vector>
 
 using namespace XFILE;
 using namespace std;

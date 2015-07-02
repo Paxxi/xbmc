@@ -22,6 +22,10 @@
 #include "guilib/GUIDialog.h"
 #include <memory>
 
+class CFileItem;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
+
 namespace EPG
 {
   class CEpgInfoTag;

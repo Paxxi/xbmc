@@ -21,6 +21,8 @@
 
 #include "DirectoryNode.h"
 
+class CFileItemList;
+
 namespace XFILE
 {
   namespace VIDEODATABASEDIRECTORY

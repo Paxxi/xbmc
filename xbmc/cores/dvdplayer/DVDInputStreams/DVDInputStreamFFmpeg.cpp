@@ -19,9 +19,12 @@
  */
 
 #include "DVDInputStreamFFmpeg.h"
+
+#include "FileItem.h"
 #include "playlists/PlayListM3U.h"
 #include "settings/Settings.h"
 #include "utils/log.h"
+
 #include <limits.h>
 
 using namespace XFILE;

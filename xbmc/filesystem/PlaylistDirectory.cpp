@@ -19,9 +19,11 @@
  */
 
 #include "PlaylistDirectory.h"
+
+#include "FileItem.h"
 #include "PlayListPlayer.h"
-#include "URL.h"
 #include "playlists/PlayList.h"
+#include "URL.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;

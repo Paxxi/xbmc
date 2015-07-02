@@ -40,6 +40,7 @@
 #include "XBDateTime.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "utils/ISerializable.h"
+#include "threads/CriticalSection.h"
 
 #include <memory>
 

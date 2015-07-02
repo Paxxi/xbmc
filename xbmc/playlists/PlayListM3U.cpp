@@ -19,15 +19,17 @@
  */
 
 #include "PlayListM3U.h"
+
+#include "FileItem.h"
 #include "filesystem/File.h"
+#include "music/tags/MusicInfoTag.h"
 #include "URL.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
 #include "utils/CharsetConverter.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoInfoTag.h"
-#include "music/tags/MusicInfoTag.h"
 
 using namespace PLAYLIST;
 using namespace XFILE;

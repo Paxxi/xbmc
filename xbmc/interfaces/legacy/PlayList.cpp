@@ -19,8 +19,10 @@
  */
 
 #include "PlayList.h"
-#include "PlayListPlayer.h"
+
 #include "Application.h"
+#include "FileItem.h"
+#include "PlayListPlayer.h"
 #include "playlists/PlayListFactory.h"
 #include "utils/URIUtils.h"
 

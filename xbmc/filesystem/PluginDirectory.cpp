@@ -19,24 +19,25 @@
  */
 
 
-#include "threads/SystemClock.h"
-#include "system.h"
 #include "PluginDirectory.h"
-#include "addons/AddonManager.h"
+
 #include "addons/AddonInstaller.h"
+#include "addons/AddonManager.h"
 #include "addons/IAddon.h"
-#include "interfaces/generic/ScriptInvocationManager.h"
-#include "threads/SingleLock.h"
-#include "guilib/GUIWindowManager.h"
+#include "Application.h"
+#include "ApplicationMessenger.h"
 #include "dialogs/GUIDialogProgress.h"
-#include "settings/Settings.h"
 #include "FileItem.h"
-#include "video/VideoInfoTag.h"
+#include "guilib/GUIWindowManager.h"
+#include "interfaces/generic/ScriptInvocationManager.h"
+#include "settings/Settings.h"
+#include "system.h"
+#include "threads/SingleLock.h"
+#include "threads/SystemClock.h"
+#include "URL.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
-#include "ApplicationMessenger.h"
-#include "Application.h"
-#include "URL.h"
+#include "video/VideoInfoTag.h"
 
 using namespace XFILE;
 using namespace std;

@@ -19,13 +19,15 @@
  *
  */
 
-#include "IFileDirectory.h"
 #include <string>
 
 class CFileItem;
+class CURL;
 
 namespace XFILE
 {
+class IFileDirectory;
+
 class CFileDirectoryFactory
 {
 public:

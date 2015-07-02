@@ -20,12 +20,16 @@
  */
 
 #include <set>
+#include <memory>
 
 #include "JSONRPC.h"
 #include "JSONUtils.h"
-#include "FileItem.h"
 
 class CThumbLoader;
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace JSONRPC
 {

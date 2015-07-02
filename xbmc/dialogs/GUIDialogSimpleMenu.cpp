@@ -20,16 +20,18 @@
 
 
 #include "GUIDialogSimpleMenu.h"
-#include "guilib/GUIWindowManager.h"
-#include "GUIDialogSelect.h"
-#include "settings/DiscSettings.h"
-#include "settings/Settings.h"
-#include "utils/URIUtils.h"
+
+#include "FileItem.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "utils/log.h"
-#include "video/VideoInfoTag.h"
+#include "GUIDialogSelect.h"
+#include "guilib/GUIWindowManager.h"
+#include "settings/DiscSettings.h"
+#include "settings/Settings.h"
 #include "URL.h"
+#include "utils/log.h"
+#include "utils/URIUtils.h"
+#include "video/VideoInfoTag.h"
 
 bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item)
 {

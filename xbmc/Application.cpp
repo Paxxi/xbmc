@@ -18,10 +18,12 @@
  *
  */
 
+#include "Application.h"
+
+#include "FileItem.h"
 #include "network/Network.h"
 #include "threads/SystemClock.h"
 #include "system.h"
-#include "Application.h"
 #include "interfaces/Builtins.h"
 #include "utils/Variant.h"
 #include "utils/Splash.h"
@@ -48,6 +50,7 @@
 #include "addons/LanguageResource.h"
 #include "addons/Skin.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
+#include "utils/RegExp.h"
 #ifdef HAS_PYTHON
 #include "interfaces/python/XBPython.h"
 #endif

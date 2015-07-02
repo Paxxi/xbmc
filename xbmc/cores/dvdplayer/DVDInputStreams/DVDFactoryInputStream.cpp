@@ -27,17 +27,18 @@
 #include "DVDInputStreamPVRManager.h"
 #include "DVDInputStreamTV.h"
 #include "DVDInputStreamRTMP.h"
+#include "FileItem.h"
+#include "filesystem/File.h"
+#include "storage/MediaManager.h"
+#include "URL.h"
+#include "utils/URIUtils.h"
+
 #ifdef HAVE_LIBBLURAY
 #include "DVDInputStreamBluray.h"
 #endif
 #ifdef ENABLE_DVDINPUTSTREAM_STACK
 #include "DVDInputStreamStack.h"
 #endif
-#include "FileItem.h"
-#include "storage/MediaManager.h"
-#include "URL.h"
-#include "filesystem/File.h"
-#include "utils/URIUtils.h"
 
 
 CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, const std::string& file, const std::string& content)

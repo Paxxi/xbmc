@@ -19,11 +19,18 @@
  *
  */
 
+#include <memory>
+
 #include "guilib/GUIDialog.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "view/GUIViewControl.h"
 #include "pvr/channels/PVRChannelGroup.h"
 #include "pvr/addons/PVRClient.h"
+
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace PVR
 {

@@ -22,17 +22,17 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 #include "AddonClass.h"
 #include "Tuple.h"
 #include "Dictionary.h"
 #include "Alternative.h"
-#include "ListItem.h"
-#include "FileItem.h"
 #include "AddonString.h"
 #include "commons/Exception.h"
 #include "InfoTagVideo.h"
 #include "InfoTagMusic.h"
+#include "FileItem.h"
 
 
 namespace XBMCAddon

@@ -22,6 +22,7 @@
 
 #include "GUIWindowMusicBase.h"
 
+class CFileItem;
 class CFileItemList;
 
 class CGUIWindowMusicPlaylistEditor : public CGUIWindowMusicBase, public IBackgroundLoaderObserver

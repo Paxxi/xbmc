@@ -19,27 +19,29 @@
  */
 
 #include "AddonInstaller.h"
-#include "utils/log.h"
-#include "utils/FileUtils.h"
-#include "utils/URIUtils.h"
-#include "Util.h"
-#include "guilib/LocalizeStrings.h"
-#include "filesystem/Directory.h"
-#include "settings/AdvancedSettings.h"
-#include "settings/Settings.h"
-#include "ApplicationMessenger.h"
-#include "filesystem/FavouritesDirectory.h"
-#include "utils/JobManager.h"
-#include "dialogs/GUIDialogYesNo.h"
+
 #include "addons/AddonManager.h"
 #include "addons/Repository.h"
-#include "guilib/GUIWindowManager.h"      // for callback
-#include "GUIUserMessages.h"              // for callback
-#include "utils/StringUtils.h"
+#include "ApplicationMessenger.h"
+#include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogOK.h"
-#include "dialogs/GUIDialogExtendedProgressBar.h"
+#include "dialogs/GUIDialogYesNo.h"
+#include "FileItem.h"
+#include "filesystem/Directory.h"
+#include "filesystem/FavouritesDirectory.h"
+#include "guilib/GUIWindowManager.h"      // for callback
+#include "guilib/LocalizeStrings.h"
+#include "GUIUserMessages.h"              // for callback
+#include "settings/AdvancedSettings.h"
+#include "settings/Settings.h"
 #include "URL.h"
+#include "Util.h"
+#include "utils/FileUtils.h"
+#include "utils/JobManager.h"
+#include "utils/log.h"
+#include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 
 #include <functional>
 

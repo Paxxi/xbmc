@@ -23,6 +23,9 @@
 #include "IFileDirectory.h"
 #include "music/tags/MusicInfoTag.h"
 
+class CFileItemList;
+class CURL;
+
 namespace XFILE
 {
   class CMusicFileDirectory : public IFileDirectory

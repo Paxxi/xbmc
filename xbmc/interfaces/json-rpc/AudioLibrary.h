@@ -20,11 +20,16 @@
  */
 
 #include <set>
+#include <memory>
 
 #include "JSONRPC.h"
 #include "FileItemHandler.h"
 
 class CMusicDatabase;
+class CFileItem;
+class CFileItemList;
+
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 
 namespace JSONRPC
 {
