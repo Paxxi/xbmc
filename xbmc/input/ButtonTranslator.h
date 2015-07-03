@@ -23,16 +23,18 @@
 
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
-#include <set>
-#include <memory>
 #include "system.h" // for HAS_EVENT_SERVER, HAS_SDL_JOYSTICK
 
 #ifdef HAS_EVENT_SERVER
 #include "network/EventClient.h"
 #endif
+
+#include <list>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 class CKey;
 class CAction;
@@ -173,4 +175,3 @@ private:
 };
 
 #endif
-

@@ -21,11 +21,12 @@
  */
 
 #include "DVDMessage.h"
-#include <string>
-#include <list>
-#include <algorithm>
 #include "threads/CriticalSection.h"
 #include "threads/Event.h"
+
+#include <algorithm>
+#include <list>
+#include <string>
 
 struct DVDMessageListItem
 {
@@ -144,4 +145,3 @@ private:
   typedef std::list<DVDMessageListItem> SList;
   SList m_list;
 };
-

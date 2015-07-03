@@ -20,17 +20,17 @@
  *
  */
 
-#include <list>
-
 #include "cores/VideoRenderers/BaseRenderer.h"
 #include "guilib/Geometry.h"
 #include "guilib/Resolution.h"
 #include "threads/SharedSection.h"
 #include "settings/VideoSettings.h"
 #include "OverlayRenderer.h"
-#include <deque>
 #include "PlatformDefs.h"
 #include "threads/Event.h"
+
+#include <deque>
+#include <list>
 
 class CRenderCapture;
 

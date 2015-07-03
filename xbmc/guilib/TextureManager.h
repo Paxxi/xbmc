@@ -26,10 +26,11 @@
 #ifndef GUILIB_TEXTUREMANAGER_H
 #define GUILIB_TEXTUREMANAGER_H
 
-#include <vector>
-#include <list>
 #include "TextureBundle.h"
 #include "threads/CriticalSection.h"
+
+#include <list>
+#include <vector>
 
 #pragma once
 

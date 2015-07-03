@@ -20,6 +20,7 @@
  */
 
 #include <list>
+#include <map>
 #include <set>
 #include <string>
 
@@ -59,7 +60,7 @@ public:
 
   virtual bool Deserialize(const TiXmlNode *node);
   virtual bool Check() const;
-  
+
   const std::string& GetName() const { return m_name; }
   const std::string& GetSetting() const { return m_setting; }
   const SettingDependencyTarget GetTarget() const { return m_target; }
@@ -68,7 +69,7 @@ public:
 private:
   bool setTarget(const std::string &target);
   bool setOperator(const std::string &op);
-  
+
   SettingDependencyTarget m_target;
   SettingDependencyOperator m_operator;
 };

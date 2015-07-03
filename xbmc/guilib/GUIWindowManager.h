@@ -36,6 +36,9 @@
 #include "guilib/WindowIDs.h"
 
 #include <list>
+#include <map>
+#include <string>
+#include <utility>
 #include <vector>
 
 class CGUIDialog;

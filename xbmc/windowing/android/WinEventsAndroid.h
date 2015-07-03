@@ -23,15 +23,15 @@
 #ifndef WINDOW_EVENTS_ANDROID_H
 #define WINDOW_EVENTS_ANDROID_H
 
-#include <list>
-#include <queue>
-#include <vector>
-#include <string>
-
 #include "threads/Event.h"
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
 #include "windowing/WinEvents.h"
+
+#include <list>
+#include <queue>
+#include <string>
+#include <vector>
 
 typedef struct {
   int32_t id;
@@ -63,4 +63,3 @@ private:
 };
 
 #endif // WINDOW_EVENTS_ANDROID_H
-

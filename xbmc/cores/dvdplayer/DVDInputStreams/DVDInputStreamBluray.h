@@ -21,6 +21,7 @@
  */
 
 #include "DVDInputStream.h"
+
 #include <list>
 #include <memory>
 
@@ -38,7 +39,7 @@ class CDVDOverlayImage;
 class DllLibbluray;
 class IDVDPlayer;
 
-class CDVDInputStreamBluray 
+class CDVDInputStreamBluray
   : public CDVDInputStream
   , public CDVDInputStream::IDisplayTime
   , public CDVDInputStream::IChapter

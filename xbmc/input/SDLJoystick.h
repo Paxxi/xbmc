@@ -22,12 +22,13 @@
 #define SDL_JOYSTICK_H
 
 #include "system.h" // for HAS_SDL_JOYSTICK
-#include <vector>
+
 #include <list>
-#include <utility>
-#include <string>
 #include <map>
 #include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 #define JACTIVE_BUTTON 0x00000001
 #define JACTIVE_AXIS   0x00000002

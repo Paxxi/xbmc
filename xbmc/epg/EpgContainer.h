@@ -19,8 +19,6 @@
  *
  */
 
-#include <map>
-
 #include "XBDateTime.h"
 #include "settings/lib/ISettingCallback.h"
 #include "threads/CriticalSection.h"
@@ -29,6 +27,9 @@
 
 #include "Epg.h"
 #include "EpgDatabase.h"
+
+#include <list>
+#include <map>
 
 class CFileItemList;
 class CGUIDialogProgressBarHandle;

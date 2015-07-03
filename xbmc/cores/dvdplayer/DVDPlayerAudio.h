@@ -29,6 +29,7 @@
 #include "IDVDPlayer.h"
 
 #include <list>
+#include <utility>
 
 class CDVDPlayer;
 class CDVDAudioCodec;
@@ -244,4 +245,3 @@ protected:
   CCriticalSection m_info_section;
   SInfo            m_info;
 };
-

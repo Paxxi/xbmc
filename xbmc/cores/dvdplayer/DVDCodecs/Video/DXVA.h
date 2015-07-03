@@ -24,10 +24,12 @@
 #include "guilib/D3DResource.h"
 #include "threads/Event.h"
 #include "DVDResource.h"
-#include <dxva2api.h>
+
 #include <deque>
-#include <vector>
+#include <dxva2api.h>
 #include <list>
+#include <map>
+#include <vector>
 
 namespace DXVA {
 

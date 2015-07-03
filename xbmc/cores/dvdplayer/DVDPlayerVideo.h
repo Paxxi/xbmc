@@ -32,6 +32,8 @@
 #endif
 #include "utils/BitstreamStats.h"
 
+#include <list>
+
 class CDemuxStreamVideo;
 
 #define VIDEO_PICTURE_QUEUE_SIZE 1
@@ -204,4 +206,3 @@ protected:
 
   CDroppingStats m_droppingStats;
 };
-

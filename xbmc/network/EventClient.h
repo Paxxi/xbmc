@@ -30,6 +30,7 @@
 #include <list>
 #include <map>
 #include <queue>
+#include <string>
 
 namespace EVENTCLIENT
 {

@@ -23,14 +23,14 @@
 
 #ifndef TARGET_WINDOWS
 
-#include <list>
-#include <string>
-#include <vector>
-
 #include "PlatformDefs.h"
 #include "XHandlePublic.h"
 #include "threads/Condition.h"
 #include "threads/CriticalSection.h"
+
+#include <list>
+#include <string>
+#include <vector>
 
 struct CXHandle {
 
@@ -75,4 +75,3 @@ protected:
 #endif
 
 #endif
-
