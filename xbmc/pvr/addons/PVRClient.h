@@ -26,6 +26,9 @@
 #include "pvr/channels/PVRChannel.h"
 #include "pvr/recordings/PVRRecordings.h"
 
+#include <memory>
+#include <vector>
+
 class CFileItem;
 
 namespace EPG

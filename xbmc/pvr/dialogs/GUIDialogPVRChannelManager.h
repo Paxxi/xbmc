@@ -19,13 +19,14 @@
  *
  */
 
-#include <memory>
-
 #include "guilib/GUIDialog.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "view/GUIViewControl.h"
 #include "pvr/channels/PVRChannelGroup.h"
 #include "pvr/addons/PVRClient.h"
+
+#include <memory>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

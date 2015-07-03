@@ -23,6 +23,8 @@
 #include "IListProvider.h"
 #include "guilib/GUIStaticItem.h"
 
+#include <vector>
+
 class CStaticListProvider : public IListProvider
 {
 public:

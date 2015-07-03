@@ -19,14 +19,16 @@
  *
  */
 
-#include <algorithm>
-#include <map>
-#include <string>
-#include <stdio.h>
 #ifdef TARGET_WINDOWS
 #include "PlatformDefs.h"
 #endif
 #include "utils/StringUtils.h"
+
+#include <algorithm>
+#include <map>
+#include <string>
+#include <stdio.h>
+#include <vector>
 
 class CSetting;
 
@@ -64,7 +66,7 @@ namespace PERIPHERALS
     PERIPHERAL_CEC,
     PERIPHERAL_BLUETOOTH,
     PERIPHERAL_TUNER,
-    PERIPHERAL_IMON 
+    PERIPHERAL_IMON
   };
 
   struct PeripheralID

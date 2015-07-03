@@ -24,7 +24,10 @@
 #include "settings/lib/ISettingCallback.h"
 #include "utils/JobManager.h"
 
+#include <map>
 #include <memory>
+#include <utility>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

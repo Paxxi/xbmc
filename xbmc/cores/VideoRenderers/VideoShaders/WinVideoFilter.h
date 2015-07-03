@@ -22,10 +22,11 @@
 
 #ifdef HAS_DX
 
-#include "../../guilib/Geometry.h"
-#include "../WinRenderer.h"
-#include "../RenderFormats.h"
+#include "guilib/Geometry.h"
+#include "cores/VideoRenderers/WinRenderer.h"
+#include "cores/VideoRenderers/RenderFormats.h"
 
+#include <vector>
 
 class CYUV2RGBMatrix
 {
@@ -79,10 +80,10 @@ public:
                       float brightness,
                       unsigned int flags,
                       YUVBuffer* YUVbuf);
-  CYUV2RGBShader() : 
+  CYUV2RGBShader() :
     m_sourceWidth (0),
     m_sourceHeight(0),
-    m_format      (RENDER_FMT_NONE)    
+    m_format      (RENDER_FMT_NONE)
     {
       memset(&m_texSteps,0,sizeof(m_texSteps));
     }

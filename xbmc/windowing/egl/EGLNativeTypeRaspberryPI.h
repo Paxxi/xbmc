@@ -26,6 +26,8 @@
 #include <bcm_host.h>
 #endif
 
+#include <vector>
+
 class DllBcmHost;
 class CEGLNativeTypeRaspberryPI : public CEGLNativeType
 {

@@ -27,6 +27,7 @@
 
 #include "GUIControl.h"
 
+#include <vector>
 /*!
  \ingroup controls
  \brief group of controls, useful for remembering last control + animating/hiding together
@@ -116,4 +117,3 @@ protected:
   int m_focusedControl;
   bool m_renderFocusedLast;
 };
-

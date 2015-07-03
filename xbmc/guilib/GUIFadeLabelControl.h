@@ -31,6 +31,8 @@
 #include "GUIControl.h"
 #include "GUILabel.h"
 
+#include <vector>
+
 /*!
  \ingroup controls
  \brief

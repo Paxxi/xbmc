@@ -20,6 +20,9 @@
  */
 #include "storage/IStorageProvider.h"
 
+#include <string>
+#include <vector>
+
 class CPosixMountProvider : public IStorageProvider
 {
 public:

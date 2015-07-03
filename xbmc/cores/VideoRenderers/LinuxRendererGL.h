@@ -35,6 +35,9 @@
 
 #include "threads/Event.h"
 
+#include <string>
+#include <vector>
+
 class CRenderCapture;
 
 class CBaseTexture;
@@ -182,7 +185,7 @@ protected:
   bool UploadNV12Texture(int index);
   void DeleteNV12Texture(int index);
   bool CreateNV12Texture(int index);
-  
+
   bool UploadVDPAUTexture(int index);
   void DeleteVDPAUTexture(int index);
   bool CreateVDPAUTexture(int index);
@@ -236,7 +239,7 @@ protected:
   unsigned short m_renderMethod;
   RenderQuality m_renderQuality;
   unsigned int m_flipindex; // just a counter to keep track of if a image has been uploaded
-  
+
   // Raw data used by renderer
   int m_currentField;
   int m_reloadShaders;

@@ -20,11 +20,12 @@
  *
  */
 
-#include <memory>
-
 #include "guilib/GUIDialog.h"
 #include "addons/IAddon.h"
 #include "utils/Job.h"
+
+#include <memory>
+#include <vector>
 
 class CFileItem;
 typedef std::shared_ptr<CFileItem> CFileItemPtr;
@@ -38,7 +39,7 @@ public:
   virtual ~CGUIDialogAddonInfo(void);
   virtual bool OnMessage(CGUIMessage& message);
   virtual bool OnAction(const CAction &action);
-  
+
   virtual CFileItemPtr GetCurrentListItem(int offset = 0) { return m_item; }
   virtual bool HasListItems() const { return true; }
 
@@ -82,4 +83,3 @@ protected:
   void GrabRollbackVersions();
   std::vector<std::string> m_rollbackVersions;
 };
-

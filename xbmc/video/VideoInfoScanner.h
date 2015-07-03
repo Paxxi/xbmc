@@ -22,6 +22,9 @@
 #include "addons/Scraper.h"
 #include "NfoFile.h"
 
+#include <string>
+#include <vector>
+
 class CRegExp;
 class CFileItem;
 class CFileItemList;
@@ -251,4 +254,3 @@ namespace VIDEO
     CNfoFile m_nfoReader;
   };
 }
-

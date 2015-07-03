@@ -24,6 +24,9 @@
 #include "UDisksProvider.h"
 #include "PosixMountProvider.h"
 
+#include <string>
+#include <vector>
+
 class CLinuxStorageProvider : public IStorageProvider
 {
 public:

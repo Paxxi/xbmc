@@ -22,6 +22,9 @@
 #include "interfaces/generic/ILanguageInvoker.h"
 #include "threads/Thread.h"
 
+#include <string>
+#include <vector>
+
 class CScriptInvocationManager;
 
 class CLanguageInvokerThread : public ILanguageInvoker, protected CThread

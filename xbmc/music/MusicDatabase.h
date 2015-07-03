@@ -28,6 +28,8 @@
 #include "utils/SortUtils.h"
 #include "MusicDbUrl.h"
 
+#include <vector>
+
 class CArtist;
 class CFileItem;
 
@@ -334,7 +336,7 @@ public:
   int  GetCompilationAlbumsCount();
 
   int GetSinglesCount();
-  
+
   /*! \brief Increment the playcount of an item
    Increments the playcount and updates the last played date
    \param item CFileItem to increment the playcount for
@@ -368,7 +370,7 @@ public:
   /////////////////////////////////////////////////
   bool SetScraperForPath(const std::string& strPath, const ADDON::ScraperPtr& info);
   bool GetScraperForPath(const std::string& strPath, ADDON::ScraperPtr& info, const ADDON::TYPE &type);
-  
+
   /*! \brief Check whether a given scraper is in use.
    \param scraperID the scraper to check for.
    \return true if the scraper is in use, false otherwise.

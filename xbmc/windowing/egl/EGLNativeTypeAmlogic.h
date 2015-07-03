@@ -21,6 +21,9 @@
  */
 
 #include "EGLNativeType.h"
+
+#include <vector>
+
 class CEGLNativeTypeAmlogic : public CEGLNativeType
 {
 public:

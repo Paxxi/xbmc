@@ -23,7 +23,9 @@
 #include <Wbemidl.h>
 #pragma comment(lib, "wbemuuid.lib")
 #pragma comment(lib, "comsuppw.lib")
+
 #include <string>
+#include <vector>
 
 class CWIN32Wmi
 {

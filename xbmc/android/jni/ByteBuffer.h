@@ -21,6 +21,8 @@
 
 #include "Buffer.h"
 
+#include <vector>
+
 class CJNIByteBuffer : public CJNIBuffer
 {
 public:

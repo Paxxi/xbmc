@@ -26,6 +26,9 @@
 #include "cdgdata.h"
 #include "karaokelyrics.h"
 
+#include <string>
+#include <vector>
+
 class CBaseTexture;
 typedef uint32_t color_t;
 
@@ -73,7 +76,7 @@ class CKaraokeLyricsCDG : public CKaraokeLyrics
 	void scrollRight( int color );
 	void scrollUp( int color );
 	void scrollDown( int color );
-	
+
 	bool UpdateBuffer( unsigned int packets_due );
 	void RenderIntoBuffer( unsigned char *pixels, unsigned int width, unsigned int height, unsigned int pitch ) const;
 
@@ -97,10 +100,10 @@ class CKaraokeLyricsCDG : public CKaraokeLyrics
 	BYTE               m_borderColor;     //!< Border color index
 	BYTE			   m_cdgScreen[CDG_FULL_WIDTH*CDG_FULL_HEIGHT];	//!< Image state for CD+G stream
 
-	// These values are used to implement screen shifting.  The CDG specification allows the entire 
+	// These values are used to implement screen shifting.  The CDG specification allows the entire
 	// screen to be shifted, up to 5 pixels right and 11 pixels down.  This shift is persistent
-	// until it is reset to a different value.  In practice, this is used in conjunction with 
-	// scrolling (which always jumps in integer blocks of 6x12 pixels) to perform 
+	// until it is reset to a different value.  In practice, this is used in conjunction with
+	// scrolling (which always jumps in integer blocks of 6x12 pixels) to perform
 	// one-pixel-at-a-time scrolls.
     BYTE				m_hOffset;
     BYTE				m_vOffset;

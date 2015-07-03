@@ -42,6 +42,9 @@
 #include "linux/RBP.h"
 #else
 
+#include <string>
+#include <vector>
+
 // dummy class to avoid ifdefs where calls are made
 class OMXClock
 {

@@ -27,6 +27,8 @@
 #include "powermanagement/PowerManager.h"
 #include "utils/Stopwatch.h"
 
+#include <vector>
+
 enum Drive_Types
 {
   ALL_DRIVES = 0,

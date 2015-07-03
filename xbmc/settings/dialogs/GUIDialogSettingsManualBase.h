@@ -20,11 +20,13 @@
  *
  */
 
-#include <map>
-
 #include "addons/IAddon.h"
 #include "settings/dialogs/GUIDialogSettingsManagerBase.h"
 #include "settings/lib/SettingDefinitions.h"
+
+#include <map>
+#include <string>
+#include <vector>
 
 class CSetting;
 class CSettingAction;

@@ -26,8 +26,10 @@
 #include "utils/rfft.h"
 
 #include <algorithm>
-#include <map>
 #include <list>
+#include <map>
+#include <memory>
+#include <string>
 #include <memory>
 
 #define AUDIO_BUFFER_SIZE 512 // MUST BE A POWER OF 2!!!

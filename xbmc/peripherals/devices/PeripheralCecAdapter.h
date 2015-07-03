@@ -24,6 +24,7 @@
 #if !defined(HAVE_LIBCEC)
 #include "Peripheral.h"
 
+
 // an empty implementation, so CPeripherals can be compiled without a bunch of #ifdef's when libCEC is not available
 namespace PERIPHERALS
 {
@@ -49,7 +50,9 @@ namespace PERIPHERALS
 #include "interfaces/AnnouncementManager.h"
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
+
 #include <queue>
+#include <vector>
 
 // undefine macro isset, it collides with function in cectypes.h
 #ifdef isset

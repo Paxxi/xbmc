@@ -28,6 +28,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class CAction;
 class CFileItem;
@@ -377,7 +378,7 @@ public:
   ReplayGainSettings& GetReplayGainSettings() { return m_replayGainSettings; }
 
   void SetLoggingIn(bool loggingIn) { m_loggingIn = loggingIn; }
-  
+
   /*!
    \brief Register an action listener.
    \param listener The listener to register
@@ -401,7 +402,7 @@ protected:
 
   bool LoadSkin(const std::string& skinID);
   bool LoadSkin(const std::shared_ptr<ADDON::CSkinInfo>& skin);
-  
+
   /*!
    \brief Delegates the action to all registered action handlers.
    \param action The action
@@ -500,11 +501,11 @@ protected:
 #endif
 
   ReplayGainSettings m_replayGainSettings;
-  
+
   std::vector<IActionListener *> m_actionListeners;
 
   bool m_fallbackLanguageLoaded;
-  
+
 private:
   CCriticalSection                m_critSection;                 /*!< critical section for all changes to this class, except for changes to triggers */
 };

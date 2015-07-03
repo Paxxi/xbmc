@@ -31,6 +31,9 @@
 #include "GUIControl.h"
 #include "GUITexture.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup controls
  \brief

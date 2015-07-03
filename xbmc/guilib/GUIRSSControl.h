@@ -32,6 +32,9 @@
 #include "GUILabel.h"
 #include "utils/IRssObserver.h"
 
+#include <string>
+#include <vector>
+
 typedef uint32_t color_t;
 typedef std::vector<color_t> vecColors;
 

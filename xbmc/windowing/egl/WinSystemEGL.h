@@ -25,8 +25,11 @@
 
 #include "rendering/gles/RenderSystemGLES.h"
 #include "utils/GlobalsHandling.h"
-#include <EGL/egl.h>
 #include "windowing/WinSystem.h"
+
+#include <EGL/egl.h>
+#include <string>
+#include <vector>
 
 class CEGLWrapper;
 class IDispResource;

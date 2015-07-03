@@ -27,6 +27,8 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <DVDResource.h>
+#include <queue>
+#include <vector>
 
 template<typename T> struct IDVDResourceCounted2
 {

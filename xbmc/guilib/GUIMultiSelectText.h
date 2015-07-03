@@ -22,6 +22,9 @@
 
 #include "GUIButtonControl.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup controls
  \brief
@@ -97,4 +100,3 @@ protected:
   unsigned int m_selectedItem;
   std::vector<CGUIButtonControl> m_buttons;
 };
-

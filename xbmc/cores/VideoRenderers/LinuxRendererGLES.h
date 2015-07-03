@@ -34,6 +34,8 @@
 #include "BaseRenderer.h"
 #include "xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h"
 
+#include <vector>
+
 class CRenderCapture;
 
 class CBaseTexture;

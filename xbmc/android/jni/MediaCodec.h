@@ -24,6 +24,8 @@
 #include "MediaCodecBufferInfo.h"
 #include "MediaFormat.h"
 
+#include <vector>
+
 class CJNISurface;
 class CJNIMediaCodec;
 class CJNIMediaCrypto;

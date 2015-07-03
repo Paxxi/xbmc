@@ -25,6 +25,9 @@
 
 #include "karaokelyrics.h"
 
+#include <string>
+#include <vector>
+
 // Karaoke colours
 // If you want to add more colors, it should be done the following way:
 // 1. Increase KARAOKE_COLOR_END

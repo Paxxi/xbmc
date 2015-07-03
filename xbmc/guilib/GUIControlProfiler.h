@@ -24,6 +24,9 @@
 
 #include "GUIControl.h"
 
+#include <string>
+#include <vector>
+
 class CGUIControlProfiler;
 class TiXmlElement;
 

@@ -19,14 +19,15 @@
  *
  */
 
-#include <memory>
-#include <string>
-
 #include "XBDateTime.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "pvr/channels/PVRChannel.h"
 #include "pvr/timers/PVRTimerInfoTag.h"
 #include "utils/ISerializable.h"
+
+#include <memory>
+#include <string>
+#include <vector>
 
 #define EPG_DEBUGGING 0
 

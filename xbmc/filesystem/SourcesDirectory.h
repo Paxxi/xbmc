@@ -21,6 +21,8 @@
 
 #include "IDirectory.h"
 
+#include <vector>
+
 class CFileItemList;
 class CMediaSource;
 typedef std::vector<CMediaSource> VECSOURCES;

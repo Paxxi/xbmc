@@ -21,6 +21,9 @@
 
 #include "JNIBase.h"
 
+#include <string>
+#include <vector>
+
 class CJNINetworkInfo;
 
 class CJNIConnectivityManager : public CJNIBase

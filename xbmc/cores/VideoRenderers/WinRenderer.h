@@ -30,6 +30,8 @@
 #include "DXVA.h"
 #include "DXVAHD.h"
 
+#include <vector>
+
 #define ALIGN(value, alignment) (((value)+((alignment)-1))&~((alignment)-1))
 #define CLAMP(a, min, max) ((a) > (max) ? (max) : ( (a) < (min) ? (min) : a ))
 
@@ -244,5 +246,3 @@ protected:
 #else
 #include "LinuxRenderer.h"
 #endif
-
-

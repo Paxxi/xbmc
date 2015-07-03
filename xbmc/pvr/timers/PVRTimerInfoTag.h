@@ -43,8 +43,8 @@
 #include "threads/CriticalSection.h"
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 class CFileItem;
 

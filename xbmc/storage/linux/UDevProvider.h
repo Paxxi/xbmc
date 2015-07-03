@@ -19,9 +19,12 @@
  *
  */
 
+#include "system.h" //for HAVE_LIBUDEV
+#ifdef HAVE_LIBUDEV
 #include "storage/IStorageProvider.h"
 
-#ifdef HAVE_LIBUDEV
+#include <string>
+#include <vector>
 
 struct udev;
 struct udev_monitor;

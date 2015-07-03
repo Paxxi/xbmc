@@ -56,8 +56,12 @@
 #include "threads/Event.h"
 #include "threads/Thread.h"
 #include "utils/ActorProtocol.h"
+
+#include <deque>
 #include <list>
 #include <map>
+#include <queue>
+#include <vector>
 
 extern "C" {
 #include "libavutil/avutil.h"

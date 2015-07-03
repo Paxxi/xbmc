@@ -20,9 +20,11 @@
  *
  */
 
+#include "XBTFReader.h"
+
 #include <map>
 #include <string>
-#include "XBTFReader.h"
+#include <vector>
 
 class CBaseTexture;
 
@@ -53,5 +55,3 @@ private:
   bool m_themeBundle;
   CXBTFReader m_XBTFReader;
 };
-
-

@@ -24,6 +24,8 @@
 #include "TextureCacheJob.h"
 #include "dbwrappers/DatabaseQuery.h"
 
+#include <vector>
+
 class CVariant;
 
 class CTextureRule : public CDatabaseQueryRule

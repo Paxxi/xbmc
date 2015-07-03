@@ -25,6 +25,9 @@
 #include "utils/Stopwatch.h"
 #include "threads/Event.h"
 
+#include <string>
+#include <vector>
+
 class CAddonDatabase;
 
 enum {

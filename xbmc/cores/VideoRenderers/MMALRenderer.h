@@ -35,6 +35,8 @@
 #include <interface/mmal/util/mmal_default_components.h>
 #include <interface/mmal/util/mmal_util_params.h>
 
+#include <vector>
+
 #define AUTOSOURCE -1
 
 class CBaseTexture;

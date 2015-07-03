@@ -24,6 +24,9 @@
 #include "guilib/GUIDialog.h"
 #include "input/KeyboardLayout.h"
 
+#include <string>
+#include <vector>
+
 enum KEYBOARD {CAPS, LOWER, SYMBOLS};
 
 class CGUIDialogKeyboardGeneric : public CGUIDialog, public CGUIKeyboard

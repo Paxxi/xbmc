@@ -20,6 +20,9 @@
  */
 #include "PlayList.h"
 
+#include <string>
+#include <vector>
+
 namespace PLAYLIST
 {
 class CPlayListPLS :

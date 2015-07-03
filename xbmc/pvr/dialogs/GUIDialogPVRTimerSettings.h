@@ -19,9 +19,12 @@
  *
  */
 
-#include <map>
-
 #include "settings/dialogs/GUIDialogSettingsManualBase.h"
+
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
 
 class CFileItem;
 class CSetting;

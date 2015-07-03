@@ -21,6 +21,9 @@
 #include "storage/IStorageProvider.h"
 #include "utils/Job.h"
 
+#include <string>
+#include <vector>
+
 class CWin32StorageProvider : public IStorageProvider
 {
 public:
@@ -53,4 +56,3 @@ private:
   std::string  m_strPath;
   bool        m_bautorun;
 };
-

@@ -21,6 +21,9 @@
 #include "utils/ScraperUrl.h"
 #include "XBDateTime.h"
 
+#include <string>
+#include <vector>
+
 // single episode information
 namespace VIDEO
 {
@@ -51,4 +54,3 @@ namespace VIDEO
 
   typedef std::vector<EPISODE> EPISODELIST;
 }
-

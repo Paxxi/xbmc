@@ -23,14 +23,15 @@
  *
  */
 
-#include <memory>
-
 #include "windows/GUIMediaWindow.h"
 #include "music/MusicDatabase.h"
 #include "music/infoscanner/MusicInfoScraper.h"
 #include "PlayListPlayer.h"
 #include "music/MusicInfoLoader.h"
 #include "music/MusicThumbLoader.h"
+
+#include <memory>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

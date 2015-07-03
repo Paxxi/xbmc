@@ -21,6 +21,8 @@
 
 #include "JNIBase.h"
 
+#include <vector>
+
 class CJNIMediaCodecInfoCodecProfileLevel : public CJNIBase
 {
 public:
@@ -201,4 +203,3 @@ public:
 private:
   CJNIMediaCodecInfo();
 };
-

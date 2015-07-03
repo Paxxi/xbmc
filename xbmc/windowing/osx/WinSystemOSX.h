@@ -26,6 +26,9 @@
 #include "threads/CriticalSection.h"
 #include "threads/Timer.h"
 
+#include <string>
+#include <vector>
+
 typedef struct SDL_Surface SDL_Surface;
 
 class IDispResource;
@@ -68,18 +71,18 @@ public:
 
   virtual void Register(IDispResource *resource);
   virtual void Unregister(IDispResource *resource);
-  
+
   virtual int GetNumScreens();
   virtual int GetCurrentScreen();
   virtual double GetCurrentRefreshrate() { return m_refreshRate; }
-  
+
   void        WindowChangedScreen();
 
   void        AnnounceOnLostDevice();
   void        AnnounceOnResetDevice();
   void        StartLostDeviceTimer();
   void        StopLostDeviceTimer();
-  
+
   void* GetCGLContextObj();
   void* GetNSOpenGLContext();
 
@@ -90,7 +93,7 @@ protected:
   void* CreateWindowedContext(void* shareCtx);
   void* CreateFullScreenContext(int screen_index, void* shareCtx);
   void  GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
-  void  EnableVSync(bool enable); 
+  void  EnableVSync(bool enable);
   bool  SwitchToVideoMode(int width, int height, double refreshrate, int screenIdx);
   void  FillInVideoModes();
   bool  FlushBuffer(void);

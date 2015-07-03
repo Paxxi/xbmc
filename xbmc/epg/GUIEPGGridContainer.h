@@ -19,12 +19,14 @@
  *
  */
 
-#include <memory>
-
 #include "XBDateTime.h"
 #include "guilib/GUIControl.h"
 #include "guilib/GUIListItemLayout.h"
 #include "guilib/IGUIContainer.h"
+
+
+#include <memory>
+#include <vector>
 
 namespace PVR
 {

@@ -22,10 +22,11 @@
 
 #include "guilib/WindowIDs.h"
 #include "threads/Thread.h"
-#include <memory>
-
-#include <queue>
 #include "utils/GlobalsHandling.h"
+
+#include <memory>
+#include <queue>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;
@@ -187,7 +188,7 @@ public:
   void PlayListPlayerClear(int playlist);
   void PlayListPlayerShuffle(int playlist, bool shuffle);
   void PlayListPlayerGetItems(int playlist, CFileItemList &list);
-  void PlayListPlayerInsert(int playlist, const CFileItem &item, int position); 
+  void PlayListPlayerInsert(int playlist, const CFileItem &item, int position);
   void PlayListPlayerInsert(int playlist, const CFileItemList &list, int position);
   void PlayListPlayerRemove(int playlist, int position);
   void PlayListPlayerSwap(int playlist, int indexItem1, int indexItem2);
@@ -258,7 +259,7 @@ public:
    \param onOff if true it becomes switched on otherwise off
    */
   void SetPVRManagerState(bool onOff);
-  
+
   bool SetupDisplay();
   bool DestroyDisplay();
   void StartAndroidActivity(const std::vector<std::string> &params);
@@ -281,5 +282,3 @@ private:
 
 XBMC_GLOBAL_REF(CApplicationMessenger,s_messenger);
 #define s_messenger XBMC_GLOBAL_USE(CApplicationMessenger)
-
-

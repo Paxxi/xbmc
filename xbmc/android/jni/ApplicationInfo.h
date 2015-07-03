@@ -21,6 +21,9 @@
 
 #include "JNIBase.h"
 
+#include <string>
+#include <vector>
+
 class CJNIApplicationInfo : public CJNIBase
 {
 public:
@@ -32,7 +35,7 @@ public:
   std::string dataDir;
   std::string nativeLibraryDir;
   std::string packageName;
-  int         uid; 
+  int         uid;
   int         targetSdkVersion;
   bool        enabled;
 

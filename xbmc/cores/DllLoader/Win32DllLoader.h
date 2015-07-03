@@ -24,6 +24,9 @@
 
 #include "LibraryLoader.h"
 
+#include <string>
+#include <vector>
+
 class Win32DllLoader : public LibraryLoader
 {
 public:

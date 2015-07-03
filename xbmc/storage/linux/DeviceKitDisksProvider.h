@@ -18,10 +18,13 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#include "storage/IStorageProvider.h"
+#include "system.h" // for HAS_DBUS
 #ifdef HAS_DBUS
+#include "storage/IStorageProvider.h"
 #include "DBusUtil.h"
 
+#include <string>
+#include <vector>
 class CDeviceKitDiskDevice
 {
 public:

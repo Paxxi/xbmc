@@ -23,6 +23,8 @@
 #include "dbwrappers/Database.h"
 #include "utils/log.h"
 
+#include <vector>
+
 class CVideoSettings;
 
 namespace PVR

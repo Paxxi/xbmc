@@ -21,6 +21,8 @@
 
 #include "Variant.h"
 
+#include <string>
+#include <vector>
 #include <yajl/yajl_parse.h>
 
 class IParseCallback

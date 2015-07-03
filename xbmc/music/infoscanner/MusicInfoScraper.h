@@ -25,6 +25,8 @@
 #include "addons/Scraper.h"
 #include "threads/Thread.h"
 
+#include <vector>
+
 namespace XFILE
 {
 class CurlFile;

@@ -19,9 +19,6 @@
  *
  */
 
-#include <map>
-#include <memory>
-
 #include "addons/include/xbmc_pvr_types.h"
 #include "settings/lib/ISettingCallback.h"
 #include "threads/Event.h"
@@ -30,6 +27,10 @@
 #include "utils/Observer.h"
 #include "interfaces/IAnnouncer.h"
 #include "pvr/recordings/PVRRecording.h"
+
+#include <map>
+#include <memory>
+#include <vector>
 
 class CGUIDialogProgressBarHandle;
 class CStopWatch;

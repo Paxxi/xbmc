@@ -19,13 +19,15 @@
  *
  */
 
-#include <map>
-#include <set>
-#include <memory>
-
 #include "addons/IAddon.h"
 #include "interfaces/generic/ILanguageInvoker.h"
 #include "threads/CriticalSection.h"
+
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 class CLanguageInvokerThread;
 typedef std::shared_ptr<CLanguageInvokerThread> CLanguageInvokerThreadPtr;

@@ -28,6 +28,7 @@
 #include <IOKit/audio/IOAudioTypes.h>
 
 #include <list>
+#include <vector>
 
 // not defined in 10.6 sdk
 #ifndef kIOAudioDeviceTransportTypeThunderbolt
@@ -43,7 +44,7 @@ class CCoreAudioStream
 public:
   CCoreAudioStream();
   virtual ~CCoreAudioStream();
-  
+
   bool    Open(AudioStreamID streamId);
   void    Close(bool restore = true);
 
@@ -70,7 +71,7 @@ protected:
   CEvent m_physical_format_event;
 
   AudioStreamID m_StreamId;
-  AudioStreamBasicDescription m_OriginalVirtualFormat;  
+  AudioStreamBasicDescription m_OriginalVirtualFormat;
   AudioStreamBasicDescription m_OriginalPhysicalFormat;
 };
 

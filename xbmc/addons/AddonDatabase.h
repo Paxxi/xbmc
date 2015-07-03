@@ -22,7 +22,9 @@
 #include "dbwrappers/Database.h"
 #include "addons/Addon.h"
 #include "FileItem.h"
+
 #include <string>
+#include <vector>
 
 class CAddonDatabase : public CDatabase
 {
@@ -65,7 +67,7 @@ public:
   ADDON::AddonVersion GetRepoVersion(const std::string& id);
 
   bool Search(const std::string& search, ADDON::VECADDONS& items);
-  static void SetPropertiesFromAddon(const ADDON::AddonPtr& addon, CFileItemPtr& item); 
+  static void SetPropertiesFromAddon(const ADDON::AddonPtr& addon, CFileItemPtr& item);
 
   /*! \brief Disable an addon.
    Sets a flag that this addon has been disabled.  If disabled, it is usually still available on disk.
@@ -79,7 +81,7 @@ public:
    \param addonID id of the addon to be checked
    \return true if addon is in database, false if addon is not in database yet */
   bool HasAddon(const std::string &addonID);
-  
+
   /*! \brief Check whether an addon has been disabled via DisableAddon.
    \param addonID id of the addon to check
    \return true if the addon is disabled, false otherwise
@@ -187,4 +189,3 @@ protected:
     dependencies_optional
   };
 };
-

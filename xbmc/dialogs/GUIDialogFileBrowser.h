@@ -20,13 +20,15 @@
  *
  */
 
-#include <memory>
-
 #include "guilib/GUIDialog.h"
 #include "filesystem/VirtualDirectory.h"
 #include "filesystem/DirectoryHistory.h"
 #include "view/GUIViewControl.h"
 #include "pictures/PictureThumbLoader.h"
+
+#include <memory>
+#include <string>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

@@ -23,6 +23,10 @@
 #include "utils/Job.h"
 #include "utils/ProgressJob.h"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace ADDON
 {
   class CRepository;
@@ -80,4 +84,3 @@ namespace ADDON
     VECADDONS m_repos;
   };
 }
-

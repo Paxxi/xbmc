@@ -32,6 +32,7 @@
 #include "system.h"
 #include "system_gl.h"
 
+#include <vector>
 
 /*!
  \ingroup textures
@@ -66,7 +67,7 @@ protected:
 private:
   unsigned int m_updateY1;
   unsigned int m_updateY2;
-  
+
   enum TextureStatus
   {
     TEXTURE_VOID = 0,
@@ -74,7 +75,7 @@ private:
     TEXTURE_REALLOCATED,
     TEXTURE_UPDATED,
   };
-  
+
   TextureStatus m_textureStatus;
 
 #if HAS_GLES

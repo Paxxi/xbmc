@@ -19,9 +19,6 @@
  *
  */
 
-#include <string.h>
-#include <stdlib.h>
-
 #include "JSONRPCUtils.h"
 #include "XBDateTime.h"
 #include "utils/SortUtils.h"
@@ -29,6 +26,10 @@
 #include "utils/JSONVariantWriter.h"
 #include "utils/JSONVariantParser.h"
 #include "utils/StringUtils.h"
+
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
 
 namespace JSONRPC
 {
@@ -76,7 +77,7 @@ namespace JSONRPC
     {
       if (size < 0)
         size = 0;
-    
+
       start = (int)parameterObject["limits"]["start"].asInteger();
       end   = (int)parameterObject["limits"]["end"].asInteger();
       end = (end <= 0 || end > size) ? size : end;
@@ -192,7 +193,7 @@ namespace JSONRPC
       limitStart = (int)parameterObject["limits"]["start"].asInteger();
       limitEnd = (int)parameterObject["limits"]["end"].asInteger();
     }
-  
+
     /*!
      \brief Checks if the given object contains a parameter
      \param parameterObject Object to check for a parameter
@@ -201,7 +202,7 @@ namespace JSONRPC
      \return True if the parameter is available otherwise false
 
      Checks the given object for a parameter with the given key (if
-     the given object is not an array) or for a parameter at the 
+     the given object is not an array) or for a parameter at the
      given position (if the given object is an array).
      */
     static inline bool ParameterExists(const CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) || (parameterObject.isArray() && parameterObject.size() > position); }
@@ -211,11 +212,11 @@ namespace JSONRPC
      with the given key
      \param value Value to check for the member
      \param key Key of the member to check for
-     \return True if the given object contains a member with 
+     \return True if the given object contains a member with
      the given key otherwise false
      */
     static inline bool IsValueMember(const CVariant &value, std::string key) { return value.isObject() && value.isMember(key); }
-    
+
     /*!
      \brief Returns the json value of a parameter
      \param parameterObject Object containing all provided parameters
@@ -225,11 +226,11 @@ namespace JSONRPC
      given position
 
      Returns the value of the parameter with the given key (if
-     the given object is not an array) or of the parameter at the 
+     the given object is not an array) or of the parameter at the
      given position (if the given object is an array).
      */
     static inline CVariant GetParameter(const CVariant &parameterObject, std::string key, unsigned int position) { return IsValueMember(parameterObject, key) ? parameterObject[key] : parameterObject[position]; }
-    
+
     /*!
      \brief Returns the json value of a parameter or the given
      default value
@@ -241,12 +242,12 @@ namespace JSONRPC
      given position or the default value if the parameter does not exist
 
      Returns the value of the parameter with the given key (if
-     the given object is not an array) or of the parameter at the 
+     the given object is not an array) or of the parameter at the
      given position (if the given object is an array). If the
      parameter does not exist the given default value is returned.
      */
     static inline CVariant GetParameter(const CVariant &parameterObject, std::string key, unsigned int position, CVariant fallback) { return IsValueMember(parameterObject, key) ? parameterObject[key] : ((parameterObject.isArray() && parameterObject.size() > position) ? parameterObject[position] : fallback); }
-    
+
     /*!
      \brief Returns the given json value as a string
      \param value Json value to convert to a string
@@ -308,9 +309,9 @@ namespace JSONRPC
 
       return AnyValue;
     }
-    
+
     /*!
-     \brief Returns a string representation for the 
+     \brief Returns a string representation for the
      given JSONSchemaType
      \param valueType Specific JSONSchemaType
      \return String representation of the given JSONSchemaType

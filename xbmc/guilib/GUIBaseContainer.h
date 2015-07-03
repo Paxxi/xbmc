@@ -29,6 +29,9 @@
 #include "GUIListItemLayout.h"
 #include "utils/Stopwatch.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup controls
  \brief
@@ -132,7 +135,7 @@ protected:
   CGUIListItemLayout *GetFocusedLayout() const;
 
   CPoint m_renderOffset; ///< \brief render offset of the first item in the list \sa SetRenderOffset
-    
+
   float m_analogScrollCount;
   unsigned int m_lastHoldTime;
 
@@ -221,5 +224,3 @@ private:
 
   static const int letter_match_timeout = 1000;
 };
-
-

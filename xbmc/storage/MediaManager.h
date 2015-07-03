@@ -20,10 +20,12 @@
  */
 
 #include "MediaSource.h" // for VECSOURCES
-#include <map>
 #include "utils/Job.h"
 #include "IStorageProvider.h"
 #include "threads/CriticalSection.h"
+
+#include <map>
+#include <vector>
 
 #define TRAY_OPEN     16
 #define TRAY_CLOSED_NO_MEDIA  64
@@ -109,4 +111,3 @@ private:
 };
 
 extern class CMediaManager g_mediaManager;
-

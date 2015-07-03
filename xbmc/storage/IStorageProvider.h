@@ -24,6 +24,9 @@
 #include "cdioSupport.h"
 #endif
 
+#include <string>
+#include <vector>
+
 class IStorageEventsCallback
 {
 public:

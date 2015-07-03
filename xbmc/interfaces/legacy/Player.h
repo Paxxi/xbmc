@@ -33,6 +33,8 @@
 
 #include "swighelper.h"
 
+#include <vector>
+
 namespace XBMCAddon
 {
   namespace xbmc
@@ -48,7 +50,7 @@ namespace XBMCAddon
 
     /**
      * Player class.
-     * 
+     *
      * Player() -- Creates a new Player class.
      */
     class Player : public AddonCallback, public IPlayerCallback
@@ -67,8 +69,8 @@ namespace XBMCAddon
 	  static PlayParameter defaultPlayParameter;
 #endif
 
-      // Construct a Player proxying the given generated binding. The 
-      //  construction of a Player needs to identify whether or not any 
+      // Construct a Player proxying the given generated binding. The
+      //  construction of a Player needs to identify whether or not any
       //  callbacks will be executed asynchronously or not.
       Player(int playerCore = EPC_NONE);
       virtual ~Player(void);
@@ -93,7 +95,7 @@ namespace XBMCAddon
        *   - xbmc.Player().play(url, listitem, windowed)\n
        *   - xbmc.Player().play(playlist, listitem, windowed, startpos)\n
        */
-      void play(const PlayParameter& item = Player::defaultPlayParameter, 
+      void play(const PlayParameter& item = Player::defaultPlayParameter,
                 const XBMCAddon::xbmcgui::ListItem* listitem = NULL, bool windowed = false, int startpos = -1);
 
       /**
@@ -123,7 +125,7 @@ namespace XBMCAddon
 
       /**
        * onPlayBackStarted() -- onPlayBackStarted method.
-       * 
+       *
        * Will be called when xbmc starts playing a file
        */
       // Player_OnPlayBackStarted
@@ -132,7 +134,7 @@ namespace XBMCAddon
 
       /**
        * onPlayBackEnded() -- onPlayBackEnded method.
-       * 
+       *
        * Will be called when xbmc stops playing a file
        */
       // Player_OnPlayBackEnded
@@ -140,7 +142,7 @@ namespace XBMCAddon
 
       /**
        * onPlayBackStopped() -- onPlayBackStopped method.
-       * 
+       *
        * Will be called when user stops xbmc playing a file
        */
       // Player_OnPlayBackStopped
@@ -148,7 +150,7 @@ namespace XBMCAddon
 
       /**
        * onPlayBackPaused() -- onPlayBackPaused method.
-       * 
+       *
        * Will be called when user pauses a playing file
        */
       // Player_OnPlayBackPaused
@@ -156,7 +158,7 @@ namespace XBMCAddon
 
       /**
        * onPlayBackResumed() -- onPlayBackResumed method.
-       * 
+       *
        * Will be called when user resumes a paused file
        */
       // Player_OnPlayBackResumed
@@ -164,37 +166,37 @@ namespace XBMCAddon
 
       /**
        * onQueueNextItem() -- onQueueNextItem method.
-       * 
+       *
        * Will be called when user queues the next item
        */
       virtual void onQueueNextItem();
 
       /**
        * onPlayBackSpeedChanged(speed) -- onPlayBackSpeedChanged method.
-       * 
+       *
        * speed          : integer - current speed of player.
-       * 
+       *
        * *Note, negative speed means player is rewinding, 1 is normal playback speed.
-       * 
+       *
        * Will be called when players speed changes. (eg. user FF/RW)
        */
       virtual void onPlayBackSpeedChanged(int speed);
 
       /**
        * onPlayBackSeek(time, seekOffset) -- onPlayBackSeek method.
-       * 
+       *
        * time           : integer - time to seek to.\n
        * seekOffset     : integer - ?.
-       * 
+       *
        * Will be called when user seeks to a time
        */
       virtual void onPlayBackSeek(int time, int seekOffset);
 
       /**
        * onPlayBackSeekChapter(chapter) -- onPlayBackSeekChapter method.
-       * 
+       *
        * chapter        : integer - chapter to seek to.
-       * 
+       *
        * Will be called when user performs a chapter seek
        */
       virtual void onPlayBackSeekChapter(int chapter);
@@ -228,7 +230,7 @@ namespace XBMCAddon
 
       /**
        * getTime() -- Returns the current time of the current playing media as fractional seconds.
-       * 
+       *
        * Throws: Exception, if player is not playing a file.
        */
       // Player_GetTime
@@ -238,7 +240,7 @@ namespace XBMCAddon
        * seekTime() -- Seeks the specified amount of time as fractional seconds.
        *               The time specified is relative to the beginning of the
        *               currently playing media file.
-       * 
+       *
        * Throws: Exception, if player is not playing a file.
        */
       // Player_SeekTime
@@ -253,7 +255,7 @@ namespace XBMCAddon
       // Player_ShowSubtitles
       /**
        * showSubtitles(visible) -- enable/disable subtitles
-       * 
+       *
        * visible        : boolean - True for visible subtitles.
        *
        * example:
@@ -281,10 +283,10 @@ namespace XBMCAddon
 
       // Player_setSubtitleStream
       /**
-       * setSubtitleStream(stream) -- set Subtitle Stream 
-       * 
+       * setSubtitleStream(stream) -- set Subtitle Stream
+       *
        * stream           : int
-       * 
+       *
        * example:
        *   - setSubtitleStream(1)
        */
@@ -292,14 +294,14 @@ namespace XBMCAddon
 
       /**
        * getVideoInfoTag() -- returns the VideoInfoTag of the current playing Movie.
-       * 
+       *
        * Throws: Exception, if player is not playing a file or current file is not a movie file.
        */
       InfoTagVideo* getVideoInfoTag();
 
       /**
        * getMusicInfoTag() -- returns the MusicInfoTag of the current playing 'Song'.
-       * 
+       *
        * Throws: Exception, if player is not playing a file or current file is not a music file.
        */
       // Player_GetMusicInfoTag
@@ -321,11 +323,11 @@ namespace XBMCAddon
 
       /**
        * setAudioStream(stream) -- set Audio Stream.
-       * 
+       *
        * stream           : int
-       * 
+       *
        * example:
-       * 
+       *
        *    - setAudioStream(1)
        */
       void setAudioStream(int iStream);
@@ -346,4 +348,3 @@ namespace XBMCAddon
     };
   }
 }
-

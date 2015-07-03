@@ -21,6 +21,8 @@
 
 #include "JNIBase.h"
 
+#include <vector>
+
 class CJNIDisplay : public CJNIBase
 {
 public:

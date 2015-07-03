@@ -39,6 +39,9 @@
 #include "video/VideoInfoTag.h"
 #include "XBDateTime.h"
 
+#include <memory>
+#include <vector>
+
 #define PVR_RECORDING_BASE_PATH     "recordings"
 #define PVR_RECORDING_DELETED_PATH  "deleted"
 #define PVR_RECORDING_ACTIVE_PATH   "active"

@@ -25,10 +25,10 @@
 #include "DVDVideoCodec.h"
 #include "threads/Event.h"
 
+#include <OMX_Core.h>
 #include <queue>
 #include <semaphore.h>
-#include <OMX_Core.h>
-
+#include <vector>
 
 // check for potentially undefined OpenMAX version numbers
 #ifndef OMX_VERSION_MAJOR
@@ -54,10 +54,10 @@
 #endif
 
 typedef struct omx_codec_capability {
-    // level is OMX_VIDEO_AVCPROFILETYPE, OMX_VIDEO_H263PROFILETYPE, 
+    // level is OMX_VIDEO_AVCPROFILETYPE, OMX_VIDEO_H263PROFILETYPE,
     // or OMX_VIDEO_MPEG4PROFILETYPE depending on context.
     OMX_U32 level;
-    // level is OMX_VIDEO_AVCLEVELTYPE, OMX_VIDEO_H263LEVELTYPE, 
+    // level is OMX_VIDEO_AVCLEVELTYPE, OMX_VIDEO_H263LEVELTYPE,
     // or OMX_VIDEO_MPEG4PROFILETYPE depending on context.
     OMX_U32 profile;
 } omx_codec_capability;

@@ -38,6 +38,9 @@
 #include "threads/CriticalSection.h"
 #include "settings/lib/ISettingCallback.h"
 
+#include <string>
+#include <vector>
+
 class IDispResource;
 
 class CWinSystemX11 : public CWinSystemBase, public ISettingCallback
@@ -132,4 +135,3 @@ private:
 };
 
 #endif // WINDOW_SYSTEM_H
-

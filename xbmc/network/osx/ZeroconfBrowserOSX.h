@@ -19,9 +19,6 @@
  */
 #pragma once
 
-#include <memory>
-#include <map>
-
 #include "network/ZeroconfBrowser.h"
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
@@ -32,6 +29,10 @@
 #else
   #include <CFNetwork/CFNetServices.h>
 #endif
+
+#include <map>
+#include <memory>
+#include <vector>
 
 //platform specific implementation of  zeroconfbrowser interface using native os x APIs
 class CZeroconfBrowserOSX : public CZeroconfBrowser
@@ -59,10 +60,10 @@ private:
   void addDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, ZeroconfService const &fcr_service);
   /// removes the service from list of found services
   void removeDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, ZeroconfService const &fcr_service);
-  
+
   //CF runloop ref; we're using main-threads runloop
   CFRunLoopRef m_runloop;
-  
+
   //shared variables (with guard)
   //TODO: split the guard for discovered, resolved access?
   CCriticalSection m_data_guard;

@@ -22,6 +22,10 @@
 
 #include "guilib/Resolution.h"
 #include <EGL/egl.h>
+
+#include <string>
+#include <vector>
+
 class CEGLNativeType;
 class CEGLWrapper
 {

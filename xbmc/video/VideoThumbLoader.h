@@ -19,10 +19,12 @@
  *
  */
 
-#include <map>
 #include "ThumbLoader.h"
 #include "utils/JobManager.h"
 #include "FileItem.h"
+
+#include <map>
+#include <vector>
 
 class CStreamDetails;
 class CVideoDatabase;
@@ -58,7 +60,7 @@ public:
   CFileItem  m_item;
   bool       m_thumb; ///< extract thumb?
   int64_t    m_pos; ///< position to extract thumb from
-  bool m_fillStreamDetails; ///< fill in stream details? 
+  bool m_fillStreamDetails; ///< fill in stream details?
 };
 
 class CVideoThumbLoader : public CThumbLoader, public CJobQueue

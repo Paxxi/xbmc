@@ -21,6 +21,7 @@
  */
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <vector>
 
 class IDllWaylandClient;
 class IDllXKBCommon;
@@ -61,7 +62,7 @@ public:
                                    struct wl_seat *seat);
     typedef void (*DestroyWaylandSeat)();
     typedef bool (*MessagePump)();
-    
+
     SetEventQueue setEventQueue;
     DestroyEventQueue destroyEventQueue;
     SetWaylandSeat setWaylandSeat;
@@ -73,17 +74,17 @@ public:
                  IDllXKBCommon &xkbCommonLibrary,
                  EventInjector &injector);
   ~XBMCConnection();
-  
+
   void PreferredResolution(RESOLUTION_INFO &res) const;
   void CurrentResolution(RESOLUTION_INFO &res) const;
   void AvailableResolutions(std::vector<RESOLUTION_INFO> &res) const;
-  
+
   EGLNativeDisplayType * NativeDisplay() const;
-  
+
   Compositor & GetCompositor();
   Shell & GetShell();
   Output & GetFirstOutput();
-  
+
 private:
 
   class Private;

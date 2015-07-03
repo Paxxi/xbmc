@@ -20,9 +20,11 @@
  *
  */
 
-#include <memory>
 #include "threads/SystemClock.h"
 #include "cores/playercorefactory/PlayerCoreFactory.h"
+
+#include <memory>
+#include <vector>
 
 typedef enum
 {
@@ -60,7 +62,7 @@ class CApplicationPlayer
   int m_iAudioStream;
   XbmcThreads::EndTime m_subtitleStreamUpdate;
   int m_iSubtitleStream;
-  
+
 public:
   CApplicationPlayer();
 
@@ -94,7 +96,7 @@ public:
   int   GetCacheLevel() const;
   float GetCachePercentage() const;
   int   GetChapterCount();
-  int   GetChapter();  
+  int   GetChapter();
   void  GetChapterName(std::string& strChapterName, int chapterIdx=-1);
   int64_t GetChapterPos(int chapterIdx=-1);
   void  GetDeinterlaceMethods(std::vector<int> &deinterlaceMethods);

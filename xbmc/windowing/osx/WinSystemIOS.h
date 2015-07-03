@@ -29,6 +29,9 @@
 #include "utils/GlobalsHandling.h"
 #include "threads/CriticalSection.h"
 
+#include <string>
+#include <vector>
+
 class IDispResource;
 class CVideoSyncIos;
 struct CADisplayLinkWrapper;
@@ -62,13 +65,13 @@ public:
 
   virtual bool BeginRender();
   virtual bool EndRender();
-  
+
   virtual void Register(IDispResource *resource);
   virtual void Unregister(IDispResource *resource);
-  
-  virtual int GetNumScreens();    
+
+  virtual int GetNumScreens();
   virtual int GetCurrentScreen();
-  
+
           bool InitDisplayLink(CVideoSyncIos *syncImpl);
           void DeinitDisplayLink(void);
           void OnAppFocusChange(bool focus);
@@ -86,7 +89,7 @@ protected:
   CCriticalSection             m_resourceSection;
   std::vector<IDispResource*>  m_resources;
   bool         m_bIsBackgrounded;
-  
+
 private:
   bool GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
   void FillInVideoModes();

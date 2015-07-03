@@ -24,6 +24,8 @@
 #include <EGL/egl.h>
 #include "EGLNativeType.h"
 
+#include <vector>
+
 #define EDID_STRUCT_DISPLAY     0x14
 
 class CEGLNativeTypeIMX : public CEGLNativeType

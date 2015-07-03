@@ -20,9 +20,10 @@
  *
  */
 
-#include <memory>
-
 #include "guilib/GUIDialog.h"
+
+#include <memory>
+#include <vector>
 
 class CMediaSource;
 class CFileItem;

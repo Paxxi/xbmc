@@ -20,10 +20,12 @@
  *
  */
 
-#include <memory>
-
 #include "GUIDialogBoxBase.h"
 #include "view/GUIViewControl.h"
+
+#include <memory>
+#include <string>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

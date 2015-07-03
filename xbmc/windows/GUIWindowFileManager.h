@@ -25,13 +25,15 @@
 #include "filesystem/DirectoryHistory.h"
 #include "utils/JobManager.h"
 
+#include <vector>
+
 class CFileItem;
 class CFileItemList;
 class CGUIDialogProgress;
 
 class CGUIWindowFileManager :
       public CGUIWindow,
-      public CJobQueue 
+      public CJobQueue
 {
 public:
 

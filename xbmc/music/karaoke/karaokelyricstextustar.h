@@ -25,6 +25,8 @@
 
 #include "karaokelyricstext.h"
 
+#include <string>
+#include <vector>
 
 //! This class loads UltraStar format lyrics
 class CKaraokeLyricsTextUStar : public CKaraokeLyricsText

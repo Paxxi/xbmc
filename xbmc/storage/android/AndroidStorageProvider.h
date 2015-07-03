@@ -21,6 +21,9 @@
 
 #include "storage/IStorageProvider.h"
 
+#include <string>
+#include <vector>
+
 class CAndroidStorageProvider : public IStorageProvider
 {
 public:
@@ -32,7 +35,7 @@ public:
 
   virtual void GetLocalDrives(VECSOURCES &localDrives);
   virtual void GetRemovableDrives(VECSOURCES &removableDrives);
-  
+
   virtual bool Eject(const std::string& mountpath);
 
   virtual std::vector<std::string> GetDiskUsage();

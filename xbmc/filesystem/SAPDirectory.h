@@ -25,6 +25,8 @@
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
 
+#include <string>
+#include <vector>
 
 namespace SDP
 {

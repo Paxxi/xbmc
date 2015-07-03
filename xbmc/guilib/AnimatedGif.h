@@ -35,6 +35,8 @@
 
 #include "Texture.h" // for COLOR
 
+#include <vector>
+
 #pragma pack(1)
 
 #define LZW_MAXBITS   12
@@ -159,4 +161,3 @@ public:
 protected:
   static unsigned char getbyte(FILE *fd);
 };
-

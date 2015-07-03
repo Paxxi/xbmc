@@ -21,6 +21,9 @@
 
 #include "JNIBase.h"
 
+#include <string>
+#include <vector>
+
 class CJNIScanResult : public CJNIBase
 {
 public:

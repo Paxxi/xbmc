@@ -33,11 +33,13 @@
 #include "threads/Event.h"
 #include "threads/Thread.h"
 #include "utils/ActorProtocol.h"
+#include "linux/sse4/DllLibSSE4.h"
+
 #include <list>
 #include <map>
 #include <memory>
 #include <va/va.h>
-#include "linux/sse4/DllLibSSE4.h"
+#include <vector>
 
 extern "C" {
 #include "libavutil/avutil.h"

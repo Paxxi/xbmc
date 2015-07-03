@@ -30,6 +30,9 @@
 
 #include "GUIControl.h"
 
+#include <string>
+#include <vector>
+
 class CTextureInfo; // forward
 class CAspectRatio;
 class CGUIInfoLabel;

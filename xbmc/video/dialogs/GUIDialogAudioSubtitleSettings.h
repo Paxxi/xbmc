@@ -22,6 +22,10 @@
 
 #include "settings/dialogs/GUIDialogSettingsManualBase.h"
 
+#include <string>
+#include <utility>
+#include <vector>
+
 class CGUIDialogAudioSubtitleSettings : public CGUIDialogSettingsManualBase
 {
 public:
@@ -58,7 +62,7 @@ protected:
 
   static void AudioStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
   static void SubtitleStreamsOptionFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
-  
+
   static std::string SettingFormatterDelay(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
   static std::string SettingFormatterPercentAsDecibel(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
 

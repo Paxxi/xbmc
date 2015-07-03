@@ -21,10 +21,12 @@
  */
 
 #include "system.h" // until we get sane int types used here
-#include <memory>
 #include "IPlayerCallback.h"
 #include "guilib/Geometry.h"
+
+#include <memory>
 #include <string>
+#include <vector>
 
 #define CURRENT_STREAM -1
 
@@ -51,7 +53,7 @@ public:
     video_only = false;
   }
   double  starttime; /* start time in seconds */
-  double  startpercent; /* start time in percent */  
+  double  startpercent; /* start time in percent */
   bool    identify;  /* identify mode, used for checking format and length of a file */
   std::string state;  /* potential playerstate to restore to */
   bool    fullscreen; /* player is allowed to switch to fullscreen */
@@ -233,7 +235,7 @@ public:
   //returns a state that is needed for resuming from a specific time
   virtual std::string GetPlayerState() { return ""; };
   virtual bool SetPlayerState(const std::string& state) { return false;};
-  
+
   virtual std::string GetPlayingTitle() { return ""; };
 
   virtual bool SwitchChannel(const PVR::CPVRChannelPtr &channel) { return false; }

@@ -29,7 +29,11 @@
 #include "cores/AudioEngine/Engines/ActiveAE/ActiveAEBuffer.h"
 
 #include "guilib/DispResource.h"
+
+#include <list>
 #include <queue>
+#include <string>
+#include <vector>
 
 // ffmpeg
 extern "C" {

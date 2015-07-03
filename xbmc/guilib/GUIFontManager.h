@@ -32,6 +32,9 @@
 #include "IMsgTargetCallback.h"
 #include "utils/GlobalsHandling.h"
 
+#include <string>
+#include <vector>
+
 // Forward
 class CGUIFont;
 class CGUIFontTTFBase;

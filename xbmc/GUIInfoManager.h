@@ -38,6 +38,8 @@
 
 #include <list>
 #include <map>
+#include <string>
+#include <vector>
 
 namespace MUSIC_INFO
 {
@@ -892,11 +894,11 @@ protected:
 
   /*! \brief Split an info string into it's constituent parts and parameters
    Format is:
-     
+
      info1(params1).info2(params2).info3(params3) ...
-   
+
    where the parameters are an optional comma separated parameter list.
-   
+
    \param infoString the original string
    \param info the resulting pairs of info and parameters.
    */
@@ -973,7 +975,3 @@ protected:
  */
 extern CGUIInfoManager g_infoManager;
 #endif
-
-
-
-

@@ -23,12 +23,14 @@
  *
  */
 
-#include <string>
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
+#include "system.h"
+
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "system.h"
+#include <string>
+#include <vector>
 
 class CUdpClient : CThread
 {

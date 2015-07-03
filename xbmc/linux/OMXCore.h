@@ -21,8 +21,6 @@
 
 #if defined(HAVE_OMXLIB)
 
-#include <string>
-#include <queue>
 
 // TODO: should this be in configure
 #ifndef OMX_SKIP64BIT
@@ -32,6 +30,9 @@
 #include "DllOMX.h"
 
 #include <semaphore.h>
+#include <string>
+#include <queue>
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // debug spew defines
@@ -218,4 +219,3 @@ protected:
 };
 
 #endif
-

@@ -34,7 +34,9 @@
 #include "DirtyRegionTracker.h"
 #include "utils/GlobalsHandling.h"
 #include "guilib/WindowIDs.h"
+
 #include <list>
+#include <vector>
 
 class CGUIDialog;
 
@@ -249,4 +251,3 @@ private:
 XBMC_GLOBAL_REF(CGUIWindowManager,g_windowManager);
 #define g_windowManager XBMC_GLOBAL_USE(CGUIWindowManager)
 #endif
-

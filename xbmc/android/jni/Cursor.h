@@ -22,6 +22,9 @@
 #include "JNIBase.h"
 #include "MediaStore.h"
 
+#include <string>
+#include <vector>
+
 class CJNIURI;
 
 class CJNICursor : public CJNIBase

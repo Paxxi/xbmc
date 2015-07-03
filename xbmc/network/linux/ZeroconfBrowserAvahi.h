@@ -22,9 +22,6 @@
 #include "system.h"
 #ifdef HAS_AVAHI
 
-#include <memory>
-#include <map>
-
 #include "network/ZeroconfBrowser.h"
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
@@ -33,6 +30,10 @@
 #include <avahi-client/lookup.h>
 #include <avahi-common/thread-watch.h>
 #include <avahi-common/defs.h>
+
+#include <map>
+#include <memory>
+#include <vector>
 
 //platform specific implementation of  zeroconfbrowser interface using avahi
 class CZeroconfBrowserAvahi : public CZeroconfBrowser

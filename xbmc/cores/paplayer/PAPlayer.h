@@ -20,8 +20,6 @@
  *
  */
 
-#include <list>
-
 #include "cores/IPlayer.h"
 #include "threads/Thread.h"
 #include "AudioDecoder.h"
@@ -30,6 +28,10 @@
 
 #include "cores/IAudioCallback.h"
 #include "cores/AudioEngine/Utils/AEChannelInfo.h"
+
+#include <list>
+#include <string>
+#include <vector>
 
 class IAEStream;
 
@@ -135,10 +137,10 @@ private:
   StreamInfo*         m_currentStream;       /* the current playing stream */
   IAudioCallback*     m_audioCallback;       /* the viz audio callback */
 
-  CFileItem*          m_FileItem;            /* our queued file or current file if no file is queued */      
+  CFileItem*          m_FileItem;            /* our queued file or current file if no file is queued */
 
   CSharedSection      m_streamsLock;         /* lock for the stream list */
-  StreamList          m_streams;             /* playing streams */  
+  StreamList          m_streams;             /* playing streams */
   StreamList          m_finishing;           /* finishing streams */
   int                 m_jobCounter;
   CEvent              m_jobEvent;
@@ -158,4 +160,3 @@ private:
   void UpdateGUIData(StreamInfo *si);
   int64_t GetTimeInternal();
 };
-

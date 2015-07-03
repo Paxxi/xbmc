@@ -30,6 +30,9 @@
 
 #include "GUIButtonControl.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup controls
  \brief Button with multi selection choice.

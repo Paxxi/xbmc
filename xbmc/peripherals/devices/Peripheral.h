@@ -19,9 +19,11 @@
  *
  */
 
+#include "peripherals/PeripheralTypes.h"
+
 #include <set>
 #include <string>
-#include "peripherals/PeripheralTypes.h"
+#include <vector>
 
 class TiXmlDocument;
 

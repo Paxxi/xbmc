@@ -20,10 +20,13 @@
  *
  */
 
-#include <boost/scoped_ptr.hpp>
 
 #include <EGL/egl.h>
 #include "EGLNativeType.h"
+
+#include <boost/scoped_ptr.hpp>
+#include <string>
+#include <vector>
 
 class CEGLNativeTypeWayland : public CEGLNativeType
 {

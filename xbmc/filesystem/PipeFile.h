@@ -33,9 +33,11 @@
 #include "threads/CriticalSection.h"
 #include "PipesManager.h"
 
+#include <vector>
+
 namespace XFILE
 {
-  
+
 class CPipeFile : public IFile, public IPipeListener
 {
 public:
@@ -60,9 +62,9 @@ public:
   virtual bool Delete(const CURL& url);
   virtual bool Rename(const CURL& url, const CURL& urlnew);
   virtual int IoControl(int request, void* param);
-  
+
   std::string GetName() const;
-  
+
   virtual void OnPipeOverFlow();
   virtual void OnPipeUnderFlow();
 
@@ -73,15 +75,15 @@ public:
   bool IsEof();
   bool IsEmpty();
   bool IsClosed();
-  
+
   void SetOpenThreashold(int threashold);
 
 protected:
   int64_t m_pos;
   int64_t m_length;
-  
+
   XFILE::Pipe *m_pipe;
-  
+
   CCriticalSection m_lock;
   std::vector<XFILE::IPipeListener *> m_listeners;
 };

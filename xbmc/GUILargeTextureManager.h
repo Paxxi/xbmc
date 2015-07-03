@@ -24,6 +24,9 @@
 #include "utils/Job.h"
 #include "guilib/TextureManager.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup textures,jobs
  \brief Image loader job class
@@ -147,5 +150,3 @@ private:
 };
 
 extern CGUILargeTextureManager g_largeTextureManager;
-
-

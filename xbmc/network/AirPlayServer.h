@@ -25,12 +25,14 @@
 #include "system.h"
 #ifdef HAS_AIRPLAY
 
-#include <map>
-#include <sys/socket.h>
 #include "threads/Thread.h"
 #include "threads/CriticalSection.h"
 #include "utils/HttpParser.h"
 #include "interfaces/IAnnouncer.h"
+
+#include <map>
+#include <sys/socket.h>
+#include <vector>
 
 class DllLibPlist;
 

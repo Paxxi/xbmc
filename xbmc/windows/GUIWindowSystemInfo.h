@@ -22,6 +22,9 @@
 
 #include "guilib/GUIWindow.h"
 
+#include <string>
+#include <vector>
+
 class CGUIWindowSystemInfo : public CGUIWindow
 {
 public:
@@ -35,4 +38,3 @@ private:
   void SetControlLabel(int id, const char *format, int label, int info);
   std::vector<std::string> m_diskUsage;
 };
-

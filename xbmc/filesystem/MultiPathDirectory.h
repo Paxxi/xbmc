@@ -19,9 +19,11 @@
  *
  */
 
+#include "IDirectory.h"
+
 #include <set>
 #include <string>
-#include "IDirectory.h"
+#include <vector>
 
 namespace XFILE
 {

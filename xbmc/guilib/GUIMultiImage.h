@@ -33,6 +33,9 @@
 #include "utils/Job.h"
 #include "threads/CriticalSection.h"
 
+#include <string>
+#include <vector>
+
 /*!
  \ingroup controls
  \brief

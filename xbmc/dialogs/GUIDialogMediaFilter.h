@@ -19,13 +19,14 @@
  *
  */
 
-#include <map>
-#include <string>
-
 #include "dbwrappers/Database.h"
 #include "dbwrappers/DatabaseQuery.h"
 #include "settings/dialogs/GUIDialogSettingsManualBase.h"
 #include "utils/DatabaseUtils.h"
+
+#include <map>
+#include <string>
+#include <vector>
 
 class CDbUrl;
 class CSetting;

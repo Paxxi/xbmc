@@ -19,10 +19,12 @@
  *
  */
 
+#include "input/KeyboardLayout.h"
+
 #include <map>
 #include <string>
-
-#include "input/KeyboardLayout.h"
+#include <utility>
+#include <vector>
 
 class CSetting;
 

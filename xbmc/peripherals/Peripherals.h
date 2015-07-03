@@ -27,6 +27,8 @@
 #include "threads/Thread.h"
 #include "utils/Observer.h"
 
+#include <vector>
+
 class CFileItemList;
 class CSetting;
 class CSettingsCategory;
@@ -206,7 +208,7 @@ namespace PERIPHERALS
       return false;
 #endif
     }
-    
+
     virtual void OnSettingChanged(const CSetting *setting);
     virtual void OnSettingAction(const CSetting *setting);
 

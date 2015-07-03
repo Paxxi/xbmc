@@ -24,6 +24,8 @@
 #include "interfaces/legacy/wsgi/WsgiResponseBody.h"
 #include "network/httprequesthandler/python/HTTPPythonRequest.h"
 
+#include <vector>
+
 namespace XBMCAddon
 {
   namespace xbmcwsgi
@@ -57,8 +59,6 @@ namespace XBMCAddon
 
       WsgiResponseBody m_body;
 #endif
-    };    
+    };
   }
 }
-
-

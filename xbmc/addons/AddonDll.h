@@ -18,8 +18,6 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#include <math.h>
-#include <string>
 
 #include "Addon.h"
 #include "DllAddon.h"
@@ -35,6 +33,10 @@
 #include "interfaces/AnnouncementManager.h"
 #include "utils/XMLUtils.h"
 #include "Util.h"
+
+#include <math.h>
+#include <string>
+#include <vector>
 
 namespace ADDON
 {
@@ -573,4 +575,3 @@ void CAddonDll<TheDll, TheStruct, TheProps>::HandleException(std::exception &e, 
 }
 
 }; /* namespace ADDON */
-

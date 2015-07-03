@@ -34,6 +34,9 @@
 #include "DirtyRegion.h"
 #include "GUIAction.h"
 
+#include <string>
+#include <vector>
+
 class CGUIListItem; // forward
 class CAction;
 class CMouseEvent;

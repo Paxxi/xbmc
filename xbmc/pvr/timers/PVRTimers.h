@@ -19,14 +19,15 @@
  *
  */
 
-#include <memory>
-#include <map>
-#include <vector>
-
 #include "PVRTimerInfoTag.h"
 #include "XBDateTime.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "utils/Observer.h"
+
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;

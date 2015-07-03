@@ -22,6 +22,9 @@
 
 #include "music/Song.h"
 
+#include <string>
+#include <vector>
+
 #define MAX_PATH_SIZE 1024
 
 class CueReader;

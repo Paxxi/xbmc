@@ -22,7 +22,9 @@
 #define WINDOW_SYSTEM_WIN32_H
 
 #include "windowing/WinSystem.h"
+
 #include <string>
+#include <vector>
 
 struct MONITOR_DETAILS
 {
@@ -190,4 +192,3 @@ protected:
 extern HWND g_hWnd;
 
 #endif // WINDOW_SYSTEM_H
-

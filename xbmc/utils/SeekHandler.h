@@ -19,7 +19,6 @@
  *
  */
 
-#include <vector>
 #include "input/Key.h"
 #include "interfaces/IActionListener.h"
 #include "settings/lib/ISettingCallback.h"
@@ -41,7 +40,7 @@ public:
   static CSeekHandler& Get();
 
   static void SettingOptionsSeekStepsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data);
-  
+
   virtual void OnSettingChanged(const CSetting *setting);
   virtual bool OnAction(const CAction &action);
 
@@ -62,7 +61,7 @@ protected:
 
 private:
   static const int analogSeekDelay = 500;
-  
+
   int GetSeekStepSize(SeekType type, int step);
   int m_seekDelay;
   std::map<SeekType, int > m_seekDelays;

@@ -22,6 +22,9 @@
 #include "JNIBase.h"
 #include "BitSet.h"
 
+#include <string>
+#include <vector>
+
 class CJNIWifiConfiguration : public CJNIBase
 {
 public:

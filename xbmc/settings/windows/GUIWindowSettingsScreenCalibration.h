@@ -22,6 +22,8 @@
 
 #include "guilib/GUIWindow.h"
 
+#include <vector>
+
 class CGUIWindowSettingsScreenCalibration : public CGUIWindow
 {
 public:

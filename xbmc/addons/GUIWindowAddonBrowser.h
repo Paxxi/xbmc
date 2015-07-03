@@ -20,11 +20,12 @@
  *
  */
 
-#include <memory>
-
 #include "addons/Addon.h"
 #include "windows/GUIMediaWindow.h"
 #include "ThumbLoader.h"
+
+#include <memory>
+#include <vector>
 
 class CFileItem;
 class CFileItemList;
@@ -63,7 +64,7 @@ public:
    */
   static int SelectAddonID(ADDON::TYPE type, std::vector<std::string> &addonIDs, bool showNone = false, bool showDetails = true, bool multipleSelection = true, bool showInstalled = true, bool showInstallable = false, bool showMore = true);
   static int SelectAddonID(const std::vector<ADDON::TYPE> &types, std::vector<std::string> &addonIDs, bool showNone = false, bool showDetails = true, bool multipleSelection = true, bool showInstalled = true, bool showInstallable = false, bool showMore = true);
-  
+
 protected:
   /* \brief set label2 of an item based on the Addon.Status property
    \param item the item to update
@@ -82,4 +83,3 @@ private:
   void SetProperties();
   CProgramThumbLoader m_thumbLoader;
 };
-

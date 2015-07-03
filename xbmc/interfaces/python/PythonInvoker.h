@@ -19,12 +19,13 @@
  *
  */
 
-#include <map>
-#include <string>
-
 #include "interfaces/generic/ILanguageInvoker.h"
 #include "threads/CriticalSection.h"
 #include "threads/Event.h"
+
+#include <map>
+#include <string>
+#include <vector>
 
 class CPythonInvoker : public ILanguageInvoker
 {
@@ -37,7 +38,7 @@ public:
   virtual bool IsStopping() const { return m_stop || ILanguageInvoker::IsStopping(); }
 
   typedef void (*PythonModuleInitialization)();
-  
+
 protected:
   // implementation of ILanguageInvoker
   virtual bool execute(const std::string &script, const std::vector<std::string> &arguments);

@@ -25,7 +25,9 @@
 #include "addons/Scraper.h"
 #include "Episode.h"
 #include "filesystem/CurlFile.h"
+
 #include <string>
+#include <vector>
 
 // forward declarations
 class CXBMCTinyXML;
@@ -89,4 +91,3 @@ protected:
 
   int InternalFindMovie(const std::string& strMovie, MOVIELIST& movielist, bool cleanChars = true);
 };
-

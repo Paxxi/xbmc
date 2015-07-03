@@ -22,6 +22,9 @@
 #include "dialogs/GUIDialogBoxBase.h"
 #include "IAddon.h"
 
+#include <string>
+#include <vector>
+
 class CGUIDialogAddonSettings : public CGUIDialogBoxBase
 {
 public:
@@ -88,4 +91,3 @@ private:
 
   std::map<std::string,std::string> m_settings; // local storage of values
 };
-
