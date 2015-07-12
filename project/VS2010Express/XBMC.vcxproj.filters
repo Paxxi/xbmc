@@ -3093,6 +3093,7 @@
     <ClCompile Include="..\..\xbmc\network\dacp\dacp.cpp">
       <Filter>network\dacp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\InfoScanner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -5929,7 +5930,7 @@
     <ClInclude Include="..\..\xbmc\addons\LanguageResource.h">
       <Filter>addons</Filter>
     </ClInclude>
-     <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
+    <ClInclude Include="..\..\xbmc\addons\UISoundsResource.h">
       <Filter>addons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ResourceFile.h">
@@ -5980,6 +5981,7 @@
     <ClInclude Include="..\..\xbmc\network\dacp\dacp.h">
       <Filter>network\dacp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\InfoScanner.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">
