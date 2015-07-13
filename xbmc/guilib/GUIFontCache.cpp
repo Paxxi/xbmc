@@ -65,8 +65,6 @@ public:
 template<class Position, class Value>
 CGUIFontCacheEntry<Position, Value>::~CGUIFontCacheEntry()
 {
-  delete &m_key.m_colors;
-  delete &m_key.m_text;
 }
 
 template<class Position, class Value>
@@ -103,7 +101,7 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
                                                   unsigned int nowMillis, bool &dirtyCache)
 {
   const CGUIFontCacheKey<Position> key(pos,
-                                       const_cast<vecColors &>(colors), const_cast<vecText &>(text),
+                                       colors, text,
                                        alignment, maxPixelWidth,
                                        scrolling, g_graphicsContext.GetGUIMatrix(),
                                        g_graphicsContext.GetGUIScaleX(), g_graphicsContext.GetGUIScaleY());

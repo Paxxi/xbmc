@@ -52,8 +52,8 @@ template<class Position>
 struct CGUIFontCacheKey
 {
   Position m_pos;
-  vecColors &m_colors;
-  vecText &m_text;
+  vecColors m_colors;
+  vecText m_text;
   uint32_t m_alignment;
   float m_maxPixelWidth;
   bool m_scrolling;
@@ -62,7 +62,7 @@ struct CGUIFontCacheKey
   float m_scaleY;
 
   CGUIFontCacheKey(Position pos,
-                   vecColors &colors, vecText &text,
+                   vecColors colors, vecText text,
                    uint32_t alignment, float maxPixelWidth,
                    bool scrolling, const TransformMatrix &matrix,
                    float scaleX, float scaleY) :
@@ -85,29 +85,25 @@ struct CGUIFontCacheEntry
 
   CGUIFontCacheEntry(const CGUIFontCacheKey<Position> &key, unsigned int nowMillis) :
     m_key(key.m_pos,
-          *new vecColors, *new vecText,
+          key.m_colors, key.m_text,
           key.m_alignment, key.m_maxPixelWidth,
           key.m_scrolling, m_matrix,
           key.m_scaleX, key.m_scaleY),
+    m_matrix(key.m_matrix),
     m_lastUsedMillis(nowMillis)
   {
-    m_key.m_colors.assign(key.m_colors.begin(), key.m_colors.end());
-    m_key.m_text.assign(key.m_text.begin(), key.m_text.end());
-    m_matrix = key.m_matrix;
   }
 
   CGUIFontCacheEntry(const CGUIFontCacheEntry &other) :
     m_key(other.m_key.m_pos,
-          *new vecColors, *new vecText,
+          other.m_key.m_colors, other.m_key.m_text,
           other.m_key.m_alignment, other.m_key.m_maxPixelWidth,
           other.m_key.m_scrolling, m_matrix,
           other.m_key.m_scaleX, other.m_key.m_scaleY),
+    m_matrix(other.m_key.m_text),
     m_lastUsedMillis(other.m_lastUsedMillis),
     m_value(other.m_value)
   {
-    m_key.m_colors.assign(other.m_key.m_colors.begin(), other.m_key.m_colors.end());
-    m_key.m_text.assign(other.m_key.m_text.begin(), other.m_key.m_text.end());
-    m_matrix = other.m_key.m_matrix;
   }
 
   ~CGUIFontCacheEntry();
