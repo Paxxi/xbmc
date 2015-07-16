@@ -20,8 +20,12 @@
 
 #include <stdint.h>
 #include <vector>
+#include <chrono>
 #include "GUIFontTTF.h"
 #include "GraphicContext.h"
+#include "contrib/spdlog/spdlog.h"
+#include "threads/SystemClock.h"
+#include "utils/log.h"
 
 #if defined(TARGET_DARWIN )
 // apple clang with c++11 doesn't like
@@ -40,6 +44,7 @@ using namespace boost::multi_index;
 template<class Position, class Value>
 class CGUIFontCacheImpl
 {
+  std::shared_ptr<spdlog::logger> log;
   /* Empty structs used as tags to identify indexes */
   struct Age {};
   struct Hash {};
@@ -64,8 +69,26 @@ class CGUIFontCacheImpl
   CGUIFontCache<Position, Value> *m_parent;
 
 public:
+  ~CGUIFontCacheImpl()
+  {
+    if (log)
+      log->flush();
+  }
 
-  CGUIFontCacheImpl(CGUIFontCache<Position, Value>* parent) : m_parent(parent) {}
+  CGUIFontCacheImpl(CGUIFontCache<Position, Value>* parent) : m_parent(parent) 
+  {
+    try
+    {
+      //spdlog::set_async_mode(1048576);
+      log = spdlog::get("async_file_logger");
+      if (!log)
+        log = spdlog::rotating_logger_mt("async_file_logger", "logs", 104857600, 10);
+    }
+    catch (const spdlog::spdlog_ex &ex)
+    {
+      CLog::Log(LOGINFO, "spdlog: ", ex.what());
+    }
+  }
   Value &Lookup(Position &pos,
                 const vecColors &colors, const vecText &text,
                 uint32_t alignment, float maxPixelWidth,
@@ -132,6 +155,7 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
                                                   bool scrolling,
                                                   unsigned int nowMillis, bool &dirtyCache)
 {
+  auto begin = std::chrono::steady_clock::now();
   const CGUIFontCacheKey<Position> key(pos,
                                        const_cast<vecColors &>(colors), const_cast<vecText &>(text),
                                        alignment, maxPixelWidth,
@@ -156,6 +180,9 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
       m_list.template get<Age>().push_back(CGUIFontCacheEntry<Position, Value>(*m_parent, key, nowMillis));
     }
     dirtyCache = true;
+    auto end = std::chrono::steady_clock::now();
+    auto t = end - begin;
+    log->info("cache miss time: {} size: {}", t.count(), m_list.template get<Age>().size());
     return (--m_list.template get<Age>().end())->m_value;
   }
   else
@@ -168,6 +195,9 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
     i->m_lastUsedMillis = nowMillis;
     m_list.template get<Age>().relocate(m_list.template get<Age>().end(), m_list.template project<Age>(i));
     dirtyCache = false;
+    auto end = std::chrono::steady_clock::now();
+    auto t = end - begin;
+    log->info("cache hit  time: {} size: {}", t.count(), m_list.template get<Age>().size());
     return i->m_value;
   }
 }
