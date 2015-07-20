@@ -247,10 +247,11 @@ void CApplicationMessenger::ProcessWindowMessages()
 
 void CApplicationMessenger::SendGUIMessage(const CGUIMessage &message, int windowID, bool waitResult)
 {
-  ThreadMessage tMsg(TMSG_GUI_MESSAGE);
-  tMsg.param1 = windowID == WINDOW_INVALID ? 0 : windowID;
-  tMsg.lpVoid = new CGUIMessage(message);
-  SendMsg(std::move(tMsg), waitResult);
+  SendMsg(ThreadMessage{TMSG_GUI_MESSAGE, 
+    windowID == WINDOW_INVALID ? 0 : windowID,
+    -1,
+    static_cast<void*>(new CGUIMessage(message))}, 
+    waitResult);
 }
 
 void CApplicationMessenger::RegisterReceveiver(IMessageTarget* target)
