@@ -41,6 +41,19 @@ namespace XFILE
   class CFile;
 }
 
+#if _MSC_VER >= 1900
+struct kodi_iobuf {
+  char *_ptr;
+  int   _cnt;
+  char *_base;
+  int   _flag;
+  int   _file;
+  int   _charbuf;
+  int   _bufsiz;
+  char *_tmpfname;
+};
+#endif
+
 typedef struct stEmuFileObject
 {
   bool    used;

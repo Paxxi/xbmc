@@ -2224,6 +2224,7 @@ extern "C"
 #endif
   }
 
+#if _MSC_VER < 1900
   int dll_filbuf(FILE *fp)
   {
     if (fp == NULL)
@@ -2250,7 +2251,7 @@ extern "C"
     return _filbuf(fp);
 #endif
   }
-
+  
   int dll_flsbuf(int data, FILE *fp)
   {
     if (fp == NULL)
@@ -2282,6 +2283,7 @@ extern "C"
 #endif
   }
 
+#endif
   // this needs to be wrapped, since dll's have their own file
   // descriptor list, but we always use app's list with our wrappers
   int __cdecl dll_open_osfhandle(intptr_t _OSFileHandle, int _Flags)
