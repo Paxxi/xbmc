@@ -1,13 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -21,11 +29,25 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -34,7 +56,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(SolutionDir)\XBMC.defaults.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(SolutionDir)\XBMC.defaults.props" />
   </ImportGroup>
@@ -46,9 +76,23 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libPlatinumd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libPlatinumd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libPlatinum</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">libPlatinum</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\lib\libUPnP;..\..\lib\libUPnP\Platinum\Source\Platinum;..\..\lib\libUPnP\Platinum\Source\Core;..\..\lib\libUPnP\Platinum\Source\Extras;..\..\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\lib\libUPnP\Neptune\Source\Core;..\..\lib\libUPnP\Neptune\Source\System\Win32</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;NPT_CONFIG_ENABLE_LOGGING;PLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi";PLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi";_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libPlatinumd.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\lib\libUPnP;..\..\lib\libUPnP\Platinum\Source\Platinum;..\..\lib\libUPnP\Platinum\Source\Core;..\..\lib\libUPnP\Platinum\Source\Extras;..\..\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\lib\libUPnP\Neptune\Source\Core;..\..\lib\libUPnP\Neptune\Source\System\Win32</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;NPT_CONFIG_ENABLE_LOGGING;PLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi";PLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi";_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -78,7 +122,36 @@
       <OutputFile>$(OutDir)libPlatinumd.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Testsuite|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\lib\libUPnP;..\..\lib\libUPnP\Platinum\Source\Platinum;..\..\lib\libUPnP\Platinum\Source\Core;..\..\lib\libUPnP\Platinum\Source\Extras;..\..\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\lib\libUPnP\Neptune\Source\Core;..\..\lib\libUPnP\Neptune\Source\System\Win32</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;NPT_CONFIG_ENABLE_LOGGING;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libPlatinumd.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\lib\libUPnP;..\..\lib\libUPnP\Platinum\Source\Platinum;..\..\lib\libUPnP\Platinum\Source\Core;..\..\lib\libUPnP\Platinum\Source\Extras;..\..\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\lib\libUPnP\Neptune\Source\Core;..\..\lib\libUPnP\Neptune\Source\System\Win32</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;NPT_CONFIG_ENABLE_LOGGING;PLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi";PLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libPlatinum.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\lib\libUPnP;..\..\lib\libUPnP\Platinum\Source\Platinum;..\..\lib\libUPnP\Platinum\Source\Core;..\..\lib\libUPnP\Platinum\Source\Extras;..\..\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\lib\libUPnP\Neptune\Source\Core;..\..\lib\libUPnP\Neptune\Source\System\Win32</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;NPT_CONFIG_ENABLE_LOGGING;PLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi";PLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi";%(PreprocessorDefinitions)</PreprocessorDefinitions>

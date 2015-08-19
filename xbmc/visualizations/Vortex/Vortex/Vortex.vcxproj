@@ -1,13 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -22,12 +30,27 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -36,7 +59,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(SolutionDir)\XBMC.defaults.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(SolutionDir)\XBMC.defaults.props" />
   </ImportGroup>
@@ -50,6 +81,13 @@
     <TargetName>Vortex_win32dx</TargetName>
     <TargetExt>.vis</TargetExt>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>Vortex_win32dx</TargetName>
+    <TargetExt>.vis</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
@@ -58,6 +96,13 @@
     <IntDir>$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <TargetName>Vortex_win32dx</TargetName>
     <TargetExt>.vis</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>Vortex_win32dx</TargetName>
+    <TargetExt>.vis</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -72,6 +117,20 @@
       <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.vortex\$(TargetFileName)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_USRDLL;VORTEX_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\VortexVis\core;..\VortexVis\effects;..\angelscript\angelscript\include;..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d11.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmtd</IgnoreSpecificDefaultLibraries>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.vortex\$(TargetFileName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_USRDLL;VORTEX_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -79,6 +138,19 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d11.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.vortex\$(TargetFileName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_USRDLL;VORTEX_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\VortexVis\core;..\VortexVis\effects;..\angelscript\angelscript\include;..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d11.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.vortex\$(TargetFileName)"</Command>
@@ -177,204 +249,386 @@
   <ItemGroup>
     <FxCompile Include="..\VortexVis\Shaders\ColorPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\ColourRemapPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ObjectFileOutput>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\constants_table.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\DiffuseNormalEnvCubeVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\DiffuseUVCubeVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\DiffuseUVEnvCubeVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\DiffuseUVEnvVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\DiffuseUVVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\TexturePixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
     <FxCompile Include="..\VortexVis\Shaders\UVNormalEnvVertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Main</EntryPointName>
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)Code</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)Code</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).inc</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalOptions>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalOptions>
     </FxCompile>
   </ItemGroup>
