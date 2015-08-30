@@ -178,7 +178,7 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
           if (currentVideoTag != NULL)
           {
             std::string originalLabel = fileItem->GetLabel();
-            fileItem->SetFromVideoInfoTag(*currentVideoTag);
+            *fileItem = CFileItem(std::make_shared<CVideoInfoTag>(*currentVideoTag));
             if (fileItem->GetLabel().empty())
               fileItem->SetLabel(originalLabel);
           }
@@ -193,7 +193,7 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
           if (currentMusicTag != NULL)
           {
             std::string originalLabel = fileItem->GetLabel();
-            fileItem = CFileItemPtr(new CFileItem(*currentMusicTag));
+            fileItem = std::make_shared<CFileItem>(std::make_shared<MUSIC_INFO::CMusicInfoTag>(*currentMusicTag));
             if (fileItem->GetLabel().empty())
               fileItem->SetLabel(originalLabel);
           }

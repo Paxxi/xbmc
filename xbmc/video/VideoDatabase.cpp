@@ -1733,9 +1733,9 @@ void CVideoDatabase::GetMusicVideosByArtist(const std::string& strArtist, CFileI
 
     while (!m_pDS->eof())
     {
-      CVideoInfoTag tag = GetDetailsForMusicVideo(m_pDS);
-      CFileItemPtr pItem(new CFileItem(tag));
-      pItem->SetLabel(StringUtils::Join(tag.m_artist, g_advancedSettings.m_videoItemSeparator));
+      auto tag = std::make_shared<CVideoInfoTag>(GetDetailsForMusicVideo(m_pDS));
+      auto pItem = std::make_shared<CFileItem>(tag);
+      pItem->SetLabel(StringUtils::Join(tag->m_artist, g_advancedSettings.m_videoItemSeparator));
       items.Add(pItem);
       m_pDS->next();
     }
@@ -6047,19 +6047,19 @@ bool CVideoDatabase::GetMoviesByWhere(const std::string& strBaseDir, const Filte
       unsigned int targetRow = (unsigned int)it->at(FieldRow).asInteger();
       const dbiplus::sql_record* const record = data.at(targetRow);
 
-      CVideoInfoTag movie = GetDetailsForMovie(record);
+      auto movie = std::make_shared<CVideoInfoTag>(GetDetailsForMovie(record));
       if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
           g_passwordManager.bMasterUser                                   ||
-          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
+          g_passwordManager.IsDatabasePathUnlocked(movie->m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
       {
-        CFileItemPtr pItem(new CFileItem(movie));
+        auto pItem = std::make_shared<CFileItem>(movie);
 
         CVideoDbUrl itemUrl = videoUrl;
-        std::string path = StringUtils::Format("%i", movie.m_iDbId);
+        std::string path = StringUtils::Format("%i", movie->m_iDbId);
         itemUrl.AppendPath(path);
         pItem->SetPath(itemUrl.ToString());
 
-        pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED,movie.m_playCount > 0);
+        pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED,movie->m_playCount > 0);
         items.Add(pItem);
       }
     }
@@ -6152,14 +6152,14 @@ bool CVideoDatabase::GetTvShowsByWhere(const std::string& strBaseDir, const Filt
       unsigned int targetRow = (unsigned int)it->at(FieldRow).asInteger();
       const dbiplus::sql_record* const record = data.at(targetRow);
       
-      CFileItemPtr pItem(new CFileItem());
-      CVideoInfoTag movie = GetDetailsForTvShow(record, false, pItem.get());
+      auto pItem = std::make_shared<CFileItem>();
+      auto movie = std::make_shared<CVideoInfoTag>(GetDetailsForTvShow(record, false, pItem.get()));
       if ((CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
            g_passwordManager.bMasterUser                                     ||
-           g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video"))) &&
-          (!g_advancedSettings.m_bVideoLibraryHideEmptySeries || movie.m_iEpisode > 0))
+           g_passwordManager.IsDatabasePathUnlocked(movie->m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video"))) &&
+          (!g_advancedSettings.m_bVideoLibraryHideEmptySeries || movie->m_iEpisode > 0))
       {
-        pItem->SetFromVideoInfoTag(movie);
+        pItem->SetFromInfoTag(movie);
 
         CVideoDbUrl itemUrl = videoUrl;
         std::string path = StringUtils::Format("%i/", record->at(0).get_asInt());
@@ -6281,12 +6281,12 @@ bool CVideoDatabase::GetEpisodesByWhere(const std::string& strBaseDir, const Fil
       unsigned int targetRow = (unsigned int)it->at(FieldRow).asInteger();
       const dbiplus::sql_record* const record = data.at(targetRow);
 
-      CVideoInfoTag movie = GetDetailsForEpisode(record);
+      auto movie = std::make_shared<CVideoInfoTag>(GetDetailsForEpisode(record));
       if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
           g_passwordManager.bMasterUser                                     ||
-          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
+          g_passwordManager.IsDatabasePathUnlocked(movie->m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
       {
-        CFileItemPtr pItem(new CFileItem(movie));
+        auto pItem = std::make_shared<CFileItem>(movie);
         formatter.FormatLabel(pItem.get());
       
         int idEpisode = record->at(0).get_asInt();
@@ -6294,14 +6294,14 @@ bool CVideoDatabase::GetEpisodesByWhere(const std::string& strBaseDir, const Fil
         CVideoDbUrl itemUrl = videoUrl;
         std::string path;
         if (appendFullShowPath && videoUrl.GetItemType() != "episodes")
-          path = StringUtils::Format("%i/%i/%i", record->at(VIDEODB_DETAILS_EPISODE_TVSHOW_ID).get_asInt(), movie.m_iSeason, idEpisode);
+          path = StringUtils::Format("%i/%i/%i", record->at(VIDEODB_DETAILS_EPISODE_TVSHOW_ID).get_asInt(), movie->m_iSeason, idEpisode);
         else
           path = StringUtils::Format("%i", idEpisode);
         itemUrl.AppendPath(path);
         pItem->SetPath(itemUrl.ToString());
 
-        pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, movie.m_playCount > 0);
-        pItem->m_dateTime = movie.m_firstAired;
+        pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, movie->m_playCount > 0);
+        pItem->m_dateTime = movie->m_firstAired;
         pItem->GetVideoInfoTag()->m_iYear = pItem->m_dateTime.GetYear();
         items.Add(pItem);
       }
@@ -7115,18 +7115,18 @@ bool CVideoDatabase::GetMusicVideosByWhere(const std::string &baseDir, const Fil
       unsigned int targetRow = (unsigned int)it->at(FieldRow).asInteger();
       const dbiplus::sql_record* const record = data.at(targetRow);
       
-      CVideoInfoTag musicvideo = GetDetailsForMusicVideo(record);
+      auto musicvideo = std::make_shared<CVideoInfoTag>(GetDetailsForMusicVideo(record));
       if (!checkLocks || CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE || g_passwordManager.bMasterUser ||
-          g_passwordManager.IsDatabasePathUnlocked(musicvideo.m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
+          g_passwordManager.IsDatabasePathUnlocked(musicvideo->m_strPath, *CMediaSourceSettings::GetInstance().GetSources("video")))
       {
-        CFileItemPtr item(new CFileItem(musicvideo));
+        auto item = std::make_shared<CFileItem>(musicvideo);
 
         CVideoDbUrl itemUrl = videoUrl;
         std::string path = StringUtils::Format("%i", record->at(0).get_asInt());
         itemUrl.AppendPath(path);
         item->SetPath(itemUrl.ToString());
 
-        item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, musicvideo.m_playCount > 0);
+        item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, musicvideo->m_playCount > 0);
         items.Add(item);
       }
     }
@@ -8743,15 +8743,15 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
     movie = root->FirstChildElement();
     while (movie)
     {
-      CVideoInfoTag info;
+      auto info = std::make_shared<CVideoInfoTag>();
       if (strnicmp(movie->Value(), MediaTypeMovie, 5) == 0)
       {
-        info.Load(movie);
+        info->Load(movie);
         CFileItem item(info);
-        bool useFolders = info.m_basePath.empty() ? LookupByFolders(item.GetPath()) : false;
-        std::string filename = info.m_strTitle;
-        if (info.m_iYear > 0)
-          filename += StringUtils::Format("_%i", info.m_iYear);
+        bool useFolders = info->m_basePath.empty() ? LookupByFolders(item.GetPath()) : false;
+        std::string filename = info->m_strTitle;
+        if (info->m_iYear > 0)
+          filename += StringUtils::Format("_%i", info->m_iYear);
         CFileItem artItem(item);
         artItem.SetPath(GetSafeFile(moviesDir, filename) + ".avi");
         scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
@@ -8761,12 +8761,12 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
       }
       else if (strnicmp(movie->Value(), MediaTypeMusicVideo, 10) == 0)
       {
-        info.Load(movie);
+        info->Load(movie);
         CFileItem item(info);
-        bool useFolders = info.m_basePath.empty() ? LookupByFolders(item.GetPath()) : false;
-        std::string filename = StringUtils::Join(info.m_artist, g_advancedSettings.m_videoItemSeparator) + "." + info.m_strTitle;
-        if (info.m_iYear > 0)
-          filename += StringUtils::Format("_%i", info.m_iYear);
+        bool useFolders = info->m_basePath.empty() ? LookupByFolders(item.GetPath()) : false;
+        std::string filename = StringUtils::Join(info->m_artist, g_advancedSettings.m_videoItemSeparator) + "." + info->m_strTitle;
+        if (info->m_iYear > 0)
+          filename += StringUtils::Format("_%i", info->m_iYear);
         CFileItem artItem(item);
         artItem.SetPath(GetSafeFile(musicvideosDir, filename) + ".avi");
         scanner.GetArtwork(&artItem, CONTENT_MUSICVIDEOS, useFolders, true, actorsDir);
@@ -8778,13 +8778,13 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
       {
         // load the TV show in.  NOTE: This deletes all episodes under the TV Show, which may not be
         // what we desire.  It may make better sense to only delete (or even better, update) the show information
-        info.Load(movie);
-        URIUtils::AddSlashAtEnd(info.m_strPath);
-        DeleteTvShow(info.m_strPath);
+        info->Load(movie);
+        URIUtils::AddSlashAtEnd(info->m_strPath);
+        DeleteTvShow(info->m_strPath);
         CFileItem showItem(info);
-        bool useFolders = info.m_basePath.empty() ? LookupByFolders(showItem.GetPath(), true) : false;
+        bool useFolders = info->m_basePath.empty() ? LookupByFolders(showItem.GetPath(), true) : false;
         CFileItem artItem(showItem);
-        std::string artPath(GetSafeFile(tvshowsDir, info.m_strTitle));
+        std::string artPath(GetSafeFile(tvshowsDir, info->m_strTitle));
         artItem.SetPath(artPath);
         scanner.GetArtwork(&artItem, CONTENT_TVSHOWS, useFolders, true, actorsDir);
         showItem.SetArt(artItem.GetArt());
@@ -8804,10 +8804,10 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
         while (episode)
         {
           // no need to delete the episode info, due to the above deletion
-          CVideoInfoTag info;
-          info.Load(episode);
+          auto info = std::make_shared<CVideoInfoTag>();
+          info->Load(episode);
           CFileItem item(info);
-          std::string filename = StringUtils::Format("s%02ie%02i.avi", info.m_iSeason, info.m_iEpisode);
+          std::string filename = StringUtils::Format("s%02ie%02i.avi", info->m_iSeason, info->m_iEpisode);
           CFileItem artItem(item);
           artItem.SetPath(GetSafeFile(artPath, filename));
           scanner.GetArtwork(&artItem, CONTENT_TVSHOWS, useFolders, true, actorsDir);
@@ -8820,7 +8820,7 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
       if (progress && total)
       {
         progress->SetPercentage(current * 100 / total);
-        progress->SetLine(2, CVariant{info.m_strTitle});
+        progress->SetLine(2, CVariant{info->m_strTitle});
         progress->Progress();
         if (progress->IsCanceled())
         {

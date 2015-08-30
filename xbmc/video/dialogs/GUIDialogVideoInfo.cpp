@@ -59,6 +59,8 @@
 #include "utils/FileUtils.h"
 #include "utils/Variant.h"
 
+#include <memory>
+
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 using namespace XFILE;
 using namespace KODI::MESSAGING;
@@ -573,7 +575,7 @@ void CGUIDialogVideoInfo::Play(bool resume)
     return;
   }
 
-  CFileItem movie(*m_movieItem->GetVideoInfoTag());
+  CFileItem movie(m_movieItem->GetInfoTag());
   if (m_movieItem->GetVideoInfoTag()->m_strFileNameAndPath.empty())
     movie.SetPath(m_movieItem->GetPath());
   CGUIWindowVideoNav* pWindow = (CGUIWindowVideoNav*)g_windowManager.GetWindow(WINDOW_VIDEO_NAV);
@@ -798,7 +800,7 @@ void CGUIDialogVideoInfo::OnGetFanart()
     items.Add(item);
   }
 
-  CFileItem item(*m_movieItem->GetVideoInfoTag());
+  CFileItem item(m_movieItem->GetInfoTag());
   std::string strLocal = item.GetLocalFanart();
   if (!strLocal.empty())
   {
@@ -1834,10 +1836,9 @@ bool CGUIDialogVideoInfo::LinkMovieToTvShow(const CFileItemPtr &item, bool bRemo
 
     for (unsigned int i = 0; i < ids.size(); ++i)
     {
-      CVideoInfoTag tag;
-      database.GetTvShowInfo("", tag, ids[i]);
-      CFileItemPtr show(new CFileItem(tag));
-      list.Add(show);
+      auto tag = std::make_shared<CVideoInfoTag>();
+      database.GetTvShowInfo("", *tag, ids[i]);
+      list.Add(std::make_shared<CFileItem>(tag));
     }
   }
   else

@@ -6193,6 +6193,7 @@
     <ClInclude Include="..\..\xbmc\utils\win32\memcpy_sse2.h">
       <Filter>utils\win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\InfoTag.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">

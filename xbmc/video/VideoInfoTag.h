@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include "InfoTag.h"
 #include "XBDateTime.h"
 #include "utils/ScraperUrl.h"
 #include "utils/Fanart.h"
@@ -47,7 +48,8 @@ struct SActorInfo
   int        order;
 };
 
-class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
+class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable,
+                      public KODI::IInfoTag
 {
 public:
   CVideoInfoTag() { Reset(); };
@@ -72,16 +74,23 @@ public:
   virtual void Archive(CArchive& ar);
   virtual void Serialize(CVariant& value) const;
   virtual void ToSortable(SortItem& sortable, Field field) const;
+
+  virtual std::string GetLabel() const override;
+  virtual std::string GetLabel2() const override;
+  virtual std::string GetPath() const override;
+  virtual bool IsFolder() const override;
+  virtual std::map<std::string, std::string> GetProperties() const override;
+
   const std::string GetCast(bool bIncludeRole = false) const;
   bool HasStreamDetails() const;
   bool IsEmpty() const;
 
-  const std::string& GetPath() const
+  /*const std::string& GetPath() const
   {
     if (m_strFileNameAndPath.empty())
       return m_strPath;
     return m_strFileNameAndPath;
-  };
+  };*/
 
   /*! \brief retrieve the duration in seconds.
    Prefers the duration from stream details if available.

@@ -227,14 +227,14 @@ bool CVideoLibraryRefreshingJob::Work(CVideoDatabase &db)
       {
         for (const auto& tvshowPath : tvshowPaths)
         {
-          CFileItemPtr tvshowItem(new CFileItem(*m_item->GetVideoInfoTag()));
+          auto tvshowItem = std::make_shared<CFileItem>(m_item->GetInfoTag());
           tvshowItem->SetPath(tvshowPath);
           items.Add(tvshowItem);
         }
       }
       // otherwise just add a copy of the item
       else
-        items.Add(CFileItemPtr(new CFileItem(*m_item->GetVideoInfoTag())));
+        items.Add(std::make_shared<CFileItem>(m_item->GetInfoTag()));
 
       // update the path to the real path (instead of a videodb:// one)
       path = m_item->GetVideoInfoTag()->m_strPath;

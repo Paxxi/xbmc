@@ -58,6 +58,7 @@
 #include "utils/Variant.h"
 #include "music/karaoke/karaokelyricsfactory.h"
 #include "utils/Mime.h"
+#include "InfoTag.h"
 
 #include <assert.h>
 #include <algorithm>
@@ -97,23 +98,6 @@ CFileItem::CFileItem(const std::string &path, const CAlbum& album)
   m_strPath = path;
   URIUtils::AddSlashAtEnd(m_strPath);
   SetFromAlbum(album);
-}
-
-CFileItem::CFileItem(const CMusicInfoTag& music)
-{
-  Initialize();
-  SetLabel(music.GetTitle());
-  m_strPath = music.GetURL();
-  m_bIsFolder = URIUtils::HasSlashAtEnd(m_strPath);
-  *GetMusicInfoTag() = music;
-  FillInDefaultIcon();
-  FillInMimeType(false);
-}
-
-CFileItem::CFileItem(const CVideoInfoTag& movie)
-{
-  Initialize();
-  SetFromVideoInfoTag(movie);
 }
 
 CFileItem::CFileItem(const CEpgInfoTagPtr& tag)
@@ -312,6 +296,23 @@ CFileItem::CFileItem(const CMediaSource& share)
   SetLabelPreformated(true);
   if (IsDVD())
     GetVideoInfoTag()->m_strFileNameAndPath = share.strDiskUniqueId; // share.strDiskUniqueId contains disc unique id
+  FillInMimeType(false);
+}
+
+CFileItem::CFileItem(std::shared_ptr<KODI::IInfoTag> tag)
+{
+  Initialize();
+  m_infoTag = tag;
+
+  SetLabel(m_infoTag->GetLabel());
+  m_strPath = m_infoTag->GetPath();
+
+  m_bIsFolder = m_infoTag->IsFolder();
+
+  for (const auto& it : m_infoTag->GetProperties())
+    SetProperty(it.first, it.second);
+
+  FillInDefaultIcon();
   FillInMimeType(false);
 }
 
@@ -1363,6 +1364,22 @@ bool CFileItem::IsAlbum() const
   return m_bIsAlbum;
 }
 
+void CFileItem::SetFromInfoTag(const std::shared_ptr<KODI::IInfoTag> tag)
+{
+  m_infoTag = tag;
+
+  SetLabel(m_infoTag->GetLabel());
+  m_strPath = m_infoTag->GetPath();
+
+  m_bIsFolder = m_infoTag->IsFolder();
+
+  for (const auto& it : m_infoTag->GetProperties())
+    SetProperty(it.first, it.second);
+
+  FillInDefaultIcon();
+  FillInMimeType(false);
+}
+
 void CFileItem::UpdateInfo(const CFileItem &item, bool replaceLabels /*=true*/)
 {
   if (item.HasVideoInfoTag())
@@ -1393,29 +1410,6 @@ void CFileItem::UpdateInfo(const CFileItem &item, bool replaceLabels /*=true*/)
   if (!item.GetIconImage().empty())
     SetIconImage(item.GetIconImage());
   AppendProperties(item);
-}
-
-void CFileItem::SetFromVideoInfoTag(const CVideoInfoTag &video)
-{
-  if (!video.m_strTitle.empty())
-    SetLabel(video.m_strTitle);
-  if (video.m_strFileNameAndPath.empty())
-  {
-    m_strPath = video.m_strPath;
-    URIUtils::AddSlashAtEnd(m_strPath);
-    m_bIsFolder = true;
-  }
-  else
-  {
-    m_strPath = video.m_strFileNameAndPath;
-    m_bIsFolder = false;
-  }
-  
-  *GetVideoInfoTag() = video;
-  if (video.m_iSeason == 0)
-    SetProperty("isspecial", "true");
-  FillInDefaultIcon();
-  FillInMimeType(false);
 }
 
 void CFileItem::SetFromAlbum(const CAlbum &album)

@@ -120,15 +120,15 @@ void CAirTunesServer::ResetMetadata()
 void CAirTunesServer::RefreshMetadata()
 {
   CSingleLock lock(m_metadataLock);
-  MUSIC_INFO::CMusicInfoTag tag;
+  auto tag = std::make_shared<MUSIC_INFO::CMusicInfoTag>();
   if (g_infoManager.GetCurrentSongTag())
-    tag = *g_infoManager.GetCurrentSongTag();
+    *tag = *g_infoManager.GetCurrentSongTag();
   if (m_metadata[0].length())
-    tag.SetAlbum(m_metadata[0]);//album
+    tag->SetAlbum(m_metadata[0]);//album
   if (m_metadata[1].length())
-    tag.SetTitle(m_metadata[1]);//title
+    tag->SetTitle(m_metadata[1]);//title
   if (m_metadata[2].length())
-    tag.SetArtist(m_metadata[2]);//artist
+    tag->SetArtist(m_metadata[2]);//artist
   
   CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 1, -1, static_cast<void*>(new CFileItem(tag)));
 }

@@ -27,6 +27,7 @@ class CVariant;
 #include <string>
 #include <vector>
 
+#include "InfoTag.h"
 #include "ReplayGain.h"
 #include "XBDateTime.h"
 #include "music/Album.h"
@@ -38,14 +39,23 @@ class CVariant;
 
 namespace MUSIC_INFO
 {
-class CMusicInfoTag : public IArchivable, public ISerializable, public ISortable
+class CMusicInfoTag : public IArchivable, public ISerializable, public ISortable,
+                      public KODI::IInfoTag
 {
 public:
   CMusicInfoTag(void);
   CMusicInfoTag(const CMusicInfoTag& tag);
+  CMusicInfoTag(const CSong& song);
   virtual ~CMusicInfoTag();
   const CMusicInfoTag& operator =(const CMusicInfoTag& tag);
   bool operator !=(const CMusicInfoTag& tag) const;
+
+  virtual std::string GetLabel() const override;
+  virtual std::string GetLabel2() const override;
+  virtual std::string GetPath() const override;
+  virtual bool IsFolder() const override;
+  virtual std::map<std::string, std::string> GetProperties() const override;
+
   bool Loaded() const;
   const std::string& GetTitle() const;
   const std::string& GetURL() const;

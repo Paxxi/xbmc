@@ -551,7 +551,7 @@ void CGUIWindowVideoBase::AddItemToPlayList(const CFileItemPtr &pItem, CFileItem
     else if (pItem->IsVideoDb())
     { // this case is needed unless we allow IsVideo() to return true for videodb items,
       // but then we have issues with playlists of videodb items
-      CFileItemPtr item(new CFileItem(*pItem->GetVideoInfoTag()));
+      CFileItemPtr item(new CFileItem(pItem->GetInfoTag()));
       queuedItems.Add(item);
     }
     else if (!pItem->IsNFO() && pItem->IsVideo())
@@ -989,7 +989,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       VECPLAYERCORES vecCores;
       if (item->IsVideoDb())
       {
-        CFileItem item2(*item->GetVideoInfoTag());
+        CFileItem item2(item->GetInfoTag());
         CPlayerCoreFactory::GetInstance().GetPlayers(item2, vecCores);
       }
       else

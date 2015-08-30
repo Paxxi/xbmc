@@ -48,6 +48,8 @@
 #include "xbmc/GUIUserMessages.h"
 #include "utils/FileUtils.h"
 
+#include <memory>
+
 NPT_SET_LOCAL_LOGGER("xbmc.upnp.server")
 
 using namespace std;
@@ -1051,9 +1053,9 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
         std::string file_path;
         db.GetFilePathById(id, file_path, content_type);
-        CVideoInfoTag tag;
-        db.LoadVideoInfo(file_path, tag);
-        updated.SetFromVideoInfoTag(tag);
+        auto tag = std::make_shared<CVideoInfoTag>();
+        db.LoadVideoInfo(file_path, *tag);
+        updated.SetFromInfoTag(tag);
         CLog::Log(LOGINFO, "UPNP: Translated to %s", file_path.c_str());
 
         position = new_vals["lastPlaybackPosition"];
@@ -1093,8 +1095,8 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
         // we must load the changed settings before propagating to local UI
         if (updatelisting) {
-            db.LoadVideoInfo(file_path, tag);
-            updated.SetFromVideoInfoTag(tag);
+            db.LoadVideoInfo(file_path, *tag);
+            updated.SetFromInfoTag(tag);
         }
 
     } else if (updated.IsMusicDb()) {

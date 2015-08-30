@@ -26,6 +26,7 @@
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "utils/Archive.h"
+#include "utils/URIUtils.h"
 #include "TextureDatabase.h"
 
 #include <algorithm>
@@ -550,6 +551,43 @@ void CVideoInfoTag::ToSortable(SortItem& sortable, Field field) const
   case FieldMediaType:                sortable[FieldMediaType] = m_type; break;
   default: break;
   }
+}
+
+std::string CVideoInfoTag::GetLabel() const
+{
+  return m_strTitle;
+}
+
+std::string CVideoInfoTag::GetLabel2() const
+{
+  return std::string(); //todo add sensible value
+}
+
+std::string CVideoInfoTag::GetPath() const
+{
+  if (m_strFileNameAndPath.empty())
+  {
+    std::string tmp{m_strPath};
+    URIUtils::AddSlashAtEnd(tmp);
+    return tmp;
+  }
+
+  return m_strFileNameAndPath;
+}
+
+bool CVideoInfoTag::IsFolder() const
+{
+  return m_strFileNameAndPath.empty();
+}
+
+std::map<std::string, std::string> CVideoInfoTag::GetProperties() const
+{
+  std::map<std::string, std::string> props;
+
+  if (m_iSeason == 0)
+    props.insert(std::make_pair("isspecial", "true"));
+
+  return props;
 }
 
 const std::string CVideoInfoTag::GetCast(bool bIncludeRole /*= false*/) const

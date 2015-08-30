@@ -36,6 +36,11 @@
 #include <vector>
 #include <memory>
 
+namespace KODI
+{
+  class IInfoTag;
+}
+
 namespace MUSIC_INFO
 {
   class CMusicInfoTag;
@@ -108,13 +113,12 @@ public:
   CFileItem(const std::string &path, const CAlbum& album);
   CFileItem(const CArtist& artist);
   CFileItem(const CGenre& genre);
-  CFileItem(const MUSIC_INFO::CMusicInfoTag& music);
-  CFileItem(const CVideoInfoTag& movie);
   CFileItem(const EPG::CEpgInfoTagPtr& tag);
   CFileItem(const PVR::CPVRChannelPtr& channel);
   CFileItem(const PVR::CPVRRecordingPtr& record);
   CFileItem(const PVR::CPVRTimerInfoTagPtr& timer);
   CFileItem(const CMediaSource& share);
+  CFileItem(std::shared_ptr<KODI::IInfoTag> tag);
   virtual ~CFileItem(void);
   virtual CGUIListItem *Clone() const { return new CFileItem(*this); };
 
@@ -256,6 +260,11 @@ public:
   }
 
   CVideoInfoTag* GetVideoInfoTag();
+
+  inline std::shared_ptr<KODI::IInfoTag> GetInfoTag() const
+  {
+    return m_infoTag;
+  }
 
   inline const CVideoInfoTag* GetVideoInfoTag() const
   {
@@ -443,11 +452,8 @@ public:
 
   bool IsAlbum() const;
 
-  /*! \brief Sets details using the information from the CVideoInfoTag object
-   Sets the videoinfotag and uses its information to set the label and path.
-   \param video video details to use and set
-   */
-  void SetFromVideoInfoTag(const CVideoInfoTag &video);
+  void SetFromInfoTag(const std::shared_ptr<KODI::IInfoTag> tag);
+
   /*! \brief Sets details using the information from the CAlbum object
    Sets the album in the music info tag and uses its information to set the
    label and album-specific properties.
@@ -497,6 +503,8 @@ private:
   std::string m_mimetype;
   std::string m_extrainfo;
   bool m_doContentLookup;
+
+  std::shared_ptr<KODI::IInfoTag> m_infoTag;
   MUSIC_INFO::CMusicInfoTag* m_musicInfoTag;
   CVideoInfoTag* m_videoInfoTag;
   EPG::CEpgInfoTagPtr m_epgInfoTag;

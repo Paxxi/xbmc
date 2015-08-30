@@ -456,7 +456,7 @@ bool CGUIWindowVideoPlaylist::OnContextButton(int itemNumber, CONTEXT_BUTTON but
       VECPLAYERCORES vecCores;
       if (item->IsVideoDb())
       {
-        CFileItem item2(*item->GetVideoInfoTag());
+        CFileItem item2(item->GetInfoTag());
         CPlayerCoreFactory::GetInstance().GetPlayers(item2, vecCores);
       }
       else

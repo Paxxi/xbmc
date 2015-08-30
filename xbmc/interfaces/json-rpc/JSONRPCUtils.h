@@ -24,6 +24,9 @@
 #include "FileItem.h"
 #include "GUIUserMessages.h"
 #include "guilib/GUIWindowManager.h"
+#include "video/VideoInfoTag.h"
+
+#include <memory>
 
 class CVariant;
 
@@ -173,7 +176,7 @@ namespace JSONRPC
     }
     static inline void NotifyItemUpdated(const CVideoInfoTag &info)
     {
-      CFileItemPtr msgItem(new CFileItem(info));
+      auto msgItem = std::make_shared<CFileItem>(std::make_shared<CVideoInfoTag>(info));
       CGUIMessage message(GUI_MSG_NOTIFY_ALL, g_windowManager.GetActiveWindow(), 0, GUI_MSG_UPDATE_ITEM, 0, msgItem);
       g_windowManager.SendThreadMessage(message);
     }

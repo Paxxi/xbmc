@@ -92,6 +92,11 @@ CMusicInfoTag::CMusicInfoTag(const CMusicInfoTag& tag)
   *this = tag;
 }
 
+CMusicInfoTag::CMusicInfoTag(const CSong& song)
+{
+  SetSong(song);
+}
+
 CMusicInfoTag::~CMusicInfoTag()
 {}
 
@@ -147,6 +152,31 @@ bool CMusicInfoTag::operator !=(const CMusicInfoTag& tag) const
   if (m_iTrack != tag.m_iTrack) return true;
   if (m_albumReleaseType != tag.m_albumReleaseType) return true;
   return false;
+}
+
+std::string CMusicInfoTag::GetLabel() const
+{
+  return GetTitle();
+}
+
+std::string CMusicInfoTag::GetLabel2() const
+{
+  return GetAlbum();
+}
+
+std::string CMusicInfoTag::GetPath() const
+{
+  return GetURL();
+}
+
+bool CMusicInfoTag::IsFolder() const
+{
+  return false;
+}
+
+std::map<std::string, std::string> CMusicInfoTag::GetProperties() const
+{
+  return std::map<std::string, std::string>();
 }
 
 int CMusicInfoTag::GetTrackNumber() const
