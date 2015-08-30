@@ -32,6 +32,7 @@
 #include "epg/EpgInfoTag.h"
 #include "music/tags/MusicInfoTag.h"
 #include "utils/SeekHandler.h"
+#include "guilib/GUIListItem.h"
 
 using namespace MUSIC_INFO;
 
@@ -54,10 +55,10 @@ std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int conte
     strLabel = StringUtils::Format("%2.1f dB", CAEUtil::PercentToGain(g_application.GetVolume(false)));
     break;
   case PLAYER_SUBTITLE_DELAY:
-    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::Get().GetCurrentVideoSettings().m_SubtitleDelay);
+    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::GetInstance().GetCurrentVideoSettings().m_SubtitleDelay);
     break;
   case PLAYER_AUDIO_DELAY:
-    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::Get().GetCurrentVideoSettings().m_AudioDelay);
+    strLabel = StringUtils::Format("%2.3f s", CMediaSettings::GetInstance().GetCurrentVideoSettings().m_AudioDelay);
     break;
   case PLAYER_CHAPTER:
     if (g_application.m_pPlayer->IsPlaying())
@@ -118,7 +119,7 @@ std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int conte
         EPG::CEpgInfoTagPtr tag(currentFile->GetPVRChannelInfoTag()->GetEPGNow());
         return tag ?
           tag->Title() :
-          CSettings::Get().GetBool("epg.hidenoinfoavailable") ?
+          CSettings::GetInstance().GetBool("epg.hidenoinfoavailable") ?
           "" : g_localizeStrings.Get(19055); // no information available
       }
       if (currentFile->HasPVRRecordingInfoTag() && !currentFile->GetPVRRecordingInfoTag()->m_strTitle.empty())
@@ -148,6 +149,36 @@ std::string CGUIPlayerInfo::GetLabel(CFileItem* currentFile, int info, int conte
   return strLabel;
 }
 
+bool CGUIPlayerInfo::HandleIsPlayingLabels(int& value, int info)
+{
+  if (g_application.m_pPlayer->IsPlaying())
+  {
+    switch (info)
+    {
+    case PLAYER_PROGRESS:
+      value = static_cast<int>(g_application.GetPercentage());
+      return true;
+    case PLAYER_PROGRESS_CACHE:
+      value = static_cast<int>(g_application.GetCachePercentage());
+      return true;
+    case PLAYER_SEEKBAR:
+      value = static_cast<int>(CSeekHandler::GetInstance().GetPercent());
+      return true;
+    case PLAYER_CACHELEVEL:
+      value = static_cast<int>(g_application.m_pPlayer->GetCacheLevel());
+      return true;
+    case PLAYER_CHAPTER:
+      value = g_application.m_pPlayer->GetChapter();
+      return true;
+    case PLAYER_CHAPTERCOUNT:
+      value = g_application.m_pPlayer->GetChapterCount();
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIListItem *item /* = nullptr */)
 {
   switch (info)
@@ -167,33 +198,7 @@ bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIL
   case PLAYER_CACHELEVEL:
   case PLAYER_CHAPTER:
   case PLAYER_CHAPTERCOUNT:
-  {
-    if (g_application.m_pPlayer->IsPlaying())
-    {
-      switch (info)
-      {
-      case PLAYER_PROGRESS:
-        value = static_cast<int>(g_application.GetPercentage());
-        break;
-      case PLAYER_PROGRESS_CACHE:
-        value = static_cast<int>(g_application.GetCachePercentage());
-        break;
-      case PLAYER_SEEKBAR:
-        value = static_cast<int>(CSeekHandler::Get().GetPercent());
-        break;
-      case PLAYER_CACHELEVEL:
-        value = static_cast<int>(g_application.m_pPlayer->GetCacheLevel());
-        break;
-      case PLAYER_CHAPTER:
-        value = g_application.m_pPlayer->GetChapter();
-        break;
-      case PLAYER_CHAPTERCOUNT:
-        value = g_application.m_pPlayer->GetChapterCount();
-        break;
-      }
-    }
-  }
-  return true;
+    return HandleIsPlayingLabels(value, info);
   default:
     break;
   }
@@ -201,4 +206,13 @@ bool CGUIPlayerInfo::GetInt(int &value, int info, int contextWindow, const CGUIL
   return false;
 }
 
+bool CGUIPlayerInfo::GetBool(int condition, int contextWindow, const CGUIListItem* item)
+{
+  switch (condition)
+  {
+    
+  }
+
+  return false;
+}
 } //end namespace GUIINFO

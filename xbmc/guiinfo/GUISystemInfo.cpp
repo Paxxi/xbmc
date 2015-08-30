@@ -24,22 +24,48 @@
 #include "LangInfo.h"
 #include "guilib/GUIWindowManager.h"
 #include "windowing/WindowingFactory.h"
-#include <xbmc/utils/SystemInfo.h>
-#include <xbmc/guilib/LocalizeStrings.h>
-#include <xbmc/settings/DisplaySettings.h>
-#include <xbmc/utils/StringUtils.h>
-#include <xbmc/settings/Settings.h>
-#include <xbmc/profiles/ProfilesManager.h>
-#include <xbmc/utils/AlarmClock.h>
-#include <xbmc/guilib/GraphicContext.h>
-#include <xbmc/guilib/GUIControl.h>
-#include <xbmc/storage/MediaManager.h>
-#include <xbmc/powermanagement/PowerManager.h>
-#include <xbmc/utils/CPUInfo.h>
-#include <xbmc/dialogs/GUIDialogProgress.h>
+#include "utils/SystemInfo.h"
+#include "guilib/LocalizeStrings.h"
+#include "settings/DisplaySettings.h"
+#include "utils/StringUtils.h"
+#include "settings/Settings.h"
+#include "profiles/ProfilesManager.h"
+#include "utils/AlarmClock.h"
+#include "guilib/GraphicContext.h"
+#include "guilib/GUIControl.h"
+#include "storage/MediaManager.h"
+#include "powermanagement/PowerManager.h"
+#include "utils/CPUInfo.h"
+#include "dialogs/GUIDialogProgress.h"
+#include "Application.h"
+#include "settings/AdvancedSettings.h"
+#include "utils/log.h"
 
 namespace GUIINFO
 {
+#if defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_LINUX;
+#elif defined(TARGET_WINDOWS)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_WINDOWS;
+#elif defined(TARGET_DARWIN_OSX)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_DARWIN_OSX;
+#define PLATFORM_DARWIN true
+#elif defined(TARGET_DARWIN_IOS)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_DARWIN_IOS
+#define PLATFORM_DARWIN true
+#elif defined(TARGET_DARWIN_IOS_ATV2)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_DARWIN_ATV2
+#define PLATFORM_DARWIN true
+#elif defined(TARGET_ANDROID)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_ANDROID
+#elif defined(TARGET_RASPBERRY_PI)
+#define CURRENT_PLATFORM SYSTEM_PLATFORM_LINUX_RASPBERRY_PI
+#endif
+
+#if !defined(PLATFORM_DARWIN)
+#define PLATFORM_DARWIN false
+#endif
+
 int CGUISystemInfo::LabelMask()
 {
   return SYSTEM_MASK;
@@ -79,15 +105,15 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
   case SYSTEM_SCREEN_RESOLUTION:
     if (g_Windowing.IsFullScreen())
       strLabel = StringUtils::Format("%ix%i@%.2fHz - %s (%02.2f fps)",
-      CDisplaySettings::Get().GetCurrentResolutionInfo().iScreenWidth,
-      CDisplaySettings::Get().GetCurrentResolutionInfo().iScreenHeight,
-      CDisplaySettings::Get().GetCurrentResolutionInfo().fRefreshRate,
+      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
+      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
+      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().fRefreshRate,
       g_localizeStrings.Get(244).c_str(),
       m_manager->GetFPS());
     else
       strLabel = StringUtils::Format("%ix%i - %s (%02.2f fps)",
-      CDisplaySettings::Get().GetCurrentResolutionInfo().iScreenWidth,
-      CDisplaySettings::Get().GetCurrentResolutionInfo().iScreenHeight,
+      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
+      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
       g_localizeStrings.Get(242).c_str(),
       m_manager->GetFPS());
     return strLabel;
@@ -139,7 +165,7 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     return g_localizeStrings.Get(g_windowManager.GetFocusedWindow());
     break;
   case SYSTEM_STARTUP_WINDOW:
-    strLabel = StringUtils::Format("%i", CSettings::Get().GetInt("lookandfeel.startupwindow"));
+    strLabel = StringUtils::Format("%i", CSettings::GetInstance().GetInt("lookandfeel.startupwindow"));
     break;
   case SYSTEM_CURRENT_CONTROL:
   {
@@ -170,15 +196,15 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     }
     break;
   case SYSTEM_PROFILENAME:
-    strLabel = CProfilesManager::Get().GetCurrentProfile().getName();
+    strLabel = CProfilesManager::GetInstance().GetCurrentProfile().getName();
     break;
   case SYSTEM_PROFILECOUNT:
-    strLabel = StringUtils::Format("%" PRIuS, CProfilesManager::Get().GetNumberOfProfiles());
+    strLabel = StringUtils::Format("%" PRIuS, CProfilesManager::GetInstance().GetNumberOfProfiles());
     break;
   case SYSTEM_PROFILEAUTOLOGIN:
   {
-    int profileId = CProfilesManager::Get().GetAutoLoginProfileId();
-    if ((profileId < 0) || (!CProfilesManager::Get().GetProfileName(profileId, strLabel)))
+    int profileId = CProfilesManager::GetInstance().GetAutoLoginProfileId();
+    if ((profileId < 0) || (!CProfilesManager::GetInstance().GetProfileName(profileId, strLabel)))
       strLabel = g_localizeStrings.Get(37014); // Last used profile
   }
   break;
@@ -200,7 +226,7 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     break;
   case SYSTEM_STEREOSCOPIC_MODE:
   {
-    int stereoMode = CSettings::Get().GetInt("videoscreen.stereoscopicmode");
+    int stereoMode = CSettings::GetInstance().GetInt("videoscreen.stereoscopicmode");
     strLabel = StringUtils::Format("%i", stereoMode);
   }
   break;
@@ -227,7 +253,7 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
   return strLabel;
 }
 
-bool CGUISystemInfo::GetInt(int &value, int info, int /*contextWindow*/, const CGUIListItem */*item*/ /* = nullptr */)
+bool CGUISystemInfo::GetInt(int &value, int info, int /*contextWindow*/, const CGUIListItem *item /*= nullptr */)
 {
   switch (info)
   {
@@ -265,6 +291,81 @@ bool CGUISystemInfo::GetInt(int &value, int info, int /*contextWindow*/, const C
     value = g_powerManager.BatteryLevel();
     return true;
   }
+  return false;
+}
+
+bool CGUISystemInfo::GetBool(int condition, int contextWindow, const CGUIListItem* item)
+{
+  switch (condition)
+  {
+  case SYSTEM_ALWAYS_TRUE:
+    return true;
+  case SYSTEM_ALWAYS_FALSE:
+    return false;
+  case SYSTEM_ETHERNET_LINK_ACTIVE:
+    return true;
+  case SYSTEM_PLATFORM_LINUX:
+  case SYSTEM_PLATFORM_WINDOWS:
+  case SYSTEM_PLATFORM_ANDROID:
+  case SYSTEM_PLATFORM_LINUX_RASPBERRY_PI:
+  case SYSTEM_PLATFORM_DARWIN_OSX:
+  case SYSTEM_PLATFORM_DARWIN_IOS:
+  case SYSTEM_PLATFORM_DARWIN_ATV2:
+    return condition == CURRENT_PLATFORM;
+  case SYSTEM_PLATFORM_DARWIN:
+    return PLATFORM_DARWIN;
+  case SYSTEM_CAN_POWERDOWN:
+    return g_powerManager.CanPowerdown();
+  case SYSTEM_CAN_SUSPEND:
+    return g_powerManager.CanSuspend();
+  case SYSTEM_CAN_HIBERNATE:
+    return g_powerManager.CanHibernate();
+  case SYSTEM_CAN_REBOOT:
+    return g_powerManager.CanReboot();
+  case SYSTEM_SCREENSAVER_ACTIVE:
+    return g_application.IsInScreenSaver();
+  case SYSTEM_DPMS_ACTIVE:
+    return g_application.IsDPMSActive();
+  case SYSTEM_HASLOCKS:
+    return CProfilesManager::GetInstance().GetMasterProfile()
+      .getLockMode() != LOCK_MODE_EVERYONE;
+  case SYSTEM_ISMASTER:
+    return CProfilesManager::GetInstance().GetMasterProfile()
+      .getLockMode() != LOCK_MODE_EVERYONE && 
+      g_passwordManager.bMasterUser;
+  case SYSTEM_HAS_PVR:
+  case SYSTEM_HAS_ADSP:
+    return true;
+  case SYSTEM_ISFULLSCREEN:
+    return g_Windowing.IsFullScreen();
+  case SYSTEM_ISSTANDALONE:
+    return g_application.IsStandAlone();
+  case SYSTEM_ISINHIBIT:
+    return g_application.IsIdleShutdownInhibited();
+  case SYSTEM_HAS_SHUTDOWN:
+    return (CSettings::GetInstance().GetInt(
+      CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNTIME) > 0);
+  case SYSTEM_LOGGEDON:
+    return !(g_windowManager.GetActiveWindow() == WINDOW_LOGIN_SCREEN);
+  case SYSTEM_SHOW_EXIT_BUTTON:
+    return g_advancedSettings.m_showExitButton;
+  case SYSTEM_HAS_LOGINSCREEN:
+    return CProfilesManager::GetInstance().UsingLoginScreen();
+  case SYSTEM_INTERNET_STATE:
+    g_sysinfo.GetInfo(condition);
+    return g_sysinfo.HasInternet();
+  case SYSTEM_MEDIA_DVD:
+    return g_mediaManager.IsDiscInDrive();
+
+#if defined(HAS_DVD_DRIVE)
+  case SYSTEM_DVDREADY:
+    return g_mediaManager.GetDriveStatus() != DRIVE_NOT_READY;
+  case SYSTEM_TRAYOPEN:
+    return g_mediaManager.GetDriveStatus() == DRIVE_OPEN;
+#endif
+  }
+
+  CLog::Log(LOGERROR, "%s: Called with unkown infolabel %d", __FUNCTION__, condition);
   return false;
 }
 }

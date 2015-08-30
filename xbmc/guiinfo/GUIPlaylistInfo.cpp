@@ -25,6 +25,7 @@
 #include <xbmc/guilib/LocalizeStrings.h>
 #include <xbmc/PlayListPlayer.h>
 #include <xbmc/utils/StringUtils.h>
+#include <xbmc/playlists/PlayList.h>
 
 using namespace PLAYLIST;
 
@@ -59,6 +60,23 @@ bool CGUIPlaylistInfo::GetInt(int& value, int info, int contextWindow, const CGU
   {
   default:
     break;
+  }
+
+  return false;
+}
+
+bool CGUIPlaylistInfo::GetBool(int condition, int contextWindow, const CGUIListItem* item)
+{
+  switch (condition)
+  {
+  case PLAYLIST_ISRANDOM:
+    return g_playlistPlayer.IsShuffled(g_playlistPlayer.GetCurrentPlaylist());
+  case PLAYLIST_ISREPEAT:
+    return g_playlistPlayer.GetRepeat(g_playlistPlayer.GetCurrentPlaylist()) ==
+      PLAYLIST::REPEAT_ALL;
+  case  PLAYLIST_ISREPEATONE:
+    return g_playlistPlayer.GetRepeat(g_playlistPlayer.GetCurrentPlaylist()) ==
+      PLAYLIST::REPEAT_ONE;
   }
 
   return false;

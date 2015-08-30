@@ -39,6 +39,7 @@ public:
 
   virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) = 0;
   virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) = 0;
+  virtual bool GetBool(int condition, int contextWindow = 0, const CGUIListItem *item = nullptr) = 0;
 
   static int LabelMask() { return 0; };
 };

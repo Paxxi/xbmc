@@ -101,62 +101,110 @@
 #define WEATHER_FANART_CODE        WEATHER_MASK + 4
 #define WEATHER_PLUGIN             WEATHER_MASK + 5
 
-#define SYSTEM_TEMPERATURE_UNITS    SYSTEM_MASK +  6
-#define SYSTEM_PROGRESS_BAR         SYSTEM_MASK +  7
-#define SYSTEM_LANGUAGE             SYSTEM_MASK +  8
-#define SYSTEM_TIME                 SYSTEM_MASK + 10
-#define SYSTEM_DATE                 SYSTEM_MASK + 11
-#define SYSTEM_CPU_TEMPERATURE      SYSTEM_MASK + 12
-#define SYSTEM_GPU_TEMPERATURE      SYSTEM_MASK + 13
-#define SYSTEM_FAN_SPEED            SYSTEM_MASK + 14
-#define SYSTEM_FREE_SPACE_C         SYSTEM_MASK + 15
-// #define SYSTEM_FREE_SPACE_D      SYSTEM_MASK +   116 //116 is reserved for space on D
-#define SYSTEM_FREE_SPACE_E         SYSTEM_MASK + 17
-#define SYSTEM_FREE_SPACE_F         SYSTEM_MASK + 18
-#define SYSTEM_FREE_SPACE_G         SYSTEM_MASK + 19
-#define SYSTEM_BUILD_VERSION        SYSTEM_MASK + 20
-#define SYSTEM_BUILD_DATE           SYSTEM_MASK + 21
-#define SYSTEM_ETHERNET_LINK_ACTIVE SYSTEM_MASK + 22
-#define SYSTEM_FPS                  SYSTEM_MASK + 23
-#define SYSTEM_ALWAYS_TRUE          SYSTEM_MASK + 25   // useful for <visible fade="10" start="hidden">true</visible>, to fade in a control
-#define SYSTEM_ALWAYS_FALSE         SYSTEM_MASK + 26   // used for <visible fade="10">false</visible>, to fade out a control (ie not particularly useful!)
-#define SYSTEM_MEDIA_DVD            SYSTEM_MASK + 27
-#define SYSTEM_DVDREADY             SYSTEM_MASK + 28
-#define SYSTEM_HAS_ALARM            SYSTEM_MASK + 29
-#define SYSTEM_SCREEN_MODE          SYSTEM_MASK + 32
-#define SYSTEM_SCREEN_WIDTH         SYSTEM_MASK + 33
-#define SYSTEM_SCREEN_HEIGHT        SYSTEM_MASK + 34
-#define SYSTEM_CURRENT_WINDOW       SYSTEM_MASK + 35
-#define SYSTEM_CURRENT_CONTROL      SYSTEM_MASK + 36
-#define SYSTEM_DVD_LABEL            SYSTEM_MASK + 38
-#define SYSTEM_HASLOCKS             SYSTEM_MASK + 40
-#define SYSTEM_ISMASTER             SYSTEM_MASK + 41
-#define SYSTEM_TRAYOPEN             SYSTEM_MASK + 42
-#define SYSTEM_SHOW_EXIT_BUTTON     SYSTEM_MASK + 43
-#define SYSTEM_ALARM_POS            SYSTEM_MASK + 44
-#define SYSTEM_LOGGEDON             SYSTEM_MASK + 45
-#define SYSTEM_PROFILENAME          SYSTEM_MASK + 46
-#define SYSTEM_PROFILETHUMB         SYSTEM_MASK + 47
-#define SYSTEM_HAS_LOGINSCREEN      SYSTEM_MASK + 48
-#define SYSTEM_HDD_SMART            SYSTEM_MASK + 50
-#define SYSTEM_HDD_TEMPERATURE      SYSTEM_MASK + 51
-#define SYSTEM_HDD_MODEL            SYSTEM_MASK + 52
-#define SYSTEM_HDD_SERIAL           SYSTEM_MASK + 53
-#define SYSTEM_HDD_FIRMWARE         SYSTEM_MASK + 54
-#define SYSTEM_HDD_PASSWORD         SYSTEM_MASK + 56
-#define SYSTEM_HDD_LOCKSTATE        SYSTEM_MASK + 57
-#define SYSTEM_HDD_LOCKKEY          SYSTEM_MASK + 58
-#define SYSTEM_INTERNET_STATE       SYSTEM_MASK + 59
-#define SYSTEM_ALARM_LESS_OR_EQUAL  SYSTEM_MASK + 80
-#define SYSTEM_PROFILECOUNT         SYSTEM_MASK + 81
-#define SYSTEM_ISFULLSCREEN         SYSTEM_MASK + 82
-#define SYSTEM_ISSTANDALONE         SYSTEM_MASK + 83
-#define SYSTEM_ISINHIBIT            SYSTEM_MASK + 84
-#define SYSTEM_HAS_SHUTDOWN         SYSTEM_MASK + 85
-#define SYSTEM_HAS_PVR              SYSTEM_MASK + 86
-#define SYSTEM_STARTUP_WINDOW       SYSTEM_MASK + 87
-#define SYSTEM_STEREOSCOPIC_MODE    SYSTEM_MASK + 88
-#define SYSTEM_BUILD_VERSION_SHORT  SYSTEM_MASK + 89
+#define SYSTEM_TEMPERATURE_UNITS            SYSTEM_MASK +  6
+#define SYSTEM_PROGRESS_BAR                 SYSTEM_MASK +  7
+#define SYSTEM_LANGUAGE                     SYSTEM_MASK +  8
+#define SYSTEM_TIME                         SYSTEM_MASK + 10
+#define SYSTEM_DATE                         SYSTEM_MASK + 11
+#define SYSTEM_CPU_TEMPERATURE              SYSTEM_MASK + 12
+#define SYSTEM_GPU_TEMPERATURE              SYSTEM_MASK + 13
+#define SYSTEM_FAN_SPEED                    SYSTEM_MASK + 14
+#define SYSTEM_FREE_SPACE_C                 SYSTEM_MASK + 15
+// #define SYSTEM_FREE_SPACE_D              SYSTEM_MASK +   116 //116 is reserved for space on D
+#define SYSTEM_FREE_SPACE_E                 SYSTEM_MASK + 17
+#define SYSTEM_FREE_SPACE_F                 SYSTEM_MASK + 18
+#define SYSTEM_FREE_SPACE_G                 SYSTEM_MASK + 19
+#define SYSTEM_BUILD_VERSION                SYSTEM_MASK + 20
+#define SYSTEM_BUILD_DATE                   SYSTEM_MASK + 21
+#define SYSTEM_ETHERNET_LINK_ACTIVE         SYSTEM_MASK + 22
+#define SYSTEM_FPS                          SYSTEM_MASK + 23
+#define SYSTEM_ALWAYS_TRUE                  SYSTEM_MASK + 25   // useful for <visible fade="10" start="hidden">true</visible>, to fade in a control
+#define SYSTEM_ALWAYS_FALSE                 SYSTEM_MASK + 26   // used for <visible fade="10">false</visible>, to fade out a control (ie not particularly useful!)
+#define SYSTEM_MEDIA_DVD                    SYSTEM_MASK + 27
+#define SYSTEM_DVDREADY                     SYSTEM_MASK + 28
+#define SYSTEM_HAS_ALARM                    SYSTEM_MASK + 29
+#define SYSTEM_SCREEN_MODE                  SYSTEM_MASK + 32
+#define SYSTEM_SCREEN_WIDTH                 SYSTEM_MASK + 33
+#define SYSTEM_SCREEN_HEIGHT                SYSTEM_MASK + 34
+#define SYSTEM_CURRENT_WINDOW               SYSTEM_MASK + 35
+#define SYSTEM_CURRENT_CONTROL              SYSTEM_MASK + 36
+#define SYSTEM_DVD_LABEL                    SYSTEM_MASK + 38
+#define SYSTEM_HASLOCKS                     SYSTEM_MASK + 40
+#define SYSTEM_ISMASTER                     SYSTEM_MASK + 41
+#define SYSTEM_TRAYOPEN                     SYSTEM_MASK + 42
+#define SYSTEM_SHOW_EXIT_BUTTON             SYSTEM_MASK + 43
+#define SYSTEM_ALARM_POS                    SYSTEM_MASK + 44
+#define SYSTEM_LOGGEDON                     SYSTEM_MASK + 45
+#define SYSTEM_PROFILENAME                  SYSTEM_MASK + 46
+#define SYSTEM_PROFILETHUMB                 SYSTEM_MASK + 47
+#define SYSTEM_HAS_LOGINSCREEN              SYSTEM_MASK + 48
+#define SYSTEM_HDD_SMART                    SYSTEM_MASK + 50
+#define SYSTEM_HDD_TEMPERATURE              SYSTEM_MASK + 51
+#define SYSTEM_HDD_MODEL                    SYSTEM_MASK + 52
+#define SYSTEM_HDD_SERIAL                   SYSTEM_MASK + 53
+#define SYSTEM_HDD_FIRMWARE                 SYSTEM_MASK + 54
+#define SYSTEM_HDD_PASSWORD                 SYSTEM_MASK + 56
+#define SYSTEM_HDD_LOCKSTATE                SYSTEM_MASK + 57
+#define SYSTEM_HDD_LOCKKEY                  SYSTEM_MASK + 58
+#define SYSTEM_INTERNET_STATE               SYSTEM_MASK + 59
+#define SYSTEM_ALARM_LESS_OR_EQUAL          SYSTEM_MASK + 80
+#define SYSTEM_PROFILECOUNT                 SYSTEM_MASK + 81
+#define SYSTEM_ISFULLSCREEN                 SYSTEM_MASK + 82
+#define SYSTEM_ISSTANDALONE                 SYSTEM_MASK + 83
+#define SYSTEM_ISINHIBIT                    SYSTEM_MASK + 84
+#define SYSTEM_HAS_SHUTDOWN                 SYSTEM_MASK + 85
+#define SYSTEM_HAS_PVR                      SYSTEM_MASK + 86
+#define SYSTEM_STARTUP_WINDOW               SYSTEM_MASK + 87
+#define SYSTEM_STEREOSCOPIC_MODE            SYSTEM_MASK + 88
+#define SYSTEM_BUILD_VERSION_SHORT          SYSTEM_MASK + 89
+#define SYSTEM_TOTAL_MEMORY                 SYSTEM_MASK + 90 
+#define SYSTEM_CPU_USAGE                    SYSTEM_MASK + 91 
+#define SYSTEM_USED_MEMORY_PERCENT          SYSTEM_MASK + 92 
+#define SYSTEM_USED_MEMORY                  SYSTEM_MASK + 93 
+#define SYSTEM_FREE_MEMORY                  SYSTEM_MASK + 94 
+#define SYSTEM_FREE_MEMORY_PERCENT          SYSTEM_MASK + 95 
+#define SYSTEM_UPTIME                       SYSTEM_MASK + 96 
+#define SYSTEM_TOTALUPTIME                  SYSTEM_MASK + 97 
+#define SYSTEM_CPUFREQUENCY                 SYSTEM_MASK + 98 
+#define SYSTEM_SCREEN_RESOLUTION            SYSTEM_MASK + 99 
+#define SYSTEM_VIDEO_ENCODER_INFO           SYSTEM_MASK + 100
+#define SYSTEM_OS_VERSION_INFO              SYSTEM_MASK + 101
+#define SYSTEM_FREE_SPACE                   SYSTEM_MASK + 102
+#define SYSTEM_USED_SPACE                   SYSTEM_MASK + 103
+#define SYSTEM_TOTAL_SPACE                  SYSTEM_MASK + 104
+#define SYSTEM_USED_SPACE_PERCENT           SYSTEM_MASK + 105
+#define SYSTEM_FREE_SPACE_PERCENT           SYSTEM_MASK + 106
+#define SYSTEM_DVD_TRAY_STATE               SYSTEM_MASK + 107
+#define SYSTEM_GET_BOOL                     SYSTEM_MASK + 108
+#define SYSTEM_GET_CORE_USAGE               SYSTEM_MASK + 109
+#define SYSTEM_HAS_CORE_ID                  SYSTEM_MASK + 110
+#define SYSTEM_RENDER_VENDOR                SYSTEM_MASK + 111
+#define SYSTEM_RENDER_RENDERER              SYSTEM_MASK + 112
+#define SYSTEM_RENDER_VERSION               SYSTEM_MASK + 113
+#define SYSTEM_SETTING                      SYSTEM_MASK + 114
+#define SYSTEM_HAS_ADDON                    SYSTEM_MASK + 115
+#define SYSTEM_ADDON_TITLE                  SYSTEM_MASK + 116
+#define SYSTEM_ADDON_ICON                   SYSTEM_MASK + 117
+#define SYSTEM_BATTERY_LEVEL                SYSTEM_MASK + 118
+#define SYSTEM_IDLE_TIME                    SYSTEM_MASK + 119
+#define SYSTEM_FRIENDLY_NAME                SYSTEM_MASK + 120
+#define SYSTEM_SCREENSAVER_ACTIVE           SYSTEM_MASK + 121
+#define SYSTEM_ADDON_VERSION                SYSTEM_MASK + 122
+#define SYSTEM_DPMS_ACTIVE                  SYSTEM_MASK + 123
+#define SYSTEM_PLATFORM_LINUX               SYSTEM_MASK + 124
+#define SYSTEM_PLATFORM_WINDOWS             SYSTEM_MASK + 125
+#define SYSTEM_PLATFORM_DARWIN              SYSTEM_MASK + 126
+#define SYSTEM_PLATFORM_DARWIN_OSX          SYSTEM_MASK + 127
+#define SYSTEM_PLATFORM_DARWIN_IOS          SYSTEM_MASK + 128
+#define SYSTEM_PLATFORM_DARWIN_ATV2         SYSTEM_MASK + 129
+#define SYSTEM_PLATFORM_ANDROID             SYSTEM_MASK + 130
+#define SYSTEM_PLATFORM_LINUX_RASPBERRY_PI  SYSTEM_MASK + 131
+#define SYSTEM_CAN_POWERDOWN                SYSTEM_MASK + 132
+#define SYSTEM_CAN_SUSPEND                  SYSTEM_MASK + 133
+#define SYSTEM_CAN_HIBERNATE                SYSTEM_MASK + 134
+#define SYSTEM_CAN_REBOOT                   SYSTEM_MASK + 135
+#define SYSTEM_PROFILEAUTOLOGIN             SYSTEM_MASK + 136
+#define SYSTEM_HAS_ADSP                     SYSTEM_MASK + 137
 
 #define NETWORK_IP_ADDRESS          NETWORK_MASK + 0
 #define NETWORK_MAC_ADDRESS         NETWORK_MASK + 1
@@ -390,6 +438,7 @@
 #define PVR_ACTUAL_STREAM_ENCRYPTED (PVR_CONDITIONS_START + 9)
 #define PVR_HAS_TV_CHANNELS         (PVR_CONDITIONS_START + 10)
 #define PVR_HAS_RADIO_CHANNELS      (PVR_CONDITIONS_START + 11)
+#define PVR_IS_TIMESHIFTING         (PVR_CONDITIONS_START + 12)
 #define PVR_CONDITIONS_END          PVR_HAS_RADIO_CHANNELS
 
 #define PVR_STRINGS_START           1200
@@ -472,7 +521,6 @@
 #define CONTROL_GROUP_HAS_FOCUS     29999
 #define CONTROL_HAS_FOCUS           30000
 
-<<<<<<< HEAD
 #define LISTITEM_START                    35000
 #define LISTITEM_THUMB                    (LISTITEM_START)
 #define LISTITEM_LABEL                    (LISTITEM_START + 1)
@@ -627,6 +675,9 @@
 #define LISTITEM_IMDBNUMBER         (LISTITEM_START + 146)
 #define LISTITEM_EPISODENAME        (LISTITEM_START + 147)
 #define LISTITEM_IS_COLLECTION      (LISTITEM_START + 148)
+#define LISTITEM_HASTIMERSCHEDULE   (LISTITEM_START + 149)
+#define LISTITEM_TIMERTYPE          (LISTITEM_START + 150)
+#define LISTITEM_EPG_EVENT_TITLE    (LISTITEM_START + 151)
 
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)

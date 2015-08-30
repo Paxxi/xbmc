@@ -128,6 +128,7 @@ static CLinuxResourceCounter m_resourceCounter;
 #endif
 
 #define SYSHEATUPDATEINTERVAL 60000
+#include "cores/AudioEngine/DSPAddons/ActiveAEDSP.h"
 
 using namespace XFILE;
 using namespace MUSIC_INFO;
@@ -261,8 +262,8 @@ const infomap player_labels[] =  {{ "hasmedia",         PLAYER_HAS_MEDIA },     
                                   { "filename",         PLAYER_FILENAME },
                                   { "isinternetstream", PLAYER_ISINTERNETSTREAM },
                                   { "pauseenabled",     PLAYER_CAN_PAUSE },
-                                  { "seekenabled",      PLAYER_CAN_SEEK },
-                                  { "channelpreviewactive", PLAYER_IS_CHANNEL_PREVIEW_ACTIVE}};
+                                  { "seekenabled",      PLAYER_CAN_SEEK }
+};
 
 const infomap player_param[] = {{"art", PLAYER_ITEM_ART}};
 
@@ -289,7 +290,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
                                   { "trayopen",         SYSTEM_TRAYOPEN },
                                   { "haslocks",         SYSTEM_HASLOCKS },
                                   { "hasloginscreen",   SYSTEM_HAS_LOGINSCREEN },
-                                  { "hasmodaldialog",   SYSTEM_HAS_MODAL_DIALOG },
                                   { "ismaster",         SYSTEM_ISMASTER },
                                   { "isfullscreen",     SYSTEM_ISFULLSCREEN },
                                   { "isstandalone",     SYSTEM_ISSTANDALONE },
@@ -530,7 +530,6 @@ const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
                                   { "filenameandpath",  LISTITEM_FILENAME_AND_PATH },
                                   { "fileextension",    LISTITEM_FILE_EXTENSION },
                                   { "date",             LISTITEM_DATE },
-                                  { "datetime",         LISTITEM_DATETIME },
                                   { "size",             LISTITEM_SIZE },
                                   { "rating",           LISTITEM_RATING },
                                   { "ratingandvotes",   LISTITEM_RATING_AND_VOTES },
@@ -1612,118 +1611,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       }
     }
     break;
-  case SYSTEM_BUILD_VERSION_SHORT:
-    strLabel = CSysInfo::GetVersionShort();
-    break;
-  case SYSTEM_BUILD_VERSION:
-    strLabel = CSysInfo::GetVersion();
-    break;
-  case SYSTEM_BUILD_DATE:
-    strLabel = CSysInfo::GetBuildDate();
-    break;
-  case SYSTEM_FREE_MEMORY:
-  case SYSTEM_FREE_MEMORY_PERCENT:
-  case SYSTEM_USED_MEMORY:
-  case SYSTEM_USED_MEMORY_PERCENT:
-  case SYSTEM_TOTAL_MEMORY:
-    {
-      MEMORYSTATUSEX stat;
-      stat.dwLength = sizeof(MEMORYSTATUSEX);
-      GlobalMemoryStatusEx(&stat);
-      int iMemPercentFree = 100 - ((int)( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f ));
-      int iMemPercentUsed = 100 - iMemPercentFree;
-
-      if (info == SYSTEM_FREE_MEMORY)
-        strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullAvailPhys/MB));
-      else if (info == SYSTEM_FREE_MEMORY_PERCENT)
-        strLabel = StringUtils::Format("%i%%", iMemPercentFree);
-      else if (info == SYSTEM_USED_MEMORY)
-        strLabel = StringUtils::Format("%luMB", (ULONG)((stat.ullTotalPhys - stat.ullAvailPhys)/MB));
-      else if (info == SYSTEM_USED_MEMORY_PERCENT)
-        strLabel = StringUtils::Format("%i%%", iMemPercentUsed);
-      else if (info == SYSTEM_TOTAL_MEMORY)
-        strLabel = StringUtils::Format("%luMB", (ULONG)(stat.ullTotalPhys/MB));
-    }
-    break;
-  case SYSTEM_SCREEN_MODE:
-    strLabel = g_graphicsContext.GetResInfo().strMode;
-    break;
-  case SYSTEM_SCREEN_WIDTH:
-    strLabel = StringUtils::Format("%i", g_graphicsContext.GetResInfo().iScreenWidth);
-    break;
-  case SYSTEM_SCREEN_HEIGHT:
-    strLabel = StringUtils::Format("%i", g_graphicsContext.GetResInfo().iScreenHeight);
-    break;
-  case SYSTEM_CURRENT_WINDOW:
-    return g_localizeStrings.Get(g_windowManager.GetFocusedWindow());
-    break;
-  case SYSTEM_STARTUP_WINDOW:
-    strLabel = StringUtils::Format("%i", CSettings::Get().GetInt("lookandfeel.startupwindow"));
-    break;
-  case SYSTEM_CURRENT_CONTROL:
-    {
-      CGUIWindow *window = g_windowManager.GetWindow(g_windowManager.GetFocusedWindow());
-      if (window)
-      {
-        CGUIControl *control = window->GetFocusedControl();
-        if (control)
-          strLabel = control->GetDescription();
-      }
-    }
-    break;
-#ifdef HAS_DVD_DRIVE
-  case SYSTEM_DVD_LABEL:
-    strLabel = g_mediaManager.GetDiskLabel();
-    break;
-#endif
-  case SYSTEM_ALARM_POS:
-    if (g_alarmClock.GetRemaining("shutdowntimer") == 0.f)
-      strLabel = "";
-    else
-    {
-      double fTime = g_alarmClock.GetRemaining("shutdowntimer");
-      if (fTime > 60.f)
-        strLabel = StringUtils::Format(g_localizeStrings.Get(13213).c_str(), g_alarmClock.GetRemaining("shutdowntimer")/60.f);
-      else
-        strLabel = StringUtils::Format(g_localizeStrings.Get(13214).c_str(), g_alarmClock.GetRemaining("shutdowntimer"));
-    }
-    break;
-  case SYSTEM_PROFILENAME:
-    strLabel = CProfilesManager::Get().GetCurrentProfile().getName();
-    break;
-  case SYSTEM_PROFILECOUNT:
-    strLabel = StringUtils::Format("%" PRIuS, CProfilesManager::Get().GetNumberOfProfiles());
-    break;
-  case SYSTEM_PROFILEAUTOLOGIN:
-    {
-      int profileId = CProfilesManager::Get().GetAutoLoginProfileId();
-      if ((profileId < 0) || (!CProfilesManager::Get().GetProfileName(profileId, strLabel)))
-        strLabel = g_localizeStrings.Get(37014); // Last used profile
-        }
-    break;
-  case SYSTEM_LANGUAGE:
-    strLabel = g_langInfo.GetEnglishLanguageName();
-    break;
-  case SYSTEM_TEMPERATURE_UNITS:
-    strLabel = g_langInfo.GetTemperatureUnitString();
-    break;
-  case SYSTEM_PROGRESS_BAR:
-    {
-      int percent;
-      if (GetInt(percent, SYSTEM_PROGRESS_BAR) && percent > 0)
-        strLabel = StringUtils::Format("%i", percent);
-      }
-    break;
-  case SYSTEM_FRIENDLY_NAME:
-    strLabel = CSysInfo::GetDeviceName();
-    break;
-  case SYSTEM_STEREOSCOPIC_MODE:
-    {
-      int stereoMode = CSettings::Get().GetInt("videoscreen.stereoscopicmode");
-      strLabel = StringUtils::Format("%i", stereoMode);
-    }
-    break;
-
+  
   case SKIN_THEME:
     strLabel = CSettings::GetInstance().GetString(CSettings::SETTING_LOOKANDFEEL_SKINTHEME);
     break;
@@ -1733,59 +1621,6 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
   case SKIN_ASPECT_RATIO:
     if (g_SkinInfo)
       strLabel = g_SkinInfo->GetCurrentAspect();
-    break;
-  case NETWORK_IP_ADDRESS:
-    {
-      CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-      if (iface)
-        return iface->GetCurrentIPAddress();
-    }
-    break;
-  case NETWORK_SUBNET_MASK:
-    {
-      CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-      if (iface)
-        return iface->GetCurrentNetmask();
-    }
-    break;
-  case NETWORK_GATEWAY_ADDRESS:
-    {
-      CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-      if (iface)
-        return iface->GetCurrentDefaultGateway();
-    }
-    break;
-  case NETWORK_DNS1_ADDRESS:
-    {
-      vector<std::string> nss = g_application.getNetwork().GetNameServers();
-      if (nss.size() >= 1)
-        return nss[0];
-    }
-    break;
-  case NETWORK_DNS2_ADDRESS:
-    {
-      vector<std::string> nss = g_application.getNetwork().GetNameServers();
-      if (nss.size() >= 2)
-        return nss[1];
-    }
-    break;
-  case NETWORK_DHCP_ADDRESS:
-    {
-      std::string dhcpserver;
-      return dhcpserver;
-    }
-    break;
-  case NETWORK_LINK_STATE:
-    {
-      std::string linkStatus = g_localizeStrings.Get(151);
-      linkStatus += " ";
-      CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-      if (iface && iface->IsConnected())
-        linkStatus += g_localizeStrings.Get(15207);
-      else
-        linkStatus += g_localizeStrings.Get(15208);
-      return linkStatus;
-    }
     break;
 
   case VISUALISATION_PRESET:
@@ -1916,6 +1751,9 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   bool bReturn = false;
   int condition = abs(condition1);
 
+  if (condition & CATEGORY_MASK > 0)
+    return m_infoHandlers[condition & CATEGORY_MASK]->GetBool(condition, contextWindow, item);
+
   if (condition >= LISTITEM_START && condition < LISTITEM_END)
   {
     if (item)
@@ -1933,12 +1771,7 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   // Ethernet Link state checking
   // Will check if system has a Ethernet Link connection! [Cable in!]
   // This can used for the skinner to switch off Network or Inter required functions
-  else if ( condition == SYSTEM_ALWAYS_TRUE)
-    bReturn = true;
-  else if (condition == SYSTEM_ALWAYS_FALSE)
-    bReturn = false;
-  else if (condition == SYSTEM_ETHERNET_LINK_ACTIVE)
-    bReturn = true;
+  
   else if (condition == WINDOW_IS_MEDIA)
   { // note: This doesn't return true for dialogs (content, favourites, login, videoinfo)
     CGUIWindow *pWindow = g_windowManager.GetWindow(g_windowManager.GetActiveWindow());
@@ -1963,120 +1796,21 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   {
     bReturn = g_application.IsMusicScanning();
   }
-  else if (condition == SYSTEM_PLATFORM_LINUX)
-#if defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_WINDOWS)
-#ifdef TARGET_WINDOWS
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_DARWIN)
-#ifdef TARGET_DARWIN
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_DARWIN_OSX)
-#ifdef TARGET_DARWIN_OSX
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_DARWIN_IOS)
-#ifdef TARGET_DARWIN_IOS
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_DARWIN_ATV2)
-#ifdef TARGET_DARWIN_IOS_ATV2
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_ANDROID)
-#if defined(TARGET_ANDROID)
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_PLATFORM_LINUX_RASPBERRY_PI)
-#if defined(TARGET_RASPBERRY_PI)
-    bReturn = true;
-#else
-    bReturn = false;
-#endif
-  else if (condition == SYSTEM_MEDIA_DVD)
-    bReturn = g_mediaManager.IsDiscInDrive();
-#ifdef HAS_DVD_DRIVE
-  else if (condition == SYSTEM_DVDREADY)
-    bReturn = g_mediaManager.GetDriveStatus() != DRIVE_NOT_READY;
-  else if (condition == SYSTEM_TRAYOPEN)
-    bReturn = g_mediaManager.GetDriveStatus() == DRIVE_OPEN;
-#endif
-  else if (condition == SYSTEM_CAN_POWERDOWN)
-    bReturn = g_powerManager.CanPowerdown();
-  else if (condition == SYSTEM_CAN_SUSPEND)
-    bReturn = g_powerManager.CanSuspend();
-  else if (condition == SYSTEM_CAN_HIBERNATE)
-    bReturn = g_powerManager.CanHibernate();
-  else if (condition == SYSTEM_CAN_REBOOT)
-    bReturn = g_powerManager.CanReboot();
-  else if (condition == SYSTEM_SCREENSAVER_ACTIVE)
-    bReturn = g_application.IsInScreenSaver();
-  else if (condition == SYSTEM_DPMS_ACTIVE)
-    bReturn = g_application.IsDPMSActive();
 
   else if (condition == PLAYER_SHOWINFO)
     bReturn = m_playerShowInfo;
   else if (condition == PLAYER_SHOWCODEC)
     bReturn = m_playerShowCodec;
-  else if (condition == PLAYER_IS_CHANNEL_PREVIEW_ACTIVE)
-    bReturn = IsPlayerChannelPreviewActive();
   else if (condition >= MULTI_INFO_START && condition <= MULTI_INFO_END)
   {
     return GetMultiInfoBool(m_multiInfo[condition - MULTI_INFO_START], contextWindow, item);
   }
-  else if (condition == SYSTEM_HASLOCKS)
-    bReturn = CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE;
-  else if (condition == SYSTEM_HAS_PVR)
-    bReturn = true;
-  else if (condition == SYSTEM_HAS_ADSP)
-    bReturn = true;
-  else if (condition == SYSTEM_ISMASTER)
-    bReturn = CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && g_passwordManager.bMasterUser;
-  else if (condition == SYSTEM_ISFULLSCREEN)
-    bReturn = g_Windowing.IsFullScreen();
-  else if (condition == SYSTEM_ISSTANDALONE)
-    bReturn = g_application.IsStandAlone();
-  else if (condition == SYSTEM_ISINHIBIT)
-    bReturn = g_application.IsIdleShutdownInhibited();
-  else if (condition == SYSTEM_HAS_SHUTDOWN)
-    bReturn = (CSettings::GetInstance().GetInt(CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNTIME) > 0);
-  else if (condition == SYSTEM_LOGGEDON)
-    bReturn = !(g_windowManager.GetActiveWindow() == WINDOW_LOGIN_SCREEN);
-  else if (condition == SYSTEM_SHOW_EXIT_BUTTON)
-    bReturn = g_advancedSettings.m_showExitButton;
-  else if (condition == SYSTEM_HAS_LOGINSCREEN)
-    bReturn = CProfilesManager::GetInstance().UsingLoginScreen();
-  else if (condition == SYSTEM_HAS_MODAL_DIALOG)
-    bReturn = g_windowManager.HasModalDialog();
   else if (condition == WEATHER_IS_FETCHED)
     bReturn = g_weatherManager.IsFetched();
   else if (condition >= PVR_CONDITIONS_START && condition <= PVR_CONDITIONS_END)
     bReturn = g_PVRManager.TranslateBoolInfo(condition);
   else if (condition >= ADSP_CONDITIONS_START && condition <= ADSP_CONDITIONS_END)
     bReturn = ActiveAE::CActiveAEDSP::GetInstance().TranslateBoolInfo(condition);
-  else if (condition == SYSTEM_INTERNET_STATE)
-  {
-    g_sysinfo.GetInfo(condition);
-    bReturn = g_sysinfo.HasInternet();
-  }
   else if (condition == CONTAINER_HASFILES || condition == CONTAINER_HASFOLDERS)
   {
     CGUIWindow *pWindow = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_IS_MEDIA_WINDOW);
@@ -2311,15 +2045,6 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
     break;
     case VIDEOPLAYER_HASMENU:
       bReturn = g_application.m_pPlayer->HasMenu();
-    break;
-    case PLAYLIST_ISRANDOM:
-      bReturn = g_playlistPlayer.IsShuffled(g_playlistPlayer.GetCurrentPlaylist());
-    break;
-    case PLAYLIST_ISREPEAT:
-      bReturn = g_playlistPlayer.GetRepeat(g_playlistPlayer.GetCurrentPlaylist()) == PLAYLIST::REPEAT_ALL;
-    break;
-    case PLAYLIST_ISREPEATONE:
-      bReturn = g_playlistPlayer.GetRepeat(g_playlistPlayer.GetCurrentPlaylist()) == PLAYLIST::REPEAT_ONE;
     break;
     case PLAYER_HASDURATION:
       bReturn = g_application.GetTotalTime() > 0;
