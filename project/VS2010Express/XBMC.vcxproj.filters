@@ -3225,6 +3225,12 @@
     <ClCompile Include="..\..\xbmc\guiinfo\GUIVisualisationInfo.cpp">
       <Filter>guiinfo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIListItemInfo.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\guiinfo\GUIListItemInfoHelper.cpp">
+      <Filter>guiinfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6124,16 +6130,10 @@
     <ClInclude Include="..\..\xbmc\win32\dxerr.h">
       <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\guiinfo\GUIInfoLabels.h">
-      <Filter>guiinfo</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\guiinfo\GUIPlayerInfo.h">
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\guiinfo\GUIWeatherInfo.h">
-      <Filter>guiinfo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\guiinfo\GUIInfo.h">
       <Filter>guiinfo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\guiinfo\GUISystemInfo.h">
@@ -6165,6 +6165,42 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\win32\memcpy_sse2.h">
       <Filter>utils\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\ImageResource.h" />
+    <ClInclude Include="..\..\xbmc\events\AddonEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\AddonManagementEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\BaseEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\EventLog.h" />
+    <ClInclude Include="..\..\xbmc\events\IEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\MediaLibraryEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\NotificationEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\UniqueEvent.h" />
+    <ClInclude Include="..\..\xbmc\events\windows\GUIViewStateEventLog.h" />
+    <ClInclude Include="..\..\xbmc\events\windows\GUIWindowEventLog.h" />
+    <ClInclude Include="..\..\xbmc\filesystem\EventsDirectory.h" />
+    <ClInclude Include="..\..\xbmc\filesystem\Directorization.h" />
+    <ClInclude Include="..\..\xbmc\filesystem\XbtDirectory.h" />
+    <ClInclude Include="..\..\xbmc\filesystem\XbtFile.h" />
+    <ClInclude Include="..\..\xbmc\filesystem\XbtManager.h" />
+    <ClInclude Include="..\..\xbmc\input\InputCodingTable.h" />
+    <ClInclude Include="..\..\xbmc\input\InputCodingTableBaiduPY.h" />
+    <ClInclude Include="..\..\xbmc\input\InputCodingTableBasePY.h" />
+    <ClInclude Include="..\..\xbmc\input\InputCodingTableFactory.h" />
+    <ClInclude Include="..\..\xbmc\main\win32\MessagePrinter.h" />
+    <ClInclude Include="..\..\xbmc\messaging\ApplicationMessenger.h" />
+    <ClInclude Include="..\..\xbmc\messaging\IMessageTarget.h" />
+    <ClInclude Include="..\..\xbmc\messaging\ThreadMessage.h" />
+    <ClInclude Include="..\..\xbmc\network\dacp\dacp.h" />
+    <ClInclude Include="..\..\xbmc\pictures\PictureScalingAlgorithm.h" />
+    <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogAudioDSPManager.h" />
+    <ClInclude Include="..\..\xbmc\settings\dialogs\GUIDialogAudioDSPSettings.h" />
+    <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryRefreshingJob.h" />
+    <ClInclude Include="..\..\xbmc\windows\GUIWindowSplash.h" />
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIListItemInfo.h">
+      <Filter>guiinfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\guiinfo\GUIListItemInfoHelper.h">
+      <Filter>guiinfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

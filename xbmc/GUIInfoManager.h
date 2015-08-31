@@ -169,8 +169,6 @@ public:
   const MUSIC_INFO::CMusicInfoTag *GetCurrentSongTag() const;
   const CVideoInfoTag* GetCurrentMovieTag() const;
 
-  std::string GetMusicLabel(int item);
-  std::string GetMusicTagLabel(int info, const CFileItem *item);
   std::string GetVideoLabel(int item);
   const std::string GetMusicPlaylistInfo(const GUIInfo& info);
   std::string GetPictureLabel(int item);
@@ -304,12 +302,6 @@ protected:
   std::string m_currentMovieThumb;
   CFileItem* m_currentSlide;
 
-  // fan stuff
-  unsigned int m_lastSysHeatInfoTime;
-  int m_fanSpeed;
-  CTemperature m_gpuTemp;
-  CTemperature m_cpuTemp;
-
   //Fullscreen OSD Stuff
   unsigned int m_AfterSeekTimeout;
   int m_seekOffset;
@@ -338,7 +330,6 @@ protected:
   int m_libraryHasCompilations;
 
   SPlayerVideoStreamInfo m_videoInfo;
-  SPlayerAudioStreamInfo m_audioInfo;
 
   std::map<int, std::unique_ptr<GUIINFO::IGUIInfo>> m_infoHandlers;
 

@@ -40,6 +40,7 @@
 #include "Application.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
+#include "utils/TimeUtils.h"
 
 namespace GUIINFO
 {
@@ -71,9 +72,50 @@ int CGUISystemInfo::LabelMask()
   return SYSTEM_MASK;
 }
 
+std::string CGUISystemInfo::GetScreenResolution() const
+{
+  if (g_Windowing.IsFullScreen())
+  {
+    return StringUtils::Format("%ix%i@%.2fHz - %s (%02.2f fps)",
+                               CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
+                               CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
+                               CDisplaySettings::GetInstance().GetCurrentResolutionInfo().fRefreshRate,
+                               g_localizeStrings.Get(244).c_str(),
+                               m_manager->GetFPS());
+  }
+
+  return StringUtils::Format("%ix%i - %s (%02.2f fps)",
+                             CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
+                             CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
+                             g_localizeStrings.Get(242).c_str(),
+                             m_manager->GetFPS());
+}
+
+std::string CGUISystemInfo::GetMemory(int info) const
+{
+  MEMORYSTATUSEX stat;
+  stat.dwLength = sizeof(MEMORYSTATUSEX);
+  GlobalMemoryStatusEx(&stat);
+  auto iMemPercentFree = 100 - static_cast<int>(100.0f* (stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys + 0.5f);
+  auto iMemPercentUsed = 100 - iMemPercentFree;
+
+  if (info == SYSTEM_FREE_MEMORY)
+    return StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullAvailPhys / MB)));
+  if (info == SYSTEM_FREE_MEMORY_PERCENT)
+    return StringUtils::Format("%i%%", iMemPercentFree);
+  if (info == SYSTEM_USED_MEMORY)
+    return StringUtils::Format("%luMB", static_cast<ULONG>(((stat.ullTotalPhys - stat.ullAvailPhys) / MB)));
+  if (info == SYSTEM_USED_MEMORY_PERCENT)
+    return StringUtils::Format("%i%%", iMemPercentUsed);
+  if (info == SYSTEM_TOTAL_MEMORY)
+    return StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullTotalPhys / MB)));
+
+  return std::string();
+}
+
 std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /*contextWindow*/, std::string *fallback)
 {
-  std::string strLabel = fallback == nullptr ? "" : *fallback;
+  auto strLabel = fallback == nullptr ? "" : *fallback;
 
   switch (info)
   {
@@ -82,14 +124,14 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
   case SYSTEM_TOTAL_SPACE:
   case SYSTEM_FREE_SPACE_PERCENT:
   case SYSTEM_USED_SPACE_PERCENT:
-    return g_sysinfo.GetHddSpaceInfo(info);
+    strLabel = g_sysinfo.GetHddSpaceInfo(info);
     break;
 
   case SYSTEM_CPU_TEMPERATURE:
   case SYSTEM_GPU_TEMPERATURE:
   case SYSTEM_FAN_SPEED:
   case SYSTEM_CPU_USAGE:
-    return m_manager->GetSystemHeatInfo(info);
+    strLabel = GetSystemHeatInfo(info);
     break;
 
   case SYSTEM_VIDEO_ENCODER_INFO:
@@ -99,24 +141,11 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
   case SYSTEM_UPTIME:
   case SYSTEM_TOTALUPTIME:
   case SYSTEM_BATTERY_LEVEL:
-    return g_sysinfo.GetInfo(info);
+    strLabel = g_sysinfo.GetInfo(info);
     break;
 
   case SYSTEM_SCREEN_RESOLUTION:
-    if (g_Windowing.IsFullScreen())
-      strLabel = StringUtils::Format("%ix%i@%.2fHz - %s (%02.2f fps)",
-      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
-      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
-      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().fRefreshRate,
-      g_localizeStrings.Get(244).c_str(),
-      m_manager->GetFPS());
-    else
-      strLabel = StringUtils::Format("%ix%i - %s (%02.2f fps)",
-      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenWidth,
-      CDisplaySettings::GetInstance().GetCurrentResolutionInfo().iScreenHeight,
-      g_localizeStrings.Get(242).c_str(),
-      m_manager->GetFPS());
-    return strLabel;
+    strLabel = GetScreenResolution();
     break;
 
   case SYSTEM_BUILD_VERSION_SHORT:
@@ -133,25 +162,8 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
   case SYSTEM_USED_MEMORY:
   case SYSTEM_USED_MEMORY_PERCENT:
   case SYSTEM_TOTAL_MEMORY:
-  {
-    MEMORYSTATUSEX stat;
-    stat.dwLength = sizeof(MEMORYSTATUSEX);
-    GlobalMemoryStatusEx(&stat);
-    int iMemPercentFree = 100 - static_cast<int>(100.0f* (stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys + 0.5f);
-    int iMemPercentUsed = 100 - iMemPercentFree;
-
-    if (info == SYSTEM_FREE_MEMORY)
-      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullAvailPhys / MB)));
-    else if (info == SYSTEM_FREE_MEMORY_PERCENT)
-      strLabel = StringUtils::Format("%i%%", iMemPercentFree);
-    else if (info == SYSTEM_USED_MEMORY)
-      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>(((stat.ullTotalPhys - stat.ullAvailPhys) / MB)));
-    else if (info == SYSTEM_USED_MEMORY_PERCENT)
-      strLabel = StringUtils::Format("%i%%", iMemPercentUsed);
-    else if (info == SYSTEM_TOTAL_MEMORY)
-      strLabel = StringUtils::Format("%luMB", static_cast<ULONG>((stat.ullTotalPhys / MB)));
-  }
-  break;
+    strLabel = GetMemory(info);
+    break;
   case SYSTEM_SCREEN_MODE:
     strLabel = g_graphicsContext.GetResInfo().strMode;
     break;
@@ -162,11 +174,12 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     strLabel = StringUtils::Format("%i", g_graphicsContext.GetResInfo().iScreenHeight);
     break;
   case SYSTEM_CURRENT_WINDOW:
-    return g_localizeStrings.Get(g_windowManager.GetFocusedWindow());
+    strLabel = g_localizeStrings.Get(g_windowManager.GetFocusedWindow());
     break;
   case SYSTEM_STARTUP_WINDOW:
     strLabel = StringUtils::Format("%i", CSettings::GetInstance().GetInt("lookandfeel.startupwindow"));
     break;
+
   case SYSTEM_CURRENT_CONTROL:
   {
     CGUIWindow *window = g_windowManager.GetWindow(g_windowManager.GetFocusedWindow());
@@ -203,7 +216,7 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     break;
   case SYSTEM_PROFILEAUTOLOGIN:
   {
-    int profileId = CProfilesManager::GetInstance().GetAutoLoginProfileId();
+    auto profileId = CProfilesManager::GetInstance().GetAutoLoginProfileId();
     if ((profileId < 0) || (!CProfilesManager::GetInstance().GetProfileName(profileId, strLabel)))
       strLabel = g_localizeStrings.Get(37014); // Last used profile
   }
@@ -226,7 +239,7 @@ std::string CGUISystemInfo::GetLabel(CFileItem* /*currentFile*/, int info, int /
     break;
   case SYSTEM_STEREOSCOPIC_MODE:
   {
-    int stereoMode = CSettings::GetInstance().GetInt("videoscreen.stereoscopicmode");
+    auto stereoMode = CSettings::GetInstance().GetInt("videoscreen.stereoscopicmode");
     strLabel = StringUtils::Format("%i", stereoMode);
   }
   break;
@@ -367,5 +380,74 @@ bool CGUISystemInfo::GetBool(int condition, int contextWindow, const CGUIListIte
 
   CLog::Log(LOGERROR, "%s: Called with unkown infolabel %d", __FUNCTION__, condition);
   return false;
+}
+
+std::string CGUISystemInfo::GetSystemHeatInfo(int info)
+{
+#define SYSHEATUPDATEINTERVAL 60000
+  if (m_lastSysHeatInfoTime == 0 ||
+    CTimeUtils::GetFrameTime() - m_lastSysHeatInfoTime >= SYSHEATUPDATEINTERVAL)
+  { // update our variables
+    m_lastSysHeatInfoTime = CTimeUtils::GetFrameTime();
+#if defined(TARGET_POSIX)
+    g_cpuInfo.getTemperature(m_cpuTemp);
+    m_gpuTemp = GetGPUTemperature();
+#endif
+  }
+
+  std::string text;
+  switch (info)
+  {
+  case SYSTEM_CPU_TEMPERATURE:
+    return m_cpuTemp.IsValid() ? g_langInfo.GetTemperatureAsString(m_cpuTemp) : "?";
+
+  case SYSTEM_GPU_TEMPERATURE:
+    return m_gpuTemp.IsValid() ? g_langInfo.GetTemperatureAsString(m_gpuTemp) : "?";
+
+  case SYSTEM_FAN_SPEED:
+    text = StringUtils::Format("%i%%", m_fanSpeed * 2);
+    break;
+
+  case SYSTEM_CPU_USAGE:
+#if defined(TARGET_DARWIN_OSX)
+    text = StringUtils::Format("%4.2f%%", m_resourceCounter.GetCPUUsage());
+#elif defined(TARGET_DARWIN) || defined(TARGET_WINDOWS)
+    text = StringUtils::Format("%d%%", g_cpuInfo.getUsedPercentage());
+#else
+    text = StringUtils::Format("%s", g_cpuInfo.GetCoresUsageString().c_str());
+#endif
+    break;
+  }
+  return text;
+}
+
+CTemperature CGUISystemInfo::GetGPUTemperature() const
+{
+  int  value = 0;
+  char scale = 0;
+
+#if defined(TARGET_DARWIN_OSX)
+  value = SMCGetTemperature(SMC_KEY_GPU_TEMP);
+  return CTemperature::CreateFromCelsius(value);
+#else
+  auto cmd = g_advancedSettings.m_gpuTempCmd;
+  int ret = 0;
+  FILE *p = nullptr;
+
+  if (cmd.empty() || !(p = popen(cmd.c_str(), "r")))
+    return CTemperature();
+
+  ret = fscanf(p, "%d %c", &value, &scale);
+  pclose(p);
+
+  if (ret != 2)
+    return CTemperature();
+#endif
+
+  if (scale == 'C' || scale == 'c')
+    return CTemperature::CreateFromCelsius(value);
+  if (scale == 'F' || scale == 'f')
+    return CTemperature::CreateFromFahrenheit(value);
+  return CTemperature();
 }
 }

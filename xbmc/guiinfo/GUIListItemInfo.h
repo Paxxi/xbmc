@@ -20,34 +20,30 @@
 */
 
 #include "GUIInfo.h"
-#include "utils/Temperature.h"
 
-class CGUIInfoManager;
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
+
+class CGUIListItem;
+typedef std::shared_ptr<CGUIListItem> CGUIListItemPtr;
 
 namespace GUIINFO
 {
-class CGUISystemInfo : public IGUIInfo
+class CGUIListItemInfo : public IGUIInfo
 {
 public:
-  CGUISystemInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
-  virtual ~CGUISystemInfo() { }
+  CGUIListItemInfo(CGUIInfoManager* manager) : IGUIInfo(manager) { }
+  virtual ~CGUIListItemInfo() { }
 
   virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
   virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
   virtual bool GetBool(int condition, int contextWindow = 0, const CGUIListItem *item = nullptr) override;
   static int LabelMask();
 
+  bool GetItemBool(const CGUIListItemPtr& item, int condition) const;
+  std::string GetItemLabel(const CFileItemPtr& item, int info, std::string *fallback) const;
 private:
-  std::string GetScreenResolution() const;
-  std::string GetMemory(int info) const;
-  std::string GetSystemHeatInfo(int info);
-  CTemperature GetGPUTemperature() const;
-
-  // fan stuff
-  unsigned int m_lastSysHeatInfoTime{0};
-  int m_fanSpeed{0};
-  CTemperature m_gpuTemp;
-  CTemperature m_cpuTemp;
-  int m_system{0};
+  
+  bool GetFileItemBool(const CFileItemPtr& item, int condition) const;
 };
 }

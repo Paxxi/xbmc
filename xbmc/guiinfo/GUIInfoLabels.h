@@ -36,6 +36,7 @@
 #define MUSICPM_MASK        (1<<17)
 #define PLAYLIST_MASK       (1<<18)
 #define VISUALISATION_MASK  (1<<19)
+#define LISTITEM_MASK       (1<<20)
 
 #define PLAYER_HAS_MEDIA             PLAYER_MASK +  1
 #define PLAYER_HAS_AUDIO             PLAYER_MASK +  2
@@ -521,7 +522,7 @@
 #define CONTROL_GROUP_HAS_FOCUS     29999
 #define CONTROL_HAS_FOCUS           30000
 
-#define LISTITEM_START                    35000
+#define LISTITEM_START                    LISTITEM_MASK
 #define LISTITEM_THUMB                    (LISTITEM_START)
 #define LISTITEM_LABEL                    (LISTITEM_START + 1)
 #define LISTITEM_TITLE                    (LISTITEM_START + 2)

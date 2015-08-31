@@ -20,6 +20,7 @@
 */
 
 #include "GUIInfo.h"
+#include "cores/IPlayer.h"
 
 class CGUIInfoManager;
 
@@ -33,7 +34,14 @@ namespace GUIINFO
 
     virtual std::string GetLabel(CFileItem* currentFile, int info, int contextWindow, std::string *fallback) override;
     virtual bool GetInt(int &value, int info, int contextWindow, const CGUIListItem *item = nullptr) override;
-
+    virtual bool GetBool(int condition, int contextWindow = 0, const CGUIListItem *item = nullptr) override;
     static int LabelMask();
+
+    void UpdateAVInfo();
+  private:
+    std::string GetMusicLabel(int item);
+    std::string GetMusicTagLabel(int info, const CFileItem* item);
+
+    SPlayerAudioStreamInfo m_audioInfo;
   };
 }
