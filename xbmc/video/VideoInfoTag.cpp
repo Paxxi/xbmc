@@ -575,19 +575,34 @@ std::string CVideoInfoTag::GetPath() const
   return m_strFileNameAndPath;
 }
 
+std::string CVideoInfoTag::GetIcon() const
+{
+  return std::string();
+}
+
 bool CVideoInfoTag::IsFolder() const
 {
   return m_strFileNameAndPath.empty();
 }
 
-std::map<std::string, std::string> CVideoInfoTag::GetProperties() const
+CDateTime CVideoInfoTag::GetDateTime() const
 {
-  std::map<std::string, std::string> props;
+  return m_dateAdded;
+}
+
+std::map<std::string, CVariant> CVideoInfoTag::GetProperties() const
+{
+  std::map<std::string, CVariant> props;
 
   if (m_iSeason == 0)
     props.insert(std::make_pair("isspecial", "true"));
 
   return props;
+}
+
+KODI::InfoTagType CVideoInfoTag::GetTagType() const
+{
+  return KODI::InfoTagType::VIDEO;
 }
 
 const std::string CVideoInfoTag::GetCast(bool bIncludeRole /*= false*/) const

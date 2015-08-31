@@ -230,7 +230,7 @@ int CGUIWindowVideoNav::GetFirstUnwatchedItemIndex(bool includeAllSeasons, bool 
     if (pItem->IsParentFolder() || !pItem->HasVideoInfoTag())
       continue;
 
-    CVideoInfoTag *pTag = pItem->GetVideoInfoTag();
+    auto pTag = pItem->GetVideoInfoTag();
 
     if ((!includeAllSeasons && pTag->m_iSeason < 0) || (!includeSpecials && pTag->m_iSeason == 0))
       continue;
@@ -258,7 +258,7 @@ int CGUIWindowVideoNav::GetFirstUnwatchedItemIndex(bool includeAllSeasons, bool 
       if (pItem->IsParentFolder() || !pItem->HasVideoInfoTag())
         continue;
 
-      CVideoInfoTag *pTag = pItem->GetVideoInfoTag();
+      auto pTag = pItem->GetVideoInfoTag();
 
       // Does the episode belong to the unwatched season and Is the episode unwatched, and is its epsiode number 
       // lower than the currently identified first unwatched episode
@@ -563,7 +563,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items, CVideoDatabase &dat
       
       // preferably use some information from PVR info tag if available
       if (pItem->HasPVRRecordingInfoTag())
-        pItem->GetPVRRecordingInfoTag()->CopyClientInfo(pItem->GetVideoInfoTag());
+        pItem->GetPVRRecordingInfoTag()->CopyClientInfo(pItem->GetVideoInfoTag().get());
 
       // set the watched overlay
       if (pItem->IsVideo())

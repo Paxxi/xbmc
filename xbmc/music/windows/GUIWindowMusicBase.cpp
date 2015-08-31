@@ -1028,7 +1028,7 @@ void CGUIWindowMusicBase::UpdateThumb(const CAlbum &album, const std::string &pa
   // sending a blank thumb to the skin.)
   if (g_application.m_pPlayer->IsPlayingAudio())
   {
-    const CMusicInfoTag* tag=g_infoManager.GetCurrentSongTag();
+    auto tag=g_infoManager.GetCurrentSongTag();
     if (tag)
     {
       // really, this may not be enough as it is to reliably update this item.  eg think of various artists albums

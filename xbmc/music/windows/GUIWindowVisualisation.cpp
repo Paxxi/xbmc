@@ -226,7 +226,7 @@ EVENT_RESULT CGUIWindowVisualisation::OnMouseEvent(const CPoint &point, const CM
 void CGUIWindowVisualisation::FrameMove()
 {
   // check for a tag change
-  const CMusicInfoTag* tag = g_infoManager.GetCurrentSongTag();
+  auto tag = g_infoManager.GetCurrentSongTag();
   if (tag && *tag != m_tag)
   { // need to fade in then out again
     m_tag = *tag;

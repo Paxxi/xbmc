@@ -332,7 +332,7 @@ bool CVisualisation::UpdateTrack()
     m_AlbumThumb = CSpecialProtocol::TranslatePath(g_infoManager.GetImage(MUSICPLAYER_COVER, WINDOW_INVALID));
 
     // get the current track tag
-    const CMusicInfoTag* tag = g_infoManager.GetCurrentSongTag();
+    auto tag = g_infoManager.GetCurrentSongTag();
 
     if (m_AlbumThumb == "DefaultAlbumCover.png")
       m_AlbumThumb = "";
@@ -344,7 +344,7 @@ bool CVisualisation::UpdateTrack()
       handled = true;
 
     // inform the visualisation of the current track's tag information
-    if ( tag && OnAction( VIS_ACTION_UPDATE_TRACK, (void*)tag ) )
+    if ( tag && OnAction( VIS_ACTION_UPDATE_TRACK, static_cast<void*>(tag.get()) ) )
       handled = true;
   }
   return handled;

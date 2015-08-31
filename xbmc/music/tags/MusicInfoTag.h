@@ -50,11 +50,18 @@ public:
   const CMusicInfoTag& operator =(const CMusicInfoTag& tag);
   bool operator !=(const CMusicInfoTag& tag) const;
 
+  //Overrides for IInfoTag
   virtual std::string GetLabel() const override;
   virtual std::string GetLabel2() const override;
   virtual std::string GetPath() const override;
+  virtual std::string GetIcon() const override;
   virtual bool IsFolder() const override;
-  virtual std::map<std::string, std::string> GetProperties() const override;
+  virtual CDateTime GetDateTime() const override;
+  virtual std::map<std::string, CVariant> GetProperties() const override;
+  virtual KODI::InfoTagType GetTagType() const override;
+  virtual std::shared_ptr<KODI::IInfoTag> GetSubTag(KODI::InfoTagType type) const override;
+  virtual bool AddSubTag(std::shared_ptr<KODI::IInfoTag> tag) override;
+
 
   bool Loaded() const;
   const std::string& GetTitle() const;

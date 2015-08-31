@@ -25,6 +25,8 @@
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 #include "threads/SingleLock.h"
+#include "music/tags/MusicInfoTag.h"
+#include "settings/Settings.h"
 
 #include "pvr/channels/PVRChannelGroupInternal.h"
 #include "epg/EpgContainer.h"
@@ -35,6 +37,7 @@
 
 #include <assert.h>
 
+using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
 
@@ -74,6 +77,9 @@ CPVRChannel::CPVRChannel(bool bRadio /* = false */)
   m_iClientChannelNumber.subchannel = 0;
   m_iClientEncryptionSystem = -1;
   UpdateEncryptionName();
+
+  if (m_bIsRadio)
+    UpdateMusicInfoTag();
 }
 
 CPVRChannel::CPVRChannel(const PVR_CHANNEL &channel, unsigned int iClientId)
@@ -107,6 +113,9 @@ CPVRChannel::CPVRChannel(const PVR_CHANNEL &channel, unsigned int iClientId)
     m_strChannelName = StringUtils::Format("%s %d", g_localizeStrings.Get(19029).c_str(), m_iUniqueId);
 
   UpdateEncryptionName();
+
+  if (m_bIsRadio)
+    UpdateMusicInfoTag();
 }
 
 void CPVRChannel::Serialize(CVariant& value) const
@@ -134,6 +143,61 @@ void CPVRChannel::Serialize(CVariant& value) const
   epg = GetEPGNext();
   if (epg)
     epg->Serialize(value["broadcastnext"]);
+}
+
+std::string CPVRChannel::GetLabel() const
+{
+  return ChannelName();
+}
+
+std::string CPVRChannel::GetLabel2() const
+{
+  auto epgNow = GetEPGNow();
+  
+  return epgNow ? epgNow->Title() :
+    CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_HIDENOINFOAVAILABLE) ?
+    "" : g_localizeStrings.Get(19055); // no information available
+}
+
+std::string CPVRChannel::GetPath() const
+{
+  return Path();
+}
+
+std::string CPVRChannel::GetIcon() const
+{
+  return IconPath();
+}
+
+bool CPVRChannel::IsFolder() const
+{
+  return false;
+}
+
+CDateTime CPVRChannel::GetDateTime() const
+{
+  return CDateTime();
+}
+
+KODI::InfoTagType CPVRChannel::GetTagType() const
+{
+  return KODI::InfoTagType::PVRCHANNEL;
+}
+
+std::shared_ptr<KODI::IInfoTag> CPVRChannel::GetSubTag(KODI::InfoTagType type) const
+{
+  if (type == m_musicInfo->GetTagType())
+    return m_musicInfo;
+  return nullptr;
+}
+
+std::map<std::string, CVariant> CPVRChannel::GetProperties() const
+{
+  return std::map<std::string, CVariant>{
+    {"channelid", ChannelID()},
+    {"path", Path()},
+    {"thumb", IconPath()}
+  };
 }
 
 /********** XBMC related channel methods **********/
@@ -194,6 +258,10 @@ bool CPVRChannel::UpdateFromClient(const CPVRChannelPtr &channel)
     m_strClientChannelName            = channel->ClientChannelName();
 
     UpdateEncryptionName();
+
+    if (m_bIsRadio)
+      UpdateMusicInfoTag();
+
     SetChanged();
   }
 
@@ -535,6 +603,24 @@ void CPVRChannel::UpdateEncryptionName(void)
     strName += StringUtils::Format(" (%04X)", m_iClientEncryptionSystem);
 
   m_strClientEncryptionName = strName;
+}
+
+void CPVRChannel::UpdateMusicInfoTag()
+{
+  m_musicInfo = std::make_shared<CMusicInfoTag>();
+
+  auto epgNow = GetEPGNow();
+
+  m_musicInfo->SetURL(Path());
+  m_musicInfo->SetTitle(GetLabel2());
+  m_musicInfo->SetArtist(ChannelName());
+  m_musicInfo->SetAlbumArtist(ChannelName());
+  if (epgNow)
+    m_musicInfo->SetGenre(epgNow->Genre());
+  m_musicInfo->SetDuration(epgNow ? epgNow->GetDuration() : 3600);
+  m_musicInfo->SetLoaded(true);
+  m_musicInfo->SetComment("");
+  m_musicInfo->SetLyrics("");
 }
 
 /********** EPG methods **********/

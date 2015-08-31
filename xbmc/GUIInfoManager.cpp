@@ -5699,7 +5699,7 @@ void CGUIInfoManager::SetCurrentVideoTag(const CVideoInfoTag &tag)
 void CGUIInfoManager::SetCurrentSongTag(const MUSIC_INFO::CMusicInfoTag &tag)
 {
   //CLog::Log(LOGDEBUG, "Asked to SetCurrentTag");
-  *m_currentFile->GetMusicInfoTag() = tag;
+  m_currentFile->AddInfoTag(std::make_shared<CMusicInfoTag>(tag));
   m_currentFile->m_lStartOffset = 0;
 }
 
@@ -5708,20 +5708,20 @@ const CFileItem& CGUIInfoManager::GetCurrentSlide() const
   return *m_currentSlide;
 }
 
-const MUSIC_INFO::CMusicInfoTag* CGUIInfoManager::GetCurrentSongTag() const
+std::shared_ptr<MUSIC_INFO::CMusicInfoTag> CGUIInfoManager::GetCurrentSongTag() const
 {
   if (m_currentFile->HasMusicInfoTag())
     return m_currentFile->GetMusicInfoTag();
 
-  return NULL;
+  return nullptr;
 }
 
-const CVideoInfoTag* CGUIInfoManager::GetCurrentMovieTag() const
+std::shared_ptr<CVideoInfoTag> CGUIInfoManager::GetCurrentMovieTag() const
 {
   if (m_currentFile->HasVideoInfoTag())
     return m_currentFile->GetVideoInfoTag();
 
-  return NULL;
+  return nullptr;
 }
 
 void GUIInfo::SetInfoFlag(uint32_t flag)

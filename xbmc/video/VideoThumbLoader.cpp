@@ -115,7 +115,7 @@ bool CThumbExtractor::DoWork()
       m_item.SetProperty("AutoThumbImage", m_target);
       m_item.SetArt("thumb", m_target);
 
-      CVideoInfoTag* info = m_item.GetVideoInfoTag();
+      auto info = m_item.GetVideoInfoTag();
       if (info->m_iDbId > 0 && !info->m_type.empty())
       {
         CVideoDatabase db;
@@ -136,7 +136,7 @@ bool CThumbExtractor::DoWork()
 
   if (result)
   {
-    CVideoInfoTag* info = m_item.GetVideoInfoTag();
+    auto info = m_item.GetVideoInfoTag();
     CVideoDatabase db;
     if (db.Open())
     {
@@ -375,7 +375,7 @@ bool CVideoThumbLoader::LoadItemLookup(CFileItem* pItem)
         if (pItem->HasVideoInfoTag())
         {
           // Item has cached autogen image but no art entry. Save it to db.
-          CVideoInfoTag* info = pItem->GetVideoInfoTag();
+          auto info = pItem->GetVideoInfoTag();
           if (info->m_iDbId > 0 && !info->m_type.empty())
             m_videoDatabase->SetArtForItem(info->m_iDbId, info->m_type, "thumb", thumbURL);
         }

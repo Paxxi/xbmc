@@ -8110,7 +8110,7 @@ void CVideoDatabase::DumpToDummyFiles(const std::string &path)
       GetEpisodesByWhere("videodb://tvshows/titles/", filter, episodes);
       for (int i = 0; i < episodes.Size(); i++)
       {
-        CVideoInfoTag *tag = episodes[i]->GetVideoInfoTag();
+        auto tag = episodes[i]->GetVideoInfoTag();
         std::string episode = StringUtils::Format("%s.s%02de%02d.avi", showName.c_str(), tag->m_iSeason, tag->m_iEpisode);
         // and make a file
         std::string episodePath = URIUtils::AddFileToFolder(TVFolder, episode);
@@ -8127,7 +8127,7 @@ void CVideoDatabase::DumpToDummyFiles(const std::string &path)
   CDirectory::Create(moviePath);
   for (int i = 0; i < items.Size(); i++)
   {
-    CVideoInfoTag *tag = items[i]->GetVideoInfoTag();
+    auto tag = items[i]->GetVideoInfoTag();
     std::string movie = StringUtils::Format("%s.avi", tag->m_strTitle.c_str());
     CFile file;
     if (file.OpenForWrite(URIUtils::AddFileToFolder(moviePath, movie)))
@@ -8812,7 +8812,7 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
           artItem.SetPath(GetSafeFile(artPath, filename));
           scanner.GetArtwork(&artItem, CONTENT_TVSHOWS, useFolders, true, actorsDir);
           item.SetArt(artItem.GetArt());
-          scanner.AddVideo(&item,CONTENT_TVSHOWS, false, false, showItem.GetVideoInfoTag(), true);
+          scanner.AddVideo(&item,CONTENT_TVSHOWS, false, false, showItem.GetVideoInfoTag().get(), true);
           episode = episode->NextSiblingElement("episodedetails");
         }
       }

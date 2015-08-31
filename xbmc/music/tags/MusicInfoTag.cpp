@@ -169,14 +169,40 @@ std::string CMusicInfoTag::GetPath() const
   return GetURL();
 }
 
+std::string CMusicInfoTag::GetIcon() const
+{
+  return std::string();
+}
+
 bool CMusicInfoTag::IsFolder() const
 {
   return false;
 }
 
-std::map<std::string, std::string> CMusicInfoTag::GetProperties() const
+CDateTime CMusicInfoTag::GetDateTime() const
 {
-  return std::map<std::string, std::string>();
+  return GetDateAdded();
+}
+
+std::map<std::string, CVariant> CMusicInfoTag::GetProperties() const
+{
+  return std::map<std::string, CVariant>();
+}
+
+KODI::InfoTagType CMusicInfoTag::GetTagType() const
+{
+  return KODI::InfoTagType::MUSIC;
+}
+
+std::shared_ptr<KODI::IInfoTag> CMusicInfoTag::GetSubTag(KODI::InfoTagType type) const
+{
+  return nullptr;
+}
+
+bool CMusicInfoTag::AddSubTag(std::shared_ptr<KODI::IInfoTag> tag)
+{
+  //We don't have subtags
+  return false;
 }
 
 int CMusicInfoTag::GetTrackNumber() const

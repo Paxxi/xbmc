@@ -56,7 +56,7 @@ bool CMusicFileDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     pItem->SetPath(strLabel);
 
     if (m_tag.Loaded())
-      *pItem->GetMusicInfoTag() = m_tag;
+      pItem->SetFromInfoTag(std::make_shared<CMusicInfoTag>(m_tag));
 
     pItem->GetMusicInfoTag()->SetTrackNumber(i+1);
     items.Add(pItem);

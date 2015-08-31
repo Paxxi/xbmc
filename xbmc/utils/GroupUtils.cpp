@@ -90,7 +90,7 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
       }
       pItem->m_bIsFolder = true;
 
-      CVideoInfoTag* setInfo = pItem->GetVideoInfoTag();
+      auto setInfo = pItem->GetVideoInfoTag();
       setInfo->m_strPath = pItem->GetPath();
       setInfo->m_strTitle = pItem->GetLabel();
 
@@ -99,7 +99,7 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
       std::set<std::string> pathSet;
       for (std::set<CFileItemPtr>::const_iterator movie = set->second.begin(); movie != set->second.end(); ++movie)
       {
-        CVideoInfoTag* movieInfo = (*movie)->GetVideoInfoTag();
+        auto movieInfo = (*movie)->GetVideoInfoTag();
         // handle rating
         if (movieInfo->m_fRating > 0.0f)
         {

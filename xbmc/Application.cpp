@@ -2192,10 +2192,10 @@ bool CApplication::OnAction(const CAction &action)
 
   if ((action.GetID() == ACTION_INCREASE_RATING || action.GetID() == ACTION_DECREASE_RATING) && m_pPlayer->IsPlayingAudio())
   {
-    const CMusicInfoTag *tag = g_infoManager.GetCurrentSongTag();
+    auto tag = g_infoManager.GetCurrentSongTag();
     if (tag)
     {
-      *m_itemCurrentFile->GetMusicInfoTag() = *tag;
+      m_itemCurrentFile->AddInfoTag(tag);
       char rating = tag->GetRating();
       bool needsUpdate(false);
       if (rating > '0' && action.GetID() == ACTION_DECREASE_RATING)

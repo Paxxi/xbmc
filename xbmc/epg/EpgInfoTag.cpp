@@ -213,6 +213,51 @@ void CEpgInfoTag::Serialize(CVariant &value) const
   value["wasactive"] = WasActive();
 }
 
+std::string CEpgInfoTag::GetLabel() const
+{
+  return Title();
+}
+
+std::string CEpgInfoTag::GetLabel2() const
+{
+  return Plot();
+}
+
+std::string CEpgInfoTag::GetPath() const
+{
+  return Path();
+}
+
+std::string CEpgInfoTag::GetIcon() const
+{
+  if (!m_strIconPath.empty())
+    return m_strIconPath;
+  if (HasPVRChannel() && !ChannelTag()->IconPath().empty())
+    return ChannelTag()->IconPath();
+
+  return std::string();
+}
+
+bool CEpgInfoTag::IsFolder() const
+{
+  return false;
+}
+
+CDateTime CEpgInfoTag::GetDateTime() const
+{
+  return StartAsLocalTime();
+}
+
+KODI::InfoTagType CEpgInfoTag::GetTagType() const
+{
+  return KODI::InfoTagType::EPG;
+}
+
+std::map<std::string, CVariant> CEpgInfoTag::GetProperties() const
+{
+  return std::map<std::string, CVariant>();
+}
+
 CDateTime CEpgInfoTag::GetCurrentPlayingTime() const
 {
   CDateTime now = CDateTime::GetUTCDateTime();

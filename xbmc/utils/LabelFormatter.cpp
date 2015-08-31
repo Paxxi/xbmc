@@ -155,8 +155,8 @@ void CLabelFormatter::FormatLabel2(CFileItem *item) const
 std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFileItem *item) const
 {
   if (!item) return "";
-  const CMusicInfoTag *music = item->GetMusicInfoTag();
-  const CVideoInfoTag *movie = item->GetVideoInfoTag();
+  auto music = item->GetMusicInfoTag();
+  auto movie = item->GetVideoInfoTag();
   const CPictureInfoTag *pic = item->GetPictureInfoTag();
   std::string value;
   switch (mask.m_content)

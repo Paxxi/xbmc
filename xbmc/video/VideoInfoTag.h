@@ -78,19 +78,16 @@ public:
   virtual std::string GetLabel() const override;
   virtual std::string GetLabel2() const override;
   virtual std::string GetPath() const override;
+  virtual std::string GetIcon() const override;
   virtual bool IsFolder() const override;
-  virtual std::map<std::string, std::string> GetProperties() const override;
+  virtual CDateTime GetDateTime() const override;
+  virtual std::map<std::string, CVariant> GetProperties() const override;
+  virtual KODI::InfoTagType GetTagType() const override;
 
   const std::string GetCast(bool bIncludeRole = false) const;
   bool HasStreamDetails() const;
   bool IsEmpty() const;
 
-  /*const std::string& GetPath() const
-  {
-    if (m_strFileNameAndPath.empty())
-      return m_strPath;
-    return m_strFileNameAndPath;
-  };*/
 
   /*! \brief retrieve the duration in seconds.
    Prefers the duration from stream details if available.

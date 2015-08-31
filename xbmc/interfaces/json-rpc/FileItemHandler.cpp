@@ -362,9 +362,9 @@ void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char
     if (item->HasPVRTimerInfoTag())
       FillDetails(item->GetPVRTimerInfoTag().get(), item, fields, object, thumbLoader);
     if (item->HasVideoInfoTag())
-      FillDetails(item->GetVideoInfoTag(), item, fields, object, thumbLoader);
+      FillDetails(item->GetVideoInfoTag().get(), item, fields, object, thumbLoader);
     if (item->HasMusicInfoTag())
-      FillDetails(item->GetMusicInfoTag(), item, fields, object, thumbLoader);
+      FillDetails(item->GetMusicInfoTag().get(), item, fields, object, thumbLoader);
     if (item->HasPictureInfoTag())
       FillDetails(item->GetPictureInfoTag(), item, fields, object, thumbLoader);
     

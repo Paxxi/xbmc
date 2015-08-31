@@ -60,7 +60,7 @@
 #include "utils/Mime.h"
 #include "InfoTag.h"
 
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 
 using namespace XFILE;
@@ -98,71 +98,6 @@ CFileItem::CFileItem(const std::string &path, const CAlbum& album)
   m_strPath = path;
   URIUtils::AddSlashAtEnd(m_strPath);
   SetFromAlbum(album);
-}
-
-CFileItem::CFileItem(const CEpgInfoTagPtr& tag)
-{
-  assert(tag.get());
-
-  Initialize();
-
-  m_bIsFolder = false;
-  m_epgInfoTag = tag;
-  m_strPath = tag->Path();
-  SetLabel(tag->Title());
-  m_strLabel2 = tag->Plot();
-  m_dateTime = tag->StartAsLocalTime();
-
-  if (!tag->Icon().empty())
-    SetIconImage(tag->Icon());
-  else if (tag->HasPVRChannel() && !tag->ChannelTag()->IconPath().empty())
-    SetIconImage(tag->ChannelTag()->IconPath());
-
-  FillInMimeType(false);
-}
-
-CFileItem::CFileItem(const CPVRChannelPtr& channel)
-{
-  assert(channel.get());
-
-  Initialize();
-
-  CEpgInfoTagPtr epgNow(channel->GetEPGNow());
-
-  m_strPath = channel->Path();
-  m_bIsFolder = false;
-  m_pvrChannelInfoTag = channel;
-  SetLabel(channel->ChannelName());
-  m_strLabel2 = epgNow ? epgNow->Title() :
-      CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_HIDENOINFOAVAILABLE) ?
-                            "" : g_localizeStrings.Get(19055); // no information available
-
-  if (channel->IsRadio())
-  {
-    CMusicInfoTag* musictag = GetMusicInfoTag();
-    if (musictag)
-    {
-      musictag->SetURL(channel->Path());
-      musictag->SetTitle(m_strLabel2);
-      musictag->SetArtist(channel->ChannelName());
-      musictag->SetAlbumArtist(channel->ChannelName());
-      if (epgNow)
-        musictag->SetGenre(epgNow->Genre());
-      musictag->SetDuration(epgNow ? epgNow->GetDuration() : 3600);
-      musictag->SetLoaded(true);
-      musictag->SetComment("");
-      musictag->SetLyrics("");
-    }
-  }
-
-  if (!channel->IconPath().empty())
-    SetIconImage(channel->IconPath());
-
-  SetProperty("channelid", channel->ChannelID());
-  SetProperty("path", channel->Path());
-  SetArt("thumb", channel->IconPath());
-
-  FillInMimeType(false);
 }
 
 CFileItem::CFileItem(const CPVRRecordingPtr& record)
@@ -301,18 +236,32 @@ CFileItem::CFileItem(const CMediaSource& share)
 
 CFileItem::CFileItem(std::shared_ptr<KODI::IInfoTag> tag)
 {
+  assert(tag.get());
+
   Initialize();
   m_infoTag = tag;
 
   SetLabel(m_infoTag->GetLabel());
+  m_strLabel2 = m_infoTag->GetLabel2();
   m_strPath = m_infoTag->GetPath();
+  m_dateTime = m_infoTag->GetDateTime();
 
   m_bIsFolder = m_infoTag->IsFolder();
 
   for (const auto& it : m_infoTag->GetProperties())
-    SetProperty(it.first, it.second);
+  {
+    if (it.first == "thumb")
+      SetArt(it.first, it.second.asString());
+    else
+      SetProperty(it.first, it.second);
+  }
 
-  FillInDefaultIcon();
+  auto icon = m_infoTag->GetIcon();
+  if (!icon.empty())
+    SetIconImage(icon);
+  else
+    FillInDefaultIcon();
+
   FillInMimeType(false);
 }
 
@@ -1380,6 +1329,20 @@ void CFileItem::SetFromInfoTag(const std::shared_ptr<KODI::IInfoTag> tag)
   FillInMimeType(false);
 }
 
+void CFileItem::AddInfoTag(const std::shared_ptr<KODI::IInfoTag> tag)
+{
+  assert(tag.get());
+  if (!tag)
+    return;
+
+  if (!m_infoTag)
+    m_infoTag = tag;
+  else if (m_infoTag->GetTagType() == tag->GetTagType())
+    m_infoTag = tag;
+  else
+    m_infoTag->AddSubTag(tag);
+}
+
 void CFileItem::UpdateInfo(const CFileItem &item, bool replaceLabels /*=true*/)
 {
   if (item.HasVideoInfoTag())
@@ -1387,7 +1350,7 @@ void CFileItem::UpdateInfo(const CFileItem &item, bool replaceLabels /*=true*/)
     *GetVideoInfoTag() = *item.GetVideoInfoTag();
     // preferably use some information from PVR info tag if available
     if (m_pvrRecordingInfoTag)
-      m_pvrRecordingInfoTag->CopyClientInfo(GetVideoInfoTag());
+      m_pvrRecordingInfoTag->CopyClientInfo(GetVideoInfoTag().get());
     SetOverlayImage(ICON_OVERLAY_UNWATCHED, GetVideoInfoTag()->m_playCount > 0);
     SetInvalid();
   }
@@ -3053,7 +3016,7 @@ bool CFileItem::LoadMusicTag()
     for (unsigned int i = 0; i < g_advancedSettings.m_musicTagsFromFileFilters.size(); i++)
     {
       CLabelFormatter formatter(g_advancedSettings.m_musicTagsFromFileFilters[i], "");
-      if (formatter.FillMusicTag(fileName, GetMusicInfoTag()))
+      if (formatter.FillMusicTag(fileName, GetMusicInfoTag().get()))
       {
         GetMusicInfoTag()->SetLoaded(true);
         return true;
@@ -3123,12 +3086,19 @@ void CFileItemList::ClearSortState()
   m_sortDescription.sortAttributes = SortAttributeNone;
 }
 
-CVideoInfoTag* CFileItem::GetVideoInfoTag()
+std::shared_ptr<CVideoInfoTag> CFileItem::GetVideoInfoTag()
 {
-  if (!m_videoInfoTag)
-    m_videoInfoTag = new CVideoInfoTag;
+  if (!m_infoTag)
+    return nullptr;
 
-  return m_videoInfoTag;
+  if (m_infoTag->GetTagType() == KODI::InfoTagType::VIDEO)
+    return std::dynamic_pointer_cast<CVideoInfoTag>(m_infoTag);
+
+  auto subTag = m_infoTag->GetSubTag(KODI::InfoTagType::VIDEO);
+  if (subTag)
+    return std::dynamic_pointer_cast<CVideoInfoTag>(subTag);
+
+  return nullptr;
 }
 
 CPictureInfoTag* CFileItem::GetPictureInfoTag()
@@ -3139,12 +3109,19 @@ CPictureInfoTag* CFileItem::GetPictureInfoTag()
   return m_pictureInfoTag;
 }
 
-MUSIC_INFO::CMusicInfoTag* CFileItem::GetMusicInfoTag()
+std::shared_ptr<MUSIC_INFO::CMusicInfoTag> CFileItem::GetMusicInfoTag() const
 {
-  if (!m_musicInfoTag)
-    m_musicInfoTag = new MUSIC_INFO::CMusicInfoTag;
+  if (!m_infoTag)
+    return nullptr;
 
-  return m_musicInfoTag;
+  if (m_infoTag->GetTagType() == KODI::InfoTagType::MUSIC)
+    return std::dynamic_pointer_cast<MUSIC_INFO::CMusicInfoTag>(m_infoTag);
+
+  auto subTag = m_infoTag->GetSubTag(KODI::InfoTagType::MUSIC);
+  if (subTag)
+    return std::dynamic_pointer_cast<MUSIC_INFO::CMusicInfoTag>(subTag);
+
+  return nullptr;
 }
 
 std::string CFileItem::FindTrailer() const

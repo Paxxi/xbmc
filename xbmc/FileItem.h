@@ -113,14 +113,12 @@ public:
   CFileItem(const std::string &path, const CAlbum& album);
   CFileItem(const CArtist& artist);
   CFileItem(const CGenre& genre);
-  CFileItem(const EPG::CEpgInfoTagPtr& tag);
-  CFileItem(const PVR::CPVRChannelPtr& channel);
   CFileItem(const PVR::CPVRRecordingPtr& record);
   CFileItem(const PVR::CPVRTimerInfoTagPtr& timer);
   CFileItem(const CMediaSource& share);
   CFileItem(std::shared_ptr<KODI::IInfoTag> tag);
   virtual ~CFileItem(void);
-  virtual CGUIListItem *Clone() const { return new CFileItem(*this); };
+  virtual CGUIListItem *Clone() const override { return new CFileItem(*this); };
 
   const CURL GetURL() const;
   void SetURL(const CURL& url);
@@ -234,7 +232,7 @@ public:
   void CleanString();
   void FillInDefaultIcon();
   void SetFileSizeLabel();
-  virtual void SetLabel(const std::string &strLabel);
+  virtual void SetLabel(const std::string &strLabel) override;
   int GetVideoContentType() const; /* return VIDEODB_CONTENT_TYPE, but don't want to include videodb in this header */
   bool IsLabelPreformated() const { return m_bLabelPreformated; }
   void SetLabelPreformated(bool bYesNo) { m_bLabelPreformated=bYesNo; }
@@ -242,24 +240,19 @@ public:
   bool SortsOnBottom() const { return m_specialSort == SortSpecialOnBottom; }
   void SetSpecialSort(SortSpecial sort) { m_specialSort = sort; }
 
-  inline bool HasMusicInfoTag() const
+  bool HasMusicInfoTag() const
   {
-    return m_musicInfoTag != NULL;
+    return m_musicInfoTag != nullptr;
   }
 
-  MUSIC_INFO::CMusicInfoTag* GetMusicInfoTag();
+  std::shared_ptr<MUSIC_INFO::CMusicInfoTag> GetMusicInfoTag() const;
 
-  inline const MUSIC_INFO::CMusicInfoTag* GetMusicInfoTag() const
-  {
-    return m_musicInfoTag;
-  }
-
-  inline bool HasVideoInfoTag() const
+  bool HasVideoInfoTag() const
   {
     return m_videoInfoTag != NULL;
   }
 
-  CVideoInfoTag* GetVideoInfoTag();
+  std::shared_ptr<CVideoInfoTag> GetVideoInfoTag();
 
   inline std::shared_ptr<KODI::IInfoTag> GetInfoTag() const
   {
@@ -453,6 +446,8 @@ public:
   bool IsAlbum() const;
 
   void SetFromInfoTag(const std::shared_ptr<KODI::IInfoTag> tag);
+
+  void AddInfoTag(const std::shared_ptr<KODI::IInfoTag> tag);
 
   /*! \brief Sets details using the information from the CAlbum object
    Sets the album in the music info tag and uses its information to set the

@@ -334,7 +334,7 @@ namespace XBMCAddon
       if (!g_application.m_pPlayer->IsPlayingVideo())
         throw PlayerException("XBMC is not playing any videofile");
 
-      const CVideoInfoTag* movie = g_infoManager.GetCurrentMovieTag();
+      auto movie = g_infoManager.GetCurrentMovieTag();
       if (movie)
         return new InfoTagVideo(*movie);
 
@@ -347,7 +347,7 @@ namespace XBMCAddon
       if (g_application.m_pPlayer->IsPlayingVideo() || !g_application.m_pPlayer->IsPlayingAudio())
         throw PlayerException("XBMC is not playing any music file");
 
-      const MUSIC_INFO::CMusicInfoTag* tag = g_infoManager.GetCurrentSongTag();
+      auto tag = g_infoManager.GetCurrentSongTag();
       if (tag)
         return new InfoTagMusic(*tag);
 

@@ -27,6 +27,7 @@
 #include "pvr/channels/PVRChannel.h"
 #include "pvr/timers/PVRTimerInfoTag.h"
 #include "utils/ISerializable.h"
+#include "InfoTag.h"
 
 #define EPG_DEBUGGING 0
 
@@ -39,7 +40,7 @@ namespace EPG
   class CEpgInfoTag;
   typedef std::shared_ptr<EPG::CEpgInfoTag> CEpgInfoTagPtr;
 
-  class CEpgInfoTag : public ISerializable
+  class CEpgInfoTag : public ISerializable, public KODI::IInfoTag
   {
     friend class CEpg;
     friend class CEpgDatabase;
@@ -85,7 +86,16 @@ namespace EPG
     bool operator ==(const CEpgInfoTag& right) const;
     bool operator !=(const CEpgInfoTag& right) const;
 
-    virtual void Serialize(CVariant &value) const;
+    virtual void Serialize(CVariant &value) const override;
+
+    virtual std::string GetLabel() const override;
+    virtual std::string GetLabel2() const override;
+    virtual std::string GetPath() const override;
+    virtual std::string GetIcon() const override;
+    virtual bool IsFolder() const override;
+    virtual CDateTime GetDateTime() const override;
+    virtual KODI::InfoTagType GetTagType() const override;
+    virtual std::map<std::string, CVariant> GetProperties() const override;
 
     /*!
      * @brief Check if this event is currently active.

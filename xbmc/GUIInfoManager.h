@@ -159,8 +159,8 @@ public:
   void SetCurrentSongTag(const MUSIC_INFO::CMusicInfoTag &tag);
   void SetCurrentVideoTag(const CVideoInfoTag &tag);
 
-  const MUSIC_INFO::CMusicInfoTag *GetCurrentSongTag() const;
-  const CVideoInfoTag* GetCurrentMovieTag() const;
+  std::shared_ptr<MUSIC_INFO::CMusicInfoTag> GetCurrentSongTag() const;
+  std::shared_ptr<CVideoInfoTag> GetCurrentMovieTag() const;
 
   std::string GetMusicLabel(int item);
   std::string GetMusicTagLabel(int info, const CFileItem *item);

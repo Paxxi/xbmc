@@ -21,6 +21,7 @@
  */
 
 #include "FileItem.h"
+#include "InfoTag.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "utils/Observer.h"
 #include "threads/CriticalSection.h"
@@ -31,6 +32,11 @@
 #define PVR_INVALID_CHANNEL_UID -1
 
 class CVariant;
+
+namespace MUSIC_INFO
+{
+  class CMusicInfoTag;
+}
 
 namespace EPG
 {
@@ -55,7 +61,8 @@ namespace PVR
   } pvr_channel_num;
 
   /** PVR Channel class */
-  class CPVRChannel : public Observable, public ISerializable, public ISortable
+  class CPVRChannel : public Observable, public ISerializable, public ISortable,
+                      public KODI::IInfoTag
   {
     friend class CPVRDatabase;
     friend class CPVRChannelGroupInternal;
@@ -73,7 +80,17 @@ namespace PVR
     bool operator ==(const CPVRChannel &right) const;
     bool operator !=(const CPVRChannel &right) const;
 
-    virtual void Serialize(CVariant& value) const;
+    virtual void Serialize(CVariant& value) const override;
+
+    virtual std::string GetLabel() const override;
+    virtual std::string GetLabel2() const override;
+    virtual std::string GetPath() const override;
+    virtual std::string GetIcon() const override;
+    virtual bool IsFolder() const override;
+    virtual CDateTime GetDateTime() const override;
+    virtual KODI::InfoTagType GetTagType() const override;
+    virtual std::shared_ptr<KODI::IInfoTag> GetSubTag(KODI::InfoTagType type) const override;
+    virtual std::map<std::string, CVariant> GetProperties() const override;
 
     /*! @name XBMC related channel methods
      */
@@ -470,6 +487,11 @@ namespace PVR
      */
     void UpdateEncryptionName(void);
 
+    /*!
+     * @brief Populate the musicinfo tag if this is a radio channel
+     */
+    void UpdateMusicInfoTag(void);
+
     /*! @name XBMC related channel data
      */
     //@{
@@ -509,6 +531,8 @@ namespace PVR
     int              m_iClientEncryptionSystem; /*!< the encryption system used by this channel. 0 for FreeToAir, -1 for unknown */
     std::string      m_strClientEncryptionName; /*!< the name of the encryption system used by this channel */
     //@}
+
+    std::shared_ptr<MUSIC_INFO::CMusicInfoTag> m_musicInfo; /*!< holds musicinfo for radio channel */
 
     CCriticalSection m_critSection;
   };

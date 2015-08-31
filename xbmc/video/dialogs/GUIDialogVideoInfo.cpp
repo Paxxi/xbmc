@@ -1674,7 +1674,7 @@ bool CGUIDialogVideoInfo::ManageVideoItemArtwork(const CFileItemPtr &item, const
       {
         for (int i=0; i < items.Size(); i++)
         {
-          CVideoInfoTag* pTag = items[i]->GetVideoInfoTag();
+          auto pTag = items[i]->GetVideoInfoTag();
           pTag->m_strPictureURL.Parse();
           pTag->m_strPictureURL.GetThumbURLs(thumbs, artType);
         }

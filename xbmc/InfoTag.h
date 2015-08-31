@@ -20,10 +20,22 @@
 */
 
 #include <map>
+#include <memory>
 #include <string>
+
+class CDateTime;
+class CVariant;
 
 namespace KODI
 {
+enum class InfoTagType
+{
+  MUSIC,
+  VIDEO,
+  EPG,
+  PVRCHANNEL
+};
+
 class IInfoTag
 {
 protected:
@@ -36,9 +48,23 @@ public:
   virtual std::string GetLabel() const = 0;
   virtual std::string GetLabel2() const = 0;
   virtual std::string GetPath() const = 0;
+  virtual std::string GetIcon() const = 0;
   
   virtual bool IsFolder() const = 0;
 
-  virtual std::map<std::string, std::string> GetProperties() const = 0;
+  virtual CDateTime GetDateTime() const = 0;
+
+  virtual InfoTagType GetTagType() const = 0;
+  virtual std::map<std::string, CVariant> GetProperties() const = 0;
+
+  virtual std::shared_ptr<IInfoTag> GetSubTag(InfoTagType type) const
+  {
+    return nullptr;
+  }
+  virtual bool AddSubTag(std::shared_ptr<IInfoTag> tag)
+  {
+    return false;
+  }
+
 };
 }

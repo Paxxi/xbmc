@@ -174,11 +174,11 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
       {
         if (!CVideoLibrary::FillFileItem(g_application.CurrentFile(), fileItem, parameterObject))
         {
-          const CVideoInfoTag *currentVideoTag = g_infoManager.GetCurrentMovieTag();
-          if (currentVideoTag != NULL)
+          auto currentVideoTag = g_infoManager.GetCurrentMovieTag();
+          if (currentVideoTag)
           {
             std::string originalLabel = fileItem->GetLabel();
-            *fileItem = CFileItem(std::make_shared<CVideoInfoTag>(*currentVideoTag));
+            *fileItem = CFileItem(currentVideoTag);
             if (fileItem->GetLabel().empty())
               fileItem->SetLabel(originalLabel);
           }
@@ -189,11 +189,11 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
       {
         if (!CAudioLibrary::FillFileItem(g_application.CurrentFile(), fileItem, parameterObject))
         {
-          const MUSIC_INFO::CMusicInfoTag *currentMusicTag = g_infoManager.GetCurrentSongTag();
-          if (currentMusicTag != NULL)
+          auto currentMusicTag = g_infoManager.GetCurrentSongTag();
+          if (currentMusicTag)
           {
             std::string originalLabel = fileItem->GetLabel();
-            fileItem = std::make_shared<CFileItem>(std::make_shared<MUSIC_INFO::CMusicInfoTag>(*currentMusicTag));
+            fileItem = std::make_shared<CFileItem>(currentMusicTag);
             if (fileItem->GetLabel().empty())
               fileItem->SetLabel(originalLabel);
           }

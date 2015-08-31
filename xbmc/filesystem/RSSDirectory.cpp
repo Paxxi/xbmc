@@ -120,7 +120,7 @@ static std::string GetValue(TiXmlElement *element)
 
 static void ParseItemMRSS(CFileItem* item, SResources& resources, TiXmlElement* item_child, const std::string& name, const std::string& xmlns, const std::string& path)
 {
-  CVideoInfoTag* vtag = item->GetVideoInfoTag();
+  auto vtag = item->GetVideoInfoTag();
   std::string text = GetValue(item_child);
 
   if(name == "content")
@@ -234,7 +234,7 @@ static void ParseItemMRSS(CFileItem* item, SResources& resources, TiXmlElement* 
 
 static void ParseItemItunes(CFileItem* item, SResources& resources, TiXmlElement* item_child, const std::string& name, const std::string& xmlns, const std::string& path)
 {
-  CVideoInfoTag* vtag = item->GetVideoInfoTag();
+  auto vtag = item->GetVideoInfoTag();
   std::string text = GetValue(item_child);
 
   if(name == "image")
@@ -310,7 +310,7 @@ static void ParseItemRSS(CFileItem* item, SResources& resources, TiXmlElement* i
 
 static void ParseItemVoddler(CFileItem* item, SResources& resources, TiXmlElement* element, const std::string& name, const std::string& xmlns, const std::string& path)
 {
-  CVideoInfoTag* vtag = item->GetVideoInfoTag();
+  auto vtag = item->GetVideoInfoTag();
   std::string text = GetValue(element);
 
   if(name == "trailer")
@@ -341,7 +341,7 @@ static void ParseItemVoddler(CFileItem* item, SResources& resources, TiXmlElemen
 
 static void ParseItemBoxee(CFileItem* item, SResources& resources, TiXmlElement* element, const std::string& name, const std::string& xmlns, const std::string& path)
 {
-  CVideoInfoTag* vtag = item->GetVideoInfoTag();
+  auto vtag = item->GetVideoInfoTag();
   std::string text = GetValue(element);
 
   if     (name == "image")
@@ -366,7 +366,7 @@ static void ParseItemBoxee(CFileItem* item, SResources& resources, TiXmlElement*
 
 static void ParseItemZink(CFileItem* item, SResources& resources, TiXmlElement* element, const std::string& name, const std::string& xmlns, const std::string& path)
 {
-  CVideoInfoTag* vtag = item->GetVideoInfoTag();
+  auto vtag = item->GetVideoInfoTag();
   std::string text = GetValue(element);
   if     (name == "episode")
     vtag->m_iEpisode = atoi(text.c_str());
@@ -533,7 +533,7 @@ static void ParseItem(CFileItem* item, TiXmlElement* root, const std::string& pa
 
   if(item->HasVideoInfoTag())
   {
-    CVideoInfoTag* vtag = item->GetVideoInfoTag();
+    auto vtag = item->GetVideoInfoTag();
 
     if(item->HasProperty("duration")    && !vtag->GetDuration())
       vtag->m_duration = StringUtils::TimeStringToSeconds(item->GetProperty("duration").asString());

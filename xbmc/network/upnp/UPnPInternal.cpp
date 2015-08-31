@@ -393,7 +393,7 @@ BuildObject(CFileItem&                    item,
             object->m_ObjectClass.type = "object.item.audioItem.musicTrack";
 
             if (item.HasMusicInfoTag()) {
-                CMusicInfoTag *tag = (CMusicInfoTag*)item.GetMusicInfoTag();
+                auto tag = item.GetMusicInfoTag();
                 PopulateObjectFromTag(*tag, *object, &file_path, &resource, quirks, upnp_service);
             }
         } else if (item.IsVideoDb() || item.IsVideo()) {
@@ -403,7 +403,7 @@ BuildObject(CFileItem&                    item,
                 object->m_Affiliation.album = "[Unknown Series]";
 
             if (item.HasVideoInfoTag()) {
-                CVideoInfoTag *tag = (CVideoInfoTag*)item.GetVideoInfoTag();
+                auto tag = item.GetVideoInfoTag();
                 PopulateObjectFromTag(*tag, *object, &file_path, &resource, quirks, upnp_service);
             }
         } else if (item.IsPicture()) {
@@ -469,7 +469,7 @@ BuildObject(CFileItem&                    item,
             switch(node) {
                 case MUSICDATABASEDIRECTORY::NODE_TYPE_ARTIST: {
                       container->m_ObjectClass.type += ".person.musicArtist";
-                      CMusicInfoTag *tag = (CMusicInfoTag*)item.GetMusicInfoTag();
+                      auto tag = item.GetMusicInfoTag();
                       if (tag) {
                           container->m_People.artists.Add(
                               CorrectAllItemsSortHack(StringUtils::Join(tag->GetArtist(), g_advancedSettings.m_musicItemSeparator)).c_str(), "Performer");
@@ -488,7 +488,7 @@ BuildObject(CFileItem&                    item,
                 case MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_ALBUM: {
                       container->m_ObjectClass.type += ".album.musicAlbum";
                       // for Sonos to be happy
-                      CMusicInfoTag *tag = (CMusicInfoTag*)item.GetMusicInfoTag();
+                      auto tag = item.GetMusicInfoTag();
                       if (tag) {
                           container->m_People.artists.Add(
                               CorrectAllItemsSortHack(StringUtils::Join(tag->GetArtist(), g_advancedSettings.m_musicItemSeparator)).c_str(), "Performer");
@@ -510,42 +510,42 @@ BuildObject(CFileItem&                    item,
             }
         } else if (item.IsVideoDb()) {
             VIDEODATABASEDIRECTORY::NODE_TYPE node = CVideoDatabaseDirectory::GetDirectoryType(item.GetPath());
-            CVideoInfoTag &tag = *(CVideoInfoTag*)item.GetVideoInfoTag();
+            auto tag = item.GetVideoInfoTag();
             switch(node) {
                 case VIDEODATABASEDIRECTORY::NODE_TYPE_GENRE:
                   container->m_ObjectClass.type += ".genre.movieGenre";
                   break;
                 case VIDEODATABASEDIRECTORY::NODE_TYPE_ACTOR:
                   container->m_ObjectClass.type += ".person.videoArtist";
-                  container->m_Creator = StringUtils::Join(tag.m_artist, g_advancedSettings.m_videoItemSeparator).c_str();
-                  container->m_Title   = tag.m_strTitle.c_str();
+                  container->m_Creator = StringUtils::Join(tag->m_artist, g_advancedSettings.m_videoItemSeparator).c_str();
+                  container->m_Title   = tag->m_strTitle.c_str();
                   break;
                 case VIDEODATABASEDIRECTORY::NODE_TYPE_SEASONS:
                 case VIDEODATABASEDIRECTORY::NODE_TYPE_TITLE_TVSHOWS:
                   container->m_ObjectClass.type += ".album.videoAlbum";
-                  container->m_Recorded.series_title = tag.m_strShowTitle.c_str();
-                  container->m_Recorded.episode_number = tag.m_iEpisode;
-                  container->m_MiscInfo.play_count = tag.m_playCount;
-                  container->m_Title = tag.m_strTitle.c_str();
-                  if (!tag.m_premiered.IsValid() && tag.m_iYear)
-                    container->m_Date = CDateTime(tag.m_iYear, 1, 1, 0, 0, 0).GetAsW3CDateTime().c_str();
+                  container->m_Recorded.series_title = tag->m_strShowTitle.c_str();
+                  container->m_Recorded.episode_number = tag->m_iEpisode;
+                  container->m_MiscInfo.play_count = tag->m_playCount;
+                  container->m_Title = tag->m_strTitle.c_str();
+                  if (!tag->m_premiered.IsValid() && tag->m_iYear)
+                    container->m_Date = CDateTime(tag->m_iYear, 1, 1, 0, 0, 0).GetAsW3CDateTime().c_str();
                   else
-                    container->m_Date = tag.m_premiered.GetAsW3CDate().c_str();
+                    container->m_Date = tag->m_premiered.GetAsW3CDate().c_str();
 
-                  for (unsigned int index = 0; index < tag.m_genre.size(); index++)
-                    container->m_Affiliation.genres.Add(tag.m_genre.at(index).c_str());
+                  for (unsigned int index = 0; index < tag->m_genre.size(); index++)
+                    container->m_Affiliation.genres.Add(tag->m_genre.at(index).c_str());
 
-                  for(CVideoInfoTag::iCast it = tag.m_cast.begin();it != tag.m_cast.end();it++) {
+                  for(CVideoInfoTag::iCast it = tag->m_cast.begin();it != tag->m_cast.end();it++) {
                       container->m_People.actors.Add(it->strName.c_str(), it->strRole.c_str());
                   }
 
-                  for (unsigned int index = 0; index < tag.m_director.size(); index++)
-                    container->m_People.directors.Add(tag.m_director[index].c_str());
-                  for (unsigned int index = 0; index < tag.m_writingCredits.size(); index++)
-                    container->m_People.authors.Add(tag.m_writingCredits[index].c_str());
+                  for (unsigned int index = 0; index < tag->m_director.size(); index++)
+                    container->m_People.directors.Add(tag->m_director[index].c_str());
+                  for (unsigned int index = 0; index < tag->m_writingCredits.size(); index++)
+                    container->m_People.authors.Add(tag->m_writingCredits[index].c_str());
 
-                  container->m_Description.description = tag.m_strTagLine.c_str();
-                  container->m_Description.long_description = tag.m_strPlot.c_str();
+                  container->m_Description.description = tag->m_strTagLine.c_str();
+                  container->m_Description.long_description = tag->m_strPlot.c_str();
 
                   break;
                 default:

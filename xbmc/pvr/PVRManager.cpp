@@ -1167,7 +1167,7 @@ bool CPVRManager::UpdateItem(CFileItem& item)
 
   if (channelTag->IsRadio())
   {
-    CMusicInfoTag* musictag = item.GetMusicInfoTag();
+    auto musictag = item.GetMusicInfoTag();
     if (musictag)
     {
       musictag->SetTitle(epgTagNow ?
@@ -1188,7 +1188,7 @@ bool CPVRManager::UpdateItem(CFileItem& item)
   }
   else
   {
-    CVideoInfoTag *videotag = item.GetVideoInfoTag();
+    auto videotag = item.GetVideoInfoTag();
     if (videotag)
     {
       videotag->m_strTitle = epgTagNow ?
@@ -1354,7 +1354,7 @@ bool CPVRManager::PerformChannelSwitch(const CPVRChannelPtr &channel, bool bPrev
     // save previous and load new channel's settings (view mode is updated in
     // the player)
     g_application.SaveFileState();
-    g_application.LoadVideoSettings(channel);
+    g_application.LoadVideoSettings(CFileItem(channel));
 
     // set channel as selected item
     CGUIWindowPVRBase::SetSelectedItemPath(channel->IsRadio(), channel->Path());
