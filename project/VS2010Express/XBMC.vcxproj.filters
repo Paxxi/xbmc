@@ -370,6 +370,9 @@
     <Filter Include="interfaces\builtins">
       <UniqueIdentifier>{248ffbc4-43f5-4aaf-b259-2dd4f840fcef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="video\db">
+      <UniqueIdentifier>{510b6b2d-1b99-4064-9235-84e9f71a1ebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -3254,6 +3257,15 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\addons\AddonCallbacksAudioEngine.cpp">
       <Filter>addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\video\db\Actor.cpp">
+      <Filter>video\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\video\db\Role.cpp">
+      <Filter>video\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\video\db\Art.cpp">
+      <Filter>video\db</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6315,6 +6327,15 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ScopeGuard.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\video\db\Actor.h">
+      <Filter>video\db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\video\db\Role.h">
+      <Filter>video\db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\video\db\Art.h">
+      <Filter>video\db</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

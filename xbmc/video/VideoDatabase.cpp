@@ -68,6 +68,8 @@
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
 #include "utils/XMLUtils.h"
+#include "video/db/Actor.h"
+#include "video/db/Role.h"
 #include "video/VideoDbUrl.h"
 #include "video/windows/GUIWindowVideoBase.h"
 #include "VideoInfoScanner.h"
@@ -5251,6 +5253,8 @@ bool CVideoDatabase::GetDirectorsNav(const std::string& strBaseDir, CFileItemLis
 
 bool CVideoDatabase::GetActorsNav(const std::string& strBaseDir, CFileItemList& items, int idContent /* = -1 */, const Filter &filter /* = Filter() */, bool countOnly /* = false */)
 {
+  auto actors = KODI::VIDEO::DB::GetActors(m_pDB);
+  auto roles = KODI::VIDEO::DB::GetRolesForActor(m_pDB, actors[0]);
   if (GetPeopleNav(strBaseDir, items, "actor", idContent, filter, countOnly))
   { // set thumbs - ideally this should be in the normal thumb setting routines
     for (int i = 0; i < items.Size() && !countOnly; i++)

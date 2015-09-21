@@ -1172,6 +1172,9 @@
     <ClInclude Include="..\..\xbmc\utils\win32\Win32InterfaceForCLog.h" />
     <ClInclude Include="..\..\xbmc\utils\win32\Win32Log.h" />
     <ClInclude Include="..\..\xbmc\utils\XSLTUtils.h" />
+    <ClInclude Include="..\..\xbmc\video\db\Actor.h" />
+    <ClInclude Include="..\..\xbmc\video\db\Art.h" />
+    <ClInclude Include="..\..\xbmc\video\db\Role.h" />
     <ClInclude Include="..\..\xbmc\video\FFmpegVideoDecoder.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\swig.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\XBPython.h" />
@@ -1306,6 +1309,9 @@
     <ClCompile Include="..\..\xbmc\utils\win32\Win32InterfaceForCLog.cpp" />
     <ClCompile Include="..\..\xbmc\utils\win32\Win32Log.cpp" />
     <ClCompile Include="..\..\xbmc\utils\XSLTUtils.cpp" />
+    <ClCompile Include="..\..\xbmc\video\db\Actor.cpp" />
+    <ClCompile Include="..\..\xbmc\video\db\Art.cpp" />
+    <ClCompile Include="..\..\xbmc\video\db\Role.cpp" />
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryCleaningJob.cpp" />
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryJob.cpp" />
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryMarkWatchedJob.cpp" />

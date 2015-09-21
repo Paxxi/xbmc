@@ -206,7 +206,7 @@ protected:
 
   bool m_sqlite; ///< \brief whether we use sqlite (defaults to true)
 
-  std::unique_ptr<dbiplus::Database> m_pDB;
+  std::shared_ptr<dbiplus::Database> m_pDB;
   std::unique_ptr<dbiplus::Dataset> m_pDS;
   std::unique_ptr<dbiplus::Dataset> m_pDS2;
 
