@@ -520,7 +520,6 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items, CVideoDatabase &dat
     Similarly, we assign the "clean" library labels to the item only if the "Replace filenames with library titles"
     setting is enabled.
     */
-  const bool stackItems    = items.GetProperty("isstacked").asBoolean() || (StackingAvailable(items) && CSettings::GetInstance().GetBool(CSettings::SETTING_MYVIDEOS_STACKVIDEOS));
   const bool replaceLabels = allowReplaceLabels && CSettings::GetInstance().GetBool(CSettings::SETTING_MYVIDEOS_REPLACELABELS);
 
   CFileItemList dbItems;
@@ -545,24 +544,7 @@ void CGUIWindowVideoNav::LoadVideoInfo(CFileItemList &items, CVideoDatabase &dat
       match = dbItems.Get(pathToMatch);
     }
     if (match)
-    {
       pItem->UpdateInfo(*match, replaceLabels);
-
-      if (stackItems)
-      {
-        if (match->m_bIsFolder)
-          pItem->SetPath(match->GetVideoInfoTag()->m_strPath);
-        else
-          pItem->SetPath(match->GetVideoInfoTag()->m_strFileNameAndPath);
-        // if we switch from a file to a folder item it means we really shouldn't be sorting files and
-        // folders separately
-        if (pItem->m_bIsFolder != match->m_bIsFolder)
-        {
-          items.SetSortIgnoreFolders(true);
-          pItem->m_bIsFolder = match->m_bIsFolder;
-        }
-      }
-    }
     else
     {
       /* NOTE: Currently we GetPlayCounts on our items regardless of whether content is set

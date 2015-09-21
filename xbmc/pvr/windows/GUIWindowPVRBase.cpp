@@ -28,7 +28,6 @@
 #include "dialogs/GUIDialogYesNo.h"
 #include "epg/Epg.h"
 #include "epg/GUIEPGGridContainer.h"
-#include "filesystem/StackDirectory.h"
 #include "guilib/GUIMessage.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
@@ -551,37 +550,37 @@ bool CGUIWindowPVRBase::PlayRecording(CFileItem *item, bool bPlayMinimized /* = 
 
   if (found != std::string::npos)
   {
-    /* Check here for asterisk at the begin of the filename */
-    if (stream[found+1] == '*')
-    {
-      /* Create a "stack://" url with all files matching the extension */
-      std::string ext = URIUtils::GetExtension(stream);
-      std::string dir = stream.substr(0, found);
+    ///* Check here for asterisk at the begin of the filename */
+    //if (stream[found+1] == '*')
+    //{
+    //  /* Create a "stack://" url with all files matching the extension */
+    //  std::string ext = URIUtils::GetExtension(stream);
+    //  std::string dir = stream.substr(0, found);
 
-      CFileItemList items;
-      XFILE::CDirectory::GetDirectory(dir, items);
-      items.Sort(SortByFile, SortOrderAscending);
+    //  CFileItemList items;
+    //  XFILE::CDirectory::GetDirectory(dir, items);
+    //  items.Sort(SortByFile, SortOrderAscending);
 
-      std::vector<int> stack;
-      for (int i = 0; i < items.Size(); ++i)
-      {
-        if (URIUtils::HasExtension(items[i]->GetPath(), ext))
-          stack.push_back(i);
-      }
+    //  std::vector<int> stack;
+    //  for (int i = 0; i < items.Size(); ++i)
+    //  {
+    //    if (URIUtils::HasExtension(items[i]->GetPath(), ext))
+    //      stack.push_back(i);
+    //  }
 
-      if (stack.empty())
-      {
-        /* If we have a stack change the path of the item to it */
-        XFILE::CStackDirectory dir;
-        std::string stackPath = dir.ConstructStackPath(items, stack);
-        item->SetPath(stackPath);
-      }
-    }
-    else
-    {
+    //  if (stack.empty())
+    //  {
+    //    /* If we have a stack change the path of the item to it */
+    //    XFILE::CStackDirectory dir;
+    //    std::string stackPath = dir.ConstructStackPath(items, stack);
+    //    item->SetPath(stackPath);
+    //  }
+    //}
+    //else
+    //{
       /* If no asterisk is present play only the given stream URL */
       item->SetPath(stream);
-    }
+    //}
   }
   else
   {

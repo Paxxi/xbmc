@@ -112,7 +112,6 @@ private:
   bool m_hideconsole;
   bool m_hidexbmc;
   bool m_islauncher;
-  bool m_playOneStackItem;
   WARP_CURSOR m_warpcursor;
   int m_playCountMinTime;
   std::vector<std::string> m_filenameReplacers;

@@ -31,7 +31,6 @@
 #include "filesystem/DirectoryCache.h"
 #include "filesystem/File.h"
 #include "filesystem/MultiPathDirectory.h"
-#include "filesystem/StackDirectory.h"
 #include "GUIInfoManager.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
@@ -304,7 +303,6 @@ namespace VIDEO
       else
       { // need to fetch the folder
         CDirectory::GetDirectory(strDirectory, items, g_advancedSettings.m_videoExtensions);
-        items.Stack();
 
         // check whether to re-use previously computed fast hash
         if (!CanFastHash(items, regexps) || fastHash.empty())
@@ -1643,39 +1641,19 @@ namespace VIDEO
       // grab the folder path
       std::string strPath = URIUtils::GetDirectory(item->GetPath());
 
-      if (bGrabAny && !item->IsStack())
+      if (bGrabAny)
       { // looking up by folder name - movie.nfo takes priority - but not for stacked items (handled below)
         nfoFile = URIUtils::AddFileToFolder(strPath, "movie.nfo");
         if (CFile::Exists(nfoFile))
           return nfoFile;
       }
 
-      // try looking for .nfo file for a stacked item
-      if (item->IsStack())
-      {
-        // first try .nfo file matching first file in stack
-        CStackDirectory dir;
-        std::string firstFile = dir.GetFirstStackedFile(item->GetPath());
-        CFileItem item2;
-        item2.SetPath(firstFile);
-        nfoFile = GetnfoFile(&item2, bGrabAny);
-        // else try .nfo file matching stacked title
-        if (nfoFile.empty())
-        {
-          std::string stackedTitlePath = dir.GetStackedTitlePath(item->GetPath());
-          item2.SetPath(stackedTitlePath);
-          nfoFile = GetnfoFile(&item2, bGrabAny);
-        }
-      }
+      // already an .nfo file?
+      if (URIUtils::HasExtension(item->GetPath(), ".nfo"))
+        nfoFile = item->GetPath();
+      // no, create .nfo file
       else
-      {
-        // already an .nfo file?
-        if (URIUtils::HasExtension(item->GetPath(), ".nfo"))
-          nfoFile = item->GetPath();
-        // no, create .nfo file
-        else
-          nfoFile = URIUtils::ReplaceExtension(item->GetPath(), ".nfo");
-      }
+        nfoFile = URIUtils::ReplaceExtension(item->GetPath(), ".nfo");
 
       // test file existence
       if (!nfoFile.empty() && !CFile::Exists(nfoFile))

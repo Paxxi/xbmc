@@ -26,7 +26,6 @@
 #include "JobManager.h"
 #include "FileOperationJob.h"
 #include "URIUtils.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/MultiPathDirectory.h"
 #include <vector>
 #include "settings/MediaSourceSettings.h"
@@ -176,8 +175,6 @@ CDateTime CFileUtils::GetModificationDate(const std::string& strFileNameAndPath,
   try
   {
     std::string file = strFileNameAndPath;
-    if (URIUtils::IsStack(strFileNameAndPath))
-      file = CStackDirectory::GetFirstStackedFile(strFileNameAndPath);
 
     if (URIUtils::IsInArchive(file))
       file = CURL(file).GetHostName();

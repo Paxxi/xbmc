@@ -26,7 +26,6 @@
 #include "Util.h"
 #include "filesystem/File.h"
 #include "FileItem.h"
-#include "filesystem/StackDirectory.h"
 #include "network/Network.h"
 #ifndef TARGET_POSIX
 #include <sys\stat.h>
@@ -561,22 +560,6 @@ std::string CURL::Get() const
 std::string CURL::GetWithoutUserDetails(bool redact) const
 {
   std::string strURL;
-
-  if (IsProtocol("stack"))
-  {
-    CFileItemList items;
-    XFILE::CStackDirectory dir;
-    dir.GetDirectory(*this,items);
-    std::vector<std::string> newItems;
-    for (int i=0;i<items.Size();++i)
-    {
-      CURL url(items[i]->GetPath());
-      items[i]->SetPath(url.GetWithoutUserDetails(redact));
-      newItems.push_back(items[i]->GetPath());
-    }
-    dir.ConstructStackPath(newItems, strURL);
-    return strURL;
-  }
 
   unsigned int sizeneed = m_strProtocol.length()
                         + m_strDomain.length()

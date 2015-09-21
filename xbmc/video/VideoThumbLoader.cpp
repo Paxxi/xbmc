@@ -26,7 +26,6 @@
 #include "cores/dvdplayer/DVDFileInfo.h"
 #include "FileItem.h"
 #include "filesystem/DirectoryCache.h"
-#include "filesystem/StackDirectory.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/StereoscopicsManager.h"
 #include "GUIUserMessages.h"
@@ -62,9 +61,6 @@ CThumbExtractor::CThumbExtractor(const CFileItem& item,
 
   if (item.IsVideoDb() && item.HasVideoInfoTag())
     m_item.SetPath(item.GetVideoInfoTag()->m_strFileNameAndPath);
-
-  if (m_item.IsStack())
-    m_item.SetPath(CStackDirectory::GetFirstStackedFile(m_item.GetPath()));
 }
 
 CThumbExtractor::~CThumbExtractor()
@@ -142,15 +138,6 @@ bool CThumbExtractor::DoWork()
     CVideoDatabase db;
     if (db.Open())
     {
-      if (URIUtils::IsStack(m_listpath))
-      {
-        // Don't know the total time of the stack, so set duration to zero to avoid confusion
-        info->m_streamDetails.SetVideoDuration(0, 0);
-
-        // Restore original stack path
-        m_item.SetPath(m_listpath);
-      }
-
       if (info->m_iFileId < 0)
         db.SetStreamDetailsForFile(info->m_streamDetails, !info->m_strFileNameAndPath.empty() ? info->m_strFileNameAndPath : static_cast<const std::string&>(m_item.GetPath()));
       else
@@ -553,8 +540,6 @@ std::string CVideoThumbLoader::GetEmbeddedThumbURL(const CFileItem &item)
   std::string path(item.GetPath());
   if (item.IsVideoDb() && item.HasVideoInfoTag())
     path = item.GetVideoInfoTag()->m_strFileNameAndPath;
-  if (URIUtils::IsStack(path))
-    path = CStackDirectory::GetFirstStackedFile(path);
 
   return CTextureUtils::GetWrappedImageURL(path, "video");
 }

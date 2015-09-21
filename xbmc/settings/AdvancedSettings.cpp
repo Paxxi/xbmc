@@ -220,16 +220,8 @@ void CAdvancedSettings::Initialize()
   m_moviesExcludeFromScanRegExps.push_back("[\\/](proof|subs)[\\/]");
   m_tvshowExcludeFromScanRegExps.push_back("[!-._ \\\\/]sample[-._ \\\\/]");
 
-  m_folderStackRegExps.clear();
-  m_folderStackRegExps.push_back("((cd|dvd|dis[ck])[0-9]+)$");
-
-  m_videoStackRegExps.clear();
-  m_videoStackRegExps.push_back("(.*?)([ _.-]*(?:cd|dvd|p(?:(?:ar)?t)|dis[ck])[ _.-]*[0-9]+)(.*?)(\\.[^.]+)$");
-  m_videoStackRegExps.push_back("(.*?)([ _.-]*(?:cd|dvd|p(?:(?:ar)?t)|dis[ck])[ _.-]*[a-d])(.*?)(\\.[^.]+)$");
-  m_videoStackRegExps.push_back("(.*?)([ ._-]*[a-d])(.*?)(\\.[^.]+)$");
   // This one is a bit too greedy to enable by default.  It will stack sequels
   // in a flat dir structure, but is perfectly safe in a dir-per-vid one.
-  //m_videoStackRegExps.push_back("(.*?)([ ._-]*[0-9])(.*?)(\\.[^.]+)$");
 
   m_tvshowEnumRegExps.clear();
   // foo.s01.e01, foo.s01_e01, S01E02 foo, S01 - E02
@@ -935,20 +927,6 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
                                         m_trailerMatchRegExps.begin(),
                                         m_trailerMatchRegExps.end());
 
-  // video stacking regexps
-  TiXmlElement* pVideoStacking = pRootElement->FirstChildElement("moviestacking");
-  if (pVideoStacking)
-    GetCustomRegexps(pVideoStacking, m_videoStackRegExps);
-
-  // folder stacking regexps
-  TiXmlElement* pFolderStacking = pRootElement->FirstChildElement("folderstacking");
-  if (pFolderStacking)
-    GetCustomRegexps(pFolderStacking, m_folderStackRegExps);
-
-  //tv stacking regexps
-  TiXmlElement* pTVStacking = pRootElement->FirstChildElement("tvshowmatching");
-  if (pTVStacking)
-    GetCustomTVRegexps(pTVStacking, m_tvshowEnumRegExps);
 
   //tv multipart enumeration regexp
   XMLUtils::GetString(pRootElement, "tvmultipartmatching", m_tvshowMultiPartEnumRegExp);
@@ -1180,8 +1158,6 @@ void CAdvancedSettings::Clear()
   m_moviesExcludeFromScanRegExps.clear();
   m_tvshowExcludeFromScanRegExps.clear();
   m_videoExcludeFromListingRegExps.clear();
-  m_videoStackRegExps.clear();
-  m_folderStackRegExps.clear();
   m_audioExcludeFromScanRegExps.clear();
   m_audioExcludeFromListingRegExps.clear();
   m_pictureExcludeFromListingRegExps.clear();

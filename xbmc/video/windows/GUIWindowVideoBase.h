@@ -32,8 +32,7 @@ enum VideoSelectAction
   SELECT_ACTION_RESUME,
   SELECT_ACTION_INFO,
   SELECT_ACTION_MORE,
-  SELECT_ACTION_PLAY,
-  SELECT_ACTION_PLAYPART
+  SELECT_ACTION_PLAY
 };
 
 class CGUIWindowVideoBase : public CGUIMediaWindow, public IBackgroundLoaderObserver
@@ -134,13 +133,8 @@ protected:
 
   static bool OnUnAssignContent(const std::string &path, int header, int text);
 
-  static bool StackingAvailable(const CFileItemList &items);
-
-  bool OnPlayStackPart(int item);
-
   CGUIDialogProgress* m_dlgProgress;
   CVideoDatabase m_database;
 
   CVideoThumbLoader m_thumbLoader;
-  bool m_stackingAvailable;
 };

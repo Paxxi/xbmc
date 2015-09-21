@@ -34,7 +34,6 @@
 #include "NfoFile.h"
 #include "PlayListPlayer.h"
 #include "GUIPassword.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/VideoDatabaseDirectory.h"
 #include "PartyModeManager.h"
 #include "guilib/GUIWindowManager.h"
@@ -85,7 +84,6 @@ CGUIWindowVideoBase::CGUIWindowVideoBase(int id, const std::string &xmlFile)
     : CGUIMediaWindow(id, xmlFile.c_str())
 {
   m_thumbLoader.SetObserver(this);
-  m_stackingAvailable = true;
   m_dlgProgress = NULL;
 }
 
@@ -231,7 +229,6 @@ void CGUIWindowVideoBase::OnInfo(CFileItem* pItem, ADDON::ScraperPtr& scraper)
     {
       CFileItemList items;
       CDirectory::GetDirectory(item.GetPath(), items, g_advancedSettings.m_videoExtensions);
-      items.Stack();
 
       // check for media files
       bool bFoundFile(false);
@@ -646,8 +643,6 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action)
       {
         std::string itemPath(item->GetPath());
         itemPath = item->GetVideoInfoTag()->m_strFileNameAndPath;
-        if (URIUtils::IsStack(itemPath) && CFileItem(CStackDirectory::GetFirstStackedFile(itemPath),false).IsDiscImage())
-          choices.Add(SELECT_ACTION_PLAYPART, 20324); // Play Part
       }
 
       std::string resumeString = GetResumeString(*item);
@@ -679,10 +674,6 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action)
     return true;
   case SELECT_ACTION_RESUME:
     item->m_lStartOffset = STARTOFFSET_RESUME;
-    break;
-  case SELECT_ACTION_PLAYPART:
-    if (!OnPlayStackPart(iItem))
-      return false;
     break;
   case SELECT_ACTION_PLAY:
   default:
@@ -827,13 +818,6 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
       if (!item->IsPath("add") && !item->IsPlugin() &&
           !item->IsScript() && !item->IsAddonsPath() && !item->IsLiveTV())
       {
-        if (URIUtils::IsStack(path))
-        {
-          std::vector<int> times;
-          if (m_database.GetStackTimes(path,times) || CFileItem(CStackDirectory::GetFirstStackedFile(path),false).IsDiscImage())
-            buttons.Add(CONTEXT_BUTTON_PLAY_PART, 20324);
-        }
-
         // allow a folder to be ad-hoc queued and played by the default player
         if (item->m_bIsFolder || (item->IsPlayList() &&
            !g_advancedSettings.m_playlistAsFolders))
@@ -893,75 +877,6 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
   CGUIMediaWindow::GetContextButtons(itemNumber, buttons);
 }
 
-bool CGUIWindowVideoBase::OnPlayStackPart(int iItem)
-{
-  if (iItem < 0 || iItem >= m_vecItems->Size())
-    return false;
-
-  CFileItemPtr stack = m_vecItems->Get(iItem);
-  std::string path(stack->GetPath());
-  if (stack->IsVideoDb())
-    path = stack->GetVideoInfoTag()->m_strFileNameAndPath;
-
-  if (!URIUtils::IsStack(path))
-    return false;
-
-  CFileItemList parts;
-  CDirectory::GetDirectory(path, parts);
-
-  for (int i = 0; i < parts.Size(); i++)
-    parts[i]->SetLabel(StringUtils::Format(g_localizeStrings.Get(23051).c_str(), i+1));
-
-  CGUIDialogSelect* pDialog = (CGUIDialogSelect*)g_windowManager.GetWindow(WINDOW_DIALOG_SELECT);
-
-  pDialog->Reset();
-  pDialog->SetHeading(CVariant{20324});
-  pDialog->SetItems(parts);
-  pDialog->Open();
-
-  if (!pDialog->IsConfirmed())
-    return false;
-
-  int selectedFile = pDialog->GetSelectedLabel();
-  if (selectedFile >= 0)
-  {
-    // ISO stack
-    if (CFileItem(CStackDirectory::GetFirstStackedFile(path),false).IsDiscImage())
-    {
-      std::string resumeString = CGUIWindowVideoBase::GetResumeString(*(parts[selectedFile].get()));
-      stack->m_lStartOffset = 0;
-      if (!resumeString.empty()) 
-      {
-        CContextButtons choices;
-        choices.Add(SELECT_ACTION_RESUME, resumeString);
-        choices.Add(SELECT_ACTION_PLAY, 12021);   // Start from beginning
-        int value = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-        if (value == SELECT_ACTION_RESUME)
-          GetResumeItemOffset(parts[selectedFile].get(), stack->m_lStartOffset, stack->m_lStartPartNumber);
-        else if (value != SELECT_ACTION_PLAY)
-          return false; // if not selected PLAY, then we changed our mind so return
-      }
-      stack->m_lStartPartNumber = selectedFile;
-    }
-    // regular stack
-    else
-    {
-      if (selectedFile > 0)
-      {
-        std::vector<int> times;
-        if (m_database.GetStackTimes(path,times))
-          stack->m_lStartOffset = times[selectedFile - 1] * 75;
-      }
-      else
-        stack->m_lStartOffset = 0;
-    }
-
-
-  }
-
-  return true;
-}
-
 bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
   CFileItemPtr item;
@@ -973,17 +888,6 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     {
       OnAssignContent(item->HasVideoInfoTag() && !item->GetVideoInfoTag()->m_strPath.empty() ? item->GetVideoInfoTag()->m_strPath : static_cast<const std::string&>(item->GetPath()));
       return true;
-    }
-  case CONTEXT_BUTTON_PLAY_PART:
-    {
-      if (OnPlayStackPart(itemNumber)) 
-      {
-        // call CGUIMediaWindow::OnClick() as otherwise autoresume will kick in
-        CGUIMediaWindow::OnClick(itemNumber);
-        return true;
-      }
-      else
-        return false;
     }
   case CONTEXT_BUTTON_QUEUE_ITEM:
     OnQueueItem(itemNumber);
@@ -1012,8 +916,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         VideoSelectAction selectAction = (VideoSelectAction)CSettings::GetInstance().GetInt(CSettings::SETTING_MYVIDEOS_SELECTACTION);
         if (selectAction != SELECT_ACTION_PLAY_OR_RESUME &&
             selectAction != SELECT_ACTION_RESUME &&
-            selectAction != SELECT_ACTION_PLAY &&
-            selectAction != SELECT_ACTION_PLAYPART)
+            selectAction != SELECT_ACTION_PLAY)
           selectAction = SELECT_ACTION_PLAY_OR_RESUME;
         return OnFileAction(itemNumber, selectAction);
       }
@@ -1137,37 +1040,37 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
 
       if (found != std::string::npos)
       {
-        /* Check here for asterix at the begin of the filename */
-        if (stream[found+1] == '*')
-        {
-          /* Create a "stack://" url with all files matching the extension */
-          std::string ext = URIUtils::GetExtension(stream);
-          std::string dir = stream.substr(0, found).c_str();
+        ///* Check here for asterix at the begin of the filename */
+        //if (stream[found+1] == '*')
+        //{
+        //  /* Create a "stack://" url with all files matching the extension */
+        //  std::string ext = URIUtils::GetExtension(stream);
+        //  std::string dir = stream.substr(0, found).c_str();
 
-          CFileItemList items;
-          CDirectory::GetDirectory(dir, items);
-          items.Sort(SortByFile, SortOrderAscending);
+        //  CFileItemList items;
+        //  CDirectory::GetDirectory(dir, items);
+        //  items.Sort(SortByFile, SortOrderAscending);
 
-          std::vector<int> stack;
-          for (int i = 0; i < items.Size(); ++i)
-          {
-            if (URIUtils::HasExtension(items[i]->GetPath(), ext))
-              stack.push_back(i);
-          }
+        //  std::vector<int> stack;
+        //  for (int i = 0; i < items.Size(); ++i)
+        //  {
+        //    if (URIUtils::HasExtension(items[i]->GetPath(), ext))
+        //      stack.push_back(i);
+        //  }
 
-          if (stack.size() > 0)
-          {
-            /* If we have a stack change the path of the item to it */
-            CStackDirectory dir;
-            std::string stackPath = dir.ConstructStackPath(items, stack);
-            item.SetPath(stackPath);
-          }
-        }
-        else
-        {
+        //  if (stack.size() > 0)
+        //  {
+        //    /* If we have a stack change the path of the item to it */
+        //    CStackDirectory dir;
+        //    std::string stackPath = dir.ConstructStackPath(items, stack);
+        //    item.SetPath(stackPath);
+        //  }
+        //}
+        //else
+        //{
           /* If no asterix is present play only the given stream URL */
           item.SetPath(stream);
-        }
+        //}
       }
       else
       {
@@ -1230,9 +1133,6 @@ void CGUIWindowVideoBase::OnDeleteItem(int iItem)
 
 void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
 {
-  // HACK: stacked files need to be treated as folders in order to be deleted
-  if (item->IsStack())
-    item->m_bIsFolder = true;
   if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE &&
       CProfilesManager::GetInstance().GetCurrentProfile().filesLocked())
   {
@@ -1354,27 +1254,7 @@ bool CGUIWindowVideoBase::GetDirectory(const std::string &strDirectory, CFileIte
     newPlaylist->SetLabelPreformated(true);
     items.Add(newPlaylist);
   }
-
-  m_stackingAvailable = StackingAvailable(items);
-  // we may also be in a tvshow files listing
-  // (ideally this should be removed, and our stack regexps tidied up if necessary
-  // No "normal" episodes should stack, and multi-parts should be supported)
-  ADDON::ScraperPtr info = m_database.GetScraperForPath(strDirectory);
-  if (info && info->Content() == CONTENT_TVSHOWS)
-    m_stackingAvailable = false;
-
-  if (m_stackingAvailable && !items.IsStack() && CSettings::GetInstance().GetBool(CSettings::SETTING_MYVIDEOS_STACKVIDEOS))
-    items.Stack();
-
   return bResult;
-}
-
-bool CGUIWindowVideoBase::StackingAvailable(const CFileItemList &items)
-{
-  CURL url(items.GetPath());
-  return !(items.IsPlugin() || items.IsAddonsPath()  ||
-           items.IsRSS() || items.IsInternetStream() ||
-           items.IsVideoDb() || url.IsProtocol("playlistvideo"));
 }
 
 void CGUIWindowVideoBase::GetGroupedItems(CFileItemList &items)

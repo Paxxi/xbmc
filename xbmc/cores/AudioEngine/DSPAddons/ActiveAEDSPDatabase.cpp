@@ -475,12 +475,7 @@ void CActiveAEDSPDatabase::EraseActiveDSPSettings()
 
 void CActiveAEDSPDatabase::SplitPath(const std::string& strFileNameAndPath, std::string& strPath, std::string& strFileName)
 {
-  if (URIUtils::IsStack(strFileNameAndPath) || StringUtils::StartsWithNoCase(strFileNameAndPath, "rar://") || StringUtils::StartsWithNoCase(strFileNameAndPath, "zip://"))
-  {
-    URIUtils::GetParentPath(strFileNameAndPath,strPath);
-    strFileName = strFileNameAndPath;
-  }
-  else if (URIUtils::IsPlugin(strFileNameAndPath))
+  if (URIUtils::IsPlugin(strFileNameAndPath))
   {
     CURL url(strFileNameAndPath);
     strPath = url.GetWithoutFilename();

@@ -77,7 +77,6 @@ CExternalPlayer::CExternalPlayer(IPlayerCallback& callback)
   m_hidexbmc = false;
   m_islauncher = false;
   m_playCountMinTime = DEFAULT_PLAYCOUNT_MIN_TIME;
-  m_playOneStackItem = false;
 
   m_dialog = NULL;
   m_hwndXbmc = NULL;
@@ -393,7 +392,7 @@ void CExternalPlayer::Process()
   g_application.ResetScreenSaver();
   g_application.WakeUpScreenSaverAndDPMS();
 
-  if (!ret || (m_playOneStackItem && g_application.CurrentFileItem().IsStack()))
+  if (!ret) 
     m_callback.OnPlayBackStopped();
   else
     m_callback.OnPlayBackEnded();
@@ -639,7 +638,6 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   }
 
   XMLUtils::GetString(pConfig, "args", m_args);
-  XMLUtils::GetBoolean(pConfig, "playonestackitem", m_playOneStackItem);
   XMLUtils::GetBoolean(pConfig, "islauncher", m_islauncher);
   XMLUtils::GetBoolean(pConfig, "hidexbmc", m_hidexbmc);
   if (!XMLUtils::GetBoolean(pConfig, "hideconsole", m_hideconsole))

@@ -393,7 +393,6 @@
     <ClCompile Include="..\..\xbmc\filesystem\SpecialProtocol.cpp" />
     <ClCompile Include="..\..\xbmc\filesystem\SpecialProtocolDirectory.cpp" />
     <ClCompile Include="..\..\xbmc\filesystem\SpecialProtocolFile.cpp" />
-    <ClCompile Include="..\..\xbmc\filesystem\StackDirectory.cpp" />
     <ClCompile Include="..\..\xbmc\filesystem\test\TestDirectory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -1258,7 +1257,6 @@
     <ClInclude Include="..\..\xbmc\filesystem\SpecialProtocol.h" />
     <ClInclude Include="..\..\xbmc\filesystem\SpecialProtocolDirectory.h" />
     <ClInclude Include="..\..\xbmc\filesystem\SpecialProtocolFile.h" />
-    <ClInclude Include="..\..\xbmc\filesystem\StackDirectory.h" />
     <ClInclude Include="..\..\xbmc\filesystem\udf25.h" />
     <ClInclude Include="..\..\xbmc\filesystem\UDFDirectory.h" />
     <ClInclude Include="..\..\xbmc\filesystem\UDFFile.h" />

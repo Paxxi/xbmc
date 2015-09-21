@@ -30,7 +30,6 @@
 #include "utils/Crc32.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/CurlFile.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "filesystem/MusicDatabaseDirectory.h"
@@ -59,6 +58,7 @@
 #include "utils/Variant.h"
 #include "music/karaoke/karaokelyricsfactory.h"
 #include "utils/Mime.h"
+#include "utils/SortUtils.h"
 
 #include <assert.h>
 #include <algorithm>
@@ -680,9 +680,6 @@ bool CFileItem::Exists(bool bUseCache /* = true */) const
   if (URIUtils::IsMultiPath(strPath))
     strPath = CMultiPathDirectory::GetFirstPath(strPath);
 
-  if (URIUtils::IsStack(strPath))
-    strPath = CStackDirectory::GetFirstStackedFile(strPath);
-
   if (m_bIsFolder)
     return CDirectory::Exists(strPath, bUseCache);
   else
@@ -995,11 +992,6 @@ bool CFileItem::IsRSS() const
 bool CFileItem::IsAndroidApp() const
 {
   return URIUtils::IsAndroidApp(m_strPath);
-}
-
-bool CFileItem::IsStack() const
-{
-  return URIUtils::IsStack(m_strPath);
 }
 
 bool CFileItem::IsPlugin() const
@@ -2299,304 +2291,6 @@ void CFileItemList::RemoveExtensions()
     m_items[i]->RemoveExtension();
 }
 
-void CFileItemList::Stack(bool stackFiles /* = true */)
-{
-  CSingleLock lock(m_lock);
-
-  // not allowed here
-  if (IsVirtualDirectoryRoot() ||
-      IsLiveTV() ||
-      IsSourcesPath() ||
-      IsLibraryFolder())
-    return;
-
-  SetProperty("isstacked", true);
-
-  // items needs to be sorted for stuff below to work properly
-  Sort(SortByLabel, SortOrderAscending);
-
-  StackFolders();
-
-  if (stackFiles)
-    StackFiles();
-}
-
-void CFileItemList::StackFolders()
-{
-  // Precompile our REs
-  VECCREGEXP folderRegExps;
-  CRegExp folderRegExp(true, CRegExp::autoUtf8);
-  const std::vector<std::string>& strFolderRegExps = g_advancedSettings.m_folderStackRegExps;
-
-  std::vector<std::string>::const_iterator strExpression = strFolderRegExps.begin();
-  while (strExpression != strFolderRegExps.end())
-  {
-    if (!folderRegExp.RegComp(*strExpression))
-      CLog::Log(LOGERROR, "%s: Invalid folder stack RegExp:'%s'", __FUNCTION__, strExpression->c_str());
-    else
-      folderRegExps.push_back(folderRegExp);
-
-    strExpression++;
-  }
-
-  if (!folderRegExp.IsCompiled())
-  {
-    CLog::Log(LOGDEBUG, "%s: No stack expressions available. Skipping folder stacking", __FUNCTION__);
-    return;
-  }
-
-  // stack folders
-  for (int i = 0; i < Size(); i++)
-  {
-    CFileItemPtr item = Get(i);
-    // combined the folder checks
-    if (item->m_bIsFolder)
-    {
-      // only check known fast sources?
-      // NOTES:
-      // 1. rars and zips may be on slow sources? is this supposed to be allowed?
-      if( !item->IsRemote()
-        || item->IsSmb()
-        || item->IsNfs() 
-        || URIUtils::IsInRAR(item->GetPath())
-        || URIUtils::IsInZIP(item->GetPath())
-        || URIUtils::IsOnLAN(item->GetPath())
-        )
-      {
-        // stack cd# folders if contains only a single video file
-
-        bool bMatch(false);
-
-        VECCREGEXP::iterator expr = folderRegExps.begin();
-        while (!bMatch && expr != folderRegExps.end())
-        {
-          //CLog::Log(LOGDEBUG,"%s: Running expression %s on %s", __FUNCTION__, expr->GetPattern().c_str(), item->GetLabel().c_str());
-          bMatch = (expr->RegFind(item->GetLabel().c_str()) != -1);
-          if (bMatch)
-          {
-            CFileItemList items;
-            CDirectory::GetDirectory(item->GetPath(),items,g_advancedSettings.m_videoExtensions);
-            // optimized to only traverse listing once by checking for filecount
-            // and recording last file item for later use
-            int nFiles = 0;
-            int index = -1;
-            for (int j = 0; j < items.Size(); j++)
-            {
-              if (!items[j]->m_bIsFolder)
-              {
-                nFiles++;
-                index = j;
-              }
-
-              if (nFiles > 1)
-                break;
-            }
-
-            if (nFiles == 1)
-              *item = *items[index];
-          }
-          expr++;
-        }
-
-        // check for dvd folders
-        if (!bMatch)
-        {
-          std::string dvdPath = item->GetOpticalMediaPath();
-
-          if (!dvdPath.empty())
-          {
-            // NOTE: should this be done for the CD# folders too?
-            item->m_bIsFolder = false;
-            item->SetPath(dvdPath);
-            item->SetLabel2("");
-            item->SetLabelPreformated(true);
-            m_sortDescription.sortBy = SortByNone; /* sorting is now broken */
-          }
-        }
-      }
-    }
-  }
-}
-
-void CFileItemList::StackFiles()
-{
-  // Precompile our REs
-  VECCREGEXP stackRegExps;
-  CRegExp tmpRegExp(true, CRegExp::autoUtf8);
-  const std::vector<std::string>& strStackRegExps = g_advancedSettings.m_videoStackRegExps;
-  std::vector<std::string>::const_iterator strRegExp = strStackRegExps.begin();
-  while (strRegExp != strStackRegExps.end())
-  {
-    if (tmpRegExp.RegComp(*strRegExp))
-    {
-      if (tmpRegExp.GetCaptureTotal() == 4)
-        stackRegExps.push_back(tmpRegExp);
-      else
-        CLog::Log(LOGERROR, "Invalid video stack RE (%s). Must have 4 captures.", strRegExp->c_str());
-    }
-    strRegExp++;
-  }
-
-  // now stack the files, some of which may be from the previous stack iteration
-  int i = 0;
-  while (i < Size())
-  {
-    CFileItemPtr item1 = Get(i);
-
-    // skip folders, nfo files, playlists
-    if (item1->m_bIsFolder
-      || item1->IsParentFolder()
-      || item1->IsNFO()
-      || item1->IsPlayList()
-      )
-    {
-      // increment index
-      i++;
-      continue;
-    }
-
-    int64_t               size        = 0;
-    size_t                offset      = 0;
-    std::string           stackName;
-    std::string           file1;
-    std::string           filePath;
-    std::vector<int>      stack;
-    VECCREGEXP::iterator  expr        = stackRegExps.begin();
-
-    URIUtils::Split(item1->GetPath(), filePath, file1);
-    if (URIUtils::HasEncodedFilename(CURL(filePath)))
-      file1 = CURL::Decode(file1);
-
-    int j;
-    while (expr != stackRegExps.end())
-    {
-      if (expr->RegFind(file1, offset) != -1)
-      {
-        std::string Title1      = expr->GetMatch(1),
-                    Volume1     = expr->GetMatch(2),
-                    Ignore1     = expr->GetMatch(3),
-                    Extension1  = expr->GetMatch(4);
-        if (offset)
-          Title1 = file1.substr(0, expr->GetSubStart(2));
-        j = i + 1;
-        while (j < Size())
-        {
-          CFileItemPtr item2 = Get(j);
-
-          // skip folders, nfo files, playlists
-          if (item2->m_bIsFolder
-            || item2->IsParentFolder()
-            || item2->IsNFO()
-            || item2->IsPlayList()
-            )
-          {
-            // increment index
-            j++;
-            continue;
-          }
-
-          std::string file2, filePath2;
-          URIUtils::Split(item2->GetPath(), filePath2, file2);
-          if (URIUtils::HasEncodedFilename(CURL(filePath2)) )
-            file2 = CURL::Decode(file2);
-
-          if (expr->RegFind(file2, offset) != -1)
-          {
-            std::string  Title2      = expr->GetMatch(1),
-                        Volume2     = expr->GetMatch(2),
-                        Ignore2     = expr->GetMatch(3),
-                        Extension2  = expr->GetMatch(4);
-            if (offset)
-              Title2 = file2.substr(0, expr->GetSubStart(2));
-            if (StringUtils::EqualsNoCase(Title1, Title2))
-            {
-              if (!StringUtils::EqualsNoCase(Volume1, Volume2))
-              {
-                if (StringUtils::EqualsNoCase(Ignore1, Ignore2) &&
-                    StringUtils::EqualsNoCase(Extension1, Extension2))
-                {
-                  if (stack.size() == 0)
-                  {
-                    stackName = Title1 + Ignore1 + Extension1;
-                    stack.push_back(i);
-                    size += item1->m_dwSize;
-                  }
-                  stack.push_back(j);
-                  size += item2->m_dwSize;
-                }
-                else // Sequel
-                {
-                  offset = 0;
-                  expr++;
-                  break;
-                }
-              }
-              else if (!StringUtils::EqualsNoCase(Ignore1, Ignore2)) // False positive, try again with offset
-              {
-                offset = expr->GetSubStart(3);
-                break;
-              }
-              else // Extension mismatch
-              {
-                offset = 0;
-                expr++;
-                break;
-              }
-            }
-            else // Title mismatch
-            {
-              offset = 0;
-              expr++;
-              break;
-            }
-          }
-          else // No match 2, next expression
-          {
-            offset = 0;
-            expr++;
-            break;
-          }
-          j++;
-        }
-        if (j == Size())
-          expr = stackRegExps.end();
-      }
-      else // No match 1
-      {
-        offset = 0;
-        expr++;
-      }
-      if (stack.size() > 1)
-      {
-        // have a stack, remove the items and add the stacked item
-        // dont actually stack a multipart rar set, just remove all items but the first
-        std::string stackPath;
-        if (Get(stack[0])->IsRAR())
-          stackPath = Get(stack[0])->GetPath();
-        else
-        {
-          CStackDirectory dir;
-          stackPath = dir.ConstructStackPath(*this, stack);
-        }
-        item1->SetPath(stackPath);
-        // clean up list
-        for (unsigned k = 1; k < stack.size(); k++)
-          Remove(i+1);
-        // item->m_bIsFolder = true;  // don't treat stacked files as folders
-        // the label may be in a different char set from the filename (eg over smb
-        // the label is converted from utf8, but the filename is not)
-        if (!CSettings::GetInstance().GetBool(CSettings::SETTING_FILELISTS_SHOWEXTENSIONS))
-          URIUtils::RemoveExtension(stackName);
-
-        item1->SetLabel(stackName);
-        item1->m_dwSize = size;
-        break;
-      }
-    }
-    i++;
-  }
-}
-
 bool CFileItemList::Load(int windowID)
 {
   CFile file;
@@ -2735,19 +2429,6 @@ std::string CFileItem::GetTBNFile() const
   std::string thumbFile;
   std::string strFile = m_strPath;
 
-  if (IsStack())
-  {
-    std::string strPath, strReturn;
-    URIUtils::GetParentPath(m_strPath,strPath);
-    CFileItem item(CStackDirectory::GetFirstStackedFile(strFile),false);
-    std::string strTBNFile = item.GetTBNFile();
-    strReturn = URIUtils::AddFileToFolder(strPath, URIUtils::GetFileName(strTBNFile));
-    if (CFile::Exists(strReturn))
-      return strReturn;
-
-    strFile = URIUtils::AddFileToFolder(strPath,URIUtils::GetFileName(CStackDirectory::GetStackedTitlePath(strFile)));
-  }
-
   if (URIUtils::IsInRAR(strFile) || URIUtils::IsInZIP(strFile))
   {
     std::string strPath = URIUtils::GetDirectory(strFile);
@@ -2819,17 +2500,6 @@ std::string CFileItem::GetLocalArt(const std::string &artFile, bool useFolder) c
     return "";
 
   std::string strFile = m_strPath;
-  if (IsStack())
-  {
-/*    CFileItem item(CStackDirectory::GetFirstStackedFile(strFile),false);
-    std::string localArt = item.GetLocalArt(artFile);
-    return localArt;
-    */
-    std::string strPath;
-    URIUtils::GetParentPath(m_strPath,strPath);
-    strFile = URIUtils::AddFileToFolder(strPath, URIUtils::GetFileName(CStackDirectory::GetStackedTitlePath(strFile)));
-  }
-
   if (URIUtils::IsInRAR(strFile) || URIUtils::IsInZIP(strFile))
   {
     std::string strPath = URIUtils::GetDirectory(strFile);
@@ -2871,13 +2541,6 @@ std::string CFileItem::GetFolderThumb(const std::string &folderJPG /* = "folder.
 {
   std::string strFolder = m_strPath;
 
-  if (IsStack() ||
-      URIUtils::IsInRAR(strFolder) ||
-      URIUtils::IsInZIP(strFolder))
-  {
-    URIUtils::GetParentPath(m_strPath,strFolder);
-  }
-
   if (IsMultiPath())
     strFolder = CMultiPathDirectory::GetFirstPath(m_strPath);
 
@@ -2899,9 +2562,6 @@ std::string CFileItem::GetMovieName(bool bUseFolderNames /* = false */) const
   }
 
   std::string strMovieName = GetBaseMoviePath(bUseFolderNames);
-
-  if (URIUtils::IsStack(strMovieName))
-    strMovieName = CStackDirectory::GetStackedTitlePath(strMovieName);
 
   URIUtils::RemoveSlashAtEnd(strMovieName);
 
@@ -2947,18 +2607,6 @@ std::string CFileItem::GetLocalFanart() const
 
   std::string strFile2;
   std::string strFile = m_strPath;
-  if (IsStack())
-  {
-    std::string strPath;
-    URIUtils::GetParentPath(m_strPath,strPath);
-    CStackDirectory dir;
-    std::string strPath2;
-    strPath2 = dir.GetStackedTitlePath(strFile);
-    strFile = URIUtils::AddFileToFolder(strPath, URIUtils::GetFileName(strPath2));
-    CFileItem item(dir.GetFirstStackedFile(m_strPath),false);
-    std::string strTBNFile(URIUtils::ReplaceExtension(item.GetTBNFile(), "-fanart"));
-    strFile2 = URIUtils::AddFileToFolder(strPath, URIUtils::GetFileName(strTBNFile));
-  }
   if (URIUtils::IsInRAR(strFile) || URIUtils::IsInZIP(strFile))
   {
     std::string strPath = URIUtils::GetDirectory(strFile);
@@ -3184,18 +2832,7 @@ std::string CFileItem::FindTrailer() const
 {
   std::string strFile2;
   std::string strFile = m_strPath;
-  if (IsStack())
-  {
-    std::string strPath;
-    URIUtils::GetParentPath(m_strPath,strPath);
-    CStackDirectory dir;
-    std::string strPath2;
-    strPath2 = dir.GetStackedTitlePath(strFile);
-    strFile = URIUtils::AddFileToFolder(strPath,URIUtils::GetFileName(strPath2));
-    CFileItem item(dir.GetFirstStackedFile(m_strPath),false);
-    std::string strTBNFile(URIUtils::ReplaceExtension(item.GetTBNFile(), "-trailer"));
-    strFile2 = URIUtils::AddFileToFolder(strPath,URIUtils::GetFileName(strTBNFile));
-  }
+  
   if (URIUtils::IsInRAR(strFile) || URIUtils::IsInZIP(strFile))
   {
     std::string strPath = URIUtils::GetDirectory(strFile);

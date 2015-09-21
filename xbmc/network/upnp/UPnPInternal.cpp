@@ -30,7 +30,6 @@
 #include "utils/URIUtils.h"
 #include "FileItem.h"
 #include "filesystem/File.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/MusicDatabaseDirectory.h"
 #include "filesystem/VideoDatabaseDirectory.h"
 #include "video/VideoDatabase.h"
@@ -123,9 +122,6 @@ GetMimeType(const CFileItem& item,
     } else if (item.HasMusicInfoTag() && !item.GetMusicInfoTag()->GetURL().empty()) {
         path = item.GetMusicInfoTag()->GetURL();
     }
-
-    if (URIUtils::IsStack(path))
-        path = XFILE::CStackDirectory::GetFirstStackedFile(path);
 
     NPT_String ext = URIUtils::GetExtension(path).c_str();
     ext.TrimLeft('.');

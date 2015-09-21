@@ -329,21 +329,16 @@ bool CMediaSourceSettings::GetSource(const std::string &category, const TiXmlNod
       std::string strPath = pPathName->FirstChild()->ValueStr();
 
       // make sure there are no virtualpaths or stack paths defined in sources.xml
-      if (!URIUtils::IsStack(strPath))
-      {
-        // translate special tags
-        if (!strPath.empty() && strPath.at(0) == '$')
-          strPath = CUtil::TranslateSpecialSource(strPath);
+      // translate special tags
+      if (!strPath.empty() && strPath.at(0) == '$')
+        strPath = CUtil::TranslateSpecialSource(strPath);
 
-        // need to check path validity again as CUtil::TranslateSpecialSource() may have failed
-        if (!strPath.empty())
-        {
-          URIUtils::AddSlashAtEnd(strPath);
-          vecPaths.push_back(strPath);
-        }
+      // need to check path validity again as CUtil::TranslateSpecialSource() may have failed
+      if (!strPath.empty())
+      {
+        URIUtils::AddSlashAtEnd(strPath);
+        vecPaths.push_back(strPath);
       }
-      else
-        CLog::Log(LOGERROR, "CMediaSourceSettings:    invalid path type (%s) in source", strPath.c_str());
     }
 
     pPathName = pPathName->NextSiblingElement("path");

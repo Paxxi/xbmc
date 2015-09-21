@@ -29,9 +29,6 @@
 #ifdef HAVE_LIBBLURAY
 #include "DVDInputStreamBluray.h"
 #endif
-#ifdef ENABLE_DVDINPUTSTREAM_STACK
-#include "DVDInputStreamStack.h"
-#endif
 #include "FileItem.h"
 #include "storage/MediaManager.h"
 #include "URL.h"
@@ -87,10 +84,6 @@ CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, 
        || file.substr(0, 7) == "mmst://"
        || file.substr(0, 7) == "mmsh://")
     return new CDVDInputStreamFFmpeg();
-#ifdef ENABLE_DVDINPUTSTREAM_STACK
-  else if(file.substr(0, 8) == "stack://")
-    return new CDVDInputStreamStack();
-#endif
 #ifdef HAS_LIBRTMP
   else if(file.substr(0, 7) == "rtmp://"
        || file.substr(0, 8) == "rtmpt://"

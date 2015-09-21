@@ -234,8 +234,6 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
     std::vector<std::string> m_audioExcludeFromListingRegExps;
     std::vector<std::string> m_audioExcludeFromScanRegExps;
     std::vector<std::string> m_pictureExcludeFromListingRegExps;
-    std::vector<std::string> m_videoStackRegExps;
-    std::vector<std::string> m_folderStackRegExps;
     std::vector<std::string> m_trailerMatchRegExps;
     SETTINGS_TVSHOWLIST m_tvshowEnumRegExps;
     std::string m_tvshowMultiPartEnumRegExp;

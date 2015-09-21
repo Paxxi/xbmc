@@ -448,8 +448,6 @@ protected:
   bool m_dpmsIsManual;
 
   CFileItemPtr m_itemCurrentFile;
-  CFileItemList* m_currentStack;
-  CFileItemPtr m_stackFileItemToUpdate;
 
   std::string m_prevMedia;
   ThreadIdentifier m_threadID;       // application thread ID.  Used in applicationMessanger to know where we are firing a thread with delay from.
@@ -460,7 +458,6 @@ protected:
   CFileItemPtr m_progressTrackingItem;
   bool m_progressTrackingPlayCountUpdate;
 
-  int m_currentStackPosition;
   int m_nextPlaylistItem;
 
   bool m_bPresentFrame;
@@ -485,7 +482,6 @@ protected:
 
   void VolumeChanged() const;
 
-  PlayBackRet PlayStack(const CFileItem& item, bool bRestart);
   int  GetActiveWindowID(void);
 
   float NavigationIdleTime();

@@ -29,7 +29,6 @@
 #include "GUIPassword.h"
 #include "GUIUserMessages.h"
 #include "PlayListPlayer.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/Directory.h"
 #include "filesystem/DirectoryFactory.h"
 #include "filesystem/File.h"
@@ -369,8 +368,6 @@ bool CAutorun::RunDisc(IDirectory* pDir, const std::string& strDrive, int& nAdde
     // stack video files
     CFileItemList tempItems;
     tempItems.Append(vecItems);
-    if (CSettings::GetInstance().GetBool(CSettings::SETTING_MYVIDEOS_STACKVIDEOS))
-      tempItems.Stack();
     CFileItemList itemlist;
 
     for (int i = 0; i < tempItems.Size(); i++)
@@ -379,16 +376,7 @@ bool CAutorun::RunDisc(IDirectory* pDir, const std::string& strDrive, int& nAdde
       if (!pItem->m_bIsFolder && pItem->IsVideo())
       {
         bPlaying = true;
-        if (pItem->IsStack())
-        {
-          // TODO: remove this once the app/player is capable of handling stacks immediately
-          CStackDirectory dir;
-          CFileItemList items;
-          dir.GetDirectory(pItem->GetURL(), items);
-          itemlist.Append(items);
-        }
-        else
-          itemlist.Add(pItem);
+        itemlist.Add(pItem);
       }
     }
     if (itemlist.Size())

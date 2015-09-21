@@ -29,7 +29,6 @@
 #include "filesystem/AddonsDirectory.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
-#include "filesystem/StackDirectory.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "input/Key.h"
 #include "settings/Settings.h"
@@ -329,10 +328,6 @@ void CGUIDialogSubtitles::Search(const std::string &search/*=""*/)
   if (setting)
     url.SetOption("languages", setting->ToString());
 
-  // Check for stacking
-  if (g_application.CurrentFileItem().IsStack())
-    url.SetOption("stack", "1");
-
   std::string preferredLanguage = CSettings::GetInstance().GetString(CSettings::SETTING_LOCALE_SUBTITLELANGUAGE);
 
   if(StringUtils::EqualsNoCase(preferredLanguage, "original"))
@@ -471,21 +466,7 @@ void CGUIDialogSubtitles::OnDownloadComplete(const CFileItemList *items, const s
     else
       strCurrentFilePath = URIUtils::GetDirectory(strCurrentFile);
 
-    // Handle stacks
-    if (g_application.CurrentFileItem().IsStack() && items->Size() > 1)
-    {
-      CStackDirectory::GetPaths(g_application.CurrentFileItem().GetPath(), vecFiles);
-      // Make sure (stack) size is the same as the size of the items handed to us, else fallback to single item
-      if (items->Size() != (int) vecFiles.size())
-      {
-        vecFiles.clear();
-        vecFiles.push_back(strCurrentFile);
-      }
-    }
-    else
-    {
-      vecFiles.push_back(strCurrentFile);
-    }
+    vecFiles.push_back(strCurrentFile);
 
     if (storageMode == SUBTITLE_STORAGEMODE_MOVIEPATH &&
         CUtil::SupportsWriteFileOperations(strCurrentFilePath))

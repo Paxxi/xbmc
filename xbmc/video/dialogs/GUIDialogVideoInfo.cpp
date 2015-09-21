@@ -1215,9 +1215,6 @@ bool CGUIDialogVideoInfo::DeleteVideoItem(const CFileItemPtr &item, bool unavail
     {
       item->SetPath(strDeletePath);
 
-      // HACK: stacked files need to be treated as folders in order to be deleted
-      if (item->IsStack())
-        item->m_bIsFolder = true;
       CFileUtils::DeleteItem(item);
     }
   }

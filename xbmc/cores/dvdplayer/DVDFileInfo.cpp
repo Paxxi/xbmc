@@ -26,7 +26,6 @@
 #include "settings/AdvancedSettings.h"
 #include "pictures/Picture.h"
 #include "video/VideoInfoTag.h"
-#include "filesystem/StackDirectory.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 
@@ -339,8 +338,6 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
     strFileNameAndPath = pItem->GetPath();
 
   std::string playablePath = strFileNameAndPath;
-  if (URIUtils::IsStack(playablePath))
-    playablePath = XFILE::CStackDirectory::GetFirstStackedFile(playablePath);
 
   CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, playablePath, "");
   if (!pInputStream)
@@ -407,22 +404,6 @@ bool CDVDFileInfo::DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDem
       pDemux->GetStreamCodecName(iStream, p->m_strCodec);
       p->m_iDuration = pDemux->GetStreamLength();
       p->m_strStereoMode = ((CDemuxStreamVideo *)stream)->stereo_mode;
-
-      // stack handling
-      if (URIUtils::IsStack(path))
-      {
-        CFileItemList files;
-        XFILE::CStackDirectory stack;
-        stack.GetDirectory(pathToUrl, files);
-
-        // skip first path as we already know the duration
-        for (int i = 1; i < files.Size(); i++)
-        {
-           int duration = 0;
-           if (CDVDFileInfo::GetFileDuration(files[i]->GetPath(), duration))
-             p->m_iDuration = p->m_iDuration + duration;
-        }
-      }
 
       // finally, calculate seconds
       if (p->m_iDuration > 0)

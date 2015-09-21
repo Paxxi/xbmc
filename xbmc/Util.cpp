@@ -47,7 +47,6 @@
 #include "Util.h"
 #include "filesystem/PVRDirectory.h"
 #include "filesystem/Directory.h"
-#include "filesystem/StackDirectory.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "filesystem/SpecialProtocol.h"
 #include "filesystem/RSSDirectory.h"
@@ -849,8 +848,6 @@ std::string CUtil::MakeLegalFileName(const std::string &strFile, int LegalType)
 // legalize entire path
 std::string CUtil::MakeLegalPath(const std::string &strPathAndFile, int LegalType)
 {
-  if (URIUtils::IsStack(strPathAndFile))
-    return MakeLegalPath(CStackDirectory::GetFirstStackedFile(strPathAndFile));
   if (URIUtils::IsMultiPath(strPathAndFile))
     return MakeLegalPath(CMultiPathDirectory::GetFirstPath(strPathAndFile));
   if (!URIUtils::IsHD(strPathAndFile) && !URIUtils::IsSmb(strPathAndFile) && !URIUtils::IsNfs(strPathAndFile))
@@ -1396,8 +1393,6 @@ bool CUtil::SupportsWriteFileOperations(const std::string& strPath)
     return true;
   if (URIUtils::IsDAV(strPath))
     return true;
-  if (URIUtils::IsStack(strPath))
-    return SupportsWriteFileOperations(CStackDirectory::GetFirstStackedFile(strPath));
   if (URIUtils::IsMultiPath(strPath))
     return CMultiPathDirectory::SupportsWriteFileOperations(strPath);
 

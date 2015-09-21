@@ -24,7 +24,6 @@
 #include "FileItem.h"
 #include "filesystem/MultiPathDirectory.h"
 #include "filesystem/SpecialProtocol.h"
-#include "filesystem/StackDirectory.h"
 #include "network/DNSNameCache.h"
 #include "settings/AdvancedSettings.h"
 #include "URL.h"
@@ -303,29 +302,6 @@ bool URIUtils::GetParentPath(const std::string& strPath, std::string& strParent)
     strFile = url.GetHostName();
     return GetParentPath(strFile, strParent);
   }
-  else if (url.IsProtocol("stack"))
-  {
-    CStackDirectory dir;
-    CFileItemList items;
-    if (!dir.GetDirectory(url, items))
-      return false;
-    items[0]->m_strDVDLabel = GetDirectory(items[0]->GetPath());
-    if (IsProtocol(items[0]->m_strDVDLabel, "rar") || IsProtocol(items[0]->m_strDVDLabel, "zip"))
-      GetParentPath(items[0]->m_strDVDLabel, strParent);
-    else
-      strParent = items[0]->m_strDVDLabel;
-    for( int i=1;i<items.Size();++i)
-    {
-      items[i]->m_strDVDLabel = GetDirectory(items[i]->GetPath());
-      if (IsProtocol(items[0]->m_strDVDLabel, "rar") || IsProtocol(items[0]->m_strDVDLabel, "zip"))
-        items[i]->SetPath(GetParentPath(items[i]->m_strDVDLabel));
-      else
-        items[i]->SetPath(items[i]->m_strDVDLabel);
-
-      GetCommonPath(strParent,items[i]->GetPath());
-    }
-    return true;
-  }
   else if (url.IsProtocol("multipath"))
   {
     // get the parent path of the first item
@@ -404,8 +380,6 @@ bool URIUtils::GetParentPath(const std::string& strPath, std::string& strParent)
 std::string URIUtils::GetBasePath(const std::string& strPath)
 {
   std::string strCheck(strPath);
-  if (IsStack(strPath))
-    strCheck = CStackDirectory::GetFirstStackedFile(strPath);
 
   std::string strDirectory = GetDirectory(strCheck);
   if (IsInRAR(strCheck))
@@ -413,13 +387,7 @@ std::string URIUtils::GetBasePath(const std::string& strPath)
     std::string strPath=strDirectory;
     GetParentPath(strPath, strDirectory);
   }
-  if (IsStack(strPath))
-  {
-    strCheck = strDirectory;
-    RemoveSlashAtEnd(strCheck);
-    if (GetFileName(strCheck).size() == 3 && StringUtils::StartsWithNoCase(GetFileName(strCheck), "cd"))
-      strDirectory = GetDirectory(strCheck);
-  }
+  
   return strDirectory;
 }
 
@@ -540,9 +508,6 @@ bool URIUtils::IsRemote(const std::string& strFile)
   if (IsCDDA(strFile) || IsISO9660(strFile))
     return false;
 
-  if (IsStack(strFile))
-    return IsRemote(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsRemote(CSpecialProtocol::TranslatePath(strFile));
 
@@ -593,9 +558,6 @@ bool URIUtils::IsOnLAN(const std::string& strPath)
 {
   if(IsMultiPath(strPath))
     return IsOnLAN(CMultiPathDirectory::GetFirstPath(strPath));
-
-  if(IsStack(strPath))
-    return IsOnLAN(CStackDirectory::GetFirstStackedFile(strPath));
 
   if(IsSpecial(strPath))
     return IsOnLAN(CSpecialProtocol::TranslatePath(strPath));
@@ -674,9 +636,6 @@ bool URIUtils::IsHD(const std::string& strFileName)
 {
   CURL url(strFileName);
 
-  if (IsStack(strFileName))
-    return IsHD(CStackDirectory::GetFirstStackedFile(strFileName));
-
   if (IsSpecial(strFileName))
     return IsHD(CSpecialProtocol::TranslatePath(strFileName));
 
@@ -708,11 +667,6 @@ bool URIUtils::IsDVD(const std::string& strFile)
 #endif
 
   return false;
-}
-
-bool URIUtils::IsStack(const std::string& strFile)
-{
-  return IsProtocol(strFile, "stack");
 }
 
 bool URIUtils::IsRAR(const std::string& strFile)
@@ -776,9 +730,6 @@ bool URIUtils::IsSpecial(const std::string& strFile)
 {
   std::string strFile2(strFile);
 
-  if (IsStack(strFile))
-    strFile2 = CStackDirectory::GetFirstStackedFile(strFile);
-
   return IsProtocol(strFile2, "special");
 }
 
@@ -818,9 +769,6 @@ bool URIUtils::IsISO9660(const std::string& strFile)
 
 bool URIUtils::IsSmb(const std::string& strFile)
 {
-  if (IsStack(strFile))
-    return IsSmb(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsSmb(CSpecialProtocol::TranslatePath(strFile));
 
@@ -838,9 +786,6 @@ bool URIUtils::IsURL(const std::string& strFile)
 
 bool URIUtils::IsFTP(const std::string& strFile)
 {
-  if (IsStack(strFile))
-    return IsFTP(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsFTP(CSpecialProtocol::TranslatePath(strFile));
 
@@ -854,9 +799,6 @@ bool URIUtils::IsFTP(const std::string& strFile)
 
 bool URIUtils::IsHTTP(const std::string& strFile)
 {
-  if (IsStack(strFile))
-    return IsHTTP(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsHTTP(CSpecialProtocol::TranslatePath(strFile));
 
@@ -872,18 +814,12 @@ bool URIUtils::IsUDP(const std::string& strFile)
 {
   std::string strFile2(strFile);
 
-  if (IsStack(strFile))
-    strFile2 = CStackDirectory::GetFirstStackedFile(strFile);
-
   return IsProtocol(strFile2, "udp");
 }
 
 bool URIUtils::IsTCP(const std::string& strFile)
 {
   std::string strFile2(strFile);
-
-  if (IsStack(strFile))
-    strFile2 = CStackDirectory::GetFirstStackedFile(strFile);
 
   return IsProtocol(strFile2, "tcp");
 }
@@ -892,17 +828,11 @@ bool URIUtils::IsPVRChannel(const std::string& strFile)
 {
   std::string strFile2(strFile);
 
-  if (IsStack(strFile))
-    strFile2 = CStackDirectory::GetFirstStackedFile(strFile);
-
   return StringUtils::StartsWithNoCase(strFile2, "pvr://channels");
 }
 
 bool URIUtils::IsDAV(const std::string& strFile)
 {
-  if (IsStack(strFile))
-    return IsDAV(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsDAV(CSpecialProtocol::TranslatePath(strFile));
 
@@ -924,10 +854,6 @@ bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */
 {
   if (url.GetProtocol().empty())
     return false;
-
-  // there's nothing to stop internet streams from being stacked
-  if (url.IsProtocol("stack"))
-    return IsInternetStream(CStackDirectory::GetFirstStackedFile(url.Get()));
 
   // Special case these
   if (url.IsProtocol("ftp") || url.IsProtocol("ftps")  ||
@@ -982,9 +908,6 @@ bool URIUtils::IsMusicDb(const std::string& strFile)
 
 bool URIUtils::IsNfs(const std::string& strFile)
 {
-  if (IsStack(strFile))
-    return IsNfs(CStackDirectory::GetFirstStackedFile(strFile));
-
   if (IsSpecial(strFile))
     return IsNfs(CSpecialProtocol::TranslatePath(strFile));
 
@@ -1304,24 +1227,8 @@ bool URIUtils::UpdateUrlEncoding(std::string &strFilename)
     return false;
   
   CURL url(strFilename);
-  // if this is a stack:// URL we need to work with its filename
-  if (URIUtils::IsStack(strFilename))
-  {
-    std::vector<std::string> files;
-    if (!CStackDirectory::GetPaths(strFilename, files))
-      return false;
-
-    for (std::vector<std::string>::iterator file = files.begin(); file != files.end(); ++file)
-      UpdateUrlEncoding(*file);
-
-    std::string stackPath;
-    if (!CStackDirectory::ConstructStackPath(files, stackPath))
-      return false;
-
-    url.Parse(stackPath);
-  }
   // if the protocol has an encoded hostname we need to work with its hostname
-  else if (URIUtils::HasEncodedHostname(url))
+  if (URIUtils::HasEncodedHostname(url))
   {
     std::string hostname = url.GetHostName();
     UpdateUrlEncoding(hostname);

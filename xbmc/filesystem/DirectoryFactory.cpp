@@ -27,7 +27,6 @@
 #include "DirectoryFactory.h"
 #include "SpecialProtocolDirectory.h"
 #include "MultiPathDirectory.h"
-#include "StackDirectory.h"
 #include "FileDirectoryFactory.h"
 #include "PlaylistDirectory.h"
 #include "MusicDatabaseDirectory.h"
@@ -152,7 +151,6 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
   }
   if (url.IsProtocol("xbt")) return new CXbtDirectory();
   if (url.IsProtocol("multipath")) return new CMultiPathDirectory();
-  if (url.IsProtocol("stack")) return new CStackDirectory();
   if (url.IsProtocol("playlistmusic")) return new CPlaylistDirectory();
   if (url.IsProtocol("playlistvideo")) return new CPlaylistDirectory();
   if (url.IsProtocol("musicdb")) return new CMusicDatabaseDirectory();

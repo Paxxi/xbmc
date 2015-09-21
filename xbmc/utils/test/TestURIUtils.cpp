@@ -388,11 +388,6 @@ TEST_F(TestURIUtils, IsSpecial)
   EXPECT_TRUE(URIUtils::IsSpecial("stack://special://path/to/file"));
 }
 
-TEST_F(TestURIUtils, IsStack)
-{
-  EXPECT_TRUE(URIUtils::IsStack("stack://path/to/file"));
-}
-
 TEST_F(TestURIUtils, IsUPnP)
 {
   EXPECT_TRUE(URIUtils::IsUPnP("upnp://path/to/file"));
