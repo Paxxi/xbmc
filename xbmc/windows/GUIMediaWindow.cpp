@@ -129,7 +129,7 @@ void CGUIMediaWindow::LoadAdditionalTags(TiXmlElement *root)
   { // backward compatibility
     std::vector<CGUIControl *> controls;
     GetContainers(controls);
-    for (ciControls it = controls.begin(); it != controls.end(); it++)
+    for (auto it = controls.begin(); it != controls.end(); it++)
     {
       CGUIControl *control = *it;
       if (control->GetID() >= CONTROL_VIEW_START && control->GetID() <= CONTROL_VIEW_END)

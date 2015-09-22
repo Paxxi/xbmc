@@ -54,7 +54,7 @@ void CGUIDialog::OnWindowLoaded()
   {
     CGUIControl* pBase = m_children[0];
 
-    for (iControls p = m_children.begin() + 1; p != m_children.end(); ++p)
+    for (auto p = m_children.begin() + 1; p != m_children.end(); ++p)
     {
       if ((*p)->GetControlType() == CGUIControl::GUICONTROL_LABEL)
       {

@@ -83,7 +83,7 @@ public:
  \ingroup winmsg
  \brief
  */
-class CGUIWindow : public CGUIControlGroup, protected CCriticalSection
+class CGUIWindow : protected CCriticalSection
 {
 public:
   enum LOAD_TYPE { LOAD_EVERY_TIME, LOAD_ON_GUI_INIT, KEEP_IN_MEMORY };
@@ -97,6 +97,7 @@ public:
   void CenterWindow();
 
   virtual void DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregions);
+  virtual void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) { }
   
   /*! \brief Main render function, called every frame.
    Window classes should override this only if they need to alter how something is rendered.
@@ -136,6 +137,7 @@ public:
   virtual bool OnMessage(CGUIMessage& message);
 
   bool ControlGroupHasFocus(int groupID, int controlID);
+  virtual int GetID(void) const;
   virtual void SetID(int id);
   virtual bool HasID(int controlID) const;
   const std::vector<int>& GetIDRange() const { return m_idRange; };
@@ -197,7 +199,68 @@ public:
   bool HasSaveLastControl() const { return !m_defaultAlways; };
 
   virtual void OnDeinitWindow(int nextWindowID);
+  int GetFocusedControlID() const { return 0; }
+  CGUIControl *GetFocusedControl() const { return nullptr; }
+  const CGUIControl *GetControl(int id) const { return nullptr; }
+  CGUIControl *GetControl(int id) { return nullptr; }
+  virtual CGUIControl *GetFirstFocusableControl(int id) { return nullptr; }
+  void MarkDirtyRegion() { }
+  virtual void Render() {};
+  void SetVisibleCondition(const std::string &expression, const std::string &allowHiddenFocus = "") { }
+  virtual void SetInvalid() { m_bInvalidated = true; };
+  virtual void SetPosition(float posX, float posY) { }
+  virtual float GetWidth() const { return 0.0f; }
+  virtual float GetHeight() const { return 0.0f; }
+  bool HasProcessed() const { return m_hasProcessed; };
+  virtual void AddControl(CGUIControl *control, int position = -1) { }
+  bool InsertControl(CGUIControl *control, const CGUIControl *insertPoint) { }
+  virtual bool RemoveControl(const CGUIControl *control) { return false; }
+  CPoint GetRenderPosition() const { return CPoint(); }
+  int GetParentID() const { return 0; }
+  void SetAnimations(const std::vector<CAnimation> &animations) { }
+  const std::vector<CAnimation> &GetAnimations() const { return m_animations; };
+
+  virtual void QueueAnimation(ANIMATION_TYPE anim) { }
+  virtual bool HasAnimation(ANIMATION_TYPE anim) { return false; }
+  CAnimation *GetAnimation(ANIMATION_TYPE type, bool checkConditions = true) { return nullptr; }
+  virtual void ResetAnimation(ANIMATION_TYPE type) { }
+  virtual void ResetAnimations() { }
+
+  virtual EVENT_RESULT SendMouseEvent(const CPoint &point, const CMouseEvent &event) { return EVENT_RESULT::EVENT_RESULT_UNHANDLED; }
+  virtual void UnfocusFromPoint(const CPoint &point) { }
+  virtual bool SendControlMessage(CGUIMessage& message) { return false; }
+  // Called after the actual rendering is completed to trigger additional
+  // non GUI rendering operations
+  virtual void RenderEx() {};
+  void GetContainers(std::vector<CGUIControl *> &containers) const { }
+  virtual float GetXPosition() const { return 0.0f; }
+  virtual float GetYPosition() const { return 0.0f; }
+
 protected:
+  int m_focusedControl;
+  CRect m_hitRect;
+  bool m_bAllocated;
+  // animation effects
+  std::vector<CAnimation> m_animations;
+  CPoint m_camera;
+  bool m_hasCamera;
+  float m_stereo;
+  TransformMatrix m_transform;
+  TransformMatrix m_cachedTransform; // Contains the absolute transform the controlCRect m_hitRect;
+  enum GUIVISIBLE { HIDDEN = 0, DELAYED, VISIBLE };
+  // visibility condition/state
+  INFO::InfoPtr m_visibleCondition;
+  GUIVISIBLE m_visible;
+  bool m_visibleFromSkinCondition;
+  bool m_forceHidden;       // set from the code when a hidden operation is given - overrides m_visible
+  std::vector<CGUIControl *> m_children;
+  float m_posX;
+  float m_posY;
+  float m_height;
+  float m_width;
+  bool m_bInvalidated;
+  CRect m_renderRegion;         // In screen coordinates
+  bool m_hasProcessed;
   virtual EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event);
   virtual bool LoadXML(const std::string& strPath, const std::string &strLowerPath);  ///< Loads from the given file
   bool Load(TiXmlElement *pRootElement);                 ///< Loads from the given XML root element
@@ -215,8 +278,6 @@ protected:
   EVENT_RESULT OnMouseAction(const CAction &action);
   virtual bool Animate(unsigned int currentTime);
   virtual bool CheckAnimation(ANIMATION_TYPE animType);
-
-  CAnimation *GetAnimation(ANIMATION_TYPE animType, bool checkConditions = true);
 
   // control state saving on window close
   virtual void SaveControlStates();
@@ -261,8 +322,11 @@ protected:
   int m_lastControlID;
   std::vector<CControlState> m_controlStates;
   int m_previousWindow;
+  int m_controlID;
+  int m_defaultControl;
 
   bool m_animationsEnabled;
+  bool m_defaultAlways;
   struct icompare
   {
     bool operator()(const std::string &s1, const std::string &s2) const;

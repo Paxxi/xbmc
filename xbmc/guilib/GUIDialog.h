@@ -26,6 +26,7 @@
  */
 
 #include "GUIWindow.h"
+#include "GUIControlGroup.h"
 #include "WindowIDs.h"
 
 enum class DialogModalityType

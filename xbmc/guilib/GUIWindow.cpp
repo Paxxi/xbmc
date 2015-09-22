@@ -154,6 +154,11 @@ bool CGUIWindow::LoadXML(const std::string &strPath, const std::string &strLower
   return Load(m_windowXMLRootElement);
 }
 
+int CGUIWindow::GetID(void) const
+{
+  return m_controlID;
+}
+
 bool CGUIWindow::Load(TiXmlElement* pRootElement)
 {
   if (!pRootElement)
@@ -334,7 +339,6 @@ void CGUIWindow::DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregi
 {
   g_graphicsContext.SetRenderingResolution(m_coordsRes, m_needsScaling);
   g_graphicsContext.AddGUITransform();
-  CGUIControlGroup::DoProcess(currentTime, dirtyregions);
   g_graphicsContext.RemoveTransform();
 
   // check if currently focused control can have it
@@ -355,7 +359,6 @@ void CGUIWindow::DoRender()
   g_graphicsContext.SetRenderingResolution(m_coordsRes, m_needsScaling);
 
   g_graphicsContext.AddGUITransform();
-  CGUIControlGroup::DoRender();
   g_graphicsContext.RemoveTransform();
 
   if (CGUIControlProfiler::IsRunning()) CGUIControlProfiler::Instance().EndFrame();
@@ -367,7 +370,7 @@ void CGUIWindow::AfterRender()
   // We check after the controls have finished rendering, as we may have to close due to
   // the controls rendering after the window has finished it's animation
   // we call the base class instead of this class so that we can find the change
-  if (m_closing && !CGUIControlGroup::IsAnimating(ANIM_TYPE_WINDOW_CLOSE))
+  if (m_closing && !IsAnimating(ANIM_TYPE_WINDOW_CLOSE))
     Close(true);
 
 }
@@ -482,7 +485,7 @@ CPoint CGUIWindow::GetPosition() const
       return CPoint(m_origins[i].x, m_origins[i].y);
     }
   }
-  return CGUIControlGroup::GetPosition();
+  return CPoint();
 }
 
 // OnMouseAction - called by OnAction()
@@ -729,7 +732,7 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
             message.GetParam1() == GUI_MSG_REFRESH_LIST ||
             message.GetParam1() == GUI_MSG_WINDOW_RESIZE)
         { // alter the message accordingly, and send to all controls
-          for (iControls it = m_children.begin(); it != m_children.end(); ++it)
+          for (auto it = m_children.begin(); it != m_children.end(); ++it)
           {
             CGUIControl *control = *it;
             CGUIMessage msg(message.GetParam1(), message.GetControlId(), control->GetID(), message.GetParam2());
@@ -777,9 +780,6 @@ void CGUIWindow::AllocResources(bool forceLoad /*= FALSE */)
   int64_t slend;
   slend = CurrentHostCounter();
 
-  // and now allocate resources
-  CGUIControlGroup::AllocResources();
-
 #ifdef _DEBUG
   int64_t end, freq;
   end = CurrentHostCounter();
@@ -798,7 +798,6 @@ void CGUIWindow::AllocResources(bool forceLoad /*= FALSE */)
 void CGUIWindow::FreeResources(bool forceUnload /*= FALSE */)
 {
   m_bAllocated = false;
-  CGUIControlGroup::FreeResources();
   //g_TextureManager.Dump();
   // unload the skin
   if (m_loadType == LOAD_EVERY_TIME || forceUnload) ClearAll();
@@ -813,13 +812,11 @@ void CGUIWindow::FreeResources(bool forceUnload /*= FALSE */)
 void CGUIWindow::DynamicResourceAlloc(bool bOnOff)
 {
   m_dynamicResourceAlloc = bOnOff;
-  CGUIControlGroup::DynamicResourceAlloc(bOnOff);
 }
 
 void CGUIWindow::ClearAll()
 {
   OnWindowUnload();
-  CGUIControlGroup::ClearAll();
   m_windowLoaded = false;
   m_dynamicResourceAlloc = true;
   m_visibleCondition.reset();
@@ -847,7 +844,6 @@ void CGUIWindow::SetInitialVisibility()
 {
   // reset our info manager caches
   g_infoManager.ResetCache();
-  CGUIControlGroup::SetInitialVisibility();
 }
 
 bool CGUIWindow::IsActive() const
@@ -875,13 +871,12 @@ bool CGUIWindow::IsAnimating(ANIMATION_TYPE animType)
     return false;
   if (animType == ANIM_TYPE_WINDOW_CLOSE)
     return m_closing;
-  return CGUIControlGroup::IsAnimating(animType);
 }
 
 bool CGUIWindow::Animate(unsigned int currentTime)
 {
   if (m_animationsEnabled)
-    return CGUIControlGroup::Animate(currentTime);
+    return true; //TODO
   else
   {
     m_transform.Reset();
@@ -924,7 +919,7 @@ void CGUIWindow::SaveControlStates()
   ResetControlStates();
   if (!m_defaultAlways)
     m_lastControlID = GetFocusedControlID();
-  for (iControls it = m_children.begin(); it != m_children.end(); ++it)
+  for (auto it = m_children.begin(); it != m_children.end(); ++it)
     (*it)->SaveStates(m_controlStates);
 }
 
@@ -1037,7 +1032,6 @@ void CGUIWindow::DumpTextureUse()
 {
 #ifdef _DEBUG
   CLog::Log(LOGDEBUG, "%s for window %u", __FUNCTION__, GetID());
-  CGUIControlGroup::DumpTextureUse();
 #endif
 }
 
@@ -1088,7 +1082,6 @@ void CGUIWindow::ClearBackground()
 
 void CGUIWindow::SetID(int id)
 {
-  CGUIControlGroup::SetID(id);
   m_idRange.clear();
   m_idRange.push_back(id);
 }

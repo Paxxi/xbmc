@@ -19,6 +19,7 @@
  */
 
 #include "GUIWindowPointer.h"
+#include "guilib/GUIWindow.h"
 #include "input/MouseStat.h"
 #include "input/InputManager.h"
 #include "windowing/WindowingFactory.h"
@@ -67,7 +68,7 @@ void CGUIWindowPointer::UpdateVisibility()
 
 void CGUIWindowPointer::OnWindowLoaded()
 { // set all our pointer images invisible
-  for (iControls i = m_children.begin();i != m_children.end(); ++i)
+  for (auto i = m_children.begin();i != m_children.end(); ++i)
   {
     CGUIControl* pControl = *i;
     pControl->SetVisible(false);
