@@ -161,6 +161,11 @@
  */
 #define GUI_MSG_UI_READY       49
 
+/*!
+ \brief Update the list with the provided CFileItemList
+ */
+#define GUI_MSG_DIRECTORY_LISTING_COMPLETE 50
+
 #define GUI_MSG_USER         1000
 
 /*!

@@ -55,6 +55,11 @@ public:
                            , const CHints &hints
                            , bool allowThreads=false);
 
+  static bool GetDirectoryAsync(int windowID
+                                , int controlID
+                                , const CURL& url
+                                , const CHints& hints);
+
   static bool Create(const CURL& url);
   static bool Exists(const CURL& url, bool bUseCache = true);
   static bool Remove(const CURL& url);
@@ -69,6 +74,17 @@ public:
                            , CFileItemList &items
                            , const CHints &hints
                            , bool allowThreads=false);
+
+  static bool GetDirectoryAsync(int windowID
+                                , int controlID
+                                , const std::string& strPath
+                                , const std::string& strMask=""
+                                , int flags = DIR_FLAG_DEFAULTS);
+
+  static bool GetDirectoryAsync(int windowID
+                                , int controlID
+                                , const std::string& strPath
+                                , const CHints& hints);
 
   static bool Create(const std::string& strPath);
   static bool Exists(const std::string& strPath, bool bUseCache = true);

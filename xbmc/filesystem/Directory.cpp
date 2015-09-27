@@ -27,10 +27,12 @@
 #include "FileDirectoryFactory.h"
 #include "FileItem.h"
 #include "guilib/GUIWindowManager.h"
+#include "messaging/ApplicationMessenger.h"
 #include "messaging/helpers/DialogHelper.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "URL.h"
+#include "utils/AsyncTask.h"
 #include "utils/Job.h"
 #include "utils/JobManager.h"
 #include "utils/log.h"
@@ -275,6 +277,107 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
   CLog::Log(LOGERROR, "%s - Error getting %s", __FUNCTION__, url.GetRedacted().c_str());
   return false;
 }
+
+bool CDirectory::GetDirectoryAsync(int windowID, int controlID, const std::string& strPath, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/)
+{
+  CHints hints;
+  hints.flags = flags;
+  hints.mask = strMask;
+  return GetDirectoryAsync(windowID, controlID, strPath, hints);
+}
+
+bool CDirectory::GetDirectoryAsync(int windowID, int controlID, const CURL& url, const CHints &hints)
+{
+  return KODI::UTILS::RunAsync([=](){
+  try
+  {
+    CURL realURL = URIUtils::SubstitutePath(url);
+    std::shared_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
+    if (!pDirectory.get())
+      return false;
+
+    auto items = new CFileItemList();
+    // check our cache for this path
+    if (g_directoryCache.GetDirectory(realURL.Get(), *items, (hints.flags & DIR_FLAG_READ_CACHE) == DIR_FLAG_READ_CACHE))
+      items->SetURL(url);
+    else
+    {
+      // need to clear the cache (in case the directory fetch fails)
+      // and (re)fetch the folder
+      if (!(hints.flags & DIR_FLAG_BYPASS_CACHE))
+        g_directoryCache.ClearDirectory(realURL.Get());
+
+      pDirectory->SetFlags(hints.flags);
+
+      const std::string pathToUrl(url.Get());
+
+      HELPERS::ShowDialogBusy();
+      pDirectory->GetDirectory(realURL, *items);
+      HELPERS::CloseDialogBusy();
+
+      // cache the directory, if necessary
+      if (!(hints.flags & DIR_FLAG_BYPASS_CACHE))
+        g_directoryCache.SetDirectory(realURL.Get(), *items, pDirectory->GetCacheType(url));
+    }
+
+    // now filter for allowed files
+    if (!pDirectory->AllowAll())
+    {
+      pDirectory->SetMask(hints.mask);
+      for (int i = 0; i < items->Size(); ++i)
+      {
+        CFileItemPtr item = (*items)[i];
+        if (!item->m_bIsFolder && !pDirectory->IsAllowed(item->GetURL()))
+        {
+          items->Remove(i);
+          i--; // don't confuse loop
+        }
+      }
+    }
+    // filter hidden files
+    // TODO: we shouldn't be checking the gui setting here, callers should use getHidden instead
+    if (!CSettings::GetInstance().GetBool(CSettings::SETTING_FILELISTS_SHOWHIDDEN) && !(hints.flags & DIR_FLAG_GET_HIDDEN))
+    {
+      for (int i = 0; i < items->Size(); ++i)
+      {
+        if ((*items)[i]->GetProperty("file:hidden").asBoolean())
+        {
+          items->Remove(i);
+          i--; // don't confuse loop
+        }
+      }
+    }
+
+    //  Should any of the files we read be treated as a directory?
+    //  Disable for database folders, as they already contain the extracted items
+    if (!(hints.flags & DIR_FLAG_NO_FILE_DIRS) && !items->IsMusicDb() && !items->IsVideoDb() && !items->IsSmartPlayList())
+      FilterFileDirectories(*items, hints.mask);
+
+    // Correct items for path substitution
+    const std::string pathToUrl(url.Get());
+    const std::string pathToUrl2(realURL.Get());
+    if (pathToUrl != pathToUrl2)
+    {
+      for (int i = 0; i < items->Size(); ++i)
+      {
+        CFileItemPtr item = (*items)[i];
+        item->SetPath(URIUtils::SubstitutePath(item->GetPath(), true));
+      }
+    }
+  CGUIMessage msg{GUI_MSG_DIRECTORY_LISTING_COMPLETE, 0, controlID, 0, 0, items};
+  CApplicationMessenger::GetInstance().PostGUIMsg(msg, windowID);
+  }
+  XBMCCOMMONS_HANDLE_UNCHECKED
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s - Unhandled exception", __FUNCTION__);
+    CGUIMessage msg{GUI_MSG_DIRECTORY_LISTING_COMPLETE, 0, controlID};
+    CApplicationMessenger::GetInstance().PostGUIMsg(msg, windowID);
+  }
+  });
+}
+
+
 
 bool CDirectory::Create(const std::string& strPath)
 {
