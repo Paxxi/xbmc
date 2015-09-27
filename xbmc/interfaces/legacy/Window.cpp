@@ -580,7 +580,10 @@ namespace XBMCAddon
 
       CGUIMessage msg(GUI_MSG_REMOVE_CONTROL, 0, 0);
       msg.SetPointer(pControl->pGUIControl);
-      CApplicationMessenger::GetInstance().SendGUIMessage(msg, iWindowId, wait);
+      if (wait)
+        CApplicationMessenger::GetInstance().SendGUIMsg(msg, iWindowId);
+      else
+        CApplicationMessenger::GetInstance().PostGUIMsg(msg, iWindowId);
 
       // initialize control to zero
       pControl->pGUIControl = NULL;
@@ -762,7 +765,10 @@ namespace XBMCAddon
       // This calls the CGUIWindow parent class to do the final add
       CGUIMessage msg(GUI_MSG_ADD_CONTROL, 0, 0);
       msg.SetPointer(pControl->pGUIControl);
-      CApplicationMessenger::GetInstance().SendGUIMessage(msg, iWindowId, wait);
+      if (wait)
+        CApplicationMessenger::GetInstance().SendGUIMsg(msg, iWindowId);
+      else
+        CApplicationMessenger::GetInstance().PostGUIMsg(msg, iWindowId);
     }
 
     void Window::addControls(std::vector<Control*> pControls)

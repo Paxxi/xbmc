@@ -21,8 +21,6 @@
 #include "GUIMessage.h"
 #include "LocalizeStrings.h"
 
-std::string CGUIMessage::empty_string;
-
 CGUIMessage::CGUIMessage(int msg, int senderID, int controlID, int param1, int param2)
 {
   m_message = msg;
@@ -160,9 +158,9 @@ void CGUIMessage::SetStringParams(const std::vector<std::string> &params)
 
 const std::string& CGUIMessage::GetStringParam(size_t param) const
 {
-  if (param >= m_params.size())
-    return empty_string;
-  return m_params[param];
+  //if we pass in an invalid param let it throw an excpetion so we find the issue
+  //instead of masking it with an emptry string
+  return m_params.at(param);
 }
 
 size_t CGUIMessage::GetNumStringParams() const

@@ -19,23 +19,27 @@
  */
 
 #include "Directory.h"
+
+#include "Application.h"
+#include "commons/Exception.h"
+#include "DirectoryCache.h"
 #include "DirectoryFactory.h"
 #include "FileDirectoryFactory.h"
-#include "commons/Exception.h"
 #include "FileItem.h"
-#include "DirectoryCache.h"
+#include "guilib/GUIWindowManager.h"
+#include "messaging/helpers/DialogHelper.h"
 #include "settings/Settings.h"
-#include "utils/log.h"
+#include "threads/SingleLock.h"
+#include "URL.h"
 #include "utils/Job.h"
 #include "utils/JobManager.h"
-#include "Application.h"
-#include "guilib/GUIWindowManager.h"
-#include "dialogs/GUIDialogBusy.h"
-#include "threads/SingleLock.h"
+#include "utils/log.h"
 #include "utils/URIUtils.h"
-#include "URL.h"
 
 using namespace XFILE;
+using namespace KODI::MESSAGING;
+
+using KODI::MESSAGING::HELPERS::DialogResponse;
 
 #define TIME_TO_BUSY_DIALOG 500
 
@@ -170,33 +174,29 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const CHint
           CGetDirectory get(pDirectory, realURL, url);
           if(!get.Wait(TIME_TO_BUSY_DIALOG))
           {
-            CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-            if (dialog)
+            DialogResponse result{DialogResponse::SUCCESS};
+            HELPERS::ShowDialogBusy();
+            while(!get.Wait(10))
             {
-              dialog->Open();
+              CSingleLock lock(g_graphicsContext);
 
-              while(!get.Wait(10))
+              // update progress
+              float progress = pDirectory->GetProgress();
+              if (progress > 0)
+                result = HELPERS::SetDialogBusyProgress(progress);
+
+              if (result == DialogResponse::CANCELLED)
               {
-                CSingleLock lock(g_graphicsContext);
-
-                // update progress
-                float progress = pDirectory->GetProgress();
-                if (progress > 0)
-                  dialog->SetProgress(progress);
-
-                if (dialog->IsCanceled())
-                {
-                  cancel = true;
-                  pDirectory->CancelDirectory();
-                  break;
-                }
-
-                lock.Leave(); // prevent an occasional deadlock on exit
-                g_windowManager.ProcessRenderLoop(false);
+                cancel = true;
+                pDirectory->CancelDirectory();
+                break;
               }
 
-              dialog->Close();
+              lock.Leave(); // prevent an occasional deadlock on exit
+              g_windowManager.ProcessRenderLoop(false);
             }
+
+            HELPERS::CloseDialogBusy();
           }
           result = get.GetDirectory(items);
         }

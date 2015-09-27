@@ -24,13 +24,13 @@
 #include "cores/AudioEngine/DSPAddons/ActiveAEDSP.h"
 #include "dialogs/GUIDialogTextViewer.h"
 #include "dialogs/GUIDialogOK.h"
-#include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIListContainer.h"
 #include "guilib/GUIRadioButtonControl.h"
 #include "input/Key.h"
+#include "messaging/helpers/DialogHelper.h"
 #include "utils/StringUtils.h"
 
 #define CONTROL_LIST_AVAILABLE                  20
@@ -50,6 +50,7 @@
 #define LIST_OUTPUT_RESAMPLE                    4
 
 using namespace ActiveAE;
+using namespace KODI::MESSAGING;
 
 typedef struct
 {
@@ -685,13 +686,7 @@ bool CGUIDialogAudioDSPManager::OnContextButton(int itemNumber, CONTEXT_BUTTON b
 
 void CGUIDialogAudioDSPManager::Update()
 {
-  CGUIDialogBusy* pDlgBusy = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-  if (!pDlgBusy)
-  {
-    helper_LogError(__FUNCTION__);
-    return;
-  }
-  pDlgBusy->Open();
+  HELPERS::ShowDialogBusy();
 
   Clear();
 
@@ -699,7 +694,7 @@ void CGUIDialogAudioDSPManager::Update()
   CActiveAEDSPDatabase db;
   if (!db.Open())
   {
-    pDlgBusy->Close();
+    HELPERS::CloseDialogBusy();
     CLog::Log(LOGERROR, "DSP Manager - %s - Could not open DSP database for update!", __FUNCTION__);
     return;
   }
@@ -744,7 +739,7 @@ void CGUIDialogAudioDSPManager::Update()
 
   db.Close();
 
-  pDlgBusy->Close();
+  HELPERS::CloseDialogBusy();
 }
 
 void CGUIDialogAudioDSPManager::SetSelectedModeType(void)
@@ -781,16 +776,10 @@ void CGUIDialogAudioDSPManager::SaveList(void)
    return;
 
   /* display the progress dialog */
-  CGUIDialogBusy* pDlgBusy = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-  if (!pDlgBusy)
-  {
-    helper_LogError(__FUNCTION__);
-    return;
-  }
-  pDlgBusy->Open();
+  HELPERS::ShowDialogBusy();
 
   /* persist all modes */
-  if (UpdateDatabase(pDlgBusy))
+  if (UpdateDatabase())
   {
     CActiveAEDSP::GetInstance().TriggerModeUpdate();
 
@@ -798,10 +787,10 @@ void CGUIDialogAudioDSPManager::SaveList(void)
     SetItemsUnchanged();
   }
 
-  pDlgBusy->Close();
+  HELPERS::CloseDialogBusy();
 }
 
-bool CGUIDialogAudioDSPManager::UpdateDatabase(CGUIDialogBusy* pDlgBusy)
+bool CGUIDialogAudioDSPManager::UpdateDatabase()
 {
   CActiveAEDSPDatabase db;
   if (!db.Open())
@@ -840,15 +829,10 @@ bool CGUIDialogAudioDSPManager::UpdateDatabase(CGUIDialogBusy* pDlgBusy)
       }
 
       processedItems++;
-      if (pDlgBusy)
-      {
-        pDlgBusy->SetProgress((float)(processedItems * 100 / maxItems));
+      auto result = HELPERS::SetDialogBusyProgress(static_cast<float>((processedItems * 100 / maxItems)));
 
-        if (pDlgBusy->IsCanceled())
-        {
-          return false;
-        }
-      }
+      if (result == HELPERS::DialogResponse::CANCELLED)
+        return false;
 
       g_windowManager.ProcessRenderLoop(false);
     }
@@ -873,15 +857,10 @@ bool CGUIDialogAudioDSPManager::UpdateDatabase(CGUIDialogBusy* pDlgBusy)
       }
 
       processedItems++;
-      if (pDlgBusy)
-      {
-        pDlgBusy->SetProgress((float)(processedItems * 100 / maxItems));
+      auto result = HELPERS::SetDialogBusyProgress(static_cast<float>((processedItems * 100 / maxItems)));
 
-        if (pDlgBusy->IsCanceled())
-        {
-          return false;
-        }
-      }
+      if (result == HELPERS::DialogResponse::CANCELLED)
+        return false;
 
       g_windowManager.ProcessRenderLoop(false);
     }

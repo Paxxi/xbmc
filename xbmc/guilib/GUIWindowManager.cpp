@@ -852,6 +852,19 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
   }
   break;
 
+  case TMSG_GUI_DIALOG_CLOSE:
+  {
+    if (pMsg->lpVoid)
+      static_cast<CGUIDialog*>(pMsg->lpVoid)->Close();
+    else
+    {
+      auto pDialog = static_cast<CGUIDialog*>(GetWindow(pMsg->param1));
+      if (pDialog)
+        pDialog->Close();
+    }
+  }
+  break;
+
   case TMSG_GUI_WINDOW_CLOSE:
   {
     CGUIWindow *window = static_cast<CGUIWindow *>(pMsg->lpVoid);
@@ -916,6 +929,7 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
     break;
 
   case TMSG_GUI_DIALOG_YESNO:
+  {
     if (!pMsg->lpVoid && pMsg->param1 < 0 && pMsg->param2 < 0)
       return;
 
@@ -934,6 +948,22 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
     }
 
     break;
+  }
+  case TMSG_GUI_DIALOG_BUSY_PROGRESS:
+  {
+    if (!pMsg->lpVoid) //No progress to set
+      return;
+
+    auto dialog = static_cast<CGUIDialogBusy*>(GetWindow(WINDOW_DIALOG_BUSY));
+    if (!dialog)
+      return;
+
+    auto progress = static_cast<float*>(pMsg->lpVoid);
+    dialog->SetProgress(*progress);
+    pMsg->SetResult(dialog->IsCanceled() ? -1 : 0);
+    delete progress;
+    break;
+  }
   }
 }
 

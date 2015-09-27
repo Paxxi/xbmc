@@ -3258,6 +3258,9 @@
     <ClCompile Include="..\..\xbmc\addons\AddonCallbacksAudioEngine.cpp">
       <Filter>addons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\AsyncTask.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6320,6 +6323,9 @@
       <Filter>cores\AudioEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\ScopeGuard.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\AsyncTask.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -526,7 +526,7 @@ bool CInputManager::OnEvent(XBMC_Event& newEvent)
     if (newEvent.touch.action == ACTION_GESTURE_END || newEvent.touch.action == ACTION_TOUCH_TAP)
     {
       CGUIMessage msg(GUI_MSG_UNFOCUS_ALL, 0, 0, 0, 0);
-      CApplicationMessenger::GetInstance().SendGUIMessage(msg);
+      CApplicationMessenger::GetInstance().PostGUIMsg(msg);
     }
     break;
   } //case

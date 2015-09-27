@@ -1115,7 +1115,7 @@ JSONRPC_STATUS CPlayerOperations::StartSlideshow(const std::string& path, bool r
 
   CGUIMessage msg(GUI_MSG_START_SLIDESHOW, 0, 0, flags);
   msg.SetStringParams(params);
-  CApplicationMessenger::GetInstance().SendGUIMessage(msg, WINDOW_SLIDESHOW, true);
+  CApplicationMessenger::GetInstance().SendGUIMsg(msg, WINDOW_SLIDESHOW);
 
   return ACK;
 }

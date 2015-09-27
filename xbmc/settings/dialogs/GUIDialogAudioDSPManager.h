@@ -64,7 +64,7 @@ namespace ActiveAE
     void Update(void);
     void SaveList(void);
     void Renumber(void);
-    bool UpdateDatabase(CGUIDialogBusy* pDlgBusy);
+    bool UpdateDatabase();
     void SetSelectedModeType(void);
 
     //! helper function prototypes

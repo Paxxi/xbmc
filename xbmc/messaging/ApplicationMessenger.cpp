@@ -257,12 +257,20 @@ void CApplicationMessenger::ProcessWindowMessages()
   }
 }
 
-void CApplicationMessenger::SendGUIMessage(const CGUIMessage &message, int windowID, bool waitResult)
+int CApplicationMessenger::SendGUIMsg(const CGUIMessage &message, int windowID)
 {
   ThreadMessage tMsg(TMSG_GUI_MESSAGE);
   tMsg.param1 = windowID == WINDOW_INVALID ? 0 : windowID;
   tMsg.lpVoid = new CGUIMessage(message);
-  SendMsg(std::move(tMsg), waitResult);
+  return SendMsg(std::move(tMsg), true);
+}
+
+void CApplicationMessenger::PostGUIMsg(const CGUIMessage &message, int windowID)
+{
+  ThreadMessage tMsg(TMSG_GUI_MESSAGE);
+  tMsg.param1 = windowID == WINDOW_INVALID ? 0 : windowID;
+  tMsg.lpVoid = new CGUIMessage(message);
+  SendMsg(std::move(tMsg), false);
 }
 
 void CApplicationMessenger::RegisterReceiver(IMessageTarget* target)

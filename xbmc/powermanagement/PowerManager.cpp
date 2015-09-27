@@ -25,12 +25,12 @@
 
 #include "Application.h"
 #include "cores/AudioEngine/AEFactory.h"
-#include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "interfaces/AnnouncementManager.h"
 #include "interfaces/builtins/Builtins.h"
+#include "messaging/helpers/DialogHelper.h"
 #include "pvr/PVRManager.h"
 #include "settings/lib/Setting.h"
 #include "settings/Settings.h"
@@ -57,6 +57,7 @@ extern HWND g_hWnd;
 #endif
 
 using namespace ANNOUNCEMENT;
+using namespace KODI::MESSAGING;
 
 CPowerManager g_powerManager;
 
@@ -171,10 +172,7 @@ bool CPowerManager::Powerdown()
 {
   if (CanPowerdown() && m_instance->Powerdown())
   {
-    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-    if (dialog)
-      dialog->Open();
-
+    HELPERS::ShowDialogBusy();
     return true;
   }
 
@@ -199,9 +197,7 @@ bool CPowerManager::Reboot()
   {
     CAnnouncementManager::GetInstance().Announce(System, "xbmc", "OnRestart");
 
-    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-    if (dialog)
-      dialog->Open();
+    HELPERS::ShowDialogBusy();
   }
 
   return success;
@@ -241,9 +237,7 @@ void CPowerManager::OnSleep()
 {
   CAnnouncementManager::GetInstance().Announce(System, "xbmc", "OnSleep");
 
-  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-  if (dialog)
-    dialog->Open();
+  HELPERS::ShowDialogBusy();
 
   CLog::Log(LOGNOTICE, "%s: Running sleep jobs", __FUNCTION__);
 
@@ -269,9 +263,7 @@ void CPowerManager::OnWake()
   // reset out timers
   g_application.ResetShutdownTimers();
 
-  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-  if (dialog)
-    dialog->Close();
+  HELPERS::CloseDialogBusy();
 
 #if defined(HAS_SDL) || defined(TARGET_WINDOWS)
   if (g_Windowing.IsFullScreen())

@@ -134,6 +134,8 @@
   \sa HELPERS::DialogYesNoMessage
 */
 #define TMSG_GUI_DIALOG_YESNO             TMSG_MASK_WINDOWMANAGER + 8
+#define TMSG_GUI_DIALOG_BUSY_PROGRESS     TMSG_MASK_WINDOWMANAGER + 9
+#define TMSG_GUI_DIALOG_CLOSE             TMSG_MASK_WINDOWMANAGER + 10
 
 
 #define TMSG_CALLBACK                     800
@@ -196,7 +198,9 @@ public:
    \param windowID optional window to send the message to (defaults to no specified window).
    \param waitResult whether to wait for the result (defaults to false).
    */
-  void SendGUIMessage(const CGUIMessage &msg, int windowID = WINDOW_INVALID, bool waitResult=false);
+  int SendGUIMsg(const CGUIMessage &msg, int windowID = WINDOW_INVALID);
+
+  void PostGUIMsg(const CGUIMessage &msg, int windowID = WINDOW_INVALID);
 
   void RegisterReceiver(IMessageTarget* target);
 

@@ -80,7 +80,7 @@ JSONRPC_STATUS CInputOperations::SendText(const std::string &method, ITransportL
   CGUIMessage msg(GUI_MSG_SET_TEXT, 0, window->GetFocusedControlID());
   msg.SetLabel(parameterObject["text"].asString());
   msg.SetParam1(parameterObject["done"].asBoolean() ? 1 : 0);
-  CApplicationMessenger::GetInstance().SendGUIMessage(msg, window->GetID());
+  CApplicationMessenger::GetInstance().PostGUIMsg(msg, window->GetID());
 
   return ACK;
 }

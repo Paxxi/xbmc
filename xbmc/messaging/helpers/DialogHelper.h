@@ -35,7 +35,9 @@ enum class DialogResponse
 {
   CANCELLED,
   YES,
-  NO
+  NO,
+  SUCCESS,
+  FAILED
 };
 
 /*! \struct DialogHelper.h "messaging/helpers/DialogHelper.h"
@@ -93,6 +95,11 @@ DialogResponse ShowYesNoDialogText(CVariant heading, CVariant text, CVariant noL
 DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant line1 = "",
   CVariant line2 = "", CVariant noLabel = "", CVariant yesLabel = "", uint32_t autoCloseTimeout = 0);
 
+void ShowDialogBusy();
+
+DialogResponse SetDialogBusyProgress(float progress);
+
+void CloseDialogBusy();
 }
 }
 }

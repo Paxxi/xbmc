@@ -91,7 +91,7 @@ void CGUIWindowPVRBase::Notify(const Observable &obs, const ObservableMessage ms
 {
   UpdateSelectedItemPath();
   CGUIMessage m(GUI_MSG_REFRESH_LIST, GetID(), 0, msg);
-  CApplicationMessenger::GetInstance().SendGUIMessage(m);
+  CApplicationMessenger::GetInstance().PostGUIMsg(m);
 }
 
 bool CGUIWindowPVRBase::OnAction(const CAction &action)

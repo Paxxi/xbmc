@@ -19,10 +19,13 @@
 */
 
 #include "DialogHelper.h"
+
+#include <cassert>
+#include <utility>
+
+#include "guilib/WindowIDs.h"
 #include "messaging/ApplicationMessenger.h"
 
-#include <utility>
-#include <cassert>
 
 namespace KODI
 {
@@ -82,6 +85,23 @@ DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant l
   //This is unreachable code but we need to return something to suppress warnings about
   //no return
   return DialogResponse::CANCELLED;
+}
+
+void ShowDialogBusy()
+{
+  CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_OPEN, WINDOW_DIALOG_BUSY);
+}
+
+DialogResponse SetDialogBusyProgress(float progress)
+{
+  int result = CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_BUSY_PROGRESS, -1, -1, static_cast<void*>(new float(progress)));
+
+  return result == 0 ? DialogResponse::SUCCESS : DialogResponse::CANCELLED;
+}
+
+void CloseDialogBusy()
+{
+  CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_DIALOG_CLOSE, WINDOW_DIALOG_BUSY);
 }
 
 }
