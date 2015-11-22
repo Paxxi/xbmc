@@ -43,6 +43,9 @@ CMusicInfoLoader::CMusicInfoLoader() : CBackgroundInfoLoader()
   m_mapFileItems = new CFileItemList;
 
   m_thumbLoader = new CMusicThumbLoader();
+  
+  m_databaseHits = 0;
+  m_tagReads = 0;
 }
 
 CMusicInfoLoader::~CMusicInfoLoader()
