@@ -76,6 +76,10 @@ CBackgroundPicLoader::CBackgroundPicLoader() : CThread("BgPicLoader")
 {
   m_pCallback = NULL;
   m_isLoading = false;
+  m_iPic = 0;
+  m_iSlideNumber = 0;
+  m_maxWidth = 0;
+  m_maxHeight = 0;
 }
 
 CBackgroundPicLoader::~CBackgroundPicLoader()
@@ -148,6 +152,7 @@ CGUIWindowSlideShow::CGUIWindowSlideShow(void)
   m_slides = new CFileItemList;
   m_Resolution = RES_INVALID;
   m_loadType = KEEP_IN_MEMORY;
+  m_bLoadNextPic = false;
   Reset();
 }
 
