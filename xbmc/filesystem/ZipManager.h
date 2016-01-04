@@ -1,6 +1,4 @@
-#ifndef ZIP_MANAGER_H_
-#define ZIP_MANAGER_H_
-
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -31,78 +29,35 @@
 #define CHDR_SIZE 46
 #define ECDREC_SIZE 22
 
-#include <memory.h>
+#include <cinttypes>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 class CURL;
 
 struct SZipEntry {
-  unsigned int header;
-  unsigned short version;
-  unsigned short flags;
-  unsigned short method;
-  unsigned short mod_time;
-  unsigned short mod_date;
-  unsigned int crc32;
-  unsigned int csize; // compressed size
-  unsigned int usize; // uncompressed size
-  unsigned short flength; // filename length
-  unsigned short elength; // extra field length (local file header)
-  unsigned short eclength; // extra field length (central file header)
-  unsigned short clength; // file comment length (central file header)
-  unsigned int lhdrOffset; // Relative offset of local header
-  int64_t offset;         // offset in file to compressed data
-  char name[255];
-
-  SZipEntry()
-  {
-    header = 0;
-    version = 0;
-    flags = 0;
-    method = 0;
-    mod_time = 0;
-    mod_date = 0;
-    crc32 = 0;
-    csize = 0;
-    usize = 0;
-    flength = 0;
-    elength = 0;
-    eclength = 0;
-    clength = 0;
-    lhdrOffset = 0;
-    offset = 0;
-    name[0] = '\0';
-  }
-
-  SZipEntry(const SZipEntry& SNewItem)
-  {
-    memcpy(&header,&SNewItem.header,sizeof(unsigned int));
-    memcpy(&version,&SNewItem.version,sizeof(unsigned short));
-    memcpy(&flags,&SNewItem.flags,sizeof(unsigned short));
-    memcpy(&method,&SNewItem.method,sizeof(unsigned short));
-    memcpy(&mod_time,&SNewItem.mod_time,sizeof(unsigned short));
-    memcpy(&mod_date,&SNewItem.mod_date,sizeof(unsigned short));
-    memcpy(&crc32,&SNewItem.crc32,sizeof(unsigned int));
-    memcpy(&csize,&SNewItem.csize,sizeof(unsigned int));
-    memcpy(&usize,&SNewItem.usize,sizeof(unsigned int));
-    memcpy(&flength,&SNewItem.flength,sizeof(unsigned short));
-    memcpy(&elength,&SNewItem.elength,sizeof(unsigned short));
-    memcpy(&eclength,&SNewItem.eclength,sizeof(unsigned short));
-    memcpy(&clength,&SNewItem.clength,sizeof(unsigned short));
-    memcpy(&lhdrOffset,&SNewItem.lhdrOffset,sizeof(unsigned int));
-    memcpy(&offset,&SNewItem.offset,sizeof(int64_t));
-    memcpy(name,SNewItem.name,255*sizeof(char));
-  }
+  uint32_t header{0};
+  uint16_t version{0};
+  uint16_t flags{0};
+  uint16_t method{0};
+  uint16_t mod_time{0};
+  uint16_t mod_date{0};
+  uint32_t crc32{0};
+  uint32_t csize{0}; // compressed size
+  uint32_t usize{0}; // uncompressed size
+  uint16_t flength{0}; // filename length
+  uint16_t elength{0}; // extra field length (local file header)
+  uint16_t eclength{0}; // extra field length (central file header)
+  uint16_t clength{0}; // file comment length (central file header)
+  uint32_t lhdrOffset{0}; // Relative offset of local header
+  int64_t offset{0};         // offset in file to compressed data
+  std::string name;
 };
 
 class CZipManager
 {
 public:
-  CZipManager();
-  ~CZipManager();
-
   bool GetZipList(const CURL& url, std::vector<SZipEntry>& items);
   bool GetZipEntry(const CURL& url, SZipEntry& item);
   bool ExtractArchive(const std::string& strArchive, const std::string& strPath);
@@ -116,5 +71,3 @@ private:
 };
 
 extern CZipManager g_ZipManager;
-
-#endif
