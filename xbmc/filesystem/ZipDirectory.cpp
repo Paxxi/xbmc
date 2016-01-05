@@ -19,23 +19,23 @@
  */
 
 #include "ZipDirectory.h"
-#include "utils/CharsetConverter.h"
-#include "utils/URIUtils.h"
-#include "Util.h"
-#include "URL.h"
-#include "ZipManager.h"
+
+#include <memory>
+#include <vector>
+
 #include "FileItem.h"
 #include "filesystem/Directorization.h"
-#include "utils/StringUtils.h"
+#include "URL.h"
+#include "utils/URIUtils.h"
+#include "ZipManager.h"
 
-#include <vector>
 
 namespace XFILE
 {
 
   static CFileItemPtr ZipEntryToFileItem(const SZipEntry& entry, const std::string& label, const std::string& path, bool isFolder)
   {
-    CFileItemPtr item(new CFileItem(label));
+    auto item = std::make_shared<CFileItem>(label);
     if (!isFolder)
     {
       item->m_dwSize = entry.usize;
@@ -43,14 +43,6 @@ namespace XFILE
     }
 
     return item;
-  }
-
-  CZipDirectory::CZipDirectory()
-  {
-  }
-
-  CZipDirectory::~CZipDirectory()
-  {
   }
 
   bool CZipDirectory::GetDirectory(const CURL& urlOrig, CFileItemList& items)
@@ -81,15 +73,8 @@ namespace XFILE
   {
     std::vector<SZipEntry> items;
     g_ZipManager.GetZipList(url, items);
-    if (items.size())
-    {
-      if (items.size() > 1)
-        return true;
 
-      return false;
-    }
-
-    return false;
+    return items.size() > 1;
   }
 }
 
