@@ -19,15 +19,19 @@
  */
 #pragma once
 
+#include <dns_sd.h>
+
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "network/Zeroconf.h"
 #include "threads/CriticalSection.h"
-#include <dns_sd.h>
 #include "threads/Thread.h"
 
-#include <memory>
-#include <utility>
 
-class CZeroconfMDNS : public CZeroconf,public CThread
+class CZeroconfMDNS : public CZeroconf, public CThread
 {
 public:
   CZeroconfMDNS();
@@ -36,23 +40,23 @@ public:
 protected:
 
   //CThread interface
-  void Process();
+  void Process() override;
 
   //implement base CZeroConf interface
   bool doPublishService(const std::string& fcr_identifier,
                         const std::string& fcr_type,
                         const std::string& fcr_name,
                         unsigned int f_port,
-                        const std::vector<std::pair<std::string, std::string> >& txt);
+                        const std::vector<std::pair<std::string, std::string> >& txt) override;
 
-  bool doForceReAnnounceService(const std::string& fcr_identifier);
-  bool doRemoveService(const std::string& fcr_ident);
+  bool doForceReAnnounceService(const std::string& fcr_identifier) override;
+  bool doRemoveService(const std::string& fcr_ident) override;
 
-  virtual void doStop();
+  void doStop() override;
 
-  bool IsZCdaemonRunning();
+  bool IsZCdaemonRunning() override;
 
-  void ProcessResults();
+  void ProcessResults() override;
 
 private:
 
@@ -69,11 +73,37 @@ private:
   CCriticalSection m_data_guard;
   struct tServiceRef
   {
+    tServiceRef(DNSServiceRef service_ref, const TXTRecordRef& txt_record_ref, int update_number);
+    ~tServiceRef();
+
+    tServiceRef(const tServiceRef& other) = default;
+
+    tServiceRef(tServiceRef&& other)
+      : serviceRef(other.serviceRef)
+      , txtRecordRef(std::move(other.txtRecordRef))
+      , updateNumber(other.updateNumber)
+    {
+    }
+
+    tServiceRef& operator=(const tServiceRef& other) = default;
+
+    //There's a VS bug with the default move operator in 2013, can replace this once
+    //we upgrade
+    tServiceRef& operator=(tServiceRef&& other)
+    {
+      if (this == &other)
+        return *this;
+
+      serviceRef = other.serviceRef;
+      txtRecordRef = std::move(other.txtRecordRef);
+      updateNumber = other.updateNumber;
+      return *this;
+    }
+
     DNSServiceRef serviceRef;
     TXTRecordRef txtRecordRef;
     int updateNumber;
   };
-  typedef std::map<std::string, struct tServiceRef> tServiceMap;
-  tServiceMap m_services;
+  std::map<std::string, struct tServiceRef> m_services;
   DNSServiceRef m_service;
 };
