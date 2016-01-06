@@ -70,3 +70,4 @@ private:
   std::vector<uint8_t*> m_unpackedFrames;
 };
 }
+

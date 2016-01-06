@@ -38,7 +38,6 @@
 
 namespace XFILE
 {
-
 CXbtFile::CXbtFile()
   : m_url(),
     m_open(false),
@@ -49,7 +48,8 @@ CXbtFile::CXbtFile()
     m_positionWithinFrame(0),
     m_positionTotal(0),
     m_unpackedFrames()
-{ }
+{
+}
 
 CXbtFile::~CXbtFile()
 {
@@ -125,7 +125,7 @@ int64_t CXbtFile::GetLength()
   return static_cast<int>(m_xbtfFile.GetUnpackedSize());
 }
 
-int CXbtFile::Stat(struct __stat64 *buffer)
+int CXbtFile::Stat(struct __stat64* buffer)
 {
   if (!m_open)
     return -1;
@@ -150,7 +150,7 @@ int CXbtFile::Stat(const CURL& url, struct __stat64* buffer)
     if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0)
       return -1;
 
-    buffer->st_mode = _S_IFDIR;
+    buffer->st_mode = _S_IFDIR ;
     return 0;
   }
 
@@ -232,21 +232,21 @@ int64_t CXbtFile::Seek(int64_t iFilePosition, int iWhence)
   int64_t newPosition = m_positionTotal;
   switch (iWhence)
   {
-    case SEEK_SET:
-      newPosition = iFilePosition;
-      break;
+  case SEEK_SET:
+    newPosition = iFilePosition;
+    break;
 
-    case SEEK_CUR:
-      newPosition += iFilePosition;
-      break;
+  case SEEK_CUR:
+    newPosition += iFilePosition;
+    break;
 
-    case SEEK_END:
-      newPosition = GetLength() + iFilePosition;
-      break;
+  case SEEK_END:
+    newPosition = GetLength() + iFilePosition;
+    break;
 
     // unsupported seek mode
-    default:
-      return -1;
+  default:
+    return -1;
   }
 
   // can't seek before the beginning or after the end of the file
@@ -382,5 +382,5 @@ bool CXbtFile::GetFile(const CURL& url, CXBTFFile& file)
   CXBTFReaderPtr reader;
   return GetReaderAndFile(url, reader, file);
 }
-
 }
+
