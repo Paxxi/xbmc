@@ -1,5 +1,4 @@
 #pragma once
-
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -20,10 +19,10 @@
  *
  */
 
-#include <string>
-#include <set>
-#include <vector>
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 #ifdef TARGET_WINDOWS
 #undef SetPort // WIN32INCLUDES this is defined as SetPortA in WinSpool.h which is being included _somewhere_
@@ -151,13 +150,14 @@ public:
   // if zeroconf is disabled (!HAS_ZEROCONF), this will return a dummy implementation that
   // just does nothings, otherwise the platform specific one
   static CZeroconfBrowser* GetInstance();
+
   // release the singleton; (save to call multiple times)
   static void ReleaseInstance();
 
   // returns false if ReleaseInstance() was called befores
   static bool IsInstantiated()
   {
-    return smp_instance != 0;
+    return smp_instance != nullptr;
   }
 
   virtual void ProcessResults()
@@ -179,7 +179,7 @@ public:
 protected:
   //singleton: we don't want to get instantiated nor copied or deleted from outside
   CZeroconfBrowser();
-  CZeroconfBrowser(const CZeroconfBrowser&);
+  CZeroconfBrowser(const CZeroconfBrowser&) = delete;
   virtual ~CZeroconfBrowser();
 
   // pure virtual methods to implement for OS specific implementations
