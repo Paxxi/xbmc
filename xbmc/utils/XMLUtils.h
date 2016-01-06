@@ -36,10 +36,10 @@ public:
   static bool GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& dwUIntValue);
   static bool GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLongValue);
   static bool GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& value);
-  static bool GetDouble(const TiXmlNode* pRootNode, const char* strTag, double &value);
+  static bool GetDouble(const TiXmlNode* pRootNode, const char* strTag, double& value);
   static bool GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue);
   static bool GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& bBoolValue);
-  
+
   /*! \brief Get a string value from the xml tag
    If the specified tag isn't found strStringvalue is not modified and will contain whatever
    value it had before the method call.
@@ -52,10 +52,10 @@ public:
   static bool GetString(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue);
 
   /*! \brief Get a string value from the xml tag
-      
+
    \param[in]  pRootNode the xml node that contains the tag
    \param[in]  strTag the tag to read from
-   
+
    \return the value in the specified tag or an empty string if the tag isn't found
    */
   static std::string GetString(const TiXmlNode* pRootNode, const char* strTag);
@@ -86,19 +86,19 @@ public:
    \param tag the name of the attribute.
    \return the attribute, if it exists, else an empty string
    */
-  static std::string GetAttribute(const TiXmlElement *element, const char *tag);
+  static std::string GetAttribute(const TiXmlElement* element, const char* tag);
 
-  static void SetString(TiXmlNode* pRootNode, const char *strTag, const std::string& strValue);
-  static void SetAdditiveString(TiXmlNode* pRootNode, const char *strTag, const std::string& strSeparator, const std::string& strValue);
-  static void SetStringArray(TiXmlNode* pRootNode, const char *strTag, const std::vector<std::string>& arrayValue);
-  static void SetInt(TiXmlNode* pRootNode, const char *strTag, int value);
-  static void SetFloat(TiXmlNode* pRootNode, const char *strTag, float value);
-  static void SetBoolean(TiXmlNode* pRootNode, const char *strTag, bool value);
-  static void SetHex(TiXmlNode* pRootNode, const char *strTag, uint32_t value);
-  static void SetPath(TiXmlNode* pRootNode, const char *strTag, const std::string& strValue);
-  static void SetLong(TiXmlNode* pRootNode, const char *strTag, long iValue);
-  static void SetDate(TiXmlNode* pRootNode, const char *strTag, const CDateTime& date);
-  static void SetDateTime(TiXmlNode* pRootNode, const char *strTag, const CDateTime& dateTime);
+  static void SetString(TiXmlNode* pRootNode, const char* strTag, const std::string& strValue);
+  static void SetAdditiveString(TiXmlNode* pRootNode, const char* strTag, const std::string& strSeparator, const std::string& strValue);
+  static void SetStringArray(TiXmlNode* pRootNode, const char* strTag, const std::vector<std::string>& arrayValue);
+  static void SetInt(TiXmlNode* pRootNode, const char* strTag, int value);
+  static void SetFloat(TiXmlNode* pRootNode, const char* strTag, float value);
+  static void SetBoolean(TiXmlNode* pRootNode, const char* strTag, bool value);
+  static void SetHex(TiXmlNode* pRootNode, const char* strTag, uint32_t value);
+  static void SetPath(TiXmlNode* pRootNode, const char* strTag, const std::string& strValue);
+  static void SetLong(TiXmlNode* pRootNode, const char* strTag, long iValue);
+  static void SetDate(TiXmlNode* pRootNode, const char* strTag, const CDateTime& date);
+  static void SetDateTime(TiXmlNode* pRootNode, const char* strTag, const CDateTime& dateTime);
 
   static const int path_version = 1;
 };
