@@ -19,24 +19,29 @@
  */
 
 #include "XMLUtils.h"
-#include "URL.h"
-#include "StringUtils.h"
-#ifdef TARGET_WINDOWS
-#include "PlatformDefs.h" //for strcasecmp
 
-#endif
+#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+
+#include "URL.h"
+#include "utils/StringUtils.h"
 
 bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& hexValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
-  return sscanf(pNode->FirstChild()->Value(), "%x", (uint32_t*)&hexValue) == 1;
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
+  return sscanf(pNode->FirstChild()->Value(), "%x", static_cast<uint32_t*>(&hexValue)) == 1;
 }
 
 bool XMLUtils::GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& uintValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
   uintValue = atol(pNode->FirstChild()->Value());
   return true;
 }
@@ -55,7 +60,9 @@ bool XMLUtils::GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t&
 bool XMLUtils::GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLongValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
   lLongValue = atol(pNode->FirstChild()->Value());
   return true;
 }
@@ -63,7 +70,9 @@ bool XMLUtils::GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLo
 bool XMLUtils::GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
   iIntValue = atoi(pNode->FirstChild()->Value());
   return true;
 }
@@ -82,7 +91,9 @@ bool XMLUtils::GetInt(const TiXmlNode* pRootNode, const char* strTag, int& value
 bool XMLUtils::GetDouble(const TiXmlNode* root, const char* tag, double& value)
 {
   const TiXmlNode* node = root->FirstChild(tag);
-  if (!node || !node->FirstChild()) return false;
+  if (!node || !node->FirstChild())
+    return false;
+
   value = atof(node->FirstChild()->Value());
   return true;
 }
@@ -90,8 +101,10 @@ bool XMLUtils::GetDouble(const TiXmlNode* root, const char* tag, double& value)
 bool XMLUtils::GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& value)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
-  value = (float)atof(pNode->FirstChild()->Value());
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
+  value = static_cast<float>(atof(pNode->FirstChild()->Value()));
   return true;
 }
 
@@ -109,7 +122,9 @@ bool XMLUtils::GetFloat(const TiXmlNode* pRootElement, const char* tagName, floa
 bool XMLUtils::GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& bBoolValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild())
+    return false;
+
   std::string strEnabled = pNode->FirstChild()->ValueStr();
   StringUtils::ToLower(strEnabled);
   if (strEnabled == "off" || strEnabled == "no" || strEnabled == "disabled" || strEnabled == "false" || strEnabled == "0")
@@ -126,15 +141,17 @@ bool XMLUtils::GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& 
 bool XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement)
+    return false;
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
-  if (pNode != NULL)
+  if (pNode != nullptr)
   {
     strStringValue = pNode->ValueStr();
-    if (encoded && strcasecmp(encoded, "yes") == 0)
+    if (encoded && _strcmpi(encoded, "yes") == 0)
       strStringValue = CURL::Decode(strStringValue);
+
     return true;
   }
   strStringValue.clear();
@@ -151,9 +168,11 @@ std::string XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag)
 bool XMLUtils::HasChild(const TiXmlNode* pRootNode, const char* strTag)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement)
+    return false;
+
   const TiXmlNode* pNode = pElement->FirstChild();
-  return (pNode != NULL);
+  return (pNode != nullptr);
 }
 
 bool XMLUtils::GetAdditiveString(const TiXmlNode* pRootNode, const char* strTag,
@@ -165,14 +184,15 @@ bool XMLUtils::GetAdditiveString(const TiXmlNode* pRootNode, const char* strTag,
   bool bResult = false;
   if (node && node->FirstChild() && clear)
     strStringValue.clear();
+
   while (node)
   {
     if (node->FirstChild())
     {
       bResult = true;
       strTemp = node->FirstChild()->Value();
-      const char* clear = node->Attribute("clear");
-      if (strStringValue.empty() || (clear && strcasecmp(clear, "true") == 0))
+      const char* nodeClear = node->Attribute("clear");
+      if (strStringValue.empty() || (clear && _strcmpi(nodeClear, "true") == 0))
         strStringValue = strTemp;
       else
         strStringValue += strSeparator + strTemp;
@@ -194,6 +214,7 @@ bool XMLUtils::GetStringArray(const TiXmlNode* pRootNode, const char* strTag, st
   bool bResult = false;
   if (node && node->FirstChild() && clear)
     arrayValue.clear();
+
   while (node)
   {
     if (node->FirstChild())
@@ -202,7 +223,7 @@ bool XMLUtils::GetStringArray(const TiXmlNode* pRootNode, const char* strTag, st
       strTemp = node->FirstChild()->ValueStr();
 
       const char* clearAttr = node->Attribute("clear");
-      if (clearAttr && strcasecmp(clearAttr, "true") == 0)
+      if (clearAttr && _strcmpi(clearAttr, "true") == 0)
         arrayValue.clear();
 
       if (strTemp.empty())
@@ -212,7 +233,7 @@ bool XMLUtils::GetStringArray(const TiXmlNode* pRootNode, const char* strTag, st
         arrayValue.push_back(strTemp);
       else
       {
-        std::vector<std::string> tempArray = StringUtils::Split(strTemp, separator);
+        auto tempArray = StringUtils::Split(strTemp, separator);
         arrayValue.insert(arrayValue.end(), tempArray.begin(), tempArray.end());
       }
     }
@@ -225,15 +246,17 @@ bool XMLUtils::GetStringArray(const TiXmlNode* pRootNode, const char* strTag, st
 bool XMLUtils::GetPath(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement)
+    return false;
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
-  if (pNode != NULL)
+  if (pNode != nullptr)
   {
     strStringValue = pNode->Value();
-    if (encoded && strcasecmp(encoded, "yes") == 0)
+    if (encoded && _strcmpi(encoded, "yes") == 0)
       strStringValue = CURL::Decode(strStringValue);
+
     return true;
   }
   strStringValue.clear();
@@ -272,20 +295,20 @@ std::string XMLUtils::GetAttribute(const TiXmlElement* element, const char* tag)
     if (attribute)
       return attribute;
   }
-  return "";
+  return std::string();
 }
 
 void XMLUtils::SetAdditiveString(TiXmlNode* pRootNode, const char* strTag, const std::string& strSeparator, const std::string& strValue)
 {
-  std::vector<std::string> list = StringUtils::Split(strValue, strSeparator);
-  for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-    SetString(pRootNode, strTag, *i);
+  auto list = StringUtils::Split(strValue, strSeparator);
+  for (const auto& i : list)
+    SetString(pRootNode, strTag, i);
 }
 
 void XMLUtils::SetStringArray(TiXmlNode* pRootNode, const char* strTag, const std::vector<std::string>& arrayValue)
 {
-  for (unsigned int i = 0; i < arrayValue.size(); i++)
-    SetString(pRootNode, strTag, arrayValue.at(i));
+  for (const auto& i : arrayValue)
+    SetString(pRootNode, strTag, i);
 }
 
 void XMLUtils::SetString(TiXmlNode* pRootNode, const char* strTag, const std::string& strValue)

@@ -20,9 +20,11 @@
  *
  */
 
-#include <string>
 #include <stdint.h>
+
+#include <string>
 #include <vector>
+
 #include "utils/XBMCTinyXML.h"
 
 class CDateTime;
