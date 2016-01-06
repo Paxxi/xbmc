@@ -23,9 +23,7 @@
 
 #include "settings/Settings.h"
 #include "system.h" //HAS_ZEROCONF define
-
 #include "threads/Atomics.h"
-#include "threads/CriticalSection.h"
 #include "threads/SingleLock.h"
 #include "utils/JobManager.h"
 
@@ -55,15 +53,15 @@ class CZeroconfDummy : public CZeroconf
 #endif
 
 long CZeroconf::sm_singleton_guard = 0;
-CZeroconf* CZeroconf::smp_instance = 0;
+CZeroconf* CZeroconf::smp_instance = nullptr;
 
-CZeroconf::CZeroconf(): mp_crit_sec(new CCriticalSection), m_started(false)
+CZeroconf::CZeroconf()
+  : m_started(false)
 {
 }
 
 CZeroconf::~CZeroconf()
 {
-  delete mp_crit_sec;
 }
 
 bool CZeroconf::PublishService(const std::string& fcr_identifier,
@@ -72,13 +70,14 @@ bool CZeroconf::PublishService(const std::string& fcr_identifier,
                                unsigned int f_port,
                                std::vector<std::pair<std::string, std::string>> txt /* = std::vector<std::pair<std::string, std::string> >() */)
 {
-  CSingleLock lock(*mp_crit_sec);
-  CZeroconf::PublishInfo info = {fcr_type, fcr_name, f_port, txt};
-  std::pair<tServiceMap::const_iterator, bool> ret = m_service_map.insert(std::make_pair(fcr_identifier, info));
+  CSingleLock lock(mp_crit_sec);
+  PublishInfo info = {fcr_type, fcr_name, f_port, txt};
+  auto ret = m_service_map.insert(std::make_pair(fcr_identifier, info));
   if (!ret.second) //identifier exists
     return false;
+
   if (m_started)
-    CJobManager::GetInstance().AddJob(new CPublish(fcr_identifier, info), NULL);
+    CJobManager::GetInstance().AddJob(new CPublish(fcr_identifier, info), nullptr);
 
   //not yet started, so its just queued
   return true;
@@ -86,23 +85,23 @@ bool CZeroconf::PublishService(const std::string& fcr_identifier,
 
 bool CZeroconf::RemoveService(const std::string& fcr_identifier)
 {
-  CSingleLock lock(*mp_crit_sec);
-  tServiceMap::iterator it = m_service_map.find(fcr_identifier);
+  CSingleLock lock(mp_crit_sec);
+  auto it = m_service_map.find(fcr_identifier);
   if (it == m_service_map.end())
     return false;
+
   m_service_map.erase(it);
   if (m_started)
     return doRemoveService(fcr_identifier);
-  else
-    return true;
+
+  return true;
 }
 
 bool CZeroconf::ForceReAnnounceService(const std::string& fcr_identifier)
 {
   if (HasService(fcr_identifier) && m_started)
-  {
     return doForceReAnnounceService(fcr_identifier);
-  }
+
   return false;
 }
 
@@ -113,7 +112,7 @@ bool CZeroconf::HasService(const std::string& fcr_identifier) const
 
 bool CZeroconf::Start()
 {
-  CSingleLock lock(*mp_crit_sec);
+  CSingleLock lock(mp_crit_sec);
   if (!IsZCdaemonRunning())
   {
     CSettings::GetInstance().SetBool(CSettings::SETTING_SERVICES_ZEROCONF, false);
@@ -121,19 +120,22 @@ bool CZeroconf::Start()
       CSettings::GetInstance().SetBool(CSettings::SETTING_SERVICES_AIRPLAY, false);
     return false;
   }
+
   if (m_started)
     return true;
+
   m_started = true;
 
-  CJobManager::GetInstance().AddJob(new CPublish(m_service_map), NULL);
+  CJobManager::GetInstance().AddJob(new CPublish(m_service_map), nullptr);
   return true;
 }
 
 void CZeroconf::Stop()
 {
-  CSingleLock lock(*mp_crit_sec);
+  CSingleLock lock(mp_crit_sec);
   if (!m_started)
     return;
+
   doStop();
   m_started = false;
 }
@@ -163,7 +165,7 @@ void CZeroconf::ReleaseInstance()
 {
   CAtomicSpinLock lock(sm_singleton_guard);
   delete smp_instance;
-  smp_instance = 0;
+  smp_instance = nullptr;
 }
 
 CZeroconf::CPublish::CPublish(const std::string& fcr_identifier, const PublishInfo& pubinfo)
@@ -178,8 +180,8 @@ CZeroconf::CPublish::CPublish(const tServiceMap& servmap)
 
 bool CZeroconf::CPublish::DoWork()
 {
-  for (tServiceMap::const_iterator it = m_servmap.begin(); it != m_servmap.end(); ++it)
-    CZeroconf::GetInstance()->doPublishService(it->first, it->second.type, it->second.name, it->second.port, it->second.txt);
+  for (const auto& service : m_servmap)
+    GetInstance()->doPublishService(service.first, service.second.type, service.second.name, service.second.port, service.second.txt);
 
   return true;
 }

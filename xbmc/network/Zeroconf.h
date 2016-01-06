@@ -24,9 +24,8 @@
 #include <utility>
 #include <vector>
 
+#include "threads/CriticalSection.h"
 #include "utils/Job.h"
-
-class CCriticalSection;
 
 /// this class provides support for zeroconf
 /// while the different zeroconf implementations have asynchronous APIs
@@ -83,13 +82,14 @@ public:
   // if zeroconf is disabled (!HAS_ZEROCONF), this will return a dummy implementation that
   // just does nothings, otherwise the platform specific one
   static CZeroconf* GetInstance();
+
   // release the singleton; (save to call multiple times)
   static void ReleaseInstance();
 
   // returns false if ReleaseInstance() was called befores
   static bool IsInstantiated()
   {
-    return smp_instance != 0;
+    return smp_instance != nullptr;
   }
 
   // win32: process results from the bonjour daemon
@@ -98,7 +98,7 @@ public:
   }
 
   // returns if the service is started and services are announced
-  bool IsStarted()
+  bool IsStarted() const
   {
     return m_started;
   }
@@ -128,10 +128,9 @@ protected:
     return true;
   }
 
-protected:
   //singleton: we don't want to get instantiated nor copied or deleted from outside
   CZeroconf();
-  CZeroconf(const CZeroconf&);
+  CZeroconf(const CZeroconf&) = delete;
   virtual ~CZeroconf();
 
 private:
@@ -144,7 +143,7 @@ private:
   };
 
   //protects data
-  CCriticalSection* mp_crit_sec;
+  CCriticalSection mp_crit_sec;
   typedef std::map<std::string, PublishInfo> tServiceMap;
   tServiceMap m_service_map;
   bool m_started;
@@ -157,9 +156,9 @@ private:
   {
   public:
     CPublish(const std::string& fcr_identifier, const PublishInfo& pubinfo);
-    CPublish(const tServiceMap& servmap);
+    explicit CPublish(const tServiceMap& servmap);
 
-    bool DoWork();
+    bool DoWork() override;
 
   private:
     tServiceMap m_servmap;
