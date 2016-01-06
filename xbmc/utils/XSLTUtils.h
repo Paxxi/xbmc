@@ -35,14 +35,14 @@ public:
    The input XML should be well formed.
    \param input    the XML document to be transformed.
    */
-  bool  SetInput(const std::string& input);
+  bool SetInput(const std::string& input);
 
   /*! \brief Set the stylesheet (XSL) for an XSLT transform from a string.
    This sets up the XSLT transformer with some stylesheet XML from a string in memory.
    The input XSL should be well formed.
    \param input    the XSL document to be transformed.
    */
-  bool  SetStylesheet(const std::string& stylesheet);
+  bool SetStylesheet(const std::string& stylesheet);
 
   /*! \brief Perform an XSLT transform on an inbound XML document.
    This will apply an XSLT transformation on an input XML document,
@@ -51,8 +51,7 @@ public:
    \param input    the parent containing the <tag>'s.
    \param filename         the <tag> in question.
    */
-  bool  XSLTTransform(std::string& output);
-
+  bool XSLTTransform(std::string& output);
 
 private:
   xmlDocPtr m_xmlInput;
@@ -60,3 +59,4 @@ private:
   xmlDocPtr m_xmlStylesheet;
   xsltStylesheetPtr m_xsltStylesheet;
 };
+
