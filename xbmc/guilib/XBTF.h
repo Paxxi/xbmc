@@ -112,7 +112,9 @@ private:
 class CXBTFBase
 {
 public:
-  virtual ~CXBTFBase() { }
+  virtual ~CXBTFBase()
+  {
+  }
 
   uint64_t GetHeaderSize() const;
 
@@ -123,7 +125,10 @@ public:
   void UpdateFile(const CXBTFFile& file);
 
 protected:
-  CXBTFBase() { }
+  CXBTFBase()
+  {
+  }
 
   std::map<std::string, CXBTFFile> m_files;
 };
+
