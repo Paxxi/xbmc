@@ -1,5 +1,4 @@
 #pragma once
-
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -28,6 +27,7 @@
 #include "utils/Job.h"
 
 class CCriticalSection;
+
 /// this class provides support for zeroconf
 /// while the different zeroconf implementations have asynchronous APIs
 /// this class hides it and provides only few ways to interact
@@ -52,8 +52,8 @@ public:
                       const std::string& fcr_type,
                       const std::string& fcr_name,
                       unsigned int f_port,
-                      std::vector<std::pair<std::string, std::string> > txt /*= std::vector<std::pair<std::string, std::string> >()*/);
-  
+                      std::vector<std::pair<std::string, std::string>> txt /*= std::vector<std::pair<std::string, std::string> >()*/);
+
   //tries to rebroadcast that service on the network without removing/readding
   //this can be achieved by changing a fake txt record. Implementations should
   //implement it by doing so.
@@ -84,13 +84,24 @@ public:
   // just does nothings, otherwise the platform specific one
   static CZeroconf* GetInstance();
   // release the singleton; (save to call multiple times)
-  static void   ReleaseInstance();
+  static void ReleaseInstance();
+
   // returns false if ReleaseInstance() was called befores
-  static bool   IsInstantiated() { return  smp_instance != 0; }
+  static bool IsInstantiated()
+  {
+    return smp_instance != 0;
+  }
+
   // win32: process results from the bonjour daemon
-  virtual void  ProcessResults() {}
+  virtual void ProcessResults()
+  {
+  }
+
   // returns if the service is started and services are announced
-  bool IsStarted() { return m_started; }
+  bool IsStarted()
+  {
+    return m_started;
+  }
 
 protected:
   //methods to implement for concrete implementations
@@ -99,12 +110,12 @@ protected:
                                 const std::string& fcr_type,
                                 const std::string& fcr_name,
                                 unsigned int f_port,
-                                const std::vector<std::pair<std::string, std::string> >& txt) = 0;
+                                const std::vector<std::pair<std::string, std::string>>& txt) = 0;
 
   //methods to implement for concrete implementations
   //update this service
   virtual bool doForceReAnnounceService(const std::string& fcr_identifier) = 0;
-  
+
   //removes the service if published
   virtual bool doRemoveService(const std::string& fcr_ident) = 0;
 
@@ -112,7 +123,10 @@ protected:
   virtual void doStop() = 0;
 
   // return true if the zeroconf daemon is running
-  virtual bool IsZCdaemonRunning() { return  true; }
+  virtual bool IsZCdaemonRunning()
+  {
+    return true;
+  }
 
 protected:
   //singleton: we don't want to get instantiated nor copied or deleted from outside
@@ -121,11 +135,12 @@ protected:
   virtual ~CZeroconf();
 
 private:
-  struct PublishInfo{
+  struct PublishInfo
+  {
     std::string type;
     std::string name;
     unsigned int port;
-    std::vector<std::pair<std::string, std::string> > txt;
+    std::vector<std::pair<std::string, std::string>> txt;
   };
 
   //protects data
@@ -150,3 +165,4 @@ private:
     tServiceMap m_servmap;
   };
 };
+

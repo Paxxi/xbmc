@@ -23,6 +23,7 @@
 
 #include "settings/Settings.h"
 #include "system.h" //HAS_ZEROCONF define
+
 #include "threads/Atomics.h"
 #include "threads/CriticalSection.h"
 #include "threads/SingleLock.h"
@@ -47,7 +48,7 @@ class CZeroconfDummy : public CZeroconf
     return false;
   }
 
-  virtual bool doForceReAnnounceService(const std::string&){return false;} 
+  virtual bool doForceReAnnounceService(const std::string&){return false;}
   virtual bool doRemoveService(const std::string& fcr_ident){return false;}
   virtual void doStop(){}
 };
@@ -56,7 +57,7 @@ class CZeroconfDummy : public CZeroconf
 long CZeroconf::sm_singleton_guard = 0;
 CZeroconf* CZeroconf::smp_instance = 0;
 
-CZeroconf::CZeroconf():mp_crit_sec(new CCriticalSection),m_started(false)
+CZeroconf::CZeroconf(): mp_crit_sec(new CCriticalSection), m_started(false)
 {
 }
 
@@ -69,14 +70,14 @@ bool CZeroconf::PublishService(const std::string& fcr_identifier,
                                const std::string& fcr_type,
                                const std::string& fcr_name,
                                unsigned int f_port,
-                               std::vector<std::pair<std::string, std::string> > txt /* = std::vector<std::pair<std::string, std::string> >() */)
+                               std::vector<std::pair<std::string, std::string>> txt /* = std::vector<std::pair<std::string, std::string> >() */)
 {
   CSingleLock lock(*mp_crit_sec);
   CZeroconf::PublishInfo info = {fcr_type, fcr_name, f_port, txt};
   std::pair<tServiceMap::const_iterator, bool> ret = m_service_map.insert(std::make_pair(fcr_identifier, info));
-  if(!ret.second) //identifier exists
+  if (!ret.second) //identifier exists
     return false;
-  if(m_started)
+  if (m_started)
     CJobManager::GetInstance().AddJob(new CPublish(fcr_identifier, info), NULL);
 
   //not yet started, so its just queued
@@ -87,10 +88,10 @@ bool CZeroconf::RemoveService(const std::string& fcr_identifier)
 {
   CSingleLock lock(*mp_crit_sec);
   tServiceMap::iterator it = m_service_map.find(fcr_identifier);
-  if(it == m_service_map.end())
+  if (it == m_service_map.end())
     return false;
   m_service_map.erase(it);
-  if(m_started)
+  if (m_started)
     return doRemoveService(fcr_identifier);
   else
     return true;
@@ -113,14 +114,14 @@ bool CZeroconf::HasService(const std::string& fcr_identifier) const
 bool CZeroconf::Start()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!IsZCdaemonRunning())
+  if (!IsZCdaemonRunning())
   {
     CSettings::GetInstance().SetBool(CSettings::SETTING_SERVICES_ZEROCONF, false);
     if (CSettings::GetInstance().GetBool(CSettings::SETTING_SERVICES_AIRPLAY))
       CSettings::GetInstance().SetBool(CSettings::SETTING_SERVICES_AIRPLAY, false);
     return false;
   }
-  if(m_started)
+  if (m_started)
     return true;
   m_started = true;
 
@@ -131,16 +132,16 @@ bool CZeroconf::Start()
 void CZeroconf::Stop()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!m_started)
+  if (!m_started)
     return;
   doStop();
   m_started = false;
 }
 
-CZeroconf*  CZeroconf::GetInstance()
+CZeroconf* CZeroconf::GetInstance()
 {
   CAtomicSpinLock lock(sm_singleton_guard);
-  if(!smp_instance)
+  if (!smp_instance)
   {
 #ifndef HAS_ZEROCONF
     smp_instance = new CZeroconfDummy;
@@ -150,7 +151,7 @@ CZeroconf*  CZeroconf::GetInstance()
 #elif defined(HAS_AVAHI)
     smp_instance  = new CZeroconfAvahi;
 #elif defined(HAS_MDNS)
-    smp_instance  = new CZeroconfMDNS;
+    smp_instance = new CZeroconfMDNS;
 #endif
 #endif
   }
@@ -170,15 +171,16 @@ CZeroconf::CPublish::CPublish(const std::string& fcr_identifier, const PublishIn
   m_servmap.insert(std::make_pair(fcr_identifier, pubinfo));
 }
 
-CZeroconf::CPublish::CPublish(const tServiceMap& servmap) 
+CZeroconf::CPublish::CPublish(const tServiceMap& servmap)
   : m_servmap(servmap)
 {
 }
 
 bool CZeroconf::CPublish::DoWork()
 {
-  for(tServiceMap::const_iterator it = m_servmap.begin(); it != m_servmap.end(); ++it)
+  for (tServiceMap::const_iterator it = m_servmap.begin(); it != m_servmap.end(); ++it)
     CZeroconf::GetInstance()->doPublishService(it->first, it->second.type, it->second.name, it->second.port, it->second.txt);
 
   return true;
 }
+
