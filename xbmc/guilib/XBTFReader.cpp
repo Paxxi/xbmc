@@ -69,7 +69,8 @@ CXBTFReader::CXBTFReader()
   : CXBTFBase(),
     m_path(),
     m_file(nullptr)
-{ }
+{
+}
 
 CXBTFReader::~CXBTFReader()
 {
@@ -113,20 +114,23 @@ bool CXBTFReader::Open(const std::string& path)
   if (!ReadUInt32(m_file, nofFiles))
     return false;
 
+  char filePath[CXBTFFile::MaximumPathLength];
+
   for (uint32_t i = 0; i < nofFiles; i++)
   {
     CXBTFFile xbtfFile;
     uint32_t u32;
     uint64_t u64;
 
-    char path[CXBTFFile::MaximumPathLength];
-    memset(path, 0, sizeof(path));
-    if (!ReadString(m_file, path, sizeof(path)))
+    memset(filePath, 0, sizeof(filePath));
+    if (!ReadString(m_file, filePath, sizeof(filePath)))
       return false;
-    xbtfFile.SetPath(path);
+
+    xbtfFile.SetPath(filePath);
 
     if (!ReadUInt32(m_file, u32))
       return false;
+
     xbtfFile.SetLoop(u32);
 
     unsigned int nofFrames;
@@ -139,30 +143,37 @@ bool CXBTFReader::Open(const std::string& path)
 
       if (!ReadUInt32(m_file, u32))
         return false;
+
       frame.SetWidth(u32);
 
       if (!ReadUInt32(m_file, u32))
         return false;
+
       frame.SetHeight(u32);
 
       if (!ReadUInt32(m_file, u32))
         return false;
+
       frame.SetFormat(u32);
 
       if (!ReadUInt64(m_file, u64))
         return false;
+
       frame.SetPackedSize(u64);
 
       if (!ReadUInt64(m_file, u64))
         return false;
+
       frame.SetUnpackedSize(u64);
 
       if (!ReadUInt32(m_file, u32))
         return false;
+
       frame.SetDuration(u32);
 
       if (!ReadUInt64(m_file, u64))
         return false;
+
       frame.SetOffset(u64);
 
       xbtfFile.GetFrames().push_back(frame);
@@ -225,3 +236,4 @@ bool CXBTFReader::Load(const CXBTFFrame& frame, unsigned char* buffer) const
 
   return true;
 }
+

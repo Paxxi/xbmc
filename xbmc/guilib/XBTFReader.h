@@ -47,3 +47,4 @@ private:
 };
 
 typedef std::shared_ptr<CXBTFReader> CXBTFReaderPtr;
+
