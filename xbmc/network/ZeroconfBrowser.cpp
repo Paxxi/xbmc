@@ -18,6 +18,7 @@
  *
  */
 #include "system.h" //HAS_ZEROCONF define
+
 #include "ZeroconfBrowser.h"
 #include <stdexcept>
 #include "utils/log.h"
@@ -51,7 +52,7 @@ class CZeroconfBrowserDummy : public CZeroconfBrowser
 long CZeroconfBrowser::sm_singleton_guard = 0;
 CZeroconfBrowser* CZeroconfBrowser::smp_instance = 0;
 
-CZeroconfBrowser::CZeroconfBrowser():mp_crit_sec(new CCriticalSection),m_started(false)
+CZeroconfBrowser::CZeroconfBrowser(): mp_crit_sec(new CCriticalSection), m_started(false)
 {
 #ifdef HAS_FILESYSTEM_SMB
   AddServiceType("_smb._tcp.");
@@ -59,8 +60,9 @@ CZeroconfBrowser::CZeroconfBrowser():mp_crit_sec(new CCriticalSection),m_started
   AddServiceType("_ftp._tcp.");
   AddServiceType("_webdav._tcp.");
 #ifdef HAS_FILESYSTEM_NFS
-  AddServiceType("_nfs._tcp.");  
+  AddServiceType("_nfs._tcp.");
 #endif// HAS_FILESYSTEM_NFS
+
   AddServiceType("_sftp-ssh._tcp.");
 }
 
@@ -72,33 +74,33 @@ CZeroconfBrowser::~CZeroconfBrowser()
 void CZeroconfBrowser::Start()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(m_started)
+  if (m_started)
     return;
   m_started = true;
-  for(tServices::const_iterator it = m_services.begin(); it != m_services.end(); ++it)
+  for (tServices::const_iterator it = m_services.begin(); it != m_services.end(); ++it)
     doAddServiceType(*it);
 }
 
 void CZeroconfBrowser::Stop()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!m_started)
+  if (!m_started)
     return;
-  for(tServices::iterator it = m_services.begin(); it != m_services.end(); ++it)
+  for (tServices::iterator it = m_services.begin(); it != m_services.end(); ++it)
     RemoveServiceType(*it);
   m_started = false;
 }
 
-bool CZeroconfBrowser::AddServiceType(const std::string& fcr_service_type /*const std::string& domain*/ )
+bool CZeroconfBrowser::AddServiceType(const std::string& fcr_service_type /*const std::string& domain*/)
 {
   CSingleLock lock(*mp_crit_sec);
   std::pair<tServices::iterator, bool> ret = m_services.insert(fcr_service_type);
-  if(!ret.second)
+  if (!ret.second)
   {
     //service already in list
     return false;
   }
-  if(m_started)
+  if (m_started)
     return doAddServiceType(*ret.first);
   //not yet started, so its just queued
   return true;
@@ -108,9 +110,9 @@ bool CZeroconfBrowser::RemoveServiceType(const std::string& fcr_service_type)
 {
   CSingleLock lock(*mp_crit_sec);
   tServices::iterator ret = m_services.find(fcr_service_type);
-  if(ret == m_services.end())
+  if (ret == m_services.end())
     return false;
-  if(m_started)
+  if (m_started)
     return doRemoveServiceType(fcr_service_type);
   //not yet started, so its just queued
   return true;
@@ -119,7 +121,7 @@ bool CZeroconfBrowser::RemoveServiceType(const std::string& fcr_service_type)
 std::vector<CZeroconfBrowser::ZeroconfService> CZeroconfBrowser::GetFoundServices()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(m_started)
+  if (m_started)
     return doGetFoundServices();
   else
   {
@@ -131,7 +133,7 @@ std::vector<CZeroconfBrowser::ZeroconfService> CZeroconfBrowser::GetFoundService
 bool CZeroconfBrowser::ResolveService(ZeroconfService& fr_service, double f_timeout)
 {
   CSingleLock lock(*mp_crit_sec);
-  if(m_started)
+  if (m_started)
   {
     return doResolveService(fr_service, f_timeout);
   }
@@ -139,13 +141,13 @@ bool CZeroconfBrowser::ResolveService(ZeroconfService& fr_service, double f_time
   return false;
 }
 
-CZeroconfBrowser*  CZeroconfBrowser::GetInstance()
+CZeroconfBrowser* CZeroconfBrowser::GetInstance()
 {
-  if(!smp_instance)
+  if (!smp_instance)
   {
     //use double checked locking
     CAtomicSpinLock lock(sm_singleton_guard);
-    if(!smp_instance)
+    if (!smp_instance)
     {
 #if !defined(HAS_ZEROCONF)
       smp_instance = new CZeroconfBrowserDummy;
@@ -155,7 +157,7 @@ CZeroconfBrowser*  CZeroconfBrowser::GetInstance()
 #elif defined(HAS_AVAHI)
       smp_instance  = new CZeroconfBrowserAvahi;
 #elif defined(HAS_MDNS)
-      smp_instance  = new CZeroconfBrowserMDNS;
+      smp_instance = new CZeroconfBrowserMDNS;
 #endif
 #endif
     }
@@ -171,8 +173,9 @@ void CZeroconfBrowser::ReleaseInstance()
   smp_instance = 0;
 }
 
-
-CZeroconfBrowser::ZeroconfService::ZeroconfService():m_port(0){}
+CZeroconfBrowser::ZeroconfService::ZeroconfService(): m_port(0)
+{
+}
 
 CZeroconfBrowser::ZeroconfService::ZeroconfService(const std::string& fcr_name, const std::string& fcr_type, const std::string& fcr_domain):
   m_name(fcr_name),
@@ -181,6 +184,7 @@ CZeroconfBrowser::ZeroconfService::ZeroconfService(const std::string& fcr_name, 
 {
   SetType(fcr_type);
 }
+
 void CZeroconfBrowser::ZeroconfService::SetName(const std::string& fcr_name)
 {
   m_name = fcr_name;
@@ -188,10 +192,10 @@ void CZeroconfBrowser::ZeroconfService::SetName(const std::string& fcr_name)
 
 void CZeroconfBrowser::ZeroconfService::SetType(const std::string& fcr_type)
 {
-  if(fcr_type.empty())
-    throw std::runtime_error("CZeroconfBrowser::ZeroconfService::SetType invalid type: "+ fcr_type);
+  if (fcr_type.empty())
+    throw std::runtime_error("CZeroconfBrowser::ZeroconfService::SetType invalid type: " + fcr_type);
   //make sure there's a "." as last char (differs for avahi and osx implementation of browsers)
-  if(fcr_type[fcr_type.length() - 1] != '.')
+  if (fcr_type[fcr_type.length() - 1] != '.')
     m_type = fcr_type + ".";
   else
     m_type = fcr_type;
@@ -220,11 +224,11 @@ void CZeroconfBrowser::ZeroconfService::SetPort(int f_port)
 void CZeroconfBrowser::ZeroconfService::SetTxtRecords(const tTxtRecordMap& txt_records)
 {
   m_txtrecords_map = txt_records;
-  
-  CLog::Log(LOGDEBUG,"CZeroconfBrowser: dump txt-records");
-  for(tTxtRecordMap::const_iterator it = m_txtrecords_map.begin(); it != m_txtrecords_map.end(); ++it)
+
+  CLog::Log(LOGDEBUG, "CZeroconfBrowser: dump txt-records");
+  for (tTxtRecordMap::const_iterator it = m_txtrecords_map.begin(); it != m_txtrecords_map.end(); ++it)
   {
-    CLog::Log(LOGDEBUG,"CZeroconfBrowser:  key: %s value: %s",it->first.c_str(), it->second.c_str());
+    CLog::Log(LOGDEBUG, "CZeroconfBrowser:  key: %s value: %s", it->first.c_str(), it->second.c_str());
   }
 }
 
@@ -235,18 +239,19 @@ std::string CZeroconfBrowser::ZeroconfService::toPath(const ZeroconfService& fcr
 
 CZeroconfBrowser::ZeroconfService CZeroconfBrowser::ZeroconfService::fromPath(const std::string& fcr_path)
 {
-  if( fcr_path.empty() )
+  if (fcr_path.empty())
     throw std::runtime_error("CZeroconfBrowser::ZeroconfService::fromPath input string empty!");
 
   size_t pos1 = fcr_path.find('@'); //first @
   size_t pos2 = fcr_path.find('@', pos1 + 1); //second
 
-  if(pos1 == std::string::npos || pos2 == std::string::npos)
+  if (pos1 == std::string::npos || pos2 == std::string::npos)
     throw std::runtime_error("CZeroconfBrowser::ZeroconfService::fromPath invalid input path");
 
   return ZeroconfService(
     fcr_path.substr(pos2 + 1, fcr_path.length()), //name
     fcr_path.substr(0, pos1), //type
-    fcr_path.substr(pos1 + 1, pos2-(pos1+1)) //domain
-    );
+    fcr_path.substr(pos1 + 1, pos2 - (pos1 + 1)) //domain
+  );
 }
+
