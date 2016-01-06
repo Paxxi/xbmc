@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2012-2013 Team XBMC
  *      http://xbmc.org
@@ -17,7 +18,6 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 
 #include <map>
 #include <memory>
@@ -51,33 +51,33 @@ private:
                                         DNSServiceFlags flags,
                                         uint32_t interfaceIndex,
                                         DNSServiceErrorType errorCode,
-                                        const char *serviceName,
-                                        const char *regtype,
-                                        const char *replyDomain,
-                                        void *context);
+                                        const char* serviceName,
+                                        const char* regtype,
+                                        const char* replyDomain,
+                                        void* context);
   /// GetAddrInfo callback
-  static void DNSSD_API GetAddrInfoCallback(DNSServiceRef                    sdRef,
-                                            DNSServiceFlags                  flags,
-                                            uint32_t                         interfaceIndex,
-                                            DNSServiceErrorType              errorCode,
-                                            const char                       *hostname,
-                                            const struct sockaddr            *address,
-                                            uint32_t                         ttl,
-                                            void                             *context
-                                            );
+  static void DNSSD_API GetAddrInfoCallback(DNSServiceRef sdRef,
+                                            DNSServiceFlags flags,
+                                            uint32_t interfaceIndex,
+                                            DNSServiceErrorType errorCode,
+                                            const char* hostname,
+                                            const struct sockaddr* address,
+                                            uint32_t ttl,
+                                            void* context
+  );
 
   /// resolve callback
-  static void DNSSD_API ResolveCallback(DNSServiceRef                       sdRef,
-                                        DNSServiceFlags                     flags,
-                                        uint32_t                            interfaceIndex,
-                                        DNSServiceErrorType                 errorCode,
-                                        const char                          *fullname,
-                                        const char                          *hosttarget,
-                                        uint16_t                            port,        /* In network byte order */
-                                        uint16_t                            txtLen,
-                                        const unsigned char                 *txtRecord,
-                                        void                                *context
-                                        );
+  static void DNSSD_API ResolveCallback(DNSServiceRef sdRef,
+                                        DNSServiceFlags flags,
+                                        uint32_t interfaceIndex,
+                                        DNSServiceErrorType errorCode,
+                                        const char* fullname,
+                                        const char* hosttarget,
+                                        uint16_t port, /* In network byte order */
+                                        uint16_t txtLen,
+                                        const unsigned char* txtRecord,
+                                        void* context
+  );
 
   /// adds the service to list of found services
   void addDiscoveredService(DNSServiceRef browser, CZeroconfBrowser::ZeroconfService const& fcr_service);
@@ -93,10 +93,11 @@ private:
   tBrowserMap m_service_browsers;
   //tDiscoveredServicesMap maps browsers to their discovered services + a ref-count for each service
   //ref-count is needed, because a service might pop up more than once, if there's more than one network-iface
-  typedef std::map<DNSServiceRef, std::vector<std::pair<ZeroconfService, unsigned int> > > tDiscoveredServicesMap;
+  typedef std::map<DNSServiceRef, std::vector<std::pair<ZeroconfService, unsigned int>>> tDiscoveredServicesMap;
   tDiscoveredServicesMap m_discovered_services;
   DNSServiceRef m_browser;
   CZeroconfBrowser::ZeroconfService m_resolving_service;
   CEvent m_resolved_event;
   CEvent m_addrinfo_event;
 };
+
