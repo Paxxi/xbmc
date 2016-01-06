@@ -19,9 +19,6 @@
  *
  */
 
-#include <map>
-#include <string>
-
 #include "IFileDirectory.h"
 
 class CXBTFFile;
@@ -31,14 +28,11 @@ namespace XFILE
 class CXbtDirectory : public IFileDirectory
 {
 public:
-  CXbtDirectory();
-  ~CXbtDirectory();
-
   // specialization of IDirectory
-  virtual DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ALWAYS; };
-  virtual bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  DIR_CACHE_TYPE GetCacheType(const CURL&) const override { return DIR_CACHE_ALWAYS; };
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
 
   // specialization of IFileDirectory
-  virtual bool ContainsFiles(const CURL& url) override;
+  bool ContainsFiles(const CURL& url) override;
 };
 }

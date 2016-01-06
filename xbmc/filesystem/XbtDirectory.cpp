@@ -18,32 +18,27 @@
  *
  */
 
-#include <stdio.h>
-
 #include "XbtDirectory.h"
+
+#include <memory>
+#include <vector>
+
 #include "FileItem.h"
-#include "URL.h"
 #include "filesystem/Directorization.h"
 #include "filesystem/XbtManager.h"
 #include "guilib/XBTF.h"
+#include "URL.h"
 
 namespace XFILE
 {
-
-static CFileItemPtr XBTFFileToFileItem(const CXBTFFile& entry, const std::string& label, const std::string& path, bool isFolder)
+static CFileItemPtr XBTFFileToFileItem(const CXBTFFile& entry, const std::string& label, const std::string& /*path*/, bool isFolder)
 {
-  CFileItemPtr item(new CFileItem(label));
+  auto item = std::make_shared<CFileItem>(label);
   if (!isFolder)
     item->m_dwSize = static_cast<int64_t>(entry.GetUnpackedSize());
 
   return item;
 }
-
-CXbtDirectory::CXbtDirectory()
-{ }
-
-CXbtDirectory::~CXbtDirectory()
-{ }
 
 bool CXbtDirectory::GetDirectory(const CURL& urlOrig, CFileItemList& items)
 {
@@ -76,5 +71,5 @@ bool CXbtDirectory::ContainsFiles(const CURL& url)
 {
   return CXbtManager::GetInstance().HasFiles(url);
 }
-
 }
+
