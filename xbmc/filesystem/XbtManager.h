@@ -33,8 +33,6 @@ namespace XFILE
 class CXbtManager
 {
 public:
-  ~CXbtManager();
-
   static CXbtManager& GetInstance();
 
   bool HasFiles(const CURL& path) const;
@@ -45,15 +43,18 @@ public:
   void Release(const CURL& path);
 
 private:
-  CXbtManager();
-  CXbtManager(const CXbtManager&);
-  CXbtManager& operator=(const CXbtManager&);
+  CXbtManager() = default;
+  ~CXbtManager() = default;
+
+  CXbtManager(const CXbtManager&) = delete;
+  CXbtManager& operator=(const CXbtManager&) = delete;
 
   struct XBTFReader
   {
     CXBTFReaderPtr reader;
     time_t lastModification;
   };
+
   using XBTFReaders = std::map<std::string, XBTFReader>;
 
   XBTFReaders::iterator GetReader(const CURL& path) const;
@@ -66,3 +67,4 @@ private:
   mutable XBTFReaders m_readers;
 };
 }
+

@@ -29,12 +29,6 @@
 namespace XFILE
 {
 
-CXbtManager::CXbtManager()
-{ }
-
-CXbtManager::~CXbtManager()
-{ }
-
 CXbtManager& CXbtManager::GetInstance()
 {
   static CXbtManager xbtManager;
@@ -118,7 +112,7 @@ CXbtManager::XBTFReaders::const_iterator CXbtManager::ProcessFile(const CURL& pa
   }
 
   // try to read the file
-  CXBTFReaderPtr reader(new CXBTFReader());
+  auto reader = std::make_shared<CXBTFReader>();
   if (!reader->Open(filePath))
     return m_readers.end();
 
@@ -126,7 +120,7 @@ CXbtManager::XBTFReaders::const_iterator CXbtManager::ProcessFile(const CURL& pa
     reader,
     reader->GetLastModificationTimestamp()
   };
-  std::pair<XBTFReaders::iterator, bool> result = m_readers.insert(std::make_pair(filePath, xbtfReader));
+  auto result = m_readers.insert(std::make_pair(filePath, xbtfReader));
   return result.first;
 }
 
@@ -137,5 +131,5 @@ std::string CXbtManager::NormalizePath(const CURL& path)
 
   return path.Get();
 }
-
 }
+
