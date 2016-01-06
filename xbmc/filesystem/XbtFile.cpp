@@ -18,6 +18,8 @@
  *
  */
 
+#include "XbtFile.h"
+
 #include <algorithm>
 #include <string.h>
 
@@ -27,7 +29,6 @@
 
 #include <lzo/lzo1x.h>
 
-#include "XbtFile.h"
 #include "URL.h"
 #include "filesystem/File.h"
 #include "filesystem/XbtManager.h"
@@ -53,7 +54,7 @@ CXbtFile::CXbtFile()
 
 CXbtFile::~CXbtFile()
 {
-  Close();
+  CXbtFile::Close();
 }
 
 bool CXbtFile::Open(const CURL& url)
@@ -94,6 +95,7 @@ void CXbtFile::Close()
 {
   for (const auto& unpackedFrame : m_unpackedFrames)
     delete unpackedFrame;
+
   m_unpackedFrames.clear();
 
   m_frameIndex = 0;
@@ -147,7 +149,7 @@ int CXbtFile::Stat(const CURL& url, struct __stat64* buffer)
       return -1;
 
     // stat the XBT file itself
-    if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0)
+    if (CFile::Stat(url.GetHostName(), buffer) != 0)
       return -1;
 
     buffer->st_mode = _S_IFDIR ;
@@ -155,7 +157,7 @@ int CXbtFile::Stat(const CURL& url, struct __stat64* buffer)
   }
 
   // stat the XBT file itself
-  if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0)
+  if (CFile::Stat(url.GetHostName(), buffer) != 0)
     return -1;
 
   buffer->st_size = file.GetUnpackedSize();
