@@ -1,3 +1,4 @@
+#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -18,8 +19,8 @@
  *
  */
 
-#pragma once
 #include "IDirectory.h"
+
 //txt-records as of http://www.dns-sd.org/ServiceTypes.html
 #define TXT_RECORD_PATH_KEY     "path"
 #define TXT_RECORD_USERNAME_KEY "u"
@@ -30,11 +31,11 @@ namespace XFILE
 class CZeroconfDirectory : public IDirectory
 {
 public:
-  CZeroconfDirectory(void);
-  virtual ~CZeroconfDirectory(void);
-  virtual bool GetDirectory(const CURL& url, CFileItemList& items);
+  CZeroconfDirectory();
+  virtual ~CZeroconfDirectory();
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
 
-  virtual DIR_CACHE_TYPE GetCacheType(const CURL& url) const
+  DIR_CACHE_TYPE GetCacheType(const CURL&) const override
   {
     return DIR_CACHE_NEVER;
   };
