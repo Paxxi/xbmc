@@ -42,16 +42,18 @@ void err(void* ctx, const char* msg, ...)
   vsnprintf(string, TMP_BUF_SIZE, msg, arg_ptr);
   va_end(arg_ptr);
   CLog::Log(LOGDEBUG, "XSLT: %s", string);
-  return;
 }
 
-XSLTUtils::XSLTUtils() :
-  m_xmlInput(NULL), m_xmlStylesheet(NULL), m_xsltStylesheet(NULL)
+XSLTUtils::XSLTUtils()
+  : m_xmlInput(nullptr)
+  , m_xmlOutput(nullptr)
+  , m_xmlStylesheet(nullptr)
+  , m_xsltStylesheet(nullptr)
 {
   // initialize libxslt
   xmlSubstituteEntitiesDefault(1);
   xmlLoadExtDtdDefaultValue = 0;
-  xsltSetGenericErrorFunc(NULL, err);
+  xsltSetGenericErrorFunc(nullptr, err);
 }
 
 XSLTUtils::~XSLTUtils()
@@ -67,7 +69,7 @@ XSLTUtils::~XSLTUtils()
 bool XSLTUtils::XSLTTransform(std::string& output)
 {
   const char* params[16 + 1];
-  params[0] = NULL;
+  params[0] = nullptr;
   m_xmlOutput = xsltApplyStylesheet(m_xsltStylesheet, m_xmlInput, params);
   if (!m_xmlOutput)
   {
@@ -75,7 +77,7 @@ bool XSLTUtils::XSLTTransform(std::string& output)
     return false;
   }
 
-  xmlChar* xmlResultBuffer = NULL;
+  xmlChar* xmlResultBuffer = nullptr;
   int xmlResultLength = 0;
   int res = xsltSaveResultToString(&xmlResultBuffer, &xmlResultLength, m_xmlOutput, m_xsltStylesheet);
   if (res == -1)
@@ -84,7 +86,7 @@ bool XSLTUtils::XSLTTransform(std::string& output)
     return false;
   }
 
-  output.append((const char *)xmlResultBuffer, xmlResultLength);
+  output.append(reinterpret_cast<const char *>(xmlResultBuffer), xmlResultLength);
   xmlFree(xmlResultBuffer);
 
   return true;
@@ -103,7 +105,7 @@ bool XSLTUtils::SetStylesheet(const std::string& stylesheet)
   if (m_xsltStylesheet)
   {
     xsltFreeStylesheet(m_xsltStylesheet);
-    m_xsltStylesheet = NULL;
+    m_xsltStylesheet = nullptr;
   }
 
   m_xmlStylesheet = xmlParseMemory(stylesheet.c_str(), stylesheet.size());
@@ -118,7 +120,7 @@ bool XSLTUtils::SetStylesheet(const std::string& stylesheet)
   {
     CLog::Log(LOGDEBUG, "could not parse stylesheetdoc");
     xmlFree(m_xmlStylesheet);
-    m_xmlStylesheet = NULL;
+    m_xmlStylesheet = nullptr;
     return false;
   }
 
