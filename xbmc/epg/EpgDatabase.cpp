@@ -188,8 +188,8 @@ int CEpgDatabase::Get(CEpgContainer &container)
       while (!m_pDS->eof())
       {
         int iEpgID                 = m_pDS->fv("idEpg").get_asInt();
-        std::string strName        = m_pDS->fv("sName").get_asString().c_str();
-        std::string strScraperName = m_pDS->fv("sScraperName").get_asString().c_str();
+        std::string strName        = m_pDS->fv("sName").get_asString();
+        std::string strScraperName = m_pDS->fv("sScraperName").get_asString();
 
         container.InsertFromDatabase(iEpgID, strName, strScraperName);
         ++iReturn;
@@ -249,7 +249,7 @@ int CEpgDatabase::Get(CEpg &epg)
         newTag->m_strIMDBNumber      = m_pDS->fv("sIMDBNumber").get_asString().c_str();
         newTag->m_iGenreType         = m_pDS->fv("iGenreType").get_asInt();
         newTag->m_iGenreSubType      = m_pDS->fv("iGenreSubType").get_asInt();
-        newTag->m_genre              = StringUtils::Split(m_pDS->fv("sGenre").get_asString().c_str(), g_advancedSettings.m_videoItemSeparator);
+        newTag->m_genre              = StringUtils::Split(m_pDS->fv("sGenre").get_asString(), g_advancedSettings.m_videoItemSeparator);
         newTag->m_iParentalRating    = m_pDS->fv("iParentalRating").get_asInt();
         newTag->m_iStarRating        = m_pDS->fv("iStarRating").get_asInt();
         newTag->m_bNotify            = m_pDS->fv("bNotify").get_asBool();
@@ -283,7 +283,7 @@ bool CEpgDatabase::GetLastEpgScanTime(int iEpgId, CDateTime *lastScan)
 
   if (!strValue.empty())
   {
-    lastScan->SetFromDBDateTime(strValue.c_str());
+    lastScan->SetFromDBDateTime(strValue);
     bReturn = true;
   }
   else

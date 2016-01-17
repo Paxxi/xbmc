@@ -36,19 +36,19 @@ bool COverrideDirectory::Create(const CURL& url)
 {
   std::string translatedPath = TranslatePath(url);
 
-  return CDirectory::Create(translatedPath.c_str());
+  return CDirectory::Create(translatedPath);
 }
 
 bool COverrideDirectory::Remove(const CURL& url)
 {
   std::string translatedPath = TranslatePath(url);
 
-  return CDirectory::Remove(translatedPath.c_str());
+  return CDirectory::Remove(translatedPath);
 }
 
 bool COverrideDirectory::Exists(const CURL& url)
 {
   std::string translatedPath = TranslatePath(url);
 
-  return CDirectory::Exists(translatedPath.c_str());
+  return CDirectory::Exists(translatedPath);
 }

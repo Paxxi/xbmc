@@ -181,7 +181,7 @@ bool CWebServer::IsAuthenticated(CWebServer *server, struct MHD_Connection *conn
   if (authorization.empty() || !StringUtils::StartsWith(authorization, base))
     return false;
 
-  return server->m_Credentials64Encoded.compare(StringUtils::Mid(authorization.c_str(), strlen(base))) == 0;
+  return server->m_Credentials64Encoded.compare(StringUtils::Mid(authorization, strlen(base))) == 0;
 }
 
 #if (MHD_VERSION >= 0x00040001)

@@ -246,7 +246,7 @@ bool CAddonDatabase::GetAddon(const std::string& addonID, const AddonVersion& ve
       "WHERE addon.addonID='%s' AND addon.version='%s' AND repoID='%s'",
       addonID.c_str(), version.asString().c_str(), repoId.c_str());
 
-    m_pDS->query(sql.c_str());
+    m_pDS->query(sql);
     if (m_pDS->eof())
       return false;
 

@@ -331,13 +331,13 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
   if (m_eLogoType == LT_NONE)
   {
     CGUIDialogKaiToast::QueueNotification(g_localizeStrings.Get(33200),
-                                          m_deviceName.c_str());
+                                          m_deviceName);
   }
   else
   {
-    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(),
+    CGUIDialogKaiToast::QueueNotification(iconfile,
                                           g_localizeStrings.Get(33200),
-                                          m_deviceName.c_str());
+                                          m_deviceName);
   }
   return true;
 }
@@ -598,14 +598,14 @@ bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
 
   if (m_eLogoType == LT_NONE)
   {
-    CGUIDialogKaiToast::QueueNotification(title.c_str(),
-                                          message.c_str());
+    CGUIDialogKaiToast::QueueNotification(title,
+                                          message);
   }
   else
   {
-    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(),
-                                          title.c_str(),
-                                          message.c_str());
+    CGUIDialogKaiToast::QueueNotification(iconfile,
+                                          title,
+                                          message);
   }
   return true;
 }

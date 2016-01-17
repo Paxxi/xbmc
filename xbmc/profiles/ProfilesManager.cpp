@@ -91,7 +91,7 @@ void CProfilesManager::OnSettingsLoaded()
   if (strDir == "set default" || strDir.empty())
   {
     strDir = "special://profile/playlists/";
-    CSettings::GetInstance().SetString(CSettings::SETTING_SYSTEM_PLAYLISTSPATH, strDir.c_str());
+    CSettings::GetInstance().SetString(CSettings::SETTING_SYSTEM_PLAYLISTSPATH, strDir);
   }
 
   CDirectory::Create(strDir);

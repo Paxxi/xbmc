@@ -1959,7 +1959,7 @@ bool CMusicDatabase::SearchArtists(const std::string& search, CFileItemList &art
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
-    std::string strVariousArtists = g_localizeStrings.Get(340).c_str();
+    std::string strVariousArtists = g_localizeStrings.Get(340);
     std::string strSQL;
     if (search.size() >= MIN_FULL_SEARCH_LENGTH)
       strSQL=PrepareSQL("select * from artist "
@@ -3171,7 +3171,7 @@ bool CMusicDatabase::GetGenresNav(const std::string& strBaseDir, CFileItemList& 
     // run query
     CLog::Log(LOGDEBUG, "%s query: %s", __FUNCTION__, strSQL.c_str());
 
-    if (!m_pDS->query(strSQL.c_str()))
+    if (!m_pDS->query(strSQL))
       return false;
     int iRowsFound = m_pDS->num_rows();
     if (iRowsFound == 0)

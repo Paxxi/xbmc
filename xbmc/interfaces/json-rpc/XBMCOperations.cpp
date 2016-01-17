@@ -89,7 +89,7 @@ JSONRPC_STATUS CXBMCOperations::GetInfoBooleans(const std::string &method, ITran
     {
       if (i >= infoLabels.size())
         break;
-      result[info[i].c_str()] = CVariant(infoLabels[i]);
+      result[info[i]] = CVariant(infoLabels[i]);
     }
   }
 

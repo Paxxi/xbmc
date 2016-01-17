@@ -49,27 +49,27 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
       if ((sscanf (line, "{%d}{}", &i)==1) ||
           (sscanf (line, "{%d}{%d}", &i, &i)==2))
       {
-        pParser = new CDVDSubtitleParserMicroDVD(pStream, strFile.c_str());
+        pParser = new CDVDSubtitleParserMicroDVD(pStream, strFile);
         pStream = NULL;
       }
       else if (sscanf(line, "[%d][%d]", &i, &i) == 2)
       {
-        pParser = new CDVDSubtitleParserMPL2(pStream, strFile.c_str());
+        pParser = new CDVDSubtitleParserMPL2(pStream, strFile);
         pStream = NULL;
       }
       else if (sscanf(line, "%d:%d:%d%*c%d --> %d:%d:%d%*c%d", &i, &i, &i, &i, &i, &i, &i, &i) == 8)
       {
-        pParser = new CDVDSubtitleParserSubrip(pStream, strFile.c_str());
+        pParser = new CDVDSubtitleParserSubrip(pStream, strFile);
         pStream = NULL;
       }
       else if (sscanf(line, "%d:%d:%d:", &i, &i, &i) == 3)
       {
-        pParser = new CDVDSubtitleParserVplayer(pStream, strFile.c_str());
+        pParser = new CDVDSubtitleParserVplayer(pStream, strFile);
         pStream = NULL;
       }
       else if ((!memcmp(line, "Dialogue: Marked", 16)) || (!memcmp(line, "Dialogue: ", 10)))
       {
-        pParser =  new CDVDSubtitleParserSSA(pStream, strFile.c_str());
+        pParser =  new CDVDSubtitleParserSSA(pStream, strFile);
         pStream = NULL;
       }
       //   if (sscanf (line, "%d:%d:%d.%d,%d:%d:%d.%d",     &i, &i, &i, &i, &i, &i, &i, &i)==8){
@@ -86,7 +86,7 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
 
       else if (strstr (line, "<SAMI>"))
       {
-        pParser = new CDVDSubtitleParserSami(pStream, strFile.c_str());
+        pParser = new CDVDSubtitleParserSami(pStream, strFile);
         pStream = NULL;
       }
       //   /*

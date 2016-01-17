@@ -2603,7 +2603,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
       CLog::Log(LOGNOTICE, "%s: Failed to suspend AudioEngine before launching external program", __FUNCTION__);
     }
 #if defined( TARGET_POSIX) && !defined(TARGET_DARWIN)
-    CUtil::RunCommandLine(pMsg->strParam.c_str(), (pMsg->param1 == 1));
+    CUtil::RunCommandLine(pMsg->strParam, (pMsg->param1 == 1));
 #elif defined(TARGET_WINDOWS)
     CWIN32Util::XBMCShellExecute(pMsg->strParam.c_str(), (pMsg->param1 == 1));
 #endif
@@ -2619,7 +2619,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
     break;
 
   case TMSG_EXECUTE_BUILT_IN:
-    CBuiltins::GetInstance().Execute(pMsg->strParam.c_str());
+    CBuiltins::GetInstance().Execute(pMsg->strParam);
     break;
 
   case TMSG_PICTURE_SHOW:

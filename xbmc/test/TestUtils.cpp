@@ -74,7 +74,7 @@ public:
     m_ptempFilePath = tmp;
 #endif
 
-    OpenForWrite(m_ptempFilePath.c_str(), true);
+    OpenForWrite(m_ptempFilePath, true);
     return true;
   }
   bool Delete()

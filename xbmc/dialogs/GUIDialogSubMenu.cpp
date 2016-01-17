@@ -21,7 +21,7 @@
 #include "GUIDialogSubMenu.h"
 
 CGUIDialogSubMenu::CGUIDialogSubMenu(int id, const std::string &xmlFile)
-    : CGUIDialog(id, xmlFile.c_str())
+    : CGUIDialog(id, xmlFile)
 {
 }
 

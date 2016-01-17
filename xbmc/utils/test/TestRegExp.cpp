@@ -155,7 +155,7 @@ TEST_F(TestRegExpLog, DumpOvector)
   std::string appName = CCompileInfo::GetAppName();
   StringUtils::ToLower(appName);
   logfile = CSpecialProtocol::TranslatePath("special://temp/") + appName + ".log";
-  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/").c_str()));
+  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/")));
   EXPECT_TRUE(XFILE::CFile::Exists(logfile));
 
   EXPECT_TRUE(regex.RegComp("^(?<first>Test)\\s*(?<second>.*)\\."));

@@ -93,7 +93,7 @@ namespace XBMCAddon
         if (listitem.isSet())
         {
           // set m_strPath to the passed url
-          listitem->item->SetPath(item.c_str());
+          listitem->item->SetPath(item);
           CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, 0, 0, static_cast<void*>(new CFileItem(*listitem->item)));
         }
         else

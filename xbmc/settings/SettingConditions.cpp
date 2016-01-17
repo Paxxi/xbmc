@@ -70,7 +70,7 @@ bool CheckMasterLock(const std::string &condition, const std::string &value, con
 
 bool CheckPVRParentalPin(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  return PVR::g_PVRManager.CheckParentalPIN(g_localizeStrings.Get(19262).c_str());
+  return PVR::g_PVRManager.CheckParentalPIN(g_localizeStrings.Get(19262));
 }
 
 bool HasPeripherals(const std::string &condition, const std::string &value, const CSetting *setting, void *data)

@@ -606,7 +606,7 @@ std::string CGUITextureManager::GetTexturePath(const std::string &textureName, b
     CSingleLock lock(m_section);
     for (std::vector<std::string>::iterator it = m_texturePaths.begin(); it != m_texturePaths.end(); ++it)
     {
-      std::string path = URIUtils::AddFileToFolder(it->c_str(), "media");
+      std::string path = URIUtils::AddFileToFolder(*it, "media");
       path = URIUtils::AddFileToFolder(path, textureName);
       if (directory)
       {

@@ -50,7 +50,7 @@ namespace XBMCAddon
       if (id.empty())
         throw AddonException("No valid addon id could be obtained. None was passed and the script wasn't executed in a normal xbmc manner.");
 
-      if (!ADDON::CAddonMgr::GetInstance().GetAddon(id.c_str(), pAddon))
+      if (!ADDON::CAddonMgr::GetInstance().GetAddon(id, pAddon))
         throw AddonException("Unknown addon id '%s'.", id.c_str());
 
       CAddonMgr::GetInstance().AddToUpdateableAddons(pAddon);

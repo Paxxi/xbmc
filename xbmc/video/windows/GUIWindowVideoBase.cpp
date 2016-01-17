@@ -1147,7 +1147,7 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem, const std::string &player)
         {
           /* Create a "stack://" url with all files matching the extension */
           std::string ext = URIUtils::GetExtension(stream);
-          std::string dir = stream.substr(0, found).c_str();
+          std::string dir = stream.substr(0, found);
 
           CFileItemList items;
           CDirectory::GetDirectory(dir, items);

@@ -51,7 +51,7 @@ TEST_F(Testlog, Log)
   std::string appName = CCompileInfo::GetAppName();
   StringUtils::ToLower(appName);
   logfile = CSpecialProtocol::TranslatePath("special://temp/") + appName + ".log";
-  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/").c_str()));
+  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/")));
   EXPECT_TRUE(XFILE::CFile::Exists(logfile));
 
   CLog::Log(LOGDEBUG, "debug log message");
@@ -107,7 +107,7 @@ TEST_F(Testlog, MemDump)
   std::string appName = CCompileInfo::GetAppName();
   StringUtils::ToLower(appName);
   logfile = CSpecialProtocol::TranslatePath("special://temp/") + appName + ".log";
-  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/").c_str()));
+  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/")));
   EXPECT_TRUE(XFILE::CFile::Exists(logfile));
 
   CLog::MemDump(refdata, sizeof(refdata));
@@ -141,7 +141,7 @@ TEST_F(Testlog, SetLogLevel)
   std::string appName = CCompileInfo::GetAppName();
   StringUtils::ToLower(appName);
   logfile = CSpecialProtocol::TranslatePath("special://temp/") + appName + ".log";
-  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/").c_str()));
+  EXPECT_TRUE(CLog::Init(CSpecialProtocol::TranslatePath("special://temp/")));
   EXPECT_TRUE(XFILE::CFile::Exists(logfile));
 
   EXPECT_EQ(LOG_LEVEL_DEBUG, CLog::GetLogLevel());

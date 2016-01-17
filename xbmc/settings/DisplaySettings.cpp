@@ -364,7 +364,7 @@ void CDisplaySettings::SetCurrentResolution(RESOLUTION resolution, bool save /* 
   if (save)
   {
     std::string mode = GetStringFromResolution(resolution);
-    CSettings::GetInstance().SetString(CSettings::SETTING_VIDEOSCREEN_SCREENMODE, mode.c_str());
+    CSettings::GetInstance().SetString(CSettings::SETTING_VIDEOSCREEN_SCREENMODE, mode);
   }
 
   if (resolution != m_currentResolution)

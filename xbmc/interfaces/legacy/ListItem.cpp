@@ -182,7 +182,7 @@ namespace XBMCAddon
       }
       else if (lowerKey == "mimetype")
       { // special case for mime type - don't actually stored in a property,
-        item->SetMimeType(value.c_str());
+        item->SetMimeType(value);
       }
       else if (lowerKey == "totaltime")
         item->GetVideoInfoTag()->m_resumePoint.totalTimeInSeconds = (float)atof(value.c_str());
@@ -405,7 +405,7 @@ namespace XBMCAddon
               CLog::Log(LOGERROR,"NEWADDON Invalid Date Format \"%s\"",value.c_str());
           }
           else if (key == "dateadded")
-            item->GetVideoInfoTag()->m_dateAdded.SetFromDBDateTime(value.c_str());
+            item->GetVideoInfoTag()->m_dateAdded.SetFromDBDateTime(value);
           else if (key == "mediatype")
           {
             if (MediaTypes::IsValidMediaType(value))
