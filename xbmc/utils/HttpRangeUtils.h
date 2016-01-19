@@ -83,7 +83,7 @@ class CHttpRanges
 {
 public:
   CHttpRanges();
-  CHttpRanges(const HttpRanges& httpRanges);
+  CHttpRanges(HttpRanges  httpRanges);
   virtual ~CHttpRanges() { }
 
   const HttpRanges& Get() const { return m_ranges; }

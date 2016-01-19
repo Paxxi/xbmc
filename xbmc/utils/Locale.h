@@ -30,9 +30,9 @@ class CLocale
 public:
   CLocale();
   CLocale(const std::string& language);
-  CLocale(const std::string& language, const std::string& territory);
-  CLocale(const std::string& language, const std::string& territory, const std::string& codeset);
-  CLocale(const std::string& language, const std::string& territory, const std::string& codeset, const std::string& modifier);
+  CLocale(std::string  language, std::string  territory);
+  CLocale(std::string  language, std::string  territory, std::string  codeset);
+  CLocale(std::string  language, std::string  territory, std::string  codeset, std::string  modifier);
   ~CLocale();
 
   /*!

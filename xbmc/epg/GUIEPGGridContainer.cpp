@@ -2047,7 +2047,7 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
   {
     if (m_channelLayout.CheckCondition())
     {
-      m_channelLayout = &m_channelLayout;
+      m_channelLayout = m_channelLayout;
       break;
     }
   }
@@ -2059,7 +2059,7 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
   {
     if (m_focusedChannelLayout.CheckCondition())
     {
-      m_focusedChannelLayout = &m_focusedChannelLayout;
+      m_focusedChannelLayout = m_focusedChannelLayout;
       break;
     }
   }
@@ -2071,7 +2071,7 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
   {
     if (m_programmeLayout.CheckCondition())
     {
-      m_programmeLayout = &m_programmeLayout;
+      m_programmeLayout = m_programmeLayout;
       break;
     }
   }
@@ -2083,7 +2083,7 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
   {
     if (m_focusedProgrammeLayout.CheckCondition())
     {
-      m_focusedProgrammeLayout = &m_focusedProgrammeLayout;
+      m_focusedProgrammeLayout = m_focusedProgrammeLayout;
       break;
     }
   }
@@ -2095,7 +2095,7 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
   {
     if (m_rulerLayout.CheckCondition())
     {
-      m_rulerLayout = &m_rulerLayout;
+      m_rulerLayout = m_rulerLayout;
       break;
     }
   }

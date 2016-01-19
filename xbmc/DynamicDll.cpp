@@ -18,6 +18,8 @@
  *
  */
 
+#include <utility>
+
 #include "DynamicDll.h"
 #include "SectionLoader.h"
 #include "filesystem/File.h"
@@ -31,8 +33,8 @@ DllDynamic::DllDynamic()
   m_DelayUnload=true;
 }
 
-DllDynamic::DllDynamic(const std::string& strDllName):
-  m_strDllName(strDllName)
+DllDynamic::DllDynamic(std::string  strDllName):
+  m_strDllName(std::move(strDllName))
 {
   m_dll=NULL;
   m_DelayUnload=true;

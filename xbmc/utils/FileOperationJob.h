@@ -66,7 +66,7 @@ private:
   class CFileOperation : public XFILE::IFileCallback
   {
   public:
-    CFileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time);
+    CFileOperation(FileAction action, std::string strFileA, std::string strFileB, int64_t time);
 
     virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed);
 

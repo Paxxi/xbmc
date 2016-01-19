@@ -37,13 +37,13 @@
 #include "video/VideoInfoDownloader.h"
 #include "video/VideoInfoScanner.h"
 
-CVideoLibraryRefreshingJob::CVideoLibraryRefreshingJob(CFileItemPtr item, bool forceRefresh, bool refreshAll, bool ignoreNfo /* = false */, const std::string& searchTitle /* = "" */)
+CVideoLibraryRefreshingJob::CVideoLibraryRefreshingJob(CFileItemPtr item, bool forceRefresh, bool refreshAll, bool ignoreNfo /* = false */, std::string  searchTitle /* = "" */)
   : CVideoLibraryProgressJob(nullptr),
-    m_item(item),
+    m_item(std::move(item)),
     m_forceRefresh(forceRefresh),
     m_refreshAll(refreshAll),
     m_ignoreNfo(ignoreNfo),
-    m_searchTitle(searchTitle)
+    m_searchTitle(std::move(searchTitle))
 { }
 
 CVideoLibraryRefreshingJob::~CVideoLibraryRefreshingJob()

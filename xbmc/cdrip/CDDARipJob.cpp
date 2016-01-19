@@ -41,7 +41,7 @@ using namespace ADDON;
 using namespace MUSIC_INFO;
 using namespace XFILE;
 
-CCDDARipJob::CCDDARipJob(const std::string& input,
+CCDDARipJob::CCDDARipJob(std::string  input,
                          const std::string& output,
                          const CMusicInfoTag& tag, 
                          int encoder,
@@ -49,7 +49,7 @@ CCDDARipJob::CCDDARipJob(const std::string& input,
                          unsigned int rate,
                          unsigned int channels, unsigned int bps) : 
   m_rate(rate), m_channels(channels), m_bps(bps), m_tag(tag),
-  m_input(input), m_output(CUtil::MakeLegalPath(output)), m_eject(eject),
+  m_input(std::move(input)), m_output(CUtil::MakeLegalPath(output)), m_eject(eject),
   m_encoder(encoder)
 {
 }

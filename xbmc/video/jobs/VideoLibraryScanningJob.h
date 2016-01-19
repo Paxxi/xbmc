@@ -40,7 +40,7 @@ public:
    \param[in] scanAll Whether to scan all items or not
    \param[in] showProgress Whether to show a progress bar or not
    */
-  CVideoLibraryScanningJob(const std::string& directory, bool scanAll = false, bool showProgress = true);
+  CVideoLibraryScanningJob(std::string  directory, bool scanAll = false, bool showProgress = true);
   virtual ~CVideoLibraryScanningJob();
 
   // specialization of CVideoLibraryJob

@@ -22,8 +22,8 @@
 #include "GUIInfoManager.h"
 #include "utils/XMLUtils.h"
 
-CProfile::CLock::CLock(LockType type, const std::string &password):
-  code(password)
+CProfile::CLock::CLock(LockType type, std::string password):
+  code(std::move(password))
 {
   programs = false;
   pictures = false;
@@ -44,9 +44,9 @@ void CProfile::CLock::Validate()
     code = "-";
 }
 
-CProfile::CProfile(const std::string &directory, const std::string &name, const int id):
-  m_directory(directory),
-  m_name(name)
+CProfile::CProfile(std::string directory, std::string name, const int id):
+  m_directory(std::move(directory)),
+  m_name(std::move(name))
 {
   m_id = id;
   m_bDatabases = true;

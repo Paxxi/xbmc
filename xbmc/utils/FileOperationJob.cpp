@@ -211,10 +211,10 @@ bool CFileOperationJob::DoProcess(FileAction action, CFileItemList & items, cons
   return true;
 }
 
-CFileOperationJob::CFileOperation::CFileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time)
+CFileOperationJob::CFileOperation::CFileOperation(FileAction action, std::string strFileA, std::string strFileB, int64_t time)
   : m_action(action),
-    m_strFileA(strFileA),
-    m_strFileB(strFileB),
+    m_strFileA(std::move(strFileA)),
+    m_strFileB(std::move(strFileB)),
     m_time(time)
 { }
 

@@ -26,10 +26,10 @@
 
 using namespace ADDON;
 
-CWebinterface::CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type /* = WebinterfaceTypeStatic */, const std::string &entryPoint /* = "WEBINTERFACE_DEFAULT_ENTRY_POINT" */)
+CWebinterface::CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type /* = WebinterfaceTypeStatic */, std::string entryPoint /* = "WEBINTERFACE_DEFAULT_ENTRY_POINT" */)
   : CAddon(props),
     m_type(type),
-    m_entryPoint(entryPoint)
+    m_entryPoint(std::move(entryPoint))
 { }
 
 CWebinterface::CWebinterface(const cp_extension_t *ext)

@@ -31,8 +31,8 @@
 
 #include <cassert>
 
-CImageLoader::CImageLoader(const std::string &path, const bool useCache):
-  m_path(path)
+CImageLoader::CImageLoader(std::string path, const bool useCache):
+  m_path(std::move(path))
 {
   m_texture = NULL;
   m_use_cache = useCache;
@@ -83,8 +83,8 @@ bool CImageLoader::DoWork()
   return (m_texture != NULL);
 }
 
-CGUILargeTextureManager::CLargeTexture::CLargeTexture(const std::string &path):
-  m_path(path)
+CGUILargeTextureManager::CLargeTexture::CLargeTexture(std::string path):
+  m_path(std::move(path))
 {
   m_refCount = 1;
   m_timeToDelete = 0;

@@ -32,9 +32,9 @@ class CDemuxStreamAudioBXA
   CDVDDemuxBXA  *m_parent;
   std::string    m_codec;
 public:
-  CDemuxStreamAudioBXA(CDVDDemuxBXA *parent, const std::string& codec)
+  CDemuxStreamAudioBXA(CDVDDemuxBXA *parent, std::string  codec)
     : m_parent(parent)
-    , m_codec(codec)
+    , m_codec(std::move(codec))
 
   {}
   void GetStreamInfo(std::string& strInfo) override

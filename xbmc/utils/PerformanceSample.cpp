@@ -18,6 +18,8 @@
  *
  */
 
+#include <utility>
+
 #include "system.h"
 #include "PerformanceSample.h"
 #include "TimeUtils.h"
@@ -34,7 +36,7 @@
 
 int64_t CPerformanceSample::m_tmFreq;
 
-CPerformanceSample::CPerformanceSample(const std::string &statName, bool bCheckWhenDone) : m_statName(statName)
+CPerformanceSample::CPerformanceSample(std::string statName, bool bCheckWhenDone) : m_statName(std::move(statName))
 {
   m_bCheckWhenDone = bCheckWhenDone;
   if (m_tmFreq == 0LL)

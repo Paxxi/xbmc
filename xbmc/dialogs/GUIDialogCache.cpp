@@ -31,9 +31,9 @@
 
 using namespace KODI::MESSAGING;
 
-CGUIDialogCache::CGUIDialogCache(DWORD dwDelay, const std::string& strHeader, const std::string& strMsg) : CThread("GUIDialogCache"),
-  m_strHeader(strHeader),
-  m_strLinePrev(strMsg)
+CGUIDialogCache::CGUIDialogCache(DWORD dwDelay, std::string  strHeader, std::string  strMsg) : CThread("GUIDialogCache"),
+  m_strHeader(std::move(strHeader)),
+  m_strLinePrev(std::move(strMsg))
 {
   bSentCancel = false;
 

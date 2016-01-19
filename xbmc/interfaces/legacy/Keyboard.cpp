@@ -32,8 +32,8 @@ namespace XBMCAddon
   namespace xbmc
   {
 
-    Keyboard::Keyboard(const String& line /* = nullString*/, const String& heading/* = nullString*/, bool hidden/* = false*/) 
-      : strDefault(line), strHeading(heading), bHidden(hidden), bConfirmed(false)
+    Keyboard::Keyboard(String  line /* = nullString*/, String  heading/* = nullString*/, bool hidden/* = false*/) 
+      : strDefault(std::move(line)), strHeading(std::move(heading)), bHidden(hidden), bConfirmed(false)
     {
     }
 

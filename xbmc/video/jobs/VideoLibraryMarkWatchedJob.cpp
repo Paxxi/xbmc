@@ -31,8 +31,8 @@
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
-CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(const CFileItemPtr &item, bool mark)
-  : m_item(item),
+CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(CFileItemPtr item, bool mark)
+  : m_item(std::move(item)),
     m_mark(mark)
 { }
 

@@ -170,8 +170,8 @@ CZeroconf::CPublish::CPublish(const std::string& fcr_identifier, const PublishIn
   m_servmap.insert(std::make_pair(fcr_identifier, pubinfo));
 }
 
-CZeroconf::CPublish::CPublish(const tServiceMap& servmap) 
-  : m_servmap(servmap)
+CZeroconf::CPublish::CPublish(tServiceMap  servmap) 
+  : m_servmap(std::move(servmap))
 {
 }
 

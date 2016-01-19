@@ -157,7 +157,7 @@ private:
 class CAddonInstallJob : public CFileOperationJob
 {
 public:
-  CAddonInstallJob(const ADDON::AddonPtr &addon, const ADDON::AddonPtr &repo, const std::string &hash = "");
+  CAddonInstallJob(const ADDON::AddonPtr &addon, ADDON::AddonPtr repo, std::string hash = "");
 
   virtual bool DoWork();
 
@@ -198,7 +198,7 @@ private:
 class CAddonUnInstallJob : public CFileOperationJob
 {
 public:
-  CAddonUnInstallJob(const ADDON::AddonPtr &addon);
+  CAddonUnInstallJob(ADDON::AddonPtr addon);
 
   virtual bool DoWork();
 

@@ -25,7 +25,7 @@
 class CAutorunMediaJob : public CJob
 {
 public:
-  CAutorunMediaJob(const std::string &label, const std::string &path);
+  CAutorunMediaJob(std::string label, std::string path);
 
   virtual bool DoWork();
 private:

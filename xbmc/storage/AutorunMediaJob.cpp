@@ -26,9 +26,9 @@
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
-CAutorunMediaJob::CAutorunMediaJob(const std::string &label, const std::string &path):
-  m_path(path),
-  m_label(label)
+CAutorunMediaJob::CAutorunMediaJob(std::string label, std::string path):
+  m_path(std::move(path)),
+  m_label(std::move(label))
 {
 }
 

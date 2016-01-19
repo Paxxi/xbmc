@@ -25,8 +25,8 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
 
-ISetting::ISetting(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
-  : m_id(id),
+ISetting::ISetting(std::string id, CSettingsManager *settingsManager /* = NULL */)
+  : m_id(std::move(id)),
     m_settingsManager(settingsManager),
     m_visible(true),
     m_label(-1), m_help(-1),

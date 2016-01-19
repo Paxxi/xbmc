@@ -86,7 +86,7 @@ enum MsgQueueReturnCode
 class CDVDMessageQueue
 {
 public:
-  CDVDMessageQueue(const std::string &owner);
+  CDVDMessageQueue(std::string owner);
   virtual ~CDVDMessageQueue();
 
   void Init();

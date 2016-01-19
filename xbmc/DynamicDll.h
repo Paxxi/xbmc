@@ -520,7 +520,7 @@ class DllDynamic
 {
 public:
   DllDynamic();
-  DllDynamic(const std::string& strDllName);
+  DllDynamic(std::string  strDllName);
   virtual ~DllDynamic();
   virtual bool Load();
   virtual void Unload();

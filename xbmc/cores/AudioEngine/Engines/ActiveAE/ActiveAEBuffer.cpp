@@ -30,7 +30,7 @@ using namespace ActiveAE;
 /* typecast AE to CActiveAE */
 #define AE (*((CActiveAE*)CAEFactory::GetEngine()))
 
-CSoundPacket::CSoundPacket(SampleConfig conf, int samples) : config(conf)
+CSoundPacket::CSoundPacket(SampleConfig conf, int samples) : config(std::move(conf))
 {
   data = AE.AllocSoundSample(config, samples, bytes_per_sample, planes, linesize);
   max_nb_samples = samples;

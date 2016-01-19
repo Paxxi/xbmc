@@ -59,7 +59,7 @@ namespace EPG
     /*!
      * @brief Create a new empty event without a unique ID.
      */
-    CEpgInfoTag(CEpg *epg, PVR::CPVRChannelPtr pvrChannel, const std::string &strTableName = "", const std::string &strIconPath = "");
+    CEpgInfoTag(CEpg *epg, PVR::CPVRChannelPtr pvrChannel, const std::string &strTableName = "", std::string strIconPath = "");
 
     /*!
      * @brief Create a new EPG infotag with 'data' as content.

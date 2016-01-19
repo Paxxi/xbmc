@@ -112,7 +112,7 @@ static int64_t mem_file_seek(void *h, int64_t pos, int whence)
   return mbuf->pos;
 }
 
-CFFmpegImage::CFFmpegImage(const std::string& strMimeType) : m_strMimeType(strMimeType)
+CFFmpegImage::CFFmpegImage(std::string  strMimeType) : m_strMimeType(std::move(strMimeType))
 {
   m_hasAlpha = false;
   m_pFrame = nullptr;

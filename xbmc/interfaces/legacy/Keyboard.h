@@ -62,7 +62,7 @@ namespace XBMCAddon
       bool bConfirmed;
 #endif
 
-      Keyboard(const String& line = emptyString, const String& heading = emptyString, bool hidden = false);
+      Keyboard(String  line = emptyString, String  heading = emptyString, bool hidden = false);
       virtual ~Keyboard();
 
       /**

@@ -18,50 +18,52 @@
  *
  */
 
+#include <utility>
+
 #include "BaseEvent.h"
 #include "guilib/LocalizeStrings.h"
 
-CBaseEvent::CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, EventLevel level /* = EventLevel::Information */)
+CBaseEvent::CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, EventLevel level /* = EventLevel::Information */)
   : m_level(level),
-    m_identifier(identifier),
+    m_identifier(std::move(identifier)),
     m_icon(),
-    m_label(label),
-    m_description(description),
+    m_label(std::move(label)),
+    m_description(std::move(description)),
     m_details(),
     m_executionLabel(),
     m_dateTime(CDateTime::GetCurrentDateTime())
 { }
 
-CBaseEvent::CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, EventLevel level /* = EventLevel::Information */)
+CBaseEvent::CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, EventLevel level /* = EventLevel::Information */)
   : m_level(level),
-    m_identifier(identifier),
-    m_icon(icon),
-    m_label(label),
-    m_description(description),
+    m_identifier(std::move(identifier)),
+    m_icon(std::move(icon)),
+    m_label(std::move(label)),
+    m_description(std::move(description)),
     m_details(),
     m_executionLabel(),
     m_dateTime(CDateTime::GetCurrentDateTime())
 { }
 
-CBaseEvent::CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, EventLevel level /* = EventLevel::Information */)
+CBaseEvent::CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, CVariant  details, EventLevel level /* = EventLevel::Information */)
   : m_level(level),
-    m_identifier(identifier),
-    m_icon(icon),
-    m_label(label),
-    m_description(description),
-    m_details(details),
+    m_identifier(std::move(identifier)),
+    m_icon(std::move(icon)),
+    m_label(std::move(label)),
+    m_description(std::move(description)),
+    m_details(std::move(details)),
     m_executionLabel(),
     m_dateTime(CDateTime::GetCurrentDateTime())
 { }
 
-CBaseEvent::CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, const CVariant& executionLabel, EventLevel level /* = EventLevel::Information */)
+CBaseEvent::CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, CVariant  details, CVariant  executionLabel, EventLevel level /* = EventLevel::Information */)
   : m_level(level),
-    m_identifier(identifier),
-    m_icon(icon),
-    m_label(label),
-    m_description(description),
-    m_details(details),
-    m_executionLabel(executionLabel),
+    m_identifier(std::move(identifier)),
+    m_icon(std::move(icon)),
+    m_label(std::move(label)),
+    m_description(std::move(description)),
+    m_details(std::move(details)),
+    m_executionLabel(std::move(executionLabel)),
     m_dateTime(CDateTime::GetCurrentDateTime())
 { }
 

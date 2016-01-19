@@ -18,12 +18,14 @@
  *
  */
 
+#include <utility>
+
 #include "DVDVideoPPFFmpeg.h"
 #include "utils/log.h"
 #include "cores/FFmpeg.h"
 
-CDVDVideoPPFFmpeg::CDVDVideoPPFFmpeg(const std::string& mType):
-  m_sType(mType)
+CDVDVideoPPFFmpeg::CDVDVideoPPFFmpeg(std::string  mType):
+  m_sType(std::move(mType))
 {
   m_pMode = m_pContext = NULL;
   m_pSource = m_pTarget = NULL;

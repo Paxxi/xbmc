@@ -69,7 +69,7 @@ namespace ADDON
   class CRepositoryUpdateJob : public CProgressJob
   {
   public:
-    CRepositoryUpdateJob(const RepositoryPtr& repo);
+    CRepositoryUpdateJob(RepositoryPtr  repo);
     virtual ~CRepositoryUpdateJob() {}
     virtual bool DoWork();
     const RepositoryPtr& GetAddon() const { return m_repo; };

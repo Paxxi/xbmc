@@ -174,9 +174,9 @@ void CZeroconfBrowser::ReleaseInstance()
 
 CZeroconfBrowser::ZeroconfService::ZeroconfService():m_port(0){}
 
-CZeroconfBrowser::ZeroconfService::ZeroconfService(const std::string& fcr_name, const std::string& fcr_type, const std::string& fcr_domain):
-  m_name(fcr_name),
-  m_domain(fcr_domain),
+CZeroconfBrowser::ZeroconfService::ZeroconfService(std::string  fcr_name, const std::string& fcr_type, std::string  fcr_domain):
+  m_name(std::move(fcr_name)),
+  m_domain(std::move(fcr_domain)),
   m_port(0)
 {
   SetType(fcr_type);

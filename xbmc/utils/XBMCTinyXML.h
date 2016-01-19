@@ -54,7 +54,7 @@ public:
   CXBMCTinyXML();
   CXBMCTinyXML(const char*);
   CXBMCTinyXML(const std::string& documentName);
-  CXBMCTinyXML(const std::string& documentName, const std::string& documentCharset);
+  CXBMCTinyXML(const std::string& documentName, std::string  documentCharset);
   bool LoadFile(TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
   bool LoadFile(const char*, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
   bool LoadFile(const std::string& _filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);

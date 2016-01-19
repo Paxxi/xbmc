@@ -27,7 +27,7 @@ class CStaticListProvider : public IListProvider
 {
 public:
   CStaticListProvider(const TiXmlElement *element, int parentID);
-  CStaticListProvider(const std::vector<CGUIStaticItemPtr> &items); // for python
+  CStaticListProvider(std::vector<CGUIStaticItemPtr> items); // for python
   virtual ~CStaticListProvider();
 
   virtual bool Update(bool forceRefresh);

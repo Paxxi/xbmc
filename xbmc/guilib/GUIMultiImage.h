@@ -73,7 +73,7 @@ protected:
   class CMultiImageJob : public CJob
   {
   public:
-    CMultiImageJob(const std::string &path);
+    CMultiImageJob(std::string path);
     virtual bool DoWork();
     virtual const char *GetType() const { return "multiimage"; };
 

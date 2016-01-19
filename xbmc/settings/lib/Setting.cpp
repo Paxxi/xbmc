@@ -745,11 +745,11 @@ CSettingInt::CSettingInt(const std::string &id, int label, int value, int minimu
   m_label = label;
 }
 
-CSettingInt::CSettingInt(const std::string &id, int label, int value, const StaticIntegerSettingOptions &options, CSettingsManager *settingsManager /* = NULL */)
+CSettingInt::CSettingInt(const std::string &id, int label, int value, StaticIntegerSettingOptions options, CSettingsManager *settingsManager /* = NULL */)
   : CSetting(id, settingsManager),
     m_value(value), m_default(value),
     m_min(0), m_step(1), m_max(0),
-    m_options(options),
+    m_options(std::move(options)),
     m_optionsFiller(NULL),
     m_optionsFillerData(NULL)
 {

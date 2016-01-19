@@ -135,9 +135,9 @@ CTextureMap::CTextureMap()
   m_memUsage = 0;
 }
 
-CTextureMap::CTextureMap(const std::string& textureName, int width, int height, int loops)
+CTextureMap::CTextureMap(std::string  textureName, int width, int height, int loops)
 : m_texture(width, height, loops)
-, m_textureName(textureName)
+, m_textureName(std::move(textureName))
 {
   m_referenceCount = 0;
   m_memUsage = 0;

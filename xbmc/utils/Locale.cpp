@@ -18,6 +18,8 @@
  *
  */
 
+#include <utility>
+
 #include "Locale.h"
 #include "utils/StringUtils.h"
 
@@ -41,32 +43,32 @@ CLocale::CLocale(const std::string& language)
   m_valid = ParseLocale(language, m_language, m_territory, m_codeset, m_modifier);
 }
 
-CLocale::CLocale(const std::string& language, const std::string& territory)
+CLocale::CLocale(std::string  language, std::string  territory)
   : m_valid(false),
-    m_language(language),
-    m_territory(territory),
+    m_language(std::move(language)),
+    m_territory(std::move(territory)),
     m_codeset(),
     m_modifier()
 {
   Initialize();
 }
 
-CLocale::CLocale(const std::string& language, const std::string& territory, const std::string& codeset)
+CLocale::CLocale(std::string  language, std::string  territory, std::string  codeset)
   : m_valid(false),
-    m_language(language),
-    m_territory(territory),
-    m_codeset(codeset),
+    m_language(std::move(language)),
+    m_territory(std::move(territory)),
+    m_codeset(std::move(codeset)),
     m_modifier()
 {
   Initialize();
 }
 
-CLocale::CLocale(const std::string& language, const std::string& territory, const std::string& codeset, const std::string& modifier)
+CLocale::CLocale(std::string  language, std::string  territory, std::string  codeset, std::string  modifier)
   : m_valid(false),
-    m_language(language),
-    m_territory(territory),
-    m_codeset(codeset),
-    m_modifier(modifier)
+    m_language(std::move(language)),
+    m_territory(std::move(territory)),
+    m_codeset(std::move(codeset)),
+    m_modifier(std::move(modifier))
 {
   Initialize();
 }

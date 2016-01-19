@@ -432,8 +432,8 @@ void CAddonMgr::RemoveFromUpdateableAddons(AddonPtr &pAddon)
 
 struct AddonIdFinder 
 { 
-    AddonIdFinder(const std::string& id)
-      : m_id(id)
+    AddonIdFinder(std::string  id)
+      : m_id(std::move(id))
     {}
     
     bool operator()(const AddonPtr& addon) 

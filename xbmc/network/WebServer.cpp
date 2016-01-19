@@ -71,8 +71,8 @@ typedef struct ConnectionHandler
   struct MHD_PostProcessor *postprocessor;
   int errorStatus;
 
-  ConnectionHandler(const std::string& uri)
-    : fullUri(uri)
+  ConnectionHandler(std::string  uri)
+    : fullUri(std::move(uri))
     , isNew(true)
     , postprocessor(nullptr)
     , requestHandler(nullptr)

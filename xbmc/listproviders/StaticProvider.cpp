@@ -49,12 +49,12 @@ CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parent
   }
 }
 
-CStaticListProvider::CStaticListProvider(const std::vector<CGUIStaticItemPtr> &items)
+CStaticListProvider::CStaticListProvider(std::vector<CGUIStaticItemPtr> items)
 : IListProvider(0),
   m_defaultItem(-1),
   m_defaultAlways(false),
   m_updateTime(0),
-  m_items(items)
+  m_items(std::move(items))
 {
 }
 

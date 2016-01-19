@@ -22,15 +22,15 @@
 #include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "video/VideoDatabase.h"
 
-CVideoLibraryCleaningJob::CVideoLibraryCleaningJob(const std::set<int>& paths /* = std::set<int>() */, bool showDialog /* = false */)
+CVideoLibraryCleaningJob::CVideoLibraryCleaningJob(std::set<int>  paths /* = std::set<int>() */, bool showDialog /* = false */)
   : CVideoLibraryProgressJob(NULL),
-    m_paths(paths),
+    m_paths(std::move(paths)),
     m_showDialog(showDialog)
 { }
 
-CVideoLibraryCleaningJob::CVideoLibraryCleaningJob(const std::set<int>& paths, CGUIDialogProgressBarHandle* progressBar)
+CVideoLibraryCleaningJob::CVideoLibraryCleaningJob(std::set<int>  paths, CGUIDialogProgressBarHandle* progressBar)
   : CVideoLibraryProgressJob(progressBar),
-    m_paths(paths),
+    m_paths(std::move(paths)),
     m_showDialog(false)
 { }
 

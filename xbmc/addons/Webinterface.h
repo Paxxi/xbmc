@@ -34,7 +34,7 @@ namespace ADDON
   class CWebinterface : public CAddon
   {
   public:
-    explicit CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type = WebinterfaceTypeStatic, const std::string &entryPoint = WEBINTERFACE_DEFAULT_ENTRY_POINT);
+    explicit CWebinterface(const ADDON::AddonProps &props, WebinterfaceType type = WebinterfaceTypeStatic, std::string entryPoint = WEBINTERFACE_DEFAULT_ENTRY_POINT);
     explicit CWebinterface(const cp_extension_t *ext);
     virtual ~CWebinterface();
 

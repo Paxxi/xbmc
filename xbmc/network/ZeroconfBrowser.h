@@ -42,7 +42,7 @@ public:
       typedef std::map<std::string, std::string> tTxtRecordMap;
 
       ZeroconfService();
-      ZeroconfService(const std::string& fcr_name, const std::string& fcr_type, const std::string& fcr_domain);
+      ZeroconfService(std::string  fcr_name, const std::string& fcr_type, std::string  fcr_domain);
 
       /// easy conversion to string and back (used in czeronfdiretory to store this service)
       ///@{

@@ -84,7 +84,7 @@ CWakeOnAccess::WakeUpEntry::WakeUpEntry (bool isAwake)
 class CMACDiscoveryJob : public CJob
 {
 public:
-  CMACDiscoveryJob(const std::string& host) : m_host(host) {}
+  CMACDiscoveryJob(std::string  host) : m_host(std::move(host)) {}
 
   bool DoWork() override;
 
@@ -229,7 +229,7 @@ private:
 class NetworkStartWaiter : public WaitCondition
 {
 public:
-  NetworkStartWaiter (unsigned settle_time_ms, const std::string& host) : m_settle_time_ms (settle_time_ms), m_host(host)
+  NetworkStartWaiter (unsigned settle_time_ms, std::string  host) : m_settle_time_ms (settle_time_ms), m_host(std::move(host))
   {
   }
   bool SuccessWaiting () const override

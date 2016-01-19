@@ -258,7 +258,7 @@ protected:
   class Property
   {
   public:
-    Property(const std::string &property, const std::string &parameters);
+    Property(std::string property, const std::string &parameters);
 
     const std::string &param(unsigned int n = 0) const;
     unsigned int num_params() const;

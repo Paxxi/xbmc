@@ -22,10 +22,10 @@
 #include <limits>
 #include "addons/Skin.h"
 
-CGUIListLabel::CGUIListLabel(int parentID, int controlID, float posX, float posY, float width, float height, const CLabelInfo& labelInfo, const CGUIInfoLabel &info, CGUIControl::GUISCROLLVALUE scroll)
+CGUIListLabel::CGUIListLabel(int parentID, int controlID, float posX, float posY, float width, float height, const CLabelInfo& labelInfo, CGUIInfoLabel info, CGUIControl::GUISCROLLVALUE scroll)
     : CGUIControl(parentID, controlID, posX, posY, width, height)
     , m_label(posX, posY, width, height, labelInfo, (scroll == CGUIControl::ALWAYS) ? CGUILabel::OVER_FLOW_SCROLL : CGUILabel::OVER_FLOW_TRUNCATE)
-    , m_info(info)
+    , m_info(std::move(info))
 {
   m_scroll = scroll;
   if (g_SkinInfo && g_SkinInfo->APIVersion() < ADDON::AddonVersion("5.1.0"))

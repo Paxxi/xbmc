@@ -35,7 +35,7 @@ class CMusicAlbumInfo
 {
 public:
   CMusicAlbumInfo() : m_bLoaded(false), m_relevance(-1) {}
-  CMusicAlbumInfo(const std::string& strAlbumInfo, const CScraperUrl& strAlbumURL);
+  CMusicAlbumInfo(std::string  strAlbumInfo, const CScraperUrl& strAlbumURL);
   CMusicAlbumInfo(const std::string& strAlbum, const std::string& strArtist, const std::string& strAlbumInfo, const CScraperUrl& strAlbumURL);
   virtual ~CMusicAlbumInfo() {}
 

@@ -288,8 +288,8 @@ std::string CGUIMultiImage::GetDescription() const
   return m_image.GetDescription();
 }
 
-CGUIMultiImage::CMultiImageJob::CMultiImageJob(const std::string &path)
-  : m_path(path)
+CGUIMultiImage::CMultiImageJob::CMultiImageJob(std::string path)
+  : m_path(std::move(path))
 {
 }
 

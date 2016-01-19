@@ -37,7 +37,7 @@
 class CImageLoader : public CJob
 {
 public:
-  CImageLoader(const std::string &path, const bool useCache);
+  CImageLoader(std::string path, const bool useCache);
   virtual ~CImageLoader();
 
   /*!
@@ -118,7 +118,7 @@ private:
   class CLargeTexture
   {
   public:
-    CLargeTexture(const std::string &path);
+    CLargeTexture(std::string path);
     virtual ~CLargeTexture();
 
     void AddRef();

@@ -39,7 +39,7 @@ public:
    \param[in] ignoreNfo Whether or not to ignore local NFO files
    \param[in] searchTitle Title to use for the search (instead of determining it from the item's filename/path)
   */
-  CVideoLibraryRefreshingJob(CFileItemPtr item, bool forceRefresh, bool refreshAll, bool ignoreNfo = false, const std::string& searchTitle = "");
+  CVideoLibraryRefreshingJob(CFileItemPtr item, bool forceRefresh, bool refreshAll, bool ignoreNfo = false, std::string  searchTitle = "");
 
   virtual ~CVideoLibraryRefreshingJob();
 

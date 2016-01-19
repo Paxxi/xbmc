@@ -21,9 +21,9 @@
 #include "VideoLibraryScanningJob.h"
 #include "video/VideoDatabase.h"
 
-CVideoLibraryScanningJob::CVideoLibraryScanningJob(const std::string& directory, bool scanAll /* = false */, bool showProgress /* = true */)
+CVideoLibraryScanningJob::CVideoLibraryScanningJob(std::string  directory, bool scanAll /* = false */, bool showProgress /* = true */)
   : m_scanner(),
-    m_directory(directory),
+    m_directory(std::move(directory)),
     m_showProgress(showProgress),
     m_scanAll(scanAll)
 { }

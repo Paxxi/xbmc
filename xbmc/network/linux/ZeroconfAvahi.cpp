@@ -56,9 +56,9 @@ private:
 ///helper to store information on howto create an avahi-group to publish
 struct CZeroconfAvahi::ServiceInfo
 {
-  ServiceInfo(const std::string& fcr_type, const std::string& fcr_name,
+  ServiceInfo(std::string  fcr_type, std::string  fcr_name,
               unsigned int f_port, AvahiStringList *txt, AvahiEntryGroup* fp_group = 0):
-    m_type(fcr_type), m_name(fcr_name), m_port(f_port), mp_txt(txt), mp_group(fp_group)
+    m_type(std::move(fcr_type)), m_name(std::move(fcr_name)), m_port(f_port), mp_txt(txt), mp_group(fp_group)
   {
   }
 

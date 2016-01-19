@@ -18,16 +18,18 @@
  *
  */
 
+#include <utility>
+
 #include "InfoBool.h"
 #include "utils/StringUtils.h"
 
 namespace INFO
 {
-  InfoBool::InfoBool(const std::string &expression, int context)
+  InfoBool::InfoBool(std::string expression, int context)
     : m_value(false),
       m_context(context),
       m_listItemDependent(false),
-      m_expression(expression),
+      m_expression(std::move(expression)),
       m_dirty(true)
   {
     StringUtils::ToLower(m_expression);

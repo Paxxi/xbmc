@@ -34,7 +34,7 @@ public:
   class CLock
   {
   public:
-    CLock(LockType type = LOCK_MODE_EVERYONE, const std::string &password = "");
+    CLock(LockType type = LOCK_MODE_EVERYONE, std::string password = "");
     void Validate();
 
     LockType mode;
@@ -48,7 +48,7 @@ public:
     bool programs;
   };
 
-  CProfile(const std::string &directory = "", const std::string &name = "", const int id = -1);
+  CProfile(std::string directory = "", std::string name = "", const int id = -1);
   ~CProfile(void);
   
   void Load(const TiXmlNode *node, int nextIdProfile);

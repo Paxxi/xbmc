@@ -31,7 +31,7 @@ class CGUIMultiSelectTextControl : public CGUIControl
 public:
   CGUIMultiSelectTextControl(int parentID, int controlID,
                     float posX, float posY, float width, float height,
-                    const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus, const CLabelInfo &label, const CGUIInfoLabel &content);
+                    const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus, const CLabelInfo &label, CGUIInfoLabel content);
 
   virtual ~CGUIMultiSelectTextControl(void);
   virtual CGUIMultiSelectTextControl *Clone() const { return new CGUIMultiSelectTextControl(*this); };
@@ -72,7 +72,7 @@ protected:
   class CSelectableString
   {
   public:
-    CSelectableString(CGUIFont *font, const std::string &text, bool selectable, const std::string &clickAction);
+    CSelectableString(CGUIFont *font, const std::string &text, bool selectable, std::string clickAction);
     CGUITextLayout m_text;
     float m_length;
     bool m_selectable;

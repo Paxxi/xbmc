@@ -34,7 +34,7 @@ namespace INFO
 class InfoBool
 {
 public:
-  InfoBool(const std::string &expression, int context);
+  InfoBool(std::string expression, int context);
   virtual ~InfoBool() {};
 
   /*! \brief Set the info bool dirty.

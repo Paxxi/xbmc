@@ -71,7 +71,7 @@ class CTextureMap
 {
 public:
   CTextureMap();
-  CTextureMap(const std::string& textureName, int width, int height, int loops);
+  CTextureMap(std::string  textureName, int width, int height, int loops);
   virtual ~CTextureMap();
 
   void Add(CBaseTexture* texture, int delay);

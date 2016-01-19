@@ -18,13 +18,15 @@
  *
  */
 
+#include <utility>
+
 #include "LanguageInvokerThread.h"
 #include "ScriptInvocationManager.h"
 
 CLanguageInvokerThread::CLanguageInvokerThread(LanguageInvokerPtr invoker, CScriptInvocationManager *invocationManager)
   : ILanguageInvoker(NULL),
     CThread("LanguageInvoker"),
-    m_invoker(invoker),
+    m_invoker(std::move(invoker)),
     m_invocationManager(invocationManager)
 { }
 

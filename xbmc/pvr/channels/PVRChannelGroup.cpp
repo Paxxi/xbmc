@@ -62,11 +62,11 @@ CPVRChannelGroup::CPVRChannelGroup(void) :
   OnInit();
 }
 
-CPVRChannelGroup::CPVRChannelGroup(bool bRadio, unsigned int iGroupId, const std::string &strGroupName) :
+CPVRChannelGroup::CPVRChannelGroup(bool bRadio, unsigned int iGroupId, std::string strGroupName) :
     m_bRadio(bRadio),
     m_iGroupType(PVR_GROUP_TYPE_DEFAULT),
     m_iGroupId(iGroupId),
-    m_strGroupName(strGroupName),
+    m_strGroupName(std::move(strGroupName)),
     m_bLoaded(false),
     m_bChanged(false),
     m_bUsingBackendChannelOrder(false),

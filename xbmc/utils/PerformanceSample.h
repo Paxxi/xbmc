@@ -44,7 +44,7 @@
 class CPerformanceSample
 {
 public:
-  CPerformanceSample(const std::string &statName, bool bCheckWhenDone=true);
+  CPerformanceSample(std::string statName, bool bCheckWhenDone=true);
   virtual ~CPerformanceSample();
 
   void Reset();

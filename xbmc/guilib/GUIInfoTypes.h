@@ -160,7 +160,7 @@ private:
   class CInfoPortion
   {
   public:
-    CInfoPortion(int info, const std::string &prefix, const std::string &postfix, bool escaped = false);
+    CInfoPortion(int info, std::string prefix, std::string postfix, bool escaped = false);
     bool NeedsUpdate(const std::string &label) const;
     std::string Get() const;
     int m_info;

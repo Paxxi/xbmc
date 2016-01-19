@@ -58,7 +58,7 @@ CEpgInfoTag::CEpgInfoTag(void) :
 {
 }
 
-CEpgInfoTag::CEpgInfoTag(CEpg *epg, PVR::CPVRChannelPtr pvrChannel, const std::string &strTableName /* = "" */, const std::string &strIconPath /* = "" */) :
+CEpgInfoTag::CEpgInfoTag(CEpg *epg, PVR::CPVRChannelPtr pvrChannel, const std::string &strTableName /* = "" */, std::string strIconPath /* = "" */) :
     m_bNotify(false),
     m_iBroadcastId(-1),
     m_iGenreType(0),
@@ -70,10 +70,10 @@ CEpgInfoTag::CEpgInfoTag(CEpg *epg, PVR::CPVRChannelPtr pvrChannel, const std::s
     m_iEpisodePart(0),
     m_iUniqueBroadcastID(0),
     m_iYear(0),
-    m_strIconPath(strIconPath),
+    m_strIconPath(std::move(strIconPath)),
     m_epg(epg),
     m_iFlags(EPG_TAG_FLAG_UNDEFINED),
-    m_pvrChannel(pvrChannel)
+    m_pvrChannel(std::move(pvrChannel))
 {
   UpdatePath();
 }

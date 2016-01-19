@@ -37,14 +37,14 @@
 using namespace PVR;
 using namespace EPG;
 
-CEpg::CEpg(int iEpgID, const std::string &strName /* = "" */, const std::string &strScraperName /* = "" */, bool bLoadedFromDb /* = false */) :
+CEpg::CEpg(int iEpgID, std::string strName /* = "" */, std::string strScraperName /* = "" */, bool bLoadedFromDb /* = false */) :
     m_bChanged(!bLoadedFromDb),
     m_bTagsChanged(false),
     m_bLoaded(false),
     m_bUpdatePending(false),
     m_iEpgID(iEpgID),
-    m_strName(strName),
-    m_strScraperName(strScraperName),
+    m_strName(std::move(strName)),
+    m_strScraperName(std::move(strScraperName)),
     m_bUpdateLastScanTime(false)
 {
 }

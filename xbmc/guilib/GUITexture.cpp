@@ -31,8 +31,8 @@ CTextureInfo::CTextureInfo()
   useLarge = false;
 }
 
-CTextureInfo::CTextureInfo(const std::string &file):
-  filename(file)
+CTextureInfo::CTextureInfo(std::string file):
+  filename(std::move(file))
 {
   orientation = 0;
   useLarge = false;

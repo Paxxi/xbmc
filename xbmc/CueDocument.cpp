@@ -121,8 +121,8 @@ class BufferReader
   : public CueReader
 {
 public:
-  BufferReader(const std::string &strContent)
-    : m_data(strContent)
+  BufferReader(std::string strContent)
+    : m_data(std::move(strContent))
     , m_pos(0)
   {
   }

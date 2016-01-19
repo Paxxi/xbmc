@@ -247,7 +247,7 @@ public:
   CSettingInt(const std::string &id, const CSettingInt &setting);
   CSettingInt(const std::string &id, int label, int value, CSettingsManager *settingsManager = NULL);
   CSettingInt(const std::string &id, int label, int value, int minimum, int step, int maximum, CSettingsManager *settingsManager = NULL);
-  CSettingInt(const std::string &id, int label, int value, const StaticIntegerSettingOptions &options, CSettingsManager *settingsManager = NULL);
+  CSettingInt(const std::string &id, int label, int value, StaticIntegerSettingOptions options, CSettingsManager *settingsManager = NULL);
   virtual ~CSettingInt() { }
 
   virtual CSetting* Clone(const std::string &id) const override;

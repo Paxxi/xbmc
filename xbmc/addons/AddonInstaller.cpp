@@ -498,10 +498,10 @@ bool CAddonInstaller::HasAvailableUpdates() const
   return !GetAvailableUpdates().empty();
 }
 
-CAddonInstallJob::CAddonInstallJob(const AddonPtr &addon, const AddonPtr &repo, const std::string &hash /* = "" */)
+CAddonInstallJob::CAddonInstallJob(const AddonPtr &addon, AddonPtr repo, std::string hash /* = "" */)
   : m_addon(addon),
-    m_repo(repo),
-    m_hash(hash)
+    m_repo(std::move(repo)),
+    m_hash(std::move(hash))
 {
   AddonPtr dummy;
   m_update = CAddonMgr::GetInstance().GetAddon(addon->ID(), dummy, ADDON_UNKNOWN, false);
@@ -872,8 +872,8 @@ void CAddonInstallJob::ReportInstallError(const std::string& addonID, const std:
   CEventLog::GetInstance().Add(activity, !IsModal(), false);
 }
 
-CAddonUnInstallJob::CAddonUnInstallJob(const AddonPtr &addon)
-  : m_addon(addon)
+CAddonUnInstallJob::CAddonUnInstallJob(AddonPtr addon)
+  : m_addon(std::move(addon))
 { }
 
 bool CAddonUnInstallJob::DoWork()

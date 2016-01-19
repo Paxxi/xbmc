@@ -96,9 +96,9 @@ enum SpecialCharset
 class CConverterType : public CCriticalSection
 {
 public:
-  CConverterType(const std::string&  sourceCharset,        const std::string&  targetCharset,        unsigned int targetSingleCharMaxLen = 1);
-  CConverterType(enum SpecialCharset sourceSpecialCharset, const std::string&  targetCharset,        unsigned int targetSingleCharMaxLen = 1);
-  CConverterType(const std::string&  sourceCharset,        enum SpecialCharset targetSpecialCharset, unsigned int targetSingleCharMaxLen = 1);
+  CConverterType(std::string   sourceCharset,        std::string   targetCharset,        unsigned int targetSingleCharMaxLen = 1);
+  CConverterType(enum SpecialCharset sourceSpecialCharset, std::string   targetCharset,        unsigned int targetSingleCharMaxLen = 1);
+  CConverterType(std::string   sourceCharset,        enum SpecialCharset targetSpecialCharset, unsigned int targetSingleCharMaxLen = 1);
   CConverterType(enum SpecialCharset sourceSpecialCharset, enum SpecialCharset targetSpecialCharset, unsigned int targetSingleCharMaxLen = 1);
   CConverterType(const CConverterType& other);
   ~CConverterType();
@@ -122,29 +122,29 @@ private:
   unsigned int        m_targetSingleCharMaxLen;
 };
 
-CConverterType::CConverterType(const std::string& sourceCharset, const std::string& targetCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
+CConverterType::CConverterType(std::string  sourceCharset, std::string  targetCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
   m_sourceSpecialCharset(NotSpecialCharset),
-  m_sourceCharset(sourceCharset),
+  m_sourceCharset(std::move(sourceCharset)),
   m_targetSpecialCharset(NotSpecialCharset),
-  m_targetCharset(targetCharset),
+  m_targetCharset(std::move(targetCharset)),
   m_iconv(NO_ICONV),
   m_targetSingleCharMaxLen(targetSingleCharMaxLen)
 {
 }
 
-CConverterType::CConverterType(enum SpecialCharset sourceSpecialCharset, const std::string& targetCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
+CConverterType::CConverterType(enum SpecialCharset sourceSpecialCharset, std::string  targetCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
   m_sourceSpecialCharset(sourceSpecialCharset),
   m_sourceCharset(),
   m_targetSpecialCharset(NotSpecialCharset),
-  m_targetCharset(targetCharset),
+  m_targetCharset(std::move(targetCharset)),
   m_iconv(NO_ICONV),
   m_targetSingleCharMaxLen(targetSingleCharMaxLen)
 {
 }
 
-CConverterType::CConverterType(const std::string& sourceCharset, enum SpecialCharset targetSpecialCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
+CConverterType::CConverterType(std::string  sourceCharset, enum SpecialCharset targetSpecialCharset, unsigned int targetSingleCharMaxLen /*= 1*/) : CCriticalSection(),
   m_sourceSpecialCharset(NotSpecialCharset),
-  m_sourceCharset(sourceCharset),
+  m_sourceCharset(std::move(sourceCharset)),
   m_targetSpecialCharset(targetSpecialCharset),
   m_targetCharset(),
   m_iconv(NO_ICONV),

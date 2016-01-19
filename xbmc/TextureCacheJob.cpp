@@ -37,9 +37,9 @@
 #include "cores/omxplayer/OMXImage.h"
 #endif
 
-CTextureCacheJob::CTextureCacheJob(const std::string &url, const std::string &oldHash):
-  m_url(url),
-  m_oldHash(oldHash),
+CTextureCacheJob::CTextureCacheJob(std::string url, std::string oldHash):
+  m_url(std::move(url)),
+  m_oldHash(std::move(oldHash)),
   m_cachePath(CTextureCache::GetCacheFile(m_url))
 {
 }
@@ -249,8 +249,8 @@ std::string CTextureCacheJob::GetImageHash(const std::string &url)
   return "";
 }
 
-CTextureDDSJob::CTextureDDSJob(const std::string &original):
-  m_original(original)
+CTextureDDSJob::CTextureDDSJob(std::string original):
+  m_original(std::move(original))
 {
 }
 
@@ -281,7 +281,7 @@ bool CTextureDDSJob::DoWork()
   return false;
 }
 
-CTextureUseCountJob::CTextureUseCountJob(const std::vector<CTextureDetails> &textures) : m_textures(textures)
+CTextureUseCountJob::CTextureUseCountJob(std::vector<CTextureDetails> textures) : m_textures(std::move(textures))
 {
 }
 

@@ -41,7 +41,7 @@ public:
   //! \param rate The sample rate of the input
   //! \param channels Number of audio channels in input
   //! \param bps The bits per sample for input
-  CCDDARipJob(const std::string& input, const std::string& output,
+  CCDDARipJob(std::string  input, const std::string& output,
               const MUSIC_INFO::CMusicInfoTag& tag, int encoder,
               bool eject=false, unsigned int rate=44100,
               unsigned int channels=2, unsigned int bps=16);

@@ -99,8 +99,8 @@ bool CPicture::CreateThumbnailFromSurface(const unsigned char *buffer, int width
   return ret;
 }
 
-CThumbnailWriter::CThumbnailWriter(unsigned char* buffer, int width, int height, int stride, const std::string& thumbFile):
-  m_thumbFile(thumbFile)
+CThumbnailWriter::CThumbnailWriter(unsigned char* buffer, int width, int height, int stride, std::string  thumbFile):
+  m_thumbFile(std::move(thumbFile))
 {
   m_buffer    = buffer;
   m_width     = width;

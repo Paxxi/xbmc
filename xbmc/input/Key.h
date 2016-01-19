@@ -401,9 +401,9 @@ class CAction
 public:
   CAction(int actionID, float amount1 = 1.0f, float amount2 = 0.0f, const std::string &name = "", unsigned int holdTime = 0);
   CAction(int actionID, wchar_t unicode);
-  CAction(int actionID, unsigned int state, float posX, float posY, float offsetX, float offsetY, const std::string &name = "");
-  CAction(int actionID, const std::string &name, const CKey &key);
-  CAction(int actionID, const std::string &name);
+  CAction(int actionID, unsigned int state, float posX, float posY, float offsetX, float offsetY, std::string name = "");
+  CAction(int actionID, std::string name, const CKey &key);
+  CAction(int actionID, std::string name);
 
   /*! \brief Identifier of the action
    \return id of the action

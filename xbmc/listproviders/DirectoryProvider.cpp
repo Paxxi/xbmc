@@ -47,9 +47,9 @@ using namespace KODI::MESSAGING;
 class CDirectoryJob : public CJob
 {
 public:
-  CDirectoryJob(const std::string &url, SortDescription sort, int limit, int parentID)
-    : m_url(url),
-      m_sort(sort),
+  CDirectoryJob(std::string url, SortDescription sort, int limit, int parentID)
+    : m_url(std::move(url)),
+      m_sort(std::move(sort)),
       m_limit(limit),
       m_parentID(parentID)
   { }

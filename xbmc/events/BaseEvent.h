@@ -40,10 +40,10 @@ public:
   virtual bool CanExecute() const { return !GetExecutionLabel().empty(); }
 
 protected:
-  CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, EventLevel level = EventLevel::Information);
-  CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, EventLevel level = EventLevel::Information);
-  CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, EventLevel level = EventLevel::Information);
-  CBaseEvent(const std::string& identifier, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, const CVariant& executionLabel, EventLevel level = EventLevel::Information);
+  CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, EventLevel level = EventLevel::Information);
+  CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, EventLevel level = EventLevel::Information);
+  CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, CVariant  details, EventLevel level = EventLevel::Information);
+  CBaseEvent(std::string  identifier, CVariant  label, CVariant  description, std::string  icon, CVariant  details, CVariant  executionLabel, EventLevel level = EventLevel::Information);
 
   EventLevel m_level;
   std::string m_identifier;

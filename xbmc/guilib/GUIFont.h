@@ -107,7 +107,7 @@ private:
 class CGUIFont
 {
 public:
-  CGUIFont(const std::string& strFontName, uint32_t style, color_t textColor,
+  CGUIFont(std::string  strFontName, uint32_t style, color_t textColor,
 	   color_t shadowColor, float lineSpacing, float origHeight, CGUIFontTTFBase *font);
   virtual ~CGUIFont();
 

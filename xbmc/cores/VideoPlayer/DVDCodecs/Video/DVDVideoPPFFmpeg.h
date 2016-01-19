@@ -27,7 +27,7 @@ class CDVDVideoPPFFmpeg
 {
 public:
 
-  CDVDVideoPPFFmpeg(const std::string& mType);
+  CDVDVideoPPFFmpeg(std::string  mType);
   ~CDVDVideoPPFFmpeg();
 
 

@@ -145,8 +145,8 @@ CHttpRanges::CHttpRanges()
 : m_ranges()
 { }
 
-CHttpRanges::CHttpRanges(const HttpRanges& httpRanges)
-: m_ranges(httpRanges)
+CHttpRanges::CHttpRanges(HttpRanges  httpRanges)
+: m_ranges(std::move(httpRanges))
 {
   SortAndCleanup();
 }

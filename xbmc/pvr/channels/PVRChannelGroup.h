@@ -81,7 +81,7 @@ namespace PVR
      * @param iGroupId The database ID of this group.
      * @param strGroupName The name of this group.
      */
-    CPVRChannelGroup(bool bRadio, unsigned int iGroupId, const std::string &strGroupName);
+    CPVRChannelGroup(bool bRadio, unsigned int iGroupId, std::string strGroupName);
 
     /*!
      * @brief Create a new channel group instance from a channel group provided by an add-on.

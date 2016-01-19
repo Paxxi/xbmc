@@ -24,9 +24,9 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
-CGUIMultiSelectTextControl::CSelectableString::CSelectableString(CGUIFont *font, const std::string &text, bool selectable, const std::string &clickAction)
+CGUIMultiSelectTextControl::CSelectableString::CSelectableString(CGUIFont *font, const std::string &text, bool selectable, std::string clickAction)
  : m_text(font, false)
- , m_clickAction(clickAction)
+ , m_clickAction(std::move(clickAction))
 {
   m_selectable = selectable;
   StringUtils::TrimLeft(m_clickAction, " =");
@@ -36,10 +36,10 @@ CGUIMultiSelectTextControl::CSelectableString::CSelectableString(CGUIFont *font,
   m_text.GetTextExtent(m_length, height);
 }
 
-CGUIMultiSelectTextControl::CGUIMultiSelectTextControl(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus, const CLabelInfo& labelInfo, const CGUIInfoLabel &content)
+CGUIMultiSelectTextControl::CGUIMultiSelectTextControl(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus, const CLabelInfo& labelInfo, CGUIInfoLabel content)
     : CGUIControl(parentID, controlID, posX, posY, width, height)
     , m_label(labelInfo)
-    , m_info(content)
+    , m_info(std::move(content))
     , m_button(parentID, controlID, posX, posY, width, height, textureFocus, textureNoFocus, labelInfo)
 {
   m_selectedItem = 0;

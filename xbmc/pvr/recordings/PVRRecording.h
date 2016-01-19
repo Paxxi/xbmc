@@ -65,7 +65,7 @@ namespace PVR
 
     CPVRRecordingUid();
     CPVRRecordingUid(const CPVRRecordingUid& recordingId);
-    CPVRRecordingUid(int iClientId, const std::string &strRecordingId);
+    CPVRRecordingUid(int iClientId, std::string strRecordingId);
 
     bool operator >(const CPVRRecordingUid& right) const;
     bool operator <(const CPVRRecordingUid& right) const;

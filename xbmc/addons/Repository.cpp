@@ -224,7 +224,7 @@ bool CRepository::Parse(const DirInfo& dir, VECADDONS& addons)
 }
 
 
-CRepositoryUpdateJob::CRepositoryUpdateJob(const RepositoryPtr& repo) : m_repo(repo) {}
+CRepositoryUpdateJob::CRepositoryUpdateJob(RepositoryPtr  repo) : m_repo(std::move(repo)) {}
 
 
 bool CRepositoryUpdateJob::DoWork()

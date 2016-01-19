@@ -53,7 +53,7 @@ namespace EPG
      * @param strScraperName The name of the scraper to use.
      * @param bLoadedFromDb True if this table was loaded from the database, false otherwise.
      */
-    CEpg(int iEpgID, const std::string &strName = "", const std::string &strScraperName = "", bool bLoadedFromDb = false);
+    CEpg(int iEpgID, std::string strName = "", std::string strScraperName = "", bool bLoadedFromDb = false);
 
     /*!
      * @brief Create a new EPG instance for a channel.

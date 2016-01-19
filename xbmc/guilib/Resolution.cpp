@@ -26,8 +26,8 @@
 #include "settings/DisplaySettings.h"
 #include <cstdlib>
 
-RESOLUTION_INFO::RESOLUTION_INFO(int width, int height, float aspect, const std::string &mode) :
-  strMode(mode)
+RESOLUTION_INFO::RESOLUTION_INFO(int width, int height, float aspect, std::string mode) :
+  strMode(std::move(mode))
 {
   iWidth = width;
   iHeight = height;

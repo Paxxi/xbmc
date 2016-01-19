@@ -21,10 +21,12 @@
 #include "LibraryLoader.h"
 #include <string.h>
 #include <stdlib.h>
+
+#include <utility>
 #include "utils/log.h"
 
-LibraryLoader::LibraryLoader(const std::string& libraryFile):
-  m_fileName(libraryFile)
+LibraryLoader::LibraryLoader(std::string  libraryFile):
+  m_fileName(std::move(libraryFile))
 {
   size_t pos = m_fileName.find_last_of("\\/");
   if (pos != std::string::npos)

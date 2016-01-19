@@ -18,6 +18,8 @@
  *
  */
 
+#include <utility>
+
 #include "XBMCTinyXML.h"
 #include "filesystem/File.h"
 #include "utils/StringUtils.h"
@@ -46,8 +48,8 @@ CXBMCTinyXML::CXBMCTinyXML(const std::string& documentName)
 {
 }
 
-CXBMCTinyXML::CXBMCTinyXML(const std::string& documentName, const std::string& documentCharset)
-: TiXmlDocument(documentName), m_SuggestedCharset(documentCharset)
+CXBMCTinyXML::CXBMCTinyXML(const std::string& documentName, std::string  documentCharset)
+: TiXmlDocument(documentName), m_SuggestedCharset(std::move(documentCharset))
 {
   StringUtils::ToUpper(m_SuggestedCharset);
 }

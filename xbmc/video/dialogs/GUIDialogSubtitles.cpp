@@ -61,7 +61,7 @@ using namespace XFILE;
 class CSubtitlesJob: public CJob
 {
 public:
-  CSubtitlesJob(const CURL &url, const std::string &language) : m_url(url), m_language(language)
+  CSubtitlesJob(const CURL &url, std::string language) : m_url(url), m_language(std::move(language))
   {
     m_items = new CFileItemList;
   }

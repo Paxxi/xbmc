@@ -46,9 +46,9 @@ CPVRRecordingUid::CPVRRecordingUid(const CPVRRecordingUid &recordingId) :
 {
 }
 
-CPVRRecordingUid::CPVRRecordingUid(int iClientId, const std::string& strRecordingId) :
+CPVRRecordingUid::CPVRRecordingUid(int iClientId, std::string  strRecordingId) :
   m_iClientId(iClientId),
-  m_strRecordingId(strRecordingId)
+  m_strRecordingId(std::move(strRecordingId))
 {
 }
 

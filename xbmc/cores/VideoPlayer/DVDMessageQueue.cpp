@@ -24,7 +24,7 @@
 #include "DVDClock.h"
 #include "utils/MathUtils.h"
 
-CDVDMessageQueue::CDVDMessageQueue(const std::string &owner) : m_hEvent(true), m_owner(owner)
+CDVDMessageQueue::CDVDMessageQueue(std::string owner) : m_hEvent(true), m_owner(std::move(owner))
 {
   m_iDataSize     = 0;
   m_bAbortRequest = false;

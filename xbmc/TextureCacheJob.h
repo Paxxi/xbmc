@@ -65,7 +65,7 @@ public:
 class CTextureCacheJob : public CJob
 {
 public:
-  CTextureCacheJob(const std::string &url, const std::string &oldHash = "");
+  CTextureCacheJob(std::string url, std::string oldHash = "");
   virtual ~CTextureCacheJob();
 
   virtual const char* GetType() const { return kJobTypeCacheImage; };
@@ -132,7 +132,7 @@ private:
 class CTextureDDSJob : public CJob
 {
 public:
-  CTextureDDSJob(const std::string &original);
+  CTextureDDSJob(std::string original);
 
   virtual const char* GetType() const { return kJobTypeDDSCompress; };
   virtual bool operator==(const CJob *job) const;
@@ -146,7 +146,7 @@ public:
 class CTextureUseCountJob : public CJob
 {
 public:
-  CTextureUseCountJob(const std::vector<CTextureDetails> &textures);
+  CTextureUseCountJob(std::vector<CTextureDetails> textures);
 
   virtual const char* GetType() const { return "usecount"; };
   virtual bool operator==(const CJob *job) const;

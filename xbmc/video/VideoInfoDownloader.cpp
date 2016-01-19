@@ -33,8 +33,8 @@ using namespace KODI::MESSAGING;
 #pragma warning (disable:4018)
 #endif
 
-CVideoInfoDownloader::CVideoInfoDownloader(const ADDON::ScraperPtr &scraper) :
-  CThread("VideoInfoDownloader"), m_state(DO_NOTHING), m_found(0), m_info(scraper)
+CVideoInfoDownloader::CVideoInfoDownloader(ADDON::ScraperPtr scraper) :
+  CThread("VideoInfoDownloader"), m_state(DO_NOTHING), m_found(0), m_info(std::move(scraper))
 {
   m_http = new XFILE::CCurlFile;
 }

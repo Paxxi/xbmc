@@ -854,8 +854,8 @@ const int picture_slide_map[]  = {/* LISTITEM_PICTURE_RESOLUTION => */ SLIDE_RES
                                   /* LISTITEM_PICTURE_GPS_LON    => */ SLIDE_EXIF_GPS_LONGITUDE,
                                   /* LISTITEM_PICTURE_GPS_ALT    => */ SLIDE_EXIF_GPS_ALTITUDE };
 
-CGUIInfoManager::Property::Property(const std::string &property, const std::string &parameters)
-: name(property)
+CGUIInfoManager::Property::Property(std::string property, const std::string &parameters)
+: name(std::move(property))
 {
   CUtil::SplitParams(parameters, params);
 }
