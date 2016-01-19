@@ -236,9 +236,8 @@ int EpgSearchFilter::FilterTimers(CFileItemList &results)
 
   std::vector<CFileItemPtr> timers = g_PVRTimers->GetActiveTimers();
   // TODO inefficient!
-  for (unsigned int iTimerPtr = 0; iTimerPtr < timers.size(); iTimerPtr++)
+  for (auto fileItem : timers)
   {
-    CFileItemPtr fileItem = timers.at(iTimerPtr);
     if (!fileItem || !fileItem->HasPVRTimerInfoTag())
       continue;
 

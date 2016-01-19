@@ -56,11 +56,11 @@ DPMSSupport::DPMSSupport()
   if (!m_supportedModes.empty())
   {
     std::string modes_message;
-    for (size_t i = 0; i < m_supportedModes.size(); i++)
+    for (auto & m_supportedMode : m_supportedModes)
     {
-      assert(CheckValidMode(m_supportedModes[i]));
+      assert(CheckValidMode(m_supportedMode));
       modes_message += " ";
-      modes_message += MODE_NAMES[m_supportedModes[i]];
+      modes_message += MODE_NAMES[m_supportedMode];
     }
     CLog::Log(LOGDEBUG, "DPMS: supported power-saving modes:%s",
               modes_message.c_str());
@@ -70,9 +70,9 @@ DPMSSupport::DPMSSupport()
 bool DPMSSupport::IsModeSupported(PowerSavingMode mode) const
 {
   if (!CheckValidMode(mode)) return false;
-  for (size_t i = 0; i < m_supportedModes.size(); i++)
+  for (auto m_supportedMode : m_supportedModes)
   {
-    if (m_supportedModes[i] == mode) return true;
+    if (m_supportedMode == mode) return true;
   }
   return false;
 }

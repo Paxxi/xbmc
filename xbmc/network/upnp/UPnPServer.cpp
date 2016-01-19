@@ -126,12 +126,12 @@ void
 CUPnPServer::OnScanCompleted(int type)
 {
     if (type == AudioLibrary) {
-        for (size_t i = 0; i < ARRAY_SIZE(audio_containers); i++)
-            UpdateContainer(audio_containers[i]);
+        for (auto & audio_container : audio_containers)
+            UpdateContainer(audio_container);
     }
     else if (type == VideoLibrary) {
-        for (size_t i = 0; i < ARRAY_SIZE(video_containers); i++)
-            UpdateContainer(video_containers[i]);
+        for (auto & video_container : video_containers)
+            UpdateContainer(video_container);
     }
     else
         return;

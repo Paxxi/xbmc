@@ -342,12 +342,12 @@ CUPnPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
         NPT_String max_string = "";
         int        max_count  = 0;
-        for(std::map<NPT_String, int>::iterator it = classes.begin(); it != classes.end(); ++it)
+        for(auto & classe : classes)
         {
-          if(it->second > max_count)
+          if(classe.second > max_count)
           {
-            max_string = it->first;
-            max_count  = it->second;
+            max_string = classe.first;
+            max_count  = classe.second;
           }
         }
         std::string content = GetContentMapping(max_string);

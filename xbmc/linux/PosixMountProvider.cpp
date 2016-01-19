@@ -82,11 +82,11 @@ void CPosixMountProvider::GetDrives(VECSOURCES &drives)
     pclose(pipe);
   }
 
-  for (unsigned int i = 0; i < result.size(); i++)
+  for (auto & i : result)
   {
     CMediaSource share;
-    share.strPath = result[i];
-    share.strName = URIUtils::GetFileName(result[i]);
+    share.strPath = i;
+    share.strName = URIUtils::GetFileName(i);
     share.m_ignore = true;
     drives.push_back(share);
   }

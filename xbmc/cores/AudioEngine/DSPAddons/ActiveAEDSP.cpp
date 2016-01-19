@@ -622,9 +622,8 @@ bool CActiveAEDSP::UpdateAndInitialiseAudioDSPAddons(bool bInitialiseAllAudioDSP
   if (map.empty())
     return false;
 
-  for (unsigned iAddonPtr = 0; iAddonPtr < map.size(); ++iAddonPtr)
+  for (auto dspAddon : map)
   {
-    const AddonPtr dspAddon = map.at(iAddonPtr);
     bool bEnabled = !CAddonMgr::GetInstance().IsAddonDisabled(dspAddon->ID());
 
     if (!bEnabled && IsKnownAudioDSPAddon(dspAddon))

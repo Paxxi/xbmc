@@ -176,7 +176,7 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     return false;
 
   // save calibrations
-  for (ResolutionInfos::const_iterator it = m_calibrations.begin(); it != m_calibrations.end(); ++it)
+  for (const auto & m_calibration : m_calibrations)
   {
     // Write the resolution tag
     TiXmlElement resElement("resolution");
@@ -185,13 +185,13 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
       return false;
 
     // Now write each of the pieces of information we need...
-    XMLUtils::SetString(pNode, "description", it->strMode);
-    XMLUtils::SetInt(pNode, "subtitles", it->iSubtitles);
-    XMLUtils::SetFloat(pNode, "pixelratio", it->fPixelRatio);
+    XMLUtils::SetString(pNode, "description", m_calibration.strMode);
+    XMLUtils::SetInt(pNode, "subtitles", m_calibration.iSubtitles);
+    XMLUtils::SetFloat(pNode, "pixelratio", m_calibration.fPixelRatio);
 #ifdef HAVE_X11
-    XMLUtils::SetFloat(pNode, "refreshrate", it->fRefreshRate);
-    XMLUtils::SetString(pNode, "output", it->strOutput);
-    XMLUtils::SetString(pNode, "xrandrid", it->strId);
+    XMLUtils::SetFloat(pNode, "refreshrate", m_calibration.fRefreshRate);
+    XMLUtils::SetString(pNode, "output", m_calibration.strOutput);
+    XMLUtils::SetString(pNode, "xrandrid", m_calibration.strId);
 #endif
 
     // create the overscan child
@@ -200,10 +200,10 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     if (pOverscanNode == NULL)
       return false;
 
-    XMLUtils::SetInt(pOverscanNode, "left", it->Overscan.left);
-    XMLUtils::SetInt(pOverscanNode, "top", it->Overscan.top);
-    XMLUtils::SetInt(pOverscanNode, "right", it->Overscan.right);
-    XMLUtils::SetInt(pOverscanNode, "bottom", it->Overscan.bottom);
+    XMLUtils::SetInt(pOverscanNode, "left", m_calibration.Overscan.left);
+    XMLUtils::SetInt(pOverscanNode, "top", m_calibration.Overscan.top);
+    XMLUtils::SetInt(pOverscanNode, "right", m_calibration.Overscan.right);
+    XMLUtils::SetInt(pOverscanNode, "bottom", m_calibration.Overscan.bottom);
   }
 
   return true;
@@ -507,12 +507,12 @@ void CDisplaySettings::UpdateCalibrations()
   {
     // find calibration
     bool found = false;
-    for (ResolutionInfos::iterator itCal = m_calibrations.begin(); itCal != m_calibrations.end(); ++itCal)
+    for (auto & m_calibration : m_calibrations)
     {
-      if (StringUtils::EqualsNoCase(itCal->strMode, m_resolutions[res].strMode))
+      if (StringUtils::EqualsNoCase(m_calibration.strMode, m_resolutions[res].strMode))
       {
         // TODO: erase calibrations with default values
-        *itCal = m_resolutions[res];
+        m_calibration = m_resolutions[res];
         found = true;
         break;
       }
@@ -538,9 +538,9 @@ RESOLUTION CDisplaySettings::FindBestMatchingResolution(const std::map<RESOLUTIO
   float bestScore = FLT_MAX;
   flags &= D3DPRESENTFLAG_MODEMASK;
 
-  for (std::map<RESOLUTION, RESOLUTION_INFO>::const_iterator it = resolutionInfos.begin(); it != resolutionInfos.end(); ++it)
+  for (const auto & resolutionInfo : resolutionInfos)
   {
-    const RESOLUTION_INFO &info = it->second;
+    const RESOLUTION_INFO &info = resolutionInfo.second;
 
     if ( info.iScreen               != screen
     ||  (info.dwFlags & D3DPRESENTFLAG_MODEMASK) != flags)
@@ -552,7 +552,7 @@ RESOLUTION CDisplaySettings::FindBestMatchingResolution(const std::map<RESOLUTIO
     if (score < bestScore)
     {
       bestScore = score;
-      bestRes = it->first;
+      bestRes = resolutionInfo.first;
     }
   }
 
@@ -768,14 +768,14 @@ void CDisplaySettings::SettingOptionsMonitorsFiller(const CSetting *setting, std
   std::vector<std::string> monitors;
   g_Windowing.GetConnectedOutputs(&monitors);
   std::string currentMonitor = CSettings::GetInstance().GetString(CSettings::SETTING_VIDEOSCREEN_MONITOR);
-  for (unsigned int i=0; i<monitors.size(); ++i)
+  for (auto & monitor : monitors)
   {
     if(currentMonitor.compare("Default") != 0 &&
-       StringUtils::EqualsNoCase(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strOutput, monitors[i]))
+       StringUtils::EqualsNoCase(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strOutput, monitor))
     {
-      current = monitors[i];
+      current = monitor;
     }
-    list.push_back(std::make_pair(monitors[i], monitors[i]));
+    list.push_back(std::make_pair(monitor, monitor));
   }
 #endif
 }

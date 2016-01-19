@@ -329,13 +329,13 @@ void CGUIDialogSmartPlaylistEditor::UpdateButtons()
   CGUIMessage msgReset(GUI_MSG_LABEL_RESET, GetID(), CONTROL_RULE_LIST);
   OnMessage(msgReset);
   m_ruleLabels->Clear();
-  for (unsigned int i = 0; i < m_playlist.m_ruleCombination.m_rules.size(); i++)
+  for (auto & m_rule : m_playlist.m_ruleCombination.m_rules)
   {
     CFileItemPtr item(new CFileItem("", false));
-    if (m_playlist.m_ruleCombination.m_rules[i]->m_field == FieldNone)
+    if (m_rule->m_field == FieldNone)
       item->SetLabel(g_localizeStrings.Get(21423));
     else
-      item->SetLabel(std::static_pointer_cast<CSmartPlaylistRule>(m_playlist.m_ruleCombination.m_rules[i])->GetLocalizedRule());
+      item->SetLabel(std::static_pointer_cast<CSmartPlaylistRule>(m_rule)->GetLocalizedRule());
     m_ruleLabels->Add(item);
   }
   CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), CONTROL_RULE_LIST, 0, 0, m_ruleLabels);
@@ -354,16 +354,16 @@ void CGUIDialogSmartPlaylistEditor::UpdateButtons()
   // sort out the order fields
   std::vector< std::pair<std::string, int> > labels;
   std::vector<SortBy> orders = CSmartPlaylistRule::GetOrders(m_playlist.GetType());
-  for (unsigned int i = 0; i < orders.size(); i++)
-    labels.push_back(make_pair(g_localizeStrings.Get(SortUtils::GetSortLabel(orders[i])), orders[i]));
+  for (auto & order : orders)
+    labels.push_back(make_pair(g_localizeStrings.Get(SortUtils::GetSortLabel(order)), order));
   SET_CONTROL_LABELS(CONTROL_ORDER_FIELD, m_playlist.m_orderField, &labels);
 
   // setup groups
   labels.clear();
   std::vector<Field> groups = CSmartPlaylistRule::GetGroups(m_playlist.GetType());
   Field currentGroup = CSmartPlaylistRule::TranslateGroup(m_playlist.GetGroup().c_str());
-  for (unsigned int i = 0; i < groups.size(); i++)
-    labels.push_back(make_pair(CSmartPlaylistRule::GetLocalizedGroup(groups[i]), groups[i]));
+  for (auto & group : groups)
+    labels.push_back(make_pair(CSmartPlaylistRule::GetLocalizedGroup(group), group));
   SET_CONTROL_LABELS(CONTROL_GROUP_BY, currentGroup, &labels);
 
   if (m_playlist.IsGroupMixed())
@@ -412,8 +412,8 @@ void CGUIDialogSmartPlaylistEditor::OnWindowLoaded()
   labels.clear();
   labels.push_back(make_pair(g_localizeStrings.Get(21428), 0));
   const int limits[] = { 10, 25, 50, 100, 250, 500, 1000 };
-  for (unsigned int i = 0; i < sizeof(limits) / sizeof(int); i++)
-    labels.push_back(make_pair(StringUtils::Format(g_localizeStrings.Get(21436).c_str(), limits[i]), limits[i]));
+  for (int limit : limits)
+    labels.push_back(make_pair(StringUtils::Format(g_localizeStrings.Get(21436).c_str(), limit), limit));
   SET_CONTROL_LABELS(CONTROL_LIMIT, 0, &labels);
 }
 
@@ -451,13 +451,13 @@ void CGUIDialogSmartPlaylistEditor::OnInitWindow()
   }
   // add to the spinner
   std::vector< std::pair<std::string, int> > labels;
-  for (unsigned int i = 0; i < allowedTypes.size(); i++)
-    labels.push_back(make_pair(GetLocalizedType(allowedTypes[i]), allowedTypes[i]));
+  for (auto & allowedType : allowedTypes)
+    labels.push_back(make_pair(GetLocalizedType(allowedType), allowedType));
   // check our playlist type is allowed
   PLAYLIST_TYPE type = ConvertType(m_playlist.GetType());
   bool allowed = false;
-  for (unsigned int i = 0; i < allowedTypes.size(); i++)
-    if (type == allowedTypes[i])
+  for (auto & allowedType : allowedTypes)
+    if (type == allowedType)
       allowed = true;
   if (!allowed && allowedTypes.size())
     type = allowedTypes[0];
@@ -481,27 +481,27 @@ void CGUIDialogSmartPlaylistEditor::OnDeinitWindow(int nextWindowID)
 
 CGUIDialogSmartPlaylistEditor::PLAYLIST_TYPE CGUIDialogSmartPlaylistEditor::ConvertType(const std::string &type)
 {
-  for (unsigned int i = 0; i < NUM_TYPES; i++)
-    if (type == types[i].string)
-      return types[i].type;
+  for (const auto & i : types)
+    if (type == i.string)
+      return i.type;
   assert(false);
   return TYPE_SONGS;
 }
 
 std::string CGUIDialogSmartPlaylistEditor::GetLocalizedType(PLAYLIST_TYPE type)
 {
-  for (unsigned int i = 0; i < NUM_TYPES; i++)
-    if (types[i].type == type)
-      return g_localizeStrings.Get(types[i].localizedString);
+  for (const auto & i : types)
+    if (i.type == type)
+      return g_localizeStrings.Get(i.localizedString);
   assert(false);
   return "";
 }
 
 std::string CGUIDialogSmartPlaylistEditor::ConvertType(PLAYLIST_TYPE type)
 {
-  for (unsigned int i = 0; i < NUM_TYPES; i++)
-    if (types[i].type == type)
-      return types[i].string;
+  for (const auto & i : types)
+    if (i.type == type)
+      return i.string;
   assert(false);
   return "songs";
 }

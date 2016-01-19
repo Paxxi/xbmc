@@ -175,11 +175,11 @@ void CDVDOverlayContainer::UpdateOverlayInfo(CDVDInputStreamNavigator* pStream, 
   pStream->CheckButtons();
 
   //Update any forced overlays.
-  for(VecOverlays::iterator it = m_overlays.begin(); it != m_overlays.end(); ++it )
+  for(auto & m_overlay : m_overlays)
   {
-    if ((*it)->IsOverlayType(DVDOVERLAY_TYPE_SPU))
+    if (m_overlay->IsOverlayType(DVDOVERLAY_TYPE_SPU))
     {
-      CDVDOverlaySpu* pOverlaySpu = (CDVDOverlaySpu*)(*it);
+      CDVDOverlaySpu* pOverlaySpu = (CDVDOverlaySpu*)m_overlay;
 
       // make sure its a forced (menu) overlay
       // set menu spu color and alpha data if there is a valid menu overlay
@@ -188,8 +188,8 @@ void CDVDOverlayContainer::UpdateOverlayInfo(CDVDInputStreamNavigator* pStream, 
         if(pOverlaySpu->Acquire()->Release() > 1)
         {
           pOverlaySpu = new CDVDOverlaySpu(*pOverlaySpu);
-          (*it)->Release();
-          (*it) = pOverlaySpu;
+          m_overlay->Release();
+          m_overlay = pOverlaySpu;
         }
 
         if(pStream->GetCurrentButtonInfo(pOverlaySpu, pSpu, iAction))

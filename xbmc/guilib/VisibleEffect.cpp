@@ -375,8 +375,8 @@ CAnimation::CAnimation(const CAnimation &src)
 
 CAnimation::~CAnimation()
 {
-  for (unsigned int i = 0; i < m_effects.size(); i++)
-    delete m_effects[i];
+  for (auto & m_effect : m_effects)
+    delete m_effect;
   m_effects.clear();
 }
 
@@ -396,23 +396,23 @@ CAnimation &CAnimation::operator =(const CAnimation &src)
   m_delay = src.m_delay;
   m_amount = src.m_amount;
   // clear all our effects
-  for (unsigned int i = 0; i < m_effects.size(); i++)
-    delete m_effects[i];
+  for (auto & m_effect : m_effects)
+    delete m_effect;
   m_effects.clear();
   // and assign the others across
-  for (unsigned int i = 0; i < src.m_effects.size(); i++)
+  for (auto m_effect : src.m_effects)
   {
     CAnimEffect *newEffect = NULL;
-    if (src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_FADE)
-      newEffect = new CFadeEffect(*(CFadeEffect *)src.m_effects[i]);
-    else if (src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_ZOOM)
-      newEffect = new CZoomEffect(*(CZoomEffect *)src.m_effects[i]);
-    else if (src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_SLIDE)
-      newEffect = new CSlideEffect(*(CSlideEffect *)src.m_effects[i]);
-    else if (src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_X ||
-             src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_Y ||
-             src.m_effects[i]->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_Z)
-      newEffect = new CRotateEffect(*(CRotateEffect *)src.m_effects[i]);
+    if (m_effect->GetType() == CAnimEffect::EFFECT_TYPE_FADE)
+      newEffect = new CFadeEffect(*(CFadeEffect *)m_effect);
+    else if (m_effect->GetType() == CAnimEffect::EFFECT_TYPE_ZOOM)
+      newEffect = new CZoomEffect(*(CZoomEffect *)m_effect);
+    else if (m_effect->GetType() == CAnimEffect::EFFECT_TYPE_SLIDE)
+      newEffect = new CSlideEffect(*(CSlideEffect *)m_effect);
+    else if (m_effect->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_X ||
+             m_effect->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_Y ||
+             m_effect->GetType() == CAnimEffect::EFFECT_TYPE_ROTATE_Z)
+      newEffect = new CRotateEffect(*(CRotateEffect *)m_effect);
     if (newEffect)
       m_effects.push_back(newEffect);
   }
@@ -527,9 +527,8 @@ void CAnimation::ApplyAnimation()
 
 void CAnimation::Calculate(const CPoint &center)
 {
-  for (unsigned int i = 0; i < m_effects.size(); i++)
+  for (auto effect : m_effects)
   {
-    CAnimEffect *effect = m_effects[i];
     if (effect->GetLength())
       effect->Calculate(m_delay + m_amount, center);
     else
@@ -557,8 +556,8 @@ void CAnimation::RenderAnimation(TransformMatrix &matrix, const CPoint &center)
   }
   if (m_currentState != ANIM_STATE_NONE)
   {
-    for (unsigned int i = 0; i < m_effects.size(); i++)
-      matrix *= m_effects[i]->GetTransform();
+    for (auto & m_effect : m_effects)
+      matrix *= m_effect->GetTransform();
   }
 }
 

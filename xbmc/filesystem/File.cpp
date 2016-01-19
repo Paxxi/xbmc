@@ -114,9 +114,9 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
         } // If the directory has a / at the beginning, don't forget it
         else if (strDirectory[0] == pathsep[0])
           strCurrPath += pathsep;
-        for (std::vector<std::string>::iterator iter=tokens.begin();iter!=tokens.end();++iter)
+        for (auto & token : tokens)
         {
-          strCurrPath += *iter+pathsep;
+          strCurrPath += token+pathsep;
           CDirectory::Create(strCurrPath);
         }
       }

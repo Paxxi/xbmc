@@ -25,8 +25,8 @@
 void CUnionDirtyRegionSolver::Solve(const CDirtyRegionList &input, CDirtyRegionList &output)
 {
   CDirtyRegion unifiedRegion;
-  for (unsigned int i = 0; i < input.size(); i++)
-    unifiedRegion.Union(input[i]);
+  for (const auto & i : input)
+    unifiedRegion.Union(i);
 
   if (!unifiedRegion.IsEmpty())
     output.push_back(unifiedRegion);
@@ -52,13 +52,12 @@ CGreedyDirtyRegionSolver::CGreedyDirtyRegionSolver()
 
 void CGreedyDirtyRegionSolver::Solve(const CDirtyRegionList &input, CDirtyRegionList &output)
 {
-  for (unsigned int i = 0; i < input.size(); i++)
+  for (auto currentRegion : input)
   {
     CDirtyRegion possibleUnionRegion;
     int   possibleUnionNbr = -1;
     float possibleUnionCost = 100000.0f;
 
-    CDirtyRegion currentRegion = input[i];
     for (unsigned int j = 0; j < output.size(); j++)
     {
       CDirtyRegion temporaryUnion = output[j];

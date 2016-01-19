@@ -284,8 +284,8 @@ void XMLUtils::SetAdditiveString(TiXmlNode* pRootNode, const char *strTag, const
 
 void XMLUtils::SetStringArray(TiXmlNode* pRootNode, const char *strTag, const std::vector<std::string>& arrayValue)
 {
-  for (unsigned int i = 0; i < arrayValue.size(); i++)
-    SetString(pRootNode, strTag, arrayValue.at(i));
+  for (const auto & i : arrayValue)
+    SetString(pRootNode, strTag, i);
 }
 
 void XMLUtils::SetString(TiXmlNode* pRootNode, const char *strTag, const std::string& strValue)

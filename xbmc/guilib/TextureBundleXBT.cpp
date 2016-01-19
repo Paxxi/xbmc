@@ -122,9 +122,9 @@ void CTextureBundleXBT::GetTexturesFromPath(const std::string &path, std::vector
   URIUtils::AddSlashAtEnd(testPath);
 
   std::vector<CXBTFFile> files = m_XBTFReader->GetFiles();
-  for (size_t i = 0; i < files.size(); i++)
+  for (auto & file : files)
   {
-    std::string path = files[i].GetPath();
+    std::string path = file.GetPath();
     if (StringUtils::StartsWithNoCase(path, testPath))
       textures.push_back(path);
   }

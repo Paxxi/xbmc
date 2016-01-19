@@ -120,11 +120,11 @@ void CTCPServer::Process()
         max_fd = *it;
     }
 
-    for (unsigned int i = 0; i < m_connections.size(); i++)
+    for (auto & m_connection : m_connections)
     {
-      FD_SET(m_connections[i]->m_socket, &rfds);
-      if ((intptr_t)m_connections[i]->m_socket > (intptr_t)max_fd)
-        max_fd = m_connections[i]->m_socket;
+      FD_SET(m_connection->m_socket, &rfds);
+      if ((intptr_t)m_connection->m_socket > (intptr_t)max_fd)
+        max_fd = m_connection->m_socket;
     }
 
     int res = select((intptr_t)max_fd+1, &rfds, NULL, NULL, &to);
@@ -233,15 +233,15 @@ void CTCPServer::Announce(AnnouncementFlag flag, const char *sender, const char 
 {
   std::string str = IJSONRPCAnnouncer::AnnouncementToJSONRPC(flag, sender, message, data, g_advancedSettings.m_jsonOutputCompact);
 
-  for (unsigned int i = 0; i < m_connections.size(); i++)
+  for (auto & m_connection : m_connections)
   {
     {
-      CSingleLock lock (m_connections[i]->m_critSection);
-      if ((m_connections[i]->GetAnnouncementFlags() & flag) == 0)
+      CSingleLock lock (m_connection->m_critSection);
+      if ((m_connection->GetAnnouncementFlags() & flag) == 0)
         continue;
     }
 
-    m_connections[i]->Send(str.c_str(), str.size());
+    m_connection->Send(str.c_str(), str.size());
   }
 }
 
@@ -459,16 +459,16 @@ bool CTCPServer::InitializeTCP()
 
 void CTCPServer::Deinitialize()
 {
-  for (unsigned int i = 0; i < m_connections.size(); i++)
+  for (auto & m_connection : m_connections)
   {
-    m_connections[i]->Disconnect();
-    delete m_connections[i];
+    m_connection->Disconnect();
+    delete m_connection;
   }
 
   m_connections.clear();
 
-  for (unsigned int i = 0; i < m_servers.size(); i++)
-    closesocket(m_servers[i]);
+  for (int m_server : m_servers)
+    closesocket(m_server);
 
   m_servers.clear();
 
@@ -631,8 +631,8 @@ void CTCPServer::CWebSocketClient::Send(const char *data, unsigned int size)
     return;
 
   std::vector<const CWebSocketFrame *> frames = msg->GetFrames();
-  for (unsigned int index = 0; index < frames.size(); index++)
-    CTCPClient::Send(frames.at(index)->GetFrameData(), (unsigned int)frames.at(index)->GetFrameLength());
+  for (auto & frame : frames)
+    CTCPClient::Send(frame->GetFrameData(), (unsigned int)frame->GetFrameLength());
 }
 
 void CTCPServer::CWebSocketClient::PushBuffer(CTCPServer *host, const char *buffer, int length)
@@ -647,13 +647,13 @@ void CTCPServer::CWebSocketClient::PushBuffer(CTCPServer *host, const char *buff
       std::vector<const CWebSocketFrame *> frames = msg->GetFrames();
       if (send)
       {
-        for (unsigned int index = 0; index < frames.size(); index++)
-          Send(frames.at(index)->GetFrameData(), (unsigned int)frames.at(index)->GetFrameLength());
+        for (auto & frame : frames)
+          Send(frame->GetFrameData(), (unsigned int)frame->GetFrameLength());
       }
       else
       {
-        for (unsigned int index = 0; index < frames.size(); index++)
-          CTCPClient::PushBuffer(host, frames.at(index)->GetApplicationData(), (int)frames.at(index)->GetLength());
+        for (auto & frame : frames)
+          CTCPClient::PushBuffer(host, frame->GetApplicationData(), (int)frame->GetLength());
       }
 
       delete msg;

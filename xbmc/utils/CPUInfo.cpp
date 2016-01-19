@@ -817,14 +817,14 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
 std::string CCPUInfo::GetCoresUsageString() const
 {
   std::string strCores;
-  for (std::map<int, CoreInfo>::const_iterator it = m_cores.begin(); it != m_cores.end(); ++it)
+  for (const auto & m_core : m_cores)
   {
     if (!strCores.empty())
       strCores += ' ';
-    if (it->second.m_fPct < 10.0)
-      strCores += StringUtils::Format("CPU%d: %1.1f%%", it->first, it->second.m_fPct);
+    if (m_core.second.m_fPct < 10.0)
+      strCores += StringUtils::Format("CPU%d: %1.1f%%", m_core.first, m_core.second.m_fPct);
     else
-      strCores += StringUtils::Format("CPU%d: %3.0f%%", it->first, it->second.m_fPct);
+      strCores += StringUtils::Format("CPU%d: %3.0f%%", m_core.first, m_core.second.m_fPct);
   }
 
   return strCores;

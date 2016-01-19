@@ -401,8 +401,8 @@ bool CAdvancedSettings::Load()
   //       don't take defaults in.  Defaults are set in the constructor above
   Initialize(); // In case of profile switch.
   ParseSettingsFile("special://xbmc/system/advancedsettings.xml");
-  for (unsigned int i = 0; i < m_settingsFiles.size(); i++)
-    ParseSettingsFile(m_settingsFiles[i]);
+  for (auto & m_settingsFile : m_settingsFiles)
+    ParseSettingsFile(m_settingsFile);
   ParseSettingsFile(CProfilesManager::GetInstance().GetUserDataItem("advancedsettings.xml"));
 
   // Add the list of disc stub extensions (if any) to the list of video extensions
@@ -1268,9 +1268,8 @@ void CAdvancedSettings::AddSettingsFile(const std::string &filename)
 float CAdvancedSettings::GetDisplayLatency(float refreshrate)
 {
   float delay = m_videoDefaultLatency / 1000.0f;
-  for (int i = 0; i < (int) m_videoRefreshLatency.size(); i++)
+  for (auto & videolatency : m_videoRefreshLatency)
   {
-    RefreshVideoLatency& videolatency = m_videoRefreshLatency[i];
     if (refreshrate >= videolatency.refreshmin && refreshrate <= videolatency.refreshmax)
       delay = videolatency.delay / 1000.0f;
   }

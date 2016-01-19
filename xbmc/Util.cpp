@@ -226,11 +226,11 @@ void CUtil::CleanString(const std::string& strFileName,
 
   URIUtils::RemoveExtension(strTitleAndYear);
 
-  for (unsigned int i = 0; i < regexps.size(); i++)
+  for (const auto & regexp : regexps)
   {
-    if (!reTags.RegComp(regexps[i].c_str()))
+    if (!reTags.RegComp(regexp.c_str()))
     { // invalid regexp - complain in logs
-      CLog::Log(LOGERROR, "%s: Invalid string clean RegExp:'%s'", __FUNCTION__, regexps[i].c_str());
+      CLog::Log(LOGERROR, "%s: Invalid string clean RegExp:'%s'", __FUNCTION__, regexp.c_str());
       continue;
     }
     int j=0;
@@ -248,16 +248,16 @@ void CUtil::CleanString(const std::string& strFileName,
     bool initialDots = true;
     bool alreadyContainsSpace = (strTitleAndYear.find(' ') != std::string::npos);
 
-    for (size_t i = 0; i < strTitleAndYear.size(); i++)
+    for (char & i : strTitleAndYear)
     {
-      char c = strTitleAndYear[i];
+      char c = i;
 
       if (c != '.')
         initialDots = false;
 
       if ((c == '_') || ((!alreadyContainsSpace) && !initialDots && (c == '.')))
       {
-        strTitleAndYear[i] = ' ';
+        i = ' ';
       }
     }
   }
@@ -441,16 +441,16 @@ bool CUtil::ExcludeFileOrFolder(const std::string& strFileOrFolder, const std::v
 
   CRegExp regExExcludes(true, CRegExp::autoUtf8);  // case insensitive regex
 
-  for (unsigned int i = 0; i < regexps.size(); i++)
+  for (const auto & regexp : regexps)
   {
-    if (!regExExcludes.RegComp(regexps[i].c_str()))
+    if (!regExExcludes.RegComp(regexp.c_str()))
     { // invalid regexp - complain in logs
-      CLog::Log(LOGERROR, "%s: Invalid exclude RegExp:'%s'", __FUNCTION__, regexps[i].c_str());
+      CLog::Log(LOGERROR, "%s: Invalid exclude RegExp:'%s'", __FUNCTION__, regexp.c_str());
       continue;
     }
     if (regExExcludes.RegFind(strFileOrFolder) > -1)
     {
-      CLog::Log(LOGDEBUG, "%s: File '%s' excluded. (Matches exclude rule RegExp:'%s')", __FUNCTION__, strFileOrFolder.c_str(), regexps[i].c_str());
+      CLog::Log(LOGDEBUG, "%s: File '%s' excluded. (Matches exclude rule RegExp:'%s')", __FUNCTION__, strFileOrFolder.c_str(), regexp.c_str());
       return true;
     }
   }
@@ -1466,18 +1466,18 @@ bool CUtil::RunCommandLine(const std::string& cmdLine, bool waitExit)
   // This allows the python invocation to be written more naturally with any amount of whitespace around the args.
   // But it's still limited, for example quotes inside the strings are not expanded, etc.
   // TODO: Maybe some python library routine can parse this more properly ?
-  for (std::vector<std::string>::iterator it = args.begin(); it != args.end(); ++it)
+  for (auto & arg : args)
   {
     size_t pos;
-    pos = it->find_first_not_of(" \t\n\"'");
+    pos = arg.find_first_not_of(" \t\n\"'");
     if (pos != std::string::npos)
     {
-      it->erase(0, pos);
+      arg.erase(0, pos);
     }
 
-    pos = it->find_last_not_of(" \t\n\"'"); // if it returns npos we'll end up with an empty string which is OK
+    pos = arg.find_last_not_of(" \t\n\"'"); // if it returns npos we'll end up with an empty string which is OK
     {
-      it->erase(++pos, it->size());
+      arg.erase(++pos, arg.size());
     }
   }
 
@@ -1938,9 +1938,9 @@ void CUtil::ScanForExternalSubtitles(const std::string& strMovie, std::vector<st
         TagConv.LoadHead(pStream);
         if (TagConv.m_Langclass.size() >= 2)
         {
-          for (unsigned int k = 0; k < TagConv.m_Langclass.size(); k++)
+          for (auto & m_Langclas : TagConv.m_Langclass)
           {
-            std::string strDest = StringUtils::Format("special://temp/subtitle.%s.%d.smi", TagConv.m_Langclass[k].Name.c_str(), i);
+            std::string strDest = StringUtils::Format("special://temp/subtitle.%s.%d.smi", m_Langclas.Name.c_str(), i);
             if (CFile::Copy(vecSubtitles[i], strDest))
             {
               CLog::Log(LOGINFO, " cached subtitle %s->%s\n", CURL::GetRedacted(vecSubtitles[i]).c_str(), strDest.c_str());
@@ -1984,11 +1984,11 @@ void CUtil::GetExternalStreamDetailsFromFilename(const std::string& strVideo, co
     std::vector<std::string> tokens;
     StringUtils::Tokenize(inputString, tokens, delimiters);
 
-    for (std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); ++it)
+    for (auto & token : tokens)
     {
       if (info.language.empty())
       {
-        std::string langTmp(*it);
+        std::string langTmp(token);
         std::string langCode;
         // try to recognize language
         if (g_LangCodeExpander.ConvertToISO6392T(langTmp, langCode))
@@ -1999,7 +1999,7 @@ void CUtil::GetExternalStreamDetailsFromFilename(const std::string& strVideo, co
       }
 
       // try to recognize a flag
-      std::string flag_tmp(*it);
+      std::string flag_tmp(token);
       StringUtils::ToLower(flag_tmp);
       if (!flag_tmp.compare("none"))
       {
@@ -2017,7 +2017,7 @@ void CUtil::GetExternalStreamDetailsFromFilename(const std::string& strVideo, co
         continue;
       }
 
-      name += " " + (*it);
+      name += " " + token;
     }
   }
   name += " ";
@@ -2040,20 +2040,20 @@ bool CUtil::FindVobSubPair(const std::vector<std::string>& vecSubtitles, const s
     std::string strIdxFile;
     std::string strIdxDirectory;
     URIUtils::Split(strIdxPath, strIdxDirectory, strIdxFile);
-    for (unsigned int j=0; j < vecSubtitles.size(); j++)
+    for (const auto & vecSubtitle : vecSubtitles)
     {
       std::string strSubFile;
       std::string strSubDirectory;
-      URIUtils::Split(vecSubtitles[j], strSubDirectory, strSubFile);
-      if (URIUtils::IsInArchive(vecSubtitles[j]))
+      URIUtils::Split(vecSubtitle, strSubDirectory, strSubFile);
+      if (URIUtils::IsInArchive(vecSubtitle))
         strSubDirectory = CURL::Decode(strSubDirectory);
       if (URIUtils::HasExtension(strSubFile, ".sub") &&
           (URIUtils::PathEquals(URIUtils::ReplaceExtension(strIdxPath,""),
-                                URIUtils::ReplaceExtension(vecSubtitles[j],"")) ||
+                                URIUtils::ReplaceExtension(vecSubtitle,"")) ||
            (strSubDirectory.size() >= 11 &&
             StringUtils::EqualsNoCase(strSubDirectory.substr(6, strSubDirectory.length()-11), URIUtils::ReplaceExtension(strIdxPath,"")))))
       {
-        strSubPath = vecSubtitles[j];
+        strSubPath = vecSubtitle;
         return true;
       }
     }
@@ -2072,16 +2072,16 @@ bool CUtil::IsVobSub(const std::vector<std::string>& vecSubtitles, const std::st
     URIUtils::Split(strSubPath, strSubDirectory, strSubFile);
     if (URIUtils::IsInArchive(strSubPath))
       strSubDirectory = CURL::Decode(strSubDirectory);
-    for (unsigned int j=0; j < vecSubtitles.size(); j++)
+    for (const auto & vecSubtitle : vecSubtitles)
     {
       std::string strIdxFile;
       std::string strIdxDirectory;
-      URIUtils::Split(vecSubtitles[j], strIdxDirectory, strIdxFile);
+      URIUtils::Split(vecSubtitle, strIdxDirectory, strIdxFile);
       if (URIUtils::HasExtension(strIdxFile, ".idx") &&
-          (URIUtils::PathEquals(URIUtils::ReplaceExtension(vecSubtitles[j],""),
+          (URIUtils::PathEquals(URIUtils::ReplaceExtension(vecSubtitle,""),
                                 URIUtils::ReplaceExtension(strSubPath,"")) ||
            (strSubDirectory.size() >= 11 &&
-            StringUtils::EqualsNoCase(strSubDirectory.substr(6, strSubDirectory.length()-11), URIUtils::ReplaceExtension(vecSubtitles[j],"")))))
+            StringUtils::EqualsNoCase(strSubDirectory.substr(6, strSubDirectory.length()-11), URIUtils::ReplaceExtension(vecSubtitle,"")))))
         return true;
     }
   }
@@ -2103,10 +2103,10 @@ std::string CUtil::GetVobSubSubFromIdx(const std::string& vobSubIdx)
   // look inside a .rar or .zip in the same directory
   const std::string archTypes[] = { "rar", "zip" };
   std::string vobSubFilename = URIUtils::GetFileName(vobSub);
-  for (unsigned int i = 0; i < ARRAY_SIZE(archTypes); i++)
+  for (const auto & archType : archTypes)
   {
-    vobSub = URIUtils::CreateArchivePath(archTypes[i],
-                                         CURL(URIUtils::ReplaceExtension(vobSubIdx, std::string(".") + archTypes[i])),
+    vobSub = URIUtils::CreateArchivePath(archType,
+                                         CURL(URIUtils::ReplaceExtension(vobSubIdx, std::string(".") + archType)),
                                          vobSubFilename).Get();
     if (CFile::Exists(vobSub))
       return vobSub;

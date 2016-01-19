@@ -78,8 +78,8 @@ void CScriptInvocationManager::Process()
   tempList.clear();
 
   // let the invocation handlers do their processing
-  for (LanguageInvocationHandlerMap::iterator it = m_invocationHandlers.begin(); it != m_invocationHandlers.end(); ++it)
-    it->second->Process();
+  for (auto & m_invocationHandler : m_invocationHandlers)
+    m_invocationHandler.second->Process();
 }
 
 void CScriptInvocationManager::Uninitialize()
@@ -91,8 +91,8 @@ void CScriptInvocationManager::Uninitialize()
 
   // make sure all scripts are done
   std::vector<LanguageInvokerThread> tempList;
-  for (LanguageInvokerThreadMap::iterator script = m_scripts.begin(); script != m_scripts.end(); ++script)
-    tempList.push_back(script->second);
+  for (auto & m_script : m_scripts)
+    tempList.push_back(m_script.second);
 
   m_scripts.clear();
   m_scriptPaths.clear();
@@ -103,17 +103,17 @@ void CScriptInvocationManager::Uninitialize()
   // finally stop and remove the finished threads but we do it outside of any
   // locks in case of any callbacks from the stop or destruction logic of
   // CLanguageInvokerThread or the ILanguageInvoker implementation
-  for (std::vector<LanguageInvokerThread>::iterator it = tempList.begin(); it != tempList.end(); ++it)
+  for (auto & it : tempList)
   {
-    if (!it->done)
-      it->thread->Stop(true);
+    if (!it.done)
+      it.thread->Stop(true);
   }
   tempList.clear();
 
   lock.Enter();
   // uninitialize all invocation handlers and then remove them
-  for (LanguageInvocationHandlerMap::iterator it = m_invocationHandlers.begin(); it != m_invocationHandlers.end(); ++it)
-    it->second->Uninitialize();
+  for (auto & m_invocationHandler : m_invocationHandlers)
+    m_invocationHandler.second->Uninitialize();
 
   m_invocationHandlers.clear();
 }
@@ -154,8 +154,8 @@ void CScriptInvocationManager::RegisterLanguageInvocationHandler(ILanguageInvoca
   if (invocationHandler == NULL || extensions.empty())
     return;
 
-  for (std::set<std::string>::const_iterator extension = extensions.begin(); extension != extensions.end(); ++extension)
-    RegisterLanguageInvocationHandler(invocationHandler, *extension);
+  for (const auto & extension : extensions)
+    RegisterLanguageInvocationHandler(invocationHandler, extension);
 }
 
 void CScriptInvocationManager::UnregisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler)

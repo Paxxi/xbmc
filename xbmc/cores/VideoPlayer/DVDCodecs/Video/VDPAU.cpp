@@ -287,15 +287,15 @@ void CVDPAUContext::SpewHardwareAvailable()  //CopyrighVDPAUt (c) 2008 Wladimir 
   CLog::Log(LOGNOTICE,"VDPAU Decoder capabilities:");
   CLog::Log(LOGNOTICE,"name          level macbs width height");
   CLog::Log(LOGNOTICE,"------------------------------------");
-  for(unsigned int x=0; x<decoder_profile_count; ++x)
+  for(auto & decoder_profile : decoder_profiles)
   {
     VdpBool is_supported = false;
     uint32_t max_level, max_macroblocks, max_width, max_height;
-    rv = m_vdpProcs.vdp_decoder_query_caps(m_vdpDevice, decoder_profiles[x].id,
+    rv = m_vdpProcs.vdp_decoder_query_caps(m_vdpDevice, decoder_profile.id,
                                 &is_supported, &max_level, &max_macroblocks, &max_width, &max_height);
     if(rv == VDP_STATUS_OK && is_supported)
     {
-      CLog::Log(LOGNOTICE,"%-16s %2i %5i %5i %5i\n", decoder_profiles[x].name,
+      CLog::Log(LOGNOTICE,"%-16s %2i %5i %5i %5i\n", decoder_profile.name,
                 max_level, max_macroblocks, max_width, max_height);
     }
   }
@@ -3300,20 +3300,19 @@ void COutput::ReleaseBufferPool()
   CSingleLock lock(m_bufferPool.renderPicSec);
 
   // release all output surfaces
-  for (unsigned int i = 0; i < m_bufferPool.outputSurfaces.size(); ++i)
+  for (unsigned int outputSurface : m_bufferPool.outputSurfaces)
   {
-    if (m_bufferPool.outputSurfaces[i] == VDP_INVALID_HANDLE)
+    if (outputSurface == VDP_INVALID_HANDLE)
       continue;
-    vdp_st = m_config.context->GetProcs().vdp_output_surface_destroy(m_bufferPool.outputSurfaces[i]);
+    vdp_st = m_config.context->GetProcs().vdp_output_surface_destroy(outputSurface);
     CheckStatus(vdp_st, __LINE__);
   }
   m_bufferPool.outputSurfaces.clear();
 
   // wait for all fences
   XbmcThreads::EndTime timeout(1000);
-  for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+  for (auto pic : m_bufferPool.allRenderPics)
   {
-    CVdpauRenderPicture *pic = m_bufferPool.allRenderPics[i];
     if (pic->usefence)
     {
 #ifdef GL_ARB_sync
@@ -3342,9 +3341,9 @@ void COutput::ReleaseBufferPool()
   ProcessSyncPicture();
 
   // invalidate all used render pictures
-  for (unsigned int i = 0; i < m_bufferPool.usedRenderPics.size(); ++i)
+  for (int usedRenderPic : m_bufferPool.usedRenderPics)
   {
-    CVdpauRenderPicture *pic = m_bufferPool.allRenderPics[m_bufferPool.usedRenderPics[i]];
+    CVdpauRenderPicture *pic = m_bufferPool.allRenderPics[usedRenderPic];
     pic->valid = false;
   }
 }
@@ -3358,9 +3357,9 @@ void COutput::PreCleanup()
   ProcessSyncPicture();
 
   CSingleLock lock(m_bufferPool.renderPicSec);
-  for (unsigned int i = 0; i < m_bufferPool.outputSurfaces.size(); ++i)
+  for (unsigned int & outputSurface : m_bufferPool.outputSurfaces)
   {
-    if (m_bufferPool.outputSurfaces[i] == VDP_INVALID_HANDLE)
+    if (outputSurface == VDP_INVALID_HANDLE)
       continue;
 
     // check if output surface is in use
@@ -3370,7 +3369,7 @@ void COutput::PreCleanup()
     for (it = m_bufferPool.usedRenderPics.begin(); it != m_bufferPool.usedRenderPics.end(); ++it)
     {
       pic = m_bufferPool.allRenderPics[*it];
-      if ((pic->sourceIdx == m_bufferPool.outputSurfaces[i]) && pic->valid)
+      if ((pic->sourceIdx == outputSurface) && pic->valid)
       {
         used = true;
         break;
@@ -3382,7 +3381,7 @@ void COutput::PreCleanup()
 #ifdef GL_NV_vdpau_interop
     // unmap surface
     std::map<VdpOutputSurface, VdpauBufferPool::GLVideoSurface>::iterator it_map;
-    it_map = m_bufferPool.glOutputSurfaceMap.find(m_bufferPool.outputSurfaces[i]);
+    it_map = m_bufferPool.glOutputSurfaceMap.find(outputSurface);
     if (it_map == m_bufferPool.glOutputSurfaceMap.end())
     {
       CLog::Log(LOGERROR, "%s - could not find gl surface", __FUNCTION__);
@@ -3393,10 +3392,10 @@ void COutput::PreCleanup()
     m_bufferPool.glOutputSurfaceMap.erase(it_map);
 #endif
 
-    vdp_st = m_config.context->GetProcs().vdp_output_surface_destroy(m_bufferPool.outputSurfaces[i]);
+    vdp_st = m_config.context->GetProcs().vdp_output_surface_destroy(outputSurface);
     CheckStatus(vdp_st, __LINE__);
 
-    m_bufferPool.outputSurfaces[i] = VDP_INVALID_HANDLE;
+    outputSurface = VDP_INVALID_HANDLE;
     if (g_advancedSettings.CanLogComponent(LOGVIDEO))
       CLog::Log(LOGDEBUG, "VDPAU::PreCleanup - released output surface");
   }
@@ -3405,10 +3404,10 @@ void COutput::PreCleanup()
 
 void COutput::InitMixer()
 {
-  for (unsigned int i = 0; i < m_bufferPool.outputSurfaces.size(); ++i)
+  for (unsigned int & outputSurface : m_bufferPool.outputSurfaces)
   {
     m_mixer.m_dataPort.SendOutMessage(CMixerDataProtocol::BUFFER,
-                                      &m_bufferPool.outputSurfaces[i],
+                                      &outputSurface,
                                       sizeof(VdpOutputSurface));
   }
 }
@@ -3463,9 +3462,9 @@ bool COutput::GLInit()
 
 #ifdef GL_ARB_sync
   bool hasfence = g_Windowing.IsExtSupported("GL_ARB_sync");
-  for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+  for (auto & allRenderPic : m_bufferPool.allRenderPics)
   {
-    m_bufferPool.allRenderPics[i]->usefence = hasfence;
+    allRenderPic->usefence = hasfence;
   }
 #endif
 

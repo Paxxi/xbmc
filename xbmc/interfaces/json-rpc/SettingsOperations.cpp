@@ -495,11 +495,11 @@ bool CSettingsOperations::SerializeSettingInt(const CSettingInt* setting, CVaria
     {
       obj["options"] = CVariant(CVariant::VariantTypeArray);
       const StaticIntegerSettingOptions& options = setting->GetOptions();
-      for (StaticIntegerSettingOptions::const_iterator itOption = options.begin(); itOption != options.end(); ++itOption)
+      for (const auto & option : options)
       {
         CVariant varOption(CVariant::VariantTypeObject);
-        varOption["label"] = g_localizeStrings.Get(itOption->first);
-        varOption["value"] = itOption->second;
+        varOption["label"] = g_localizeStrings.Get(option.first);
+        varOption["value"] = option.second;
         obj["options"].push_back(varOption);
       }
       break;
@@ -704,6 +704,6 @@ bool CSettingsOperations::SerializeSettingControl(const ISettingControl* control
 void CSettingsOperations::SerializeSettingListValues(const std::vector<CVariant> &values, CVariant &obj)
 {
   obj = CVariant(CVariant::VariantTypeArray);
-  for (std::vector<CVariant>::const_iterator itValue = values.begin(); itValue != values.end(); ++itValue)
-    obj.push_back(*itValue);
+  for (const auto & value : values)
+    obj.push_back(value);
 }

@@ -178,9 +178,8 @@ void CPlayListXML::Save(const std::string& strFileName) const
   std::string write;
   write += StringUtils::Format("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
   write += StringUtils::Format("<streams>\n");
-  for (int i = 0; i < (int)m_vecItems.size(); ++i)
+  for (auto item : m_vecItems)
   {
-    CFileItemPtr item = m_vecItems[i];
     write += StringUtils::Format("  <stream>\n" );
     write += StringUtils::Format("    <url>%s</url>", item->GetPath().c_str() );
     write += StringUtils::Format("    <name>%s</name>", item->GetLabel().c_str() );

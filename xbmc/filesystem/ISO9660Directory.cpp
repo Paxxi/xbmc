@@ -58,9 +58,9 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
   {
     strSearchMask = "\\";
   }
-  for (int i = 0; i < (int)strSearchMask.size(); ++i )
+  for (char & i : strSearchMask)
   {
-    if (strSearchMask[i] == '/') strSearchMask[i] = '\\';
+    if (i == '/') i = '\\';
   }
 
   hFind = m_isoReader.FindFirstFile((char*)strSearchMask.c_str(), &wfd);

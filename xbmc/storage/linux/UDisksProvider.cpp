@@ -222,8 +222,8 @@ void CUDisksProvider::Initialize()
 
   CLog::Log(LOGDEBUG, "UDisks: Querying available devices");
   std::vector<std::string> devices = EnumerateDisks();
-  for (unsigned int i = 0; i < devices.size(); i++)
-    DeviceAdded(devices[i].c_str(), NULL);
+  for (auto & device : devices)
+    DeviceAdded(device.c_str(), NULL);
 }
 
 bool CUDisksProvider::Eject(const std::string& mountpath)

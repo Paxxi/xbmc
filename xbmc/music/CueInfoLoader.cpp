@@ -34,8 +34,8 @@ void CueInfoLoader::Load(const std::string& aStrCuesheet, CFileItemPtr aFileItem
     {
       std::vector<std::string> MediaFileVec;
       doc.GetMediaFiles(MediaFileVec);
-      for (std::vector<std::string>::iterator itMedia = MediaFileVec.begin(); itMedia != MediaFileVec.end(); itMedia++)
-        doc.UpdateMediaFile(*itMedia, songPath);
+      for (auto & itMedia : MediaFileVec)
+        doc.UpdateMediaFile(itMedia, songPath);
     }
   }
 

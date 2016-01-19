@@ -91,9 +91,9 @@ bool CGUIDialogGamepad::OnAction(const CAction &action)
     }
 
     std::string strHiddenInput(m_strUserInput);
-    for (int i = 0; i < (int)strHiddenInput.size(); i++)
+    for (char & i : strHiddenInput)
     {
-      strHiddenInput[i] = m_cHideInputChar;
+      i = m_cHideInputChar;
     }
     SetLine(2, CVariant{std::move(strHiddenInput)});
     return true;

@@ -163,9 +163,8 @@ void CGUIDialogPeripheralSettings::InitializeSettings()
   }
   
   std::vector<CSetting*> settings = peripheral->GetSettings();
-  for (std::vector<CSetting*>::iterator itSetting = settings.begin(); itSetting != settings.end(); ++itSetting)
+  for (auto setting : settings)
   {
-    CSetting *setting = *itSetting;
     if (setting == NULL)
       continue;
 

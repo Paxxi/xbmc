@@ -148,10 +148,10 @@ bool CScraperUrl::ParseString(std::string strUrl)
 
 const CScraperUrl::SUrlEntry CScraperUrl::GetFirstThumb(const std::string &type) const
 {
-  for (std::vector<SUrlEntry>::const_iterator iter=m_url.begin();iter != m_url.end();++iter)
+  for (const auto & iter : m_url)
   {
-    if (iter->m_type == URL_TYPE_GENERAL && (type.empty() || type == "thumb" || iter->m_aspect == type))
-      return *iter;
+    if (iter.m_type == URL_TYPE_GENERAL && (type.empty() || type == "thumb" || iter.m_aspect == type))
+      return iter;
   }
 
   SUrlEntry result;
@@ -164,11 +164,11 @@ const CScraperUrl::SUrlEntry CScraperUrl::GetFirstThumb(const std::string &type)
 
 const CScraperUrl::SUrlEntry CScraperUrl::GetSeasonThumb(int season, const std::string &type) const
 {
-  for (std::vector<SUrlEntry>::const_iterator iter=m_url.begin();iter != m_url.end();++iter)
+  for (const auto & iter : m_url)
   {
-    if (iter->m_type == URL_TYPE_SEASON && iter->m_season == season &&
-       (type.empty() || type == "thumb" || iter->m_aspect == type))
-      return *iter;
+    if (iter.m_type == URL_TYPE_SEASON && iter.m_season == season &&
+       (type.empty() || type == "thumb" || iter.m_aspect == type))
+      return iter;
   }
 
   SUrlEntry result;
@@ -182,10 +182,10 @@ const CScraperUrl::SUrlEntry CScraperUrl::GetSeasonThumb(int season, const std::
 unsigned int CScraperUrl::GetMaxSeasonThumb() const
 {
   unsigned int maxSeason = 0;
-  for (std::vector<SUrlEntry>::const_iterator iter=m_url.begin();iter != m_url.end();++iter)
+  for (const auto & iter : m_url)
   {
-    if (iter->m_type == URL_TYPE_SEASON && iter->m_season > 0 && (unsigned int)iter->m_season > maxSeason)
-      maxSeason = iter->m_season;
+    if (iter.m_type == URL_TYPE_SEASON && iter.m_season > 0 && (unsigned int)iter.m_season > maxSeason)
+      maxSeason = iter.m_season;
   }
   return maxSeason;
 }
@@ -349,14 +349,14 @@ std::string CScraperUrl::GetThumbURL(const CScraperUrl::SUrlEntry &entry)
 
 void CScraperUrl::GetThumbURLs(std::vector<std::string> &thumbs, const std::string &type, int season) const
 {
-  for (std::vector<SUrlEntry>::const_iterator iter = m_url.begin(); iter != m_url.end(); ++iter)
+  for (const auto & iter : m_url)
   {
-    if (iter->m_aspect == type || type.empty() || type == "thumb" || iter->m_aspect.empty())
+    if (iter.m_aspect == type || type.empty() || type == "thumb" || iter.m_aspect.empty())
     {
-      if ((iter->m_type == CScraperUrl::URL_TYPE_GENERAL && season == -1)
-       || (iter->m_type == CScraperUrl::URL_TYPE_SEASON && iter->m_season == season))
+      if ((iter.m_type == CScraperUrl::URL_TYPE_GENERAL && season == -1)
+       || (iter.m_type == CScraperUrl::URL_TYPE_SEASON && iter.m_season == season))
       {
-        thumbs.push_back(GetThumbURL(*iter));
+        thumbs.push_back(GetThumbURL(iter));
       }
     }
   }

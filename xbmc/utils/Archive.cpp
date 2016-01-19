@@ -206,8 +206,8 @@ CArchive& CArchive::operator<<(const CVariant& variant)
 CArchive& CArchive::operator<<(const std::vector<std::string>& strArray)
 {
   *this << strArray.size();
-  for (size_t index = 0; index < strArray.size(); index++)
-    *this << strArray.at(index);
+  for (const auto & index : strArray)
+    *this << index;
 
   return *this;
 }
@@ -215,8 +215,8 @@ CArchive& CArchive::operator<<(const std::vector<std::string>& strArray)
 CArchive& CArchive::operator<<(const std::vector<int>& iArray)
 {
   *this << iArray.size();
-  for (size_t index = 0; index < iArray.size(); index++)
-    *this << iArray.at(index);
+  for (int index : iArray)
+    *this << index;
 
   return *this;
 }

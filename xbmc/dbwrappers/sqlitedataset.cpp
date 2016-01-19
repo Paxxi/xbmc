@@ -324,8 +324,8 @@ int SqliteDatabase::drop_analytics(void) {
   sprintf(sqlcmd, "SELECT name FROM sqlite_master WHERE type == 'index'");
   if ((last_err = sqlite3_exec(conn, sqlcmd, &callback, &res, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
 
-  for (size_t i=0; i < res.records.size(); i++) {
-    sprintf(sqlcmd,"DROP INDEX '%s'", res.records[i]->at(0).get_asString().c_str());
+  for (auto & record : res.records) {
+    sprintf(sqlcmd,"DROP INDEX '%s'", record->at(0).get_asString().c_str());
     if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   res.clear();
@@ -334,8 +334,8 @@ int SqliteDatabase::drop_analytics(void) {
   sprintf(sqlcmd, "SELECT name FROM sqlite_master WHERE type == 'view'");
   if ((last_err = sqlite3_exec(conn, sqlcmd, &callback, &res, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
 
-  for (size_t i=0; i < res.records.size(); i++) {
-    sprintf(sqlcmd,"DROP VIEW '%s'", res.records[i]->at(0).get_asString().c_str());
+  for (auto & record : res.records) {
+    sprintf(sqlcmd,"DROP VIEW '%s'", record->at(0).get_asString().c_str());
     if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   res.clear();
@@ -344,8 +344,8 @@ int SqliteDatabase::drop_analytics(void) {
   sprintf(sqlcmd, "SELECT name FROM sqlite_master WHERE type == 'trigger'");
   if ((last_err = sqlite3_exec(conn, sqlcmd, &callback, &res, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
 
-  for (size_t i=0; i < res.records.size(); i++) {
-    sprintf(sqlcmd,"DROP TRIGGER '%s'", res.records[i]->at(0).get_asString().c_str());
+  for (auto & record : res.records) {
+    sprintf(sqlcmd,"DROP TRIGGER '%s'", record->at(0).get_asString().c_str());
     if ((last_err = sqlite3_exec(conn, sqlcmd, NULL, NULL, NULL)) != SQLITE_OK) return DB_UNEXPECTED_RESULT;
   }
   // res would be cleared on destruct
@@ -490,8 +490,8 @@ void SqliteDataset::make_query(StringList &_sql) {
   if (autocommit) db->start_transaction();
 
 
-  for (std::list<std::string>::iterator i =_sql.begin(); i!=_sql.end(); ++i) {
-  query = *i;
+  for (auto & i : _sql) {
+  query = i;
   char* err=NULL; 
   Dataset::parse_sql(query);
   if (db->setErr(sqlite3_exec(this->handle(),query.c_str(),NULL,NULL,&err),query.c_str())!=SQLITE_OK) {

@@ -993,55 +993,55 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     const Property &prop = info[1];
     if (cat.name == "player")
     {
-      for (size_t i = 0; i < sizeof(player_labels) / sizeof(infomap); i++)
+      for (auto player_label : player_labels)
       {
         if (prop.name == player_labels[i].str)
-          return player_labels[i].val;
+          return player_label.val;
       }
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++)
+      for (auto player_time : player_times)
       {
         if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
+          return AddMultiInfo(GUIInfo(player_time.val, TranslateTimeFormat(prop.param())));
       }
       if (prop.num_params() == 1)
       {
-        for (size_t i = 0; i < sizeof(player_param) / sizeof(infomap); i++)
+        for (auto i : player_param)
         {
           if (prop.name == player_param[i].str)
-            return AddMultiInfo(GUIInfo(player_param[i].val, ConditionalStringParameter(prop.param())));
+            return AddMultiInfo(GUIInfo(i.val, ConditionalStringParameter(prop.param())));
         }
       }
     }
     else if (cat.name == "weather")
     {
-      for (size_t i = 0; i < sizeof(weather) / sizeof(infomap); i++)
+      for (auto i : weather)
       {
         if (prop.name == weather[i].str)
-          return weather[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "network")
     {
-      for (size_t i = 0; i < sizeof(network_labels) / sizeof(infomap); i++)
+      for (auto network_label : network_labels)
       {
         if (prop.name == network_labels[i].str)
-          return network_labels[i].val;
+          return network_label.val;
       }
     }
     else if (cat.name == "musicpartymode")
     {
-      for (size_t i = 0; i < sizeof(musicpartymode) / sizeof(infomap); i++)
+      for (auto i : musicpartymode)
       {
         if (prop.name == musicpartymode[i].str)
-          return musicpartymode[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "system")
     {
-      for (size_t i = 0; i < sizeof(system_labels) / sizeof(infomap); i++)
+      for (auto system_label : system_labels)
       {
         if (prop.name == system_labels[i].str)
-          return system_labels[i].val;
+          return system_label.val;
       }
       if (prop.num_params() == 1)
       {
@@ -1052,10 +1052,10 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
           StringUtils::ToLower(paramCopy);
           return AddMultiInfo(GUIInfo(SYSTEM_GET_BOOL, ConditionalStringParameter(paramCopy, true)));
         }
-        for (size_t i = 0; i < sizeof(system_param) / sizeof(infomap); i++)
+        for (auto i : system_param)
         {
           if (prop.name == system_param[i].str)
-            return AddMultiInfo(GUIInfo(system_param[i].val, ConditionalStringParameter(param)));
+            return AddMultiInfo(GUIInfo(i.val, ConditionalStringParameter(param)));
         }
         if (prop.name == "memory")
         {
@@ -1147,10 +1147,10 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "musicplayer")
     {
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
+      for (auto player_time : player_times) // TODO: remove these, they're repeats
       {
         if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
+          return AddMultiInfo(GUIInfo(player_time.val, TranslateTimeFormat(prop.param())));
       }
       if (prop.name == "content" && prop.num_params())
         return AddMultiInfo(GUIInfo(MUSICPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
@@ -1165,50 +1165,50 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "videoplayer")
     {
-      for (size_t i = 0; i < sizeof(player_times) / sizeof(infomap); i++) // TODO: remove these, they're repeats
+      for (auto player_time : player_times) // TODO: remove these, they're repeats
       {
         if (prop.name == player_times[i].str)
-          return AddMultiInfo(GUIInfo(player_times[i].val, TranslateTimeFormat(prop.param())));
+          return AddMultiInfo(GUIInfo(player_time.val, TranslateTimeFormat(prop.param())));
       }
       if (prop.name == "content" && prop.num_params())
         return AddMultiInfo(GUIInfo(VIDEOPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
-      for (size_t i = 0; i < sizeof(videoplayer) / sizeof(infomap); i++)
+      for (auto i : videoplayer)
       {
         if (prop.name == videoplayer[i].str)
-          return videoplayer[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "slideshow")
     {
-      for (size_t i = 0; i < sizeof(slideshow) / sizeof(infomap); i++)
+      for (auto i : slideshow)
       {
         if (prop.name == slideshow[i].str)
-          return slideshow[i].val;
+          return i.val;
       }
       return CPictureInfoTag::TranslateString(prop.name);
     }
     else if (cat.name == "container")
     {
-      for (size_t i = 0; i < sizeof(mediacontainer) / sizeof(infomap); i++) // these ones don't have or need an id
+      for (auto i : mediacontainer) // these ones don't have or need an id
       {
         if (prop.name == mediacontainer[i].str)
-          return mediacontainer[i].val;
+          return i.val;
       }
       int id = atoi(cat.param().c_str());
-      for (size_t i = 0; i < sizeof(container_bools) / sizeof(infomap); i++) // these ones can have an id (but don't need to?)
+      for (auto container_bool : container_bools) // these ones can have an id (but don't need to?)
       {
         if (prop.name == container_bools[i].str)
-          return id ? AddMultiInfo(GUIInfo(container_bools[i].val, id)) : container_bools[i].val;
+          return id ? AddMultiInfo(GUIInfo(container_bool.val, id)) : container_bool.val;
       }
-      for (size_t i = 0; i < sizeof(container_ints) / sizeof(infomap); i++) // these ones can have an int param on the property
+      for (auto container_int : container_ints) // these ones can have an int param on the property
       {
         if (prop.name == container_ints[i].str)
-          return AddMultiInfo(GUIInfo(container_ints[i].val, id, atoi(prop.param().c_str())));
+          return AddMultiInfo(GUIInfo(container_int.val, id, atoi(prop.param().c_str())));
       }
-      for (size_t i = 0; i < sizeof(container_str) / sizeof(infomap); i++) // these ones have a string param on the property
+      for (auto i : container_str) // these ones have a string param on the property
       {
         if (prop.name == container_str[i].str)
-          return AddMultiInfo(GUIInfo(container_str[i].val, id, ConditionalStringParameter(prop.param())));
+          return AddMultiInfo(GUIInfo(i.val, id, ConditionalStringParameter(prop.param())));
       }
       if (prop.name == "sortdirection")
       {
@@ -1242,26 +1242,26 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "visualisation")
     {
-      for (size_t i = 0; i < sizeof(visualisation) / sizeof(infomap); i++)
+      for (auto i : visualisation)
       {
         if (prop.name == visualisation[i].str)
-          return visualisation[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "fanart")
     {
-      for (size_t i = 0; i < sizeof(fanart_labels) / sizeof(infomap); i++)
+      for (auto fanart_label : fanart_labels)
       {
         if (prop.name == fanart_labels[i].str)
-          return fanart_labels[i].val;
+          return fanart_label.val;
       }
     }
     else if (cat.name == "skin")
     {
-      for (size_t i = 0; i < sizeof(skin_labels) / sizeof(infomap); i++)
+      for (auto skin_label : skin_labels)
       {
         if (prop.name == skin_labels[i].str)
-          return skin_labels[i].val;
+          return skin_label.val;
       }
       if (prop.num_params())
       {
@@ -1286,26 +1286,26 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         if (winID != WINDOW_INVALID)
           return AddMultiInfo(GUIInfo(WINDOW_PROPERTY, winID, ConditionalStringParameter(prop.param())));
       }
-      for (size_t i = 0; i < sizeof(window_bools) / sizeof(infomap); i++)
+      for (auto window_bool : window_bools)
       {
         if (prop.name == window_bools[i].str)
         { // TODO: The parameter for these should really be on the first not the second property
           if (prop.param().find("xml") != std::string::npos)
-            return AddMultiInfo(GUIInfo(window_bools[i].val, 0, ConditionalStringParameter(prop.param())));
+            return AddMultiInfo(GUIInfo(window_bool.val, 0, ConditionalStringParameter(prop.param())));
           int winID = prop.param().empty() ? WINDOW_INVALID : CButtonTranslator::TranslateWindow(prop.param());
-          return winID != WINDOW_INVALID ? AddMultiInfo(GUIInfo(window_bools[i].val, winID, 0)) : window_bools[i].val;
+          return winID != WINDOW_INVALID ? AddMultiInfo(GUIInfo(window_bool.val, winID, 0)) : window_bool.val;
         }
       }
     }
     else if (cat.name == "control")
     {
-      for (size_t i = 0; i < sizeof(control_labels) / sizeof(infomap); i++)
+      for (auto control_label : control_labels)
       {
         if (prop.name == control_labels[i].str)
         { // TODO: The parameter for these should really be on the first not the second property
           int controlID = atoi(prop.param().c_str());
           if (controlID)
-            return AddMultiInfo(GUIInfo(control_labels[i].val, controlID, 0));
+            return AddMultiInfo(GUIInfo(control_label.val, controlID, 0));
           return 0;
         }
       }
@@ -1319,11 +1319,11 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     else if (cat.name == "playlist")
     {
       int ret = -1;
-      for (size_t i = 0; i < sizeof(playlist) / sizeof(infomap); i++)
+      for (auto i : playlist)
       {
         if (prop.name == playlist[i].str)
         {
-          ret = playlist[i].val;
+          ret = i.val;
           break;
         }
       }
@@ -1346,18 +1346,18 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
     }
     else if (cat.name == "pvr")
     {
-      for (size_t i = 0; i < sizeof(pvr) / sizeof(infomap); i++)
+      for (auto i : pvr)
       {
         if (prop.name == pvr[i].str)
-          return pvr[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "adsp")
     {
-      for (size_t i = 0; i < sizeof(adsp) / sizeof(infomap); i++)
+      for (auto i : adsp)
       {
         if (prop.name == adsp[i].str)
-          return adsp[i].val;
+          return i.val;
       }
     }
     else if (cat.name == "rds")
@@ -1365,10 +1365,10 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       if (prop.name == "getline")
         return AddMultiInfo(GUIInfo(RDS_GET_RADIOTEXT_LINE, atoi(prop.param(0).c_str())));
 
-      for (size_t i = 0; i < sizeof(rds) / sizeof(infomap); i++)
+      for (auto rd : rds)
       {
         if (prop.name == rds[i].str)
-          return rds[i].val;
+          return rd.val;
       }
     }
   }
@@ -1453,10 +1453,10 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 
 int CGUIInfoManager::TranslateListItem(const Property &info)
 {
-  for (size_t i = 0; i < sizeof(listitem_labels) / sizeof(infomap); i++) // these ones don't have or need an id
+  for (auto listitem_label : listitem_labels) // these ones don't have or need an id
   {
     if (info.name == listitem_labels[i].str)
-      return listitem_labels[i].val;
+      return listitem_label.val;
   }
   if (info.name == "property" && info.num_params() == 1)
   {
@@ -1476,10 +1476,10 @@ int CGUIInfoManager::TranslateListItem(const Property &info)
 
 int CGUIInfoManager::TranslateMusicPlayerString(const std::string &info) const
 {
-  for (size_t i = 0; i < sizeof(musicplayer) / sizeof(infomap); i++)
+  for (auto i : musicplayer)
   {
     if (info == musicplayer[i].str)
-      return musicplayer[i].val;
+      return i.val;
   }
   return 0;
 }

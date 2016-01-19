@@ -104,7 +104,7 @@ void CDemuxStreamSubtitlePVRClient::GetStreamInfo(std::string& strInfo)
 CDVDDemuxPVRClient::CDVDDemuxPVRClient() : CDVDDemux()
 {
   m_pInput = NULL;
-  for (int i = 0; i < MAX_STREAMS; i++) m_streams[i] = NULL;
+  for (auto & m_stream : m_streams) m_stream = NULL;
 }
 
 CDVDDemuxPVRClient::~CDVDDemuxPVRClient()
@@ -125,10 +125,10 @@ bool CDVDDemuxPVRClient::Open(CDVDInputStream* pInput)
 
 void CDVDDemuxPVRClient::Dispose()
 {
-  for (int i = 0; i < MAX_STREAMS; i++)
+  for (auto & m_stream : m_streams)
   {
-    delete m_streams[i];
-    m_streams[i] = NULL;
+    delete m_stream;
+    m_stream = NULL;
   }
 
   m_pInput = NULL;

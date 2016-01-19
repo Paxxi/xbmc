@@ -385,10 +385,10 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
   if (!m_lastAxisMap.empty())
   {
     // Process all the stored axis.
-    for (std::map<std::string, std::map<int, float> >::iterator iter = m_lastAxisMap.begin(); iter != m_lastAxisMap.end(); ++iter)
+    for (auto & iter : m_lastAxisMap)
     {
-      for (std::map<int, float>::iterator iterAxis = (*iter).second.begin(); iterAxis != (*iter).second.end(); ++iterAxis)
-        ProcessJoystickEvent(windowId, (*iter).first, (*iterAxis).first, JACTIVE_AXIS, (*iterAxis).second);
+      for (std::map<int, float>::iterator iterAxis = iter.second.begin(); iterAxis != iter.second.end(); ++iterAxis)
+        ProcessJoystickEvent(windowId, iter.first, (*iterAxis).first, JACTIVE_AXIS, (*iterAxis).second);
     }
   }
 

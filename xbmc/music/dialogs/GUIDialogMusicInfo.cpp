@@ -238,9 +238,8 @@ void CGUIDialogMusicInfo::SetArtist(const CArtist& artist, const std::string &pa
 void CGUIDialogMusicInfo::SetSongs(const VECSONGS &songs)
 {
   m_albumSongs->Clear();
-  for (unsigned int i = 0; i < songs.size(); i++)
+  for (const auto & song : songs)
   {
-    const CSong& song = songs[i];
     CFileItemPtr item(new CFileItem(song));
     m_albumSongs->Add(item);
   }
@@ -255,10 +254,10 @@ void CGUIDialogMusicInfo::SetDiscography()
   std::vector<int> albumsByArtist;
   database.GetAlbumsByArtist(m_artist.idArtist, true, albumsByArtist);
 
-  for (unsigned int i=0;i<m_artist.discography.size();++i)
+  for (auto & i : m_artist.discography)
   {
-    CFileItemPtr item(new CFileItem(m_artist.discography[i].first));
-    item->SetLabel2(m_artist.discography[i].second);
+    CFileItemPtr item(new CFileItem(i.first));
+    item->SetLabel2(i.second);
 
     int idAlbum = -1;
     for (std::vector<int>::const_iterator album = albumsByArtist.begin(); album != albumsByArtist.end(); ++album)

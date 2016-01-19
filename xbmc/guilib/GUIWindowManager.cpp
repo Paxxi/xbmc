@@ -427,10 +427,8 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
   bool handled = false;
 //  CLog::Log(LOGDEBUG,"SendMessage: mess=%d send=%d control=%d param1=%d", message.GetMessage(), message.GetSenderId(), message.GetControlId(), message.GetParam1());
   // Send the message to all none window targets
-  for (int i = 0; i < (int) m_vecMsgTargets.size(); i++)
+  for (auto pMsgTarget : m_vecMsgTargets)
   {
-    IMsgTargetCallback* pMsgTarget = m_vecMsgTargets[i];
-
     if (pMsgTarget)
     {
       if (pMsgTarget->OnMessage( message )) handled = true;
@@ -1199,9 +1197,8 @@ void CGUIWindowManager::DeInitialize()
   m_vecMsgTargets.erase( m_vecMsgTargets.begin(), m_vecMsgTargets.end() );
 
   // destroy our custom windows...
-  for (int i = 0; i < (int)m_vecCustomWindows.size(); i++)
+  for (auto pWindow : m_vecCustomWindows)
   {
-    CGUIWindow *pWindow = m_vecCustomWindows[i];
     Remove(pWindow->GetID());
     delete pWindow;
   }

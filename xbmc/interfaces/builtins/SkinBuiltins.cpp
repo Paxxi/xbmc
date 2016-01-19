@@ -114,9 +114,9 @@ static int SelectBool(const std::vector<std::string>& params)
   pDlgSelect->Reset();
   pDlgSelect->SetHeading(CVariant{g_localizeStrings.Get(424)});
 
-  for (unsigned int i = 0 ; i < params.size() ; i++)
+  for (const auto & param : params)
   {
-    std::vector<std::string> values = StringUtils::Split(params[i], '|');
+    std::vector<std::string> values = StringUtils::Split(param, '|');
     std::string label = g_localizeStrings.Get(atoi(values[0].c_str()));
     settings.push_back(std::make_pair(label,values[1].c_str()));
     pDlgSelect->Add(label);

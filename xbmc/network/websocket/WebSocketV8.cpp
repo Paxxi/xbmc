@@ -106,10 +106,10 @@ bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &respo
   if (value && strlen(value) > 0)
   {
     std::vector<std::string> protocols = StringUtils::Split(value, ",");
-    for (std::vector<std::string>::iterator protocol = protocols.begin(); protocol != protocols.end(); ++protocol)
+    for (auto & protocol : protocols)
     {
-      StringUtils::Trim(*protocol);
-      if (*protocol == WS_PROTOCOL_JSONRPC)
+      StringUtils::Trim(protocol);
+      if (protocol == WS_PROTOCOL_JSONRPC)
       {
         websocketProtocol = WS_PROTOCOL_JSONRPC;
         break;
@@ -197,8 +197,8 @@ std::string CWebSocketV8::calculateKey(const std::string &key)
   unsigned int digest[5];
   hash.get_digest(digest);
 
-  for (unsigned int index = 0; index < 5; index++)
-    digest[index] = Endian_SwapBE32(digest[index]);
+  for (unsigned int & index : digest)
+    index = Endian_SwapBE32(index);
 
   return Base64::Encode((const char*)digest, sizeof(digest));
 }

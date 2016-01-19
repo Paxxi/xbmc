@@ -45,13 +45,13 @@ JSONRPC_STATUS CFileOperations::GetRootDirectory(const std::string &method, ITra
   if (sources)
   {
     CFileItemList items;
-    for (unsigned int i = 0; i < (unsigned int)sources->size(); i++)
+    for (auto & source : *sources)
     {
       // Do not show sources which are locked
-      if (sources->at(i).m_iHasLock == 2)
+      if (source.m_iHasLock == 2)
         continue;
 
-      items.Add(CFileItemPtr(new CFileItem(sources->at(i))));
+      items.Add(CFileItemPtr(new CFileItem(source)));
     }
 
     for (unsigned int i = 0; i < (unsigned int)items.Size(); i++)

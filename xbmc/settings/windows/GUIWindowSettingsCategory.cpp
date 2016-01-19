@@ -196,10 +196,10 @@ int CGUIWindowSettingsCategory::GetSettingLevel() const
 
 CSettingSection* CGUIWindowSettingsCategory::GetSection()
 {
-  for (size_t index = 0; index < SettingGroupSize; index++)
+  for (const auto & index : s_settingGroupMap)
   {
-    if (s_settingGroupMap[index].id == m_iSection)
-      return m_settings.GetSection(s_settingGroupMap[index].name);
+    if (index.id == m_iSection)
+      return m_settings.GetSection(index.name);
   }
 
   return NULL;

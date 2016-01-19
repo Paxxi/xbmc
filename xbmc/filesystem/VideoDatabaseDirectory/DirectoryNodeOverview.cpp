@@ -46,18 +46,18 @@ CDirectoryNodeOverview::CDirectoryNodeOverview(const std::string& strName, CDire
 
 NODE_TYPE CDirectoryNodeOverview::GetChildType() const
 {
-  for (unsigned int i = 0; i < sizeof(OverviewChildren) / sizeof(Node); ++i)
-    if (GetName() == OverviewChildren[i].id)
-      return OverviewChildren[i].node;
+  for (auto & i : OverviewChildren)
+    if (GetName() == i.id)
+      return i.node;
 
   return NODE_TYPE_NONE;
 }
 
 std::string CDirectoryNodeOverview::GetLocalizedName() const
 {
-  for (unsigned int i = 0; i < sizeof(OverviewChildren) / sizeof(Node); ++i)
-    if (GetName() == OverviewChildren[i].id)
-      return g_localizeStrings.Get(OverviewChildren[i].label);
+  for (auto & i : OverviewChildren)
+    if (GetName() == i.id)
+      return g_localizeStrings.Get(i.label);
   return "";
 }
 
@@ -99,10 +99,10 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
       vec.push_back(std::make_pair("recentlyaddedmusicvideos", 20390)); // Recently Added Music Videos
   }
   std::string path = BuildPath();
-  for (unsigned int i = 0; i < vec.size(); ++i)
+  for (auto & i : vec)
   {
-    CFileItemPtr pItem(new CFileItem(path + vec[i].first + "/", true));
-    pItem->SetLabel(g_localizeStrings.Get(vec[i].second));
+    CFileItemPtr pItem(new CFileItem(path + i.first + "/", true));
+    pItem->SetLabel(g_localizeStrings.Get(i.second));
     pItem->SetLabelPreformated(true);
     pItem->SetCanQueue(false);
     items.Add(pItem);

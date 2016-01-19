@@ -93,9 +93,9 @@ namespace XBMCAddon
         pDialog->SetHeading(CVariant{heading});
 
       String listLine;
-      for(unsigned int i = 0; i < list.size(); i++)
+      for(const auto & i : list)
       {
-        listLine = list[i];
+        listLine = i;
           pDialog->Add(listLine);
       }
       if (autoclose > 0)

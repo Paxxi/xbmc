@@ -212,8 +212,8 @@ bool CGUISelectButtonControl::OnMessage(CGUIMessage& message)
     {
       const std::vector< std::pair<std::string, int> > *labels = (const std::vector< std::pair<std::string, int> > *)message.GetPointer();
       m_vecItems.clear();
-      for (std::vector< std::pair<std::string, int> >::const_iterator i = labels->begin(); i != labels->end(); ++i)
-        m_vecItems.push_back(i->first);
+      for (const auto & label : *labels)
+        m_vecItems.push_back(label.first);
       m_iDefaultItem = m_iCurrentItem = message.GetParam1();
     }
   }

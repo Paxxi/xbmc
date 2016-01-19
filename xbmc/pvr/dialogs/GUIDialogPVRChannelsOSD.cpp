@@ -223,8 +223,8 @@ void CGUIDialogPVRChannelsOSD::SetInvalid()
   if (m_refreshTimeout.IsTimePast())
   {
     VECFILEITEMS items = m_vecItems->GetList();
-    for (VECFILEITEMS::iterator it = items.begin(); it != items.end(); ++it)
-      (*it)->SetInvalid();
+    for (auto & item : items)
+      item->SetInvalid();
     CGUIDialog::SetInvalid();
     m_refreshTimeout.Set(MAX_INVALIDATION_FREQUENCY);
   }

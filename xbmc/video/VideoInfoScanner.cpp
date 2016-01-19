@@ -981,10 +981,10 @@ namespace VIDEO
     // URLDecode in case an episode is on a http/https/dav/davs:// source and URL-encoded like foo%201x01%20bar.avi
     strLabel = CURL::Decode(strLabel);
 
-    for (unsigned int i=0;i<expression.size();++i)
+    for (auto & i : expression)
     {
       CRegExp reg(true, CRegExp::autoUtf8);
-      if (!reg.RegComp(expression[i].regexp))
+      if (!reg.RegComp(i.regexp))
         continue;
 
       int regexppos, regexp2pos;
@@ -999,8 +999,8 @@ namespace VIDEO
       episode.cDate.SetValid(false);
       episode.isFolder = false;
 
-      bool byDate = expression[i].byDate ? true : false;
-      int defaultSeason = expression[i].defaultSeason;
+      bool byDate = i.byDate ? true : false;
+      int defaultSeason = i.defaultSeason;
 
       if (byDate)
       {
@@ -1008,7 +1008,7 @@ namespace VIDEO
           continue;
 
         CLog::Log(LOGDEBUG, "VideoInfoScanner: Found date based match %s (%s) [%s]", CURL::GetRedacted(episode.strPath).c_str(),
-                  episode.cDate.GetAsLocalizedDate().c_str(), expression[i].regexp.c_str());
+                  episode.cDate.GetAsLocalizedDate().c_str(), i.regexp.c_str());
       }
       else
       {
@@ -1016,7 +1016,7 @@ namespace VIDEO
           continue;
 
         CLog::Log(LOGDEBUG, "VideoInfoScanner: Found episode match %s (s%ie%i) [%s]", CURL::GetRedacted(episode.strPath).c_str(),
-                  episode.iSeason, episode.iEpisode, expression[i].regexp.c_str());
+                  episode.iSeason, episode.iEpisode, i.regexp.c_str());
       }
 
       // Grab the remainder from first regexp run
@@ -1442,7 +1442,7 @@ namespace VIDEO
 
     int iMax = files.size();
     int iCurr = 1;
-    for (EPISODELIST::iterator file = files.begin(); file != files.end(); ++file)
+    for (auto & file : files)
     {
       m_nfoReader.Close();
       if (pDlgProgress)
@@ -1457,7 +1457,7 @@ namespace VIDEO
       if ((pDlgProgress && pDlgProgress->IsCanceled()) || m_bStop)
         return INFO_CANCELLED;
 
-      if (m_database.GetEpisodeId(file->strPath, file->iEpisode, file->iSeason) > -1)
+      if (m_database.GetEpisodeId(file.strPath, file.iEpisode, file.iSeason) > -1)
       {
         if (m_handle)
           m_handle->SetText(g_localizeStrings.Get(20415));
@@ -1465,25 +1465,25 @@ namespace VIDEO
       }
 
       CFileItem item;
-      item.SetPath(file->strPath);
+      item.SetPath(file.strPath);
 
       // handle .nfo files
       CNfoFile::NFOResult result=CNfoFile::NO_NFO;
       CScraperUrl scrUrl;
       ScraperPtr info(scraper);
-      item.GetVideoInfoTag()->m_iEpisode = file->iEpisode;
+      item.GetVideoInfoTag()->m_iEpisode = file.iEpisode;
       if (useLocal)
         result = CheckForNFOFile(&item, false, info,scrUrl);
       if (result == CNfoFile::FULL_NFO)
       {
         m_nfoReader.GetDetails(*item.GetVideoInfoTag());
         // override with episode and season number from file if available
-        if (file->iEpisode > -1)
+        if (file.iEpisode > -1)
         {
-          item.GetVideoInfoTag()->m_iEpisode = file->iEpisode;
-          item.GetVideoInfoTag()->m_iSeason = file->iSeason;
+          item.GetVideoInfoTag()->m_iEpisode = file.iEpisode;
+          item.GetVideoInfoTag()->m_iSeason = file.iSeason;
         }
-        if (AddVideo(&item, CONTENT_TVSHOWS, file->isFolder, true, &showInfo) < 0)
+        if (AddVideo(&item, CONTENT_TVSHOWS, file.isFolder, true, &showInfo) < 0)
           return INFO_ERROR;
         continue;
       }
@@ -1514,37 +1514,37 @@ namespace VIDEO
       {
         CLog::Log(LOGERROR, "VideoInfoScanner: Asked to lookup episode %s"
                             " online, but we have no episode guide. Check your tvshow.nfo and make"
-                            " sure the <episodeguide> tag is in place.", CURL::GetRedacted(file->strPath).c_str());
+                            " sure the <episodeguide> tag is in place.", CURL::GetRedacted(file.strPath).c_str());
         continue;
       }
 
-      EPISODE key(file->iSeason, file->iEpisode, file->iSubepisode);
-      EPISODE backupkey(file->iSeason, file->iEpisode, 0);
+      EPISODE key(file.iSeason, file.iEpisode, file.iSubepisode);
+      EPISODE backupkey(file.iSeason, file.iEpisode, 0);
       bool bFound = false;
       EPISODELIST::iterator guide = episodes.begin();
       EPISODELIST matches;
 
       for (; guide != episodes.end(); ++guide )
       {
-        if ((file->iEpisode!=-1) && (file->iSeason!=-1))
+        if ((file.iEpisode!=-1) && (file.iSeason!=-1))
         {
           if (key==*guide)
           {
             bFound = true;
             break;
           }
-          else if ((file->iSubepisode!=0) && (backupkey==*guide))
+          else if ((file.iSubepisode!=0) && (backupkey==*guide))
           {
             matches.push_back(*guide);
             continue;
           }
         }
-        if (file->cDate.IsValid() && guide->cDate.IsValid() && file->cDate==guide->cDate)
+        if (file.cDate.IsValid() && guide->cDate.IsValid() && file.cDate==guide->cDate)
         {
           matches.push_back(*guide);
           continue;
         }
-        if (!guide->cScraperUrl.strTitle.empty() && StringUtils::EqualsNoCase(guide->cScraperUrl.strTitle, file->strTitle))
+        if (!guide->cScraperUrl.strTitle.empty() && StringUtils::EqualsNoCase(guide->cScraperUrl.strTitle, file.strTitle))
         {
           bFound = true;
           break;
@@ -1559,12 +1559,12 @@ namespace VIDEO
          *
          * Otherwise, use the title to further refine the best match.
          */
-        if (matches.size() == 1 || (file->strTitle.empty() && matches.size() > 1))
+        if (matches.size() == 1 || (file.strTitle.empty() && matches.size() > 1))
         {
           guide = matches.begin();
           bFound = true;
         }
-        else if (!file->strTitle.empty())
+        else if (!file.strTitle.empty())
         {
           double minscore = 0; // Default minimum score is 0 to find whatever is the best match.
 
@@ -1585,7 +1585,7 @@ namespace VIDEO
           }
 
           double matchscore;
-          std::string loweredTitle(file->strTitle);
+          std::string loweredTitle(file.strTitle);
           StringUtils::ToLower(loweredTitle);
           int index = StringUtils::FindBestMatch(loweredTitle, titles, matchscore);
           if (matchscore >= minscore)
@@ -1593,7 +1593,7 @@ namespace VIDEO
             guide = candidates->begin() + index;
             bFound = true;
             CLog::Log(LOGDEBUG,"%s fuzzy title match for show: '%s', title: '%s', match: '%s', score: %f >= %f",
-                      __FUNCTION__, showInfo.m_strTitle.c_str(), file->strTitle.c_str(), titles[index].c_str(), matchscore, minscore);
+                      __FUNCTION__, showInfo.m_strTitle.c_str(), file.strTitle.c_str(), titles[index].c_str(), matchscore, minscore);
           }
         }
       }
@@ -1602,7 +1602,7 @@ namespace VIDEO
       {
         CVideoInfoDownloader imdb(scraper);
         CFileItem item;
-        item.SetPath(file->strPath);
+        item.SetPath(file.strPath);
         if (!imdb.GetEpisodeDetails(guide->cScraperUrl, *item.GetVideoInfoTag(), pDlgProgress))
           return INFO_NOT_FOUND; // TODO: should we just skip to the next episode?
           
@@ -1612,14 +1612,14 @@ namespace VIDEO
         if (item.GetVideoInfoTag()->m_iEpisode == -1)
           item.GetVideoInfoTag()->m_iEpisode = guide->iEpisode;
           
-        if (AddVideo(&item, CONTENT_TVSHOWS, file->isFolder, useLocal, &showInfo) < 0)
+        if (AddVideo(&item, CONTENT_TVSHOWS, file.isFolder, useLocal, &showInfo) < 0)
           return INFO_ERROR;
       }
       else
       {
         CLog::Log(LOGDEBUG,"%s - no match for show: '%s', season: %d, episode: %d.%d, airdate: '%s', title: '%s'",
-                  __FUNCTION__, showInfo.m_strTitle.c_str(), file->iSeason, file->iEpisode, file->iSubepisode,
-                  file->cDate.GetAsLocalizedDate().c_str(), file->strTitle.c_str());
+                  __FUNCTION__, showInfo.m_strTitle.c_str(), file.iSeason, file.iEpisode, file.iSubepisode,
+                  file.cDate.GetAsLocalizedDate().c_str(), file.strTitle.c_str());
       }
     }
     return INFO_ADDED;
@@ -1912,11 +1912,11 @@ namespace VIDEO
           basePath = StringUtils::Format("season%02i", season);
         CFileItem artItem(URIUtils::AddFileToFolder(show.m_strPath, basePath), false);
 
-        for (std::vector<std::string>::const_iterator i = artTypes.begin(); i != artTypes.end(); ++i)
+        for (const auto & artType : artTypes)
         {
-          std::string image = CVideoThumbLoader::GetLocalArt(artItem, *i, false);
+          std::string image = CVideoThumbLoader::GetLocalArt(artItem, artType, false);
           if (!image.empty())
-            art.insert(std::make_pair(*i, image));
+            art.insert(std::make_pair(artType, image));
         }
         // find and classify the local thumb (backcompat) if available
         if (lookForThumb)
@@ -1936,13 +1936,13 @@ namespace VIDEO
       }
 
       // find online art
-      for (std::vector<std::string>::const_iterator i = artTypes.begin(); i != artTypes.end(); ++i)
+      for (const auto & artType : artTypes)
       {
-        if (art.find(*i) == art.end())
+        if (art.find(artType) == art.end())
         {
-          std::string image = CScraperUrl::GetThumbURL(show.m_strPictureURL.GetSeasonThumb(season, *i));
+          std::string image = CScraperUrl::GetThumbURL(show.m_strPictureURL.GetSeasonThumb(season, artType));
           if (!image.empty())
-            art.insert(std::make_pair(*i, image));
+            art.insert(std::make_pair(artType, image));
         }
       }
       // use the first piece of online art as the first art type if no thumb type is available yet
@@ -1964,11 +1964,11 @@ namespace VIDEO
     if (CDirectory::Exists(actorsDir))
       CDirectory::GetDirectory(actorsDir, items, ".png|.jpg|.tbn", DIR_FLAG_NO_FILE_DIRS |
                                DIR_FLAG_NO_FILE_INFO);
-    for (std::vector<SActorInfo>::iterator i = actors.begin(); i != actors.end(); ++i)
+    for (auto & actor : actors)
     {
-      if (i->thumb.empty())
+      if (actor.thumb.empty())
       {
-        std::string thumbFile = i->strName;
+        std::string thumbFile = actor.strName;
         StringUtils::Replace(thumbFile, ' ', '_');
         for (int j = 0; j < items.Size(); j++)
         {
@@ -1976,14 +1976,14 @@ namespace VIDEO
           URIUtils::RemoveExtension(compare);
           if (!items[j]->m_bIsFolder && compare == thumbFile)
           {
-            i->thumb = items[j]->GetPath();
+            actor.thumb = items[j]->GetPath();
             break;
           }
         }
-        if (i->thumb.empty() && !i->thumbUrl.GetFirstThumb().m_url.empty())
-          i->thumb = CScraperUrl::GetThumbURL(i->thumbUrl.GetFirstThumb());
-        if (!i->thumb.empty())
-          CTextureCache::GetInstance().BackgroundCacheImage(i->thumb);
+        if (actor.thumb.empty() && !actor.thumbUrl.GetFirstThumb().m_url.empty())
+          actor.thumb = CScraperUrl::GetThumbURL(actor.thumbUrl.GetFirstThumb());
+        if (!actor.thumb.empty())
+          CTextureCache::GetInstance().BackgroundCacheImage(actor.thumb);
       }
     }
   }

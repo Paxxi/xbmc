@@ -139,8 +139,8 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
 
     do
     {
-      for (size_t l=0; l<m_listeners.size(); l++)
-        m_listeners[l]->OnPipeUnderFlow();
+      for (auto & m_listener : m_listeners)
+        m_listener->OnPipeUnderFlow();
 
       bHasData = m_readEvent.WaitMSec(min(200,nMillisLeft));
       nMillisLeft -= 200;
@@ -182,8 +182,8 @@ bool Pipe::Write(const char *buf, int nSize, int nWaitMillis)
     while ( (int)m_buffer.getMaxWriteSize() < nSize && m_bOpen )
     {
       lock.Leave();
-      for (size_t l=0; l<m_listeners.size(); l++)
-        m_listeners[l]->OnPipeOverFlow();
+      for (auto & m_listener : m_listeners)
+        m_listener->OnPipeOverFlow();
 
       bool bClear = nWaitMillis < 0 ? m_writeEvent.Wait() : m_writeEvent.WaitMSec(nWaitMillis);
       lock.Enter();
@@ -240,9 +240,9 @@ void Pipe::Close()
 void Pipe::AddListener(IPipeListener *l)
 {
   CSingleLock lock(m_lock);
-  for (size_t i=0; i<m_listeners.size(); i++)
+  for (auto & m_listener : m_listeners)
   {
-    if (m_listeners[i] == l)
+    if (m_listener == l)
       return;
   }
   m_listeners.push_back(l);

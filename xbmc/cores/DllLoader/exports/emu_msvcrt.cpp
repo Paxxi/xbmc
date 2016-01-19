@@ -291,9 +291,9 @@ extern "C"
     // close all open dirs...
     if (bVecDirsInited)
     {
-      for (int i=0;i < MAX_OPEN_DIRS; ++i)
+      for (auto & i : vecDirsOpen)
       {
-        vecDirsOpen[i].items.Clear();
+        i.items.Clear();
       }
       bVecDirsInited = false;
     }
@@ -1024,9 +1024,9 @@ extern "C"
       return NULL;
 
     bool emulated(false);
-    for (int i = 0; i < MAX_OPEN_DIRS; i++)
+    for (auto & i : vecDirsOpen)
     {
-      if (dirp == (DIR*)&vecDirsOpen[i])
+      if (dirp == (DIR*)&i)
       {
         emulated = true;
         break;
@@ -1063,9 +1063,9 @@ extern "C"
   int dll_closedir(DIR *dirp)
   {
     bool emulated(false);
-    for (int i = 0; i < MAX_OPEN_DIRS; i++)
+    for (auto & i : vecDirsOpen)
     {
-      if (dirp == (DIR*)&vecDirsOpen[i])
+      if (dirp == (DIR*)&i)
       {
         emulated = true;
         break;
@@ -1087,9 +1087,9 @@ extern "C"
   void dll_rewinddir(DIR *dirp)
   {
     bool emulated(false);
-    for (int i = 0; i < MAX_OPEN_DIRS; i++)
+    for (auto & i : vecDirsOpen)
     {
-      if (dirp == (DIR*)&vecDirsOpen[i])
+      if (dirp == (DIR*)&i)
       {
         emulated = true;
         break;

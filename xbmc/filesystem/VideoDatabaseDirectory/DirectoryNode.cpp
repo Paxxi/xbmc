@@ -210,8 +210,8 @@ std::string CDirectoryNode::BuildPath() const
   }
 
   std::string strPath="videodb://";
-  for (int i = 0; i < (int)array.size(); ++i)
-    strPath += array[i]+"/";
+  for (auto & i : array)
+    strPath += i+"/";
 
   std::string options = m_options.GetOptionsString();
   if (!options.empty())

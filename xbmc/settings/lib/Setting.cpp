@@ -164,12 +164,12 @@ bool CSetting::IsEnabled() const
   }
 
   bool enabled = true;
-  for (SettingDependencies::const_iterator depIt = m_dependencies.begin(); depIt != m_dependencies.end(); ++depIt)
+  for (const auto & m_dependencie : m_dependencies)
   {
-    if (depIt->GetType() != SettingDependencyTypeEnable)
+    if (m_dependencie.GetType() != SettingDependencyTypeEnable)
       continue;
 
-    if (!depIt->Check())
+    if (!m_dependencie.Check())
     {
       enabled = false;
       break;
@@ -195,12 +195,12 @@ bool CSetting::IsVisible() const
     return false;
 
   bool visible = true;
-  for (SettingDependencies::const_iterator depIt = m_dependencies.begin(); depIt != m_dependencies.end(); ++depIt)
+  for (const auto & m_dependencie : m_dependencies)
   {
-    if (depIt->GetType() != SettingDependencyTypeVisible)
+    if (m_dependencie.GetType() != SettingDependencyTypeVisible)
       continue;
 
-    if (!depIt->Check())
+    if (!m_dependencie.Check())
     {
       visible = false;
       break;
@@ -521,12 +521,12 @@ void CSettingList::copy(const SettingPtrList &srcValues, SettingPtrList &dstValu
 {
   dstValues.clear();
 
-  for (SettingPtrList::const_iterator itValue = srcValues.begin(); itValue != srcValues.end(); ++itValue)
+  for (const auto & srcValue : srcValues)
   {
-    if (*itValue == NULL)
+    if (srcValue == NULL)
       continue;
 
-    CSetting *valueCopy = (*itValue)->Clone((*itValue)->GetId());
+    CSetting *valueCopy = srcValue->Clone(srcValue->GetId());
     if (valueCopy == NULL)
       continue;
 
@@ -548,11 +548,11 @@ bool CSettingList::fromValues(const std::vector<std::string> &strValues, Setting
 
   bool ret = true;
   int index = 0;
-  for (std::vector<std::string>::const_iterator itValue = strValues.begin(); itValue != strValues.end(); ++itValue)
+  for (const auto & strValue : strValues)
   {
     CSetting *settingValue = m_definition->Clone(StringUtils::Format("%s.%d", m_id.c_str(), index++));
     if (settingValue == NULL ||
-        !settingValue->FromString(*itValue))
+        !settingValue->FromString(strValue))
     {
       delete settingValue;
       ret = false;
@@ -571,10 +571,10 @@ bool CSettingList::fromValues(const std::vector<std::string> &strValues, Setting
 std::string CSettingList::toString(const SettingPtrList &values) const
 {
   std::vector<std::string> strValues;
-  for (SettingPtrList::const_iterator it = values.begin(); it != values.end(); ++it)
+  for (const auto & value : values)
   {
-    if (*it != NULL)
-      strValues.push_back((*it)->ToString());
+    if (value != NULL)
+      strValues.push_back(value->ToString());
   }
 
   return StringUtils::Join(strValues, m_delimiter);
@@ -862,9 +862,9 @@ bool CSettingInt::CheckValidity(int value) const
   {
     //if the setting is an std::map, check if we got a valid value before assigning it
     bool ok = false;
-    for (StaticIntegerSettingOptions::const_iterator it = m_options.begin(); it != m_options.end(); ++it)
+    for (const auto & m_option : m_options)
     {
-      if (it->second == value)
+      if (m_option.second == value)
       {
         ok = true;
         break;

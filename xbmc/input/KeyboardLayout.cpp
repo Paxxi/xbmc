@@ -111,8 +111,8 @@ bool CKeyboardLayout::Load(const TiXmlElement* element)
         std::vector<std::string> chars = BreakCharacters(strRow);
         if (!modifierKeysSet.empty())
         {
-          for (std::set<unsigned int>::const_iterator it = modifierKeysSet.begin(); it != modifierKeysSet.end(); ++it)
-            m_keyboards[*it].push_back(chars);
+          for (unsigned int it : modifierKeysSet)
+            m_keyboards[it].push_back(chars);
         }
         else
           m_keyboards[ModifierKeyNone].push_back(chars);

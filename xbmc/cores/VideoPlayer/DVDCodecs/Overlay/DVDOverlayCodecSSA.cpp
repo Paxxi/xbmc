@@ -86,9 +86,9 @@ int CDVDOverlayCodecSSA::Decode(DemuxPacket *pPacket)
     std::string      line, line2;
     std::vector<std::string> lines;
     StringUtils::Tokenize((const char*)data, lines, "\r\n");
-    for(size_t i=0; i<lines.size(); i++)
+    for(auto & i : lines)
     {
-      line = lines[i];
+      line = i;
       StringUtils::Trim(line);
       std::unique_ptr<char[]> layer(new char[line.length() + 1]);
 

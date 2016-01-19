@@ -260,8 +260,8 @@ bool CGUISpinControl::OnMessage(CGUIMessage& message)
       {
         const std::vector< std::pair<std::string, int> > *labels = (const std::vector< std::pair<std::string, int> > *)message.GetPointer();
         Clear();
-        for (std::vector< std::pair<std::string, int> >::const_iterator i = labels->begin(); i != labels->end(); ++i)
-          AddLabel(i->first, i->second);
+        for (const auto & label : *labels)
+          AddLabel(label.first, label.second);
         SetValue( message.GetParam1());
       }
       break;

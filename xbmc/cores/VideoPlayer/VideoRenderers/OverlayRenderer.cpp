@@ -67,8 +67,8 @@ CRenderer::CRenderer(CRenderManager *renderManager)
 
 CRenderer::~CRenderer()
 {
-  for(int i = 0; i < NUM_BUFFERS; i++)
-    Release(m_buffers[i]);
+  for(auto & m_buffer : m_buffers)
+    Release(m_buffer);
 }
 
 void CRenderer::AddOverlay(CDVDOverlay* o, double pts, int index)
@@ -86,10 +86,10 @@ void CRenderer::Release(std::vector<SElement>& list)
   std::vector<SElement> l = list;
   list.clear();
 
-  for(std::vector<SElement>::iterator it = l.begin(); it != l.end(); ++it)
+  for(auto & it : l)
   {
-    if (it->overlay_dvd)
-      it->overlay_dvd->Release();
+    if (it.overlay_dvd)
+      it.overlay_dvd->Release();
   }
 }
 
@@ -97,8 +97,8 @@ void CRenderer::Flush()
 {
   CSingleLock lock(m_section);
 
-  for(int i = 0; i < NUM_BUFFERS; i++)
-    Release(m_buffers[i]);
+  for(auto & m_buffer : m_buffers)
+    Release(m_buffer);
 
   ReleaseCache();
 }
@@ -153,12 +153,12 @@ void CRenderer::Render(int idx)
 
   std::vector<COverlay*> render;
   std::vector<SElement>& list = m_buffers[idx];
-  for(std::vector<SElement>::iterator it = list.begin(); it != list.end(); ++it)
+  for(auto & it : list)
   {
     COverlay* o = NULL;
 
-    if(it->overlay_dvd)
-      o = Convert(it->overlay_dvd, it->pts);
+    if(it.overlay_dvd)
+      o = Convert(it.overlay_dvd, it.pts);
 
     if(!o)
       continue;
@@ -169,17 +169,14 @@ void CRenderer::Render(int idx)
   float total_height = 0.0f;
   float cur_height = 0.0f;
   int subalign = CSettings::GetInstance().GetInt(CSettings::SETTING_SUBTITLES_ALIGN);
-  for (std::vector<COverlay*>::iterator it = render.begin(); it != render.end(); ++it)
+  for (auto o : render)
   {
-    COverlay* o = *it;
     o->PrepareRender();
     total_height += o->m_height;
   }
 
-  for (std::vector<COverlay*>::iterator it = render.begin(); it != render.end(); ++it)
+  for (auto o : render)
   {
-    COverlay* o = *it;
-
     float adjust_height = 0.0f;
 
     if (o->m_type == COverlay::TYPE_GUITEXT)
@@ -290,9 +287,9 @@ bool CRenderer::HasOverlay(int idx)
   CSingleLock lock(m_section);
 
   std::vector<SElement>& list = m_buffers[idx];
-  for(std::vector<SElement>::iterator it = list.begin(); it != list.end(); ++it)
+  for(auto & it : list)
   {
-    if (it->overlay_dvd)
+    if (it.overlay_dvd)
     {
       hasOverlay = true;
       break;

@@ -64,9 +64,8 @@ void CGUIListGroup::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   g_graphicsContext.SetOrigin(m_posX, m_posY);
 
   CRect rect;
-  for (iControls it = m_children.begin(); it != m_children.end(); ++it)
+  for (auto control : m_children)
   {
-    CGUIControl *control = *it;
     control->UpdateVisibility(m_item);
     unsigned int oldDirty = dirtyregions.size();
     control->DoProcess(currentTime, dirtyregions);
@@ -83,8 +82,8 @@ void CGUIListGroup::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
 void CGUIListGroup::ResetAnimation(ANIMATION_TYPE type)
 {
   CGUIControl::ResetAnimation(type);
-  for (iControls it = m_children.begin(); it != m_children.end(); ++it)
-    (*it)->ResetAnimation(type);
+  for (auto & it : m_children)
+    it->ResetAnimation(type);
 }
 
 void CGUIListGroup::UpdateVisibility(const CGUIListItem *item)
@@ -95,10 +94,10 @@ void CGUIListGroup::UpdateVisibility(const CGUIListItem *item)
 
 void CGUIListGroup::UpdateInfo(const CGUIListItem *item)
 {
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto & it : m_children)
   {
-    (*it)->UpdateInfo(item);
-    (*it)->UpdateVisibility(item);
+    it->UpdateInfo(item);
+    it->UpdateVisibility(item);
   }
   // now we have to check our overlapping label pairs
   for (unsigned int i = 0; i < m_children.size(); i++)
@@ -117,9 +116,8 @@ void CGUIListGroup::UpdateInfo(const CGUIListItem *item)
 void CGUIListGroup::EnlargeWidth(float difference)
 {
   // Alters the width of the controls that have an ID of 1 to 14
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto child : m_children)
   {
-    CGUIControl *child = *it;
     if (child->GetID() >= 1 && child->GetID() <= 14)
     {
       if (child->GetID() == 1)
@@ -139,9 +137,8 @@ void CGUIListGroup::EnlargeWidth(float difference)
 void CGUIListGroup::EnlargeHeight(float difference)
 {
   // Alters the height of the controls that have an ID of 1 to 14
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto child : m_children)
   {
-    CGUIControl *child = *it;
     if (child->GetID() >= 1 && child->GetID() <= 14)
     {
       if (child->GetID() == 1)
@@ -162,45 +159,45 @@ void CGUIListGroup::SetInvalid()
 {
   if (!m_bInvalidated)
   { // this can be triggered by an item change, so all children need invalidating rather than just the group
-    for (iControls it = m_children.begin(); it != m_children.end(); ++it)
-      (*it)->SetInvalid();
+    for (auto & it : m_children)
+      it->SetInvalid();
     CGUIControlGroup::SetInvalid();
   }
 }
 
 void CGUIListGroup::SetFocusedItem(unsigned int focus)
 {
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto & it : m_children)
   {
-    if ((*it)->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT)
-      ((CGUIMultiSelectTextControl *)(*it))->SetFocusedItem(focus);
-    else if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)
-      ((CGUIListGroup *)(*it))->SetFocusedItem(focus);
+    if (it->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT)
+      ((CGUIMultiSelectTextControl *)it)->SetFocusedItem(focus);
+    else if (it->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)
+      ((CGUIListGroup *)it)->SetFocusedItem(focus);
     else
-      (*it)->SetFocus(focus > 0);
+      it->SetFocus(focus > 0);
   }
   SetFocus(focus > 0);
 }
 
 unsigned int CGUIListGroup::GetFocusedItem() const
 {
-  for (ciControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto it : m_children)
   {
-    if ((*it)->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)(*it))->GetFocusedItem())
-      return ((CGUIMultiSelectTextControl *)(*it))->GetFocusedItem();
-    else if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)(*it))->GetFocusedItem())
-      return ((CGUIListGroup *)(*it))->GetFocusedItem();
+    if (it->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)it)->GetFocusedItem())
+      return ((CGUIMultiSelectTextControl *)it)->GetFocusedItem();
+    else if (it->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)it)->GetFocusedItem())
+      return ((CGUIListGroup *)it)->GetFocusedItem();
   }
   return 0;
 }
 
 bool CGUIListGroup::MoveLeft()
 {
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto & it : m_children)
   {
-    if ((*it)->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)(*it))->MoveLeft())
+    if (it->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)it)->MoveLeft())
       return true;
-    else if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)(*it))->MoveLeft())
+    else if (it->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)it)->MoveLeft())
       return true;
   }
   return false;
@@ -208,11 +205,11 @@ bool CGUIListGroup::MoveLeft()
 
 bool CGUIListGroup::MoveRight()
 {
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto & it : m_children)
   {
-    if ((*it)->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)(*it))->MoveRight())
+    if (it->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT && ((CGUIMultiSelectTextControl *)it)->MoveRight())
       return true;
-    else if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)(*it))->MoveRight())
+    else if (it->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP && ((CGUIListGroup *)it)->MoveRight())
       return true;
   }
   return false;
@@ -220,16 +217,16 @@ bool CGUIListGroup::MoveRight()
 
 void CGUIListGroup::SetState(bool selected, bool focused)
 {
-  for (iControls it = m_children.begin(); it != m_children.end(); it++)
+  for (auto & it : m_children)
   {
-    if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTLABEL)
+    if (it->GetControlType() == CGUIControl::GUICONTROL_LISTLABEL)
     {
-      CGUIListLabel *label = (CGUIListLabel *)(*it);
+      CGUIListLabel *label = (CGUIListLabel *)it;
       label->SetSelected(selected);
       label->SetScrolling(focused);
     }
-    else if ((*it)->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)
-      ((CGUIListGroup *)(*it))->SetState(selected, focused);
+    else if (it->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)
+      ((CGUIListGroup *)it)->SetState(selected, focused);
   }
 }
 
@@ -237,9 +234,8 @@ void CGUIListGroup::SelectItemFromPoint(const CPoint &point)
 {
   CPoint controlCoords(point);
   m_transform.InverseTransformPosition(controlCoords.x, controlCoords.y);
-  for (iControls it = m_children.begin(); it != m_children.end(); ++it)
+  for (auto child : m_children)
   {
-    CGUIControl *child = *it;
     if (child->GetControlType() == CGUIControl::GUICONTROL_MULTISELECT)
       ((CGUIMultiSelectTextControl *)child)->SelectItemFromPoint(point);
     else if (child->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)

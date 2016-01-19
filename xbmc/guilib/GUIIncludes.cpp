@@ -202,8 +202,8 @@ bool CGUIIncludes::LoadIncludesFromXML(const TiXmlElement *root)
 
 bool CGUIIncludes::HasIncludeFile(const std::string &file) const
 {
-  for (iFiles it = m_files.begin(); it != m_files.end(); ++it)
-    if (*it == file) return true;
+  for (const auto & m_file : m_files)
+    if (m_file == file) return true;
   return false;
 }
 
@@ -481,11 +481,11 @@ CGUIIncludes::ResolveParamsResult CGUIIncludes::ResolveParameters(const std::str
 std::string CGUIIncludes::ResolveConstant(const std::string &constant) const
 {
   std::vector<std::string> values = StringUtils::Split(constant, ",");
-  for (std::vector<std::string>::iterator i = values.begin(); i != values.end(); ++i)
+  for (auto & value : values)
   {
-    std::map<std::string, std::string>::const_iterator it = m_constants.find(*i);
+    std::map<std::string, std::string>::const_iterator it = m_constants.find(value);
     if (it != m_constants.end())
-      *i = it->second;
+      value = it->second;
   }
   return StringUtils::Join(values, ",");
 }

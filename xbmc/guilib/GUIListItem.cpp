@@ -140,8 +140,8 @@ void CGUIListItem::ClearArt()
 
 void CGUIListItem::AppendArt(const ArtMap &art, const std::string &prefix)
 {
-  for (ArtMap::const_iterator i = art.begin(); i != art.end(); ++i)
-    SetArt(prefix.empty() ? i->first : prefix + '.' + i->first, i->second);
+  for (const auto & i : art)
+    SetArt(prefix.empty() ? i.first : prefix + '.' + i.first, i.second);
 }
 
 std::string CGUIListItem::GetArt(const std::string &type) const
@@ -459,6 +459,6 @@ void CGUIListItem::IncrementProperty(const std::string &strKey, double dVal)
 
 void CGUIListItem::AppendProperties(const CGUIListItem &item)
 {
-  for (PropertyMap::const_iterator i = item.m_mapProperties.begin(); i != item.m_mapProperties.end(); ++i)
-    SetProperty(i->first, i->second);
+  for (const auto & m_mapPropertie : item.m_mapProperties)
+    SetProperty(m_mapPropertie.first, m_mapPropertie.second);
 }

@@ -164,9 +164,9 @@ const std::vector<std::string> CSong::GetArtist() const
 {
   //Get artist names as vector from artist credits
   std::vector<std::string> songartists;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    songartists.push_back(artistCredit->GetArtist());
+    songartists.push_back(artistCredit.GetArtist());
   }
   return songartists;
 }
@@ -175,9 +175,9 @@ const std::vector<std::string> CSong::GetMusicBrainzArtistID() const
 {
   //Get artist MusicBrainz IDs as vector from artist credits
   std::vector<std::string> muisicBrainzID;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    muisicBrainzID.push_back(artistCredit->GetMusicBrainzArtistID());
+    muisicBrainzID.push_back(artistCredit.GetMusicBrainzArtistID());
   }
   return muisicBrainzID;
 }
@@ -189,8 +189,8 @@ const std::string CSong::GetArtistString() const
   if (!strArtistDesc.empty())
     return strArtistDesc;
   std::string artistString;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
-    artistString += artistCredit->GetArtist() + artistCredit->GetJoinPhrase();
+  for (const auto & artistCredit : artistCredits)
+    artistString += artistCredit.GetArtist() + artistCredit.GetJoinPhrase();
   return artistString;
 }
 
@@ -198,8 +198,8 @@ const std::vector<int> CSong::GetArtistIDArray() const
 {
   // Get song artist IDs for json rpc
   std::vector<int> artistids;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
-    artistids.push_back(artistCredit->GetArtistId());
+  for (const auto & artistCredit : artistCredits)
+    artistids.push_back(artistCredit.GetArtistId());
   return artistids;
 }
 

@@ -67,8 +67,8 @@ void CPeripheralBus::Clear(void)
   }
 
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
-    delete m_peripherals.at(iPeripheralPtr);
+  for (auto & m_peripheral : m_peripherals)
+    delete m_peripheral;
   m_peripherals.clear();
 }
 
@@ -90,9 +90,8 @@ void CPeripheralBus::UnregisterRemovedDevices(const PeripheralScanResults &resul
   }
   lock.Leave();
 
-  for (unsigned int iDevicePtr = 0; iDevicePtr < removedPeripherals.size(); iDevicePtr++)
+  for (auto peripheral : removedPeripherals)
   {
-    CPeripheral *peripheral = removedPeripherals.at(iDevicePtr);
     std::vector<PeripheralFeature> features;
     peripheral->GetFeatures(features);
     bool peripheralHasFeatures = features.size() > 1 || (features.size() == 1 && features.at(0) != FEATURE_UNKNOWN);
@@ -110,9 +109,8 @@ void CPeripheralBus::UnregisterRemovedDevices(const PeripheralScanResults &resul
 void CPeripheralBus::RegisterNewDevices(const PeripheralScanResults &results)
 {
   CSingleLock lock(m_critSection);
-  for (unsigned int iResultPtr = 0; iResultPtr < results.m_results.size(); iResultPtr++)
+  for (const auto & result : results.m_results)
   {
-    const PeripheralScanResult& result = results.m_results.at(iResultPtr);
     if (!HasPeripheral(result.m_strLocation))
       g_peripherals.CreatePeripheral(*this, result);
   }
@@ -141,9 +139,9 @@ bool CPeripheralBus::HasFeature(const PeripheralFeature feature) const
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
+  for (auto m_peripheral : m_peripherals)
   {
-    if (m_peripherals.at(iPeripheralPtr)->HasFeature(feature))
+    if (m_peripheral->HasFeature(feature))
     {
       bReturn = true;
       break;
@@ -155,19 +153,19 @@ bool CPeripheralBus::HasFeature(const PeripheralFeature feature) const
 void CPeripheralBus::GetFeatures(std::vector<PeripheralFeature> &features) const
 {
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
-    m_peripherals.at(iPeripheralPtr)->GetFeatures(features);
+  for (auto m_peripheral : m_peripherals)
+    m_peripheral->GetFeatures(features);
 }
 
 CPeripheral *CPeripheralBus::GetPeripheral(const std::string &strLocation) const
 {
   CPeripheral *peripheral(NULL);
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
+  for (auto m_peripheral : m_peripherals)
   {
-    if (m_peripherals.at(iPeripheralPtr)->Location() == strLocation)
+    if (m_peripheral->Location() == strLocation)
     {
-      peripheral = m_peripherals.at(iPeripheralPtr);
+      peripheral = m_peripheral;
       break;
     }
   }
@@ -178,11 +176,11 @@ int CPeripheralBus::GetPeripheralsWithFeature(std::vector<CPeripheral *> &result
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
+  for (auto m_peripheral : m_peripherals)
   {
-    if (m_peripherals.at(iPeripheralPtr)->HasFeature(feature))
+    if (m_peripheral->HasFeature(feature))
     {
-      results.push_back(m_peripherals.at(iPeripheralPtr));
+      results.push_back(m_peripheral);
       ++iReturn;
     }
   }
@@ -194,10 +192,10 @@ size_t CPeripheralBus::GetNumberOfPeripheralsWithId(const int iVendorId, const i
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
-  for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
+  for (auto m_peripheral : m_peripherals)
   {
-    if (m_peripherals.at(iPeripheralPtr)->VendorId() == iVendorId &&
-        m_peripherals.at(iPeripheralPtr)->ProductId() == iProductId)
+    if (m_peripheral->VendorId() == iVendorId &&
+        m_peripheral->ProductId() == iProductId)
       iReturn++;
   }
 
@@ -280,9 +278,8 @@ void CPeripheralBus::GetDirectory(const std::string &strPath, CFileItemList &ite
 {
   std::string strDevPath;
   CSingleLock lock(m_critSection);
-  for (unsigned int iDevicePtr = 0; iDevicePtr < m_peripherals.size(); iDevicePtr++)
+  for (auto peripheral : m_peripherals)
   {
-    const CPeripheral *peripheral = m_peripherals.at(iDevicePtr);
     if (peripheral->IsHidden())
       continue;
 
@@ -313,10 +310,10 @@ CPeripheral *CPeripheralBus::GetByPath(const std::string &strPath) const
 {
   std::string strDevPath;
   CSingleLock lock(m_critSection);
-  for (unsigned int iDevicePtr = 0; iDevicePtr < m_peripherals.size(); iDevicePtr++)
+  for (auto m_peripheral : m_peripherals)
   {
-    if (StringUtils::EqualsNoCase(strPath, m_peripherals.at(iDevicePtr)->FileLocation()))
-      return m_peripherals.at(iDevicePtr);
+    if (StringUtils::EqualsNoCase(strPath, m_peripheral->FileLocation()))
+      return m_peripheral;
   }
 
   return NULL;

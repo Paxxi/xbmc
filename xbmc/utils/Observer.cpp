@@ -33,8 +33,8 @@ void Observer::StopObserving(void)
 {
   CSingleLock lock(m_obsCritSection);
   std::vector<Observable *> observables = m_observables;
-  for (unsigned int iObsPtr = 0; iObsPtr < observables.size(); iObsPtr++)
-    observables.at(iObsPtr)->UnregisterObserver(this);
+  for (auto & observable : observables)
+    observable->UnregisterObserver(this);
 }
 
 bool Observer::IsObserving(const Observable &obs) const
@@ -74,8 +74,8 @@ Observable &Observable::operator=(const Observable &observable)
 
   m_bObservableChanged = observable.m_bObservableChanged;
   m_observers.clear();
-  for (unsigned int iObsPtr = 0; iObsPtr < observable.m_observers.size(); iObsPtr++)
-    m_observers.push_back(observable.m_observers.at(iObsPtr));
+  for (auto m_observer : observable.m_observers)
+    m_observers.push_back(m_observer);
 
   return *this;
 }
@@ -84,8 +84,8 @@ void Observable::StopObserver(void)
 {
   CSingleLock lock(m_obsCritSection);
   std::vector<Observer *> observers = m_observers;
-  for (unsigned int iObsPtr = 0; iObsPtr < observers.size(); iObsPtr++)
-    observers.at(iObsPtr)->UnregisterObservable(this);
+  for (auto & observer : observers)
+    observer->UnregisterObservable(this);
 }
 
 bool Observable::IsObserving(const Observer &obs) const

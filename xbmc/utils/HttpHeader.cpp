@@ -158,10 +158,10 @@ std::vector<std::string> CHttpHeader::GetValues(std::string strParam) const
   StringUtils::ToLower(strParam);
   std::vector<std::string> values;
 
-  for (HeaderParams::const_iterator iter = m_params.begin(); iter != m_params.end(); ++iter)
+  for (const auto & m_param : m_params)
   {
-    if (iter->first == strParam)
-      values.push_back(iter->second);
+    if (m_param.first == strParam)
+      values.push_back(m_param.second);
   }
 
   return values;
@@ -174,8 +174,8 @@ std::string CHttpHeader::GetHeader(void) const
 
   std::string strHeader(m_protoLine + "\r\n");
 
-  for (HeaderParams::const_iterator iter = m_params.begin(); iter != m_params.end(); ++iter)
-    strHeader += ((*iter).first + ": " + (*iter).second + "\r\n");
+  for (const auto & m_param : m_params)
+    strHeader += (m_param.first + ": " + m_param.second + "\r\n");
 
   strHeader += "\r\n";
   return strHeader;

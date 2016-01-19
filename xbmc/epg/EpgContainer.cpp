@@ -668,8 +668,8 @@ bool CEpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
       invalidTables.push_back(epg);
   }
 
-  for (auto it = invalidTables.begin(); it != invalidTables.end(); ++it)
-    DeleteEpg(**it, true);
+  for (auto & invalidTable : invalidTables)
+    DeleteEpg(*invalidTable, true);
 
   if (bInterrupted)
   {

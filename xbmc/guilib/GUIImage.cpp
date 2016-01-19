@@ -174,8 +174,8 @@ void CGUIImage::Render()
 {
   if (!IsVisible()) return;
 
-  for (std::vector<CFadingTexture *>::iterator itr = m_fadingTextures.begin(); itr != m_fadingTextures.end(); ++itr)
-    (*itr)->m_texture->Render();
+  for (auto & m_fadingTexture : m_fadingTextures)
+    m_fadingTexture->m_texture->Render();
 
   m_texture.Render();
 
@@ -242,8 +242,8 @@ void CGUIImage::AllocResources()
 void CGUIImage::FreeTextures(bool immediately /* = false */)
 {
   m_texture.FreeResources(immediately);
-  for (unsigned int i = 0; i < m_fadingTextures.size(); i++)
-    delete m_fadingTextures[i];
+  for (auto & m_fadingTexture : m_fadingTextures)
+    delete m_fadingTexture;
   m_fadingTextures.clear();
   m_currentTexture.clear();
   if (!m_info.IsConstant()) // constant textures never change
@@ -297,8 +297,8 @@ CRect CGUIImage::CalcRenderRegion() const
 {
   CRect region = m_texture.GetRenderRect();
 
-  for (std::vector<CFadingTexture *>::const_iterator itr = m_fadingTextures.begin(); itr != m_fadingTextures.end(); ++itr)
-    region.Union( (*itr)->m_texture->GetRenderRect() );
+  for (auto m_fadingTexture : m_fadingTextures)
+    region.Union( m_fadingTexture->m_texture->GetRenderRect() );
 
   return CGUIControl::CalcRenderRegion().Intersect(region);
 }

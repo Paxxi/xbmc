@@ -59,9 +59,8 @@ bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
 bool CSourcesDirectory::GetDirectory(const VECSOURCES &sources, CFileItemList &items)
 {
-  for (unsigned int i = 0; i < sources.size(); ++i)
+  for (const auto & share : sources)
   {
-    const CMediaSource& share = sources[i];
     CFileItemPtr pItem(new CFileItem(share));
     if (URIUtils::IsProtocol(pItem->GetPath(), "musicsearch"))
       pItem->SetCanQueue(false);

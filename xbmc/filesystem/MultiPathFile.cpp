@@ -41,9 +41,8 @@ bool CMultiPathFile::Open(const CURL& url)
   if (!CMultiPathDirectory::GetPaths(path, vecPaths))
     return false;
 
-  for (unsigned int i = 0; i < vecPaths.size(); i++)
+  for (auto filePath : vecPaths)
   {
-    std::string filePath = vecPaths[i];
     filePath = URIUtils::AddFileToFolder(filePath, fileName);
     if (m_file.Open(filePath))
       return true;
@@ -60,9 +59,8 @@ bool CMultiPathFile::Exists(const CURL& url)
   if (!CMultiPathDirectory::GetPaths(path, vecPaths))
     return false;
 
-  for (unsigned int i = 0; i < vecPaths.size(); i++)
+  for (auto filePath : vecPaths)
   {
-    std::string filePath = vecPaths[i];
     filePath = URIUtils::AddFileToFolder(filePath, fileName);
     if (CFile::Exists(filePath))
       return true;
@@ -79,9 +77,8 @@ int CMultiPathFile::Stat(const CURL& url, struct __stat64* buffer)
   if (!CMultiPathDirectory::GetPaths(path, vecPaths))
     return false;
 
-  for (unsigned int i = 0; i < vecPaths.size(); i++)
+  for (auto filePath : vecPaths)
   {
-    std::string filePath = vecPaths[i];
     filePath = URIUtils::AddFileToFolder(filePath, fileName);
     int ret = CFile::Stat(filePath, buffer);
     if (ret == 0)

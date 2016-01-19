@@ -44,24 +44,24 @@ std::vector<CVariant> CSettingUtils::ListToValues(const CSettingList *setting, c
   if (setting == NULL)
     return realValues;
 
-  for (SettingPtrList::const_iterator it = values.begin(); it != values.end(); ++it)
+  for (const auto & value : values)
   {
     switch (setting->GetElementType())
     {
       case SettingTypeBool:
-        realValues.push_back(static_cast<const CSettingBool*>(it->get())->GetValue());
+        realValues.push_back(static_cast<const CSettingBool*>(value.get())->GetValue());
         break;
 
       case SettingTypeInteger:
-        realValues.push_back(static_cast<const CSettingInt*>(it->get())->GetValue());
+        realValues.push_back(static_cast<const CSettingInt*>(value.get())->GetValue());
         break;
 
       case SettingTypeNumber:
-        realValues.push_back(static_cast<const CSettingNumber*>(it->get())->GetValue());
+        realValues.push_back(static_cast<const CSettingNumber*>(value.get())->GetValue());
         break;
 
       case SettingTypeString:
-        realValues.push_back(static_cast<const CSettingString*>(it->get())->GetValue());
+        realValues.push_back(static_cast<const CSettingString*>(value.get())->GetValue());
         break;
 
       default:
@@ -80,7 +80,7 @@ bool CSettingUtils::ValuesToList(const CSettingList *setting, const std::vector<
 
   int index = 0;
   bool ret = true;
-  for (std::vector<CVariant>::const_iterator itValue = values.begin(); itValue != values.end(); ++itValue)
+  for (const auto & value : values)
   {
     CSetting *settingValue = setting->GetDefinition()->Clone(StringUtils::Format("%s.%d", setting->GetId().c_str(), index++));
     if (settingValue == NULL)
@@ -89,31 +89,31 @@ bool CSettingUtils::ValuesToList(const CSettingList *setting, const std::vector<
     switch (setting->GetElementType())
     {
       case SettingTypeBool:
-        if (!itValue->isBoolean())
+        if (!value.isBoolean())
           ret = false;
         else
-          ret = static_cast<CSettingBool*>(settingValue)->SetValue(itValue->asBoolean());
+          ret = static_cast<CSettingBool*>(settingValue)->SetValue(value.asBoolean());
         break;
 
       case SettingTypeInteger:
-        if (!itValue->isInteger())
+        if (!value.isInteger())
           ret = false;
         else
-          ret = static_cast<CSettingInt*>(settingValue)->SetValue((int)itValue->asInteger());
+          ret = static_cast<CSettingInt*>(settingValue)->SetValue((int)value.asInteger());
         break;
 
       case SettingTypeNumber:
-        if (!itValue->isDouble())
+        if (!value.isDouble())
           ret = false;
         else
-          ret = static_cast<CSettingNumber*>(settingValue)->SetValue(itValue->asDouble());
+          ret = static_cast<CSettingNumber*>(settingValue)->SetValue(value.asDouble());
         break;
 
       case SettingTypeString:
-        if (!itValue->isString())
+        if (!value.isString())
           ret = false;
         else
-          ret = static_cast<CSettingString*>(settingValue)->SetValue(itValue->asString());
+          ret = static_cast<CSettingString*>(settingValue)->SetValue(value.asString());
         break;
 
       default:

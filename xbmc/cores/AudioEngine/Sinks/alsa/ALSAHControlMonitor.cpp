@@ -73,10 +73,9 @@ void CALSAHControlMonitor::Clear()
 {
   Stop();
 
-  for (std::map<std::string, CTLHandle>::iterator it = m_ctlHandles.begin();
-       it != m_ctlHandles.end(); ++it)
+  for (auto & m_ctlHandle : m_ctlHandles)
   {
-    snd_hctl_close(it->second.handle);
+    snd_hctl_close(m_ctlHandle.second.handle);
   }
   m_ctlHandles.clear();
 }
@@ -88,18 +87,17 @@ void CALSAHControlMonitor::Start()
   std::vector<struct pollfd> pollfds;
   std::vector<CFDEventMonitor::MonitoredFD> monitoredFDs;
 
-  for (std::map<std::string, CTLHandle>::iterator it = m_ctlHandles.begin();
-       it != m_ctlHandles.end(); ++it)
+  for (auto & m_ctlHandle : m_ctlHandles)
   {
-    pollfds.resize(snd_hctl_poll_descriptors_count(it->second.handle));
-    int fdcount = snd_hctl_poll_descriptors(it->second.handle, &pollfds[0], pollfds.size());
+    pollfds.resize(snd_hctl_poll_descriptors_count(m_ctlHandle.second.handle));
+    int fdcount = snd_hctl_poll_descriptors(m_ctlHandle.second.handle, &pollfds[0], pollfds.size());
 
     for (int j = 0; j < fdcount; ++j)
     {
       monitoredFDs.push_back(CFDEventMonitor::MonitoredFD(pollfds[j].fd,
                                                           pollfds[j].events,
                                                           FDEventCallback,
-                                                          it->second.handle));
+                                                          m_ctlHandle.second.handle));
     }
   }
 

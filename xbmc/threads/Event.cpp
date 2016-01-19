@@ -75,9 +75,8 @@ void CEvent::Set()
   CSingleLock l(groupListMutex);
   if (groups)
   {
-    for (std::vector<XbmcThreads::CEventGroup*>::iterator iter = groups->begin(); 
-         iter != groups->end(); ++iter)
-      (*iter)->Set(this);
+    for (auto & group : *groups)
+      group->Set(this);
   }
 }
 
@@ -166,9 +165,8 @@ namespace XbmcThreads
 
     // we preping for a wait, so we need to set the group value on
     // all of the CEvents. 
-    for (std::vector<CEvent*>::iterator iter = events.begin();
-         iter != events.end(); ++iter)
-      (*iter)->addGroup(this);
+    for (auto & event : events)
+      event->addGroup(this);
   }
 
   CEventGroup::CEventGroup(CEvent* v1, ...) : signaled(NULL), condVar(actualCv,signaled), numWaits(0)
@@ -191,15 +189,13 @@ namespace XbmcThreads
 
     // we preping for a wait, so we need to set the group value on
     // all of the CEvents. 
-    for (std::vector<CEvent*>::iterator iter = events.begin();
-         iter != events.end(); ++iter)
-      (*iter)->addGroup(this);
+    for (auto & event : events)
+      event->addGroup(this);
   }
 
   CEventGroup::~CEventGroup()
   {
-    for (std::vector<CEvent*>::iterator iter = events.begin();
-         iter != events.end(); ++iter)
-      (*iter)->removeGroup(this);
+    for (auto & event : events)
+      event->removeGroup(this);
   }
 }

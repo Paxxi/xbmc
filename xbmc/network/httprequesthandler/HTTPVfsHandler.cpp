@@ -64,9 +64,9 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
             if (source->m_iHasLock == 2 || !source->m_allowSharing)
               continue;
 
-            for (std::vector<std::string>::const_iterator path = source->vecPaths.begin(); path != source->vecPaths.end(); ++path)
+            for (const auto & vecPath : source->vecPaths)
             {
-              std::string realSourcePath = URIUtils::GetRealPath(*path);
+              std::string realSourcePath = URIUtils::GetRealPath(vecPath);
               if (URIUtils::IsInPath(realPath, realSourcePath))
               {
                 accessible = true;

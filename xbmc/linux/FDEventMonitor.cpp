@@ -74,10 +74,10 @@ void CFDEventMonitor::AddFDs(const std::vector<MonitoredFD>& monitoredFDs,
   CSingleLock lock(m_mutex);
   InterruptPoll();
 
-  for (unsigned int i = 0; i < monitoredFDs.size(); ++i)
+  for (const auto & monitoredFD : monitoredFDs)
   {
     int id;
-    AddFDLocked(monitoredFDs[i], id);
+    AddFDLocked(monitoredFD, id);
     ids.push_back(id);
   }
 
@@ -207,10 +207,9 @@ void CFDEventMonitor::UpdatePollDescs()
   m_monitoredFDbyPollDescs.clear();
   m_pollDescs.clear();
 
-  for (std::map<int, MonitoredFD>::iterator it = m_monitoredFDs.begin();
-       it != m_monitoredFDs.end(); ++it)
+  for (auto & m_monitoredFD : m_monitoredFDs)
   {
-    AddPollDesc(it->first, it->second.fd, it->second.events);
+    AddPollDesc(m_monitoredFD.first, m_monitoredFD.second.fd, m_monitoredFD.second.events);
   }
 }
 

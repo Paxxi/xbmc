@@ -116,11 +116,11 @@ bool CSettingGroup::Deserialize(const TiXmlNode *node, bool update /* = false */
     if (CSettingCategory::DeserializeIdentification(settingElement, settingId))
     {
       CSetting *setting = NULL;
-      for (SettingList::iterator itSetting = m_settings.begin(); itSetting != m_settings.end(); ++itSetting)
+      for (auto & m_setting : m_settings)
       {
-        if ((*itSetting)->GetId() == settingId)
+        if (m_setting->GetId() == settingId)
         {
-          setting = *itSetting;
+          setting = m_setting;
           break;
         }
       }
@@ -162,10 +162,10 @@ SettingList CSettingGroup::GetSettings(SettingLevel level) const
 {
   SettingList settings;
 
-  for (SettingList::const_iterator it = m_settings.begin(); it != m_settings.end(); ++it)
+  for (auto m_setting : m_settings)
   {
-    if ((*it)->GetLevel() <= level && (*it)->MeetsRequirements())
-      settings.push_back(*it);
+    if (m_setting->GetLevel() <= level && m_setting->MeetsRequirements())
+      settings.push_back(m_setting);
   }
 
   return settings;
@@ -178,8 +178,8 @@ void CSettingGroup::AddSetting(CSetting *setting)
 
 void CSettingGroup::AddSettings(const SettingList &settings)
 {
-  for (SettingList::const_iterator itSetting = settings.begin(); itSetting != settings.end(); ++itSetting)
-    addISetting(NULL, *itSetting, m_settings);
+  for (auto setting : settings)
+    addISetting(NULL, setting, m_settings);
 }
 
 CSettingCategory::CSettingCategory(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
@@ -212,11 +212,11 @@ bool CSettingCategory::Deserialize(const TiXmlNode *node, bool update /* = false
     if (CSettingGroup::DeserializeIdentification(groupNode, groupId))
     {
       CSettingGroup *group = NULL;
-      for (SettingGroupList::iterator itGroup = m_groups.begin(); itGroup != m_groups.end(); ++itGroup)
+      for (auto & m_group : m_groups)
       {
-        if ((*itGroup)->GetId() == groupId)
+        if (m_group->GetId() == groupId)
         {
-          group = *itGroup;
+          group = m_group;
           break;
         }
       }
@@ -248,10 +248,10 @@ SettingGroupList CSettingCategory::GetGroups(SettingLevel level) const
 {
   SettingGroupList groups;
 
-  for (SettingGroupList::const_iterator it = m_groups.begin(); it != m_groups.end(); ++it)
+  for (auto m_group : m_groups)
   {
-    if ((*it)->MeetsRequirements() && (*it)->IsVisible() && (*it)->GetSettings(level).size() > 0)
-      groups.push_back(*it);
+    if (m_group->MeetsRequirements() && m_group->IsVisible() && m_group->GetSettings(level).size() > 0)
+      groups.push_back(m_group);
   }
 
   return groups;
@@ -269,8 +269,8 @@ void CSettingCategory::AddGroup(CSettingGroup *group)
 
 void CSettingCategory::AddGroups(const SettingGroupList &groups)
 {
-  for (SettingGroupList::const_iterator itGroup = groups.begin(); itGroup != groups.end(); ++itGroup)
-    addISetting(NULL, *itGroup, m_groups);
+  for (auto group : groups)
+    addISetting(NULL, group, m_groups);
 }
 
 CSettingSection::CSettingSection(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
@@ -298,11 +298,11 @@ bool CSettingSection::Deserialize(const TiXmlNode *node, bool update /* = false 
     if (CSettingCategory::DeserializeIdentification(categoryNode, categoryId))
     {
       CSettingCategory *category = NULL;
-      for (SettingCategoryList::iterator itCategory = m_categories.begin(); itCategory != m_categories.end(); ++itCategory)
+      for (auto & m_categorie : m_categories)
       {
-        if ((*itCategory)->GetId() == categoryId)
+        if (m_categorie->GetId() == categoryId)
         {
-          category = *itCategory;
+          category = m_categorie;
           break;
         }
       }
@@ -334,10 +334,10 @@ SettingCategoryList CSettingSection::GetCategories(SettingLevel level) const
 {
   SettingCategoryList categories;
 
-  for (SettingCategoryList::const_iterator it = m_categories.begin(); it != m_categories.end(); ++it)
+  for (auto m_categorie : m_categories)
   {
-    if ((*it)->MeetsRequirements() && (*it)->IsVisible() && (*it)->GetGroups(level).size() > 0)
-      categories.push_back(*it);
+    if (m_categorie->MeetsRequirements() && m_categorie->IsVisible() && m_categorie->GetGroups(level).size() > 0)
+      categories.push_back(m_categorie);
   }
 
   return categories;
@@ -350,6 +350,6 @@ void CSettingSection::AddCategory(CSettingCategory *category)
 
 void CSettingSection::AddCategories(const SettingCategoryList &categories)
 {
-  for (SettingCategoryList::const_iterator itCategory = categories.begin(); itCategory != categories.end(); ++itCategory)
-    addISetting(NULL, *itCategory, m_categories);
+  for (auto categorie : categories)
+    addISetting(NULL, categorie, m_categories);
 }

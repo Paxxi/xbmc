@@ -36,9 +36,8 @@ void CPVRSettings::MarginTimeFiller(
   };
   static const size_t marginTimeValuesCount = sizeof(marginTimeValues) / sizeof(int);
 
-  for (size_t i = 0; i < marginTimeValuesCount; ++i)
+  for (int iValue : marginTimeValues)
   {
-    int iValue = marginTimeValues[i];
     list.push_back(
       std::make_pair(StringUtils::Format(g_localizeStrings.Get(14044).c_str(), iValue) /* %i min */, iValue));
   }

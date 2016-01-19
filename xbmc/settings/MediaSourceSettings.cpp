@@ -195,25 +195,25 @@ bool CMediaSourceSettings::UpdateSource(const std::string &strType, const std::s
   if (pShares == NULL)
     return false;
 
-  for (IVECSOURCES it = pShares->begin(); it != pShares->end(); it++)
+  for (auto & pShare : *pShares)
   {
-    if (it->strName == strOldName)
+    if (pShare.strName == strOldName)
     {
       if (strUpdateChild == "name")
-        it->strName = strUpdateValue;
+        pShare.strName = strUpdateValue;
       else if (strUpdateChild == "lockmode")
-        it->m_iLockMode = (LockType)std::strtol(strUpdateValue.c_str(), NULL, 10);
+        pShare.m_iLockMode = (LockType)std::strtol(strUpdateValue.c_str(), NULL, 10);
       else if (strUpdateChild == "lockcode")
-        it->m_strLockCode = strUpdateValue;
+        pShare.m_strLockCode = strUpdateValue;
       else if (strUpdateChild == "badpwdcount")
-        it->m_iBadPwdCount = (int)std::strtol(strUpdateValue.c_str(), NULL, 10);
+        pShare.m_iBadPwdCount = (int)std::strtol(strUpdateValue.c_str(), NULL, 10);
       else if (strUpdateChild == "thumbnail")
-        it->m_strThumbnailImage = strUpdateValue;
+        pShare.m_strThumbnailImage = strUpdateValue;
       else if (strUpdateChild == "path")
       {
-        it->vecPaths.clear();
-        it->strPath = strUpdateValue;
-        it->vecPaths.push_back(strUpdateValue);
+        pShare.vecPaths.clear();
+        pShare.strPath = strUpdateValue;
+        pShare.vecPaths.push_back(strUpdateValue);
       }
       else
         return false;
@@ -293,14 +293,14 @@ bool CMediaSourceSettings::UpdateShare(const std::string &type, const std::strin
 
   // update our current share list
   CMediaSource* pShare = NULL;
-  for (IVECSOURCES it = pShares->begin(); it != pShares->end(); it++)
+  for (auto & it : *pShares)
   {
-    if (it->strName == oldName)
+    if (it.strName == oldName)
     {
-      it->strName = share.strName;
-      it->strPath = share.strPath;
-      it->vecPaths = share.vecPaths;
-      pShare = &(*it);
+      it.strName = share.strName;
+      it.strPath = share.strPath;
+      it.vecPaths = share.vecPaths;
+      pShare = &it;
       break;
     }
   }
@@ -467,17 +467,16 @@ bool CMediaSourceSettings::SetSources(TiXmlNode *root, const char *section, cons
     return false;
 
   XMLUtils::SetPath(sectionNode, "default", defaultPath);
-  for (CIVECSOURCES it = shares.begin(); it != shares.end(); it++)
+  for (const auto & share : shares)
   {
-    const CMediaSource &share = *it;
     if (share.m_ignore)
       continue;
 
     TiXmlElement source(XML_SOURCE);
     XMLUtils::SetString(&source, "name", share.strName);
 
-    for (unsigned int i = 0; i < share.vecPaths.size(); i++)
-      XMLUtils::SetPath(&source, "path", share.vecPaths[i]);
+    for (const auto & vecPath : share.vecPaths)
+      XMLUtils::SetPath(&source, "path", vecPath);
 
     if (share.m_iHasLock)
     {

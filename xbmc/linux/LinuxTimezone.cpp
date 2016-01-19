@@ -253,8 +253,8 @@ std::string CLinuxTimezone::GetOSConfiguredTimezone()
 void CLinuxTimezone::SettingOptionsTimezoneCountriesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data)
 {
   std::vector<std::string> countries = g_timezone.GetCounties();
-  for (unsigned int i = 0; i < countries.size(); i++)
-    list.push_back(std::make_pair(countries[i], countries[i]));
+  for (auto & countrie : countries)
+    list.push_back(std::make_pair(countrie, countrie));
 }
 
 void CLinuxTimezone::SettingOptionsTimezonesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data)
@@ -262,12 +262,12 @@ void CLinuxTimezone::SettingOptionsTimezonesFiller(const CSetting *setting, std:
   current = ((const CSettingString*)setting)->GetValue();
   bool found = false;
   std::vector<std::string> timezones = g_timezone.GetTimezonesByCountry(CSettings::GetInstance().GetString(CSettings::SETTING_LOCALE_TIMEZONECOUNTRY));
-  for (unsigned int i = 0; i < timezones.size(); i++)
+  for (auto & timezone : timezones)
   {
-    if (!found && StringUtils::EqualsNoCase(timezones[i], current))
+    if (!found && StringUtils::EqualsNoCase(timezone, current))
       found = true;
 
-    list.push_back(std::make_pair(timezones[i], timezones[i]));
+    list.push_back(std::make_pair(timezone, timezone));
   }
 
   if (!found && !timezones.empty())

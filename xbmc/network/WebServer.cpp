@@ -589,8 +589,8 @@ int CWebServer::FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& hand
     handler->AddResponseHeader(MHD_HTTP_HEADER_CONTENT_LENGTH, StringUtils::Format("%" PRIu64, responseDetails.totalLength));
 
   // add all headers set by the request handler
-  for (std::multimap<std::string, std::string>::const_iterator it = responseDetails.headers.begin(); it != responseDetails.headers.end(); ++it)
-    AddHeader(response, it->first, it->second);
+  for (const auto & header : responseDetails.headers)
+    AddHeader(response, header.first, header.second);
 
 #ifdef WEBSERVER_DEBUG
   std::multimap<std::string, std::string> headerValues;

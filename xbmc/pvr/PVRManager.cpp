@@ -377,8 +377,8 @@ void CPVRManager::Cleanup(void)
   m_outdatedAddons.clear();
   m_bEpgsCreated = false;
 
-  for (unsigned int iJobPtr = 0; iJobPtr < m_pendingUpdates.size(); iJobPtr++)
-    delete m_pendingUpdates.at(iJobPtr);
+  for (auto & m_pendingUpdate : m_pendingUpdates)
+    delete m_pendingUpdate;
   m_pendingUpdates.clear();
 
   /* unregister application action listener */

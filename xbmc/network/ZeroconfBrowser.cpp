@@ -75,8 +75,8 @@ void CZeroconfBrowser::Start()
   if(m_started)
     return;
   m_started = true;
-  for(tServices::const_iterator it = m_services.begin(); it != m_services.end(); ++it)
-    doAddServiceType(*it);
+  for(const auto & m_service : m_services)
+    doAddServiceType(m_service);
 }
 
 void CZeroconfBrowser::Stop()
@@ -84,8 +84,8 @@ void CZeroconfBrowser::Stop()
   CSingleLock lock(*mp_crit_sec);
   if(!m_started)
     return;
-  for(tServices::iterator it = m_services.begin(); it != m_services.end(); ++it)
-    RemoveServiceType(*it);
+  for(const auto & m_service : m_services)
+    RemoveServiceType(m_service);
   m_started = false;
 }
 

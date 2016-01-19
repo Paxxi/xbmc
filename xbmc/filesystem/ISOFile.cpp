@@ -52,9 +52,9 @@ bool CISOFile::Open(const CURL& url)
 {
   std::string strFName = "\\";
   strFName += url.GetFileName();
-  for (int i = 0; i < (int)strFName.size(); ++i )
+  for (char & i : strFName)
   {
-    if (strFName[i] == '/') strFName[i] = '\\';
+    if (i == '/') i = '\\';
   }
   m_hFile = m_isoReader.OpenFile((char*)strFName.c_str());
   if (m_hFile == INVALID_HANDLE_VALUE)
@@ -142,9 +142,9 @@ bool CISOFile::Exists(const CURL& url)
 {
   std::string strFName = "\\";
   strFName += url.GetFileName();
-  for (int i = 0; i < (int)strFName.size(); ++i )
+  for (char & i : strFName)
   {
-    if (strFName[i] == '/') strFName[i] = '\\';
+    if (i == '/') i = '\\';
   }
   m_hFile = m_isoReader.OpenFile((char*)strFName.c_str());
   if (m_hFile == INVALID_HANDLE_VALUE)
@@ -158,9 +158,9 @@ int CISOFile::Stat(const CURL& url, struct __stat64* buffer)
 {
   std::string strFName = "\\";
   strFName += url.GetFileName();
-  for (int i = 0; i < (int)strFName.size(); ++i )
+  for (char & i : strFName)
   {
-    if (strFName[i] == '/') strFName[i] = '\\';
+    if (i == '/') i = '\\';
   }
   m_hFile = m_isoReader.OpenFile((char*)strFName.c_str());
   if (m_hFile != INVALID_HANDLE_VALUE)

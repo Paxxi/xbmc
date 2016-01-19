@@ -679,18 +679,18 @@ void SortUtils::Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute attribute
       Fields sortingFields = GetFieldsForSorting(sortBy);
 
       // Prepare the string used for sorting and store it under FieldSort
-      for (DatabaseResults::iterator item = items.begin(); item != items.end(); ++item)
+      for (auto & item : items)
       {
         // add all fields to the item that are required for sorting if they are currently missing
-        for (Fields::const_iterator field = sortingFields.begin(); field != sortingFields.end(); ++field)
+        for (auto sortingField : sortingFields)
         {
-          if (item->find(*field) == item->end())
-            item->insert(std::pair<Field, CVariant>(*field, CVariant::ConstNullVariant));
+          if (item.find(sortingField) == item.end())
+            item.insert(std::pair<Field, CVariant>(sortingField, CVariant::ConstNullVariant));
         }
 
         std::wstring sortLabel;
-        g_charsetConverter.utf8ToW(preparator(attributes, *item), sortLabel, false);
-        item->insert(std::pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
+        g_charsetConverter.utf8ToW(preparator(attributes, item), sortLabel, false);
+        item.insert(std::pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
       }
 
       // Do the sorting
@@ -718,18 +718,18 @@ void SortUtils::Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute attribute
       Fields sortingFields = GetFieldsForSorting(sortBy);
 
       // Prepare the string used for sorting and store it under FieldSort
-      for (SortItems::iterator item = items.begin(); item != items.end(); ++item)
+      for (auto & item : items)
       {
         // add all fields to the item that are required for sorting if they are currently missing
-        for (Fields::const_iterator field = sortingFields.begin(); field != sortingFields.end(); ++field)
+        for (auto sortingField : sortingFields)
         {
-          if ((*item)->find(*field) == (*item)->end())
-            (*item)->insert(std::pair<Field, CVariant>(*field, CVariant::ConstNullVariant));
+          if (item->find(sortingField) == item->end())
+            item->insert(std::pair<Field, CVariant>(sortingField, CVariant::ConstNullVariant));
         }
 
         std::wstring sortLabel;
-        g_charsetConverter.utf8ToW(preparator(attributes, **item), sortLabel, false);
-        (*item)->insert(std::pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
+        g_charsetConverter.utf8ToW(preparator(attributes, *item), sortLabel, false);
+        item->insert(std::pair<Field, CVariant>(FieldSort, CVariant(sortLabel)));
       }
 
       // Do the sorting
@@ -814,10 +814,10 @@ const Fields& SortUtils::GetFieldsForSorting(SortBy sortBy)
 std::string SortUtils::RemoveArticles(const std::string &label)
 {
   std::set<std::string> sortTokens = g_langInfo.GetSortTokens();
-  for (std::set<std::string>::const_iterator token = sortTokens.begin(); token != sortTokens.end(); ++token)
+  for (const auto & sortToken : sortTokens)
   {
-    if (token->size() < label.size() && StringUtils::StartsWithNoCase(label, *token))
-      return label.substr(token->size());
+    if (sortToken.size() < label.size() && StringUtils::StartsWithNoCase(label, sortToken))
+      return label.substr(sortToken.size());
   }
 
   return label;
@@ -899,18 +899,18 @@ const sort_map table[] = {
 
 SORT_METHOD SortUtils::TranslateOldSortMethod(SortBy sortBy, bool ignoreArticle)
 {
-  for (size_t i = 0; i < sizeof(table) / sizeof(sort_map); i++)
+  for (auto i : table)
   {
-    if (table[i].sort == sortBy)
+    if (i.sort == sortBy)
     {
-      if (ignoreArticle == ((table[i].flags & SortAttributeIgnoreArticle) == SortAttributeIgnoreArticle))
-        return table[i].old;
+      if (ignoreArticle == ((i.flags & SortAttributeIgnoreArticle) == SortAttributeIgnoreArticle))
+        return i.old;
     }
   }
-  for (size_t i = 0; i < sizeof(table) / sizeof(sort_map); i++)
+  for (auto i : table)
   {
-    if (table[i].sort == sortBy)
-      return table[i].old;
+    if (i.sort == sortBy)
+      return i.old;
   }
   return SORT_METHOD_NONE;
 }
@@ -918,12 +918,12 @@ SORT_METHOD SortUtils::TranslateOldSortMethod(SortBy sortBy, bool ignoreArticle)
 SortDescription SortUtils::TranslateOldSortMethod(SORT_METHOD sortBy)
 {
   SortDescription description;
-  for (size_t i = 0; i < sizeof(table) / sizeof(sort_map); i++)
+  for (auto i : table)
   {
-    if (table[i].old == sortBy)
+    if (i.old == sortBy)
     {
-      description.sortBy = table[i].sort;
-      description.sortAttributes = table[i].flags;
+      description.sortBy = i.sort;
+      description.sortAttributes = i.flags;
       break;
     }
   }
@@ -932,10 +932,10 @@ SortDescription SortUtils::TranslateOldSortMethod(SORT_METHOD sortBy)
 
 int SortUtils::GetSortLabel(SortBy sortBy)
 {
-  for (size_t i = 0; i < sizeof(table) / sizeof(sort_map); i++)
+  for (auto i : table)
   {
-    if (table[i].sort == sortBy)
-      return table[i].label;
+    if (i.sort == sortBy)
+      return i.label;
   }
   return 16018; // None
 }

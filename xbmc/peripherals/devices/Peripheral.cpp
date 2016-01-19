@@ -74,8 +74,8 @@ CPeripheral::~CPeripheral(void)
 {
   PersistSettings(true);
 
-  for (unsigned int iSubdevicePtr = 0; iSubdevicePtr < m_subDevices.size(); iSubdevicePtr++)
-    delete m_subDevices.at(iSubdevicePtr);
+  for (auto & m_subDevice : m_subDevices)
+    delete m_subDevice;
   m_subDevices.clear();
 
   ClearSettings();
@@ -98,9 +98,9 @@ bool CPeripheral::HasFeature(const PeripheralFeature feature) const
 {
   bool bReturn(false);
 
-  for (unsigned int iFeaturePtr = 0; iFeaturePtr < m_features.size(); iFeaturePtr++)
+  for (auto m_feature : m_features)
   {
-    if (m_features.at(iFeaturePtr) == feature)
+    if (m_feature == feature)
     {
       bReturn = true;
       break;
@@ -109,9 +109,9 @@ bool CPeripheral::HasFeature(const PeripheralFeature feature) const
 
   if (!bReturn)
   {
-    for (unsigned int iSubdevicePtr = 0; iSubdevicePtr < m_subDevices.size(); iSubdevicePtr++)
+    for (auto m_subDevice : m_subDevices)
     {
-      if (m_subDevices.at(iSubdevicePtr)->HasFeature(feature))
+      if (m_subDevice->HasFeature(feature))
       {
         bReturn = true;
         break;
@@ -124,11 +124,11 @@ bool CPeripheral::HasFeature(const PeripheralFeature feature) const
 
 void CPeripheral::GetFeatures(std::vector<PeripheralFeature> &features) const
 {
-  for (unsigned int iFeaturePtr = 0; iFeaturePtr < m_features.size(); iFeaturePtr++)
-    features.push_back(m_features.at(iFeaturePtr));
+  for (auto m_feature : m_features)
+    features.push_back(m_feature);
 
-  for (unsigned int iSubdevicePtr = 0; iSubdevicePtr < m_subDevices.size(); iSubdevicePtr++)
-    m_subDevices.at(iSubdevicePtr)->GetFeatures(features);
+  for (auto m_subDevice : m_subDevices)
+    m_subDevice->GetFeatures(features);
 }
 
 bool CPeripheral::Initialise(void)
@@ -149,14 +149,13 @@ bool CPeripheral::Initialise(void)
                                           m_strProductId.c_str());
   LoadPersistedSettings();
 
-  for (unsigned int iFeaturePtr = 0; iFeaturePtr < m_features.size(); iFeaturePtr++)
+  for (auto feature : m_features)
   {
-    PeripheralFeature feature = m_features.at(iFeaturePtr);
     bReturn &= InitialiseFeature(feature);
   }
 
-  for (unsigned int iSubdevicePtr = 0; iSubdevicePtr < m_subDevices.size(); iSubdevicePtr++)
-    bReturn &= m_subDevices.at(iSubdevicePtr)->Initialise();
+  for (auto & m_subDevice : m_subDevices)
+    bReturn &= m_subDevice->Initialise();
 
   if (bReturn)
   {
@@ -170,8 +169,8 @@ bool CPeripheral::Initialise(void)
 
 void CPeripheral::GetSubdevices(std::vector<CPeripheral *> &subDevices) const
 {
-  for (unsigned int iSubdevicePtr = 0; iSubdevicePtr < m_subDevices.size(); iSubdevicePtr++)
-    subDevices.push_back(m_subDevices.at(iSubdevicePtr));
+  for (auto m_subDevice : m_subDevices)
+    subDevices.push_back(m_subDevice);
 }
 
 bool CPeripheral::IsMultiFunctional(void) const
@@ -182,8 +181,8 @@ bool CPeripheral::IsMultiFunctional(void) const
 std::vector<CSetting *> CPeripheral::GetSettings(void) const
 {
   std::vector<PeripheralDeviceSetting> tmpSettings;
-  for (std::map<std::string, PeripheralDeviceSetting>::const_iterator it = m_settings.begin(); it != m_settings.end(); ++it)
-    tmpSettings.push_back(it->second);
+  for (const auto & m_setting : m_settings)
+    tmpSettings.push_back(m_setting.second);
   sort(tmpSettings.begin(), tmpSettings.end(), SortBySettingsOrder());
 
   std::vector<CSetting *> settings;
@@ -487,8 +486,8 @@ void CPeripheral::PersistSettings(bool bExiting /* = false */)
 
   if (!bExiting)
   {
-    for (std::set<std::string>::const_iterator it = m_changedSettings.begin(); it != m_changedSettings.end(); ++it)
-      OnSettingChanged(*it);
+    for (const auto & m_changedSetting : m_changedSettings)
+      OnSettingChanged(m_changedSetting);
   }
   m_changedSettings.clear();
 }

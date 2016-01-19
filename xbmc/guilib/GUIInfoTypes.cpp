@@ -330,14 +330,14 @@ void CGUIInfoLabel::Parse(const std::string &label, int context)
     size_t pos1 = work.size();
     size_t pos2;
     size_t len = 0;
-    for (size_t i = 0; i < sizeof(infoformatmap) / sizeof(infoformat); i++)
+    for (auto i : infoformatmap)
     {
       pos2 = work.find(infoformatmap[i].str);
       if (pos2 != std::string::npos && pos2 < pos1)
       {
         pos1 = pos2;
-        len = strlen(infoformatmap[i].str);
-        format = infoformatmap[i].val;
+        len = strlen(i.str);
+        format = i.val;
       }
     }
 

@@ -68,15 +68,15 @@ static const size_t NUM_FIELDS = sizeof(fields) / sizeof(translateField);
 
 int CTextureRule::TranslateField(const char *field) const
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
-    if (StringUtils::EqualsNoCase(field, fields[i].string)) return fields[i].field;
+  for (const auto & i : fields)
+    if (StringUtils::EqualsNoCase(field, i.string)) return i.field;
   return FieldNone;
 }
 
 std::string CTextureRule::TranslateField(int field) const
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
-    if (field == fields[i].field) return fields[i].string;
+  for (const auto & i : fields)
+    if (field == i.field) return i.string;
   return "none";
 }
 
@@ -96,8 +96,8 @@ std::string CTextureRule::GetField(int field, const std::string &type) const
 
 CDatabaseQueryRule::FIELD_TYPE CTextureRule::GetFieldType(int field) const
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
-    if (field == fields[i].field) return fields[i].type;
+  for (const auto & i : fields)
+    if (field == i.field) return i.type;
   return TEXT_FIELD;
 }
 

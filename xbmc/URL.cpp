@@ -786,10 +786,8 @@ std::string CURL::Encode(const std::string& strURLData)
   /* wonder what a good value is here is, depends on how often it occurs */
   strResult.reserve( strURLData.length() * 2 );
 
-  for (size_t i = 0; i < strURLData.size(); ++i)
+  for (char kar : strURLData)
   {
-    const char kar = strURLData[i];
-    
     // Don't URL encode "-_.!()" according to RFC1738
     // TODO: Update it to "-_.~" after Gotham according to RFC3986
     if (StringUtils::isasciialphanum(kar) || kar == '-' || kar == '.' || kar == '_' || kar == '!' || kar == '(' || kar == ')')

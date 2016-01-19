@@ -290,10 +290,10 @@ void CScreenShot::TakeScreenshot()
 
         if (!newDir.empty())
         {
-          for (unsigned int i = 0; i < screenShots.size(); i++)
+          for (auto & screenShot : screenShots)
           {
             std::string file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(newDir, "screenshot%03d.png"), 999);
-            CFile::Copy(screenShots[i], file);
+            CFile::Copy(screenShot, file);
           }
           screenShots.clear();
         }
