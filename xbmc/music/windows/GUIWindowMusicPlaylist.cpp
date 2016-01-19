@@ -58,14 +58,14 @@ using namespace PLAYLIST;
 #define CONTROL_BTNPREVIOUS       25
 #define CONTROL_BTNREPEAT         26
 
-CGUIWindowMusicPlayList::CGUIWindowMusicPlayList(void)
+CGUIWindowMusicPlayList::CGUIWindowMusicPlayList()
     : CGUIWindowMusicBase(WINDOW_MUSIC_PLAYLIST, "MyMusicPlaylist.xml")
 {
   m_musicInfoLoader.SetObserver(this);
   m_movingFrom = -1;
 }
 
-CGUIWindowMusicPlayList::~CGUIWindowMusicPlayList(void)
+CGUIWindowMusicPlayList::~CGUIWindowMusicPlayList()
 {
 }
 

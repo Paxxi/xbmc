@@ -37,13 +37,13 @@
 #pragma comment(lib,"liblzo2.lib")
 #endif
 
-CTextureBundleXBT::CTextureBundleXBT(void)
+CTextureBundleXBT::CTextureBundleXBT()
 {
   m_themeBundle = false;
   m_TimeStamp = 0;
 }
 
-CTextureBundleXBT::~CTextureBundleXBT(void)
+CTextureBundleXBT::~CTextureBundleXBT()
 {
   Cleanup();
 }

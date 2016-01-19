@@ -527,7 +527,7 @@ bool CAddon::HasSettingsToSave() const
   return !m_settings.empty();
 }
 
-void CAddon::SaveSettings(void)
+void CAddon::SaveSettings()
 {
   if (!HasSettingsToSave())
     return; // no settings to save

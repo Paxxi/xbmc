@@ -316,7 +316,7 @@ bool CMatrixGL::Project(GLfloat objx, GLfloat objy, GLfloat objz, const GLfloat 
   return true;
 }
 
-void CMatrixGL::PrintMatrix(void)
+void CMatrixGL::PrintMatrix()
 {
   CLog::Log(LOGDEBUG, "%f %f %f %f", m_pMatrix[0], m_pMatrix[4], m_pMatrix[8],  m_pMatrix[12]);
   CLog::Log(LOGDEBUG, "%f %f %f %f", m_pMatrix[1], m_pMatrix[5], m_pMatrix[9],  m_pMatrix[13]);

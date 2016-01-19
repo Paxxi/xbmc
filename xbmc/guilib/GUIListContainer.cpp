@@ -30,7 +30,7 @@ CGUIListContainer::CGUIListContainer(int parentID, int controlID, float posX, fl
   m_type = VIEW_TYPE_LIST;
 }
 
-CGUIListContainer::~CGUIListContainer(void)
+CGUIListContainer::~CGUIListContainer()
 {
 }
 

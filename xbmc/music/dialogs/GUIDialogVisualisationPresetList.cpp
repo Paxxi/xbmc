@@ -33,7 +33,7 @@
 
 using ADDON::CVisualisation;
 
-CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList(void)
+CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList()
     : CGUIDialog(WINDOW_DIALOG_VIS_PRESET_LIST, "DialogSelect.xml")
 {
   m_currentPreset = 0;
@@ -42,7 +42,7 @@ CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList(void)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogVisualisationPresetList::~CGUIDialogVisualisationPresetList(void)
+CGUIDialogVisualisationPresetList::~CGUIDialogVisualisationPresetList()
 {
   delete m_vecPresets;
 }

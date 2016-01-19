@@ -310,7 +310,7 @@ bool CCurlFile::CReadState::Seek(int64_t pos)
   return false;
 }
 
-void CCurlFile::CReadState::SetResume(void)
+void CCurlFile::CReadState::SetResume()
 {
   /*
    * Explicitly set RANGE header when filepos=0 as some http servers require us to always send the range
@@ -1705,7 +1705,7 @@ void CCurlFile::SetRequestHeader(const std::string& header, long value)
   m_requestheaders[header] = StringUtils::Format("%ld", value);
 }
 
-std::string CCurlFile::GetServerReportedCharset(void)
+std::string CCurlFile::GetServerReportedCharset()
 {
   if (!m_state)
     return "";

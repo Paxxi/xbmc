@@ -56,7 +56,7 @@ CProfile::CProfile(std::string directory, std::string name, const int id):
   m_bAddons = true;
 }
 
-CProfile::~CProfile(void)
+CProfile::~CProfile()
 {}
 
 void CProfile::setDate()

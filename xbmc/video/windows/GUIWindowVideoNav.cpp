@@ -75,13 +75,13 @@ using namespace KODI::MESSAGING;
 
 #define CONTROL_UPDATE_LIBRARY    20
 
-CGUIWindowVideoNav::CGUIWindowVideoNav(void)
+CGUIWindowVideoNav::CGUIWindowVideoNav()
     : CGUIWindowVideoBase(WINDOW_VIDEO_NAV, "MyVideoNav.xml")
 {
   m_thumbLoader.SetObserver(this);
 }
 
-CGUIWindowVideoNav::~CGUIWindowVideoNav(void)
+CGUIWindowVideoNav::~CGUIWindowVideoNav()
 {
 }
 

@@ -98,7 +98,7 @@ CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals *manager) :
   CLog::Log(LOGDEBUG, "%s - initialised udev monitor", __FUNCTION__);
 }
 
-CPeripheralBusUSB::~CPeripheralBusUSB(void)
+CPeripheralBusUSB::~CPeripheralBusUSB()
 {
   StopThread(true);
   udev_monitor_unref(m_udevMon);
@@ -198,7 +198,7 @@ const PeripheralType CPeripheralBusUSB::GetType(int iDeviceClass)
   }
 }
 
-void CPeripheralBusUSB::Process(void)
+void CPeripheralBusUSB::Process()
 {
   bool bUpdated(false);
   ScanForDevices();
@@ -212,7 +212,7 @@ void CPeripheralBusUSB::Process(void)
   m_bIsStarted = false;
 }
 
-void CPeripheralBusUSB::Clear(void)
+void CPeripheralBusUSB::Clear()
 {
   StopThread(false);
 

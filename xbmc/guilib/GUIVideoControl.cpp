@@ -31,7 +31,7 @@ CGUIVideoControl::CGUIVideoControl(int parentID, int controlID, float posX, floa
   ControlType = GUICONTROL_VIDEO;
 }
 
-CGUIVideoControl::~CGUIVideoControl(void)
+CGUIVideoControl::~CGUIVideoControl()
 {}
 
 void CGUIVideoControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)

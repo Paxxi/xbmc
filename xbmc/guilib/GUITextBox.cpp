@@ -76,7 +76,7 @@ CGUITextBox::CGUITextBox(const CGUITextBox &from)
   ControlType = GUICONTROL_TEXTBOX;
 }
 
-CGUITextBox::~CGUITextBox(void)
+CGUITextBox::~CGUITextBox()
 {
   delete m_autoScrollRepeatAnim;
   m_autoScrollRepeatAnim = NULL;

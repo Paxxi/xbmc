@@ -141,7 +141,7 @@ void SqliteDatabase::setDatabase(const char *newDb) {
     db += ".db";
 }
 
-int SqliteDatabase::status(void) {
+int SqliteDatabase::status() {
   if (active == false) return DB_CONNECTION_NONE;
   return DB_CONNECTION_OK;
 }
@@ -237,7 +237,7 @@ int SqliteDatabase::connect(bool create) {
   return DB_CONNECTION_NONE;
 }
 
-bool SqliteDatabase::exists(void)
+bool SqliteDatabase::exists()
 {
   bool bRet = false;
   if (!active) return bRet;
@@ -255,7 +255,7 @@ bool SqliteDatabase::exists(void)
   return bRet;
 }
 
-void SqliteDatabase::disconnect(void) {
+void SqliteDatabase::disconnect() {
   if (active == false) return;
   sqlite3_close(conn);
   active = false;
@@ -311,7 +311,7 @@ int SqliteDatabase::copy(const char *backup_name) {
   return rc;
 }
 
-int SqliteDatabase::drop_analytics(void) {
+int SqliteDatabase::drop_analytics() {
   // SqliteDatabase::copy used a full database copy, so we have a new version
   // with all the analytics stuff. We should clean database from everything but data
   if (active == false)
@@ -760,18 +760,18 @@ void SqliteDataset::last() {
   fill_fields();
 }
 
-void SqliteDataset::prev(void) {
+void SqliteDataset::prev() {
   Dataset::prev();
   fill_fields();
 }
 
-void SqliteDataset::next(void) {
+void SqliteDataset::next() {
   Dataset::next();
   if (!eof()) 
       fill_fields();
 }
 
-void SqliteDataset::free_row(void)
+void SqliteDataset::free_row()
 {
   if (frecno < 0 || (unsigned int)frecno >= result.records.size())
     return;

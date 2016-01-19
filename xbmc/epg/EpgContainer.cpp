@@ -41,7 +41,7 @@
 using namespace EPG;
 using namespace PVR;
 
-CEpgContainer::CEpgContainer(void) :
+CEpgContainer::CEpgContainer() :
     CThread("EPGUpdater")
 {
   m_progressHandle = NULL;
@@ -63,7 +63,7 @@ CEpgContainer::CEpgContainer(void) :
   m_bIgnoreDbForClient = false;
 }
 
-CEpgContainer::~CEpgContainer(void)
+CEpgContainer::~CEpgContainer()
 {
   Unload();
 }
@@ -74,19 +74,19 @@ CEpgContainer &CEpgContainer::GetInstance()
   return epgInstance;
 }
 
-void CEpgContainer::Unload(void)
+void CEpgContainer::Unload()
 {
   Stop();
   Clear(false);
 }
 
-bool CEpgContainer::IsStarted(void) const
+bool CEpgContainer::IsStarted() const
 {
   CSingleLock lock(m_critSection);
   return m_bStarted;
 }
 
-unsigned int CEpgContainer::NextEpgId(void)
+unsigned int CEpgContainer::NextEpgId()
 {
   CSingleLock lock(m_critSection);
   return ++m_iNextEpgId;
@@ -139,9 +139,9 @@ class CEPGContainerStartJob : public CJob
 {
 public:
   CEPGContainerStartJob() {}
-  ~CEPGContainerStartJob(void) override {}
+  ~CEPGContainerStartJob() override {}
 
-  bool DoWork(void) override
+  bool DoWork() override
   {
     g_EpgContainer.Start(false);
     return true;
@@ -191,7 +191,7 @@ void CEpgContainer::Start(bool bAsync)
   }
 }
 
-bool CEpgContainer::Stop(void)
+bool CEpgContainer::Stop()
 {
   StopThread();
 
@@ -223,7 +223,7 @@ void CEpgContainer::OnSettingChanged(const CSetting *setting)
     LoadSettings();
 }
 
-void CEpgContainer::LoadFromDB(void)
+void CEpgContainer::LoadFromDB()
 {
   CSingleLock lock(m_critSection);
 
@@ -270,7 +270,7 @@ void CEpgContainer::LoadFromDB(void)
   m_bLoaded = bLoaded;
 }
 
-bool CEpgContainer::MarkTablesForPersist(void)
+bool CEpgContainer::MarkTablesForPersist()
 {
   /* Set m_bMarkForPersist to persist tables on the next Process() run but only
   if epg.ignoredbforclient is set, otherwise persistAll does already persisting. */
@@ -278,7 +278,7 @@ bool CEpgContainer::MarkTablesForPersist(void)
   return m_bMarkForPersist = CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT);
 }
 
-bool CEpgContainer::PersistTables(void)
+bool CEpgContainer::PersistTables()
 {
   m_critSection.lock();
   auto copy = m_epgs;
@@ -286,7 +286,7 @@ bool CEpgContainer::PersistTables(void)
   return m_database.Persist(copy);
 }
 
-bool CEpgContainer::PersistAll(void)
+bool CEpgContainer::PersistAll()
 {
   bool bReturn(true);
   m_critSection.lock();
@@ -305,7 +305,7 @@ bool CEpgContainer::PersistAll(void)
   return bReturn;
 }
 
-void CEpgContainer::Process(void)
+void CEpgContainer::Process()
 {
   time_t iNow(0), iLastSave(0);
   bool bUpdateEpg(true);
@@ -480,7 +480,7 @@ CEpgPtr CEpgContainer::CreateChannelEpg(CPVRChannelPtr channel)
   return epg;
 }
 
-bool CEpgContainer::LoadSettings(void)
+bool CEpgContainer::LoadSettings()
 {
   m_bIgnoreDbForClient = CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT);
   m_iUpdateTime        = CSettings::GetInstance().GetInt (CSettings::SETTING_EPG_EPGUPDATE) * 60;
@@ -489,7 +489,7 @@ bool CEpgContainer::LoadSettings(void)
   return true;
 }
 
-bool CEpgContainer::RemoveOldEntries(void)
+bool CEpgContainer::RemoveOldEntries()
 {
   CDateTime now = CDateTime::GetUTCDateTime() -
       CDateTimeSpan(0, g_advancedSettings.m_iEpgLingerTime / 60, g_advancedSettings.m_iEpgLingerTime % 60, 0);
@@ -531,7 +531,7 @@ bool CEpgContainer::DeleteEpg(const CEpg &epg, bool bDeleteFromDatabase /* = fal
   return true;
 }
 
-void CEpgContainer::CloseProgressDialog(void)
+void CEpgContainer::CloseProgressDialog()
 {
   if (m_progressHandle)
   {
@@ -562,7 +562,7 @@ void CEpgContainer::UpdateProgressDialog(int iCurrent, int iMax, const std::stri
   }
 }
 
-bool CEpgContainer::InterruptUpdate(void) const
+bool CEpgContainer::InterruptUpdate() const
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);
@@ -718,7 +718,7 @@ int CEpgContainer::GetEPGAll(CFileItemList &results)
   return results.Size() - iInitialSize;
 }
 
-const CDateTime CEpgContainer::GetFirstEPGDate(void)
+const CDateTime CEpgContainer::GetFirstEPGDate()
 {
   CDateTime returnValue;
 
@@ -735,7 +735,7 @@ const CDateTime CEpgContainer::GetFirstEPGDate(void)
   return returnValue;
 }
 
-const CDateTime CEpgContainer::GetLastEPGDate(void)
+const CDateTime CEpgContainer::GetLastEPGDate()
 {
   CDateTime returnValue;
 
@@ -770,7 +770,7 @@ int CEpgContainer::GetEPGSearch(CFileItemList &results, const EpgSearchFilter &f
   return results.Size() - iInitialSize;
 }
 
-bool CEpgContainer::CheckPlayingEvents(void)
+bool CEpgContainer::CheckPlayingEvents()
 {
   bool bReturn(false);
   time_t iNow;
@@ -802,7 +802,7 @@ bool CEpgContainer::CheckPlayingEvents(void)
   return bReturn;
 }
 
-bool CEpgContainer::IsInitialising(void) const
+bool CEpgContainer::IsInitialising() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsInitialising;

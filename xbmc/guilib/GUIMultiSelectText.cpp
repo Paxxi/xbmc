@@ -52,7 +52,7 @@ CGUIMultiSelectTextControl::CGUIMultiSelectTextControl(int parentID, int control
   m_label.align &= ~3; // we currently ignore all x alignment
 }
 
-CGUIMultiSelectTextControl::~CGUIMultiSelectTextControl(void)
+CGUIMultiSelectTextControl::~CGUIMultiSelectTextControl()
 {
 }
 

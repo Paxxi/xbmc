@@ -147,14 +147,14 @@ using namespace PVR;
 using namespace PERIPHERALS;
 using namespace KODI::MESSAGING;
 
-CGUIWindowManager::CGUIWindowManager(void)
+CGUIWindowManager::CGUIWindowManager()
 {
   m_pCallback = NULL;
   m_iNested = 0;
   m_initialized = false;
 }
 
-CGUIWindowManager::~CGUIWindowManager(void)
+CGUIWindowManager::~CGUIWindowManager()
 {
 }
 

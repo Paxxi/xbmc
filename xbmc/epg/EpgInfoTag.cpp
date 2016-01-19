@@ -41,7 +41,7 @@ CEpgInfoTagPtr CEpgInfoTag::CreateDefaultTag()
   return CEpgInfoTagPtr(new CEpgInfoTag());
 }
 
-CEpgInfoTag::CEpgInfoTag(void) :
+CEpgInfoTag::CEpgInfoTag() :
     m_bNotify(false),
     m_iBroadcastId(-1),
     m_iGenreType(0),
@@ -233,25 +233,25 @@ CDateTime CEpgInfoTag::GetCurrentPlayingTime() const
   return now;
 }
 
-bool CEpgInfoTag::IsActive(void) const
+bool CEpgInfoTag::IsActive() const
 {
   CDateTime now = GetCurrentPlayingTime();
   return (m_startTime <= now && m_endTime > now);
 }
 
-bool CEpgInfoTag::WasActive(void) const
+bool CEpgInfoTag::WasActive() const
 {
   CDateTime now = GetCurrentPlayingTime();
   return (m_endTime < now);
 }
 
-bool CEpgInfoTag::IsUpcoming(void) const
+bool CEpgInfoTag::IsUpcoming() const
 {
   CDateTime now = GetCurrentPlayingTime();
   return (m_startTime > now);
 }
 
-float CEpgInfoTag::ProgressPercentage(void) const
+float CEpgInfoTag::ProgressPercentage() const
 {
   float fReturn(0);
   int iDuration;
@@ -270,7 +270,7 @@ float CEpgInfoTag::ProgressPercentage(void) const
   return fReturn;
 }
 
-int CEpgInfoTag::Progress(void) const
+int CEpgInfoTag::Progress() const
 {
   int iDuration;
   time_t currentTime, startTime;
@@ -284,12 +284,12 @@ int CEpgInfoTag::Progress(void) const
   return iDuration;
 }
 
-CEpgInfoTagPtr CEpgInfoTag::GetNextEvent(void) const
+CEpgInfoTagPtr CEpgInfoTag::GetNextEvent() const
 {
   return GetTable()->GetNextEvent(*this);
 }
 
-CEpgInfoTagPtr CEpgInfoTag::GetPreviousEvent(void) const
+CEpgInfoTagPtr CEpgInfoTag::GetPreviousEvent() const
 {
   return GetTable()->GetPreviousEvent(*this);
 }
@@ -299,34 +299,34 @@ void CEpgInfoTag::SetUniqueBroadcastID(unsigned int iUniqueBroadcastID)
   m_iUniqueBroadcastID = iUniqueBroadcastID;
 }
 
-unsigned int CEpgInfoTag::UniqueBroadcastID(void) const
+unsigned int CEpgInfoTag::UniqueBroadcastID() const
 {
   return m_iUniqueBroadcastID;
 }
 
-int CEpgInfoTag::BroadcastId(void) const
+int CEpgInfoTag::BroadcastId() const
 {
   return m_iBroadcastId;
 }
 
-CDateTime CEpgInfoTag::StartAsUTC(void) const
+CDateTime CEpgInfoTag::StartAsUTC() const
 {
   return m_startTime;
 }
 
-CDateTime CEpgInfoTag::StartAsLocalTime(void) const
+CDateTime CEpgInfoTag::StartAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_startTime);
   return retVal;
 }
 
-CDateTime CEpgInfoTag::EndAsUTC(void) const
+CDateTime CEpgInfoTag::EndAsUTC() const
 {
   return m_endTime;
 }
 
-CDateTime CEpgInfoTag::EndAsLocalTime(void) const
+CDateTime CEpgInfoTag::EndAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_endTime);
@@ -338,7 +338,7 @@ void CEpgInfoTag::SetEndFromUTC(const CDateTime &end)
   m_endTime = end;
 }
 
-int CEpgInfoTag::GetDuration(void) const
+int CEpgInfoTag::GetDuration() const
 {
   time_t start, end;
   m_startTime.GetAsTime(start);
@@ -406,22 +406,22 @@ std::string CEpgInfoTag::OriginalTitle(bool bOverrideParental /* = false */) con
   return retVal;
 }
 
-std::string CEpgInfoTag::Cast(void) const
+std::string CEpgInfoTag::Cast() const
 {
   return m_strCast;
 }
 
-std::string CEpgInfoTag::Director(void) const
+std::string CEpgInfoTag::Director() const
 {
   return m_strDirector;
 }
 
-std::string CEpgInfoTag::Writer(void) const
+std::string CEpgInfoTag::Writer() const
 {
   return m_strWriter;
 }
 
-int CEpgInfoTag::Year(void) const
+int CEpgInfoTag::Year() const
 {
   return m_iYear;
 }
@@ -451,12 +451,12 @@ void CEpgInfoTag::SetGenre(int iGenreType, int iGenreSubType, const char* strGen
   }
 }
 
-int CEpgInfoTag::GenreType(void) const
+int CEpgInfoTag::GenreType() const
 {
   return m_iGenreType;
 }
 
-int CEpgInfoTag::GenreSubType(void) const
+int CEpgInfoTag::GenreSubType() const
 {
   return m_iGenreSubType;
 }
@@ -466,75 +466,75 @@ const std::vector<std::string> CEpgInfoTag::Genre(void) const
   return m_genre;
 }
 
-CDateTime CEpgInfoTag::FirstAiredAsUTC(void) const
+CDateTime CEpgInfoTag::FirstAiredAsUTC() const
 {
   return m_firstAired;
 }
 
-CDateTime CEpgInfoTag::FirstAiredAsLocalTime(void) const
+CDateTime CEpgInfoTag::FirstAiredAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_firstAired);
   return retVal;
 }
 
-int CEpgInfoTag::ParentalRating(void) const
+int CEpgInfoTag::ParentalRating() const
 {
   return m_iParentalRating;
 }
 
-int CEpgInfoTag::StarRating(void) const
+int CEpgInfoTag::StarRating() const
 {
   return m_iStarRating;
 }
 
-bool CEpgInfoTag::Notify(void) const
+bool CEpgInfoTag::Notify() const
 {
   return m_bNotify;
 }
 
-int CEpgInfoTag::SeriesNumber(void) const
+int CEpgInfoTag::SeriesNumber() const
 {
   return m_iSeriesNumber;
 }
 
-int CEpgInfoTag::EpisodeNumber(void) const
+int CEpgInfoTag::EpisodeNumber() const
 {
   return m_iEpisodeNumber;
 }
 
-int CEpgInfoTag::EpisodePart(void) const
+int CEpgInfoTag::EpisodePart() const
 {
   return m_iEpisodePart;
 }
 
-std::string CEpgInfoTag::EpisodeName(void) const
+std::string CEpgInfoTag::EpisodeName() const
 {
   return m_strEpisodeName;
 }
 
-std::string CEpgInfoTag::Icon(void) const
+std::string CEpgInfoTag::Icon() const
 {
   return m_strIconPath;
 }
 
-std::string CEpgInfoTag::Path(void) const
+std::string CEpgInfoTag::Path() const
 {
   return m_strFileNameAndPath;
 }
 
-bool CEpgInfoTag::HasTimer(void) const
+bool CEpgInfoTag::HasTimer() const
 {
   return m_timer != NULL;
 }
 
-bool CEpgInfoTag::HasTimerRule(void) const
+bool CEpgInfoTag::HasTimerRule() const
 {
   CSingleLock lock(m_critSection);
   return m_timer && (m_timer->GetTimerRuleId() != PVR_TIMER_NO_PARENT);
 }
 
-CPVRTimerInfoTagPtr CEpgInfoTag::Timer(void) const
+CPVRTimerInfoTagPtr CEpgInfoTag::Timer() const
 {
   return m_timer;
 }
@@ -545,19 +545,19 @@ void CEpgInfoTag::SetPVRChannel(PVR::CPVRChannelPtr channel)
   m_pvrChannel = channel;
 }
 
-bool CEpgInfoTag::HasPVRChannel(void) const
+bool CEpgInfoTag::HasPVRChannel() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel.get() != NULL;
 }
 
-int CEpgInfoTag::PVRChannelNumber(void) const
+int CEpgInfoTag::PVRChannelNumber() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->ChannelNumber() : -1;
 }
 
-std::string CEpgInfoTag::PVRChannelName(void) const
+std::string CEpgInfoTag::PVRChannelName() const
 {
   std::string strReturn;
 
@@ -570,7 +570,7 @@ std::string CEpgInfoTag::PVRChannelName(void) const
   return strReturn;
 }
 
-const PVR::CPVRChannelPtr CEpgInfoTag::ChannelTag(void) const
+const PVR::CPVRChannelPtr CEpgInfoTag::ChannelTag() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel;
@@ -697,7 +697,7 @@ bool CEpgInfoTag::Persist(bool bSingleUpdate /* = true */)
   return bReturn;
 }
 
-void CEpgInfoTag::UpdatePath(void)
+void CEpgInfoTag::UpdatePath()
 {
   m_strFileNameAndPath = StringUtils::Format("pvr://guide/%04i/%s.epg", EpgID(), m_startTime.GetAsDBDateTime().c_str());
 }
@@ -707,7 +707,7 @@ const CEpg *CEpgInfoTag::GetTable() const
   return m_epg;
 }
 
-const int CEpgInfoTag::EpgID(void) const
+const int CEpgInfoTag::EpgID() const
 {
   return m_epg ? m_epg->EpgID() : -1;
 }
@@ -717,7 +717,7 @@ void CEpgInfoTag::SetTimer(CPVRTimerInfoTagPtr timer)
   m_timer = timer;
 }
 
-void CEpgInfoTag::ClearTimer(void)
+void CEpgInfoTag::ClearTimer()
 {
   CPVRTimerInfoTagPtr previousTag;
   previousTag = m_timer;
@@ -734,19 +734,19 @@ void CEpgInfoTag::SetRecording(CPVRRecordingPtr recording)
   m_recording = recording;
 }
 
-void CEpgInfoTag::ClearRecording(void)
+void CEpgInfoTag::ClearRecording()
 {
   CSingleLock lock(m_critSection);
   m_recording.reset();
 }
 
-bool CEpgInfoTag::HasRecording(void) const
+bool CEpgInfoTag::HasRecording() const
 {
   CSingleLock lock(m_critSection);
   return m_recording.get() != NULL;
 }
 
-CPVRRecordingPtr CEpgInfoTag::Recording(void) const
+CPVRRecordingPtr CEpgInfoTag::Recording() const
 {
   CSingleLock lock(m_critSection);
   return m_recording;

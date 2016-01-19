@@ -97,7 +97,7 @@ void CDatabase::Filter::AppendGroup(const std::string &strGroup)
     group += ", " + strGroup;
 }
 
-CDatabase::CDatabase(void)
+CDatabase::CDatabase()
 {
   m_openCount = 0;
   m_sqlite = true;
@@ -105,7 +105,7 @@ CDatabase::CDatabase(void)
   m_multipleExecute = false;
 }
 
-CDatabase::~CDatabase(void)
+CDatabase::~CDatabase()
 {
   Close();
 }

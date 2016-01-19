@@ -46,7 +46,7 @@
 #define CONTROL_VIDEO   20
 #define CONTROL_NONE   0
 
-CGUIWindowSettingsScreenCalibration::CGUIWindowSettingsScreenCalibration(void)
+CGUIWindowSettingsScreenCalibration::CGUIWindowSettingsScreenCalibration()
     : CGUIWindow(WINDOW_SCREEN_CALIBRATION, "SettingsScreenCalibration.xml")
 {
   m_iCurRes = 0;
@@ -55,7 +55,7 @@ CGUIWindowSettingsScreenCalibration::CGUIWindowSettingsScreenCalibration(void)
   m_needsScaling = false;         // we handle all the scaling
 }
 
-CGUIWindowSettingsScreenCalibration::~CGUIWindowSettingsScreenCalibration(void)
+CGUIWindowSettingsScreenCalibration::~CGUIWindowSettingsScreenCalibration()
 {}
 
 

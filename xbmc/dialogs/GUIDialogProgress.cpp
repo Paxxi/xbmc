@@ -31,13 +31,13 @@
 #define CONTROL_CANCEL_BUTTON 10
 #define CONTROL_PROGRESS_BAR 20
 
-CGUIDialogProgress::CGUIDialogProgress(void)
+CGUIDialogProgress::CGUIDialogProgress()
     : CGUIDialogBoxBase(WINDOW_DIALOG_PROGRESS, "DialogProgress.xml")
 {
   Reset();
 }
 
-CGUIDialogProgress::~CGUIDialogProgress(void)
+CGUIDialogProgress::~CGUIDialogProgress()
 {
 
 }

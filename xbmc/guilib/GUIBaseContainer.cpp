@@ -62,7 +62,7 @@ CGUIBaseContainer::CGUIBaseContainer(int parentID, int controlID, float posX, fl
   m_lastRenderTime = 0;
 }
 
-CGUIBaseContainer::~CGUIBaseContainer(void)
+CGUIBaseContainer::~CGUIBaseContainer()
 {
   delete m_listProvider;
 }

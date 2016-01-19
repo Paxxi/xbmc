@@ -254,7 +254,7 @@ CFileItem::CFileItem(const CGUIListItem& item)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(void)
+CFileItem::CFileItem()
 {
   Initialize();
 }
@@ -315,7 +315,7 @@ CFileItem::CFileItem(const CMediaSource& share)
   FillInMimeType(false);
 }
 
-CFileItem::~CFileItem(void)
+CFileItem::~CFileItem()
 {
   delete m_musicInfoTag;
   delete m_videoInfoTag;

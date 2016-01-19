@@ -31,7 +31,7 @@
 
 using namespace PVR;
 
-CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void) :
+CPVRChannelGroupsContainer::CPVRChannelGroupsContainer() :
     m_groupsRadio(new CPVRChannelGroups(true)),
     m_groupsTV(new CPVRChannelGroups(false)),
     m_bUpdateChannelsOnly(false),
@@ -39,7 +39,7 @@ CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void) :
 {
 }
 
-CPVRChannelGroupsContainer::~CPVRChannelGroupsContainer(void)
+CPVRChannelGroupsContainer::~CPVRChannelGroupsContainer()
 {
   delete m_groupsRadio;
   delete m_groupsTV;
@@ -65,7 +65,7 @@ bool CPVRChannelGroupsContainer::Update(bool bChannelsOnly /* = false */)
   return bReturn;
 }
 
-bool CPVRChannelGroupsContainer::Load(void)
+bool CPVRChannelGroupsContainer::Load()
 {
   Unload();
 
@@ -73,7 +73,7 @@ bool CPVRChannelGroupsContainer::Load(void)
          m_groupsTV->Load();
 }
 
-void CPVRChannelGroupsContainer::Unload(void)
+void CPVRChannelGroupsContainer::Unload()
 {
   m_groupsRadio->Clear();
   m_groupsTV->Clear();
@@ -228,7 +228,7 @@ CPVRChannelPtr CPVRChannelGroupsContainer::GetByUniqueID(int iUniqueChannelId, i
   return channel;
 }
 
-void CPVRChannelGroupsContainer::SearchMissingChannelIcons(void) const
+void CPVRChannelGroupsContainer::SearchMissingChannelIcons() const
 {
   CLog::Log(LOGINFO, "PVRChannelGroupsContainer - %s - starting channel icon search", __FUNCTION__);
 
@@ -241,7 +241,7 @@ void CPVRChannelGroupsContainer::SearchMissingChannelIcons(void) const
     channelgroupradio->SearchAndSetChannelIcons(true);
 }
 
-CFileItemPtr CPVRChannelGroupsContainer::GetLastPlayedChannel(void) const
+CFileItemPtr CPVRChannelGroupsContainer::GetLastPlayedChannel() const
 {
   CFileItemPtr channelTV = m_groupsTV->GetGroupAll()->GetLastPlayedChannel();
   CFileItemPtr channelRadio = m_groupsRadio->GetGroupAll()->GetLastPlayedChannel();
@@ -266,13 +266,13 @@ CPVRChannelGroupPtr CPVRChannelGroupsContainer::GetLastPlayedGroup(int iChannelI
   return groupTV;
 }
 
-bool CPVRChannelGroupsContainer::CreateChannelEpgs(void)
+bool CPVRChannelGroupsContainer::CreateChannelEpgs()
 {
   return m_groupsRadio->CreateChannelEpgs() &&
          m_groupsTV->CreateChannelEpgs();
 }
 
-CPVRChannelGroupPtr CPVRChannelGroupsContainer::GetPreviousPlayedGroup(void)
+CPVRChannelGroupPtr CPVRChannelGroupsContainer::GetPreviousPlayedGroup()
 {
   CSingleLock lock(m_critSection);
   return m_lastPlayedGroups[0];

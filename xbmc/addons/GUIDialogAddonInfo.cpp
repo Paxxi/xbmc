@@ -59,7 +59,7 @@
 using namespace ADDON;
 using namespace XFILE;
 
-CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
+CGUIDialogAddonInfo::CGUIDialogAddonInfo()
   : CGUIDialog(WINDOW_DIALOG_ADDON_INFO, "DialogAddonInfo.xml"),
   m_jobid(0),
   m_addonEnabled(false),
@@ -69,7 +69,7 @@ CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogAddonInfo::~CGUIDialogAddonInfo(void)
+CGUIDialogAddonInfo::~CGUIDialogAddonInfo()
 {
 }
 

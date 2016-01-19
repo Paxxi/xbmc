@@ -32,13 +32,13 @@
 using namespace XFILE;
 using namespace XCURL;
 
-CDAVFile::CDAVFile(void)
+CDAVFile::CDAVFile()
   : CCurlFile()
   , m_lastResponseCode(0)
 {
 }
 
-CDAVFile::~CDAVFile(void)
+CDAVFile::~CDAVFile()
 {
 }
 

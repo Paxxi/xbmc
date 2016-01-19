@@ -31,11 +31,11 @@
 
 CGUIColorManager g_colorManager;
 
-CGUIColorManager::CGUIColorManager(void)
+CGUIColorManager::CGUIColorManager()
 {
 }
 
-CGUIColorManager::~CGUIColorManager(void)
+CGUIColorManager::~CGUIColorManager()
 {
   Clear();
 }

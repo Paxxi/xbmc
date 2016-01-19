@@ -46,13 +46,13 @@ using namespace EPG;
 #define CONTROL_BTN_OK                  7
 #define CONTROL_BTN_PLAY_RECORDING      8
 
-CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo(void)
+CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo()
     : CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_INFO, "DialogPVRInfo.xml")
     , m_progItem(new CFileItem)
 {
 }
 
-CGUIDialogPVRGuideInfo::~CGUIDialogPVRGuideInfo(void)
+CGUIDialogPVRGuideInfo::~CGUIDialogPVRGuideInfo()
 {
 }
 

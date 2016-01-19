@@ -146,7 +146,7 @@ void CBackgroundPicLoader::LoadPic(int iPic, int iSlideNumber, const std::string
   m_loadPic.Set();
 }
 
-CGUIWindowSlideShow::CGUIWindowSlideShow(void)
+CGUIWindowSlideShow::CGUIWindowSlideShow()
     : CGUIWindow(WINDOW_SLIDESHOW, "SlideShow.xml")
 {
   m_pBackgroundLoader = NULL;
@@ -157,7 +157,7 @@ CGUIWindowSlideShow::CGUIWindowSlideShow(void)
   Reset();
 }
 
-CGUIWindowSlideShow::~CGUIWindowSlideShow(void)
+CGUIWindowSlideShow::~CGUIWindowSlideShow()
 {
   Reset();
   delete m_slides;

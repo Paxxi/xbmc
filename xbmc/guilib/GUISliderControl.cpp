@@ -60,7 +60,7 @@ CGUISliderControl::CGUISliderControl(int parentID, int controlID, float posX, fl
   m_action = NULL;
 }
 
-CGUISliderControl::~CGUISliderControl(void)
+CGUISliderControl::~CGUISliderControl()
 {
 }
 

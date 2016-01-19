@@ -54,10 +54,10 @@ Length2=5
 NumberOfEntries=2
 Version=2
 ----------------------------------------------------------------------*/
-CPlayListPLS::CPlayListPLS(void)
+CPlayListPLS::CPlayListPLS()
 {}
 
-CPlayListPLS::~CPlayListPLS(void)
+CPlayListPLS::~CPlayListPLS()
 {}
 
 bool CPlayListPLS::Load(const std::string &strFile)

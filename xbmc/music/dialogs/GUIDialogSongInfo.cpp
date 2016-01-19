@@ -46,7 +46,7 @@ using namespace XFILE;
 #define CONTROL_ALBUMINFO         12
 #define CONTROL_GETTHUMB          13
 
-CGUIDialogSongInfo::CGUIDialogSongInfo(void)
+CGUIDialogSongInfo::CGUIDialogSongInfo()
     : CGUIDialog(WINDOW_DIALOG_SONG_INFO, "DialogSongInfo.xml")
     , m_song(new CFileItem)
 {
@@ -56,7 +56,7 @@ CGUIDialogSongInfo::CGUIDialogSongInfo(void)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogSongInfo::~CGUIDialogSongInfo(void)
+CGUIDialogSongInfo::~CGUIDialogSongInfo()
 {
 }
 

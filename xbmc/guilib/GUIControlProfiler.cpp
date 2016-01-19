@@ -41,7 +41,7 @@ CGUIControlProfilerItem::CGUIControlProfilerItem(CGUIControlProfiler *pProfiler,
   }
 }
 
-CGUIControlProfilerItem::~CGUIControlProfilerItem(void)
+CGUIControlProfilerItem::~CGUIControlProfilerItem()
 {
   Reset(NULL);
 }
@@ -62,22 +62,22 @@ void CGUIControlProfilerItem::Reset(CGUIControlProfiler *pProfiler)
   m_pProfiler = pProfiler;
 }
 
-void CGUIControlProfilerItem::BeginVisibility(void)
+void CGUIControlProfilerItem::BeginVisibility()
 {
   m_i64VisStart = CurrentHostCounter();
 }
 
-void CGUIControlProfilerItem::EndVisibility(void)
+void CGUIControlProfilerItem::EndVisibility()
 {
   m_visTime += (unsigned int)(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64VisStart));
 }
 
-void CGUIControlProfilerItem::BeginRender(void)
+void CGUIControlProfilerItem::BeginRender()
 {
   m_i64RenderStart = CurrentHostCounter();
 }
 
-void CGUIControlProfilerItem::EndRender(void)
+void CGUIControlProfilerItem::EndRender()
 {
   m_renderTime += (unsigned int)(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64RenderStart));
 }
@@ -236,25 +236,25 @@ CGUIControlProfilerItem *CGUIControlProfilerItem::FindOrAddControl(CGUIControl *
   return NULL;
 }
 
-CGUIControlProfiler::CGUIControlProfiler(void)
+CGUIControlProfiler::CGUIControlProfiler()
 : m_ItemHead(NULL, NULL, NULL), m_pLastItem(NULL), m_iMaxFrameCount(200), m_iFrameCount(0)
 // m_bIsRunning(false), no isRunning because it is static
 {
   m_fPerfScale = 100000.0f / CurrentHostFrequency();
 }
 
-CGUIControlProfiler &CGUIControlProfiler::Instance(void)
+CGUIControlProfiler &CGUIControlProfiler::Instance()
 {
   static CGUIControlProfiler _instance;
   return _instance;
 }
 
-bool CGUIControlProfiler::IsRunning(void)
+bool CGUIControlProfiler::IsRunning()
 {
   return m_bIsRunning;
 }
 
-void CGUIControlProfiler::Start(void)
+void CGUIControlProfiler::Start()
 {
   m_iFrameCount = 0;
   m_bIsRunning = true;
@@ -314,7 +314,7 @@ CGUIControlProfilerItem *CGUIControlProfiler::FindOrAddControl(CGUIControl *pCon
   return m_pLastItem;
 }
 
-void CGUIControlProfiler::EndFrame(void)
+void CGUIControlProfiler::EndFrame()
 {
   m_iFrameCount++;
   if (m_iFrameCount >= m_iMaxFrameCount)
@@ -333,7 +333,7 @@ void CGUIControlProfiler::EndFrame(void)
   }
 }
 
-bool CGUIControlProfiler::SaveResults(void)
+bool CGUIControlProfiler::SaveResults()
 {
   if (m_strOutputFile.empty())
     return false;

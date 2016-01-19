@@ -24,13 +24,13 @@
 #define CONTROL_HEADING  1
 #define CONTROL_TEXTAREA 5
 
-CGUIDialogTextViewer::CGUIDialogTextViewer(void)
+CGUIDialogTextViewer::CGUIDialogTextViewer()
     : CGUIDialog(WINDOW_DIALOG_TEXT_VIEWER, "DialogTextViewer.xml")
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogTextViewer::~CGUIDialogTextViewer(void)
+CGUIDialogTextViewer::~CGUIDialogTextViewer()
 {}
 
 bool CGUIDialogTextViewer::OnAction(const CAction &action)

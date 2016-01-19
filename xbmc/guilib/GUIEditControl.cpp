@@ -79,7 +79,7 @@ CGUIEditControl::CGUIEditControl(const CGUIButtonControl &button)
   DefaultConstructor();
 }
 
-CGUIEditControl::~CGUIEditControl(void)
+CGUIEditControl::~CGUIEditControl()
 {
 }
 

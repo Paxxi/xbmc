@@ -52,7 +52,7 @@ void CDirectoryCache::CDir::SetLastAccess(unsigned int &accessCounter)
   m_lastAccess = accessCounter++;
 }
 
-CDirectoryCache::CDirectoryCache(void)
+CDirectoryCache::CDirectoryCache()
 {
   m_accessCounter = 0;
 #ifdef _DEBUG
@@ -61,7 +61,7 @@ CDirectoryCache::CDirectoryCache(void)
 #endif
 }
 
-CDirectoryCache::~CDirectoryCache(void)
+CDirectoryCache::~CDirectoryCache()
 {
 }
 

@@ -31,7 +31,7 @@ CGUIFixedListContainer::CGUIFixedListContainer(int parentID, int controlID, floa
   SetCursor(m_fixedCursor);
 }
 
-CGUIFixedListContainer::~CGUIFixedListContainer(void)
+CGUIFixedListContainer::~CGUIFixedListContainer()
 {
 }
 

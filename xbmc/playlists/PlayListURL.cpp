@@ -32,10 +32,10 @@ using namespace XFILE;
 //[InternetShortcut]
 //URL=http://msdn2.microsoft.com/en-us/library/ms812698.aspx
 
-CPlayListURL::CPlayListURL(void)
+CPlayListURL::CPlayListURL()
 {}
 
-CPlayListURL::~CPlayListURL(void)
+CPlayListURL::~CPlayListURL()
 {}
 
 bool CPlayListURL::Load(const std::string& strFileName)

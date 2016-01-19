@@ -60,7 +60,7 @@ CGUIRSSControl::CGUIRSSControl(const CGUIRSSControl &from)
   ControlType = GUICONTROL_RSS;
 }
 
-CGUIRSSControl::~CGUIRSSControl(void)
+CGUIRSSControl::~CGUIRSSControl()
 {
   CSingleLock lock(m_criticalSection);
   if (m_pReader)

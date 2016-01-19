@@ -34,10 +34,10 @@
 
 using namespace XFILE;
 
-CPosixDirectory::CPosixDirectory(void)
+CPosixDirectory::CPosixDirectory()
 {}
 
-CPosixDirectory::~CPosixDirectory(void)
+CPosixDirectory::~CPosixDirectory()
 {}
 
 bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList &items)

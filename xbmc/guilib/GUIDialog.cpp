@@ -42,7 +42,7 @@ CGUIDialog::CGUIDialog(int id, const std::string &xmlFile, DialogModalityType mo
   m_bAutoClosed = false;
 }
 
-CGUIDialog::~CGUIDialog(void)
+CGUIDialog::~CGUIDialog()
 {}
 
 void CGUIDialog::OnWindowLoaded()
@@ -232,7 +232,7 @@ void CGUIDialog::SetAutoClose(unsigned int timeoutMs)
    ResetAutoClose();
 }
 
-void CGUIDialog::ResetAutoClose(void)
+void CGUIDialog::ResetAutoClose()
 {
   if (m_autoClosing && m_active)
     m_showStartTime = CTimeUtils::GetFrameTime();

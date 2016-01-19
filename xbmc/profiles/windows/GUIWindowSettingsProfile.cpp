@@ -44,14 +44,14 @@ using namespace XFILE;
 #define CONTROL_LOGINSCREEN 4
 #define CONTROL_AUTOLOGIN 5
 
-CGUIWindowSettingsProfile::CGUIWindowSettingsProfile(void)
+CGUIWindowSettingsProfile::CGUIWindowSettingsProfile()
     : CGUIWindow(WINDOW_SETTINGS_PROFILES, "SettingsProfile.xml")
 {
   m_listItems = new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIWindowSettingsProfile::~CGUIWindowSettingsProfile(void)
+CGUIWindowSettingsProfile::~CGUIWindowSettingsProfile()
 {
   delete m_listItems;
 }

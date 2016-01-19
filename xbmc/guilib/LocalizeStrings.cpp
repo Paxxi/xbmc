@@ -30,12 +30,12 @@
 #include "threads/SingleLock.h"
 #include "utils/StringUtils.h"
 
-CLocalizeStrings::CLocalizeStrings(void)
+CLocalizeStrings::CLocalizeStrings()
 {
 
 }
 
-CLocalizeStrings::~CLocalizeStrings(void)
+CLocalizeStrings::~CLocalizeStrings()
 {
 
 }

@@ -23,7 +23,7 @@
 #include "guilib/GUITexture.h"
 #include "Application.h"
 
-CGUIWindowScreensaverDim::CGUIWindowScreensaverDim(void)
+CGUIWindowScreensaverDim::CGUIWindowScreensaverDim()
   : CGUIDialog(WINDOW_SCREENSAVER_DIM, "", DialogModalityType::MODELESS)
 {
   m_needsScaling = false;
@@ -34,7 +34,7 @@ CGUIWindowScreensaverDim::CGUIWindowScreensaverDim(void)
   m_renderOrder = RENDER_ORDER_WINDOW_SCREENSAVER;
 }
 
-CGUIWindowScreensaverDim::~CGUIWindowScreensaverDim(void)
+CGUIWindowScreensaverDim::~CGUIWindowScreensaverDim()
 {
 }
 

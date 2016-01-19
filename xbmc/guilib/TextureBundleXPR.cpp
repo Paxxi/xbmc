@@ -101,14 +101,14 @@ operator BYTE*() const { return p; }
 void Release() { p = 0; }
 };
 
-CTextureBundleXPR::CTextureBundleXPR(void)
+CTextureBundleXPR::CTextureBundleXPR()
 {
   m_hFile = NULL;
   m_themeBundle = false;
   m_TimeStamp = 0;
 }
 
-CTextureBundleXPR::~CTextureBundleXPR(void)
+CTextureBundleXPR::~CTextureBundleXPR()
 {
   if (m_hFile != NULL)
     fclose(m_hFile);

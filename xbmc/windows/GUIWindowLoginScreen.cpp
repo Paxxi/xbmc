@@ -59,7 +59,7 @@ using namespace KODI::MESSAGING;
 #define CONTROL_LABEL_HEADER            2
 #define CONTROL_LABEL_SELECTED_PROFILE  3
 
-CGUIWindowLoginScreen::CGUIWindowLoginScreen(void)
+CGUIWindowLoginScreen::CGUIWindowLoginScreen()
   : CGUIWindow(WINDOW_LOGIN_SCREEN, "LoginScreen.xml")
 {
   watch.StartZero();
@@ -68,7 +68,7 @@ CGUIWindowLoginScreen::CGUIWindowLoginScreen(void)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIWindowLoginScreen::~CGUIWindowLoginScreen(void)
+CGUIWindowLoginScreen::~CGUIWindowLoginScreen()
 {
   delete m_vecItems;
 }

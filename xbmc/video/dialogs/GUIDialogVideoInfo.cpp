@@ -83,7 +83,7 @@ bool compFileItemsByDbId(const CFileItemPtr& lhs, const CFileItemPtr& rhs)
   return lhs->HasVideoInfoTag() && rhs->HasVideoInfoTag() && lhs->GetVideoInfoTag()->m_iDbId < rhs->GetVideoInfoTag()->m_iDbId;
 }
 
-CGUIDialogVideoInfo::CGUIDialogVideoInfo(void)
+CGUIDialogVideoInfo::CGUIDialogVideoInfo()
     : CGUIDialog(WINDOW_DIALOG_VIDEO_INFO, "DialogVideoInfo.xml")
     , m_movieItem(new CFileItem)
 {
@@ -96,7 +96,7 @@ CGUIDialogVideoInfo::CGUIDialogVideoInfo(void)
   m_startUserrating = -1;
 }
 
-CGUIDialogVideoInfo::~CGUIDialogVideoInfo(void)
+CGUIDialogVideoInfo::~CGUIDialogVideoInfo()
 {
   delete m_castList;
 }

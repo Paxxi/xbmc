@@ -34,7 +34,7 @@
 
 using namespace PVR;
 
-CPVRRecordings::CPVRRecordings(void) :
+CPVRRecordings::CPVRRecordings() :
     m_bIsUpdating(false),
     m_iLastId(0),
     m_bGroupItems(true),
@@ -50,7 +50,7 @@ CPVRRecordings::~CPVRRecordings()
     m_database.Close();
 }
 
-void CPVRRecordings::UpdateFromClients(void)
+void CPVRRecordings::UpdateFromClients()
 {
   CSingleLock lock(m_critSection);
   Clear();
@@ -159,7 +159,7 @@ void CPVRRecordings::GetSubDirectories(const std::string &strBase, CFileItemList
     (*it)->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED, true);
 }
 
-int CPVRRecordings::Load(void)
+int CPVRRecordings::Load()
 {
   Update();
 
@@ -171,7 +171,7 @@ void CPVRRecordings::Unload()
   Clear();
 }
 
-void CPVRRecordings::Update(void)
+void CPVRRecordings::Update()
 {
   CSingleLock lock(m_critSection);
   if (m_bIsUpdating)
@@ -511,7 +511,7 @@ void CPVRRecordings::UpdateFromClient(const CPVRRecordingPtr &tag)
   }
 }
 
-void CPVRRecordings::UpdateEpgTags(void)
+void CPVRRecordings::UpdateEpgTags()
 {
   CSingleLock lock(m_critSection);
   unsigned int iEpgEvent;

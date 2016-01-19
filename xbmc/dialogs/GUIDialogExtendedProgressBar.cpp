@@ -30,7 +30,7 @@
 
 #define ITEM_SWITCH_TIME_MS       2000
 
-std::string CGUIDialogProgressBarHandle::Text(void) const
+std::string CGUIDialogProgressBarHandle::Text() const
 {
   CSingleLock lock(m_critSection);
   std::string retVal(m_strText);
@@ -56,7 +56,7 @@ void CGUIDialogProgressBarHandle::SetProgress(int currentItem, int itemCount)
     m_fPercentage = std::min(100.0f, fPercentage);
 }
 
-CGUIDialogExtendedProgressBar::CGUIDialogExtendedProgressBar(void)
+CGUIDialogExtendedProgressBar::CGUIDialogExtendedProgressBar()
   : CGUIDialog(WINDOW_DIALOG_EXT_PROGRESS, "DialogExtendedProgressBar.xml", DialogModalityType::MODELESS)
 {
   m_loadType        = LOAD_ON_GUI_INIT;

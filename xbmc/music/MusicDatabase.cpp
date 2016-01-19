@@ -102,11 +102,11 @@ static void AnnounceUpdate(const std::string& content, int id)
   ANNOUNCEMENT::CAnnouncementManager::GetInstance().Announce(ANNOUNCEMENT::AudioLibrary, "xbmc", "OnUpdate", data);
 }
 
-CMusicDatabase::CMusicDatabase(void)
+CMusicDatabase::CMusicDatabase()
 {
 }
 
-CMusicDatabase::~CMusicDatabase(void)
+CMusicDatabase::~CMusicDatabase()
 {
   EmptyCache();
 }

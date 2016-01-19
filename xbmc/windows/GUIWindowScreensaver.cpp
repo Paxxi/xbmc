@@ -30,7 +30,7 @@
 
 using namespace ADDON;
 
-CGUIWindowScreensaver::CGUIWindowScreensaver(void)
+CGUIWindowScreensaver::CGUIWindowScreensaver()
     : CGUIWindow(WINDOW_SCREENSAVER, "")
 {
 }

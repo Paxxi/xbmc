@@ -39,12 +39,12 @@
 #include "filesystem/SpecialProtocol.h"
 #endif
 
-GUIFontManager::GUIFontManager(void)
+GUIFontManager::GUIFontManager()
 {
   m_canReload = true;
 }
 
-GUIFontManager::~GUIFontManager(void)
+GUIFontManager::~GUIFontManager()
 {
   Clear();
 }
@@ -201,7 +201,7 @@ bool GUIFontManager::OnMessage(CGUIMessage &message)
   return false;
 }
 
-void GUIFontManager::ReloadTTFFonts(void)
+void GUIFontManager::ReloadTTFFonts()
 {
   if (!m_vecFonts.size())
     return;   // we haven't even loaded fonts in yet

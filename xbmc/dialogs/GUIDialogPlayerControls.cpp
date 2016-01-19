@@ -21,13 +21,13 @@
 #include "GUIDialogPlayerControls.h"
 
 
-CGUIDialogPlayerControls::CGUIDialogPlayerControls(void)
+CGUIDialogPlayerControls::CGUIDialogPlayerControls()
     : CGUIDialog(WINDOW_DIALOG_PLAYER_CONTROLS, "PlayerControls.xml")
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogPlayerControls::~CGUIDialogPlayerControls(void)
+CGUIDialogPlayerControls::~CGUIDialogPlayerControls()
 {
 }
 

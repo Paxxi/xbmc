@@ -30,7 +30,7 @@ CGUIWindowPVRTimers::CGUIWindowPVRTimers(bool bRadio) :
 {
 }
 
-std::string CGUIWindowPVRTimers::GetDirectoryPath(void)
+std::string CGUIWindowPVRTimers::GetDirectoryPath()
 {
   const std::string basePath(CPVRTimersPath(m_bRadio, false).GetPath());
   return StringUtils::StartsWith(m_vecItems->GetPath(), basePath) ? m_vecItems->GetPath() : basePath;

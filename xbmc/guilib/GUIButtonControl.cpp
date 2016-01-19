@@ -37,7 +37,7 @@ CGUIButtonControl::CGUIButtonControl(int parentID, int controlID, float posX, fl
   ControlType = GUICONTROL_BUTTON;
 }
 
-CGUIButtonControl::~CGUIButtonControl(void)
+CGUIButtonControl::~CGUIButtonControl()
 {
 }
 

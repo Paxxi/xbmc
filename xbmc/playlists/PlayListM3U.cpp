@@ -60,10 +60,10 @@ using namespace XFILE;
 //   playlist_800.m3u8
 
 
-CPlayListM3U::CPlayListM3U(void)
+CPlayListM3U::CPlayListM3U()
 {}
 
-CPlayListM3U::~CPlayListM3U(void)
+CPlayListM3U::~CPlayListM3U()
 {}
 
 

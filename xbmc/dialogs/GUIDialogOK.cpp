@@ -25,12 +25,12 @@
 
 #define ID_BUTTON_OK   10
 
-CGUIDialogOK::CGUIDialogOK(void)
+CGUIDialogOK::CGUIDialogOK()
     : CGUIDialogBoxBase(WINDOW_DIALOG_OK, "DialogOK.xml")
 {
 }
 
-CGUIDialogOK::~CGUIDialogOK(void)
+CGUIDialogOK::~CGUIDialogOK()
 {}
 
 bool CGUIDialogOK::OnMessage(CGUIMessage& message)

@@ -49,7 +49,7 @@ using namespace KODI::MESSAGING;
 /** sleep time in milliseconds when no auto-configured add-ons were found */
 #define PVR_CLIENT_AVAHI_SLEEP_TIME_MS     (250)
 
-CPVRClients::CPVRClients(void) :
+CPVRClients::CPVRClients() :
     CThread("PVRClient"),
     m_bChannelScanRunning(false),
     m_bIsSwitchingChannels(false),
@@ -77,7 +77,7 @@ bool CPVRClients::IsInUse(const std::string& strAddonId) const
   return false;
 }
 
-void CPVRClients::Start(void)
+void CPVRClients::Start()
 {
   Stop();
 
@@ -85,7 +85,7 @@ void CPVRClients::Start(void)
   SetPriority(-1);
 }
 
-void CPVRClients::Stop(void)
+void CPVRClients::Stop()
 {
   StopThread();
 }
@@ -161,7 +161,7 @@ bool CPVRClients::RequestRemoval(AddonPtr addon)
   return StopClient(addon, false);
 }
 
-void CPVRClients::Unload(void)
+void CPVRClients::Unload()
 {
   Stop();
 
@@ -180,7 +180,7 @@ void CPVRClients::Unload(void)
   m_clientMap.clear();
 }
 
-int CPVRClients::GetFirstConnectedClientID(void)
+int CPVRClients::GetFirstConnectedClientID()
 {
   CSingleLock lock(m_critSection);
 
@@ -191,7 +191,7 @@ int CPVRClients::GetFirstConnectedClientID(void)
   return -1;
 }
 
-int CPVRClients::EnabledClientAmount(void) const
+int CPVRClients::EnabledClientAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
@@ -203,7 +203,7 @@ int CPVRClients::EnabledClientAmount(void) const
   return iReturn;
 }
 
-bool CPVRClients::HasEnabledClients(void) const
+bool CPVRClients::HasEnabledClients() const
 {
   for (PVR_CLIENTMAP_CITR itr = m_clientMap.begin(); itr != m_clientMap.end(); itr++)
     if (!CAddonMgr::GetInstance().IsAddonDisabled(itr->second->ID()))
@@ -229,7 +229,7 @@ bool CPVRClients::StopClient(AddonPtr client, bool bRestart)
   return false;
 }
 
-int CPVRClients::ConnectedClientAmount(void) const
+int CPVRClients::ConnectedClientAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
@@ -241,7 +241,7 @@ int CPVRClients::ConnectedClientAmount(void) const
   return iReturn;
 }
 
-bool CPVRClients::HasConnectedClients(void) const
+bool CPVRClients::HasConnectedClients() const
 {
   CSingleLock lock(m_critSection);
 
@@ -350,7 +350,7 @@ int CPVRClients::GetConnectedClients(PVR_CLIENTMAP &clients) const
   return iReturn;
 }
 
-int CPVRClients::GetPlayingClientID(void) const
+int CPVRClients::GetPlayingClientID() const
 {
   CSingleLock lock(m_critSection);
 
@@ -359,7 +359,7 @@ int CPVRClients::GetPlayingClientID(void) const
   return -EINVAL;
 }
 
-const std::string CPVRClients::GetPlayingClientName(void) const
+const std::string CPVRClients::GetPlayingClientName() const
 {
   CSingleLock lock(m_critSection);
   return m_strPlayingClientName;
@@ -445,7 +445,7 @@ CPVRChannelPtr CPVRClients::GetPlayingChannel() const
   return CPVRChannelPtr();
 }
 
-CPVRRecordingPtr CPVRClients::GetPlayingRecording(void) const
+CPVRRecordingPtr CPVRClients::GetPlayingRecording() const
 {
   PVR_CLIENT client;
   return GetPlayingClient(client) ? client->GetPlayingRecording() : CPVRRecordingPtr();
@@ -746,19 +746,19 @@ std::vector<PVR_EDL_ENTRY> CPVRClients::GetRecordingEdl(const CPVRRecording &rec
   return std::vector<PVR_EDL_ENTRY>();
 }
 
-bool CPVRClients::IsRecordingOnPlayingChannel(void) const
+bool CPVRClients::IsRecordingOnPlayingChannel() const
 {
   CPVRChannelPtr currentChannel(GetPlayingChannel());
   return currentChannel && currentChannel->IsRecording();
 }
 
-bool CPVRClients::CanRecordInstantly(void)
+bool CPVRClients::CanRecordInstantly()
 {
   CPVRChannelPtr currentChannel(GetPlayingChannel());
   return currentChannel && currentChannel->CanRecord();
 }
 
-bool CPVRClients::CanPauseStream(void) const
+bool CPVRClients::CanPauseStream() const
 {
   PVR_CLIENT client;
 
@@ -770,7 +770,7 @@ bool CPVRClients::CanPauseStream(void) const
   return false;
 }
 
-bool CPVRClients::CanSeekStream(void) const
+bool CPVRClients::CanSeekStream() const
 {
   PVR_CLIENT client;
 
@@ -951,7 +951,7 @@ void CPVRClients::ProcessMenuHooks(int iClientID, PVR_MENUHOOK_CAT cat, const CF
   }
 }
 
-bool CPVRClients::IsRunningChannelScan(void) const
+bool CPVRClients::IsRunningChannelScan() const
 {
   CSingleLock lock(m_critSection);
   return m_bChannelScanRunning;
@@ -972,7 +972,7 @@ std::vector<PVR_CLIENT> CPVRClients::GetClientsSupportingChannelScan(void) const
   return possibleScanClients;
 }
 
-void CPVRClients::StartChannelScan(void)
+void CPVRClients::StartChannelScan()
 {
   PVR_CLIENT scanClient;
   CSingleLock lock(m_critSection);
@@ -1266,7 +1266,7 @@ bool CPVRClients::UpdateAndInitialiseClients(bool bInitialiseAllClients /* = fal
   return bReturn;
 }
 
-void CPVRClients::Process(void)
+void CPVRClients::Process()
 {
   bool bCheckedEnabledClientsOnStartup(false);
 
@@ -1298,7 +1298,7 @@ void CPVRClients::Process(void)
   }
 }
 
-bool CPVRClients::AutoconfigureClients(void)
+bool CPVRClients::AutoconfigureClients()
 {
   bool bReturn(false);
   std::vector<PVR_CLIENT> autoConfigAddons;
@@ -1370,7 +1370,7 @@ bool CPVRClients::AutoconfigureClients(void)
   return bReturn;
 }
 
-void CPVRClients::ShowDialogNoClientsEnabled(void)
+void CPVRClients::ShowDialogNoClientsEnabled()
 {
   if (!g_PVRManager.IsStarted() && !g_PVRManager.IsInitialising())
     return;
@@ -1383,7 +1383,7 @@ void CPVRClients::ShowDialogNoClientsEnabled(void)
   g_windowManager.ActivateWindow(WINDOW_ADDON_BROWSER, params);
 }
 
-bool CPVRClients::UpdateAddons(void)
+bool CPVRClients::UpdateAddons()
 {
   VECADDONS addons;
   PVR_CLIENT addon;
@@ -1596,7 +1596,7 @@ bool CPVRClients::OpenStream(const CPVRRecordingPtr &channel)
   return bReturn;
 }
 
-void CPVRClients::CloseStream(void)
+void CPVRClients::CloseStream()
 {
   PVR_CLIENT playingClient;
   if (GetPlayingClient(playingClient))
@@ -1617,7 +1617,7 @@ int CPVRClients::ReadStream(void* lpBuf, int64_t uiBufSize)
   return -EINVAL;
 }
 
-int64_t CPVRClients::GetStreamLength(void)
+int64_t CPVRClients::GetStreamLength()
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))
@@ -1633,7 +1633,7 @@ int64_t CPVRClients::SeekStream(int64_t iFilePosition, int iWhence/* = SEEK_SET*
   return -EINVAL;
 }
 
-int64_t CPVRClients::GetStreamPosition(void)
+int64_t CPVRClients::GetStreamPosition()
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))
@@ -1648,7 +1648,7 @@ void CPVRClients::PauseStream(bool bPaused)
     client->PauseStream(bPaused);
 }
 
-std::string CPVRClients::GetCurrentInputFormat(void) const
+std::string CPVRClients::GetCurrentInputFormat() const
 {
   std::string strReturn;
   CPVRChannelPtr currentChannel(GetPlayingChannel());
@@ -1658,13 +1658,13 @@ std::string CPVRClients::GetCurrentInputFormat(void) const
   return strReturn;
 }
 
-bool CPVRClients::IsPlaying(void) const
+bool CPVRClients::IsPlaying() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsPlayingRecording || m_bIsPlayingLiveTV;
 }
 
-bool CPVRClients::IsPlayingRadio(void) const
+bool CPVRClients::IsPlayingRadio() const
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))
@@ -1672,7 +1672,7 @@ bool CPVRClients::IsPlayingRadio(void) const
   return false;
 }
 
-bool CPVRClients::IsPlayingTV(void) const
+bool CPVRClients::IsPlayingTV() const
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))
@@ -1680,19 +1680,19 @@ bool CPVRClients::IsPlayingTV(void) const
   return false;
 }
 
-bool CPVRClients::IsPlayingRecording(void) const
+bool CPVRClients::IsPlayingRecording() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsPlayingRecording;
 }
 
-bool CPVRClients::IsReadingLiveStream(void) const
+bool CPVRClients::IsReadingLiveStream() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsPlayingLiveTV;
 }
 
-bool CPVRClients::IsEncrypted(void) const
+bool CPVRClients::IsEncrypted() const
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))
@@ -1726,7 +1726,7 @@ time_t CPVRClients::GetPlayingTime() const
   return time;
 }
 
-bool CPVRClients::IsTimeshifting(void) const
+bool CPVRClients::IsTimeshifting() const
 {
   PVR_CLIENT client;
   if (GetPlayingClient(client))

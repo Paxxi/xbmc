@@ -29,12 +29,12 @@ static void MD5Final(unsigned char digest[16], struct MD5Context *context);
 static void MD5Transform(uint32_t buf[4], uint32_t const in[16]);
 
 
-XBMC::XBMC_MD5::XBMC_MD5(void)
+XBMC::XBMC_MD5::XBMC_MD5()
 {
   MD5Init(&m_ctx);
 }
 
-XBMC::XBMC_MD5::~XBMC_MD5(void)
+XBMC::XBMC_MD5::~XBMC_MD5()
 {}
 
 void XBMC::XBMC_MD5::append(const void *inBuf, size_t inLen)

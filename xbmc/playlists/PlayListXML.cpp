@@ -63,10 +63,10 @@ using namespace XFILE;
 */
 
 
-CPlayListXML::CPlayListXML(void)
+CPlayListXML::CPlayListXML()
 {}
 
-CPlayListXML::~CPlayListXML(void)
+CPlayListXML::~CPlayListXML()
 {}
 
 

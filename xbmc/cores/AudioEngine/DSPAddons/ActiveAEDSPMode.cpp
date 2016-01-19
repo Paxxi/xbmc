@@ -175,26 +175,26 @@ CActiveAEDSPMode &CActiveAEDSPMode::operator=(const CActiveAEDSPMode &mode)
 
 /********** General mode related functions **********/
 
-bool CActiveAEDSPMode::IsNew(void) const
+bool CActiveAEDSPMode::IsNew() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeId <= 0;
 }
 
-bool CActiveAEDSPMode::IsChanged(void) const
+bool CActiveAEDSPMode::IsChanged() const
 {
   CSingleLock lock(m_critSection);
   return m_bChanged;
 }
 
 
-bool CActiveAEDSPMode::IsInternal(void) const
+bool CActiveAEDSPMode::IsInternal() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsInternal;
 }
 
-bool CActiveAEDSPMode::IsEnabled(void) const
+bool CActiveAEDSPMode::IsEnabled() const
 {
   CSingleLock lock(m_critSection);
   return m_bIsEnabled;
@@ -217,7 +217,7 @@ bool CActiveAEDSPMode::SetEnabled(bool bIsEnabled)
   return false;
 }
 
-int CActiveAEDSPMode::ModePosition(void) const
+int CActiveAEDSPMode::ModePosition() const
 {
   CSingleLock lock(m_critSection);
   return m_iModePosition;
@@ -258,37 +258,37 @@ bool CActiveAEDSPMode::SupportStreamType(AE_DSP_STREAMTYPE streamType) const
 
 /********** Mode user interface related data functions **********/
 
-int CActiveAEDSPMode::ModeName(void) const
+int CActiveAEDSPMode::ModeName() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeName;
 }
 
-int CActiveAEDSPMode::ModeSetupName(void) const
+int CActiveAEDSPMode::ModeSetupName() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeSetupName;
 }
 
-int CActiveAEDSPMode::ModeDescription(void) const
+int CActiveAEDSPMode::ModeDescription() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeDescription;
 }
 
-int CActiveAEDSPMode::ModeHelp(void) const
+int CActiveAEDSPMode::ModeHelp() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeHelp;
 }
 
-const std::string &CActiveAEDSPMode::IconOwnModePath(void) const
+const std::string &CActiveAEDSPMode::IconOwnModePath() const
 {
   CSingleLock lock(m_critSection);
   return m_strOwnIconPath;
 }
 
-const std::string &CActiveAEDSPMode::IconOverrideModePath(void) const
+const std::string &CActiveAEDSPMode::IconOverrideModePath() const
 {
   CSingleLock lock(m_critSection);
   return m_strOverrideIconPath;
@@ -313,7 +313,7 @@ bool CActiveAEDSPMode::SetBaseType(AE_DSP_BASETYPE baseType)
   return false;
 }
 
-AE_DSP_BASETYPE CActiveAEDSPMode::BaseType(void) const
+AE_DSP_BASETYPE CActiveAEDSPMode::BaseType() const
 {
   CSingleLock lock(m_critSection);
   return m_iBaseType;
@@ -322,7 +322,7 @@ AE_DSP_BASETYPE CActiveAEDSPMode::BaseType(void) const
 
 /********** Audio DSP database related functions **********/
 
-int CActiveAEDSPMode::ModeID(void) const
+int CActiveAEDSPMode::ModeID() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeId;
@@ -351,7 +351,7 @@ int CActiveAEDSPMode::AddUpdate(bool force)
   return m_iModeId;
 }
 
-bool CActiveAEDSPMode::Delete(void)
+bool CActiveAEDSPMode::Delete()
 {
   CActiveAEDSPDatabase *database = CActiveAEDSP::GetInstance().GetADSPDatabase();
   if (!database || !database->IsOpen())
@@ -363,7 +363,7 @@ bool CActiveAEDSPMode::Delete(void)
   return database->DeleteMode(*this);
 }
 
-bool CActiveAEDSPMode::IsKnown(void) const
+bool CActiveAEDSPMode::IsKnown() const
 {
   CActiveAEDSPDatabase *database = CActiveAEDSP::GetInstance().GetADSPDatabase();
   if (!database || !database->IsOpen())
@@ -384,7 +384,7 @@ void CActiveAEDSPMode::SetCPUUsage(float percent)
   m_fCPUUsage = percent;
 }
 
-float CActiveAEDSPMode::CPUUsage(void) const
+float CActiveAEDSPMode::CPUUsage() const
 {
   CSingleLock lock(m_critSection);
   return m_fCPUUsage;
@@ -393,37 +393,37 @@ float CActiveAEDSPMode::CPUUsage(void) const
 
 /********** Fixed addon related Mode methods **********/
 
-int CActiveAEDSPMode::AddonID(void) const
+int CActiveAEDSPMode::AddonID() const
 {
   CSingleLock lock(m_critSection);
   return m_iAddonId;
 }
 
-unsigned int CActiveAEDSPMode::AddonModeNumber(void) const
+unsigned int CActiveAEDSPMode::AddonModeNumber() const
 {
   CSingleLock lock(m_critSection);
   return m_iAddonModeNumber;
 }
 
-AE_DSP_MODE_TYPE CActiveAEDSPMode::ModeType(void) const
+AE_DSP_MODE_TYPE CActiveAEDSPMode::ModeType() const
 {
   CSingleLock lock(m_critSection);
   return m_iModeType;
 }
 
-const std::string &CActiveAEDSPMode::AddonModeName(void) const
+const std::string &CActiveAEDSPMode::AddonModeName() const
 {
   CSingleLock lock(m_critSection);
   return m_strModeName;
 }
 
-bool CActiveAEDSPMode::HasSettingsDialog(void) const
+bool CActiveAEDSPMode::HasSettingsDialog() const
 {
   CSingleLock lock(m_critSection);
   return m_bHasSettingsDialog;
 }
 
-unsigned int CActiveAEDSPMode::StreamTypeFlags(void) const
+unsigned int CActiveAEDSPMode::StreamTypeFlags() const
 {
   CSingleLock lock(m_critSection);
   return m_iStreamTypeFlags;

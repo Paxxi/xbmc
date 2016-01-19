@@ -32,11 +32,11 @@
 using namespace XFILE;
 using namespace MEDIA_DETECT;
 
-CCDDADirectory::CCDDADirectory(void)
+CCDDADirectory::CCDDADirectory()
 {
 }
 
-CCDDADirectory::~CCDDADirectory(void)
+CCDDADirectory::~CCDDADirectory()
 {
 }
 

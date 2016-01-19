@@ -24,11 +24,11 @@
 
 using namespace XFILE;
 
-CImageFile::CImageFile(void)
+CImageFile::CImageFile()
 {
 }
 
-CImageFile::~CImageFile(void)
+CImageFile::~CImageFile()
 {
   Close();
 }

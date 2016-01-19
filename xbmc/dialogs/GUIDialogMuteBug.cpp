@@ -21,13 +21,13 @@
 #include "GUIDialogMuteBug.h"
 #include "Application.h"
 
-CGUIDialogMuteBug::CGUIDialogMuteBug(void)
+CGUIDialogMuteBug::CGUIDialogMuteBug()
   : CGUIDialog(WINDOW_DIALOG_MUTE_BUG, "DialogMuteBug.xml", DialogModalityType::MODELESS)
 {
   m_loadType = LOAD_ON_GUI_INIT;
 }
 
-CGUIDialogMuteBug::~CGUIDialogMuteBug(void)
+CGUIDialogMuteBug::~CGUIDialogMuteBug()
 {}
 
 void CGUIDialogMuteBug::UpdateVisibility()

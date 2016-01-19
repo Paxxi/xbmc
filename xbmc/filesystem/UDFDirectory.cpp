@@ -29,11 +29,11 @@
 
 using namespace XFILE;
 
-CUDFDirectory::CUDFDirectory(void)
+CUDFDirectory::CUDFDirectory()
 {
 }
 
-CUDFDirectory::~CUDFDirectory(void)
+CUDFDirectory::~CUDFDirectory()
 {
 }
 

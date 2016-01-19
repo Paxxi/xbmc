@@ -45,7 +45,7 @@ CGUIProgressControl::CGUIProgressControl(int parentID, int controlID,
   m_bChanged = false;
 }
 
-CGUIProgressControl::~CGUIProgressControl(void)
+CGUIProgressControl::~CGUIProgressControl()
 {
 }
 
@@ -212,7 +212,7 @@ std::string CGUIProgressControl::GetDescription() const
   return StringUtils::Format("%2.f", m_fPercent);
 }
 
-bool CGUIProgressControl::UpdateLayout(void)
+bool CGUIProgressControl::UpdateLayout()
 {
   bool bChanged(false);
 

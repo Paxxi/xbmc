@@ -29,7 +29,7 @@ CGUISettingsSliderControl::CGUISettingsSliderControl(int parentID, int controlID
   ControlType = GUICONTROL_SETTINGS_SLIDER;
 }
 
-CGUISettingsSliderControl::~CGUISettingsSliderControl(void)
+CGUISettingsSliderControl::~CGUISettingsSliderControl()
 {
 }
 

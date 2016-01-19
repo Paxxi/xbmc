@@ -31,7 +31,7 @@
 #define CONTROL_EXTRA_BUTTON    5
 #define CONTROL_CANCEL_BUTTON   7
 
-CGUIDialogSelect::CGUIDialogSelect(void)
+CGUIDialogSelect::CGUIDialogSelect()
     : CGUIDialogBoxBase(WINDOW_DIALOG_SELECT, "DialogSelect.xml"),
     m_bButtonEnabled(false),
     m_bButtonPressed(false),
@@ -46,7 +46,7 @@ CGUIDialogSelect::CGUIDialogSelect(void)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogSelect::~CGUIDialogSelect(void)
+CGUIDialogSelect::~CGUIDialogSelect()
 {
 }
 

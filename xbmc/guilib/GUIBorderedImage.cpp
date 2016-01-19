@@ -34,7 +34,7 @@ CGUIBorderedImage::CGUIBorderedImage(const CGUIBorderedImage &right)
   ControlType = GUICONTROL_BORDEREDIMAGE;
 }
 
-CGUIBorderedImage::~CGUIBorderedImage(void)
+CGUIBorderedImage::~CGUIBorderedImage()
 {
 }
 

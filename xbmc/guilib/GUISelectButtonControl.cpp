@@ -55,7 +55,7 @@ CGUISelectButtonControl::CGUISelectButtonControl(int parentID, int controlID,
   ControlType = GUICONTROL_SELECTBUTTON;
 }
 
-CGUISelectButtonControl::~CGUISelectButtonControl(void)
+CGUISelectButtonControl::~CGUISelectButtonControl()
 {}
 
 void CGUISelectButtonControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)

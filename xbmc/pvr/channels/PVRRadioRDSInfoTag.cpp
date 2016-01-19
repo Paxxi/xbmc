@@ -38,7 +38,7 @@ CPVRRadioRDSInfoTagPtr CPVRRadioRDSInfoTag::CreateDefaultTag()
   return CPVRRadioRDSInfoTagPtr(new CPVRRadioRDSInfoTag());
 }
 
-CPVRRadioRDSInfoTag::CPVRRadioRDSInfoTag(void)
+CPVRRadioRDSInfoTag::CPVRRadioRDSInfoTag()
 {
   Clear();
 }

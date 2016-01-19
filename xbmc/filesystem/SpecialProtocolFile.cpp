@@ -24,11 +24,11 @@
 
 using namespace XFILE;
 
-CSpecialProtocolFile::CSpecialProtocolFile(void)
+CSpecialProtocolFile::CSpecialProtocolFile()
   : COverrideFile(true)
 { }
 
-CSpecialProtocolFile::~CSpecialProtocolFile(void)
+CSpecialProtocolFile::~CSpecialProtocolFile()
 { }
 
 std::string CSpecialProtocolFile::TranslatePath(const CURL& url)

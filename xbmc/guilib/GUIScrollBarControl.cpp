@@ -42,7 +42,7 @@ CGUIScrollBar::CGUIScrollBar(int parentID, int controlID, float posX, float posY
   m_showOnePage = showOnePage;
 }
 
-CGUIScrollBar::~CGUIScrollBar(void)
+CGUIScrollBar::~CGUIScrollBar()
 {
 }
 
