@@ -410,7 +410,7 @@ void CRenderSystemGL::CaptureStateBlock()
   glMatrixTexture.Push();
 
   glDisable(GL_SCISSOR_TEST); // fixes FBO corruption on Macs
-  if (glActiveTextureARB)
+  if (&glActiveTextureARB)
     glActiveTextureARB(GL_TEXTURE0_ARB);
   glDisable(GL_TEXTURE_2D);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -428,7 +428,7 @@ void CRenderSystemGL::ApplyStateBlock()
   glMatrixModview.PopLoad();
   glMatrixTexture.PopLoad();
 
-  if (glActiveTextureARB)
+  if (&glActiveTextureARB)
     glActiveTextureARB(GL_TEXTURE0_ARB);
   glEnable(GL_TEXTURE_2D);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

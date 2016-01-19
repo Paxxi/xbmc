@@ -109,7 +109,7 @@ protected:
     g_charsetConverter.clear();
   }
 
-  ~TestCharsetConverter()
+  ~TestCharsetConverter() override
   {
     CSettings::GetInstance().Unload();
   }

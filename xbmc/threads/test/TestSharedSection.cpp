@@ -47,7 +47,7 @@ public:
   inline locker(CSharedSection& o, CEvent* wait_ = NULL) : 
     sec(o), wait(wait_), mutex(NULL), haslock(false), obtainedlock(false) {}
   
-  void Run()
+  void Run() override
   {
     AtomicGuard g(mutex);
     L lock(sec);

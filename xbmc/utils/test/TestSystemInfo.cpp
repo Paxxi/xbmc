@@ -30,7 +30,7 @@ protected:
   TestSystemInfo()
   {
   }
-  ~TestSystemInfo()
+  ~TestSystemInfo() override
   {
   }
 };

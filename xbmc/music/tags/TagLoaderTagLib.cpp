@@ -58,8 +58,8 @@ class TagStringHandler : public T
 {
 public:
   TagStringHandler() {}
-  virtual ~TagStringHandler() {}
-  virtual String parse(const ByteVector &data) const
+  ~TagStringHandler() override {}
+  String parse(const ByteVector &data) const override
   {
     std::string strSource(data.data(), data.size());
     std::string strUTF8;

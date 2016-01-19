@@ -53,7 +53,7 @@ public:
   ThreadLocal<Thinggy>& threadLocal;
 
   inline Runnable(ThreadLocal<Thinggy>& tl) : waiting(false), threadLocal(tl) {}
-  inline void Run()
+  inline void Run() override
   {
     staticThinggy = new Thinggy;
     staticThreadLocal.set(staticThinggy);
@@ -85,7 +85,7 @@ class HeapThreadLocal : public Runnable
 public:
   ThreadLocal<Thinggy>* hthreadLocal;
   inline HeapThreadLocal() : Runnable(*(new ThreadLocal<Thinggy>)) { hthreadLocal = &threadLocal; }
-  inline ~HeapThreadLocal() { delete hthreadLocal; }
+  inline ~HeapThreadLocal() override { delete hthreadLocal; }
 };
 
 

@@ -55,17 +55,17 @@ protected:
       baseUrl(StringUtils::Format("http://" WEBSERVER_HOST ":%d", WEBSERVER_PORT)),
       sourcePath(XBMC_REF_FILE_PATH("xbmc/network/test/data/webserver/"))
   { }
-  virtual ~TestWebServer() { }
+  ~TestWebServer() override { }
 
 protected:
-  virtual void SetUp()
+  void SetUp() override
   {
     SetupMediaSources();
 
     webserver.Start(WEBSERVER_PORT, "", "");
   }
 
-  virtual void TearDown()
+  void TearDown() override
   {
     if (webserver.IsStarted())
       webserver.Stop();

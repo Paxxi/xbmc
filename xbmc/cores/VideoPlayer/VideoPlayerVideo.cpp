@@ -49,7 +49,7 @@ public:
     , m_codec(codec)
     , m_hints(hints)
   {}
- ~CDVDMsgVideoCodecChange()
+ ~CDVDMsgVideoCodecChange() override
   {
     delete m_codec;
   }

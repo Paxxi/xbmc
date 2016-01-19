@@ -139,9 +139,9 @@ class CEPGContainerStartJob : public CJob
 {
 public:
   CEPGContainerStartJob() {}
-  ~CEPGContainerStartJob(void) {}
+  ~CEPGContainerStartJob(void) override {}
 
-  bool DoWork(void)
+  bool DoWork(void) override
   {
     g_EpgContainer.Start(false);
     return true;

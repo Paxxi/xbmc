@@ -37,7 +37,7 @@ public:
     , m_codec(codec)
 
   {}
-  void GetStreamInfo(std::string& strInfo)
+  void GetStreamInfo(std::string& strInfo) override
   {
     strInfo = StringUtils::Format("%s", m_codec.c_str());
   }

@@ -29,7 +29,7 @@ class CDemuxStreamAudioCDDA
   : public CDemuxStreamAudio
 {
 public:
-  void GetStreamInfo(std::string& strInfo)
+  void GetStreamInfo(std::string& strInfo) override
   {
     strInfo = "pcm";
   }

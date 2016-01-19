@@ -32,7 +32,7 @@
 class NullLogger : public XbmcCommons::ILogger
 {
 public:
-  void log(int loglevel, const char* message) {}
+  void log(int loglevel, const char* message) override {}
 };
 
 int main(int argc, char **argv)

@@ -93,9 +93,9 @@ class CActiveAEDSPStartJob : public CJob
 {
 public:
   CActiveAEDSPStartJob() {}
-  ~CActiveAEDSPStartJob(void) {}
+  ~CActiveAEDSPStartJob(void) override {}
 
-  bool DoWork(void)
+  bool DoWork(void) override
   {
     CActiveAEDSP::GetInstance().Activate(false);
     return true;
@@ -135,9 +135,9 @@ class CActiveAEDSPModeUpdateJob : public CJob
 {
 public:
   CActiveAEDSPModeUpdateJob() {}
-  ~CActiveAEDSPModeUpdateJob(void) {}
+  ~CActiveAEDSPModeUpdateJob(void) override {}
 
-  bool DoWork(void)
+  bool DoWork(void) override
   {
     CActiveAEDSP::GetInstance().TriggerModeUpdate(false);
     return true;
