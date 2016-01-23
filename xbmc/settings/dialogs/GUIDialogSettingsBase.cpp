@@ -445,8 +445,8 @@ void CGUIDialogSettingsBase::FreeSettingsControls()
     control->ClearAll();
   }
 
-  for (std::vector<BaseSettingControlPtr>::iterator control = m_settingControls.begin(); control != m_settingControls.end(); ++control)
-    (*control)->Clear();
+  for (auto & m_settingControl : m_settingControls)
+    m_settingControl->Clear();
 
   m_settingControls.clear();
 }
@@ -509,19 +509,19 @@ std::set<std::string> CGUIDialogSettingsBase::CreateSettings()
   const SettingGroupList& groups = category->GetGroups((SettingLevel)GetSettingLevel());
   int iControlID = CONTROL_SETTINGS_START_CONTROL;
   bool first = true;
-  for (SettingGroupList::const_iterator groupIt = groups.begin(); groupIt != groups.end(); ++groupIt)
+  for (auto groupIt : groups)
   {
-    if (*groupIt == nullptr)
+    if (groupIt == nullptr)
       continue;
 
-    const SettingList& settings = (*groupIt)->GetSettings((SettingLevel)GetSettingLevel());
+    const SettingList& settings = groupIt->GetSettings((SettingLevel)GetSettingLevel());
     if (settings.size() <= 0)
       continue;
 
-    const CSettingControlTitle *title = dynamic_cast<CSettingControlTitle *>((*groupIt)->GetControl());
+    const CSettingControlTitle *title = dynamic_cast<CSettingControlTitle *>(groupIt->GetControl());
     bool hideSeparator = title ? title->IsSeparatorHidden() : false;
     bool separatorBelowGroupLabel = title ? title->IsSeparatorBelowLabel() : false;
-    int groupLabel = (*groupIt)->GetLabel();
+    int groupLabel = groupIt->GetLabel();
 
     // hide the separator for the first settings grouplist if it
     // is the very first item in the list (also above the label)
@@ -540,9 +540,8 @@ std::set<std::string> CGUIDialogSettingsBase::CreateSettings()
     if (separatorBelowGroupLabel && !hideSeparator)
       AddSeparator(group->GetWidth(), iControlID);
 
-    for (SettingList::const_iterator settingIt = settings.begin(); settingIt != settings.end(); ++settingIt)
+    for (auto pSetting : settings)
     {
-      CSetting *pSetting = *settingIt;
       settingMap.insert(pSetting->GetId());
       AddSetting(pSetting, group->GetWidth(), iControlID);
     }
@@ -568,9 +567,8 @@ std::string CGUIDialogSettingsBase::GetSettingsLabel(CSetting *pSetting)
 
 void CGUIDialogSettingsBase::UpdateSettings()
 {
-  for (std::vector<BaseSettingControlPtr>::iterator it = m_settingControls.begin(); it != m_settingControls.end(); ++it)
+  for (auto pSettingControl : m_settingControls)
   {
-    BaseSettingControlPtr pSettingControl = *it;
     CSetting *pSetting = pSettingControl->GetSetting();
     CGUIControl *pControl = pSettingControl->GetControl();
     if (pSetting == nullptr || pControl == nullptr)
@@ -758,9 +756,9 @@ void CGUIDialogSettingsBase::OnResetSettings()
 {
   if (CGUIDialogYesNo::ShowAndGetInput(CVariant{10041}, CVariant{10042}))
   {
-    for(std::vector<BaseSettingControlPtr>::iterator it = m_settingControls.begin(); it != m_settingControls.end(); ++it)
+    for(auto & m_settingControl : m_settingControls)
     {
-      CSetting *setting = (*it)->GetSetting();
+      CSetting *setting = m_settingControl->GetSetting();
       if (setting != nullptr)
         setting->Reset();
     }
@@ -845,10 +843,10 @@ void CGUIDialogSettingsBase::SetControlLabel(int controlId, const CVariant &labe
 
 BaseSettingControlPtr CGUIDialogSettingsBase::GetSettingControl(const std::string &strSetting)
 {
-  for (std::vector<BaseSettingControlPtr>::iterator control = m_settingControls.begin(); control != m_settingControls.end(); ++control)
+  for (auto & m_settingControl : m_settingControls)
   {
-    if ((*control)->GetSetting() != nullptr && (*control)->GetSetting()->GetId() == strSetting)
-      return *control;
+    if (m_settingControl->GetSetting() != nullptr && m_settingControl->GetSetting()->GetId() == strSetting)
+      return m_settingControl;
   }
 
   return BaseSettingControlPtr();

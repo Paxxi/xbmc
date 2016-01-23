@@ -2052,9 +2052,8 @@ void CFileItemList::Archive(CArchive& ar)
     ar << (int)m_cacheToDisc;
 
     ar << (int)m_sortDetails.size();
-    for (unsigned int j = 0; j < m_sortDetails.size(); ++j)
+    for (auto & details : m_sortDetails)
     {
-      const GUIViewSortDetails &details = m_sortDetails[j];
       ar << (int)details.m_sortDescription.sortBy;
       ar << (int)details.m_sortDescription.sortOrder;
       ar << (int)details.m_sortDescription.sortAttributes;

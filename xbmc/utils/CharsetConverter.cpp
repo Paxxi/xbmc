@@ -628,8 +628,8 @@ std::string CCharsetConverter::getCharsetNameByLabel(const std::string& charsetL
 
 void CCharsetConverter::reset(void)
 {
-  for (int i = 0; i < NumberOfStdConversionTypes; i++)
-    CInnerConverter::m_stdConversion[i].Reset();
+  for (auto & i : CInnerConverter::m_stdConversion)
+    i.Reset();
 }
 
 void CCharsetConverter::resetSystemCharset(void)
@@ -874,6 +874,6 @@ void CCharsetConverter::SettingOptionsCharsetsFiller(const CSetting* setting, st
   sort(vecCharsets.begin(), vecCharsets.end(), sortstringbyname());
 
   list.push_back(make_pair(g_localizeStrings.Get(13278), "DEFAULT")); // "Default"
-  for (int i = 0; i < (int) vecCharsets.size(); ++i)
-    list.push_back(make_pair(vecCharsets[i], g_charsetConverter.getCharsetNameByLabel(vecCharsets[i])));
+  for (auto & vecCharset : vecCharsets)
+    list.push_back(make_pair(vecCharset, g_charsetConverter.getCharsetNameByLabel(vecCharset)));
 }

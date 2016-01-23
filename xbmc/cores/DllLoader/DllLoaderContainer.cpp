@@ -288,11 +288,11 @@ LibraryLoader* DllLoaderContainer::GetModule(int iPos)
 
 void DllLoaderContainer::RegisterDll(LibraryLoader* pDll)
 {
-  for (int i = 0; i < 64; i++)
+  for (auto & m_dll : m_dlls)
   {
-    if (m_dlls[i] == nullptr)
+    if (m_dll == nullptr)
     {
-      m_dlls[i] = pDll;
+      m_dll = pDll;
       m_iNrOfDlls++;
       break;
     }

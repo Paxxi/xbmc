@@ -457,8 +457,8 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
     }
     else if (message.GetMessage() == GUI_MSG_REFRESH_LIST)
     { // update our list contents
-      for (unsigned int i = 0; i < m_items.size(); ++i)
-        m_items[i]->SetInvalid();
+      for (auto & m_item : m_items)
+        m_item->SetInvalid();
     }
     else if (message.GetMessage() == GUI_MSG_MOVE_OFFSET)
     {
@@ -532,11 +532,11 @@ void CGUIBaseContainer::OnRight()
 void CGUIBaseContainer::OnNextLetter()
 {
   int offset = CorrectOffset(GetOffset(), GetCursor());
-  for (unsigned int i = 0; i < m_letterOffsets.size(); i++)
+  for (auto & m_letterOffset : m_letterOffsets)
   {
-    if (m_letterOffsets[i].first > offset)
+    if (m_letterOffset.first > offset)
     {
-      SelectItem(m_letterOffsets[i].first);
+      SelectItem(m_letterOffset.first);
       return;
     }
   }
@@ -617,11 +617,11 @@ void CGUIBaseContainer::OnJumpSMS(int letter)
   while (true)
   {
     // check if we can jump to this letter
-    for (size_t i = 0; i < m_letterOffsets.size(); i++)
+    for (auto & m_letterOffset : m_letterOffsets)
     {
-      if (m_letterOffsets[i].second == letters.substr(pos, 1))
+      if (m_letterOffset.second == letters.substr(pos, 1))
       {
-        SelectItem(m_letterOffsets[i].first);
+        SelectItem(m_letterOffset.first);
         return;
       }
     }
@@ -854,8 +854,8 @@ void CGUIBaseContainer::UpdateLayout(bool updateAllItems)
 {
   if (updateAllItems)
   { // free memory of items
-    for (iItems it = m_items.begin(); it != m_items.end(); ++it)
-      (*it)->FreeMemory();
+    for (auto & m_item : m_items)
+      m_item->FreeMemory();
   }
   // and recalculate the layout
   CalculateLayout();
@@ -1201,11 +1201,11 @@ bool CGUIBaseContainer::GetCondition(int condition, int data) const
 void CGUIBaseContainer::GetCurrentLayouts()
 {
   m_layout = nullptr;
-  for (unsigned int i = 0; i < m_layouts.size(); i++)
+  for (auto & m_layout : m_layouts)
   {
-    if (m_layouts[i].CheckCondition())
+    if (m_layout.CheckCondition())
     {
-      m_layout = &m_layouts[i];
+      m_layout = &m_layout;
       break;
     }
   }
@@ -1213,11 +1213,11 @@ void CGUIBaseContainer::GetCurrentLayouts()
     m_layout = &m_layouts[0];  // failsafe
 
   m_focusedLayout = nullptr;
-  for (unsigned int i = 0; i < m_focusedLayouts.size(); i++)
+  for (auto & m_focusedLayout : m_focusedLayouts)
   {
-    if (m_focusedLayouts[i].CheckCondition())
+    if (m_focusedLayout.CheckCondition())
     {
-      m_focusedLayout = &m_focusedLayouts[i];
+      m_focusedLayout = &m_focusedLayout;
       break;
     }
   }

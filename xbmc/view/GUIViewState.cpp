@@ -287,8 +287,8 @@ void CGUIViewState::AddSortMethod(SortBy sortBy, int buttonLabel, const LABEL_MA
 
 void CGUIViewState::AddSortMethod(SortBy sortBy, SortAttribute sortAttributes, int buttonLabel, const LABEL_MASKS &labelMasks, SortOrder sortOrder /* = SortOrderNone */)
 {
-  for (size_t i = 0; i < m_sortMethods.size(); ++i)
-    if (m_sortMethods[i].m_sortDescription.sortBy == sortBy)
+  for (auto & m_sortMethod : m_sortMethods)
+    if (m_sortMethod.m_sortDescription.sortBy == sortBy)
       return;
 
   // handle unspecified sort order

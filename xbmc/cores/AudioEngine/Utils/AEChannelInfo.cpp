@@ -135,8 +135,8 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
 void CAEChannelInfo::Reset()
 {
   m_channelCount = 0;
-  for (unsigned int i = 0; i < AE_CH_MAX; ++i)
-    m_channels[i] = AE_CH_NULL;
+  for (auto & m_channel : m_channels)
+    m_channel = AE_CH_NULL;
 }
 
 CAEChannelInfo& CAEChannelInfo::operator=(const CAEChannelInfo& rhs)
@@ -325,8 +325,8 @@ void CAEChannelInfo::ReplaceChannel(const enum AEChannel from, const enum AEChan
 int CAEChannelInfo::BestMatch(const std::vector<CAEChannelInfo>& dsts, int* score) const
 {
   CAEChannelInfo availableDstChannels;
-  for (unsigned int i = 0; i < dsts.size(); i++)
-    availableDstChannels.AddMissingChannels(dsts[i]);
+  for (const auto & dst : dsts)
+    availableDstChannels.AddMissingChannels(dst);
 
   /* if we have channels not existing in any destination layout but that
    * are remappable (e.g. RC => RL+RR), do those remaps */

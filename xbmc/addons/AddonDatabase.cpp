@@ -468,8 +468,8 @@ int CAddonDatabase::AddRepository(const std::string& id, const VECADDONS& addons
 
     m_pDS->exec(sql);
     idRepo = (int)m_pDS->lastinsertid();
-    for (unsigned int i=0;i<addons.size();++i)
-      AddAddon(addons[i],idRepo);
+    for (const auto & addon : addons)
+      AddAddon(addon,idRepo);
 
     CommitTransaction();
     return idRepo;

@@ -70,9 +70,8 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
 
   int choseong = -1, jungseong = -1, jongseong = -1;
 
-  for (unsigned int i = 0; i < input.size(); i++)
+  for (wchar_t ch : input)
   {
-    wchar_t ch = input.at(i);
     int key = dicKorean.find(ch);
 
     // H/W Keyboard input with English will be changed to Korean 

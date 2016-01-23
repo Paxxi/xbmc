@@ -35,9 +35,9 @@ CDVDDemuxVobsub::CDVDDemuxVobsub()
 
 CDVDDemuxVobsub::~CDVDDemuxVobsub()
 {
-  for(unsigned i=0;i<m_Streams.size();i++)
+  for(auto & m_Stream : m_Streams)
   {
-    delete m_Streams[i];
+    delete m_Stream;
   }
   m_Streams.clear();
 }
@@ -110,11 +110,11 @@ bool CDVDDemuxVobsub::Open(const std::string& filename, int source, const std::s
   sort(m_Timestamps.begin(), m_Timestamps.end(), s);
   m_Timestamp = m_Timestamps.begin();
 
-  for(unsigned i=0;i<m_Streams.size();i++)
+  for(auto & m_Stream : m_Streams)
   {
-    m_Streams[i]->ExtraSize = state.extra.length()+1;
-    m_Streams[i]->ExtraData = new uint8_t[m_Streams[i]->ExtraSize];
-    strcpy((char*)m_Streams[i]->ExtraData, state.extra.c_str());
+    m_Stream->ExtraSize = state.extra.length()+1;
+    m_Stream->ExtraData = new uint8_t[m_Stream->ExtraSize];
+    strcpy((char*)m_Stream->ExtraData, state.extra.c_str());
   }
 
   return true;

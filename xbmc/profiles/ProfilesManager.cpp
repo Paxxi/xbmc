@@ -210,8 +210,8 @@ bool CProfilesManager::Save(const std::string &file) const
   XMLUtils::SetInt(pRoot, XML_AUTO_LOGIN, m_autoLoginProfile);
   XMLUtils::SetInt(pRoot, XML_NEXTID, m_nextProfileId);      
 
-  for (std::vector<CProfile>::const_iterator profile = m_profiles.begin(); profile != m_profiles.end(); ++profile)
-    profile->Save(pRoot);
+  for (const auto & m_profile : m_profiles)
+    m_profile.Save(pRoot);
 
   // save the file
   return xmlDoc.SaveFile(file);

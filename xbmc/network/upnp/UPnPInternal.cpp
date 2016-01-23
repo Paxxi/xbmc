@@ -231,14 +231,14 @@ PopulateObjectFromTag(CMusicInfoTag&         tag,
       *file_path = tag.GetURL().c_str();
 
     std::vector<std::string> genres = tag.GetGenre();
-    for (unsigned int index = 0; index < genres.size(); index++)
-      object.m_Affiliation.genres.Add(genres.at(index).c_str());
+    for (auto & genre : genres)
+      object.m_Affiliation.genres.Add(genre.c_str());
     object.m_Title = tag.GetTitle().c_str();
     object.m_Affiliation.album = tag.GetAlbum().c_str();
-    for (unsigned int index = 0; index < tag.GetArtist().size(); index++)
+    for (const auto & index : tag.GetArtist())
     {
-      object.m_People.artists.Add(tag.GetArtist().at(index).c_str());
-      object.m_People.artists.Add(tag.GetArtist().at(index).c_str(), "Performer");
+      object.m_People.artists.Add(index.c_str());
+      object.m_People.artists.Add(index.c_str(), "Performer");
     }
     object.m_People.artists.Add((!tag.GetAlbumArtistString().empty() ? tag.GetAlbumArtistString() : tag.GetArtistString()).c_str(), "AlbumArtist");
     if(tag.GetAlbumArtistString().empty())
@@ -310,8 +310,8 @@ PopulateObjectFromTag(CVideoInfoTag&         tag,
     if(object.m_ReferenceID == object.m_ObjectID)
         object.m_ReferenceID = "";
 
-    for (unsigned int index = 0; index < tag.m_studio.size(); index++)
-        object.m_People.publisher.Add(tag.m_studio[index].c_str());
+    for (auto & index : tag.m_studio)
+        object.m_People.publisher.Add(index.c_str());
 
     object.m_XbmcInfo.date_added = tag.m_dateAdded.GetAsW3CDate().c_str();
     object.m_XbmcInfo.rating = tag.GetRating().rating;
@@ -321,18 +321,18 @@ PopulateObjectFromTag(CVideoInfoTag&         tag,
       object.m_XbmcInfo.countries.Add(country.c_str());
     object.m_XbmcInfo.user_rating = tag.m_iUserRating;
 
-    for (unsigned int index = 0; index < tag.m_genre.size(); index++)
-      object.m_Affiliation.genres.Add(tag.m_genre.at(index).c_str());
+    for (auto & index : tag.m_genre)
+      object.m_Affiliation.genres.Add(index.c_str());
 
     for(CVideoInfoTag::iCast it = tag.m_cast.begin();it != tag.m_cast.end();it++) {
         object.m_People.actors.Add(it->strName.c_str(), it->strRole.c_str());
     }
 
-    for (unsigned int index = 0; index < tag.m_director.size(); index++)
-      object.m_People.directors.Add(tag.m_director[index].c_str());
+    for (auto & index : tag.m_director)
+      object.m_People.directors.Add(index.c_str());
 
-    for (unsigned int index = 0; index < tag.m_writingCredits.size(); index++)
-      object.m_People.authors.Add(tag.m_writingCredits[index].c_str());
+    for (auto & m_writingCredit : tag.m_writingCredits)
+      object.m_People.authors.Add(m_writingCredit.c_str());
 
     object.m_Description.description = tag.m_strTagLine.c_str();
     object.m_Description.long_description = tag.m_strPlot.c_str();
@@ -535,17 +535,17 @@ BuildObject(CFileItem&                    item,
                   else
                     container->m_Date = tag.m_premiered.GetAsW3CDate().c_str();
 
-                  for (unsigned int index = 0; index < tag.m_genre.size(); index++)
-                    container->m_Affiliation.genres.Add(tag.m_genre.at(index).c_str());
+                  for (auto & index : tag.m_genre)
+                    container->m_Affiliation.genres.Add(index.c_str());
 
                   for(CVideoInfoTag::iCast it = tag.m_cast.begin();it != tag.m_cast.end();it++) {
                       container->m_People.actors.Add(it->strName.c_str(), it->strRole.c_str());
                   }
 
-                  for (unsigned int index = 0; index < tag.m_director.size(); index++)
-                    container->m_People.directors.Add(tag.m_director[index].c_str());
-                  for (unsigned int index = 0; index < tag.m_writingCredits.size(); index++)
-                    container->m_People.authors.Add(tag.m_writingCredits[index].c_str());
+                  for (auto & index : tag.m_director)
+                    container->m_People.directors.Add(index.c_str());
+                  for (auto & m_writingCredit : tag.m_writingCredits)
+                    container->m_People.authors.Add(m_writingCredit.c_str());
 
                   container->m_Description.description = tag.m_strTagLine.c_str();
                   container->m_Description.long_description = tag.m_strPlot.c_str();
@@ -608,12 +608,12 @@ BuildObject(CFileItem&                    item,
             object->m_ExtraInfo.album_arts.Add(art);
         }
 
-        for (CGUIListItem::ArtMap::const_iterator itArtwork = item.GetArt().begin(); itArtwork != item.GetArt().end(); ++itArtwork) {
-            if (!itArtwork->first.empty() && !itArtwork->second.empty()) {
-                std::string wrappedUrl = CTextureUtils::GetWrappedImageURL(itArtwork->second);
-                object->m_XbmcInfo.artwork.Add(itArtwork->first.c_str(),
+        for (const auto & itArtwork : item.GetArt()) {
+            if (!itArtwork.first.empty() && !itArtwork.second.empty()) {
+                std::string wrappedUrl = CTextureUtils::GetWrappedImageURL(itArtwork.second);
+                object->m_XbmcInfo.artwork.Add(itArtwork.first.c_str(),
                   upnp_server->BuildSafeResourceUri(rooturi, (*ips.GetFirstItem()).ToString(), wrappedUrl.c_str()));
-                upnp_server->AddSafeResourceUri(object, rooturi, ips, wrappedUrl.c_str(), ("xbmc.org:*:" + itArtwork->first + ":*").c_str());
+                upnp_server->AddSafeResourceUri(object, rooturi, ips, wrappedUrl.c_str(), ("xbmc.org:*:" + itArtwork.first + ":*").c_str());
             }
         }
     }
@@ -631,16 +631,16 @@ BuildObject(CFileItem&                    item,
         CUtil::ScanForExternalSubtitles(file_path.GetChars(), filenames);
 
         std::string ext;
-        for (unsigned int i = 0; i < filenames.size(); i++)
+        for (auto & filename : filenames)
         {
-            ext = URIUtils::GetExtension(filenames[i]).c_str();
+            ext = URIUtils::GetExtension(filename).c_str();
             ext = ext.substr(1);
             std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
             /* Hardcoded check for extension is not the best way, but it can't be allowed to pass all
                subtitle extension (ex. rar or zip). There are the most popular extensions support by UPnP devices.*/
             if (ext == "txt" || ext == "srt" || ext == "ssa" || ext == "ass" || ext == "sub" || ext == "smi")
             {
-                subtitles.push_back(filenames[i]);
+                subtitles.push_back(filename);
             }
         }
 
@@ -657,14 +657,14 @@ BuildObject(CFileItem&                    item,
             std::string preferredLanguageCode;
             g_LangCodeExpander.ConvertToISO6392T(preferredLanguage, preferredLanguageCode);
 
-            for (unsigned int i = 0; i < subtitles.size(); i++)
+            for (auto & subtitle : subtitles)
             {
                 ExternalStreamInfo info;
-                CUtil::GetExternalStreamDetailsFromFilename(file_path.GetChars(), subtitles[i], info);
+                CUtil::GetExternalStreamDetailsFromFilename(file_path.GetChars(), subtitle, info);
 
                 if (preferredLanguageCode == info.language)
                 {
-                    subtitlePath = subtitles[i];
+                    subtitlePath = subtitle;
                     break;
                 }
             }
@@ -1095,9 +1095,9 @@ bool GetResource(const PLT_MediaObject* entry, CFileItem& item)
       , "text/ssa"
       , "text/sub"
       , "text/idx" };
-    for(unsigned type = 0; type < ARRAY_SIZE(allowed); type++)
+    for(auto & type : allowed)
     {
-      if(info.Match(PLT_ProtocolInfo("*", "*", allowed[type], "*")))
+      if(info.Match(PLT_ProtocolInfo("*", "*", type, "*")))
       {
         std::string prop = StringUtils::Format("subtitle:%d", ++subs);
         item.SetProperty(prop, (const char*)res.m_Uri);

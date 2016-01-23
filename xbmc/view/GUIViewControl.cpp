@@ -242,9 +242,9 @@ void CGUIViewControl::SetFocused()
 bool CGUIViewControl::HasControl(int viewControlID) const
 {
   // run through our controls, checking for the id
-  for (ciViews it = m_allViews.begin(); it != m_allViews.end(); ++it)
+  for (auto m_allView : m_allViews)
   {
-    if ((*it)->GetID() == viewControlID)
+    if (m_allView->GetID() == viewControlID)
       return true;
   }
   return false;
@@ -273,9 +273,9 @@ int CGUIViewControl::GetViewModeNumber(int number) const
 
 int CGUIViewControl::GetViewModeByID(int id) const
 {
-  for (unsigned int i = 0; i < m_visibleViews.size(); ++i)
+  for (auto m_visibleView : m_visibleViews)
   {
-    IGUIContainer *view = (IGUIContainer *)m_visibleViews[i];
+    IGUIContainer *view = (IGUIContainer *)m_visibleView;
     if (view->GetID() == id)
       return (view->GetType() << 16) | view->GetID();
   }
@@ -341,9 +341,8 @@ void CGUIViewControl::UpdateViewVisibility()
   // used for views (i.e. based on contenttype) may have changed
   g_infoManager.ResetCache();
   m_visibleViews.clear();
-  for (unsigned int i = 0; i < m_allViews.size(); i++)
+  for (auto view : m_allViews)
   {
-    CGUIControl *view = m_allViews[i];
     if (view->HasVisibleCondition())
     {
       view->UpdateVisibility();

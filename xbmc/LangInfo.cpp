@@ -163,9 +163,8 @@ static CTemperature::Unit StringToTemperatureUnit(const std::string& temperature
   std::string unit(temperatureUnit);
   StringUtils::ToLower(unit);
 
-  for (size_t i = 0; i < TEMPERATURE_INFO_SIZE; i++)
+  for (const auto & info : temperatureInfo)
   {
-    const TemperatureInfo& info = temperatureInfo[i];
     if (info.name == unit)
       return info.unit;
   }
@@ -178,9 +177,8 @@ static CSpeed::Unit StringToSpeedUnit(const std::string& speedUnit)
   std::string unit(speedUnit);
   StringUtils::ToLower(unit);
 
-  for (size_t i = 0; i < SPEED_INFO_SIZE; i++)
+  for (const auto & info : speedInfo)
   {
-    const SpeedInfo& info = speedInfo[i];
     if (info.name == unit)
       return info.unit;
   }

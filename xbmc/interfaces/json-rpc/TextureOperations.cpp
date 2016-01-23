@@ -75,8 +75,8 @@ JSONRPC_STATUS CTextureOperations::GetTextures(const std::string &method, ITrans
     // erase these fields
     for (CVariant::iterator_array item = items.begin_array(); item != items.end_array(); ++item)
     {
-      for (std::set<std::string>::const_iterator i = fields.begin(); i != fields.end(); ++i)
-        item->erase(*i);
+      for (const auto & field : fields)
+        item->erase(field);
     }
     if (fields.find("url") == fields.end())
     {

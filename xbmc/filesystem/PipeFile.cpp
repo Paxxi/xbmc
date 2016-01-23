@@ -178,8 +178,8 @@ std::string CPipeFile::GetName() const
 void CPipeFile::OnPipeOverFlow()
 {
   CSingleLock lock(m_lock);
-  for (size_t l=0; l<m_listeners.size(); l++)
-    m_listeners[l]->OnPipeOverFlow();
+  for (auto & m_listener : m_listeners)
+    m_listener->OnPipeOverFlow();
 }
 
 int64_t	CPipeFile::GetAvailableRead()
@@ -189,16 +189,16 @@ int64_t	CPipeFile::GetAvailableRead()
 
 void CPipeFile::OnPipeUnderFlow()
 {
-  for (size_t l=0; l<m_listeners.size(); l++)
-    m_listeners[l]->OnPipeUnderFlow();
+  for (auto & m_listener : m_listeners)
+    m_listener->OnPipeUnderFlow();
 }
 
 void CPipeFile::AddListener(IPipeListener *l)
 {
   CSingleLock lock(m_lock);
-  for (size_t i=0; i<m_listeners.size(); i++)
+  for (auto & m_listener : m_listeners)
   {
-    if (m_listeners[i] == l)
+    if (m_listener == l)
       return;
   }
   m_listeners.push_back(l);

@@ -174,14 +174,14 @@ JSONRPC_STATUS CAudioLibrary::GetAlbums(const std::string &method, ITransportLay
 
   CFileItemList items;
   items.Reserve(albums.size());
-  for (unsigned int index = 0; index < albums.size(); index++)
+  for (auto & album : albums)
   {
     CMusicDbUrl itemUrl = musicUrl;
-    std::string path = StringUtils::Format("%li/", albums[index].idAlbum);
+    std::string path = StringUtils::Format("%li/", album.idAlbum);
     itemUrl.AppendPath(path);
 
     CFileItemPtr pItem;
-    FillAlbumItem(albums[index], itemUrl.ToString(), pItem);
+    FillAlbumItem(album, itemUrl.ToString(), pItem);
     items.Add(pItem);
   }
 
@@ -324,12 +324,12 @@ JSONRPC_STATUS CAudioLibrary::GetRecentlyAddedAlbums(const std::string &method, 
     return InternalError;
 
   CFileItemList items;
-  for (unsigned int index = 0; index < albums.size(); index++)
+  for (auto & album : albums)
   {
-    std::string path = StringUtils::Format("musicdb://recentlyaddedalbums/%li/", albums[index].idAlbum);
+    std::string path = StringUtils::Format("musicdb://recentlyaddedalbums/%li/", album.idAlbum);
 
     CFileItemPtr item;
-    FillAlbumItem(albums[index], path, item);
+    FillAlbumItem(album, path, item);
     items.Add(item);
   }
 
@@ -374,12 +374,12 @@ JSONRPC_STATUS CAudioLibrary::GetRecentlyPlayedAlbums(const std::string &method,
     return InternalError;
 
   CFileItemList items;
-  for (unsigned int index = 0; index < albums.size(); index++)
+  for (auto & album : albums)
   {
-    std::string path = StringUtils::Format("musicdb://recentlyplayedalbums/%li/", albums[index].idAlbum);
+    std::string path = StringUtils::Format("musicdb://recentlyplayedalbums/%li/", album.idAlbum);
 
     CFileItemPtr item;
-    FillAlbumItem(albums[index], path, item);
+    FillAlbumItem(album, path, item);
     items.Add(item);
   }
 
@@ -736,8 +736,8 @@ void CAudioLibrary::FillItemArtistIDs(const std::vector<int> artistids, CFileIte
 {
   // Add artistIds as separate property as not part of CMusicInfoTag
   CVariant artistidObj(CVariant::VariantTypeArray);
-  for (std::vector<int>::const_iterator artistid = artistids.begin(); artistid != artistids.end(); ++artistid)
-    artistidObj.push_back(*artistid);
+  for (int artistid : artistids)
+    artistidObj.push_back(artistid);
 
   item->SetProperty("artistid", artistidObj);
 }

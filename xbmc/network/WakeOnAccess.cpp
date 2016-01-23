@@ -437,10 +437,8 @@ bool CWakeOnAccess::FindOrTouchHostEntry (const std::string& hostName, WakeUpEnt
 
   bool need_wakeup = false;
 
-  for (EntriesVector::iterator i = m_entries.begin();i != m_entries.end(); ++i)
+  for (auto & server : m_entries)
   {
-    WakeUpEntry& server = *i;
-
     if (StringUtils::EqualsNoCase(hostName, server.host))
     {
       CDateTime now = CDateTime::GetCurrentDateTime();
@@ -466,10 +464,8 @@ void CWakeOnAccess::TouchHostEntry (const std::string& hostName)
 {
   CSingleLock lock (m_entrylist_protect);
 
-  for (EntriesVector::iterator i = m_entries.begin();i != m_entries.end(); ++i)
+  for (auto & server : m_entries)
   {
-    WakeUpEntry& server = *i;
-
     if (StringUtils::EqualsNoCase(hostName, server.host))
     {
       server.nextWake = CDateTime::GetCurrentDateTime() + server.timeout;
@@ -507,9 +503,9 @@ void CWakeOnAccess::QueueMACDiscoveryForHost(const std::string& host)
 
 static void AddHostsFromMediaSource(const CMediaSource& source, std::vector<std::string>& hosts)
 {
-  for (std::vector<std::string>::const_iterator it = source.vecPaths.begin() ; it != source.vecPaths.end(); ++it)
+  for (const auto & vecPath : source.vecPaths)
   {
-    CURL url(*it);
+    CURL url(vecPath);
 
     AddHost (url.GetHostName(), hosts);
   }
@@ -517,8 +513,8 @@ static void AddHostsFromMediaSource(const CMediaSource& source, std::vector<std:
 
 static void AddHostsFromVecSource(const VECSOURCES& sources, std::vector<std::string>& hosts)
 {
-  for (VECSOURCES::const_iterator it = sources.begin(); it != sources.end(); ++it)
-    AddHostsFromMediaSource(*it, hosts);
+  for (const auto & source : sources)
+    AddHostsFromMediaSource(source, hosts);
 }
 
 static void AddHostsFromVecSource(const VECSOURCES* sources, std::vector<std::string>& hosts)
@@ -564,12 +560,12 @@ void CWakeOnAccess::SaveMACDiscoveryResult(const std::string& host, const std::s
 
   std::string heading = LOCALIZED(13033);
 
-  for (EntriesVector::iterator i = m_entries.begin(); i != m_entries.end(); ++i)
+  for (auto & m_entrie : m_entries)
   {
-    if (StringUtils::EqualsNoCase(host, i->host))
+    if (StringUtils::EqualsNoCase(host, m_entrie.host))
     {
       CLog::Log(LOGDEBUG, "%s - Update existing entry for host '%s'", __FUNCTION__, host.c_str());
-      if (!StringUtils::EqualsNoCase(mac, i->mac))
+      if (!StringUtils::EqualsNoCase(mac, m_entrie.mac))
       {
         if (IsEnabled()) // show notification only if we have general feature enabled
         {
@@ -577,7 +573,7 @@ void CWakeOnAccess::SaveMACDiscoveryResult(const std::string& host, const std::s
           CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, heading, message, 4000, true, 3000);
         }
 
-        i->mac = mac;
+        m_entrie.mac = mac;
         SaveToXML();
       }
 

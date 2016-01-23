@@ -38,27 +38,27 @@ CDirectoryNodeTop100::CDirectoryNodeTop100(const std::string& strName, CDirector
 
 NODE_TYPE CDirectoryNodeTop100::GetChildType() const
 {
-  for (unsigned int i = 0; i < sizeof(Top100Children) / sizeof(Node); ++i)
-    if (GetName() == Top100Children[i].id)
-      return Top100Children[i].node;
+  for (auto & i : Top100Children)
+    if (GetName() == i.id)
+      return i.node;
 
   return NODE_TYPE_NONE;
 }
 
 std::string CDirectoryNodeTop100::GetLocalizedName() const
 {
-  for (unsigned int i = 0; i < sizeof(Top100Children) / sizeof(Node); ++i)
-    if (GetName() == Top100Children[i].id)
-      return g_localizeStrings.Get(Top100Children[i].label);
+  for (auto & i : Top100Children)
+    if (GetName() == i.id)
+      return g_localizeStrings.Get(i.label);
   return "";
 }
 
 bool CDirectoryNodeTop100::GetContent(CFileItemList& items) const
 {
-  for (unsigned int i = 0; i < sizeof(Top100Children) / sizeof(Node); ++i)
+  for (auto & i : Top100Children)
   {
-    CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(Top100Children[i].label)));
-    std::string strDir = StringUtils::Format("%s/", Top100Children[i].id.c_str());
+    CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(i.label)));
+    std::string strDir = StringUtils::Format("%s/", i.id.c_str());
     pItem->SetPath(BuildPath() + strDir);
     pItem->m_bIsFolder = true;
     items.Add(pItem);

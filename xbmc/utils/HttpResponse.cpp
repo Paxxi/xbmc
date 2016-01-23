@@ -87,14 +87,14 @@ unsigned int CHttpResponse::Create(char *&response)
   m_buffer.append(LINEBREAK);
 
   bool hasContentLengthHeader = false;
-  for (unsigned int index = 0; index < m_headers.size(); index++)
+  for (auto & m_header : m_headers)
   {
-    m_buffer.append(m_headers[index].first);
+    m_buffer.append(m_header.first);
     m_buffer.append(SEPARATOR);
-    m_buffer.append(m_headers[index].second);
+    m_buffer.append(m_header.second);
     m_buffer.append(LINEBREAK);
 
-    if (m_headers[index].first.compare(HEADER_CONTENT_LENGTH) == 0)
+    if (m_header.first.compare(HEADER_CONTENT_LENGTH) == 0)
       hasContentLengthHeader = true;
   }
 

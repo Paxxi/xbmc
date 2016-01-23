@@ -91,13 +91,13 @@ bool CFileUtils::RenameFile(const std::string &strFile)
       std::vector<std::string> paths;
       CMultiPathDirectory::GetPaths(strFileAndPath, paths);
       bool success = false;
-      for (unsigned int i = 0; i < paths.size(); ++i)
+      for (auto & path : paths)
       {
-        std::string filePath(paths[i]);
+        std::string filePath(path);
         URIUtils::RemoveSlashAtEnd(filePath);
         filePath = URIUtils::GetDirectory(filePath);
         filePath = URIUtils::AddFileToFolder(filePath, strFileName);
-        if (CFile::Rename(paths[i], filePath))
+        if (CFile::Rename(path, filePath))
           success = true;
       }
       return success;
@@ -154,9 +154,9 @@ bool CFileUtils::RemoteAccessAllowed(const std::string &strPath)
       return true;
   }
   bool isSource;
-  for (unsigned int index = 0; index < SourcesSize; index++)
+  for (const auto & SourceName : SourceNames)
   {
-    VECSOURCES* sources = CMediaSourceSettings::GetInstance().GetSources(SourceNames[index]);
+    VECSOURCES* sources = CMediaSourceSettings::GetInstance().GetSources(SourceName);
     int sourceIndex = CUtil::GetMatchingSource(realPath, *sources, isSource);
     if (sourceIndex >= 0 && sourceIndex < (int)sources->size() && sources->at(sourceIndex).m_iHasLock != 2 && sources->at(sourceIndex).m_allowSharing)
       return true;

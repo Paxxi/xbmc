@@ -199,8 +199,8 @@ bool CHttpRanges::GetLastPosition(uint64_t& position) const
 uint64_t CHttpRanges::GetLength() const
 {
   uint64_t length = 0;
-  for (HttpRanges::const_iterator range = m_ranges.begin(); range != m_ranges.end(); ++range)
-    length += range->GetLength();
+  for (const auto & m_range : m_ranges)
+    length += m_range.GetLength();
 
   return length;
 }

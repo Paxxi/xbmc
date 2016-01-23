@@ -224,10 +224,10 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
   m_iOrientation = hints.orientation;
 
-  for(std::vector<ERenderFormat>::iterator it = options.m_formats.begin(); it != options.m_formats.end(); ++it)
+  for(auto & m_format : options.m_formats)
   {
-    m_formats.push_back((AVPixelFormat)CDVDCodecUtils::PixfmtFromEFormat(*it));
-    if(*it == RENDER_FMT_YUV420P)
+    m_formats.push_back((AVPixelFormat)CDVDCodecUtils::PixfmtFromEFormat(m_format));
+    if(m_format == RENDER_FMT_YUV420P)
       m_formats.push_back(AV_PIX_FMT_YUVJ420P);
   }
   m_formats.push_back(AV_PIX_FMT_NONE); /* always add none to get a terminated list in ffmpeg world */
@@ -317,12 +317,12 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   }
 
   // set any special options
-  for(std::vector<CDVDCodecOption>::iterator it = options.m_keys.begin(); it != options.m_keys.end(); ++it)
+  for(auto & m_key : options.m_keys)
   {
-    if (it->m_name == "surfaces")
-      m_uSurfacesCount = atoi(it->m_value.c_str());
+    if (m_key.m_name == "surfaces")
+      m_uSurfacesCount = atoi(m_key.m_value.c_str());
     else
-      av_opt_set(m_pCodecContext, it->m_name.c_str(), it->m_value.c_str(), 0);
+      av_opt_set(m_pCodecContext, m_key.m_name.c_str(), m_key.m_value.c_str(), 0);
   }
 
   if (avcodec_open2(m_pCodecContext, pCodec, nullptr) < 0)

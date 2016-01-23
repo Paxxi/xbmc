@@ -379,10 +379,10 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
 bool CDVDFileInfo::DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDemux *pDemuxer, const std::vector<CStreamDetailSubtitle> &subs, CStreamDetails &details)
 {
   bool result = DemuxerToStreamDetails(pInputStream, pDemuxer, details);
-  for (unsigned int i = 0; i < subs.size(); i++)
+  for (const auto & i : subs)
   {
     CStreamDetailSubtitle* sub = new CStreamDetailSubtitle();
-    sub->m_strLanguage = subs[i].m_strLanguage;
+    sub->m_strLanguage = i.m_strLanguage;
     details.AddStream(sub);
     result = true;
   }

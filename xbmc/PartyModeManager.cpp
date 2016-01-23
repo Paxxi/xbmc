@@ -612,12 +612,12 @@ bool CPartyModeManager::AddInitialSongs(std::vector< std::pair<int,int > > &song
     std::string sqlWhereMusic = "songview.idSong IN (";
     std::string sqlWhereVideo = "idMVideo IN (";
 
-    for (std::vector< std::pair<int,int> >::iterator it = chosenSongIDs.begin(); it != chosenSongIDs.end(); ++it)
+    for (auto & chosenSongID : chosenSongIDs)
     {
-      std::string song = StringUtils::Format("%i,", it->second);
-      if (it->first == 1)
+      std::string song = StringUtils::Format("%i,", chosenSongID.second);
+      if (chosenSongID.first == 1)
         sqlWhereMusic += song;
-      if (it->first == 2)
+      if (chosenSongID.first == 2)
         sqlWhereVideo += song;
     }
     // add songs to fill queue
@@ -655,12 +655,12 @@ std::pair<std::string,std::string> CPartyModeManager::GetWhereClauseWithHistory(
   // now add this on to the normal where clause
   std::vector<std::string> historyItemsMusic;
   std::vector<std::string> historyItemsVideo;
-  for (unsigned int i = 0; i < m_history.size(); i++)
+  for (const auto & i : m_history)
   {
-    std::string number = StringUtils::Format("%i", m_history[i].second);
-    if (m_history[i].first == 1)
+    std::string number = StringUtils::Format("%i", i.second);
+    if (i.first == 1)
       historyItemsMusic.push_back(number);
-    if (m_history[i].first == 2)
+    if (i.first == 2)
       historyItemsVideo.push_back(number);
   }
 

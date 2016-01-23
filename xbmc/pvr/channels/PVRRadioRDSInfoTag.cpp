@@ -340,9 +340,9 @@ void CPVRRadioRDSInfoTag::SetInfoNews(const std::string& strNews)
   std::string tmpStr = Trim(strNews);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoNews.size(); ++i)
+  for (auto & m_strInfoNew : m_strInfoNews)
   {
-    if (m_strInfoNews[i].compare(tmpStr) == 0)
+    if (m_strInfoNew.compare(tmpStr) == 0)
       return;
   }
 
@@ -369,9 +369,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoNewsDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoNews() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoNews.size(); ++i)
+  for (auto tmpStr : m_strInfoNews)
   {
-    std::string tmpStr = m_strInfoNews[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -384,9 +383,9 @@ void CPVRRadioRDSInfoTag::SetInfoNewsLocal(const std::string& strNews)
   std::string tmpStr = Trim(strNews);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoNewsLocal.size(); ++i)
+  for (auto & i : m_strInfoNewsLocal)
   {
-    if (m_strInfoNewsLocal[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -413,9 +412,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoNewsLocalDeque() cons
 const std::string CPVRRadioRDSInfoTag::GetInfoNewsLocal() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoNewsLocal.size(); ++i)
+  for (auto tmpStr : m_strInfoNewsLocal)
   {
-    std::string tmpStr = m_strInfoNewsLocal[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -428,9 +426,9 @@ void CPVRRadioRDSInfoTag::SetInfoSport(const std::string& strSport)
   std::string tmpStr = Trim(strSport);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoSport.size(); ++i)
+  for (auto & i : m_strInfoSport)
   {
-    if (m_strInfoSport[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -457,9 +455,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoSportDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoSport() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoSport.size(); ++i)
+  for (auto tmpStr : m_strInfoSport)
   {
-    std::string tmpStr = m_strInfoSport[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -472,9 +469,9 @@ void CPVRRadioRDSInfoTag::SetInfoStock(const std::string& strStock)
   std::string tmpStr = Trim(strStock);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoStock.size(); ++i)
+  for (auto & i : m_strInfoStock)
   {
-    if (m_strInfoStock[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -501,9 +498,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoStockDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoStock() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoStock.size(); ++i)
+  for (auto tmpStr : m_strInfoStock)
   {
-    std::string tmpStr = m_strInfoStock[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -516,9 +512,9 @@ void CPVRRadioRDSInfoTag::SetInfoWeather(const std::string& strWeather)
   std::string tmpStr = Trim(strWeather);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoWeather.size(); ++i)
+  for (auto & i : m_strInfoWeather)
   {
-    if (m_strInfoWeather[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -544,9 +540,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoWeatherDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoWeather() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoWeather.size(); ++i)
+  for (auto tmpStr : m_strInfoWeather)
   {
-    std::string tmpStr = m_strInfoWeather[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -559,9 +554,9 @@ void CPVRRadioRDSInfoTag::SetInfoLottery(const std::string& strLottery)
   std::string tmpStr = Trim(strLottery);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoLottery.size(); ++i)
+  for (auto & i : m_strInfoLottery)
   {
-    if (m_strInfoLottery[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -587,9 +582,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoLotteryDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoLottery() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoLottery.size(); ++i)
+  for (auto tmpStr : m_strInfoLottery)
   {
-    std::string tmpStr = m_strInfoLottery[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -602,9 +596,9 @@ void CPVRRadioRDSInfoTag::SetEditorialStaff(const std::string& strEditorialStaff
   std::string tmpStr = Trim(strEditorialStaff);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strEditorialStaff.size(); ++i)
+  for (auto & i : m_strEditorialStaff)
   {
-    if (m_strEditorialStaff[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -630,9 +624,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetEditorialStaffDeque() con
 const std::string CPVRRadioRDSInfoTag::GetEditorialStaff() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strEditorialStaff.size(); ++i)
+  for (auto tmpStr : m_strEditorialStaff)
   {
-    std::string tmpStr = m_strEditorialStaff[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -645,9 +638,9 @@ void CPVRRadioRDSInfoTag::SetInfoHoroscope(const std::string& strHoroscope)
   std::string tmpStr = Trim(strHoroscope);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoHoroscope.size(); ++i)
+  for (auto & i : m_strInfoHoroscope)
   {
-    if (m_strInfoHoroscope[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -673,9 +666,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoHoroscopeDeque() cons
 const std::string CPVRRadioRDSInfoTag::GetInfoHoroscope() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoHoroscope.size(); ++i)
+  for (auto tmpStr : m_strInfoHoroscope)
   {
-    std::string tmpStr = m_strInfoHoroscope[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -688,9 +680,9 @@ void CPVRRadioRDSInfoTag::SetInfoCinema(const std::string& strCinema)
   std::string tmpStr = Trim(strCinema);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoCinema.size(); ++i)
+  for (auto & i : m_strInfoCinema)
   {
-    if (m_strInfoCinema[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -716,9 +708,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoCinemaDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoCinema() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoCinema.size(); ++i)
+  for (auto tmpStr : m_strInfoCinema)
   {
-    std::string tmpStr = m_strInfoCinema[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }
@@ -731,9 +722,9 @@ void CPVRRadioRDSInfoTag::SetInfoOther(const std::string& strOther)
   std::string tmpStr = Trim(strOther);
   g_charsetConverter.unknownToUTF8(tmpStr);
 
-  for (unsigned i = 0; i < m_strInfoOther.size(); ++i)
+  for (auto & i : m_strInfoOther)
   {
-    if (m_strInfoOther[i].compare(tmpStr) == 0)
+    if (i.compare(tmpStr) == 0)
       return;
   }
 
@@ -759,9 +750,8 @@ const std::deque<std::string>& CPVRRadioRDSInfoTag::GetInfoOtherDeque() const
 const std::string CPVRRadioRDSInfoTag::GetInfoOther() const
 {
   std::string retStr = "";
-  for (unsigned i = 0; i < m_strInfoOther.size(); ++i)
+  for (auto tmpStr : m_strInfoOther)
   {
-    std::string tmpStr = m_strInfoOther[i];
     tmpStr.insert(tmpStr.end(),'\n');
     retStr += tmpStr;
   }

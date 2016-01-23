@@ -495,9 +495,8 @@ void CPlayList::UpdateItem(const CFileItem *item)
 {
   if (!item) return;
 
-  for (ivecItems it = m_vecItems.begin(); it != m_vecItems.end(); ++it)
+  for (auto playlistItem : m_vecItems)
   {
-    CFileItemPtr playlistItem = *it;
     if (playlistItem->IsSamePath(item))
     {
       std::string temp = playlistItem->GetPath(); // save path, it may have been altered

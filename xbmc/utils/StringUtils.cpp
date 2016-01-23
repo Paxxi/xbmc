@@ -553,11 +553,11 @@ std::string& StringUtils::RemoveDuplicatedSpacesAndTabs(std::string& str)
 int StringUtils::Replace(std::string &str, char oldChar, char newChar)
 {
   int replacedChars = 0;
-  for (std::string::iterator it = str.begin(); it != str.end(); ++it)
+  for (char & it : str)
   {
-    if (*it == oldChar)
+    if (it == oldChar)
     {
-      *it = newChar;
+      it = newChar;
       replacedChars++;
     }
   }
@@ -695,8 +695,8 @@ bool StringUtils::EndsWithNoCase(const std::string &str1, const char *s2)
 std::string StringUtils::Join(const std::vector<std::string> &strings, const std::string& delimiter)
 {
   std::string result;
-  for(std::vector<std::string>::const_iterator it = strings.begin(); it != strings.end(); ++it )
-    result += (*it) + delimiter;
+  for(const auto & it : strings)
+    result += it + delimiter;
   
   if (!result.empty())
     result.erase(result.size() - delimiter.size());
@@ -1076,16 +1076,16 @@ void StringUtils::WordToDigits(std::string &word)
 {
   static const char word_to_letter[] = "22233344455566677778889999";
   StringUtils::ToLower(word);
-  for (unsigned int i = 0; i < word.size(); ++i)
+  for (char & i : word)
   { // NB: This assumes ascii, which probably needs extending at some  point.
-    char letter = word[i];
+    char letter = i;
     if ((letter >= 'a' && letter <= 'z')) // assume contiguous letter range
     {
-      word[i] = word_to_letter[letter-'a'];
+      i = word_to_letter[letter-'a'];
     }
     else if (letter < '0' || letter > '9') // We want to keep 0-9!
     {
-      word[i] = ' ';  // replace everything else with a space
+      i = ' ';  // replace everything else with a space
     }
   }
 }
@@ -1132,9 +1132,9 @@ int StringUtils::FindBestMatch(const std::string &str, const std::vector<std::st
 
 bool StringUtils::ContainsKeyword(const std::string &str, const std::vector<std::string> &keywords)
 {
-  for (std::vector<std::string>::const_iterator it = keywords.begin(); it != keywords.end(); ++it)
+  for (const auto & keyword : keywords)
   {
-    if (str.find(*it) != str.npos)
+    if (str.find(keyword) != str.npos)
       return true;
   }
   return false;

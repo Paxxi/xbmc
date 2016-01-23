@@ -70,23 +70,23 @@ void CSeekHandler::Configure()
   seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_VIDEO, CSettings::SETTING_VIDEOPLAYER_SEEKSTEPS));
   seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_MUSIC, CSettings::SETTING_MUSICPLAYER_SEEKSTEPS));
 
-  for (std::map<SeekType, std::string>::iterator it = seekTypeSettingMap.begin(); it!=seekTypeSettingMap.end(); ++it)
+  for (auto & it : seekTypeSettingMap)
   {
     std::vector<int> forwardSeekSteps;
     std::vector<int> backwardSeekSteps;
 
-    std::vector<CVariant> seekSteps = CSettings::GetInstance().GetList(it->second);
-    for (std::vector<CVariant>::iterator it = seekSteps.begin(); it != seekSteps.end(); ++it)
+    std::vector<CVariant> seekSteps = CSettings::GetInstance().GetList(it.second);
+    for (auto & seekStep : seekSteps)
     {
-      int stepSeconds = (*it).asInteger();
+      int stepSeconds = seekStep.asInteger();
       if (stepSeconds < 0)
         backwardSeekSteps.insert(backwardSeekSteps.begin(), stepSeconds);
       else
         forwardSeekSteps.push_back(stepSeconds);
     }
 
-    m_forwardSeekSteps.insert(std::make_pair(it->first, forwardSeekSteps));
-    m_backwardSeekSteps.insert(std::make_pair(it->first, backwardSeekSteps));
+    m_forwardSeekSteps.insert(std::make_pair(it.first, forwardSeekSteps));
+    m_backwardSeekSteps.insert(std::make_pair(it.first, backwardSeekSteps));
   }
 }
 

@@ -821,12 +821,12 @@ bool CGUIEPGGridContainer::OnMessage(CGUIMessage& message)
 
       case GUI_MSG_REFRESH_LIST:
         // update our list contents
-        for (unsigned int i = 0; i < m_channelItems.size(); ++i)
-          m_channelItems[i]->SetInvalid();
-        for (unsigned int i = 0; i < m_programmeItems.size(); ++i)
-          m_programmeItems[i]->SetInvalid();
-        for (unsigned int i = 0; i < m_rulerItems.size(); ++i)
-          m_rulerItems[i]->SetInvalid();
+        for (auto & m_channelItem : m_channelItems)
+          m_channelItem->SetInvalid();
+        for (auto & m_programmeItem : m_programmeItems)
+          m_programmeItem->SetInvalid();
+        for (auto & m_rulerItem : m_rulerItems)
+          m_rulerItem->SetInvalid();
         break;
     }
   }
@@ -1898,14 +1898,14 @@ std::string CGUIEPGGridContainer::GetDescription() const
 
 void CGUIEPGGridContainer::ClearGridIndex(void)
 {
-  for (unsigned int i = 0; i < m_gridIndex.size(); i++)
+  for (auto & i : m_gridIndex)
   {
     for (int block = 0; block < m_blocks; block++)
     {
-      if (m_gridIndex[i][block].item)
-        m_gridIndex[i][block].item.get()->ClearProperties();
+      if (i[block].item)
+        i[block].item.get()->ClearProperties();
     }
-    m_gridIndex[i].clear();
+    i.clear();
   }
   m_gridIndex.clear();
 }
@@ -2061,11 +2061,11 @@ void CGUIEPGGridContainer::UpdateScrollOffset(unsigned int currentTime)
 void CGUIEPGGridContainer::GetCurrentLayouts()
 {
   m_channelLayout = nullptr;
-  for (unsigned int i = 0; i < m_channelLayouts.size(); i++)
+  for (auto & m_channelLayout : m_channelLayouts)
   {
-    if (m_channelLayouts[i].CheckCondition())
+    if (m_channelLayout.CheckCondition())
     {
-      m_channelLayout = &m_channelLayouts[i];
+      m_channelLayout = &m_channelLayout;
       break;
     }
   }
@@ -2073,11 +2073,11 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
     m_channelLayout = &m_channelLayouts[0];  // failsafe
 
   m_focusedChannelLayout = nullptr;
-  for (unsigned int i = 0; i < m_focusedChannelLayouts.size(); i++)
+  for (auto & m_focusedChannelLayout : m_focusedChannelLayouts)
   {
-    if (m_focusedChannelLayouts[i].CheckCondition())
+    if (m_focusedChannelLayout.CheckCondition())
     {
-      m_focusedChannelLayout = &m_focusedChannelLayouts[i];
+      m_focusedChannelLayout = &m_focusedChannelLayout;
       break;
     }
   }
@@ -2085,11 +2085,11 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
     m_focusedChannelLayout = &m_focusedChannelLayouts[0];  // failsafe
 
   m_programmeLayout = nullptr;
-  for (unsigned int i = 0; i < m_programmeLayouts.size(); i++)
+  for (auto & m_programmeLayout : m_programmeLayouts)
   {
-    if (m_programmeLayouts[i].CheckCondition())
+    if (m_programmeLayout.CheckCondition())
     {
-      m_programmeLayout = &m_programmeLayouts[i];
+      m_programmeLayout = &m_programmeLayout;
       break;
     }
   }
@@ -2097,11 +2097,11 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
     m_programmeLayout = &m_programmeLayouts[0];  // failsafe
 
   m_focusedProgrammeLayout = nullptr;
-  for (unsigned int i = 0; i < m_focusedProgrammeLayouts.size(); i++)
+  for (auto & m_focusedProgrammeLayout : m_focusedProgrammeLayouts)
   {
-    if (m_focusedProgrammeLayouts[i].CheckCondition())
+    if (m_focusedProgrammeLayout.CheckCondition())
     {
-      m_focusedProgrammeLayout = &m_focusedProgrammeLayouts[i];
+      m_focusedProgrammeLayout = &m_focusedProgrammeLayout;
       break;
     }
   }
@@ -2109,11 +2109,11 @@ void CGUIEPGGridContainer::GetCurrentLayouts()
     m_focusedProgrammeLayout = &m_focusedProgrammeLayouts[0];  // failsafe
 
   m_rulerLayout = nullptr;
-  for (unsigned int i = 0; i < m_rulerLayouts.size(); i++)
+  for (auto & m_rulerLayout : m_rulerLayouts)
   {
-    if (m_rulerLayouts[i].CheckCondition())
+    if (m_rulerLayout.CheckCondition())
     {
-      m_rulerLayout = &m_rulerLayouts[i];
+      m_rulerLayout = &m_rulerLayout;
       break;
     }
   }
@@ -2129,12 +2129,12 @@ void CGUIEPGGridContainer::SetRenderOffset(const CPoint &offset)
 void CGUIEPGGridContainer::FreeItemsMemory()
 {
   // free memory of items
-  for (std::vector<CFileItemPtr>::iterator it = m_channelItems.begin(); it != m_channelItems.end(); ++it)
-    (*it)->FreeMemory();
-  for (std::vector<CFileItemPtr>::iterator it = m_rulerItems.begin(); it != m_rulerItems.end(); ++it)
-    (*it)->FreeMemory();
-  for (std::vector<CFileItemPtr>::iterator it = m_programmeItems.begin(); it != m_programmeItems.end(); ++it)
-    (*it)->FreeMemory();
+  for (auto & m_channelItem : m_channelItems)
+    m_channelItem->FreeMemory();
+  for (auto & m_rulerItem : m_rulerItems)
+    m_rulerItem->FreeMemory();
+  for (auto & m_programmeItem : m_programmeItems)
+    m_programmeItem->FreeMemory();
 }
 
 void CGUIEPGGridContainer::FreeChannelMemory(int keepStart, int keepEnd)

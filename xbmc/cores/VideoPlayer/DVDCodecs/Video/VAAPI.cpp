@@ -436,9 +436,9 @@ int CVideoSurfaces::NumFree()
 bool CVideoSurfaces::HasRefs()
 {
   CSingleLock lock(m_section);
-  for (std::map<VASurfaceID, int>::iterator it = m_state.begin(); it != m_state.end(); ++it)
+  for (auto & it : m_state)
   {
-    if (it->second & SURFACE_USED_FOR_REFERENCE)
+    if (it.second & SURFACE_USED_FOR_REFERENCE)
     return true;
   }
   return false;
@@ -1016,9 +1016,9 @@ bool CDecoder::Supports(EINTERLACEMETHOD method)
   if(method == VS_INTERLACEMETHOD_AUTO)
     return true;
 
-  for (size_t i = 0; i < m_diMethods.size(); i++)
+  for (auto & m_diMethod : m_diMethods)
   {
-    if (m_diMethods[i] == method)
+    if (m_diMethod == method)
       return true;
   }
   return false;
@@ -1931,15 +1931,15 @@ void COutput::Flush()
     }
   }
 
-  for (unsigned int i = 0; i < m_bufferPool.decodedPics.size(); i++)
+  for (auto & decodedPic : m_bufferPool.decodedPics)
   {
-    m_config.videoSurfaces->ClearRender(m_bufferPool.decodedPics[i].videoSurface);
+    m_config.videoSurfaces->ClearRender(decodedPic.videoSurface);
   }
   m_bufferPool.decodedPics.clear();
 
-  for (unsigned int i = 0; i < m_bufferPool.processedPics.size(); i++)
+  for (auto & processedPic : m_bufferPool.processedPics)
   {
-    ReleaseProcessedPicture(m_bufferPool.processedPics[i]);
+    ReleaseProcessedPicture(processedPic);
   }
   m_bufferPool.processedPics.clear();
 
@@ -2296,9 +2296,9 @@ bool COutput::EnsureBufferPool()
 {
   // create avFrames and init interop
   CVaapiRenderPicture *pic;
-  for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+  for (auto & allRenderPic : m_bufferPool.allRenderPics)
   {
-    pic = m_bufferPool.allRenderPics[i];
+    pic = allRenderPic;
     pic->glInterop.vadsp = m_config.dpy;
 
     pic->glInterop.eglDisplay = m_eglDisplay;
@@ -2329,9 +2329,9 @@ void COutput::ReleaseBufferPool(bool precleanup)
   {
     // wait for all fences
     XbmcThreads::EndTime timeout(1000);
-    for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+    for (auto & allRenderPic : m_bufferPool.allRenderPics)
     {
-      pic = m_bufferPool.allRenderPics[i];
+      pic = allRenderPic;
       if (pic->usefence)
       {
 #ifdef GL_ARB_sync
@@ -2362,9 +2362,9 @@ void COutput::ReleaseBufferPool(bool precleanup)
 
   ProcessSyncPicture();
 
-  for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+  for (auto & allRenderPic : m_bufferPool.allRenderPics)
   {
-    pic = m_bufferPool.allRenderPics[i];
+    pic = allRenderPic;
 
     if (precleanup && pic->valid)
       continue;
@@ -2379,15 +2379,15 @@ void COutput::ReleaseBufferPool(bool precleanup)
     pic->valid = false;
   }
 
-  for (unsigned int i = 0; i < m_bufferPool.decodedPics.size(); i++)
+  for (auto & decodedPic : m_bufferPool.decodedPics)
   {
-    m_config.videoSurfaces->ClearRender(m_bufferPool.decodedPics[i].videoSurface);
+    m_config.videoSurfaces->ClearRender(decodedPic.videoSurface);
   }
   m_bufferPool.decodedPics.clear();
 
-  for (unsigned int i = 0; i < m_bufferPool.processedPics.size(); i++)
+  for (auto & processedPic : m_bufferPool.processedPics)
   {
-    ReleaseProcessedPicture(m_bufferPool.processedPics[i]);
+    ReleaseProcessedPicture(processedPic);
   }
   m_bufferPool.processedPics.clear();
 }
@@ -2396,9 +2396,9 @@ bool COutput::GLInit()
 {
 #ifdef GL_ARB_sync
   bool hasfence = g_Windowing.IsExtSupported("GL_ARB_sync");
-  for (unsigned int i = 0; i < m_bufferPool.allRenderPics.size(); i++)
+  for (auto & allRenderPic : m_bufferPool.allRenderPics)
   {
-    m_bufferPool.allRenderPics[i]->usefence = hasfence;
+    allRenderPic->usefence = hasfence;
   }
 #endif
 

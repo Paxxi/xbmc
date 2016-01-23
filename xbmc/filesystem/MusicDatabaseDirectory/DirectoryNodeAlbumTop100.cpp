@@ -60,9 +60,8 @@ bool CDirectoryNodeAlbumTop100::GetContent(CFileItemList& items) const
     return false;
   }
 
-  for (int i=0; i<(int)albums.size(); ++i)
+  for (auto & album : albums)
   {
-    CAlbum& album=albums[i];
     std::string strDir = StringUtils::Format("%s%ld/", BuildPath().c_str(), album.idAlbum);
     CFileItemPtr pItem(new CFileItem(strDir, album));
     items.Add(pItem);

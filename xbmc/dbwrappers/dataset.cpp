@@ -172,9 +172,9 @@ void Dataset::set_select_sql(const std::string &sel_sql) {
 
 void Dataset::parse_sql(std::string &sql) {
   std::string fpattern,by_what;
-  for (unsigned int i=0;i< fields_object->size();i++) {
-    fpattern = ":OLD_"+(*fields_object)[i].props.name;
-    by_what = "'"+(*fields_object)[i].val.get_asString()+"'";
+  for (auto & i : *fields_object) {
+    fpattern = ":OLD_"+i.props.name;
+    by_what = "'"+i.val.get_asString()+"'";
 		int idx=0; int next_idx=0;
 		while ((idx = sql.find(fpattern,next_idx))>=0) {
 		       	   next_idx=idx+fpattern.size();
@@ -186,9 +186,9 @@ void Dataset::parse_sql(std::string &sql) {
 		}//while
     }//for
 
-  for (unsigned int i=0;i< edit_object->size();i++) {
-    fpattern = ":NEW_"+(*edit_object)[i].props.name;
-    by_what = "'"+(*edit_object)[i].val.get_asString()+"'";
+  for (auto & i : *edit_object) {
+    fpattern = ":NEW_"+i.props.name;
+    by_what = "'"+i.val.get_asString()+"'";
 		int idx=0; int next_idx=0;
 		while ((idx = sql.find(fpattern,next_idx))>=0) {
 		       	   next_idx=idx+fpattern.size();
@@ -361,9 +361,9 @@ const field_value Dataset::get_field_value(const char *f_name) {
   if (ds_state != dsInactive)
   {
     if (ds_state == dsEdit || ds_state == dsInsert){
-      for (unsigned int i=0; i < edit_object->size(); i++)
-        if (str_compare((*edit_object)[i].props.name.c_str(), f_name)==0) {
-          return (*edit_object)[i].val;
+      for (auto & i : *edit_object)
+        if (str_compare(i.props.name.c_str(), f_name)==0) {
+          return i.val;
         }
       throw DbErrors("Field not found: %s",f_name);
     }
@@ -419,9 +419,9 @@ const sql_record* const Dataset::get_sql_record()
 
 const field_value Dataset::f_old(const char *f_name) {
   if (ds_state != dsInactive)
-    for (int unsigned i=0; i < fields_object->size(); i++) 
-      if ((*fields_object)[i].props.name == f_name)
-	return (*fields_object)[i].val;
+    for (auto & i : *fields_object) 
+      if (i.props.name == f_name)
+	return i.val;
   field_value fv;
   return fv;
 }

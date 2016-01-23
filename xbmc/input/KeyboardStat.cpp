@@ -63,9 +63,9 @@ bool CKeyboardStat::LookupSymAndUnicodePeripherals(XBMC_keysym &keysym, uint8_t 
   std::vector<CPeripheral *> hidDevices;
   if (g_peripherals.GetPeripheralsWithFeature(hidDevices, FEATURE_HID))
   {
-    for (unsigned int iDevicePtr = 0; iDevicePtr < hidDevices.size(); iDevicePtr++)
+    for (auto & iDevicePtr : hidDevices)
     {
-      CPeripheralHID *hidDevice = (CPeripheralHID *) hidDevices.at(iDevicePtr);
+      CPeripheralHID *hidDevice = (CPeripheralHID *) iDevicePtr;
       if (hidDevice && hidDevice->LookupSymAndUnicode(keysym, key, unicode))
         return true;
     }

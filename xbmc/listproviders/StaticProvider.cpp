@@ -70,21 +70,21 @@ bool CStaticListProvider::Update(bool forceRefresh)
   else if (CTimeUtils::GetFrameTime() - m_updateTime > 1000)
   {
     m_updateTime = CTimeUtils::GetFrameTime();
-    for (std::vector<CGUIStaticItemPtr>::iterator i = m_items.begin(); i != m_items.end(); ++i)
-      (*i)->UpdateProperties(m_parentID);
+    for (auto & m_item : m_items)
+      m_item->UpdateProperties(m_parentID);
   }
-  for (std::vector<CGUIStaticItemPtr>::iterator i = m_items.begin(); i != m_items.end(); ++i)
-    changed |= (*i)->UpdateVisibility(m_parentID);
+  for (auto & m_item : m_items)
+    changed |= m_item->UpdateVisibility(m_parentID);
   return changed; // TODO: Also returned changed if properties are changed (if so, need to update scroll to letter).
 }
 
 void CStaticListProvider::Fetch(std::vector<CGUIListItemPtr> &items) const
 {
   items.clear();
-  for (std::vector<CGUIStaticItemPtr>::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
+  for (const auto & m_item : m_items)
   {
-    if ((*i)->IsVisible())
-      items.push_back(*i);
+    if (m_item->IsVisible())
+      items.push_back(m_item);
   }
 }
 
@@ -99,11 +99,11 @@ int CStaticListProvider::GetDefaultItem() const
   if (m_defaultItem >= 0)
   {
     unsigned int offset = 0;
-    for (std::vector<CGUIStaticItemPtr>::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
+    for (const auto & m_item : m_items)
     {
-      if ((*i)->IsVisible())
+      if (m_item->IsVisible())
       {
-        if ((*i)->m_iprogramCount == m_defaultItem && (*i)->IsVisible())
+        if (m_item->m_iprogramCount == m_defaultItem && m_item->IsVisible())
           return offset;
         offset++;
       }

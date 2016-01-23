@@ -187,8 +187,8 @@ namespace XFILE
       return false;
 
     // because " , " is used as a seperator any "," in the real paths are double escaped
-    for (std::vector<std::string>::iterator itPath = vecPaths.begin(); itPath != vecPaths.end(); ++itPath)
-      StringUtils::Replace(*itPath, ",,", ",");
+    for (auto & vecPath : vecPaths)
+      StringUtils::Replace(vecPath, ",,", ",");
 
     return true;
   }

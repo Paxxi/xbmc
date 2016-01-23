@@ -161,9 +161,8 @@ void CGUILargeTextureManager::CleanupUnusedImages(bool immediately)
 bool CGUILargeTextureManager::GetImage(const std::string &path, CTextureArray &texture, bool firstRequest, const bool useCache)
 {
   CSingleLock lock(m_listSection);
-  for (listIterator it = m_allocated.begin(); it != m_allocated.end(); ++it)
+  for (auto image : m_allocated)
   {
-    CLargeTexture *image = *it;
     if (image->GetPath() == path)
     {
       if (firstRequest)
@@ -210,9 +209,9 @@ void CGUILargeTextureManager::ReleaseImage(const std::string &path, bool immedia
 void CGUILargeTextureManager::QueueImage(const std::string &path, bool useCache)
 {
   CSingleLock lock(m_listSection);
-  for (queueIterator it = m_queued.begin(); it != m_queued.end(); ++it)
+  for (auto & it : m_queued)
   {
-    CLargeTexture *image = it->second;
+    CLargeTexture *image = it.second;
     if (image->GetPath() == path)
     {
       image->AddRef();

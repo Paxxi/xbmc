@@ -508,8 +508,8 @@ void CGUIDialogSmartPlaylistRule::OnInitWindow()
   // add the fields to the field spincontrol
   std::vector< std::pair<std::string, int> > labels;
   std::vector<Field> fields = CSmartPlaylistRule::GetFields(m_type);
-  for (unsigned int i = 0; i < fields.size(); i++)
-    labels.push_back(std::make_pair(CSmartPlaylistRule::GetLocalizedField(fields[i]), fields[i]));
+  for (auto & field : fields)
+    labels.push_back(std::make_pair(CSmartPlaylistRule::GetLocalizedField(field), field));
 
   SET_CONTROL_LABELS(CONTROL_FIELD, 0, &labels);
 

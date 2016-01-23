@@ -497,10 +497,9 @@ void CGUIViewStateWindowMusicNav::AddOnlineShares()
 
   VECSOURCES *musicSources = CMediaSourceSettings::GetInstance().GetSources("music");
 
-  for (int i = 0; i < (int)musicSources->size(); ++i)
+  for (auto share : *musicSources)
   {
-    CMediaSource share = musicSources->at(i);
-  }
+    }
 }
 
 VECSOURCES& CGUIViewStateWindowMusicNav::GetSources()

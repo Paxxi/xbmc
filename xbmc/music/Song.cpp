@@ -60,9 +60,9 @@ CSong::CSong(CFileItem& item)
   }
   else
   { // no musicbrainz info, so fill in directly
-    for (std::vector<std::string>::const_iterator it = tag.GetArtist().begin(); it != tag.GetArtist().end(); ++it)
+    for (const auto & it : tag.GetArtist())
     {
-      CArtistCredit artistCredit(*it);
+      CArtistCredit artistCredit(it);
       artistCredits.push_back(artistCredit);
     }
   }
@@ -164,9 +164,9 @@ const std::vector<std::string> CSong::GetArtist() const
 {
   //Get artist names as vector from artist credits
   std::vector<std::string> songartists;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    songartists.push_back(artistCredit->GetArtist());
+    songartists.push_back(artistCredit.GetArtist());
   }
   //When artist credits have not been populated attempt to build an artist vector from the descrpition string
   //This is a tempory fix, in the longer term other areas should query the song_artist table and populate
@@ -180,9 +180,9 @@ const std::vector<std::string> CSong::GetMusicBrainzArtistID() const
 {
   //Get artist MusicBrainz IDs as vector from artist credits
   std::vector<std::string> muisicBrainzID;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    muisicBrainzID.push_back(artistCredit->GetMusicBrainzArtistID());
+    muisicBrainzID.push_back(artistCredit.GetMusicBrainzArtistID());
   }
   return muisicBrainzID;
 }
@@ -194,8 +194,8 @@ const std::string CSong::GetArtistString() const
   if (!strArtistDesc.empty())
     return strArtistDesc;
   std::vector<std::string> artistvector;
-  for (VECARTISTCREDITS::const_iterator i = artistCredits.begin(); i != artistCredits.end(); ++i)
-    artistvector.push_back(i->GetArtist());
+  for (const auto & artistCredit : artistCredits)
+    artistvector.push_back(artistCredit.GetArtist());
   std::string artistString;
   if (!artistvector.empty())
     artistString = StringUtils::Join(artistvector, g_advancedSettings.m_musicItemSeparator);
@@ -206,8 +206,8 @@ const std::vector<int> CSong::GetArtistIDArray() const
 {
   // Get song artist IDs for json rpc
   std::vector<int> artistids;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
-    artistids.push_back(artistCredit->GetArtistId());
+  for (const auto & artistCredit : artistCredits)
+    artistids.push_back(artistCredit.GetArtistId());
   return artistids;
 }
 

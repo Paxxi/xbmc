@@ -212,9 +212,9 @@ unsigned CDVDMessageQueue::GetPacketCount(CDVDMsg::Message type)
     return 0;
 
   unsigned count = 0;
-  for(SList::iterator it = m_list.begin(); it != m_list.end();++it)
+  for(auto & it : m_list)
   {
-    if(it->message->IsType(type))
+    if(it.message->IsType(type))
       count++;
   }
 

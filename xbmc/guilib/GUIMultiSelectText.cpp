@@ -116,8 +116,8 @@ void CGUIMultiSelectTextControl::Render()
   g_graphicsContext.SetOrigin(-m_scrollOffset, 0);
 
   // render the buttons
-  for (unsigned int i = 0; i < m_buttons.size(); i++)
-    m_buttons[i].DoRender();
+  for (auto & m_button : m_buttons)
+    m_button.DoRender();
 
   // position the text - we center vertically if applicable, and use the offsets.
   // all x-alignment is ignored for now (see constructor)
@@ -131,9 +131,8 @@ void CGUIMultiSelectTextControl::Render()
 
   // render the text
   unsigned int num_selectable = 0;
-  for (unsigned int i = 0; i < m_items.size(); i++)
+  for (auto & string : m_items)
   {
-    CSelectableString &string = m_items[i];
     if (IsDisabled()) // all text is rendered with disabled color
       string.m_text.Render(posX, posY, 0, m_label.disabledColor, m_label.shadowColor, m_label.align, 0, true);
     else if (HasFocus() && string.m_selectable && num_selectable == m_selectedItem) // text is rendered with focusedcolor
@@ -170,12 +169,12 @@ bool CGUIMultiSelectTextControl::OnAction(const CAction &action)
     // item is clicked - see if we have a clickaction
     std::string clickAction;
     unsigned int selected = 0;
-    for (unsigned int i = 0; i < m_items.size(); i++)
+    for (auto & m_item : m_items)
     {
-      if (m_items[i].m_selectable)
+      if (m_item.m_selectable)
       {
         if (m_selectedItem == selected)
-          clickAction = m_items[i].m_clickAction;
+          clickAction = m_item.m_clickAction;
         selected++;
       }
     }
@@ -273,9 +272,8 @@ int CGUIMultiSelectTextControl::GetItemFromPoint(const CPoint &point) const
   if (!m_label.font) return -1;
   float posX = m_posX;
   unsigned int selectable = 0;
-  for (unsigned int i = 0; i < m_items.size(); i++)
+  for (const auto & string : m_items)
   {
-    const CSelectableString &string = m_items[i];
     if (string.m_selectable)
     {
       CRect rect(posX, m_posY, posX + string.m_length, m_posY + m_height);
@@ -349,9 +347,8 @@ void CGUIMultiSelectTextControl::PositionButtons()
   if (m_items.size() && m_items.front().m_selectable)
     m_totalWidth += m_label.offsetX;
 
-  for (unsigned int i = 0; i < m_items.size(); i++)
+  for (auto & text : m_items)
   {
-    const CSelectableString &text = m_items[i];
     if (text.m_selectable)
     {
       CGUIButtonControl button(m_button);
@@ -377,8 +374,8 @@ std::string CGUIMultiSelectTextControl::GetDescription() const
 unsigned int CGUIMultiSelectTextControl::GetNumSelectable() const
 {
   unsigned int selectable = 0;
-  for (unsigned int i = 0; i < m_items.size(); i++)
-    if (m_items[i].m_selectable)
+  for (const auto & m_item : m_items)
+    if (m_item.m_selectable)
       selectable++;
   return selectable;
 }
@@ -405,8 +402,8 @@ bool CGUIMultiSelectTextControl::CanFocus() const
 
 void CGUIMultiSelectTextControl::SetFocus(bool focus)
 {
-  for (unsigned int i = 0; i < m_buttons.size(); i++)
-    m_buttons[i].SetFocus(focus);
+  for (auto & m_button : m_buttons)
+    m_button.SetFocus(focus);
   CGUIControl::SetFocus(focus);
 }
 
@@ -416,9 +413,8 @@ void CGUIMultiSelectTextControl::SetAnimations(const std::vector<CAnimation> &an
   // send any focus animations down to the focus image only
   m_animations.clear();
   std::vector<CAnimation> focusAnims;
-  for (unsigned int i = 0; i < animations.size(); i++)
+  for (const auto & anim : animations)
   {
-    const CAnimation &anim = animations[i];
     if (anim.GetType() == ANIM_TYPE_FOCUS)
       focusAnims.push_back(anim);
     else

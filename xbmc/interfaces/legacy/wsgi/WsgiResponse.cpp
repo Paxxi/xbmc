@@ -69,8 +69,8 @@ namespace XBMCAddon
         CLog::Log(LOGWARNING, "WsgiResponse: empty status provided");
 
       // copy the response headers
-      for (std::vector<WsgiHttpHeader>::const_iterator headerIt = response_headers.begin(); headerIt != response_headers.end(); ++headerIt)
-        m_responseHeaders.insert(std::make_pair(headerIt->first(), headerIt->second()));
+      for (const auto & response_header : response_headers)
+        m_responseHeaders.insert(std::make_pair(response_header.first(), response_header.second()));
 
       return &m_body;
     }

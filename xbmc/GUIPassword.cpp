@@ -429,13 +429,13 @@ bool CGUIPassword::LockSource(const std::string& strType, const std::string& str
 {
   VECSOURCES* pShares = CMediaSourceSettings::GetInstance().GetSources(strType);
   bool bResult = false;
-  for (IVECSOURCES it=pShares->begin();it != pShares->end();++it)
+  for (auto & pShare : *pShares)
   {
-    if (it->strName == strName)
+    if (pShare.strName == strName)
     {
-      if (it->m_iHasLock > 0)
+      if (pShare.m_iHasLock > 0)
       {
-        it->m_iHasLock = bState?2:1;
+        pShare.m_iHasLock = bState?2:1;
         bResult = true;
       }
       break;
@@ -451,12 +451,12 @@ void CGUIPassword::LockSources(bool lock)
 {
   // lock or unlock all sources (those with locks)
   const char* strType[5] = {"programs","music","video","pictures","files"};
-  for (int i=0;i<5;++i)
+  for (auto & i : strType)
   {
-    VECSOURCES *shares = CMediaSourceSettings::GetInstance().GetSources(strType[i]);
-    for (IVECSOURCES it=shares->begin();it != shares->end();++it)
-      if (it->m_iLockMode != LOCK_MODE_EVERYONE)
-        it->m_iHasLock = lock ? 2 : 1;
+    VECSOURCES *shares = CMediaSourceSettings::GetInstance().GetSources(i);
+    for (auto & share : *shares)
+      if (share.m_iLockMode != LOCK_MODE_EVERYONE)
+        share.m_iHasLock = lock ? 2 : 1;
   }
   CGUIMessage msg(GUI_MSG_NOTIFY_ALL,0,0,GUI_MSG_UPDATE_SOURCES);
   g_windowManager.SendThreadMessage(msg);
@@ -466,15 +466,15 @@ void CGUIPassword::RemoveSourceLocks()
 {
   // remove lock from all sources
   const char* strType[5] = {"programs","music","video","pictures","files"};
-  for (int i=0;i<5;++i)
+  for (auto & i : strType)
   {
-    VECSOURCES *shares = CMediaSourceSettings::GetInstance().GetSources(strType[i]);
-    for (IVECSOURCES it=shares->begin();it != shares->end();++it)
-      if (it->m_iLockMode != LOCK_MODE_EVERYONE) // remove old info
+    VECSOURCES *shares = CMediaSourceSettings::GetInstance().GetSources(i);
+    for (auto & share : *shares)
+      if (share.m_iLockMode != LOCK_MODE_EVERYONE) // remove old info
       {
-        it->m_iHasLock = 0;
-        it->m_iLockMode = LOCK_MODE_EVERYONE;
-        CMediaSourceSettings::GetInstance().UpdateSource(strType[i], it->strName, "lockmode", "0"); // removes locks from xml
+        share.m_iHasLock = 0;
+        share.m_iLockMode = LOCK_MODE_EVERYONE;
+        CMediaSourceSettings::GetInstance().UpdateSource(i, share.strName, "lockmode", "0"); // removes locks from xml
       }
   }
   CMediaSourceSettings::GetInstance().Save();

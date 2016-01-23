@@ -27,11 +27,11 @@ CEmuFileWrapper g_emuFileWrapper;
 CEmuFileWrapper::CEmuFileWrapper()
 {
   // since we always use dlls we might just initialize it directly
-  for (int i = 0; i < MAX_EMULATED_FILES; i++)
+  for (auto & m_file : m_files)
   {
-    memset(&m_files[i], 0, sizeof(EmuFileObject));
-    m_files[i].used = false;
-    m_files[i].file_emu._file = -1;
+    memset(&m_file, 0, sizeof(EmuFileObject));
+    m_file.used = false;
+    m_file.file_emu._file = -1;
   }
 }
 
@@ -42,21 +42,21 @@ CEmuFileWrapper::~CEmuFileWrapper()
 void CEmuFileWrapper::CleanUp()
 {
   CSingleLock lock(m_criticalSection);
-  for (int i = 0; i < MAX_EMULATED_FILES; i++)
+  for (auto & m_file : m_files)
   {
-    if (m_files[i].used)
+    if (m_file.used)
     {
-      m_files[i].file_xbmc->Close();
-      delete m_files[i].file_xbmc;
+      m_file.file_xbmc->Close();
+      delete m_file.file_xbmc;
 
-      if (m_files[i].file_lock)
+      if (m_file.file_lock)
       {
-        delete m_files[i].file_lock;
-        m_files[i].file_lock = nullptr;
+        delete m_file.file_lock;
+        m_file.file_lock = nullptr;
       }
-      memset(&m_files[i], 0, sizeof(EmuFileObject));
-      m_files[i].used = false;
-      m_files[i].file_emu._file = -1;
+      memset(&m_file, 0, sizeof(EmuFileObject));
+      m_file.used = false;
+      m_file.file_emu._file = -1;
     }
   }
 }

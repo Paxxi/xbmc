@@ -293,11 +293,11 @@ void CGUIDialogVideoInfo::SetMovie(const CFileItem *item)
     CMusicDatabase database;
     database.Open();
     const std::vector<std::string> &artists = m_movieItem->GetVideoInfoTag()->m_artist;
-    for (std::vector<std::string>::const_iterator it = artists.begin(); it != artists.end(); ++it)
+    for (const auto & artist : artists)
     {
-      int idArtist = database.GetArtistByName(*it);
+      int idArtist = database.GetArtistByName(artist);
       std::string thumb = database.GetArtForItem(idArtist, MediaTypeArtist, "thumb");
-      CFileItemPtr item(new CFileItem(*it));
+      CFileItemPtr item(new CFileItem(artist));
       if (!thumb.empty())
         item->SetArt("thumb", thumb);
       item->SetIconImage("DefaultArtist.png");
@@ -616,10 +616,10 @@ std::string CGUIDialogVideoInfo::ChooseArtType(const CFileItem &videoItem, std::
 
   // add in any stored art for this item that is non-empty.
   db.GetArtForItem(videoItem.GetVideoInfoTag()->m_iDbId, videoItem.GetVideoInfoTag()->m_type, currentArt);
-  for (CGUIListItem::ArtMap::iterator i = currentArt.begin(); i != currentArt.end(); ++i)
+  for (auto & i : currentArt)
   {
-    if (!i->second.empty() && find(artTypes.begin(), artTypes.end(), i->first) == artTypes.end())
-      artTypes.push_back(i->first);
+    if (!i.second.empty() && find(artTypes.begin(), artTypes.end(), i.first) == artTypes.end())
+      artTypes.push_back(i.first);
   }
 
   // add any art types that exist for other media items of the same type
@@ -1380,9 +1380,9 @@ bool CGUIDialogVideoInfo::ManageMovieSets(const CFileItemPtr &item)
   clearItem->GetVideoInfoTag()->m_iDbId = -1; // -1 will be used to clear set
   VECFILEITEMS deletedItems;
   set_difference(original.begin(),original.end(), selected.begin(),selected.end(), std::back_inserter(deletedItems), compFileItemsByDbId);
-  for (VECFILEITEMS::iterator it = deletedItems.begin();  it != deletedItems.end(); ++it)
+  for (auto & deletedItem : deletedItems)
   {
-    if (SetMovieSet(it->get(), clearItem.get()))
+    if (SetMovieSet(deletedItem.get(), clearItem.get()))
       refreshNeeded = true;
   }
 
@@ -1908,10 +1908,10 @@ bool CGUIDialogVideoInfo::LinkMovieToTvShow(const CFileItemPtr &item, bool bRemo
     if (!database.GetLinksToTvShow(dbId, ids))
       return false;
 
-    for (unsigned int i = 0; i < ids.size(); ++i)
+    for (int id : ids)
     {
       CVideoInfoTag tag;
-      database.GetTvShowInfo("", tag, ids[i]);
+      database.GetTvShowInfo("", tag, id);
       CFileItemPtr show(new CFileItem(tag));
       list.Add(show);
     }

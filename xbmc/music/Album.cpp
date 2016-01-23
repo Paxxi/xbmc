@@ -96,9 +96,9 @@ CAlbum::CAlbum(const CFileItem& item)
   }
   else
   { // no musicbrainz info, so fill in directly
-    for (std::vector<std::string>::const_iterator it = tag.GetAlbumArtist().begin(); it != tag.GetAlbumArtist().end(); ++it)
+    for (const auto & it : tag.GetAlbumArtist())
     {
-      artistCredits.emplace_back(*it);
+      artistCredits.emplace_back(it);
     }
   }
 
@@ -128,10 +128,10 @@ void CAlbum::MergeScrapedAlbum(const CAlbum& source, bool override /* = true */)
   if (override)
     bCompilation = source.bCompilation;
   //  iTimesPlayed = source.iTimesPlayed; // times played is derived from songs
-  for (std::map<std::string, std::string>::const_iterator i = source.art.begin(); i != source.art.end(); ++i)
+  for (const auto & i : source.art)
   {
-    if (override || art.find(i->first) == art.end())
-      art[i->first] = i->second;
+    if (override || art.find(i.first) == art.end())
+      art[i.first] = i.second;
   }
   strLabel = source.strLabel;
   thumbURL = source.thumbURL;
@@ -154,12 +154,12 @@ void CAlbum::MergeScrapedAlbum(const CAlbum& source, bool override /* = true */)
   if (!strMusicBrainzAlbumID.empty())
   {
     /* update local songs with MB information */
-    for (VECSONGS::iterator song = songs.begin(); song != songs.end(); ++song)
+    for (auto & song : songs)
     {
-      if (!song->strMusicBrainzTrackID.empty())
-        for (VECSONGS::const_iterator sourceSong = source.infoSongs.begin(); sourceSong != source.infoSongs.end(); ++sourceSong)
-          if (sourceSong->strMusicBrainzTrackID == song->strMusicBrainzTrackID)
-            song->MergeScrapedSong(*sourceSong, override);
+      if (!song.strMusicBrainzTrackID.empty())
+        for (const auto & infoSong : source.infoSongs)
+          if (infoSong.strMusicBrainzTrackID == song.strMusicBrainzTrackID)
+            song.MergeScrapedSong(infoSong, override);
     }
   }
   infoSongs = source.infoSongs;
@@ -174,9 +174,9 @@ const std::vector<std::string> CAlbum::GetAlbumArtist() const
 {
   //Get artist names as vector from artist credits
   std::vector<std::string> albumartists;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    albumartists.push_back(artistCredit->GetArtist());
+    albumartists.push_back(artistCredit.GetArtist());
   }
   return albumartists;
 }
@@ -185,9 +185,9 @@ const std::vector<std::string> CAlbum::GetMusicBrainzAlbumArtistID() const
 {
   //Get artist MusicBrainz IDs as vector from artist credits
   std::vector<std::string> muisicBrainzID;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
+  for (const auto & artistCredit : artistCredits)
   {
-    muisicBrainzID.push_back(artistCredit->GetMusicBrainzArtistID());
+    muisicBrainzID.push_back(artistCredit.GetMusicBrainzArtistID());
   }
   return muisicBrainzID;
 }
@@ -199,8 +199,8 @@ const std::string CAlbum::GetAlbumArtistString() const
   if (!strArtistDesc.empty())
     return strArtistDesc;
   std::vector<std::string> artistvector;
-  for (VECARTISTCREDITS::const_iterator i = artistCredits.begin(); i != artistCredits.end(); ++i)
-    artistvector.emplace_back(i->GetArtist());
+  for (const auto & artistCredit : artistCredits)
+    artistvector.emplace_back(artistCredit.GetArtist());
   std::string artistString;
   if (!artistvector.empty())
     artistString = StringUtils::Join(artistvector, g_advancedSettings.m_musicItemSeparator);
@@ -211,8 +211,8 @@ const std::vector<int> CAlbum::GetArtistIDArray() const
 {
   // Get album artist IDs for json rpc
   std::vector<int> artistids;
-  for (VECARTISTCREDITS::const_iterator artistCredit = artistCredits.begin(); artistCredit != artistCredits.end(); ++artistCredit)
-    artistids.push_back(artistCredit->GetArtistId());
+  for (const auto & artistCredit : artistCredits)
+    artistids.push_back(artistCredit.GetArtistId());
   return artistids;
 }
 
@@ -239,9 +239,8 @@ void CAlbum::SetLastPlayed(const std::string& strLastPlayed)
 
 std::string CAlbum::ReleaseTypeToString(CAlbum::ReleaseType releaseType)
 {
-  for (size_t i = 0; i < RELEASE_TYPES_SIZE; i++)
+  for (const auto & releaseTypeInfo : releaseTypes)
   {
-    const ReleaseTypeInfo& releaseTypeInfo = releaseTypes[i];
     if (releaseTypeInfo.type == releaseType)
       return releaseTypeInfo.name;
   }
@@ -251,9 +250,8 @@ std::string CAlbum::ReleaseTypeToString(CAlbum::ReleaseType releaseType)
 
 CAlbum::ReleaseType CAlbum::ReleaseTypeFromString(const std::string& strReleaseType)
 {
-  for (size_t i = 0; i < RELEASE_TYPES_SIZE; i++)
+  for (const auto & releaseTypeInfo : releaseTypes)
   {
-    const ReleaseTypeInfo& releaseTypeInfo = releaseTypes[i];
     if (releaseTypeInfo.name == strReleaseType)
       return releaseTypeInfo.type;
   }
@@ -492,13 +490,13 @@ bool CAlbum::Save(TiXmlNode *node, const std::string &tag, const std::string& st
     // add a <song> tag
     TiXmlElement cast("track");
     TiXmlNode *node = album->InsertEndChild(cast);
-    for( VECARTISTCREDITS::const_iterator artistCredit = song->artistCredits.begin(); artistCredit != song->artistCredits.end(); ++artistCredit)
+    for(const auto & artistCredit : song->artistCredits)
     {
       // add an <albumArtistCredits> tag
       TiXmlElement songArtistCreditsElement("songArtistCredits");
       TiXmlNode *songArtistCreditsNode = node->InsertEndChild(songArtistCreditsElement);
-      XMLUtils::SetString(songArtistCreditsNode,               "artist", artistCredit->m_strArtist);
-      XMLUtils::SetString(songArtistCreditsNode,  "musicBrainzArtistID", artistCredit->m_strMusicBrainzArtistID);
+      XMLUtils::SetString(songArtistCreditsNode,               "artist", artistCredit.m_strArtist);
+      XMLUtils::SetString(songArtistCreditsNode,  "musicBrainzArtistID", artistCredit.m_strMusicBrainzArtistID);
     }
     XMLUtils::SetString(node,   "musicBrainzTrackID",   song->strMusicBrainzTrackID);
     XMLUtils::SetString(node,   "title",                song->strTitle);

@@ -143,10 +143,10 @@ bool CGUIDialogMediaFilter::OnMessage(CGUIMessage& message)
         m_filter->Reset();
         m_filter->SetType(m_mediaType);
 
-        for (std::map<std::string, Filter>::iterator filter = m_filters.begin(); filter != m_filters.end(); filter++)
+        for (auto & m_filter : m_filters)
         {
-          filter->second.rule = nullptr;
-          filter->second.setting->Reset();
+          m_filter.second.rule = nullptr;
+          m_filter.second.setting->Reset();
         }
 
         TriggerFilter();
@@ -389,19 +389,19 @@ void CGUIDialogMediaFilter::InitializeSettings()
     return;
   }
 
-  for (unsigned int index = 0; index < NUM_FILTERS; index++)
+  for (const auto & index : filterList)
   {
-    if (filterList[index].mediaType != m_mediaType)
+    if (index.mediaType != m_mediaType)
       continue;
 
-    Filter filter = filterList[index];
+    Filter filter = index;
 
     // check the smartplaylist if it contains a matching rule
-    for (CDatabaseQueryRules::iterator rule = m_filter->m_ruleCombination.m_rules.begin(); rule != m_filter->m_ruleCombination.m_rules.end(); rule++)
+    for (auto & m_rule : m_filter->m_ruleCombination.m_rules)
     {
-      if ((*rule)->m_field == filter.field)
+      if (m_rule->m_field == filter.field)
       {
-        filter.rule = (CSmartPlaylistRule *)rule->get();
+        filter.rule = (CSmartPlaylistRule *)m_rule.get();
         handledRules++;
         break;
       }
@@ -574,21 +574,21 @@ bool CGUIDialogMediaFilter::SetPath(const std::string &path)
 
 void CGUIDialogMediaFilter::UpdateControls()
 {
-  for (std::map<std::string, Filter>::iterator itFilter = m_filters.begin(); itFilter != m_filters.end(); itFilter++)
+  for (auto & m_filter : m_filters)
   {
-    if (itFilter->second.controlType != "list")
+    if (m_filter.second.controlType != "list")
       continue;
 
     std::vector<std::string> items;
-    int size = GetItems(itFilter->second, items, true);
+    int size = GetItems(m_filter.second, items, true);
 
-    std::string label = g_localizeStrings.Get(itFilter->second.label);
-    BaseSettingControlPtr control = GetSettingControl(itFilter->second.setting->GetId());
+    std::string label = g_localizeStrings.Get(m_filter.second.label);
+    BaseSettingControlPtr control = GetSettingControl(m_filter.second.setting->GetId());
     if (control == nullptr)
       continue;
 
     if (size <= 0 ||
-       (size == 1 && itFilter->second.field != FieldSet && itFilter->second.field != FieldTag))
+       (size == 1 && m_filter.second.field != FieldSet && m_filter.second.field != FieldTag))
        CONTROL_DISABLE(control->GetID());
     else
     {

@@ -155,12 +155,12 @@ void CPasswordManager::Save() const
   if (!root)
     return;
 
-  for (std::map<std::string, std::string>::const_iterator i = m_permanentCache.begin(); i != m_permanentCache.end(); ++i)
+  for (const auto & i : m_permanentCache)
   {
     TiXmlElement pathElement("path");
     TiXmlNode *path = root->InsertEndChild(pathElement);
-    XMLUtils::SetPath(path, "from", i->first);
-    XMLUtils::SetPath(path, "to", i->second);
+    XMLUtils::SetPath(path, "from", i.first);
+    XMLUtils::SetPath(path, "to", i.second);
   }
 
   doc.SaveFile(CProfilesManager::GetInstance().GetUserDataItem("passwords.xml"));

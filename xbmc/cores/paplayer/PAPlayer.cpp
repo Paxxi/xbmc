@@ -97,9 +97,8 @@ bool PAPlayer::HandlesType(const std::string &type)
 void PAPlayer::SoftStart(bool wait/* = false */)
 {
   CSingleLock lock(m_streamsLock);
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+  for(auto si : m_streams)
   {
-    StreamInfo* si = *itt;
     if (si->m_fadeOutTriggered)
       continue;
 
@@ -118,9 +117,8 @@ void PAPlayer::SoftStart(bool wait/* = false */)
     while(wait)
     {
       wait = false;
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for(auto si : m_streams)
       {
-        StreamInfo* si = *itt;
         if (si->m_stream->IsFading())
         {
           lock.Leave();
@@ -138,9 +136,8 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
 {
   /* fade all the streams out fast for a nice soft stop */
   CSingleLock lock(m_streamsLock);
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+  for(auto si : m_streams)
   {
-    StreamInfo* si = *itt;
     if (si->m_stream)
       si->m_stream->FadeVolume(1.0f, 0.0f, FAST_XFADE_TIME);
 
@@ -167,9 +164,8 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
     while(wait && !CAEFactory::IsSuspended() && !timer.IsTimePast())
     {
       wait = false;
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for(auto si : m_streams)
       {
-        StreamInfo* si = *itt;
         if (si->m_stream && si->m_stream->IsFading())
         {
           lock.Leave();
@@ -184,9 +180,8 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
     /* if we are not closing the streams, pause them */
     if (!close)
     {
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for(auto si : m_streams)
       {
-        StreamInfo* si = *itt;
         si->m_stream->Pause();
       }
     }
@@ -898,9 +893,9 @@ void PAPlayer::UnRegisterAudioCallback()
 {
   CSingleLock lock(m_streamsLock);
   /* only one stream should have the callback, but we do it to all just incase */
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
-    if ((*itt)->m_stream)
-      (*itt)->m_stream->UnRegisterAudioCallback();
+  for(auto & m_stream : m_streams)
+    if (m_stream->m_stream)
+      m_stream->m_stream->UnRegisterAudioCallback();
   m_audioCallback = nullptr;
 }
 

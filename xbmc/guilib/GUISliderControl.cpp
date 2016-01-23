@@ -648,11 +648,11 @@ float CGUISliderControl::GetProportion(RangeSelector selector /* = RangeSelector
 
 void CGUISliderControl::SetAction(const std::string &action)
 {
-  for (size_t i = 0; i < sizeof(actions)/sizeof(SliderAction); i++)
+  for (const auto & i : actions)
   {
-    if (StringUtils::EqualsNoCase(action, actions[i].action))
+    if (StringUtils::EqualsNoCase(action, i.action))
     {
-      m_action = &actions[i];
+      m_action = &i;
       return;
     }
   }

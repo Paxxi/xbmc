@@ -57,13 +57,12 @@ bool CSettingConditionItem::Check() const
 bool CSettingConditionCombination::Check() const
 {
   bool ok = false;
-  for (CBooleanLogicOperations::const_iterator operation = m_operations.begin();
-       operation != m_operations.end(); ++operation)
+  for (const auto & m_operation : m_operations)
   {
-    if (*operation == nullptr)
+    if (m_operation == nullptr)
       continue;
 
-    CSettingConditionCombination *combination = static_cast<CSettingConditionCombination*>((*operation).get());
+    CSettingConditionCombination *combination = static_cast<CSettingConditionCombination*>(m_operation.get());
     if (combination == nullptr)
       continue;
     
@@ -73,13 +72,12 @@ bool CSettingConditionCombination::Check() const
       return false;
   }
 
-  for (CBooleanLogicValues::const_iterator value = m_values.begin();
-       value != m_values.end(); ++value)
+  for (const auto & m_value : m_values)
   {
-    if (*value == nullptr)
+    if (m_value == nullptr)
       continue;
 
-    CSettingConditionItem *condition = static_cast<CSettingConditionItem*>((*value).get());
+    CSettingConditionItem *condition = static_cast<CSettingConditionItem*>(m_value.get());
     if (condition == nullptr)
       continue;
 

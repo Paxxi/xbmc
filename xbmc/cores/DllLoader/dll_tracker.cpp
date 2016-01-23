@@ -80,12 +80,12 @@ void tracker_dll_free(DllLoader* pDll)
 void tracker_dll_set_addr(DllLoader* pDll, uintptr_t min, uintptr_t max)
 {
   CSingleLock locktd(g_trackerLock);
-  for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
+  for (auto & g_trackedDll : g_trackedDlls)
   {
-    if ((*it)->pDll == pDll)
+    if (g_trackedDll->pDll == pDll)
     {
-      (*it)->lMinAddr = min;
-      (*it)->lMaxAddr = max;
+      g_trackedDll->lMinAddr = min;
+      g_trackedDll->lMaxAddr = max;
       break;
     }
   }
@@ -102,21 +102,21 @@ const char* tracker_getdllname(uintptr_t caller)
 DllTrackInfo* tracker_get_dlltrackinfo(uintptr_t caller)
 {
   CSingleLock locktd(g_trackerLock);
-  for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
+  for (auto & g_trackedDll : g_trackedDlls)
   {
-    if (caller >= (*it)->lMinAddr && caller <= (*it)->lMaxAddr)
+    if (caller >= g_trackedDll->lMinAddr && caller <= g_trackedDll->lMaxAddr)
     {
-      return *it;
+      return g_trackedDll;
     }
   }
 
   // crap not in any base address, check if it may be in virtual spaces
-  for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
+  for (auto & g_trackedDll : g_trackedDlls)
   {
-    for(VAllocListIter it2 = (*it)->virtualList.begin(); it2 != (*it)->virtualList.end(); ++it2)
+    for(VAllocListIter it2 = g_trackedDll->virtualList.begin(); it2 != g_trackedDll->virtualList.end(); ++it2)
     {
       if( it2->first <= caller && caller < it2->first + it2->second.size )
-        return *it;
+        return g_trackedDll;
 
     }
   }
@@ -127,11 +127,11 @@ DllTrackInfo* tracker_get_dlltrackinfo(uintptr_t caller)
 DllTrackInfo* tracker_get_dlltrackinfo_byobject(DllLoader* pDll)
 {
   CSingleLock locktd(g_trackerLock);
-  for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
+  for (auto & g_trackedDll : g_trackedDlls)
   {
-    if ((*it)->pDll == pDll)
+    if (g_trackedDll->pDll == pDll)
     {
-      return *it;
+      return g_trackedDll;
     }
   }
   return nullptr;
@@ -140,11 +140,11 @@ DllTrackInfo* tracker_get_dlltrackinfo_byobject(DllLoader* pDll)
 void tracker_dll_data_track(DllLoader* pDll, uintptr_t addr)
 {
   CSingleLock locktd(g_trackerLock);
-  for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
+  for (auto & g_trackedDll : g_trackedDlls)
   {
-    if (pDll == (*it)->pDll)
+    if (pDll == g_trackedDll->pDll)
     {
-      (*it)->dummyList.push_back((uintptr_t)addr);
+      g_trackedDll->dummyList.push_back((uintptr_t)addr);
       break;
     }
   }

@@ -113,9 +113,9 @@ void CTextureArray::Set(CBaseTexture *texture, int width, int height)
 void CTextureArray::Free()
 {
   CSingleLock lock(g_graphicsContext);
-  for (unsigned int i = 0; i < m_textures.size(); i++)
+  for (auto & m_texture : m_textures)
   {
-    delete m_textures[i];
+    delete m_texture;
   }
 
   m_textures.clear();
@@ -263,9 +263,8 @@ bool CGUITextureManager::HasTexture(const std::string &textureName, std::string 
 
   // Check our loaded and bundled textures - we store in bundles using \\.
   std::string bundledName = CTextureBundle::Normalize(textureName);
-  for (int i = 0; i < (int)m_vecTextures.size(); ++i)
+  for (auto pMap : m_vecTextures)
   {
-    CTextureMap *pMap = m_vecTextures[i];
     if (pMap->GetName() == textureName)
     {
       if (size) *size = 1;
@@ -300,9 +299,8 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
 
   if (size) // we found the texture
   {
-    for (int i = 0; i < (int)m_vecTextures.size(); ++i)
+    for (auto pMap : m_vecTextures)
     {
-      CTextureMap *pMap = m_vecTextures[i];
       if (pMap->GetName() == strTextureName)
       {
         //CLog::Log(LOGDEBUG, "Total memusage %u", GetMemoryUsage());
@@ -488,7 +486,7 @@ void CGUITextureManager::FreeUnusedTextures(unsigned int timeDelay)
   }
 
 #if defined(HAS_GL) || defined(HAS_GLES)
-  for (unsigned int i = 0; i < m_unusedHwTextures.size(); ++i)
+  for (unsigned int & m_unusedHwTexture : m_unusedHwTextures)
   {
   // on ios the hw textures might be deleted from the os
   // when XBMC is backgrounded (e.x. for backgrounded music playback)
@@ -496,7 +494,7 @@ void CGUITextureManager::FreeUnusedTextures(unsigned int timeDelay)
 #if defined(TARGET_DARWIN_IOS)
     if (!g_Windowing.IsBackgrounded() || glIsTexture(m_unusedHwTextures[i]))
 #endif
-      glDeleteTextures(1, (GLuint*) &m_unusedHwTextures[i]);
+      glDeleteTextures(1, (GLuint*) &m_unusedHwTexture);
   }
 #endif
   m_unusedHwTextures.clear();
@@ -521,8 +519,8 @@ void CGUITextureManager::Cleanup()
     delete pMap;
     i = m_vecTextures.erase(i);
   }
-  for (int i = 0; i < 2; i++)
-    m_TexBundle[i].Cleanup();
+  for (auto & i : m_TexBundle)
+    i.Cleanup();
   FreeUnusedTextures();
 }
 
@@ -530,9 +528,8 @@ void CGUITextureManager::Dump() const
 {
   CLog::Log(LOGDEBUG, "%s: total texturemaps size:%" PRIuS, __FUNCTION__, m_vecTextures.size());
 
-  for (int i = 0; i < (int)m_vecTextures.size(); ++i)
+  for (auto pMap : m_vecTextures)
   {
-    const CTextureMap* pMap = m_vecTextures[i];
     if (!pMap->IsEmpty())
       pMap->Dump();
   }
@@ -563,9 +560,9 @@ void CGUITextureManager::Flush()
 unsigned int CGUITextureManager::GetMemoryUsage() const
 {
   unsigned int memUsage = 0;
-  for (int i = 0; i < (int)m_vecTextures.size(); ++i)
+  for (auto m_vecTexture : m_vecTextures)
   {
-    memUsage += m_vecTextures[i]->GetMemoryUsage();
+    memUsage += m_vecTexture->GetMemoryUsage();
   }
   return memUsage;
 }
@@ -604,9 +601,9 @@ std::string CGUITextureManager::GetTexturePath(const std::string &textureName, b
   else
   { // texture doesn't include the full path, so check all fallbacks
     CSingleLock lock(m_section);
-    for (std::vector<std::string>::iterator it = m_texturePaths.begin(); it != m_texturePaths.end(); ++it)
+    for (auto & m_texturePath : m_texturePaths)
     {
-      std::string path = URIUtils::AddFileToFolder(it->c_str(), "media");
+      std::string path = URIUtils::AddFileToFolder(m_texturePath.c_str(), "media");
       path = URIUtils::AddFileToFolder(path, textureName);
       if (directory)
       {

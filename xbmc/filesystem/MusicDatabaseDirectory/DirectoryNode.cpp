@@ -78,9 +78,9 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   CDirectoryNode* pParent=nullptr;
   NODE_TYPE NodeType=NODE_TYPE_ROOT;
 
-  for (int i=0; i<(int)Path.size(); ++i)
+  for (auto & i : Path)
   {
-    pNode=CDirectoryNode::CreateNode(NodeType, Path[i], pParent);
+    pNode=CDirectoryNode::CreateNode(NodeType, i, pParent);
     NodeType= pNode ? pNode->GetChildType() : NODE_TYPE_NONE;
     pParent=pNode;
   }
@@ -214,8 +214,8 @@ std::string CDirectoryNode::BuildPath() const
   }
 
   std::string strPath="musicdb://";
-  for (int i=0; i<(int)array.size(); ++i)
-    strPath+=array[i]+"/";
+  for (auto & i : array)
+    strPath+=i+"/";
 
   std::string options = m_options.GetOptionsString();
   if (!options.empty())

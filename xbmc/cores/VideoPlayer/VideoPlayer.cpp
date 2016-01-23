@@ -105,13 +105,13 @@ SelectionStream& CSelectionStreams::Get(StreamType type, int index)
 {
   CSingleLock lock(m_section);
   int count = -1;
-  for(size_t i=0;i<m_Streams.size();i++)
+  for(auto & m_Stream : m_Streams)
   {
-    if(m_Streams[i].type != type)
+    if(m_Stream.type != type)
       continue;
     count++;
     if(count == index)
-      return m_Streams[i];
+      return m_Stream;
   }
   return m_invalid;
 }
@@ -323,13 +323,13 @@ static bool PredicateVideoPriority(const SelectionStream& lh, const SelectionStr
 bool CSelectionStreams::Get(StreamType type, CDemuxStream::EFlags flag, SelectionStream& out)
 {
   CSingleLock lock(m_section);
-  for(size_t i=0;i<m_Streams.size();i++)
+  for(auto & m_Stream : m_Streams)
   {
-    if(m_Streams[i].type != type)
+    if(m_Stream.type != type)
       continue;
-    if((m_Streams[i].flags & flag) != flag)
+    if((m_Stream.flags & flag) != flag)
       continue;
-    out = m_Streams[i];
+    out = m_Stream;
     return true;
   }
   return false;
@@ -339,16 +339,16 @@ int CSelectionStreams::IndexOf(StreamType type, int source, int id) const
 {
   CSingleLock lock(m_section);
   int count = -1;
-  for(size_t i=0;i<m_Streams.size();i++)
+  for(const auto & m_Stream : m_Streams)
   {
-    if(type && m_Streams[i].type != type)
+    if(type && m_Stream.type != type)
       continue;
     count++;
-    if(source && m_Streams[i].source != source)
+    if(source && m_Stream.source != source)
       continue;
     if(id < 0)
       continue;
-    if(m_Streams[i].id == id)
+    if(m_Stream.id == id)
       return count;
   }
   if(id < 0)
@@ -390,9 +390,8 @@ int CSelectionStreams::Source(StreamSource source, std::string filename)
 {
   CSingleLock lock(m_section);
   int index = source - 1;
-  for(size_t i=0;i<m_Streams.size();i++)
+  for(auto & s : m_Streams)
   {
-    SelectionStream &s = m_Streams[i];
     if(STREAM_SOURCE_MASK(s.source) != source)
       continue;
     // if it already exists, return same
@@ -548,11 +547,11 @@ int CSelectionStreams::CountSource(StreamType type, StreamSource source) const
 {
   CSingleLock lock(m_section);
   int count = 0;
-  for(size_t i=0;i<m_Streams.size();i++)
+  for(const auto & m_Stream : m_Streams)
   {
-    if(type && m_Streams[i].type != type)
+    if(type && m_Stream.type != type)
       continue;
-    if (source && m_Streams[i].source != source)
+    if (source && m_Stream.source != source)
       continue;
     count++;
     continue;
@@ -4792,13 +4791,13 @@ bool CVideoPlayer::GetStreamDetails(CStreamDetails &details)
   {
     std::vector<SelectionStream> subs = m_SelectionStreams.Get(STREAM_SUBTITLE);
     std::vector<CStreamDetailSubtitle> extSubDetails;
-    for (unsigned int i = 0; i < subs.size(); i++)
+    for (auto & sub : subs)
     {
-      if (subs[i].filename == m_item.GetPath())
+      if (sub.filename == m_item.GetPath())
         continue;
 
       CStreamDetailSubtitle p;
-      p.m_strLanguage = subs[i].language;
+      p.m_strLanguage = sub.language;
       extSubDetails.push_back(p);
     }
     

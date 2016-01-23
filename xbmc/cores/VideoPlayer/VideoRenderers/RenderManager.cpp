@@ -221,8 +221,8 @@ void CRenderManager::WaitPresentTime(double presenttime)
 
   //get the average error from the buffer
   double avgerror = 0.0;
-  for (int i = 0; i < ERRORBUFFSIZE; i++)
-    avgerror += m_errorbuff[i];
+  for (double i : m_errorbuff)
+    avgerror += i;
 
   avgerror /= ERRORBUFFSIZE;
 
@@ -236,8 +236,8 @@ void CRenderManager::WaitPresentTime(double presenttime)
 std::string CRenderManager::GetVSyncState()
 {
   double avgerror = 0.0;
-  for (int i = 0; i < ERRORBUFFSIZE; i++)
-    avgerror += m_errorbuff[i];
+  for (double i : m_errorbuff)
+    avgerror += i;
   avgerror /= ERRORBUFFSIZE;
 
   std::string state = StringUtils::Format("sync:%+3d%% avg:%3d%% error:%2d%%"

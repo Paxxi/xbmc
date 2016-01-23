@@ -104,9 +104,9 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
       float totalRatings = 0;
       int iWatched = 0; // have all the movies been played at least once?
       std::set<std::string> pathSet;
-      for (std::set<CFileItemPtr>::const_iterator movie = set->second.begin(); movie != set->second.end(); ++movie)
+      for (const auto & movie : set->second)
       {
-        CVideoInfoTag* movieInfo = (*movie)->GetVideoInfoTag();
+        CVideoInfoTag* movieInfo = movie->GetVideoInfoTag();
         // handle rating
         if (movieInfo->GetRating().rating > 0.0f)
         {

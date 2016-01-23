@@ -547,12 +547,12 @@ bool CButtonTranslator::Load(bool AlwaysLoad)
   };
   bool success = false;
 
-  for (unsigned int dirIndex = 0; dirIndex < ARRAY_SIZE(DIRS_TO_CHECK); ++dirIndex)
+  for (auto & dirIndex : DIRS_TO_CHECK)
   {
-    if (XFILE::CDirectory::Exists(DIRS_TO_CHECK[dirIndex]))
+    if (XFILE::CDirectory::Exists(dirIndex))
     {
       CFileItemList files;
-      XFILE::CDirectory::GetDirectory(DIRS_TO_CHECK[dirIndex], files, ".xml");
+      XFILE::CDirectory::GetDirectory(dirIndex, files, ".xml");
       // Sort the list for filesystem based priorities, e.g. 01-keymap.xml, 02-keymap-overrides.xml
       files.Sort(SortByFile, SortOrderAscending);
       for(int fileIndex = 0; fileIndex<files.Size(); ++fileIndex)
@@ -565,7 +565,7 @@ bool CButtonTranslator::Load(bool AlwaysLoad)
       std::list<std::string>::iterator it;
       for (it = m_deviceList.begin(); it != m_deviceList.end(); ++it)
       {
-        std::string devicedir = DIRS_TO_CHECK[dirIndex];
+        std::string devicedir = dirIndex;
         devicedir.append(*it);
         devicedir.append("/");
         if( XFILE::CDirectory::Exists(devicedir) )
@@ -733,11 +733,10 @@ void CButtonTranslator::MapRemote(TiXmlNode *pRemote, const char* szDevice)
     }
     pButton = pButton->NextSiblingElement();
   }
-  for (std::vector<std::string>::iterator it  = RemoteNames.begin();
-                                it != RemoteNames.end();++it)
+  for (auto & RemoteName : RemoteNames)
   {
-    CLog::Log(LOGINFO, "* Linking remote mapping for '%s' to '%s'", szDevice, it->c_str());
-    lircRemotesMap[*it] = &buttons;
+    CLog::Log(LOGINFO, "* Linking remote mapping for '%s' to '%s'", szDevice, RemoteName.c_str());
+    lircRemotesMap[RemoteName] = &buttons;
   }
 }
 
@@ -1148,10 +1147,10 @@ void CButtonTranslator::GetWindows(std::vector<std::string> &windowList)
 
 int CButtonTranslator::GetFallbackWindow(int windowID)
 {
-  for (unsigned int index = 0; index < ARRAY_SIZE(fallbackWindows); ++index)
+  for (auto fallbackWindow : fallbackWindows)
   {
-    if (fallbackWindows[index].origin == windowID)
-      return fallbackWindows[index].target;
+    if (fallbackWindow.origin == windowID)
+      return fallbackWindow.target;
   }
   // for addon windows use WINDOW_ADDON_START because id is dynamic
   if (windowID > WINDOW_ADDON_START && windowID <= WINDOW_ADDON_END)
@@ -1382,11 +1381,11 @@ bool CButtonTranslator::TranslateActionString(const char *szAction, int &action)
   if (CBuiltins::GetInstance().HasCommand(strAction))
     action = ACTION_BUILT_IN_FUNCTION;
 
-  for (unsigned int index=0;index < ARRAY_SIZE(actions);++index)
+  for (auto index : actions)
   {
-    if (strAction == actions[index].name)
+    if (strAction == index.name)
     {
-      action = actions[index].action;
+      action = index.action;
       break;
     }
   }
@@ -1402,10 +1401,10 @@ bool CButtonTranslator::TranslateActionString(const char *szAction, int &action)
 
 std::string CButtonTranslator::TranslateWindow(int windowID)
 {
-  for (unsigned int index = 0; index < ARRAY_SIZE(windows); ++index)
+  for (auto window : windows)
   {
-    if (windows[index].action == windowID)
-      return windows[index].name;
+    if (window.action == windowID)
+      return window.name;
   }
   return "";
 }
@@ -1435,10 +1434,10 @@ int CButtonTranslator::TranslateWindow(const std::string &window)
   }
 
   // run through the window structure
-  for (unsigned int index = 0; index < ARRAY_SIZE(windows); ++index)
+  for (auto window : windows)
   {
-    if (strWindow == windows[index].name)
-      return windows[index].action;
+    if (strWindow == window.name)
+      return window.action;
   }
 
   CLog::Log(LOGERROR, "Window Translator: Can't find window %s", strWindow.c_str());
@@ -1680,11 +1679,11 @@ uint32_t CButtonTranslator::TranslateMouseCommand(TiXmlElement *pButton)
     if (!szKey.empty())
     {
       StringUtils::ToLower(szKey);
-      for (unsigned int i = 0; i < ARRAY_SIZE(mousekeys); i++)
+      for (auto mousekey : mousekeys)
       {
-        if (szKey == mousekeys[i].name)
+        if (szKey == mousekey.name)
         {
-          buttonId = mousekeys[i].action;
+          buttonId = mousekey.action;
           break;
         }
       }
@@ -1741,11 +1740,11 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
     strTouchCommand += attrVal;
 
   uint32_t actionId = ACTION_NONE;
-  for (unsigned int i = 0; i < ARRAY_SIZE(touchcommands); i++)
+  for (auto touchcommand : touchcommands)
   {
-    if (strTouchCommand == touchcommands[i].name)
+    if (strTouchCommand == touchcommand.name)
     {
-      actionId = touchcommands[i].action;
+      actionId = touchcommand.action;
       break;
     }
   }

@@ -565,10 +565,10 @@ void CGUIDialogKeyboardGeneric::SetControlLabel(int id, const std::string &label
 { // find all controls with this id, and set all their labels
   CGUIMessage message(GUI_MSG_LABEL_SET, GetID(), id);
   message.SetLabel(label);
-  for (unsigned int i = 0; i < m_children.size(); i++)
+  for (auto & i : m_children)
   {
-    if (m_children[i]->GetID() == id || m_children[i]->IsGroup())
-      m_children[i]->OnMessage(message);
+    if (i->GetID() == id || i->IsGroup())
+      i->OnMessage(message);
   }
 }
 

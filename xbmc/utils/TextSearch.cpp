@@ -49,17 +49,17 @@ bool CTextSearch::Search(const std::string &strHaystack) const
     StringUtils::ToLower(strSearch);
 
   /* check whether any of the NOT terms matches and return false if there's a match */
-  for (unsigned int iNotPtr = 0; iNotPtr < m_NOT.size(); iNotPtr++)
+  for (const auto & iNotPtr : m_NOT)
   {
-    if (strSearch.find(m_NOT.at(iNotPtr)) != std::string::npos)
+    if (strSearch.find(iNotPtr) != std::string::npos)
       return false;
   }
 
   /* check whether at least one of the OR terms matches and return false if there's no match found */
   bool bFound(m_OR.empty());
-  for (unsigned int iOrPtr = 0; iOrPtr < m_OR.size(); iOrPtr++)
+  for (const auto & iOrPtr : m_OR)
   {
-    if (strSearch.find(m_OR.at(iOrPtr)) != std::string::npos)
+    if (strSearch.find(iOrPtr) != std::string::npos)
     {
       bFound = true;
       break;
@@ -69,9 +69,9 @@ bool CTextSearch::Search(const std::string &strHaystack) const
     return false;
 
   /* check whether all of the AND terms match and return false if one of them wasn't found */
-  for (unsigned int iAndPtr = 0; iAndPtr < m_AND.size(); iAndPtr++)
+  for (const auto & iAndPtr : m_AND)
   {
-    if (strSearch.find(m_AND[iAndPtr]) == std::string::npos)
+    if (strSearch.find(iAndPtr) == std::string::npos)
       return false;
   }
 

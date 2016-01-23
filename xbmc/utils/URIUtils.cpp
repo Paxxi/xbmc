@@ -426,8 +426,8 @@ std::string URIUtils::GetBasePath(const std::string& strPath)
 std::string URLEncodePath(const std::string& strPath)
 {
   std::vector<std::string> segments = StringUtils::Split(strPath, "/");
-  for (std::vector<std::string>::iterator i = segments.begin(); i != segments.end(); ++i)
-    *i = CURL::Encode(*i);
+  for (auto & segment : segments)
+    segment = CURL::Encode(segment);
 
   return StringUtils::Join(segments, "/");
 }
@@ -435,8 +435,8 @@ std::string URLEncodePath(const std::string& strPath)
 std::string URLDecodePath(const std::string& strPath)
 {
   std::vector<std::string> segments = StringUtils::Split(strPath, "/");
-  for (std::vector<std::string>::iterator i = segments.begin(); i != segments.end(); ++i)
-    *i = CURL::Decode(*i);
+  for (auto & segment : segments)
+    segment = CURL::Decode(segment);
 
   return StringUtils::Join(segments, "/");
 }
@@ -561,8 +561,8 @@ bool URIUtils::IsRemote(const std::string& strFile)
     std::vector<std::string> paths;
     if (CMultiPathDirectory::GetPaths(strFile, paths))
     {
-      for (unsigned int i = 0; i < paths.size(); i++)
-        if (IsRemote(paths[i])) return true;
+      for (auto & path : paths)
+        if (IsRemote(path)) return true;
     }
     return false;
   }
@@ -1291,9 +1291,9 @@ std::string URIUtils::resolvePath(const std::string &path)
 
   std::string realPath;
   // re-add any / or \ at the beginning
-  for (std::string::const_iterator itPath = path.begin(); itPath != path.end(); ++itPath)
+  for (char itPath : path)
   {
-    if (*itPath != delim.at(0))
+    if (itPath != delim.at(0))
       break;
 
     realPath += delim;
@@ -1320,8 +1320,8 @@ bool URIUtils::UpdateUrlEncoding(std::string &strFilename)
     if (!CStackDirectory::GetPaths(strFilename, files))
       return false;
 
-    for (std::vector<std::string>::iterator file = files.begin(); file != files.end(); ++file)
-      UpdateUrlEncoding(*file);
+    for (auto & file : files)
+      UpdateUrlEncoding(file);
 
     std::string stackPath;
     if (!CStackDirectory::ConstructStackPath(files, stackPath))

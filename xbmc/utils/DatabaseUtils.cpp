@@ -290,18 +290,18 @@ bool DatabaseUtils::GetSelectFields(const Fields &fields, const MediaType &media
     sortFields.insert(FieldArtist);
 
   selectFields.clear();
-  for (Fields::const_iterator it = sortFields.begin(); it != sortFields.end(); ++it)
+  for (auto sortField : sortFields)
   {
     // ignore FieldLabel because it needs special handling (see further up)
-    if (*it == FieldLabel)
+    if (sortField == FieldLabel)
       continue;
 
-    if (GetField(*it, mediaType, DatabaseQueryPartSelect).empty())
+    if (GetField(sortField, mediaType, DatabaseQueryPartSelect).empty())
     {
-      CLog::Log(LOGDEBUG, "DatabaseUtils::GetSortFieldList: unknown field %d", *it);
+      CLog::Log(LOGDEBUG, "DatabaseUtils::GetSortFieldList: unknown field %d", sortField);
       continue;
     }
-    selectFields.push_back(*it);
+    selectFields.push_back(sortField);
   }
 
   return !selectFields.empty();
@@ -381,8 +381,8 @@ bool DatabaseUtils::GetDatabaseResults(const MediaType &mediaType, const FieldLi
 
   std::vector<int> fieldIndexLookup;
   fieldIndexLookup.reserve(fields.size());
-  for (FieldList::const_iterator it = fields.begin(); it != fields.end(); ++it)
-    fieldIndexLookup.push_back(GetFieldIndex(*it, mediaType));
+  for (auto field : fields)
+    fieldIndexLookup.push_back(GetFieldIndex(field, mediaType));
 
   results.reserve(resultSet.records.size() + offset);
   for (unsigned int index = 0; index < resultSet.records.size(); index++)
@@ -391,14 +391,14 @@ bool DatabaseUtils::GetDatabaseResults(const MediaType &mediaType, const FieldLi
     result[FieldRow] = index + offset;
 
     unsigned int lookupIndex = 0;
-    for (FieldList::const_iterator it = fields.begin(); it != fields.end(); ++it)
+    for (auto field : fields)
     {
       int fieldIndex = fieldIndexLookup[lookupIndex++];
       if (fieldIndex < 0)
         return false;
 
       std::pair<Field, CVariant> value;
-      value.first = *it;
+      value.first = field;
       if (!GetFieldValue(resultSet.records[index]->at(fieldIndex), value.second))
         CLog::Log(LOGWARNING, "GetDatabaseResults: unable to retrieve value of field %s", resultSet.record_header[fieldIndex].name.c_str());
 

@@ -237,9 +237,9 @@ void CPullupCorrection::GetDifftypes(std::vector<double>& difftypes)
   for (int i = 0; i < m_ringfill; i++)
   {
     bool hasmatch = false;
-    for (unsigned int j = 0; j < difftypes.size(); j++)
+    for (double difftype : difftypes)
     {
-      if (MatchDiff(GetDiff(i), difftypes[j]))
+      if (MatchDiff(GetDiff(i), difftype))
       {
         hasmatch = true;
         break;
@@ -372,8 +372,8 @@ std::string CPullupCorrection::GetPatternStr()
 {
   std::string patternstr;
 
-  for (unsigned int i = 0; i < m_pattern.size(); i++)
-    patternstr += StringUtils::Format("%.2f ", m_pattern[i]);
+  for (double i : m_pattern)
+    patternstr += StringUtils::Format("%.2f ", i);
 
   StringUtils::Trim(patternstr);
 

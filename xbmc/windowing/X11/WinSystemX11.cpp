@@ -309,11 +309,11 @@ void CWinSystemX11::UpdateResolutions()
 
       // switch off other outputs
       std::vector<XOutput> outputs = g_xrandr.GetModes();
-      for (size_t i=0; i<outputs.size(); i++)
+      for (auto & output : outputs)
       {
-        if (StringUtils::EqualsNoCase(outputs[i].name, m_userOutput))
+        if (StringUtils::EqualsNoCase(output.name, m_userOutput))
           continue;
-        g_xrandr.TurnOffOutput(outputs[i].name);
+        g_xrandr.TurnOffOutput(output.name);
       }
     }
 
@@ -434,9 +434,9 @@ void CWinSystemX11::GetConnectedOutputs(std::vector<std::string> *outputs)
   g_xrandr.Query(true);
   outs = g_xrandr.GetModes();
   outputs->push_back("Default");
-  for(unsigned int i=0; i<outs.size(); ++i)
+  for(auto & out : outs)
   {
-    outputs->push_back(outs[i].name);
+    outputs->push_back(out.name);
   }
 }
 
@@ -624,8 +624,8 @@ void CWinSystemX11::OnLostDevice()
   KODI::MESSAGING::CApplicationMessenger::GetInstance().SendMsg(TMSG_RENDERER_FLUSH);
 
   { CSingleLock lock(m_resourceSection);
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
-      (*i)->OnLostDisplay();
+    for (auto & m_resource : m_resources)
+      m_resource->OnLostDisplay();
   }
 
   CWinEventsX11Imp::SetXRRFailSafeTimer(3000);

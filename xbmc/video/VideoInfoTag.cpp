@@ -308,13 +308,13 @@ void CVideoInfoTag::Archive(CArchive& ar)
     ar << m_studio;
     ar << m_strTrailer;
     ar << (int)m_cast.size();
-    for (unsigned int i=0;i<m_cast.size();++i)
+    for (auto & i : m_cast)
     {
-      ar << m_cast[i].strName;
-      ar << m_cast[i].strRole;
-      ar << m_cast[i].order;
-      ar << m_cast[i].thumb;
-      ar << m_cast[i].thumbUrl.m_xml;
+      ar << i.strName;
+      ar << i.strRole;
+      ar << i.order;
+      ar << i.thumb;
+      ar << i.thumbUrl.m_xml;
     }
 
     ar << m_strSet;
@@ -499,14 +499,14 @@ void CVideoInfoTag::Serialize(CVariant& value) const
   value["studio"] = m_studio;
   value["trailer"] = m_strTrailer;
   value["cast"] = CVariant(CVariant::VariantTypeArray);
-  for (unsigned int i = 0; i < m_cast.size(); ++i)
+  for (const auto & i : m_cast)
   {
     CVariant actor;
-    actor["name"] = m_cast[i].strName;
-    actor["role"] = m_cast[i].strRole;
-    actor["order"] = m_cast[i].order;
-    if (!m_cast[i].thumb.empty())
-      actor["thumbnail"] = CTextureUtils::GetWrappedImageURL(m_cast[i].thumb);
+    actor["name"] = i.strName;
+    actor["role"] = i.strRole;
+    actor["order"] = i.order;
+    if (!i.thumb.empty())
+      actor["thumbnail"] = CTextureUtils::GetWrappedImageURL(i.thumb);
     value["cast"].push_back(actor);
   }
   value["set"] = m_strSet;
@@ -664,13 +664,13 @@ const CRating CVideoInfoTag::GetRating(std::string type) const
 const std::string CVideoInfoTag::GetCast(bool bIncludeRole /*= false*/) const
 {
   std::string strLabel;
-  for (iCast it = m_cast.begin(); it != m_cast.end(); ++it)
+  for (const auto & it : m_cast)
   {
     std::string character;
-    if (it->strRole.empty() || !bIncludeRole)
-      character = StringUtils::Format("%s\n", it->strName.c_str());
+    if (it.strRole.empty() || !bIncludeRole)
+      character = StringUtils::Format("%s\n", it.strName.c_str());
     else
-      character = StringUtils::Format("%s %s %s\n", it->strName.c_str(), g_localizeStrings.Get(20347).c_str(), it->strRole.c_str());
+      character = StringUtils::Format("%s %s %s\n", it.strName.c_str(), g_localizeStrings.Get(20347).c_str(), it.strRole.c_str());
     strLabel += character;
   }
   return StringUtils::TrimRight(strLabel, "\n");

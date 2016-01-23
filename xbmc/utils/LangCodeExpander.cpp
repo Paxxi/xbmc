@@ -152,17 +152,17 @@ bool CLangCodeExpander::ConvertISO6391ToISO6392T(const std::string& strISO6391, 
   StringUtils::ToLower(strISO6391Lower);
   StringUtils::Trim(strISO6391Lower);
 
-  for (unsigned int index = 0; index < ARRAY_SIZE(LanguageCodes); ++index)
+  for (const auto & LanguageCode : LanguageCodes)
   {
-    if (strISO6391Lower == LanguageCodes[index].iso639_1)
+    if (strISO6391Lower == LanguageCode.iso639_1)
     {
-      if (checkWin32Locales && LanguageCodes[index].win_id)
+      if (checkWin32Locales && LanguageCode.win_id)
       {
-        strISO6392T = LanguageCodes[index].win_id;
+        strISO6392T = LanguageCode.win_id;
         return true;
       }
 
-      strISO6392T = LanguageCodes[index].iso639_2;
+      strISO6392T = LanguageCode.iso639_2;
       return true;
     }
   }
@@ -183,19 +183,19 @@ bool CLangCodeExpander::ConvertToISO6392T(const std::string& strCharCode, std::s
   if (strCharCode.size() == 3)
   {
     std::string charCode(strCharCode); StringUtils::ToLower(charCode);
-    for (unsigned int index = 0; index < ARRAY_SIZE(LanguageCodes); ++index)
+    for (const auto & LanguageCode : LanguageCodes)
     {
-      if (charCode == LanguageCodes[index].iso639_2 ||
-         (checkWin32Locales && LanguageCodes[index].win_id != nullptr && charCode == LanguageCodes[index].win_id))
+      if (charCode == LanguageCode.iso639_2 ||
+         (checkWin32Locales && LanguageCode.win_id != nullptr && charCode == LanguageCode.win_id))
       {
         strISO6392T = charCode;
         return true;
       }
     }
 
-    for (unsigned int index = 0; index < ARRAY_SIZE(RegionCodes); ++index)
+    for (auto RegionCode : RegionCodes)
     {
-      if (charCode == RegionCodes[index].alpha3)
+      if (charCode == RegionCode.alpha3)
       {
         strISO6392T = charCode;
         return true;
@@ -204,11 +204,11 @@ bool CLangCodeExpander::ConvertToISO6392T(const std::string& strCharCode, std::s
   }
   else if (strCharCode.size() > 3)
   {
-    for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_2)
     {
-      if (StringUtils::EqualsNoCase(strCharCode, g_iso639_2[i].name))
+      if (StringUtils::EqualsNoCase(strCharCode, i.name))
       {
-        CodeToString(g_iso639_2[i].code, strISO6392T);
+        CodeToString(i.code, strISO6392T);
         return true;
       }
     }
@@ -292,20 +292,20 @@ bool CLangCodeExpander::ConvertToISO6391(const std::string& lang, std::string& c
   else if (lang.length() == 3)
   {
     std::string lower(lang); StringUtils::ToLower(lower);
-    for (unsigned int index = 0; index < ARRAY_SIZE(LanguageCodes); ++index)
+    for (const auto & LanguageCode : LanguageCodes)
     {
-      if (lower == LanguageCodes[index].iso639_2 || (LanguageCodes[index].win_id && lower == LanguageCodes[index].win_id))
+      if (lower == LanguageCode.iso639_2 || (LanguageCode.win_id && lower == LanguageCode.win_id))
       {
-        code = LanguageCodes[index].iso639_1;
+        code = LanguageCode.iso639_1;
         return true;
       }
     }
 
-    for (unsigned int index = 0; index < ARRAY_SIZE(RegionCodes); ++index)
+    for (auto RegionCode : RegionCodes)
     {
-      if (lower == RegionCodes[index].alpha3)
+      if (lower == RegionCode.alpha3)
       {
-        code = RegionCodes[index].alpha2;
+        code = RegionCode.alpha2;
         return true;
       }
     }
@@ -344,20 +344,20 @@ bool CLangCodeExpander::ReverseLookup(const std::string& desc, std::string& code
     }
   }
 
-  for (unsigned int i = 0; i < sizeof(g_iso639_1) / sizeof(LCENTRY); i++)
+  for (auto i : g_iso639_1)
   {
-    if (StringUtils::EqualsNoCase(descTmp, g_iso639_1[i].name))
+    if (StringUtils::EqualsNoCase(descTmp, i.name))
     {
-      CodeToString(g_iso639_1[i].code, code);
+      CodeToString(i.code, code);
       return true;
     }
   }
 
-  for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+  for (auto i : g_iso639_2)
   {
-    if (StringUtils::EqualsNoCase(descTmp, g_iso639_2[i].name))
+    if (StringUtils::EqualsNoCase(descTmp, i.name))
     {
-      CodeToString(g_iso639_2[i].code, code);
+      CodeToString(i.code, code);
       return true;
     }
   }
@@ -398,11 +398,11 @@ bool CLangCodeExpander::LookupInISO639Tables(const std::string& code, std::strin
   if (sCode.length() == 2)
   {
     longcode = MAKECODE('\0', '\0', sCode[0], sCode[1]);
-    for (unsigned int i = 0; i < sizeof(g_iso639_1) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_1)
     {
-      if (g_iso639_1[i].code == longcode)
+      if (i.code == longcode)
       {
-        desc = g_iso639_1[i].name;
+        desc = i.name;
         return true;
       }
     }
@@ -410,11 +410,11 @@ bool CLangCodeExpander::LookupInISO639Tables(const std::string& code, std::strin
   else if (sCode.length() == 3)
   {
     longcode = MAKECODE('\0', sCode[0], sCode[1], sCode[2]);
-    for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_2)
     {
-      if (g_iso639_2[i].code == longcode)
+      if (i.code == longcode)
       {
-        desc = g_iso639_2[i].name;
+        desc = i.name;
         return true;
       }
     }

@@ -94,8 +94,8 @@ void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, c
 
   // Make a copy of announers. They may be removed or even remove themselves during execution of IAnnouncer::Announce()!
   std::vector<IAnnouncer *> announcers(m_announcers); 
-  for (unsigned int i = 0; i < announcers.size(); i++)
-    announcers[i]->Announce(flag, sender, message, data);
+  for (auto & announcer : announcers)
+    announcer->Announce(flag, sender, message, data);
 }
 
 void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, CFileItemPtr item)

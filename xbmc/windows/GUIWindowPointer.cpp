@@ -67,9 +67,8 @@ void CGUIWindowPointer::UpdateVisibility()
 
 void CGUIWindowPointer::OnWindowLoaded()
 { // set all our pointer images invisible
-  for (iControls i = m_children.begin();i != m_children.end(); ++i)
+  for (auto pControl : m_children)
   {
-    CGUIControl* pControl = *i;
     pControl->SetVisible(false);
   }
   CGUIWindow::OnWindowLoaded();

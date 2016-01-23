@@ -210,8 +210,8 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
       if (i != m_albumArt.end())
       {
         item.AppendArt(i->second, MediaTypeAlbum);
-        for (std::map<std::string, std::string>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
-          item.SetArtFallback(j->first, "album." + j->first);
+        for (const auto & j : i->second)
+          item.SetArtFallback(j.first, "album." + j.first);
       }
     }
     if (tag.GetType() == MediaTypeSong || tag.GetType() == MediaTypeAlbum)

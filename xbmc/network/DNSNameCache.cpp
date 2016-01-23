@@ -105,9 +105,8 @@ bool CDNSNameCache::GetCached(const std::string& strHostName, std::string& strIp
   CSingleLock lock(m_critical);
 
   // loop through all DNSname entries and see if strHostName is cached
-  for (int i = 0; i < (int)g_DNSCache.m_vecDNSNames.size(); ++i)
+  for (auto & DNSname : g_DNSCache.m_vecDNSNames)
   {
-    CDNSName& DNSname = g_DNSCache.m_vecDNSNames[i];
     if ( DNSname.m_strHostName == strHostName )
     {
       strIpAddress = DNSname.m_strIpAddress;

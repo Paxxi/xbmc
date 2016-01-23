@@ -307,8 +307,8 @@ std::map<std::string, CPythonInvoker::PythonModuleInitialization> CHTTPPythonWsg
   static std::map<std::string, PythonModuleInitialization> modules;
   if (modules.empty())
   {
-    for (size_t i = 0; i < PythonModulesSize; i++)
-      modules.insert(std::make_pair(PythonModules[i].name, PythonModules[i].initialization));
+    for (auto & i : PythonModules)
+      modules.insert(std::make_pair(i.name, i.initialization));
   }
 
   return modules;

@@ -384,9 +384,9 @@ void CGUIDialogAudioSubtitleSettings::InitializeSettings()
 
 bool CGUIDialogAudioSubtitleSettings::SupportsAudioFeature(int feature)
 {
-  for (Features::iterator itr = m_audioCaps.begin(); itr != m_audioCaps.end(); ++itr)
+  for (int & m_audioCap : m_audioCaps)
   {
-    if (*itr == feature || *itr == IPC_AUD_ALL)
+    if (m_audioCap == feature || m_audioCap == IPC_AUD_ALL)
       return true;
   }
 
@@ -395,9 +395,9 @@ bool CGUIDialogAudioSubtitleSettings::SupportsAudioFeature(int feature)
 
 bool CGUIDialogAudioSubtitleSettings::SupportsSubtitleFeature(int feature)
 {
-  for (Features::iterator itr = m_subCaps.begin(); itr != m_subCaps.end(); ++itr)
+  for (int & m_subCap : m_subCaps)
   {
-    if (*itr == feature || *itr == IPC_SUBS_ALL)
+    if (m_subCap == feature || m_subCap == IPC_SUBS_ALL)
       return true;
   }
 

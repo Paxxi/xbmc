@@ -132,9 +132,8 @@ public:
   std::vector<InfoTagType> GetItemTypes(std::vector<InfoTagType> &itemTypes) const
   {
     itemTypes.clear();
-    for (std::map<InfoTagType, std::shared_ptr<CThumbLoader> >::const_iterator
-         i = m_thumbloaders.begin(); i != m_thumbloaders.end(); ++i)
-      itemTypes.push_back(i->first);
+    for (const auto & m_thumbloader : m_thumbloaders)
+      itemTypes.push_back(m_thumbloader.first);
     return itemTypes;
   }
 private:
@@ -203,8 +202,8 @@ bool CDirectoryProvider::Update(bool forceRefresh)
   if (fireJob)
     FireJob();
 
-  for (std::vector<CGUIStaticItemPtr>::iterator i = m_items.begin(); i != m_items.end(); ++i)
-    changed |= (*i)->UpdateVisibility(m_parentID);
+  for (auto & m_item : m_items)
+    changed |= m_item->UpdateVisibility(m_parentID);
   return changed; // TODO: Also returned changed if properties are changed (if so, need to update scroll to letter).
 }
 
@@ -242,10 +241,10 @@ void CDirectoryProvider::Fetch(std::vector<CGUIListItemPtr> &items) const
 {
   CSingleLock lock(m_section);
   items.clear();
-  for (std::vector<CGUIStaticItemPtr>::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
+  for (const auto & m_item : m_items)
   {
-    if ((*i)->IsVisible())
-      items.push_back(*i);
+    if (m_item->IsVisible())
+      items.push_back(m_item);
   }
 }
 

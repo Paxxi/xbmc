@@ -238,8 +238,8 @@ void CDeviceKitDisksProvider::Initialize()
 
   CLog::Log(LOGDEBUG, "DeviceKit.Disks: Querying available devices");
   std::vector<std::string> devices = EnumerateDisks();
-  for (unsigned int i = 0; i < devices.size(); i++)
-    DeviceAdded(devices[i].c_str(), nullptr);
+  for (auto & device : devices)
+    DeviceAdded(device.c_str(), nullptr);
 }
 
 bool CDeviceKitDisksProvider::Eject(const std::string& mountpath)

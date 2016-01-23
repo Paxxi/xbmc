@@ -563,9 +563,8 @@ void iso9660::Reset()
     free (m_paths);
     m_paths = nextpath;
   }
-  for (int i = 0; i < (int)m_vecDirsAndFiles.size(); ++i)
+  for (auto pDir : m_vecDirsAndFiles)
   {
-    struct iso_dirtree* pDir = m_vecDirsAndFiles[i];
     if (pDir->path) free(pDir->path);
     if (pDir->name) free(pDir->name);
     free(pDir);

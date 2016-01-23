@@ -200,13 +200,13 @@ std::string CSpecialProtocol::TranslatePathConvertCase(const std::string& path)
   DIR* dir;
   struct dirent* de;
 
-  for (unsigned int i = 0; i < tokens.size(); i++)
+  for (auto & token : tokens)
   {
     file = result + "/";
-    file += tokens[i];
+    file += token;
     if (stat(file.c_str(), &stat_buf) == 0)
     {
-      result += "/" + tokens[i];
+      result += "/" + token;
     }
     else
     {
@@ -216,7 +216,7 @@ std::string CSpecialProtocol::TranslatePathConvertCase(const std::string& path)
         while ((de = readdir(dir)) != nullptr)
         {
           // check if there's a file with same name but different case
-          if (strcasecmp(de->d_name, tokens[i].c_str()) == 0)
+          if (strcasecmp(de->d_name, token.c_str()) == 0)
           {
             result += "/";
             result += de->d_name;
@@ -227,13 +227,13 @@ std::string CSpecialProtocol::TranslatePathConvertCase(const std::string& path)
         // if we did not find any file that somewhat matches, just
         // fallback but we know it's not gonna be a good ending
         if (de == nullptr)
-          result += "/" + tokens[i];
+          result += "/" + token;
 
         closedir(dir);
       }
       else
       { // this is just fallback, we won't succeed anyway...
-        result += "/" + tokens[i];
+        result += "/" + token;
       }
     }
   }

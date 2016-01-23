@@ -41,10 +41,10 @@ CPlayerCoreFactory::CPlayerCoreFactory()
 
 CPlayerCoreFactory::~CPlayerCoreFactory()
 {
-  for(std::vector<CPlayerCoreConfig *>::iterator it = m_vecPlayerConfigs.begin(); it != m_vecPlayerConfigs.end(); ++it)
-    delete *it;
-  for(std::vector<CPlayerSelectionRule *>::iterator it = m_vecCoreSelectionRules.begin(); it != m_vecCoreSelectionRules.end(); ++it)
-    delete *it;
+  for(auto & m_vecPlayerConfig : m_vecPlayerConfigs)
+    delete m_vecPlayerConfig;
+  for(auto & m_vecCoreSelectionRule : m_vecCoreSelectionRules)
+    delete m_vecCoreSelectionRule;
 }
 
 CPlayerCoreFactory& CPlayerCoreFactory::GetInstance()
