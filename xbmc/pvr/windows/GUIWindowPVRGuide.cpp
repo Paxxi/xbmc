@@ -65,13 +65,13 @@ void CGUIWindowPVRGuide::OnInitWindow()
   CGUIWindowPVRBase::OnInitWindow();
 }
 
-void CGUIWindowPVRGuide::ResetObservers(void)
+void CGUIWindowPVRGuide::ResetObservers()
 {
   UnregisterObservers();
   g_EpgContainer.RegisterObserver(this);
 }
 
-void CGUIWindowPVRGuide::UnregisterObservers(void)
+void CGUIWindowPVRGuide::UnregisterObservers()
 {
   g_EpgContainer.UnregisterObserver(this);
 }
@@ -171,7 +171,7 @@ bool CGUIWindowPVRGuide::Update(const std::string &strDirectory, bool updateFilt
   return bReturn;
 }
 
-void CGUIWindowPVRGuide::UpdateButtons(void)
+void CGUIWindowPVRGuide::UpdateButtons()
 {
   CGUIWindowPVRBase::UpdateButtons();
   switch (m_viewControl.GetCurrentControl())

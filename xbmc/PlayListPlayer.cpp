@@ -41,7 +41,7 @@
 using namespace PLAYLIST;
 using namespace KODI::MESSAGING;
 
-CPlayListPlayer::CPlayListPlayer(void)
+CPlayListPlayer::CPlayListPlayer()
 {
   m_PlaylistMusic = new CPlayList(PLAYLIST_MUSIC);
   m_PlaylistVideo = new CPlayList(PLAYLIST_VIDEO);
@@ -56,7 +56,7 @@ CPlayListPlayer::CPlayListPlayer(void)
   m_failedSongsStart = 0;
 }
 
-CPlayListPlayer::~CPlayListPlayer(void)
+CPlayListPlayer::~CPlayListPlayer()
 {
   Clear();
   delete m_PlaylistMusic;

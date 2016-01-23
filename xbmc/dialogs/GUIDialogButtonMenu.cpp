@@ -28,7 +28,7 @@ CGUIDialogButtonMenu::CGUIDialogButtonMenu(int id, const std::string &xmlFile)
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogButtonMenu::~CGUIDialogButtonMenu(void)
+CGUIDialogButtonMenu::~CGUIDialogButtonMenu()
 {}
 
 bool CGUIDialogButtonMenu::OnMessage(CGUIMessage &message)

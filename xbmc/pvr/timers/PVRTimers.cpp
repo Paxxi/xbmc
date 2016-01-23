@@ -42,18 +42,18 @@
 using namespace PVR;
 using namespace EPG;
 
-CPVRTimers::CPVRTimers(void)
+CPVRTimers::CPVRTimers()
 {
   m_bIsUpdating = false;
   m_iLastId     = 0;
 }
 
-CPVRTimers::~CPVRTimers(void)
+CPVRTimers::~CPVRTimers()
 {
   Unload();
 }
 
-bool CPVRTimers::Load(void)
+bool CPVRTimers::Load()
 {
   // unload previous timers
   Unload();
@@ -75,7 +75,7 @@ void CPVRTimers::Unload()
   m_tags.clear();
 }
 
-bool CPVRTimers::Update(void)
+bool CPVRTimers::Update()
 {
   {
     CSingleLock lock(m_critSection);
@@ -90,7 +90,7 @@ bool CPVRTimers::Update(void)
   return UpdateEntries(newTimerList);
 }
 
-bool CPVRTimers::IsRecording(void) const
+bool CPVRTimers::IsRecording() const
 {
   CSingleLock lock(m_critSection);
 
@@ -321,7 +321,7 @@ bool CPVRTimers::UpdateFromClient(const CPVRTimerInfoTagPtr &timer)
 
 /********** getters **********/
 
-CFileItemPtr CPVRTimers::GetNextActiveTimer(void) const
+CFileItemPtr CPVRTimers::GetNextActiveTimer() const
 {
   CSingleLock lock(m_critSection);
   for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it)
@@ -362,7 +362,7 @@ std::vector<CFileItemPtr> CPVRTimers::GetActiveTimers(void) const
   return tags;
 }
 
-int CPVRTimers::AmountActiveTimers(void) const
+int CPVRTimers::AmountActiveTimers() const
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
@@ -396,7 +396,7 @@ std::vector<CFileItemPtr> CPVRTimers::GetActiveRecordings(void) const
   return tags;
 }
 
-int CPVRTimers::AmountActiveRecordings(void) const
+int CPVRTimers::AmountActiveRecordings() const
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
@@ -409,7 +409,7 @@ int CPVRTimers::AmountActiveRecordings(void) const
   return iReturn;
 }
 
-bool CPVRTimers::HasActiveTimers(void) const
+bool CPVRTimers::HasActiveTimers() const
 {
   CSingleLock lock(m_critSection);
   for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it)
@@ -773,7 +773,7 @@ void CPVRTimers::Notify(const Observable &obs, const ObservableMessage msg)
     g_PVRManager.TriggerTimersUpdate();
 }
 
-CDateTime CPVRTimers::GetNextEventTime(void) const
+CDateTime CPVRTimers::GetNextEventTime() const
 {
   const bool dailywakup = CSettings::GetInstance().GetBool(CSettings::SETTING_PVRPOWERMANAGEMENT_DAILYWAKEUP);
   const CDateTime now = CDateTime::GetUTCDateTime();
@@ -855,7 +855,7 @@ void CPVRTimers::UpdateEpgEvent(CPVRTimerInfoTagPtr timer)
   }
 }
 
-void CPVRTimers::UpdateChannels(void)
+void CPVRTimers::UpdateChannels()
 {
   CSingleLock lock(m_critSection);
   for (MapTags::iterator it = m_tags.begin(); it != m_tags.end(); ++it)

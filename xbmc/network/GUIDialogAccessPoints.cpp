@@ -31,13 +31,13 @@
 
 #define CONTROL_ACCESS_POINTS 3
 
-CGUIDialogAccessPoints::CGUIDialogAccessPoints(void)
+CGUIDialogAccessPoints::CGUIDialogAccessPoints()
     : CGUIDialog(WINDOW_DIALOG_ACCESS_POINTS, "DialogAccessPoints.xml")
 {
   m_accessPoints = new CFileItemList;
 }
 
-CGUIDialogAccessPoints::~CGUIDialogAccessPoints(void)
+CGUIDialogAccessPoints::~CGUIDialogAccessPoints()
 {
   delete m_accessPoints;
 }

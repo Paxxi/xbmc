@@ -33,8 +33,8 @@
 
 using namespace XFILE;
 
-CHTTPDirectory::CHTTPDirectory(void){}
-CHTTPDirectory::~CHTTPDirectory(void){}
+CHTTPDirectory::CHTTPDirectory(){}
+CHTTPDirectory::~CHTTPDirectory(){}
 
 bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

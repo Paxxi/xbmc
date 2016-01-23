@@ -31,7 +31,7 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
-CGUIViewControl::CGUIViewControl(void)
+CGUIViewControl::CGUIViewControl()
 {
   m_viewAsControl = -1;
   m_parentWindow = WINDOW_INVALID;
@@ -39,7 +39,7 @@ CGUIViewControl::CGUIViewControl(void)
   Reset();
 }
 
-CGUIViewControl::~CGUIViewControl(void)
+CGUIViewControl::~CGUIViewControl()
 { }
 
 void CGUIViewControl::Reset()

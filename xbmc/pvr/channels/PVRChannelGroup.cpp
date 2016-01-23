@@ -45,7 +45,7 @@
 using namespace PVR;
 using namespace EPG;
 
-CPVRChannelGroup::CPVRChannelGroup(void) :
+CPVRChannelGroup::CPVRChannelGroup() :
     m_bRadio(false),
     m_iGroupType(PVR_GROUP_TYPE_DEFAULT),
     m_iGroupId(-1),
@@ -118,7 +118,7 @@ CPVRChannelGroup::CPVRChannelGroup(const CPVRChannelGroup &group) :
   OnInit();
 }
 
-CPVRChannelGroup::~CPVRChannelGroup(void)
+CPVRChannelGroup::~CPVRChannelGroup()
 {
   CSettings::GetInstance().UnregisterCallback(this);
   Unload();
@@ -145,7 +145,7 @@ std::pair<int, int> CPVRChannelGroup::PathIdToStorageId(uint64_t storageId)
   return std::make_pair(storageId >> 32, storageId & 0xFFFFFFFF);
 }
 
-void CPVRChannelGroup::OnInit(void)
+void CPVRChannelGroup::OnInit()
 {
   CSettings::GetInstance().RegisterCallback(this, {
     CSettings::SETTING_PVRMANAGER_BACKENDCHANNELORDER,
@@ -153,7 +153,7 @@ void CPVRChannelGroup::OnInit(void)
   });
 }
 
-bool CPVRChannelGroup::Load(void)
+bool CPVRChannelGroup::Load()
 {
   /* make sure this container is empty before loading */
   Unload();
@@ -184,14 +184,14 @@ bool CPVRChannelGroup::Load(void)
   return true;
 }
 
-void CPVRChannelGroup::Unload(void)
+void CPVRChannelGroup::Unload()
 {
   CSingleLock lock(m_critSection);
   m_sortedMembers.clear();
   m_members.clear();
 }
 
-bool CPVRChannelGroup::Update(void)
+bool CPVRChannelGroup::Update()
 {
   if (GroupType() == PVR_GROUP_TYPE_USER_DEFINED ||
       !CSettings::GetInstance().GetBool(CSettings::SETTING_PVRMANAGER_SYNCCHANNELGROUPS))
@@ -376,7 +376,7 @@ struct sortByChannelNumber
   }
 };
 
-bool CPVRChannelGroup::SortAndRenumber(void)
+bool CPVRChannelGroup::SortAndRenumber()
 {
   if (PreventSortAndRenumber())
     return true;
@@ -392,14 +392,14 @@ bool CPVRChannelGroup::SortAndRenumber(void)
   return bReturn;
 }
 
-void CPVRChannelGroup::SortByClientChannelNumber(void)
+void CPVRChannelGroup::SortByClientChannelNumber()
 {
   CSingleLock lock(m_critSection);
   if (!PreventSortAndRenumber())
     sort(m_sortedMembers.begin(), m_sortedMembers.end(), sortByClientChannelNumber());
 }
 
-void CPVRChannelGroup::SortByChannelNumber(void)
+void CPVRChannelGroup::SortByChannelNumber()
 {
   CSingleLock lock(m_critSection);
   if (!PreventSortAndRenumber())
@@ -556,7 +556,7 @@ CFileItemPtr CPVRChannelGroup::GetByChannelDown(const CPVRChannelPtr &channel) c
   return retval;
 }
 
-PVR_CHANNEL_GROUP_SORTED_MEMBERS CPVRChannelGroup::GetMembers(void) const
+PVR_CHANNEL_GROUP_SORTED_MEMBERS CPVRChannelGroup::GetMembers() const
 {
   CSingleLock lock(m_critSection);
   return m_sortedMembers;
@@ -580,12 +580,12 @@ int CPVRChannelGroup::GetMembers(CFileItemList &results, bool bGroupMembers /* =
   return results.Size() - iOrigSize;
 }
 
-CPVRChannelGroupPtr CPVRChannelGroup::GetNextGroup(void) const
+CPVRChannelGroupPtr CPVRChannelGroup::GetNextGroup() const
 {
   return g_PVRChannelGroups->Get(m_bRadio)->GetNextGroup(*this);
 }
 
-CPVRChannelGroupPtr CPVRChannelGroup::GetPreviousGroup(void) const
+CPVRChannelGroupPtr CPVRChannelGroup::GetPreviousGroup() const
 {
   return g_PVRChannelGroups->Get(m_bRadio)->GetPreviousGroup(*this);
 }
@@ -605,7 +605,7 @@ int CPVRChannelGroup::LoadFromDb(bool bCompress /* = false */)
   return Size() - iChannelCount;
 }
 
-bool CPVRChannelGroup::LoadFromClients(void)
+bool CPVRChannelGroup::LoadFromClients()
 {
   /* get the channels from the backends */
   return g_PVRClients->GetChannelGroupMembers(this) == PVR_ERROR_NO_ERROR;
@@ -739,7 +739,7 @@ bool CPVRChannelGroup::UpdateGroupEntries(const CPVRChannelGroup &channels)
   return bReturn;
 }
 
-void CPVRChannelGroup::RemoveInvalidChannels(void)
+void CPVRChannelGroup::RemoveInvalidChannels()
 {
   CPVRChannelPtr channel;
   CSingleLock lock(m_critSection);
@@ -885,7 +885,7 @@ bool CPVRChannelGroup::SetGroupName(const std::string &strGroupName, bool bSaveI
   return bReturn;
 }
 
-bool CPVRChannelGroup::Persist(void)
+bool CPVRChannelGroup::Persist()
 {
   bool bReturn(true);
   CSingleLock lock(m_critSection);
@@ -915,7 +915,7 @@ bool CPVRChannelGroup::Persist(void)
   return bReturn;
 }
 
-bool CPVRChannelGroup::Renumber(void)
+bool CPVRChannelGroup::Renumber()
 {
   bool bReturn(false);
   unsigned int iChannelNumber(0);
@@ -962,7 +962,7 @@ bool CPVRChannelGroup::Renumber(void)
   return bReturn;
 }
 
-void CPVRChannelGroup::ResetChannelNumberCache(void)
+void CPVRChannelGroup::ResetChannelNumberCache()
 {
   CSingleLock lock(m_critSection);
   if (!m_bSelectedGroup)
@@ -978,7 +978,7 @@ void CPVRChannelGroup::ResetChannelNumberCache(void)
   }
 }
 
-bool CPVRChannelGroup::HasChangedChannels(void) const
+bool CPVRChannelGroup::HasChangedChannels() const
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);
@@ -989,7 +989,7 @@ bool CPVRChannelGroup::HasChangedChannels(void) const
   return bReturn;
 }
 
-bool CPVRChannelGroup::HasNewChannels(void) const
+bool CPVRChannelGroup::HasNewChannels() const
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);
@@ -1000,7 +1000,7 @@ bool CPVRChannelGroup::HasNewChannels(void) const
   return bReturn;
 }
 
-bool CPVRChannelGroup::HasChanges(void) const
+bool CPVRChannelGroup::HasChanges() const
 {
   CSingleLock lock(m_critSection);
   return m_bChanged || HasNewChannels() || HasChangedChannels();
@@ -1042,7 +1042,7 @@ void CPVRChannelGroup::OnSettingChanged(const CSetting *setting)
   }
 }
 
-bool CPVRPersistGroupJob::DoWork(void)
+bool CPVRPersistGroupJob::DoWork()
 {
   return m_group->Persist();
 }
@@ -1165,17 +1165,17 @@ CDateTime CPVRChannelGroup::GetEPGDate(EpgDateType epgDateType) const
   return date;
 }
 
-CDateTime CPVRChannelGroup::GetFirstEPGDate(void) const
+CDateTime CPVRChannelGroup::GetFirstEPGDate() const
 {
   return GetEPGDate(EPG_FIRST_DATE);
 }
 
-CDateTime CPVRChannelGroup::GetLastEPGDate(void) const
+CDateTime CPVRChannelGroup::GetLastEPGDate() const
 {
   return GetEPGDate(EPG_LAST_DATE);
 }
 
-int CPVRChannelGroup::GroupID(void) const
+int CPVRChannelGroup::GroupID() const
 {
   return m_iGroupId;
 }
@@ -1191,19 +1191,19 @@ void CPVRChannelGroup::SetGroupType(int iGroupType)
   m_iGroupType = iGroupType;
 }
 
-int CPVRChannelGroup::GroupType(void) const
+int CPVRChannelGroup::GroupType() const
 {
   return m_iGroupType;
 }
 
-std::string CPVRChannelGroup::GroupName(void) const
+std::string CPVRChannelGroup::GroupName() const
 {
   CSingleLock lock(m_critSection);
   std::string strReturn(m_strGroupName);
   return strReturn;
 }
 
-time_t CPVRChannelGroup::LastWatched(void) const
+time_t CPVRChannelGroup::LastWatched() const
 {
   CSingleLock lock(m_critSection);
   return m_iLastWatched;
@@ -1226,7 +1226,7 @@ bool CPVRChannelGroup::SetLastWatched(time_t iLastWatched)
   return false;
 }
 
-bool CPVRChannelGroup::PreventSortAndRenumber(void) const
+bool CPVRChannelGroup::PreventSortAndRenumber() const
 {
   CSingleLock lock(m_critSection);
   return m_bPreventSortAndRenumber;
@@ -1275,7 +1275,7 @@ bool CPVRChannelGroup::UpdateChannel(const CFileItem &item, bool bHidden, bool b
   return true;
 }
 
-size_t CPVRChannelGroup::Size(void) const
+size_t CPVRChannelGroup::Size() const
 {
   CSingleLock lock(m_critSection);
   return m_members.size();
@@ -1311,7 +1311,7 @@ void CPVRChannelGroup::SetSelectedGroup(bool bSetTo)
   m_bSelectedGroup = bSetTo;
 }
 
-bool CPVRChannelGroup::IsSelectedGroup(void) const
+bool CPVRChannelGroup::IsSelectedGroup() const
 {
   CSingleLock lock(m_critSection);
   return m_bSelectedGroup;
@@ -1334,13 +1334,13 @@ void CPVRChannelGroup::SetHidden(bool bHidden)
   }
 }
 
-bool CPVRChannelGroup::IsHidden(void) const
+bool CPVRChannelGroup::IsHidden() const
 {
   CSingleLock lock(m_critSection);
   return m_bHidden;
 }
 
-int CPVRChannelGroup::GetPosition(void) const
+int CPVRChannelGroup::GetPosition() const
 {
   CSingleLock lock(m_critSection);
   return m_iPosition;

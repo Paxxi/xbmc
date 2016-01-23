@@ -1563,7 +1563,7 @@ void CVideoPlayer::Process()
   }
 }
 
-bool CVideoPlayer::CheckDelayedChannelEntry(void)
+bool CVideoPlayer::CheckDelayedChannelEntry()
 {
   bool bReturn(false);
 
@@ -4078,7 +4078,7 @@ int CVideoPlayer::OnDVDNavResult(void* pData, int iMessage)
   return NAVRESULT_NOP;
 }
 
-bool CVideoPlayer::ShowPVRChannelInfo(void)
+bool CVideoPlayer::ShowPVRChannelInfo()
 {
   bool bReturn(false);
 

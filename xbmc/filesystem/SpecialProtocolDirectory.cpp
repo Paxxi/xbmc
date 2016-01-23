@@ -28,11 +28,11 @@
 
 using namespace XFILE;
 
-CSpecialProtocolDirectory::CSpecialProtocolDirectory(void)
+CSpecialProtocolDirectory::CSpecialProtocolDirectory()
 {
 }
 
-CSpecialProtocolDirectory::~CSpecialProtocolDirectory(void)
+CSpecialProtocolDirectory::~CSpecialProtocolDirectory()
 {
 }
 

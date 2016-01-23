@@ -175,7 +175,7 @@ CGUIFontTTFBase::CGUIFontTTFBase(const std::string& strFileName) : m_staticCache
   m_nTexture = 0;
 }
 
-CGUIFontTTFBase::~CGUIFontTTFBase(void)
+CGUIFontTTFBase::~CGUIFontTTFBase()
 {
   Clear();
 }

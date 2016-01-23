@@ -42,7 +42,7 @@ GUIScrollBarControl::GUIScrollBarControl(int parentID, int controlID, float posX
   m_showOnePage = showOnePage;
 }
 
-GUIScrollBarControl::~GUIScrollBarControl(void)
+GUIScrollBarControl::~GUIScrollBarControl()
 {
 }
 

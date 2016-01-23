@@ -167,7 +167,7 @@ std::vector<std::string> CHttpHeader::GetValues(std::string strParam) const
   return values;
 }
 
-std::string CHttpHeader::GetHeader(void) const
+std::string CHttpHeader::GetHeader() const
 {
   if (m_protoLine.empty() && m_params.empty())
     return "";
@@ -181,7 +181,7 @@ std::string CHttpHeader::GetHeader(void) const
   return strHeader;
 }
 
-std::string CHttpHeader::GetMimeType(void) const
+std::string CHttpHeader::GetMimeType() const
 {
   std::string strValue(GetValueRaw("content-type"));
 
@@ -191,7 +191,7 @@ std::string CHttpHeader::GetMimeType(void) const
   return mimeType;
 }
 
-std::string CHttpHeader::GetCharset(void) const
+std::string CHttpHeader::GetCharset() const
 {
   std::string strValue(GetValueRaw("content-type"));
   if (strValue.empty())

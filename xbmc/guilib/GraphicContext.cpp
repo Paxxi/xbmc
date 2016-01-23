@@ -39,7 +39,7 @@ extern bool g_fullScreen;
 /* quick access to a skin setting, fine unless we starts clearing video settings */
 static CSettingInt* g_guiSkinzoom = nullptr;
 
-CGraphicContext::CGraphicContext(void) :
+CGraphicContext::CGraphicContext() :
   m_iScreenHeight(576),
   m_iScreenWidth(720),
   m_iScreenId(0),
@@ -62,7 +62,7 @@ CGraphicContext::CGraphicContext(void) :
 {
 }
 
-CGraphicContext::~CGraphicContext(void)
+CGraphicContext::~CGraphicContext()
 {
 }
 

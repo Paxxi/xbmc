@@ -102,7 +102,7 @@
 // In milliseconds
 #define MINIMUM_TIME_BETWEEN_READS 500
 
-CCPUInfo::CCPUInfo(void)
+CCPUInfo::CCPUInfo()
 {
 #ifdef TARGET_POSIX
   m_fProcStat = m_fProcTemperature = m_fCPUFreq = nullptr;

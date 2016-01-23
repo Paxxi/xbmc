@@ -60,7 +60,7 @@ CGUIControlGroup::CGUIControlGroup(const CGUIControlGroup &from)
   ControlType = GUICONTROL_GROUP;
 }
 
-CGUIControlGroup::~CGUIControlGroup(void)
+CGUIControlGroup::~CGUIControlGroup()
 {
   ClearAll();
 }

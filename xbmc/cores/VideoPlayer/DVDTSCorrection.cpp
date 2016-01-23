@@ -33,7 +33,7 @@ CPullupCorrection::CPullupCorrection()
   Flush();
 }
 
-void CPullupCorrection::ResetVFRDetection(void)
+void CPullupCorrection::ResetVFRDetection()
 {
   m_minframeduration = DVD_NOPTS_VALUE;
   m_maxframeduration = DVD_NOPTS_VALUE;

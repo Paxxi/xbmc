@@ -62,7 +62,7 @@ CEpg::CEpg(const CPVRChannelPtr &channel, bool bLoadedFromDb /* = false */) :
 {
 }
 
-CEpg::CEpg(void) :
+CEpg::CEpg() :
     m_bChanged(false),
     m_bTagsChanged(false),
     m_bLoaded(false),
@@ -72,7 +72,7 @@ CEpg::CEpg(void) :
 {
 }
 
-CEpg::~CEpg(void)
+CEpg::~CEpg()
 {
   Clear();
 }
@@ -132,12 +132,12 @@ void CEpg::SetUpdatePending(bool bUpdatePending /* = true */)
     g_EpgContainer.SetHasPendingUpdates(true);
 }
 
-void CEpg::ForceUpdate(void)
+void CEpg::ForceUpdate()
 {
   SetUpdatePending();
 }
 
-bool CEpg::HasValidEntries(void) const
+bool CEpg::HasValidEntries() const
 {
   CSingleLock lock(m_critSection);
 
@@ -146,13 +146,13 @@ bool CEpg::HasValidEntries(void) const
       m_tags.rbegin()->second->EndAsUTC() >= CDateTime::GetCurrentDateTime().GetAsUTCDateTime()); /* the last end time hasn't passed yet */
 }
 
-void CEpg::Clear(void)
+void CEpg::Clear()
 {
   CSingleLock lock(m_critSection);
   m_tags.clear();
 }
 
-void CEpg::Cleanup(void)
+void CEpg::Cleanup()
 {
   CDateTime cleanupTime = CDateTime::GetCurrentDateTime().GetAsUTCDateTime() -
       CDateTimeSpan(0, g_advancedSettings.m_iEpgLingerTime / 60, g_advancedSettings.m_iEpgLingerTime % 60, 0);
@@ -237,7 +237,7 @@ CEpgInfoTagPtr CEpg::GetTagNext() const
   return CEpgInfoTagPtr();
 }
 
-bool CEpg::CheckPlayingEvent(void)
+bool CEpg::CheckPlayingEvent()
 {
   CEpgInfoTagPtr previousTag(GetTagNow(false));
   CEpgInfoTagPtr newTag(GetTagNow(true));
@@ -338,7 +338,7 @@ bool CEpg::UpdateEntry(const CEpgInfoTag &tag, bool bUpdateDatabase /* = false *
   return true;
 }
 
-bool CEpg::Load(void)
+bool CEpg::Load()
 {
   bool bReturn(false);
   CEpgDatabase *database = g_EpgContainer.GetDatabase();
@@ -399,7 +399,7 @@ bool CEpg::UpdateEntries(const CEpg &epg, bool bStoreInDb /* = true */)
   return true;
 }
 
-CDateTime CEpg::GetLastScanTime(void)
+CDateTime CEpg::GetLastScanTime()
 {
   CDateTime lastScanTime;
   {
@@ -510,7 +510,7 @@ int CEpg::Get(CFileItemList &results, const EpgSearchFilter &filter) const
   return results.Size() - iInitialSize;
 }
 
-bool CEpg::Persist(void)
+bool CEpg::Persist()
 {
   if (CSettings::GetInstance().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT) || !NeedsSave())
     return true;
@@ -554,7 +554,7 @@ bool CEpg::Persist(void)
   return database->CommitInsertQueries();
 }
 
-CDateTime CEpg::GetFirstDate(void) const
+CDateTime CEpg::GetFirstDate() const
 {
   CDateTime first;
 
@@ -565,7 +565,7 @@ CDateTime CEpg::GetFirstDate(void) const
   return first;
 }
 
-CDateTime CEpg::GetLastDate(void) const
+CDateTime CEpg::GetLastDate() const
 {
   CDateTime last;
 
@@ -729,7 +729,7 @@ bool CEpg::UpdateEntry(const EPG_TAG *data, bool bUpdateDatabase /* = false */)
   return UpdateEntry(*tag, bUpdateDatabase);
 }
 
-bool CEpg::IsRadio(void) const
+bool CEpg::IsRadio() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->IsRadio() : false;
@@ -785,25 +785,25 @@ CEpgInfoTagPtr CEpg::GetPreviousEvent(const CEpgInfoTag& tag) const
   return retVal;
 }
 
-CPVRChannelPtr CEpg::Channel(void) const
+CPVRChannelPtr CEpg::Channel() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel;
 }
 
-int CEpg::ChannelID(void) const
+int CEpg::ChannelID() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->ChannelID() : -1;
 }
 
-int CEpg::ChannelNumber(void) const
+int CEpg::ChannelNumber() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->ChannelNumber() : -1;
 }
 
-int CEpg::SubChannelNumber(void) const
+int CEpg::SubChannelNumber() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->SubChannelNumber() : -1;
@@ -825,31 +825,31 @@ void CEpg::SetChannel(const PVR::CPVRChannelPtr &channel)
   }
 }
 
-bool CEpg::HasPVRChannel(void) const
+bool CEpg::HasPVRChannel() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel != NULL;
 }
 
-bool CEpg::UpdatePending(void) const
+bool CEpg::UpdatePending() const
 {
   CSingleLock lock(m_critSection);
   return m_bUpdatePending;
 }
 
-size_t CEpg::Size(void) const
+size_t CEpg::Size() const
 {
   CSingleLock lock(m_critSection);
   return m_tags.size();
 }
 
-bool CEpg::NeedsSave(void) const
+bool CEpg::NeedsSave() const
 {
   CSingleLock lock(m_critSection);
   return !m_changedTags.empty() || !m_deletedTags.empty() || m_bChanged;
 }
 
-bool CEpg::IsValid(void) const
+bool CEpg::IsValid() const
 {
   CSingleLock lock(m_critSection);
   if (ScraperName() == "client")

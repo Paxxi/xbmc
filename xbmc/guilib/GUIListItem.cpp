@@ -41,7 +41,7 @@ CGUIListItem::CGUIListItem(const CGUIListItem& item)
   SetInvalid();
 }
 
-CGUIListItem::CGUIListItem(void)
+CGUIListItem::CGUIListItem()
 {
   m_bIsFolder = false;
   m_bSelected = false;
@@ -61,7 +61,7 @@ CGUIListItem::CGUIListItem(const std::string& strLabel):
   m_focusedLayout = nullptr;
 }
 
-CGUIListItem::~CGUIListItem(void)
+CGUIListItem::~CGUIListItem()
 {
   FreeMemory();
 }

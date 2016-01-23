@@ -23,12 +23,12 @@
 #include "guilib/GUIMessage.h"
 #include "utils/Variant.h"
 
-CGUIDialogOK::CGUIDialogOK(void)
+CGUIDialogOK::CGUIDialogOK()
     : CGUIDialogBoxBase(WINDOW_DIALOG_OK, "DialogConfirm.xml")
 {
 }
 
-CGUIDialogOK::~CGUIDialogOK(void)
+CGUIDialogOK::~CGUIDialogOK()
 {}
 
 bool CGUIDialogOK::OnMessage(CGUIMessage& message)

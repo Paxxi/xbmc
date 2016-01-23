@@ -34,7 +34,7 @@
 using namespace MEDIA_DETECT;
 using namespace XFILE;
 
-CFileCDDA::CFileCDDA(void)
+CFileCDDA::CFileCDDA()
 {
   m_pCdIo = nullptr;
   m_lsnStart = CDIO_INVALID_LSN;
@@ -44,7 +44,7 @@ CFileCDDA::CFileCDDA(void)
   m_iSectorCount = 52;
 }
 
-CFileCDDA::~CFileCDDA(void)
+CFileCDDA::~CFileCDDA()
 {
   Close();
 }

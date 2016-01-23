@@ -903,7 +903,7 @@ unsigned int CActiveAEDSPProcess::GetOutputFrames()
   return m_outputFrames;
 }
 
-float CActiveAEDSPProcess::GetCPUUsage(void) const
+float CActiveAEDSPProcess::GetCPUUsage() const
 {
   return m_fLastProcessUsage;
 }

@@ -36,7 +36,7 @@ CGUILabelControl::CGUILabelControl(int parentID, int controlID, float posX, floa
   m_minWidth = 0;
 }
 
-CGUILabelControl::~CGUILabelControl(void)
+CGUILabelControl::~CGUILabelControl()
 {
 }
 

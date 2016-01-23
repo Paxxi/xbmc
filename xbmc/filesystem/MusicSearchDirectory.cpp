@@ -28,11 +28,11 @@
 
 using namespace XFILE;
 
-CMusicSearchDirectory::CMusicSearchDirectory(void)
+CMusicSearchDirectory::CMusicSearchDirectory()
 {
 }
 
-CMusicSearchDirectory::~CMusicSearchDirectory(void)
+CMusicSearchDirectory::~CMusicSearchDirectory()
 {
 }
 

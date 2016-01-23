@@ -38,7 +38,7 @@
 
 #include "TimeSmoother.h"
 
-int64_t CurrentHostCounter(void)
+int64_t CurrentHostCounter()
 {
 #if   defined(TARGET_DARWIN)
   return( (int64_t)CVGetCurrentHostTime() );
@@ -57,7 +57,7 @@ int64_t CurrentHostCounter(void)
 #endif
 }
 
-int64_t CurrentHostFrequency(void)
+int64_t CurrentHostFrequency()
 {
 #if defined(TARGET_DARWIN)
   return( (int64_t)CVGetHostClockFrequency() );

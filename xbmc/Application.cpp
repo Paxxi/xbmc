@@ -251,7 +251,7 @@ using KODI::MESSAGING::HELPERS::DialogResponse;
 #define MAX_FFWD_SPEED 5
 
 //extern IDirectSoundRenderer* m_pAudioDecoder;
-CApplication::CApplication(void)
+CApplication::CApplication()
   : m_pPlayer(new CApplicationPlayer)
   , m_saveSkinOnUnloading(true)
   , m_autoExecScriptExecuted(false)
@@ -308,7 +308,7 @@ CApplication::CApplication(void)
   m_volumeLevel = VOLUME_MAXIMUM;
 }
 
-CApplication::~CApplication(void)
+CApplication::~CApplication()
 {
   delete m_musicInfoScanner;
   delete &m_progressTrackingVideoResumeBookmark;
@@ -4704,7 +4704,7 @@ bool CApplication::IsMuted() const
   return CAEFactory::IsMuted();
 }
 
-void CApplication::ToggleMute(void)
+void CApplication::ToggleMute()
 {
   if (m_muted)
     UnMute();

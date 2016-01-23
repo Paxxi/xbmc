@@ -40,7 +40,7 @@
 using namespace PVR;
 using namespace EPG;
 
-CPVRGUIInfo::CPVRGUIInfo(void) :
+CPVRGUIInfo::CPVRGUIInfo() :
     CThread("PVRGUIInfo")
 {
   ResetProperties();
@@ -51,7 +51,7 @@ CPVRGUIInfo::~CPVRGUIInfo(void)
   Stop();
 }
 
-void CPVRGUIInfo::ResetProperties(void)
+void CPVRGUIInfo::ResetProperties()
 {
   CSingleLock lock(m_critSection);
   m_strActiveTimerTitle         .clear();
@@ -109,14 +109,14 @@ void CPVRGUIInfo::ClearQualityInfo(PVR_SIGNAL_STATUS &qualityInfo)
   strncpy(qualityInfo.strAdapterStatus, g_localizeStrings.Get(13106).c_str(), PVR_ADDON_NAME_STRING_LENGTH - 1);
 }
 
-void CPVRGUIInfo::Start(void)
+void CPVRGUIInfo::Start()
 {
   ResetProperties();
   Create();
   SetPriority(-1);
 }
 
-void CPVRGUIInfo::Stop(void)
+void CPVRGUIInfo::Stop()
 {
   StopThread();
   if (g_PVRTimers)
@@ -141,7 +141,7 @@ void CPVRGUIInfo::ShowPlayerInfo(int iTimeout)
   g_infoManager.SetShowInfo(true);
 }
 
-void CPVRGUIInfo::ToggleShowInfo(void)
+void CPVRGUIInfo::ToggleShowInfo()
 {
   CSingleLock lock(m_critSection);
 
@@ -166,7 +166,7 @@ void CPVRGUIInfo::ToggleShowInfo(void)
   }
 }
 
-bool CPVRGUIInfo::TimerInfoToggle(void)
+bool CPVRGUIInfo::TimerInfoToggle()
 {
   CSingleLock lock(m_critSection);
   if (m_iTimerInfoToggleStart == 0)
@@ -189,7 +189,7 @@ bool CPVRGUIInfo::TimerInfoToggle(void)
   return false;
 }
 
-void CPVRGUIInfo::Process(void)
+void CPVRGUIInfo::Process()
 {
   unsigned int mLoop(0);
   int toggleInterval = g_advancedSettings.m_iPVRInfoToggleInterval / 1000;
@@ -246,7 +246,7 @@ void CPVRGUIInfo::Process(void)
     ResetPlayingTag();
 }
 
-void CPVRGUIInfo::UpdateQualityData(void)
+void CPVRGUIInfo::UpdateQualityData()
 {
   PVR_SIGNAL_STATUS qualityInfo;
   ClearQualityInfo(qualityInfo);
@@ -261,7 +261,7 @@ void CPVRGUIInfo::UpdateQualityData(void)
   memcpy(&m_qualityInfo, &qualityInfo, sizeof(m_qualityInfo));
 }
 
-void CPVRGUIInfo::UpdateMisc(void)
+void CPVRGUIInfo::UpdateMisc()
 {
   bool bStarted = g_PVRManager.IsStarted();
   std::string strPlayingClientName     = bStarted ? g_PVRClients->GetPlayingClientName() : "";
@@ -290,7 +290,7 @@ void CPVRGUIInfo::UpdateMisc(void)
   m_strPlayingTVGroup         = strPlayingTVGroup;
 }
 
-void CPVRGUIInfo::UpdateTimeshift(void)
+void CPVRGUIInfo::UpdateTimeshift()
 {
   bool bStarted = g_PVRManager.IsStarted();
 
@@ -755,7 +755,7 @@ void CPVRGUIInfo::CharInfoProvider(std::string &strValue) const
     strValue = m_qualityInfo.strProviderName;
 }
 
-void CPVRGUIInfo::UpdateBackendCache(void)
+void CPVRGUIInfo::UpdateBackendCache()
 {
   CSingleLock lock(m_critSection);
 
@@ -814,7 +814,7 @@ void CPVRGUIInfo::UpdateBackendCache(void)
     m_iCurrentActiveClient = 0;
 }
 
-void CPVRGUIInfo::UpdateTimersCache(void)
+void CPVRGUIInfo::UpdateTimersCache()
 {
   int iTimerAmount          = g_PVRTimers->AmountActiveTimers();
   int iRecordingTimerAmount = g_PVRTimers->AmountActiveRecordings();
@@ -829,7 +829,7 @@ void CPVRGUIInfo::UpdateTimersCache(void)
   UpdateTimersToggle();
 }
 
-void CPVRGUIInfo::UpdateNextTimer(void)
+void CPVRGUIInfo::UpdateNextTimer()
 {
   std::string strNextRecordingTitle;
   std::string strNextRecordingChannelName;
@@ -861,7 +861,7 @@ void CPVRGUIInfo::UpdateNextTimer(void)
   m_strNextTimerInfo            = strNextTimerInfo;
 }
 
-void CPVRGUIInfo::UpdateTimersToggle(void)
+void CPVRGUIInfo::UpdateTimersToggle()
 {
   if (!TimerInfoToggle())
     return;
@@ -892,13 +892,13 @@ void CPVRGUIInfo::UpdateTimersToggle(void)
   m_strActiveTimerTime          = strActiveTimerTime;
 }
 
-int CPVRGUIInfo::GetDuration(void) const
+int CPVRGUIInfo::GetDuration() const
 {
   CSingleLock lock(m_critSection);
   return m_iDuration;
 }
 
-int CPVRGUIInfo::GetStartTime(void) const
+int CPVRGUIInfo::GetStartTime() const
 {
   CSingleLock lock(m_critSection);
   if (m_playingEpgTag)
@@ -920,7 +920,7 @@ int CPVRGUIInfo::GetStartTime(void) const
   }
 }
 
-void CPVRGUIInfo::ResetPlayingTag(void)
+void CPVRGUIInfo::ResetPlayingTag()
 {
   CSingleLock lock(m_critSection);
   m_playingEpgTag.reset();
@@ -933,7 +933,7 @@ CEpgInfoTagPtr CPVRGUIInfo::GetPlayingTag() const
   return m_playingEpgTag;
 }
 
-void CPVRGUIInfo::UpdatePlayingTag(void)
+void CPVRGUIInfo::UpdatePlayingTag()
 {
   CPVRChannelPtr currentChannel(g_PVRManager.GetCurrentChannel());
   if (currentChannel)

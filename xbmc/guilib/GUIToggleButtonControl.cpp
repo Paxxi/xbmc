@@ -31,7 +31,7 @@ CGUIToggleButtonControl::CGUIToggleButtonControl(int parentID, int controlID, fl
   ControlType = GUICONTROL_TOGGLEBUTTON;
 }
 
-CGUIToggleButtonControl::~CGUIToggleButtonControl(void)
+CGUIToggleButtonControl::~CGUIToggleButtonControl()
 {
 }
 

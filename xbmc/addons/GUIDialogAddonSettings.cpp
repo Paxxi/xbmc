@@ -81,7 +81,7 @@ CGUIDialogAddonSettings::CGUIDialogAddonSettings()
   m_saveToDisk = false;
 }
 
-CGUIDialogAddonSettings::~CGUIDialogAddonSettings(void)
+CGUIDialogAddonSettings::~CGUIDialogAddonSettings()
 {
 }
 
@@ -550,7 +550,7 @@ void CGUIDialogAddonSettings::UpdateFromControls()
   }
 }
 
-void CGUIDialogAddonSettings::SaveSettings(void)
+void CGUIDialogAddonSettings::SaveSettings()
 {
   UpdateFromControls();
 

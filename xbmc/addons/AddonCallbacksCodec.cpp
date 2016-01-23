@@ -35,7 +35,7 @@ namespace ADDON
 class CCodecIds
 {
 public:
-  virtual ~CCodecIds(void) {}
+  virtual ~CCodecIds() {}
 
   static CCodecIds& GetInstance()
   {
@@ -60,7 +60,7 @@ public:
   }
 
 private:
-  CCodecIds(void)
+  CCodecIds()
   {
     // get ids and names
     AVCodec* codec = nullptr;

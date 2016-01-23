@@ -33,7 +33,7 @@ CGUIPanelContainer::CGUIPanelContainer(int parentID, int controlID, float posX, 
   m_itemsPerRow = 1;
 }
 
-CGUIPanelContainer::~CGUIPanelContainer(void)
+CGUIPanelContainer::~CGUIPanelContainer()
 {
 }
 

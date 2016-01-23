@@ -34,10 +34,10 @@
 //Define this to get loggin on all calls to load/unload sections/dlls
 //#define LOGALL
 
-CSectionLoader::CSectionLoader(void)
+CSectionLoader::CSectionLoader()
 {}
 
-CSectionLoader::~CSectionLoader(void)
+CSectionLoader::~CSectionLoader()
 {
   UnloadAll();
 }

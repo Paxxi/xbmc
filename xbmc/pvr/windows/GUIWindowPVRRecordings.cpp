@@ -47,7 +47,7 @@ CGUIWindowPVRRecordings::CGUIWindowPVRRecordings(bool bRadio) :
 {
 }
 
-void CGUIWindowPVRRecordings::UnregisterObservers(void)
+void CGUIWindowPVRRecordings::UnregisterObservers()
 {
   CSingleLock lock(m_critSection);
   if (g_PVRRecordings)
@@ -57,7 +57,7 @@ void CGUIWindowPVRRecordings::UnregisterObservers(void)
   g_infoManager.UnregisterObserver(this);
 }
 
-void CGUIWindowPVRRecordings::ResetObservers(void)
+void CGUIWindowPVRRecordings::ResetObservers()
 {
   CSingleLock lock(m_critSection);
   UnregisterObservers();
@@ -71,7 +71,7 @@ void CGUIWindowPVRRecordings::OnWindowLoaded()
   CONTROL_SELECT(CONTROL_BTNGROUPITEMS);
 }
 
-std::string CGUIWindowPVRRecordings::GetDirectoryPath(void)
+std::string CGUIWindowPVRRecordings::GetDirectoryPath()
 {
   std::string basePath = StringUtils::Format("pvr://recordings/%s/", m_bShowDeletedRecordings ? "deleted" : "active");
 
@@ -225,7 +225,7 @@ bool CGUIWindowPVRRecordings::Update(const std::string &strDirectory, bool updat
   return bReturn;
 }
 
-void CGUIWindowPVRRecordings::UpdateButtons(void)
+void CGUIWindowPVRRecordings::UpdateButtons()
 {
   CGUIRadioButtonControl *btnShowDeleted = (CGUIRadioButtonControl*) GetControl(CONTROL_BTNSHOWDELETED);
   if (btnShowDeleted)

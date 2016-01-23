@@ -107,11 +107,11 @@ using namespace PLAYLIST;
 unsigned int CUtil::s_randomSeed = time(nullptr);
 #endif
 
-CUtil::CUtil(void)
+CUtil::CUtil()
 {
 }
 
-CUtil::~CUtil(void)
+CUtil::~CUtil()
 {}
 
 std::string CUtil::GetTitleFromPath(const std::string& strFileNameAndPath, bool bIsFolder /* = false */)

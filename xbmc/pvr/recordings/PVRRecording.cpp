@@ -171,7 +171,7 @@ void CPVRRecording::Serialize(CVariant& value) const
     value["art"]["fanart"] = m_strFanartPath;
 }
 
-void CPVRRecording::Reset(void)
+void CPVRRecording::Reset()
 {
   m_strRecordingId     .clear();
   m_iClientId          = 0;
@@ -203,7 +203,7 @@ int CPVRRecording::GetDuration() const
       m_duration.GetSeconds());
 }
 
-bool CPVRRecording::Delete(void)
+bool CPVRRecording::Delete()
 {
   PVR_ERROR error = g_PVRClients->DeleteRecording(*this);
   if (error != PVR_ERROR_NO_ERROR)
@@ -215,14 +215,14 @@ bool CPVRRecording::Delete(void)
   return true;
 }
 
-void CPVRRecording::OnDelete(void)
+void CPVRRecording::OnDelete()
 {
   EPG::CEpgInfoTagPtr epgTag = EPG::CEpgContainer::GetInstance().GetTagById(EpgEvent());
   if (epgTag)
     epgTag->ClearRecording();
 }
 
-bool CPVRRecording::Undelete(void)
+bool CPVRRecording::Undelete()
 {
   PVR_ERROR error = g_PVRClients->UndeleteRecording(*this);
   if (error != PVR_ERROR_NO_ERROR)
@@ -394,7 +394,7 @@ void CPVRRecording::Update(const CPVRRecording &tag)
   UpdatePath();
 }
 
-void CPVRRecording::UpdatePath(void)
+void CPVRRecording::UpdatePath()
 {
   if (!m_strStreamURL.empty())
   {
@@ -435,7 +435,7 @@ void CPVRRecording::UpdatePath(void)
   }
 }
 
-const CDateTime &CPVRRecording::RecordingTimeAsLocalTime(void) const
+const CDateTime &CPVRRecording::RecordingTimeAsLocalTime() const
 {
   static CDateTime tmp;
   tmp.SetFromUTCDateTime(m_recordingTime);
@@ -464,7 +464,7 @@ void CPVRRecording::CopyClientInfo(CVideoInfoTag *target) const
   target->m_resumePoint = m_resumePoint;
 }
 
-CPVRChannelPtr CPVRRecording::Channel(void) const
+CPVRChannelPtr CPVRRecording::Channel() const
 {
   if (m_iEpgEventId)
   {
@@ -475,7 +475,7 @@ CPVRChannelPtr CPVRRecording::Channel(void) const
   return CPVRChannelPtr();
 }
 
-bool CPVRRecording::IsBeingRecorded(void) const
+bool CPVRRecording::IsBeingRecorded() const
 {
   if (m_iEpgEventId)
   {

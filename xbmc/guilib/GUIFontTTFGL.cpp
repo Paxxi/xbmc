@@ -47,7 +47,7 @@ CGUIFontTTFGL::CGUIFontTTFGL(const std::string& strFileName)
   m_textureStatus = TEXTURE_VOID;
 }
 
-CGUIFontTTFGL::~CGUIFontTTFGL(void)
+CGUIFontTTFGL::~CGUIFontTTFGL()
 {
   // It's important that all the CGUIFontCacheEntry objects are
   // destructed before the CGUIFontTTFGL goes out of scope, because

@@ -70,7 +70,7 @@ CPeripheral::CPeripheral(const PeripheralScanResult& scanResult) :
   }
 }
 
-CPeripheral::~CPeripheral(void)
+CPeripheral::~CPeripheral()
 {
   PersistSettings(true);
 
@@ -131,7 +131,7 @@ void CPeripheral::GetFeatures(std::vector<PeripheralFeature> &features) const
     m_subDevice->GetFeatures(features);
 }
 
-bool CPeripheral::Initialise(void)
+bool CPeripheral::Initialise()
 {
   bool bReturn(false);
 
@@ -173,12 +173,12 @@ void CPeripheral::GetSubdevices(std::vector<CPeripheral *> &subDevices) const
     subDevices.push_back(m_subDevice);
 }
 
-bool CPeripheral::IsMultiFunctional(void) const
+bool CPeripheral::IsMultiFunctional() const
 {
   return m_subDevices.size() > 0;
 }
 
-std::vector<CSetting *> CPeripheral::GetSettings(void) const
+std::vector<CSetting *> CPeripheral::GetSettings() const
 {
   std::vector<PeripheralDeviceSetting> tmpSettings;
   for (const auto & m_setting : m_settings)
@@ -264,12 +264,12 @@ bool CPeripheral::HasSetting(const std::string &strKey) const
   return it != m_settings.end();
 }
 
-bool CPeripheral::HasSettings(void) const
+bool CPeripheral::HasSettings() const
 {
   return !m_settings.empty();
 }
 
-bool CPeripheral::HasConfigurableSettings(void) const
+bool CPeripheral::HasConfigurableSettings() const
 {
   bool bReturn(false);
   std::map<std::string, PeripheralDeviceSetting>::const_iterator it = m_settings.begin();
@@ -492,7 +492,7 @@ void CPeripheral::PersistSettings(bool bExiting /* = false */)
   m_changedSettings.clear();
 }
 
-void CPeripheral::LoadPersistedSettings(void)
+void CPeripheral::LoadPersistedSettings()
 {
   CXBMCTinyXML doc;
   if (doc.LoadFile(m_strSettingsFile))
@@ -509,7 +509,7 @@ void CPeripheral::LoadPersistedSettings(void)
   }
 }
 
-void CPeripheral::ResetDefaultSettings(void)
+void CPeripheral::ResetDefaultSettings()
 {
   ClearSettings();
   g_peripherals.GetSettingsFromMapping(*this);
@@ -524,7 +524,7 @@ void CPeripheral::ResetDefaultSettings(void)
   PersistSettings();
 }
 
-void CPeripheral::ClearSettings(void)
+void CPeripheral::ClearSettings()
 {
   std::map<std::string, PeripheralDeviceSetting>::iterator it = m_settings.begin();
   while (it != m_settings.end())

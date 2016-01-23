@@ -37,14 +37,14 @@ using namespace XFILE;
 
 #define FAVOURITES_LIST 450
 
-CGUIDialogFavourites::CGUIDialogFavourites(void)
+CGUIDialogFavourites::CGUIDialogFavourites()
     : CGUIDialog(WINDOW_DIALOG_FAVOURITES, "DialogFavourites.xml")
 {
   m_favourites = new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogFavourites::~CGUIDialogFavourites(void)
+CGUIDialogFavourites::~CGUIDialogFavourites()
 {
   delete m_favourites;
 }

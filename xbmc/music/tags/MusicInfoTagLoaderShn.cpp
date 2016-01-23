@@ -24,7 +24,7 @@
 
 using namespace MUSIC_INFO;
 
-CMusicInfoTagLoaderSHN::CMusicInfoTagLoaderSHN(void)
+CMusicInfoTagLoaderSHN::CMusicInfoTagLoaderSHN()
 {}
 
 CMusicInfoTagLoaderSHN::~CMusicInfoTagLoaderSHN()

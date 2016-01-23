@@ -303,12 +303,12 @@ void CWeatherJob::SetFromProperties()
   }
 }
 
-CWeather::CWeather(void) : CInfoLoader(30 * 60 * 1000) // 30 minutes
+CWeather::CWeather() : CInfoLoader(30 * 60 * 1000) // 30 minutes
 {
   Reset();
 }
 
-CWeather::~CWeather(void)
+CWeather::~CWeather()
 {
 }
 

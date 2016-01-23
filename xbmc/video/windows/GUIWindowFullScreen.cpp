@@ -73,7 +73,7 @@ using namespace KODI::MESSAGING;
 static CLinuxResourceCounter m_resourceCounter;
 #endif
 
-CGUIWindowFullScreen::CGUIWindowFullScreen(void)
+CGUIWindowFullScreen::CGUIWindowFullScreen()
     : CGUIWindow(WINDOW_FULLSCREEN_VIDEO, "VideoFullScreen.xml")
 {
   m_timeCodeStamp[0] = 0;
@@ -103,7 +103,7 @@ CGUIWindowFullScreen::CGUIWindowFullScreen(void)
 
 }
 
-CGUIWindowFullScreen::~CGUIWindowFullScreen(void)
+CGUIWindowFullScreen::~CGUIWindowFullScreen()
 {}
 
 bool CGUIWindowFullScreen::OnAction(const CAction &action)

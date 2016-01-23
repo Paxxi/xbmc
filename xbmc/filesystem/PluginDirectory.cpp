@@ -55,7 +55,7 @@ CPluginDirectory::CPluginDirectory()
   m_fileResult = new CFileItem;
 }
 
-CPluginDirectory::~CPluginDirectory(void)
+CPluginDirectory::~CPluginDirectory()
 {
   delete m_listItems;
   delete m_fileResult;

@@ -81,11 +81,11 @@ CNetworkInterfaceLinux::CNetworkInterfaceLinux(CNetworkLinux* network, std::stri
    memcpy(m_interfaceMacAddrRaw, interfaceMacAddrRaw, sizeof(m_interfaceMacAddrRaw));
 }
 
-CNetworkInterfaceLinux::~CNetworkInterfaceLinux(void)
+CNetworkInterfaceLinux::~CNetworkInterfaceLinux()
 {
 }
 
-std::string& CNetworkInterfaceLinux::GetName(void)
+std::string& CNetworkInterfaceLinux::GetName()
 {
    return m_interfaceName;
 }
@@ -143,7 +143,7 @@ void CNetworkInterfaceLinux::GetMacAddressRaw(char rawMac[6])
   memcpy(rawMac, m_interfaceMacAddrRaw, 6);
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentIPAddress(void)
+std::string CNetworkInterfaceLinux::GetCurrentIPAddress()
 {
    std::string result;
 
@@ -158,7 +158,7 @@ std::string CNetworkInterfaceLinux::GetCurrentIPAddress(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentNetmask(void)
+std::string CNetworkInterfaceLinux::GetCurrentNetmask()
 {
    std::string result;
 
@@ -173,7 +173,7 @@ std::string CNetworkInterfaceLinux::GetCurrentNetmask(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId(void)
+std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId()
 {
    std::string result;
 
@@ -195,7 +195,7 @@ std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
+std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway()
 {
    std::string result;
 
@@ -308,13 +308,13 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
    return result;
 }
 
-CNetworkLinux::CNetworkLinux(void)
+CNetworkLinux::CNetworkLinux()
 {
    m_sock = socket(AF_INET, SOCK_DGRAM, 0);
    queryInterfaceList();
 }
 
-CNetworkLinux::~CNetworkLinux(void)
+CNetworkLinux::~CNetworkLinux()
 {
   if (m_sock != -1)
     close(CNetworkLinux::m_sock);
@@ -328,7 +328,7 @@ CNetworkLinux::~CNetworkLinux(void)
   }
 }
 
-std::vector<CNetworkInterface*>& CNetworkLinux::GetInterfaceList(void)
+std::vector<CNetworkInterface*>& CNetworkLinux::GetInterfaceList()
 {
    return m_interfaces;
 }
@@ -337,7 +337,7 @@ std::vector<CNetworkInterface*>& CNetworkLinux::GetInterfaceList(void)
 // the interface list if no connected device is found
 // this fixes a bug when no network is available after first start of xbmc
 // and the interface comes up during runtime
-CNetworkInterface* CNetworkLinux::GetFirstConnectedInterface(void)
+CNetworkInterface* CNetworkLinux::GetFirstConnectedInterface()
 {
     CNetworkInterface *pNetIf=CNetwork::GetFirstConnectedInterface();
     
@@ -467,7 +467,7 @@ void CNetworkLinux::queryInterfaceList()
 #endif
 }
 
-std::vector<std::string> CNetworkLinux::GetNameServers(void)
+std::vector<std::string> CNetworkLinux::GetNameServers()
 {
    std::vector<std::string> result;
 
@@ -655,7 +655,7 @@ bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, std::strin
 }
 #endif
 
-std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
+std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints()
 {
    std::vector<NetworkAccessPoint> result;
 

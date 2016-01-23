@@ -30,7 +30,7 @@
 
 #include <utility>
 
-CGUIDialogGamepad::CGUIDialogGamepad(void)
+CGUIDialogGamepad::CGUIDialogGamepad()
     : CGUIDialogBoxBase(WINDOW_DIALOG_GAMEPAD, "DialogConfirm.xml")
 {
   m_bCanceled = false;
@@ -40,7 +40,7 @@ CGUIDialogGamepad::CGUIDialogGamepad(void)
   m_cHideInputChar = '*';
 }
 
-CGUIDialogGamepad::~CGUIDialogGamepad(void)
+CGUIDialogGamepad::~CGUIDialogGamepad()
 {}
 
 void CGUIDialogGamepad::OnInitWindow()

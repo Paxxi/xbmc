@@ -28,13 +28,13 @@
 #include "utils/log.h"
 #include "utils/Variant.h"
 
-CGUIDialogProgress::CGUIDialogProgress(void)
+CGUIDialogProgress::CGUIDialogProgress()
     : CGUIDialogBoxBase(WINDOW_DIALOG_PROGRESS, "DialogConfirm.xml")
 {
   Reset();
 }
 
-CGUIDialogProgress::~CGUIDialogProgress(void)
+CGUIDialogProgress::~CGUIDialogProgress()
 {
 
 }

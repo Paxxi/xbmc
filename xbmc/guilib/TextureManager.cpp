@@ -225,13 +225,13 @@ void CTextureMap::Add(CBaseTexture* texture, int delay)
 /************************************************************************/
 /*                                                                      */
 /************************************************************************/
-CGUITextureManager::CGUITextureManager(void)
+CGUITextureManager::CGUITextureManager()
 {
   // we set the theme bundle to be the first bundle (thus prioritizing it)
   m_TexBundle[0].SetThemeBundle(true);
 }
 
-CGUITextureManager::~CGUITextureManager(void)
+CGUITextureManager::~CGUITextureManager()
 {
   Cleanup();
 }

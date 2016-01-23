@@ -119,16 +119,16 @@ class CSetCurrentItemJob : public CJob
   CFileItemPtr m_itemCurrentFile;
 public:
   CSetCurrentItemJob(const CFileItemPtr item) : m_itemCurrentFile(item) { }
-  ~CSetCurrentItemJob(void) {}
+  ~CSetCurrentItemJob() {}
 
-  bool DoWork(void)
+  bool DoWork()
   {
     g_infoManager.SetCurrentItemJob(m_itemCurrentFile);
     return true;
   }
 };
 
-CGUIInfoManager::CGUIInfoManager(void) :
+CGUIInfoManager::CGUIInfoManager() :
     Observable()
 {
   m_lastSysHeatInfoTime = -SYSHEATUPDATEINTERVAL;  // make sure we grab CPU temp on the first pass
@@ -149,7 +149,7 @@ CGUIInfoManager::CGUIInfoManager(void) :
   ResetLibraryBools();
 }
 
-CGUIInfoManager::~CGUIInfoManager(void)
+CGUIInfoManager::~CGUIInfoManager()
 {
   delete m_currentFile;
   delete m_currentSlide;

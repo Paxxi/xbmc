@@ -40,7 +40,7 @@
 #define CONTROL_OK              18
 #define CONTROL_CANCEL          19
 
-CGUIDialogNetworkSetup::CGUIDialogNetworkSetup(void)
+CGUIDialogNetworkSetup::CGUIDialogNetworkSetup()
     : CGUIDialog(WINDOW_DIALOG_NETWORK_SETUP, "DialogNetworkSetup.xml")
 {
   m_protocol = NET_PROTOCOL_SMB;

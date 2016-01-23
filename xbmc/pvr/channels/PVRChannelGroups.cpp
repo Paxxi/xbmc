@@ -45,13 +45,13 @@ CPVRChannelGroups::~CPVRChannelGroups(void)
   Clear();
 }
 
-void CPVRChannelGroups::Clear(void)
+void CPVRChannelGroups::Clear()
 {
   CSingleLock lock(m_critSection);
   m_groups.clear();
 }
 
-bool CPVRChannelGroups::GetGroupsFromClients(void)
+bool CPVRChannelGroups::GetGroupsFromClients()
 {
   if (! CSettings::GetInstance().GetBool(CSettings::SETTING_PVRMANAGER_SYNCCHANNELGROUPS))
     return true;
@@ -267,7 +267,7 @@ bool CPVRChannelGroups::UpdateGroupsEntries(const CPVRChannelGroups &groups)
   return true;
 }
 
-bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
+bool CPVRChannelGroups::LoadUserDefinedChannelGroups()
 {
   bool bSyncWithBackends = CSettings::GetInstance().GetBool(CSettings::SETTING_PVRMANAGER_SYNCCHANNELGROUPS);
 
@@ -313,7 +313,7 @@ bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
   return bSyncWithBackends ? PersistAll() : true;
 }
 
-bool CPVRChannelGroups::Load(void)
+bool CPVRChannelGroups::Load()
 {
   CPVRDatabase *database = GetPVRDatabase();
   if (!database)
@@ -358,7 +358,7 @@ bool CPVRChannelGroups::Load(void)
   return m_groups.size() > 0;
 }
 
-bool CPVRChannelGroups::PersistAll(void)
+bool CPVRChannelGroups::PersistAll()
 {
   bool bReturn(true);
   CLog::Log(LOGDEBUG, "CPVRChannelGroups - %s - persisting all changes in channel groups", __FUNCTION__);
@@ -370,7 +370,7 @@ bool CPVRChannelGroups::PersistAll(void)
   return bReturn;
 }
 
-CPVRChannelGroupPtr CPVRChannelGroups::GetGroupAll(void) const
+CPVRChannelGroupPtr CPVRChannelGroups::GetGroupAll() const
 {
   CSingleLock lock(m_critSection);
   if (!m_groups.empty())
@@ -380,7 +380,7 @@ CPVRChannelGroupPtr CPVRChannelGroups::GetGroupAll(void) const
   return empty;
 }
 
-CPVRChannelGroupPtr CPVRChannelGroups::GetLastGroup(void) const
+CPVRChannelGroupPtr CPVRChannelGroups::GetLastGroup() const
 {
   CSingleLock lock(m_critSection);
   if (!m_groups.empty())
@@ -498,7 +498,7 @@ CPVRChannelGroupPtr CPVRChannelGroups::GetNextGroup(const CPVRChannelGroup &grou
   return GetFirstGroup();
 }
 
-CPVRChannelGroupPtr CPVRChannelGroups::GetSelectedGroup(void) const
+CPVRChannelGroupPtr CPVRChannelGroups::GetSelectedGroup() const
 {
   CSingleLock lock(m_critSection);
   return m_selectedGroup;
@@ -586,7 +586,7 @@ bool CPVRChannelGroups::DeleteGroup(const CPVRChannelGroup &group)
   return bFound;
 }
 
-bool CPVRChannelGroups::CreateChannelEpgs(void)
+bool CPVRChannelGroups::CreateChannelEpgs()
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);

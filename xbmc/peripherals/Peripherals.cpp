@@ -60,12 +60,12 @@
 using namespace PERIPHERALS;
 using namespace XFILE;
 
-CPeripherals::CPeripherals(void)
+CPeripherals::CPeripherals()
 {
   Clear();
 }
 
-CPeripherals::~CPeripherals(void)
+CPeripherals::~CPeripherals()
 {
   Clear();
 }
@@ -76,7 +76,7 @@ CPeripherals &CPeripherals::GetInstance()
   return peripheralsInstance;
 }
 
-void CPeripherals::Initialise(void)
+void CPeripherals::Initialise()
 {
   CSingleLock lock(m_critSection);
   if (!m_bIsStarted)
@@ -111,7 +111,7 @@ void CPeripherals::Initialise(void)
   }
 }
 
-void CPeripherals::Clear(void)
+void CPeripherals::Clear()
 {
   CSingleLock lock(m_critSection);
   /* delete busses and devices */
@@ -411,7 +411,7 @@ void CPeripherals::GetSettingsFromMapping(CPeripheral &peripheral) const
 }
 
 #define SS(x) ((x) ? x : "")
-bool CPeripherals::LoadMappings(void)
+bool CPeripherals::LoadMappings()
 {
   CXBMCTinyXML xmlDoc;
   if (!xmlDoc.LoadFile("special://xbmc/system/peripherals.xml"))
@@ -621,7 +621,7 @@ bool CPeripherals::OnAction(const CAction &action)
   return false;
 }
 
-bool CPeripherals::IsMuted(void)
+bool CPeripherals::IsMuted()
 {
   std::vector<CPeripheral *> peripherals;
   if (SupportsCEC() && GetPeripheralsWithFeature(peripherals, FEATURE_CEC))
@@ -637,7 +637,7 @@ bool CPeripherals::IsMuted(void)
   return false;
 }
 
-bool CPeripherals::ToggleMute(void)
+bool CPeripherals::ToggleMute()
 {
   std::vector<CPeripheral *> peripherals;
   if (SupportsCEC() && GetPeripheralsWithFeature(peripherals, FEATURE_CEC))

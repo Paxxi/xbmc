@@ -36,11 +36,11 @@
 
 using namespace XFILE;
 
-CLibraryDirectory::CLibraryDirectory(void)
+CLibraryDirectory::CLibraryDirectory()
 {
 }
 
-CLibraryDirectory::~CLibraryDirectory(void)
+CLibraryDirectory::~CLibraryDirectory()
 {
 }
 

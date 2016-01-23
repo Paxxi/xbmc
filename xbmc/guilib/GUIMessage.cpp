@@ -59,7 +59,7 @@ CGUIMessage::CGUIMessage(const CGUIMessage& msg)
   *this = msg;
 }
 
-CGUIMessage::~CGUIMessage(void)
+CGUIMessage::~CGUIMessage()
 {}
 
 

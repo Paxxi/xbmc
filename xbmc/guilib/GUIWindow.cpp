@@ -73,7 +73,7 @@ CGUIWindow::CGUIWindow(int id, const std::string &xmlFile)
   m_menuLastFocusedControlID = 0;
 }
 
-CGUIWindow::~CGUIWindow(void)
+CGUIWindow::~CGUIWindow()
 {
   delete m_windowXMLRootElement;
 }

@@ -28,10 +28,10 @@
 
 using namespace XFILE;
 
-CISO9660Directory::CISO9660Directory(void)
+CISO9660Directory::CISO9660Directory()
 {}
 
-CISO9660Directory::~CISO9660Directory(void)
+CISO9660Directory::~CISO9660Directory()
 {}
 
 bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)

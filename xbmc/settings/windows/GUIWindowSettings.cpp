@@ -22,12 +22,12 @@
 #include "GUIWindowSettings.h"
 #include "guilib/WindowIDs.h"
 
-CGUIWindowSettings::CGUIWindowSettings(void)
+CGUIWindowSettings::CGUIWindowSettings()
     : CGUIWindow(WINDOW_SETTINGS_MENU, "Settings.xml")
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIWindowSettings::~CGUIWindowSettings(void)
+CGUIWindowSettings::~CGUIWindowSettings()
 {
 }

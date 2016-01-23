@@ -24,12 +24,12 @@
 
 #include <algorithm>
 
-Observer::~Observer(void)
+Observer::~Observer()
 {
   StopObserving();
 }
 
-void Observer::StopObserving(void)
+void Observer::StopObserving()
 {
   CSingleLock lock(m_obsCritSection);
   std::vector<Observable *> observables = m_observables;
@@ -80,7 +80,7 @@ Observable &Observable::operator=(const Observable &observable)
   return *this;
 }
 
-void Observable::StopObserver(void)
+void Observable::StopObserver()
 {
   CSingleLock lock(m_obsCritSection);
   std::vector<Observer *> observers = m_observers;

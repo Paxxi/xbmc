@@ -28,12 +28,12 @@
 
 using namespace XFILE;
 
-IDirectory::IDirectory(void)
+IDirectory::IDirectory()
 {
   m_flags = DIR_FLAG_DEFAULTS;
 }
 
-IDirectory::~IDirectory(void)
+IDirectory::~IDirectory()
 {}
 
 /*!

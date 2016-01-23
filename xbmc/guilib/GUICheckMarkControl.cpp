@@ -34,7 +34,7 @@ CGUICheckMarkControl::CGUICheckMarkControl(int parentID, int controlID, float po
   ControlType = GUICONTROL_CHECKMARK;
 }
 
-CGUICheckMarkControl::~CGUICheckMarkControl(void)
+CGUICheckMarkControl::~CGUICheckMarkControl()
 {}
 
 void CGUICheckMarkControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)

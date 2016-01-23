@@ -21,13 +21,13 @@
 #include "system.h"
 #include "TextureBundle.h"
 
-CTextureBundle::CTextureBundle(void)
+CTextureBundle::CTextureBundle()
 {
   m_useXPR = false;
   m_useXBT = false;
 }
 
-CTextureBundle::~CTextureBundle(void)
+CTextureBundle::~CTextureBundle()
 {
 }
 

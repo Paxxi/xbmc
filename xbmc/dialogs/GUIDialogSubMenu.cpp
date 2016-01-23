@@ -25,7 +25,7 @@ CGUIDialogSubMenu::CGUIDialogSubMenu(int id, const std::string &xmlFile)
 {
 }
 
-CGUIDialogSubMenu::~CGUIDialogSubMenu(void)
+CGUIDialogSubMenu::~CGUIDialogSubMenu()
 {}
 
 bool CGUIDialogSubMenu::OnMessage(CGUIMessage &message)

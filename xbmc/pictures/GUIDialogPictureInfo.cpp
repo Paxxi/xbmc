@@ -31,14 +31,14 @@
 
 #define SLIDE_STRING_BASE 21800 - SLIDE_INFO_START
 
-CGUIDialogPictureInfo::CGUIDialogPictureInfo(void)
+CGUIDialogPictureInfo::CGUIDialogPictureInfo()
     : CGUIDialog(WINDOW_DIALOG_PICTURE_INFO, "DialogPictureInfo.xml")
 {
   m_pictureInfo = new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
 }
 
-CGUIDialogPictureInfo::~CGUIDialogPictureInfo(void)
+CGUIDialogPictureInfo::~CGUIDialogPictureInfo()
 {
   delete m_pictureInfo;
 }

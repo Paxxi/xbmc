@@ -57,7 +57,7 @@ void CPeripheralBus::OnDeviceRemoved(const std::string &strLocation)
   ScanForDevices();
 }
 
-void CPeripheralBus::Clear(void)
+void CPeripheralBus::Clear()
 {
   if (m_bNeedsPolling)
   {
@@ -116,7 +116,7 @@ void CPeripheralBus::RegisterNewDevices(const PeripheralScanResults &results)
   }
 }
 
-bool CPeripheralBus::ScanForDevices(void)
+bool CPeripheralBus::ScanForDevices()
 {
   bool bReturn(false);
 
@@ -202,7 +202,7 @@ size_t CPeripheralBus::GetNumberOfPeripheralsWithId(const int iVendorId, const i
   return iReturn;
 }
 
-void CPeripheralBus::Process(void)
+void CPeripheralBus::Process()
 {
   while (!m_bStop)
   {
@@ -218,7 +218,7 @@ void CPeripheralBus::Process(void)
   m_bIsStarted = false;
 }
 
-bool CPeripheralBus::Initialise(void)
+bool CPeripheralBus::Initialise()
 {
   CSingleLock lock(m_critSection);
   if (!m_bIsStarted)
@@ -254,7 +254,7 @@ void CPeripheralBus::Register(CPeripheral *peripheral)
   }
 }
 
-void CPeripheralBus::TriggerDeviceScan(void)
+void CPeripheralBus::TriggerDeviceScan()
 {
   CSingleLock lock(m_critSection);
   if (m_bNeedsPolling)

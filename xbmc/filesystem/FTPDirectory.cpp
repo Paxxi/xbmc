@@ -30,8 +30,8 @@
 
 using namespace XFILE;
 
-CFTPDirectory::CFTPDirectory(void){}
-CFTPDirectory::~CFTPDirectory(void){}
+CFTPDirectory::CFTPDirectory(){}
+CFTPDirectory::~CFTPDirectory(){}
 
 bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
 {

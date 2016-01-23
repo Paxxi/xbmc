@@ -24,7 +24,7 @@
 #include "windowing/WindowingFactory.h"
 #define ID_POINTER 10
 
-CGUIWindowPointer::CGUIWindowPointer(void)
+CGUIWindowPointer::CGUIWindowPointer()
   : CGUIDialog(WINDOW_DIALOG_POINTER, "Pointer.xml", DialogModalityType::MODELESS)
 {
   m_pointer = 0;
@@ -34,7 +34,7 @@ CGUIWindowPointer::CGUIWindowPointer(void)
   m_renderOrder = RENDER_ORDER_WINDOW_POINTER;
 }
 
-CGUIWindowPointer::~CGUIWindowPointer(void)
+CGUIWindowPointer::~CGUIWindowPointer()
 {
 }
 

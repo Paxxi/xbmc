@@ -230,7 +230,7 @@ bool CAEFactory::HasHDAudioChannelCount()
   * Returns true if current AudioEngine supports at lest two basic quality levels
   * @return true if quality setting is supported, otherwise false
   */
-bool CAEFactory::SupportsQualitySetting(void) 
+bool CAEFactory::SupportsQualitySetting() 
 {
   if (!AE)
     return false;

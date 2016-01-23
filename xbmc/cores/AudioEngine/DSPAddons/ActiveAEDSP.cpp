@@ -93,9 +93,9 @@ class CActiveAEDSPStartJob : public CJob
 {
 public:
   CActiveAEDSPStartJob() {}
-  ~CActiveAEDSPStartJob(void) {}
+  ~CActiveAEDSPStartJob() {}
 
-  bool DoWork(void)
+  bool DoWork()
   {
     CActiveAEDSP::GetInstance().Activate(false);
     return true;
@@ -135,9 +135,9 @@ class CActiveAEDSPModeUpdateJob : public CJob
 {
 public:
   CActiveAEDSPModeUpdateJob() {}
-  ~CActiveAEDSPModeUpdateJob(void) {}
+  ~CActiveAEDSPModeUpdateJob() {}
 
-  bool DoWork(void)
+  bool DoWork()
   {
     CActiveAEDSP::GetInstance().TriggerModeUpdate(false);
     return true;
@@ -177,7 +177,7 @@ void CActiveAEDSP::TriggerModeUpdate(bool bAsync /* = true */)
   }
 }
 
-void CActiveAEDSP::Deactivate(void)
+void CActiveAEDSP::Deactivate()
 {
   /* check whether the audio dsp is loaded */
   if (!m_isActive)
@@ -204,7 +204,7 @@ void CActiveAEDSP::Deactivate(void)
     m_databaseDSP.Close();
 }
 
-void CActiveAEDSP::Cleanup(void)
+void CActiveAEDSP::Cleanup()
 {
   CActiveAEDSPProcessPtr tmp;
   for (unsigned int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
@@ -247,7 +247,7 @@ bool CActiveAEDSP::HasOutdatedAddons(std::vector<std::string> &outdatedAddons)
   return false;
 }
 
-void CActiveAEDSP::ResetDatabase(void)
+void CActiveAEDSP::ResetDatabase()
 {
   CLog::Log(LOGNOTICE, "ActiveAE DSP - clearing the audio DSP database");
 
@@ -565,13 +565,13 @@ CActiveAEDSPProcessPtr CActiveAEDSP::GetDSPProcess(unsigned int streamId)
   return CActiveAEDSPProcessPtr();
 }
 
-unsigned int CActiveAEDSP::GetProcessingStreamsAmount(void)
+unsigned int CActiveAEDSP::GetProcessingStreamsAmount()
 {
   CSingleLock lock(m_critSection);
   return m_usedProcessesCnt;
 }
 
-unsigned int CActiveAEDSP::GetActiveStreamId(void)
+unsigned int CActiveAEDSP::GetActiveStreamId()
 {
   CSingleLock lock(m_critSection);
 
@@ -701,7 +701,7 @@ bool CActiveAEDSP::UpdateAndInitialiseAudioDSPAddons(bool bInitialiseAllAudioDSP
   return bReturn;
 }
 
-bool CActiveAEDSP::UpdateAddons(void)
+bool CActiveAEDSP::UpdateAddons()
 {
   VECADDONS addons;
   AE_DSP_ADDON dspAddon;
@@ -751,7 +751,7 @@ void CActiveAEDSP::Notify(const Observable &obs, const ObservableMessage msg)
     UpdateAddons();
 }
 
-void CActiveAEDSP::Process(void)
+void CActiveAEDSP::Process()
 {
   bool bCheckedEnabledAddonsOnStartup(false);
 
@@ -783,7 +783,7 @@ void CActiveAEDSP::Process(void)
   m_isActive = false;
 }
 
-void CActiveAEDSP::ShowDialogNoAddonsEnabled(void)
+void CActiveAEDSP::ShowDialogNoAddonsEnabled()
 {
   if (!IsActivated())
     return;
@@ -852,7 +852,7 @@ int CActiveAEDSP::RegisterAudioDSPAddon(AddonPtr addon)
 /*! @name Played source settings methods
  *  @note for save of settings see CSaveFileStateJob */
 //@{
-AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings(void)
+AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings()
 {
   CSingleLock lock(m_critSection);
 
@@ -879,17 +879,17 @@ AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings(void)
 /*! @name Backend methods */
 //@{
 
-bool CActiveAEDSP::IsProcessing(void) const
+bool CActiveAEDSP::IsProcessing() const
 {
   return m_isActive && m_usedProcessesCnt > 0;
 }
 
-bool CActiveAEDSP::IsActivated(void) const
+bool CActiveAEDSP::IsActivated() const
 {
   return m_isActive;
 }
 
-int CActiveAEDSP::EnabledAudioDSPAddonAmount(void) const
+int CActiveAEDSP::EnabledAudioDSPAddonAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critUpdateSection);
@@ -903,7 +903,7 @@ int CActiveAEDSP::EnabledAudioDSPAddonAmount(void) const
   return iReturn;
 }
 
-bool CActiveAEDSP::HasEnabledAudioDSPAddons(void) const
+bool CActiveAEDSP::HasEnabledAudioDSPAddons() const
 {
   return EnabledAudioDSPAddonAmount() > 0;
 }
@@ -925,7 +925,7 @@ int CActiveAEDSP::GetEnabledAudioDSPAddons(AE_DSP_ADDONMAP &addons) const
   return iReturn;
 }
 
-int CActiveAEDSP::ReadyAudioDSPAddonAmount(void) const
+int CActiveAEDSP::ReadyAudioDSPAddonAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critUpdateSection);
@@ -939,7 +939,7 @@ int CActiveAEDSP::ReadyAudioDSPAddonAmount(void) const
   return iReturn;
 }
 
-bool CActiveAEDSP::HasReadyAudioDSPAddons(void) const
+bool CActiveAEDSP::HasReadyAudioDSPAddons() const
 {
   return ReadyAudioDSPAddonAmount() > 0;
 }

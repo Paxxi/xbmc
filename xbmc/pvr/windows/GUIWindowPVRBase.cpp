@@ -122,7 +122,7 @@ bool CGUIWindowPVRBase::OnBack(int actionID)
   return CGUIMediaWindow::OnBack(actionID);
 }
 
-void CGUIWindowPVRBase::OnInitWindow(void)
+void CGUIWindowPVRBase::OnInitWindow()
 {
   if (!g_PVRManager.IsStarted() || !g_PVRClients->HasConnectedClients())
   {
@@ -332,7 +332,7 @@ bool CGUIWindowPVRBase::CanBeActivated() const
   return CSettings::GetInstance().GetBool(CSettings::SETTING_PVRMANAGER_ENABLED);
 }
 
-bool CGUIWindowPVRBase::OpenGroupSelectionDialog(void)
+bool CGUIWindowPVRBase::OpenGroupSelectionDialog()
 {
   CGUIDialogSelect *dialog = (CGUIDialogSelect*)g_windowManager.GetWindow(WINDOW_DIALOG_SELECT);
   if (!dialog)
@@ -360,7 +360,7 @@ bool CGUIWindowPVRBase::OpenGroupSelectionDialog(void)
   return true;
 }
 
-CPVRChannelGroupPtr CGUIWindowPVRBase::GetGroup(void)
+CPVRChannelGroupPtr CGUIWindowPVRBase::GetGroup()
 {
   CSingleLock lock(m_critSection);
   return m_group;
@@ -880,7 +880,7 @@ bool CGUIWindowPVRBase::UpdateEpgForChannel(CFileItem *item)
   return true;
 }
 
-void CGUIWindowPVRBase::UpdateButtons(void)
+void CGUIWindowPVRBase::UpdateButtons()
 {
   CGUIMediaWindow::UpdateButtons();
   SET_CONTROL_LABEL(CONTROL_BTNCHANNELGROUPS, g_localizeStrings.Get(19141) + ": " + m_group->GroupName());

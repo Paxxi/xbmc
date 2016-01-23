@@ -28,11 +28,11 @@
 using namespace MUSIC_INFO;
 using namespace XFILE;
 
-CMusicFileDirectory::CMusicFileDirectory(void)
+CMusicFileDirectory::CMusicFileDirectory()
 {
 }
 
-CMusicFileDirectory::~CMusicFileDirectory(void)
+CMusicFileDirectory::~CMusicFileDirectory()
 {
 }
 

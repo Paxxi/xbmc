@@ -162,7 +162,7 @@ CGUIEPGGridContainer::CGUIEPGGridContainer(const CGUIEPGGridContainer &other)
   m_channelScrollOffset     = other.m_channelScrollOffset;
 }
 
-CGUIEPGGridContainer::~CGUIEPGGridContainer(void)
+CGUIEPGGridContainer::~CGUIEPGGridContainer()
 {
   Reset();
 }
@@ -1896,7 +1896,7 @@ std::string CGUIEPGGridContainer::GetDescription() const
   return strLabel;
 }
 
-void CGUIEPGGridContainer::ClearGridIndex(void)
+void CGUIEPGGridContainer::ClearGridIndex()
 {
   for (auto & i : m_gridIndex)
   {

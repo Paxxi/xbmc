@@ -44,7 +44,7 @@ CGUIWindowPVRTimersBase::CGUIWindowPVRTimersBase(bool bRadio, int id, const std:
 {
 }
 
-void CGUIWindowPVRTimersBase::UnregisterObservers(void)
+void CGUIWindowPVRTimersBase::UnregisterObservers()
 {
   CSingleLock lock(m_critSection);
   if (g_PVRTimers)
@@ -52,7 +52,7 @@ void CGUIWindowPVRTimersBase::UnregisterObservers(void)
   g_infoManager.UnregisterObserver(this);
 }
 
-void CGUIWindowPVRTimersBase::ResetObservers(void)
+void CGUIWindowPVRTimersBase::ResetObservers()
 {
   CSingleLock lock(m_critSection);
   UnregisterObservers();
@@ -153,7 +153,7 @@ bool CGUIWindowPVRTimersBase::Update(const std::string &strDirectory, bool updat
   return CGUIWindowPVRBase::Update(strDirectory);
 }
 
-void CGUIWindowPVRTimersBase::UpdateButtons(void)
+void CGUIWindowPVRTimersBase::UpdateButtons()
 {
   SET_CONTROL_SELECTED(GetID(), CONTROL_BTNHIDEDISABLEDTIMERS, CSettings::GetInstance().GetBool(CSettings::SETTING_PVRTIMERS_HIDEDISABLEDTIMERS));
 
@@ -381,7 +381,7 @@ bool CGUIWindowPVRTimersBase::ActionShowTimer(CFileItem *item)
   return bReturn;
 }
 
-bool CGUIWindowPVRTimersBase::ShowNewTimerDialog(void)
+bool CGUIWindowPVRTimersBase::ShowNewTimerDialog()
 {
   bool bReturn(false);
 

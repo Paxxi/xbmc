@@ -22,13 +22,13 @@
 
 using namespace XFILE;
 
-CHTTPFile::CHTTPFile(void)
+CHTTPFile::CHTTPFile()
 {
   m_openedforwrite = false;
 }
 
 
-CHTTPFile::~CHTTPFile(void)
+CHTTPFile::~CHTTPFile()
 {
 }
 

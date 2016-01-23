@@ -85,7 +85,7 @@ void EmbeddedArt::set(const uint8_t *dat, size_t siz, const std::string &mim)
   memcpy(&data[0], dat, siz);
 }
 
-CMusicInfoTag::CMusicInfoTag(void)
+CMusicInfoTag::CMusicInfoTag()
 {
   Clear();
 }

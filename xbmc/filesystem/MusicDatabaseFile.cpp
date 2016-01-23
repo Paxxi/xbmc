@@ -26,11 +26,11 @@
 
 using namespace XFILE;
 
-CMusicDatabaseFile::CMusicDatabaseFile(void)
+CMusicDatabaseFile::CMusicDatabaseFile()
 {
 }
 
-CMusicDatabaseFile::~CMusicDatabaseFile(void)
+CMusicDatabaseFile::~CMusicDatabaseFile()
 {
   Close();
 }

@@ -33,12 +33,12 @@
 using namespace dbiplus;
 using namespace EPG;
 
-bool CEpgDatabase::Open(void)
+bool CEpgDatabase::Open()
 {
   return CDatabase::Open(g_advancedSettings.m_databaseEpg);
 }
 
-void CEpgDatabase::CreateTables(void)
+void CEpgDatabase::CreateTables()
 {
   CLog::Log(LOGINFO, "EpgDB - %s - creating tables", __FUNCTION__);
 
@@ -122,7 +122,7 @@ void CEpgDatabase::UpdateTables(int iVersion)
   }
 }
 
-bool CEpgDatabase::DeleteEpg(void)
+bool CEpgDatabase::DeleteEpg()
 {
   bool bReturn(false);
   CLog::Log(LOGDEBUG, "EpgDB - %s - deleting all EPG data from the database", __FUNCTION__);
@@ -149,7 +149,7 @@ bool CEpgDatabase::Delete(const CEpg &table)
   return DeleteValues("epg", filter);
 }
 
-bool CEpgDatabase::DeleteOldEpgEntries(void)
+bool CEpgDatabase::DeleteOldEpgEntries()
 {
   time_t iCleanupTime;
   CDateTime cleanupTime = CDateTime::GetCurrentDateTime().GetAsUTCDateTime() -
@@ -405,7 +405,7 @@ int CEpgDatabase::Persist(const CEpgInfoTag &tag, bool bSingleUpdate /* = true *
   return iReturn;
 }
 
-int CEpgDatabase::GetLastEPGId(void)
+int CEpgDatabase::GetLastEPGId()
 {
   std::string strQuery = PrepareSQL("SELECT MAX(idEpg) FROM epg");
   std::string strValue = GetSingleValue(strQuery);
