@@ -75,7 +75,7 @@ CEventLog& CEventLog::GetInstance()
   auto eventLog = s_eventLogs.find(currentProfileId);
   if (eventLog == s_eventLogs.end())
   {
-    s_eventLogs.insert(std::make_pair(currentProfileId, std::unique_ptr<CEventLog>(new CEventLog())));
+    s_eventLogs.insert(std::make_pair(currentProfileId, std::make_unique<CEventLog>()));
     eventLog = s_eventLogs.find(currentProfileId);
   }
 

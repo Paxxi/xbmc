@@ -1205,7 +1205,7 @@ void CGUIBaseContainer::GetCurrentLayouts()
   {
     if (m_layout.CheckCondition())
     {
-      m_layout = &m_layout;
+      m_layout = m_layout;
       break;
     }
   }
@@ -1217,7 +1217,7 @@ void CGUIBaseContainer::GetCurrentLayouts()
   {
     if (m_focusedLayout.CheckCondition())
     {
-      m_focusedLayout = &m_focusedLayout;
+      m_focusedLayout = m_focusedLayout;
       break;
     }
   }
