@@ -33,7 +33,7 @@ class DoIncrement : public IRunnable
 public:
   inline DoIncrement(long* num) : number(num) {}
 
-  virtual void Run()
+  void Run() override
   {
     for (long i = 0; i<TESTNUM; i++)
       AtomicIncrement(number);
@@ -46,7 +46,7 @@ class DoDecrement : public IRunnable
 public:
   inline DoDecrement(long* num) : number(num) {}
 
-  virtual void Run()
+  void Run() override
   {
     for (long i = 0; i<TESTNUM; i++)
       AtomicDecrement(number);
@@ -61,7 +61,7 @@ class DoAdd : public IRunnable
 public:
   inline DoAdd(long* num, long toAd) : number(num), toAdd(toAd) {}
 
-  virtual void Run()
+  void Run() override
   {
     for (long i = 0; i<TESTNUM; i++)
       AtomicAdd(number,toAdd);
@@ -75,7 +75,7 @@ class DoSubtract : public IRunnable
 public:
   inline DoSubtract(long* num, long toAd) : number(num), toAdd(toAd) {}
 
-  virtual void Run()
+  void Run() override
   {
     for (long i = 0; i<TESTNUM; i++)
       AtomicSubtract(number,toAdd);

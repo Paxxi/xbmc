@@ -210,7 +210,7 @@ bool CGUIWindowAddonBrowser::OnContextButton(int itemNumber, CONTEXT_BUTTON butt
 
 class UpdateAddons : public IRunnable
 {
-  virtual void Run()
+  void Run() override
   {
     CAddonInstaller::GetInstance().InstallUpdates(true);
   }

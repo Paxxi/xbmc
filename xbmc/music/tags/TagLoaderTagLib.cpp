@@ -58,8 +58,8 @@ class TagStringHandler : public T
 {
 public:
   TagStringHandler() = default;
-  virtual ~TagStringHandler() = default;
-  virtual String parse(const ByteVector &data) const
+  ~TagStringHandler() override = default;
+  String parse(const ByteVector &data) const override
   {
     std::string strSource(data.data(), data.size());
     std::string strUTF8;
@@ -68,8 +68,8 @@ public:
   }
 };
 
-static const TagStringHandler<ID3v1::StringHandler> ID3v1StringHandler;
-static const TagStringHandler<ID3v2::Latin1StringHandler> ID3v2StringHandler;
+static const TagStringHandler<ID3v1::StringHandler> ID3v1StringHandler{};
+static const TagStringHandler<ID3v2::Latin1StringHandler> ID3v2StringHandler{};
 
 CTagLoaderTagLib::CTagLoaderTagLib()
 {

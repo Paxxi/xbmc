@@ -44,7 +44,7 @@ protected:
     */
   }
 
-  ~TestLabelFormatter()
+  ~TestLabelFormatter() override
   {
     CSettings::GetInstance().Unload();
   }

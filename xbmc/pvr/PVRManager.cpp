@@ -412,9 +412,9 @@ class CPVRManagerStartJob : public CJob
 {
 public:
   CPVRManagerStartJob() {}
-  ~CPVRManagerStartJob() = default;
+  ~CPVRManagerStartJob() override = default;
 
-  bool DoWork()
+  bool DoWork() override
   {
     g_PVRManager.Start(false);
     return true;

@@ -51,7 +51,7 @@ protected:
     */
   }
 
-  ~TestZipFile()
+  ~TestZipFile() override
   {
     CSettings::GetInstance().Unload();
   }

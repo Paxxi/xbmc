@@ -50,7 +50,7 @@ protected:
     }
   }
 
-  ~TestFileFactory()
+  ~TestFileFactory() override
   {
     g_advancedSettings.Clear();
     CSettings::GetInstance().Unload();
