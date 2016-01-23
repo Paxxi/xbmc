@@ -55,7 +55,7 @@ namespace XBMCAddon
     {
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogYesNo* pDialog = (CGUIDialogYesNo*)g_windowManager.GetWindow(WINDOW_DIALOG_YES_NO);
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
 
       // get lines, last 4 lines are optional.
@@ -85,7 +85,7 @@ namespace XBMCAddon
     {
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogSelect* pDialog= (CGUIDialogSelect*)g_windowManager.GetWindow(WINDOW_DIALOG_SELECT);
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
 
       pDialog->Reset();
@@ -139,7 +139,7 @@ namespace XBMCAddon
     {
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogOK* pDialog = (CGUIDialogOK*)g_windowManager.GetWindow(WINDOW_DIALOG_OK);
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
 
       if (!heading.empty())
@@ -162,7 +162,7 @@ namespace XBMCAddon
       const int window = WINDOW_DIALOG_TEXT_VIEWER;
 
       CGUIDialogTextViewer* pDialog = (CGUIDialogTextViewer*)g_windowManager.GetWindow(window);
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
       if (!heading.empty())
         pDialog->SetHeading(heading);
@@ -406,7 +406,7 @@ namespace XBMCAddon
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogProgress* pDialog= (CGUIDialogProgress*)g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
 
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
 
       dlg = pDialog;
@@ -431,7 +431,7 @@ namespace XBMCAddon
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogProgress* pDialog = dlg;
 
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Dialog not created.");
 
       if (percent >= 0 && percent <= 100)
@@ -455,7 +455,7 @@ namespace XBMCAddon
     void DialogProgress::close()
     {
       DelayedCallGuard dcguard(languageHook);
-      if (dlg == NULL)
+      if (dlg == nullptr)
         throw WindowException("Dialog not created.");
       dlg->Close();
       open = false;
@@ -463,7 +463,7 @@ namespace XBMCAddon
 
     bool DialogProgress::iscanceled()
     {
-      if (dlg == NULL)
+      if (dlg == nullptr)
         throw WindowException("Dialog not created.");
       return dlg->IsCanceled();
     }
@@ -487,7 +487,7 @@ namespace XBMCAddon
       CGUIDialogExtendedProgressBar* pDialog = 
           (CGUIDialogExtendedProgressBar*)g_windowManager.GetWindow(WINDOW_DIALOG_EXT_PROGRESS);
 
-      if (pDialog == NULL)
+      if (pDialog == nullptr)
         throw WindowException("Error: Window is NULL, this is not possible :-)");
 
       CGUIDialogProgressBarHandle* pHandle = pDialog->GetHandle(heading);
@@ -506,7 +506,7 @@ namespace XBMCAddon
       DelayedCallGuard dcguard(languageHook);
       CGUIDialogProgressBarHandle* pHandle = handle;
 
-      if (pHandle == NULL)
+      if (pHandle == nullptr)
         throw WindowException("Dialog not created.");
 
       if (percent >= 0 && percent <= 100)
@@ -520,7 +520,7 @@ namespace XBMCAddon
     void DialogProgressBG::close()
     {
       DelayedCallGuard dcguard(languageHook);
-      if (handle == NULL)
+      if (handle == nullptr)
         throw WindowException("Dialog not created.");
       handle->MarkFinished();
       open = false;
@@ -528,7 +528,7 @@ namespace XBMCAddon
 
     bool DialogProgressBG::isFinished()
     {
-      if (handle == NULL)
+      if (handle == nullptr)
         throw WindowException("Dialog not created.");
       return handle->IsFinished();
     }

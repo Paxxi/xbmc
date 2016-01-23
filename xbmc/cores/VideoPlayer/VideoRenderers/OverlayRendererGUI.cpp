@@ -72,7 +72,7 @@ static CGUITextLayout* GetFontLayout()
       return new CGUITextLayout(subtitle_font, true, 0, border_font);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 COverlayText::COverlayText(CDVDOverlayText * src)
@@ -161,7 +161,7 @@ void COverlayText::PrepareRender()
 
 void COverlayText::Render(OVERLAY::SRenderState &state)
 {
-  if(m_layout == NULL)
+  if(m_layout == nullptr)
     return;
 
   CRect rd = g_graphicsContext.GetViewWindow();

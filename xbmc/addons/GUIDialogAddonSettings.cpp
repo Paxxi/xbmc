@@ -203,7 +203,7 @@ bool CGUIDialogAddonSettings::ShowAndGetInput(const AddonPtr &addon, bool saveTo
   if (addon->HasSettings())
   { 
     // Create the dialog
-    CGUIDialogAddonSettings* pDialog = NULL;
+    CGUIDialogAddonSettings* pDialog = nullptr;
     pDialog = (CGUIDialogAddonSettings*) g_windowManager.GetWindow(WINDOW_DIALOG_ADDON_SETTINGS);
     if (!pDialog)
       return false;
@@ -271,8 +271,8 @@ bool CGUIDialogAddonSettings::ShowVirtualKeyboard(int iControl)
           bool bEncoded = false;
           if (option)
           {
-            bHidden = (strstr(option, "hidden") != NULL);
-            bEncoded = (strstr(option, "urlencoded") != NULL);
+            bHidden = (strstr(option, "hidden") != nullptr);
+            bEncoded = (strstr(option, "urlencoded") != nullptr);
           }
           if (bEncoded)
             value = CURL::Decode(value);
@@ -353,7 +353,7 @@ bool CGUIDialogAddonSettings::ShowVirtualKeyboard(int iControl)
               || type == "file"  || type == "folder")
         {
           // setup the shares
-          VECSOURCES *shares = NULL;
+          VECSOURCES *shares = nullptr;
           if (source && strcmpi(source, "") != 0)
             shares = CMediaSourceSettings::GetInstance().GetSources(source);
 
@@ -608,7 +608,7 @@ void CGUIDialogAddonSettings::CreateSections()
   int buttonID = CONTROL_START_SECTION;
   while (category)
   { // add a category
-    CGUIButtonControl *button = originalButton ? originalButton->Clone() : NULL;
+    CGUIButtonControl *button = originalButton ? originalButton->Clone() : nullptr;
 
     std::string label = GetString(category->Attribute("label"));
     if (label.empty())
@@ -672,7 +672,7 @@ void CGUIDialogAddonSettings::CreateControls()
   // set our dialog heading
   SET_CONTROL_LABEL(CONTROL_HEADING_LABEL, m_strHeading);
 
-  CGUIControl* pControl = NULL;
+  CGUIControl* pControl = nullptr;
   int controlId = CONTROL_START_SETTING;
   const TiXmlElement *setting = GetFirstSetting();
   while (setting)
@@ -898,7 +898,7 @@ void CGUIDialogAddonSettings::CreateControls()
       pControl->SetID(controlId);
       pControl->AllocResources();
       group->AddControl(pControl);
-      pControl = NULL;
+      pControl = nullptr;
     }
 
     setting = setting->NextSiblingElement("setting");
@@ -1146,7 +1146,7 @@ const TiXmlElement *CGUIDialogAddonSettings::GetFirstSetting() const
     category = category->NextSiblingElement("category");
   if (category)
     return category->FirstChildElement("setting");
-  return NULL;
+  return nullptr;
 }
 
 void CGUIDialogAddonSettings::DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregions)

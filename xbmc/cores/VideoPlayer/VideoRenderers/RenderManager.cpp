@@ -271,7 +271,7 @@ bool CRenderManager::Configure(DVDVideoPicture& picture, float fps, unsigned fla
         m_extended_format == picture.extended_format &&
         m_orientation == orientation &&
         m_NumberBuffers == buffers &&
-        m_pRenderer != NULL)
+        m_pRenderer != nullptr)
       return true;
   }
 
@@ -727,7 +727,7 @@ void CRenderManager::DeleteRenderer()
   if (m_pRenderer)
   {
     delete m_pRenderer;
-    m_pRenderer = NULL;
+    m_pRenderer = nullptr;
   }
 }
 

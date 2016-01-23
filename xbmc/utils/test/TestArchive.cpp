@@ -67,7 +67,7 @@ TEST_F(TestArchive, FloatArchive)
   arstore << float_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> float_var;
   arload.Close();
@@ -84,7 +84,7 @@ TEST_F(TestArchive, DoubleArchive)
   arstore << double_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> double_var;
   arload.Close();
@@ -101,7 +101,7 @@ TEST_F(TestArchive, IntegerArchive)
   arstore << int_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> int_var;
   arload.Close();
@@ -118,7 +118,7 @@ TEST_F(TestArchive, UnsignedIntegerArchive)
   arstore << unsigned_int_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> unsigned_int_var;
   arload.Close();
@@ -135,7 +135,7 @@ TEST_F(TestArchive, Int64tArchive)
   arstore << int64_t_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> int64_t_var;
   arload.Close();
@@ -152,7 +152,7 @@ TEST_F(TestArchive, UInt64tArchive)
   arstore << uint64_t_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> uint64_t_var;
   arload.Close();
@@ -169,7 +169,7 @@ TEST_F(TestArchive, BoolArchive)
   arstore << bool_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> bool_var;
   arload.Close();
@@ -186,7 +186,7 @@ TEST_F(TestArchive, CharArchive)
   arstore << char_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> char_var;
   arload.Close();
@@ -203,7 +203,7 @@ TEST_F(TestArchive, WStringArchive)
   arstore << wstring_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> wstring_var;
   arload.Close();
@@ -220,7 +220,7 @@ TEST_F(TestArchive, StringArchive)
   arstore << string_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> string_var;
   arload.Close();
@@ -238,7 +238,7 @@ TEST_F(TestArchive, SYSTEMTIMEArchive)
   arstore << SYSTEMTIME_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> SYSTEMTIME_var;
   arload.Close();
@@ -255,7 +255,7 @@ TEST_F(TestArchive, CVariantArchive)
   arstore << CVariant_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> CVariant_var;
   arload.Close();
@@ -273,7 +273,7 @@ TEST_F(TestArchive, CVariantArchiveString)
   arstore << CVariant_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> CVariant_var;
   arload.Close();
@@ -295,7 +295,7 @@ TEST_F(TestArchive, StringVectorArchive)
   arstore << strArray_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> strArray_var;
   arload.Close();
@@ -319,12 +319,12 @@ TEST_F(TestArchive, IntegerVectorArchive)
   arstore << iArray_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   arload >> iArray_var;
   arload.Close();
 
-  EXPECT_EQ(0, iArray_var.at(0));
+  EXPECT_EQ(nullptr, iArray_var.at(0));
   EXPECT_EQ(1, iArray_var.at(1));
   EXPECT_EQ(2, iArray_var.at(2));
   EXPECT_EQ(3, iArray_var.at(3));
@@ -376,7 +376,7 @@ TEST_F(TestArchive, MultiTypeArchive)
   arstore << iArray_ref;
   arstore.Close();
 
-  ASSERT_EQ(0, file->Seek(0, SEEK_SET));
+  ASSERT_EQ(nullptr, file->Seek(0, SEEK_SET));
   CArchive arload(file, CArchive::load);
   EXPECT_TRUE(arload.IsLoading());
   EXPECT_FALSE(arload.IsStoring());
@@ -412,7 +412,7 @@ TEST_F(TestArchive, MultiTypeArchive)
   EXPECT_STREQ("test strArray_ref 1", strArray_var.at(1).c_str());
   EXPECT_STREQ("test strArray_ref 2", strArray_var.at(2).c_str());
   EXPECT_STREQ("test strArray_ref 3", strArray_var.at(3).c_str());
-  EXPECT_EQ(0, iArray_var.at(0));
+  EXPECT_EQ(nullptr, iArray_var.at(0));
   EXPECT_EQ(1, iArray_var.at(1));
   EXPECT_EQ(2, iArray_var.at(2));
   EXPECT_EQ(3, iArray_var.at(3));

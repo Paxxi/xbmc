@@ -109,7 +109,7 @@ TEST(TestMassAtomic, Decrement)
   for(size_t i=0; i<NUMTHREADS; i++)
     t[i]->join();
 
-  EXPECT_EQ(0, lNumber);
+  EXPECT_EQ(nullptr, lNumber);
  }
 
 TEST(TestMassAtomic, Add)
@@ -141,7 +141,7 @@ TEST(TestMassAtomic, Subtract)
   for(size_t i=0; i<NUMTHREADS; i++)
     t[i]->join();
 
-  EXPECT_EQ(0, lNumber);
+  EXPECT_EQ(nullptr, lNumber);
  }
 
 #define STARTVAL 767856l

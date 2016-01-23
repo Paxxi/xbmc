@@ -25,8 +25,8 @@
 CDVDVideoPPFFmpeg::CDVDVideoPPFFmpeg(const std::string& mType):
   m_sType(mType)
 {
-  m_pMode = m_pContext = NULL;
-  m_pSource = m_pTarget = NULL;
+  m_pMode = m_pContext = nullptr;
+  m_pSource = m_pTarget = nullptr;
   m_iInitWidth = m_iInitHeight = 0;
   m_deinterlace = false;
   memset(&m_FrameBuffer, 0, sizeof(DVDVideoPicture));
@@ -40,12 +40,12 @@ void CDVDVideoPPFFmpeg::Dispose()
   if (m_pMode)
   {
     pp_free_mode(m_pMode);
-    m_pMode = NULL;
+    m_pMode = nullptr;
   }
   if(m_pContext)
   {
     pp_free_context(m_pContext);
-    m_pContext = NULL;
+    m_pContext = nullptr;
   }
 
   if( m_FrameBuffer.iFlags & DVP_FLAG_ALLOCATED )
@@ -55,7 +55,7 @@ void CDVDVideoPPFFmpeg::Dispose()
       if( m_FrameBuffer.data[i] )
       {
         _aligned_free(m_FrameBuffer.data[i]);
-        m_FrameBuffer.data[i] = NULL;
+        m_FrameBuffer.data[i] = nullptr;
         m_FrameBuffer.iLineSize[i] = 0;
       }
     }
@@ -123,7 +123,7 @@ bool CDVDVideoPPFFmpeg::Process(DVDVideoPicture* pPicture)
       m_pTarget = &m_FrameBuffer;
     else
     {
-      m_pTarget = NULL;
+      m_pTarget = nullptr;
       return false;
     }
   }
@@ -166,7 +166,7 @@ bool CDVDVideoPPFFmpeg::CheckFrameBuffer(const DVDVideoPicture* pSource)
       if(m_FrameBuffer.data[i])
       {
         delete[] m_FrameBuffer.data[i];
-        m_FrameBuffer.data[i] = NULL;
+        m_FrameBuffer.data[i] = nullptr;
       }
   }
 

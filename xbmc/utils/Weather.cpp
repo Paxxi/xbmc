@@ -156,7 +156,7 @@ void CWeatherJob::LoadLocalizedToken()
   // We load the english strings in to get our tokens
   std::string language = LANGUAGE_DEFAULT;
   CSettingString* languageSetting = static_cast<CSettingString*>(CSettings::GetInstance().GetSetting(CSettings::SETTING_LOCALE_LANGUAGE));
-  if (languageSetting != NULL)
+  if (languageSetting != nullptr)
     language = languageSetting->GetDefault();
 
   // Try the strings PO file first
@@ -259,12 +259,12 @@ void CWeatherJob::SetFromProperties()
     m_info.currentIcon = ConstructPath(window->GetProperty("Current.OutlookIcon").asString());
     LocalizeOverview(m_info.currentConditions);
     FormatTemperature(m_info.currentTemperature,
-        strtol(window->GetProperty("Current.Temperature").asString().c_str(),0,10));
+        strtol(window->GetProperty("Current.Temperature").asString().c_str(),nullptr,10));
     FormatTemperature(m_info.currentFeelsLike,
-        strtol(window->GetProperty("Current.FeelsLike").asString().c_str(),0,10));
+        strtol(window->GetProperty("Current.FeelsLike").asString().c_str(),nullptr,10));
     m_info.currentUVIndex = window->GetProperty("Current.UVIndex").asString();
     LocalizeOverview(m_info.currentUVIndex);
-    CSpeed speed = CSpeed::CreateFromKilometresPerHour(strtol(window->GetProperty("Current.Wind").asString().c_str(),0,10));
+    CSpeed speed = CSpeed::CreateFromKilometresPerHour(strtol(window->GetProperty("Current.Wind").asString().c_str(),nullptr,10));
     std::string direction = window->GetProperty("Current.WindDirection").asString();
     if (direction == "CALM")
       m_info.currentWind = g_localizeStrings.Get(1410);
@@ -277,7 +277,7 @@ void CWeatherJob::SetFromProperties()
     std::string windspeed = StringUtils::Format("%i %s", (int)speed.To(g_langInfo.GetSpeedUnit()), g_langInfo.GetSpeedUnitString().c_str());
     window->SetProperty("Current.WindSpeed",windspeed);
     FormatTemperature(m_info.currentDewPoint,
-        strtol(window->GetProperty("Current.DewPoint").asString().c_str(),0,10));
+        strtol(window->GetProperty("Current.DewPoint").asString().c_str(),nullptr,10));
     if (window->GetProperty("Current.Humidity").asString().empty())
       m_info.currentHumidity.clear();
     else
@@ -290,10 +290,10 @@ void CWeatherJob::SetFromProperties()
       LocalizeOverviewToken(m_info.forecast[i].m_day);
       strDay = StringUtils::Format("Day%i.HighTemp",i);
       FormatTemperature(m_info.forecast[i].m_high,
-                    strtol(window->GetProperty(strDay).asString().c_str(),0,10));
+                    strtol(window->GetProperty(strDay).asString().c_str(),nullptr,10));
       strDay = StringUtils::Format("Day%i.LowTemp",i);
       FormatTemperature(m_info.forecast[i].m_low,
-                    strtol(window->GetProperty(strDay).asString().c_str(),0,10));
+                    strtol(window->GetProperty(strDay).asString().c_str(),nullptr,10));
       strDay = StringUtils::Format("Day%i.OutlookIcon",i);
       m_info.forecast[i].m_icon = ConstructPath(window->GetProperty(strDay).asString());
       strDay = StringUtils::Format("Day%i.Outlook",i);
@@ -400,7 +400,7 @@ void CWeather::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 
 void CWeather::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string settingId = setting->GetId();
@@ -415,7 +415,7 @@ void CWeather::OnSettingChanged(const CSetting *setting)
 
 void CWeather::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string settingId = setting->GetId();

@@ -48,7 +48,7 @@ using namespace XFILE;
 
 CRssReader::CRssReader() : CThread("RSSReader")
 {
-  m_pObserver = NULL;
+  m_pObserver = nullptr;
   m_spacesBetweenFeeds = 0;
   m_bIsRunning = false;
   m_savedScrollPixelPos = 0;
@@ -266,11 +266,11 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
   if (m_tagSet.empty())
     AddTag("title");
 
-  while (itemNode > 0)
+  while (itemNode > nullptr)
   {
     TiXmlNode* childNode = itemNode->FirstChild();
     mTagElements.clear();
-    while (childNode > 0)
+    while (childNode > nullptr)
     {
       std::string strName = childNode->ValueStr();
 
@@ -334,7 +334,7 @@ bool CRssReader::Parse(int iFeed)
   if (!rootXmlNode)
     return false;
 
-  TiXmlElement* rssXmlNode = NULL;
+  TiXmlElement* rssXmlNode = nullptr;
 
   std::string strValue = rootXmlNode->ValueStr();
   if (strValue.find("rss") != std::string::npos ||

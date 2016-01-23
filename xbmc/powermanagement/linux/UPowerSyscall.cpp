@@ -26,7 +26,7 @@
 
 CUPowerSource::CUPowerSource(const char *powerSource)
 {
-  if(powerSource == NULL)
+  if(powerSource == nullptr)
     m_powerSource = "";
   else
     m_powerSource = powerSource;
@@ -80,7 +80,7 @@ CUPowerSyscall::CUPowerSyscall()
     CLog::Log(LOGERROR, "UPower: Failed to attach to signal %s", m_error.message);
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 
   m_CanPowerdown = false;
@@ -97,7 +97,7 @@ CUPowerSyscall::~CUPowerSyscall()
   {
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 
   dbus_error_free (&m_error);
@@ -182,10 +182,10 @@ void CUPowerSyscall::EnumeratePowerSources()
   DBusMessage *reply = message.SendSystem();
   if (reply)
   {
-    char** source  = NULL;
+    char** source  = nullptr;
     int    length = 0;
 
-    if (dbus_message_get_args (reply, NULL, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &source, &length, DBUS_TYPE_INVALID))
+    if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &source, &length, DBUS_TYPE_INVALID))
     {
       for (int i = 0; i < length; i++)
       {

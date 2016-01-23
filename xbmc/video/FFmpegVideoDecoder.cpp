@@ -32,11 +32,11 @@ extern "C" {
 
 FFmpegVideoDecoder::FFmpegVideoDecoder()
 {
-  m_pFormatCtx = 0;
-  m_pCodecCtx = 0;
-  m_pCodec = 0;
-  m_pFrame = 0;
-  m_pFrameRGB = 0;
+  m_pFormatCtx = nullptr;
+  m_pCodecCtx = nullptr;
+  m_pCodec = nullptr;
+  m_pFrame = nullptr;
+  m_pFrameRGB = nullptr;
 }
 
 FFmpegVideoDecoder::~FFmpegVideoDecoder()
@@ -65,11 +65,11 @@ void FFmpegVideoDecoder::close()
   if ( m_pFormatCtx )
 	avformat_close_input( &m_pFormatCtx );
 
-  m_pFormatCtx = 0;
-  m_pCodecCtx = 0;
-  m_pCodec = 0;
-  m_pFrame = 0;
-  m_pFrameRGB = 0;
+  m_pFormatCtx = nullptr;
+  m_pCodecCtx = nullptr;
+  m_pCodec = nullptr;
+  m_pFrame = nullptr;
+  m_pFrameRGB = nullptr;
 }
 
 bool FFmpegVideoDecoder::isOpened() const
@@ -146,7 +146,7 @@ bool FFmpegVideoDecoder::open( const std::string& filename )
   close();
   
   // Open the video file
-  if ( avformat_open_input( &m_pFormatCtx, filename.c_str(), NULL, NULL ) < 0 )
+  if ( avformat_open_input( &m_pFormatCtx, filename.c_str(), nullptr, nullptr ) < 0 )
   {
     m_errorMsg = "Could not open the video file";
    close();
@@ -154,7 +154,7 @@ bool FFmpegVideoDecoder::open( const std::string& filename )
   }
 
   // Retrieve the stream information
-  if ( avformat_find_stream_info( m_pFormatCtx, 0 ) < 0 )
+  if ( avformat_find_stream_info( m_pFormatCtx, nullptr ) < 0 )
   {
     m_errorMsg = "Could not find the stream information";
     close();
@@ -186,7 +186,7 @@ bool FFmpegVideoDecoder::open( const std::string& filename )
   // Find the decoder for the video stream
   m_pCodec = avcodec_find_decoder( m_pCodecCtx->codec_id );
 
-  if ( m_pCodec == NULL )
+  if ( m_pCodec == nullptr )
   {
     m_errorMsg = "Could not find a video decoder";
     close();
@@ -194,7 +194,7 @@ bool FFmpegVideoDecoder::open( const std::string& filename )
   }
     
   // Open the codec
-  if ( avcodec_open2( m_pCodecCtx, m_pCodec, 0 ) < 0 )
+  if ( avcodec_open2( m_pCodecCtx, m_pCodec, nullptr ) < 0 )
   {
     m_errorMsg = "Could not open the video decoder";
     close();
@@ -287,7 +287,7 @@ bool FFmpegVideoDecoder::nextFrame( CBaseTexture * texture )
 
   // We got the video frame, render it into the picture buffer
   struct SwsContext * context = sws_getContext( m_pCodecCtx->width, m_pCodecCtx->height, m_pCodecCtx->pix_fmt,
-                           m_frameRGBwidth, m_frameRGBheight, AV_PIX_FMT_RGB32, SWS_FAST_BILINEAR, NULL, NULL, NULL );
+                           m_frameRGBwidth, m_frameRGBheight, AV_PIX_FMT_RGB32, SWS_FAST_BILINEAR, nullptr, nullptr, nullptr );
 
   sws_scale( context, m_pFrame->data, m_pFrame->linesize, 0, m_pCodecCtx->height,
                                                                      m_pFrameRGB->data, m_pFrameRGB->linesize );

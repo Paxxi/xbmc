@@ -53,7 +53,7 @@ bool CSettingAddon::Deserialize(const TiXmlNode *node, bool update /* = false */
   if (!CSettingString::Deserialize(node, update))
     return false;
     
-  if (m_control != NULL &&
+  if (m_control != nullptr &&
      (m_control->GetType() != "button" || m_control->GetFormat() != "addon"))
   {
     CLog::Log(LOGERROR, "CSettingAddon: invalid <control> of \"%s\"", m_id.c_str());
@@ -63,7 +63,7 @@ bool CSettingAddon::Deserialize(const TiXmlNode *node, bool update /* = false */
   bool ok = false;
   std::string strAddonType;
   const TiXmlNode *constraints = node->FirstChild("constraints");
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // get the addon type
     if (XMLUtils::GetString(constraints, "addontype", strAddonType) && !strAddonType.empty())

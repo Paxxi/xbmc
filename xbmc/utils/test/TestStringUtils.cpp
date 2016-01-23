@@ -325,8 +325,8 @@ TEST(TestStringUtils, TimeStringToSeconds)
   EXPECT_EQ(2*3600+4*60+3, StringUtils::TimeStringToSeconds("   2:4:3"));
   EXPECT_EQ(2*3600+4*60+3, StringUtils::TimeStringToSeconds("  \t\t 02:04:03 \n "));
   EXPECT_EQ(1*3600+5*60+2, StringUtils::TimeStringToSeconds("01:05:02:04:03 \n "));
-  EXPECT_EQ(0, StringUtils::TimeStringToSeconds("blah"));
-  EXPECT_EQ(0, StringUtils::TimeStringToSeconds("ля-ля"));
+  EXPECT_EQ(nullptr, StringUtils::TimeStringToSeconds("blah"));
+  EXPECT_EQ(nullptr, StringUtils::TimeStringToSeconds("ля-ля"));
 }
 
 TEST(TestStringUtils, RemoveCRLF)

@@ -285,30 +285,30 @@ namespace XBMCAddon
           const String value(alt.which() == first ? alt.former() : emptyString);
 
           if (key == "year")
-            item->GetVideoInfoTag()->m_iYear = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iYear = strtol(value.c_str(), nullptr, 10);
           else if (key == "episode")
-            item->GetVideoInfoTag()->m_iEpisode = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iEpisode = strtol(value.c_str(), nullptr, 10);
           else if (key == "season")
-            item->GetVideoInfoTag()->m_iSeason = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iSeason = strtol(value.c_str(), nullptr, 10);
           else if (key == "top250")
-            item->GetVideoInfoTag()->m_iTop250 = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iTop250 = strtol(value.c_str(), nullptr, 10);
           else if (key == "tracknumber")
-            item->GetVideoInfoTag()->m_iTrack = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iTrack = strtol(value.c_str(), nullptr, 10);
           else if (key == "count")
-            item->m_iprogramCount = strtol(value.c_str(), NULL, 10);
+            item->m_iprogramCount = strtol(value.c_str(), nullptr, 10);
           else if (key == "rating")
-            item->GetVideoInfoTag()->SetRating((float)strtod(value.c_str(), NULL));
+            item->GetVideoInfoTag()->SetRating((float)strtod(value.c_str(), nullptr));
           else if (key == "userrating")
-            item->GetVideoInfoTag()->m_iUserRating = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_iUserRating = strtol(value.c_str(), nullptr, 10);
           else if (key == "size")
-            item->m_dwSize = (int64_t)strtoll(value.c_str(), NULL, 10);
+            item->m_dwSize = (int64_t)strtoll(value.c_str(), nullptr, 10);
           else if (key == "watched") // backward compat - do we need it?
-            item->GetVideoInfoTag()->m_playCount = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_playCount = strtol(value.c_str(), nullptr, 10);
           else if (key == "playcount")
-            item->GetVideoInfoTag()->m_playCount = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_playCount = strtol(value.c_str(), nullptr, 10);
           else if (key == "overlay")
           {
-            long overlay = strtol(value.c_str(), NULL, 10);
+            long overlay = strtol(value.c_str(), nullptr, 10);
             if (overlay >= 0 && overlay <= 8)
               item->SetOverlayImage((CGUIListItem::GUIIconOverlay)overlay);
           }
@@ -365,7 +365,7 @@ namespace XBMCAddon
           else if (key == "sorttitle")
             item->GetVideoInfoTag()->m_strSortTitle = value;
           else if (key == "duration")
-            item->GetVideoInfoTag()->m_duration = strtol(value.c_str(), NULL, 10);
+            item->GetVideoInfoTag()->m_duration = strtol(value.c_str(), nullptr, 10);
           else if (key == "studio")
             item->GetVideoInfoTag()->m_studio = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);            
           else if (key == "tagline")
@@ -427,21 +427,21 @@ namespace XBMCAddon
 
           // TODO: add the rest of the infolabels
           if (key == "tracknumber")
-            item->GetMusicInfoTag()->SetTrackNumber(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetTrackNumber(strtol(value.c_str(), nullptr, 10));
           else if (key == "discnumber")
-            item->GetMusicInfoTag()->SetDiscNumber(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetDiscNumber(strtol(value.c_str(), nullptr, 10));
           else if (key == "count")
-            item->m_iprogramCount = strtol(value.c_str(), NULL, 10);
+            item->m_iprogramCount = strtol(value.c_str(), nullptr, 10);
           else if (key == "size")
-            item->m_dwSize = (int64_t)strtoll(value.c_str(), NULL, 10);
+            item->m_dwSize = (int64_t)strtoll(value.c_str(), nullptr, 10);
           else if (key == "duration")
-            item->GetMusicInfoTag()->SetDuration(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetDuration(strtol(value.c_str(), nullptr, 10));
           else if (key == "year")
-            item->GetMusicInfoTag()->SetYear(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetYear(strtol(value.c_str(), nullptr, 10));
           else if (key == "listeners")
-            item->GetMusicInfoTag()->SetListeners(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetListeners(strtol(value.c_str(), nullptr, 10));
           else if (key == "playcount")
-            item->GetMusicInfoTag()->SetPlayCount(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetPlayCount(strtol(value.c_str(), nullptr, 10));
           else if (key == "genre")
             item->GetMusicInfoTag()->SetGenre(value);
           else if (key == "album")
@@ -451,9 +451,9 @@ namespace XBMCAddon
           else if (key == "title")
             item->GetMusicInfoTag()->SetTitle(value);
           else if (key == "rating")
-            item->GetMusicInfoTag()->SetRating((float)strtod(value.c_str(), NULL));
+            item->GetMusicInfoTag()->SetRating((float)strtod(value.c_str(), nullptr));
           else if (key == "userrating")
-            item->GetMusicInfoTag()->SetUserrating(strtol(value.c_str(), NULL, 10));
+            item->GetMusicInfoTag()->SetUserrating(strtol(value.c_str(), nullptr, 10));
           else if (key == "lyrics")
             item->GetMusicInfoTag()->SetLyrics(value);
           else if (key == "lastplayed")
@@ -497,9 +497,9 @@ namespace XBMCAddon
           const String value(alt.which() == first ? alt.former() : emptyString);
 
           if (key == "count")
-            item->m_iprogramCount = strtol(value.c_str(), NULL, 10);
+            item->m_iprogramCount = strtol(value.c_str(), nullptr, 10);
           else if (key == "size")
-            item->m_dwSize = (int64_t)strtoll(value.c_str(), NULL, 10);
+            item->m_dwSize = (int64_t)strtoll(value.c_str(), nullptr, 10);
           else if (key == "title")
             item->m_strTitle = value;
           else if (key == "picturepath")
@@ -542,11 +542,11 @@ namespace XBMCAddon
           else if (key == "aspect")
             video->m_fAspect = (float)atof(value.c_str());
           else if (key == "width")
-            video->m_iWidth = strtol(value.c_str(), NULL, 10);
+            video->m_iWidth = strtol(value.c_str(), nullptr, 10);
           else if (key == "height")
-            video->m_iHeight = strtol(value.c_str(), NULL, 10);
+            video->m_iHeight = strtol(value.c_str(), nullptr, 10);
           else if (key == "duration")
-            video->m_iDuration = strtol(value.c_str(), NULL, 10);
+            video->m_iDuration = strtol(value.c_str(), nullptr, 10);
           else if (key == "stereomode")
             video->m_strStereoMode = value;
           else if (key == "language")
@@ -567,7 +567,7 @@ namespace XBMCAddon
           else if (key == "language")
             audio->m_strLanguage = value;
           else if (key == "channels")
-            audio->m_iChannels = strtol(value.c_str(), NULL, 10);
+            audio->m_iChannels = strtol(value.c_str(), nullptr, 10);
         }
         item->GetVideoInfoTag()->m_streamDetails.AddStream(audio);
       }

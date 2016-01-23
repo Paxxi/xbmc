@@ -24,7 +24,7 @@ namespace ADDON
 CAudioEncoder::CAudioEncoder(const cp_extension_t* ext)
  : AudioEncoderDll(ext),
    extension(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@extension")),
-   m_context(NULL)
+   m_context(nullptr)
 {
 }
 
@@ -76,7 +76,7 @@ bool CAudioEncoder::Close()
     return false;
 
   m_pStruct->Free(m_context);
-  m_context = NULL;
+  m_context = nullptr;
 
   return true;
 }

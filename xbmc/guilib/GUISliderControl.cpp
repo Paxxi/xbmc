@@ -57,7 +57,7 @@ CGUISliderControl::CGUISliderControl(int parentID, int controlID, float posX, fl
   ControlType = GUICONTROL_SLIDER;
   m_iInfoCode = 0;
   m_dragging = false;
-  m_action = NULL;
+  m_action = nullptr;
 }
 
 CGUISliderControl::~CGUISliderControl(void)
@@ -656,5 +656,5 @@ void CGUISliderControl::SetAction(const std::string &action)
       return;
     }
   }
-  m_action = NULL;
+  m_action = nullptr;
 }

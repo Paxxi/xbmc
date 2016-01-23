@@ -161,7 +161,7 @@ void CPeripheralBus::GetFeatures(std::vector<PeripheralFeature> &features) const
 
 CPeripheral *CPeripheralBus::GetPeripheral(const std::string &strLocation) const
 {
-  CPeripheral *peripheral(NULL);
+  CPeripheral *peripheral(nullptr);
   CSingleLock lock(m_critSection);
   for (unsigned int iPeripheralPtr = 0; iPeripheralPtr < m_peripherals.size(); iPeripheralPtr++)
   {
@@ -273,7 +273,7 @@ void CPeripheralBus::TriggerDeviceScan(void)
 
 bool CPeripheralBus::HasPeripheral(const std::string &strLocation) const
 {
-  return (GetPeripheral(strLocation) != NULL);
+  return (GetPeripheral(strLocation) != nullptr);
 }
 
 void CPeripheralBus::GetDirectory(const std::string &strPath, CFileItemList &items) const
@@ -319,7 +319,7 @@ CPeripheral *CPeripheralBus::GetByPath(const std::string &strPath) const
       return m_peripherals.at(iDevicePtr);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 size_t CPeripheralBus::GetNumberOfPeripherals() const

@@ -144,7 +144,7 @@ MsgQueueReturnCode CDVDMessageQueue::Get(CDVDMsg** pMsg, unsigned int iTimeoutIn
 {
   CSingleLock lock(m_section);
 
-  *pMsg = NULL;
+  *pMsg = nullptr;
 
   int ret = 0;
 

@@ -52,16 +52,16 @@ TEST(TestStreamDetails, General)
   EXPECT_EQ(1, a.GetVideoStreamCount());
   EXPECT_STREQ("", a.GetVideoCodec().c_str());
   EXPECT_EQ(0.0f, a.GetVideoAspect());
-  EXPECT_EQ(0, a.GetVideoWidth());
-  EXPECT_EQ(0, a.GetVideoHeight());
-  EXPECT_EQ(0, a.GetVideoDuration());
+  EXPECT_EQ(nullptr, a.GetVideoWidth());
+  EXPECT_EQ(nullptr, a.GetVideoHeight());
+  EXPECT_EQ(nullptr, a.GetVideoDuration());
   EXPECT_STREQ("", a.GetStereoMode().c_str());
 
   EXPECT_EQ(1, a.GetStreamCount(CStreamDetail::AUDIO));
   EXPECT_EQ(1, a.GetAudioStreamCount());
 
-  EXPECT_EQ(0, a.GetStreamCount(CStreamDetail::SUBTITLE));
-  EXPECT_EQ(0, a.GetSubtitleStreamCount());
+  EXPECT_EQ(nullptr, a.GetStreamCount(CStreamDetail::SUBTITLE));
+  EXPECT_EQ(nullptr, a.GetSubtitleStreamCount());
 
   a.AddStream(subtitle);
   EXPECT_EQ(1, a.GetStreamCount(CStreamDetail::SUBTITLE));

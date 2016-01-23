@@ -31,8 +31,8 @@
 
 CDVDOverlayCodecSSA::CDVDOverlayCodecSSA() : CDVDOverlayCodec("SSA Subtitle Decoder")
 {
-  m_pOverlay = NULL;
-  m_libass   = NULL;
+  m_pOverlay = nullptr;
+  m_libass   = nullptr;
   m_order    = 0;
   m_output   = false;
 }
@@ -163,7 +163,7 @@ CDVDOverlay* CDVDOverlayCodecSSA::GetOverlay()
     m_output = false;
     return m_pOverlay->Acquire();
   }
-  return NULL;
+  return nullptr;
 }
 
 

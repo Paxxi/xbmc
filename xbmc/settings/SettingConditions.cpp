@@ -46,11 +46,11 @@
 
 bool AddonHasSettings(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   const CSettingAddon *settingAddon = dynamic_cast<const CSettingAddon*>(setting);
-  if (settingAddon == NULL)
+  if (settingAddon == nullptr)
     return false;
 
   ADDON::AddonPtr addon;
@@ -164,9 +164,9 @@ bool ProfileHasVideosLocked(const std::string &condition, const std::string &val
 
 bool ProfileLockMode(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  char *tmp = NULL;
+  char *tmp = nullptr;
   LockType lock = (LockType)strtol(value.c_str(), &tmp, 0);
-  if (tmp != NULL && *tmp != '\0')
+  if (tmp != nullptr && *tmp != '\0')
     return false;
 
   return CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() == lock;

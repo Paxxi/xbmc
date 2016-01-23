@@ -33,8 +33,8 @@ using namespace PVR;
 
 CDemuxStreamPVRInternal::CDemuxStreamPVRInternal(CDVDDemuxPVRClient *parent)
  : m_parent(parent)
- , m_parser(NULL)
- , m_context(NULL)
+ , m_parser(nullptr)
+ , m_context(nullptr)
  , m_parser_split(false)
 {
 }
@@ -49,12 +49,12 @@ void CDemuxStreamPVRInternal::DisposeParser()
   if (m_parser)
   {
     av_parser_close(m_parser);
-    m_parser = NULL;
+    m_parser = nullptr;
   }
   if (m_context)
   {
     avcodec_close(m_context);
-    m_context = NULL;
+    m_context = nullptr;
   }
 }
 
@@ -110,8 +110,8 @@ std::string CDemuxStreamSubtitlePVRClient::GetStreamInfo()
 
 CDVDDemuxPVRClient::CDVDDemuxPVRClient() : CDVDDemux()
 {
-  m_pInput = NULL;
-  for (int i = 0; i < MAX_STREAMS; i++) m_streams[i] = NULL;
+  m_pInput = nullptr;
+  for (int i = 0; i < MAX_STREAMS; i++) m_streams[i] = nullptr;
 }
 
 CDVDDemuxPVRClient::~CDVDDemuxPVRClient()
@@ -135,10 +135,10 @@ void CDVDDemuxPVRClient::Dispose()
   for (int i = 0; i < MAX_STREAMS; i++)
   {
     delete m_streams[i];
-    m_streams[i] = NULL;
+    m_streams[i] = nullptr;
   }
 
-  m_pInput = NULL;
+  m_pInput = nullptr;
 }
 
 void CDVDDemuxPVRClient::DisposeStream(int iStreamId)
@@ -146,7 +146,7 @@ void CDVDDemuxPVRClient::DisposeStream(int iStreamId)
   if (iStreamId < 0 || iStreamId >= MAX_STREAMS)
     return;
   delete m_streams[iStreamId];
-  m_streams[iStreamId] = NULL;
+  m_streams[iStreamId] = nullptr;
 }
 
 void CDVDDemuxPVRClient::Reset()
@@ -174,7 +174,7 @@ void CDVDDemuxPVRClient::Flush()
 void CDVDDemuxPVRClient::ParsePacket(DemuxPacket* pkt)
 {
   CDemuxStream* st = m_streams[pkt->iStreamId];
-  if (st == NULL)
+  if (st == nullptr)
     return;
 
   if (st->ExtraSize)
@@ -182,14 +182,14 @@ void CDVDDemuxPVRClient::ParsePacket(DemuxPacket* pkt)
 
   CDemuxStreamPVRInternal* pvr = dynamic_cast<CDemuxStreamPVRInternal*>(st);
 
-  if(pvr == NULL
-  || pvr->m_parser == NULL)
+  if(pvr == nullptr
+  || pvr->m_parser == nullptr)
     return;
 
-  if(pvr->m_context == NULL)
+  if(pvr->m_context == nullptr)
   {
     AVCodec *codec = avcodec_find_decoder(st->codec);
-    if (codec == NULL)
+    if (codec == nullptr)
     {
       CLog::Log(LOGERROR, "%s - can't find decoder", __FUNCTION__);
       pvr->DisposeParser();
@@ -197,7 +197,7 @@ void CDVDDemuxPVRClient::ParsePacket(DemuxPacket* pkt)
     }
 
     pvr->m_context = avcodec_alloc_context3(codec);
-    if(pvr->m_context == NULL)
+    if(pvr->m_context == nullptr)
     {
       CLog::Log(LOGERROR, "%s - can't allocate context", __FUNCTION__);
       pvr->DisposeParser();
@@ -225,7 +225,7 @@ void CDVDDemuxPVRClient::ParsePacket(DemuxPacket* pkt)
   }
 
 
-  uint8_t *outbuf = NULL;
+  uint8_t *outbuf = nullptr;
   int      outbuf_size = 0;
   int len = av_parser_parse2(pvr->m_parser
                                         , pvr->m_context, &outbuf, &outbuf_size
@@ -287,7 +287,7 @@ DemuxPacket* CDVDDemuxPVRClient::Read()
   {
     if (m_pInput)
       m_pInput->Close();
-    return NULL;
+    return nullptr;
   }
 
   if (pPacket->iStreamId == DMX_SPECIALID_STREAMINFO)
@@ -312,7 +312,7 @@ DemuxPacket* CDVDDemuxPVRClient::Read()
 
 CDemuxStream* CDVDDemuxPVRClient::GetStream(int iStreamId)
 {
-  if (iStreamId < 0 || iStreamId >= MAX_STREAMS) return NULL;
+  if (iStreamId < 0 || iStreamId >= MAX_STREAMS) return nullptr;
     return m_streams[iStreamId];
 }
 
@@ -331,7 +331,7 @@ void CDVDDemuxPVRClient::RequestStreams()
 
     if (props.stream[i].iCodecType == XBMC_CODEC_TYPE_AUDIO)
     {
-      CDemuxStreamAudioPVRClient* st = NULL;
+      CDemuxStreamAudioPVRClient* st = nullptr;
       if (stm)
       {
         st = dynamic_cast<CDemuxStreamAudioPVRClient*>(stm);
@@ -356,7 +356,7 @@ void CDVDDemuxPVRClient::RequestStreams()
     }
     else if (props.stream[i].iCodecType == XBMC_CODEC_TYPE_VIDEO)
     {
-      CDemuxStreamVideoPVRClient* st = NULL;
+      CDemuxStreamVideoPVRClient* st = nullptr;
       if (stm)
       {
         st = dynamic_cast<CDemuxStreamVideoPVRClient*>(stm);
@@ -395,7 +395,7 @@ void CDVDDemuxPVRClient::RequestStreams()
     else if (props.stream[i].iCodecType == XBMC_CODEC_TYPE_RDS &&
              CSettings::GetInstance().GetBool("pvrplayback.enableradiords"))
     {
-      CDemuxStreamRadioRDS* st = NULL;
+      CDemuxStreamRadioRDS* st = nullptr;
       if (stm)
       {
         st = dynamic_cast<CDemuxStreamRadioRDS*>(stm);
@@ -407,7 +407,7 @@ void CDVDDemuxPVRClient::RequestStreams()
     }
     else if (props.stream[i].iCodecType == XBMC_CODEC_TYPE_SUBTITLE)
     {
-      CDemuxStreamSubtitlePVRClient* st = NULL;
+      CDemuxStreamSubtitlePVRClient* st = nullptr;
       if (stm)
       {
         st = dynamic_cast<CDemuxStreamSubtitlePVRClient*>(stm);

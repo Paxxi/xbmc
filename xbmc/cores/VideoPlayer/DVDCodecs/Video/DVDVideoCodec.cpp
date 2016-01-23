@@ -25,7 +25,7 @@
 
 bool CDVDVideoCodec::IsSettingVisible(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL || value.empty())
+  if (setting == nullptr || value.empty())
     return false;
 
   const std::string &settingId = setting->GetId();
@@ -76,7 +76,7 @@ bool CDVDVideoCodec::IsCodecDisabled(DVDCodecAvailableType* map, unsigned int si
     return (!CSettings::GetInstance().GetBool(map[index].setting) ||
             !CDVDVideoCodec::IsSettingVisible("unused", "unused",
                                               CSettings::GetInstance().GetSetting(map[index].setting),
-                                              NULL));
+                                              nullptr));
   }
 
   return false; // don't disable what we don't have

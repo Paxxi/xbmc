@@ -56,7 +56,7 @@ class CUPnPPlayerController
 public:
   CUPnPPlayerController(PLT_MediaController* control, PLT_DeviceDataReference& device, IPlayerCallback& callback)
     : m_control(control)
-    , m_transport(NULL)
+    , m_transport(nullptr)
     , m_device(device)
     , m_instance(0)
     , m_callback(callback)
@@ -92,7 +92,7 @@ public:
 
   virtual void OnGetMediaInfoResult(NPT_Result res, PLT_DeviceDataReference& device, PLT_MediaInfo* info, void* userdata)
   {
-    if(NPT_FAILED(res) || info == NULL)
+    if(NPT_FAILED(res) || info == nullptr)
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnGetMediaInfoResult failed");
   }
 
@@ -127,7 +127,7 @@ public:
   {
     CSingleLock lock(m_section);
 
-    if(NPT_FAILED(res) || info == NULL)
+    if(NPT_FAILED(res) || info == nullptr)
     {
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnGetMediaInfoResult failed");
       m_posinfo = PLT_PositionInfo();
@@ -164,8 +164,8 @@ public:
 
 CUPnPPlayer::CUPnPPlayer(IPlayerCallback& callback, const char* uuid)
 : IPlayer(callback)
-, m_control(NULL)
-, m_delegate(NULL)
+, m_control(nullptr)
+, m_delegate(nullptr)
 , m_started(false)
 , m_stopremote(false)
 {
@@ -193,7 +193,7 @@ static NPT_Result WaitOnEvent(CEvent& event, XbmcThreads::EndTime& timeout, CGUI
   if(event.WaitMSec(0))
     return NPT_SUCCESS;
 
-  if(dialog == NULL) {
+  if(dialog == nullptr) {
     dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
     dialog->Open();
   }
@@ -230,7 +230,7 @@ int CUPnPPlayer::PlayFile(const CFileItem& file, const CPlayerOptions& options, 
   else if (item.IsMusicDb())
     thumb_loader = NPT_Reference<CThumbLoader>(new CMusicThumbLoader());
 
-  obj = BuildObject(item, path, false, thumb_loader, NULL, CUPnP::GetServer(), UPnPPlayer);
+  obj = BuildObject(item, path, false, thumb_loader, nullptr, CUPnP::GetServer(), UPnPPlayer);
   if(obj.IsNull()) goto failed;
 
   NPT_CHECK_LABEL_SEVERE(PLT_Didl::ToDidl(*obj, "", tmp), failed_todidl);
@@ -360,7 +360,7 @@ failed:
 
 bool CUPnPPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options)
 {
-  CGUIDialogBusy* dialog = NULL;
+  CGUIDialogBusy* dialog = nullptr;
   XbmcThreads::EndTime timeout(10000);
 
   /* if no path we want to attach to a already playing player */
@@ -417,7 +417,7 @@ bool CUPnPPlayer::QueueNextFile(const CFileItem& file)
     thumb_loader = NPT_Reference<CThumbLoader>(new CMusicThumbLoader());
 
 
-  obj = BuildObject(item, path, 0, thumb_loader, NULL, CUPnP::GetServer(), UPnPPlayer);
+  obj = BuildObject(item, path, 0, thumb_loader, nullptr, CUPnP::GetServer(), UPnPPlayer);
   if(!obj.IsNull())
   {
     NPT_CHECK_LABEL_SEVERE(PLT_Didl::ToDidl(*obj, "", tmp), failed);

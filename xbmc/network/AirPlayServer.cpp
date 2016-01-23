@@ -67,7 +67,7 @@ using namespace KODI::MESSAGING;
 #define AIRPLAY_STATUS_NO_RESPONSE_NEEDED  1000
 
 CCriticalSection CAirPlayServer::ServerInstanceLock;
-CAirPlayServer *CAirPlayServer::ServerInstance = NULL;
+CAirPlayServer *CAirPlayServer::ServerInstance = nullptr;
 int CAirPlayServer::m_isPlaying = 0;
 
 #define EVENT_NONE     -1
@@ -255,14 +255,14 @@ void CAirPlayServer::StopServer(bool bWait)
     if (bWait)
     {
       delete ServerInstance;
-      ServerInstance = NULL;
+      ServerInstance = nullptr;
     }
   }
 }
 
 bool CAirPlayServer::IsRunning()
 {
-  if (ServerInstance == NULL)
+  if (ServerInstance == nullptr)
     return false;
 
   return ((CThread*)ServerInstance)->IsRunning();
@@ -355,7 +355,7 @@ void CAirPlayServer::Process()
         max_fd = m_connections[i].m_socket;
     }
 
-    int res = select(max_fd+1, &rfds, NULL, NULL, &to);
+    int res = select(max_fd+1, &rfds, nullptr, nullptr, &to);
     if (res < 0)
     {
       CLog::Log(LOGERROR, "AIRPLAY Server: Select failed");
@@ -529,7 +529,7 @@ void CAirPlayServer::CTCPClient::PushBuffer(CAirPlayServer *host, const char *bu
 
     // Prepare the response
     std::string response;
-    const time_t ltime = time(NULL);
+    const time_t ltime = time(nullptr);
     char *date = asctime(gmtime(&ltime)); //Fri, 17 Dec 2010 11:18:01 GMT;
     date[strlen(date) - 1] = '\0'; // remove \n
     response = StringUtils::Format("HTTP/1.1 %d %s\nDate: %s\r\n", status, statusMsg.c_str(), date);
@@ -566,7 +566,7 @@ void CAirPlayServer::CTCPClient::Disconnect()
     close(m_socket);
     m_socket = INVALID_SOCKET;
     delete m_httpParser;
-    m_httpParser = NULL;
+    m_httpParser = nullptr;
   }
 }
 
@@ -743,7 +743,7 @@ void CAirPlayServer::restoreVolume()
 
 void dumpPlist(DllLibPlist *pLibPlist, plist_t *dict)
 {
-  char *plist = NULL;
+  char *plist = nullptr;
   uint32_t len = 0;
   pLibPlist->plist_to_xml(*dict,&plist, &len);
   CLog::Log(LOGDEBUG, "AIRPLAY-DUMP: %s", plist);
@@ -753,7 +753,7 @@ void dumpPlist(DllLibPlist *pLibPlist, plist_t *dict)
 std::string getStringFromPlist(DllLibPlist *pLibPlist,plist_t node)
 {
   std::string ret;
-  char *tmpStr = NULL;
+  char *tmpStr = nullptr;
   pLibPlist->plist_get_string_val(node, &tmpStr);
   ret = tmpStr;
 #ifdef TARGET_WINDOWS
@@ -840,7 +840,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
   else if (uri == "/volume")
   {
       const char* found = strstr(queryString.c_str(), "volume=");
-      float volume = found ? (float)strtod(found + strlen("volume="), NULL) : 0;
+      float volume = found ? (float)strtod(found + strlen("volume="), nullptr) : 0;
 
       CLog::Log(LOGDEBUG, "AIRPLAY: got request %s with volume %f", uri.c_str(), volume);
 
@@ -887,7 +887,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
 
         const char* bodyChr = m_httpParser->getBody();
 
-        plist_t dict = NULL;
+        plist_t dict = nullptr;
         m_pLibPlist->plist_from_bin(bodyChr, m_httpParser->getContentLength(), &dict);
 
         if (m_pLibPlist->plist_dict_get_size(dict))
@@ -904,7 +904,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
           if (tmpNode)
           {
             location = getStringFromPlist(m_pLibPlist, tmpNode);
-            tmpNode = NULL;
+            tmpNode = nullptr;
           }
           
           tmpNode = m_pLibPlist->plist_dict_get_item(dict, "rate");
@@ -916,7 +916,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
             {
               startPlayback = false;
             }
-            tmpNode = NULL;
+            tmpNode = nullptr;
           }
 
           // in newer protocol versions the location is given

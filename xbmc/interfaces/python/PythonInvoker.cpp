@@ -98,8 +98,8 @@ static const std::string getListOfAddonClassesAsString(XBMCAddon::AddonClass::Re
 
 CPythonInvoker::CPythonInvoker(ILanguageInvocationHandler *invocationHandler)
   : ILanguageInvoker(invocationHandler),
-    m_argc(0), m_argv(NULL),
-    m_threadState(NULL), m_stop(false)
+    m_argc(0), m_argv(nullptr),
+    m_threadState(nullptr), m_stop(false)
 { }
 
 CPythonInvoker::~CPythonInvoker()
@@ -115,7 +115,7 @@ CPythonInvoker::~CPythonInvoker()
   Stop(true);
   pulseGlobalEvent();
 
-  if (m_argv != NULL)
+  if (m_argv != nullptr)
   {
     for (unsigned int i = 0; i < m_argc; i++)
       delete [] m_argv[i];
@@ -427,11 +427,11 @@ bool CPythonInvoker::execute(const std::string &script, const std::vector<std::s
 
 void CPythonInvoker::executeScript(void *fp, const std::string &script, void *module, void *moduleDict)
 {
-  if (fp == NULL || script.empty() || module == NULL || moduleDict == NULL)
+  if (fp == nullptr || script.empty() || module == nullptr || moduleDict == nullptr)
     return;
 
   int m_Py_file_input = Py_file_input;
-  PyRun_FileExFlags(static_cast<FILE*>(fp), script.c_str(), m_Py_file_input, static_cast<PyObject*>(moduleDict), static_cast<PyObject*>(moduleDict), 1, NULL);
+  PyRun_FileExFlags(static_cast<FILE*>(fp), script.c_str(), m_Py_file_input, static_cast<PyObject*>(moduleDict), static_cast<PyObject*>(moduleDict), 1, nullptr);
 }
 
 bool CPythonInvoker::stop(bool abort)
@@ -444,7 +444,7 @@ bool CPythonInvoker::stop(bool abort)
 
   setState(InvokerStateStopping);
 
-  if (m_threadState != NULL)
+  if (m_threadState != nullptr)
   {
     PyEval_AcquireLock();
     PyThreadState* old = PyThreadState_Swap((PyThreadState*)m_threadState);
@@ -455,11 +455,11 @@ bool CPythonInvoker::stop(bool abort)
 
     PyObject *m;
     m = PyImport_AddModule((char*)"xbmc");
-    if (m == NULL || PyObject_SetAttrString(m, (char*)"abortRequested", PyBool_FromLong(1)))
+    if (m == nullptr || PyObject_SetAttrString(m, (char*)"abortRequested", PyBool_FromLong(1)))
       CLog::Log(LOGERROR, "CPythonInvoker(%d, %s): failed to set abortRequested", GetId(), m_sourceFile.c_str());
 
     PyThreadState_Swap(old);
-    old = NULL;
+    old = nullptr;
     PyEval_ReleaseLock();
 
     XbmcThreads::EndTime timeout(PYTHON_SCRIPT_TIMEOUT);
@@ -494,7 +494,7 @@ bool CPythonInvoker::stop(bool abort)
 
     // Since we released the m_critical it's possible that the state is cleaned up
     // so we need to recheck for m_threadState == NULL
-    if (m_threadState != NULL)
+    if (m_threadState != nullptr)
     {
       old = PyThreadState_Swap((PyThreadState*)m_threadState);
       for (PyThreadState* state = ((PyThreadState*)m_threadState)->interp->tstate_head; state; state = state->next)
@@ -509,7 +509,7 @@ bool CPythonInvoker::stop(bool abort)
       pulseGlobalEvent();
     }
 
-    if (old != NULL)
+    if (old != nullptr)
       PyThreadState_Swap(old);
 
     lock.Leave();
@@ -521,14 +521,14 @@ bool CPythonInvoker::stop(bool abort)
 
 void CPythonInvoker::onExecutionFailed()
 {
-  PyThreadState_Swap(NULL);
+  PyThreadState_Swap(nullptr);
   PyEval_ReleaseLock();
 
   setState(InvokerStateFailed);
   CLog::Log(LOGERROR, "CPythonInvoker(%d, %s): abnormally terminating python thread", GetId(), m_sourceFile.c_str());
 
   CSingleLock lock(m_critical);
-  m_threadState = NULL;
+  m_threadState = nullptr;
 
   ILanguageInvoker::onExecutionFailed();
 }
@@ -549,7 +549,7 @@ void CPythonInvoker::onInitialization()
 
   // get a possible initialization script
   const char* runscript = getInitializationScript();
-  if (runscript!= NULL && strlen(runscript) > 0)
+  if (runscript!= nullptr && strlen(runscript) > 0)
   {
     // redirecting default output to debug console
     if (PyRun_SimpleString(runscript) == -1)
@@ -559,7 +559,7 @@ void CPythonInvoker::onInitialization()
 
 void CPythonInvoker::onPythonModuleInitialization(void* moduleDict)
 {
-  if (m_addon.get() == NULL || moduleDict == NULL)
+  if (m_addon.get() == nullptr || moduleDict == nullptr)
     return;
 
   PyObject *moduleDictionary = (PyObject *)moduleDict;
@@ -586,7 +586,7 @@ void CPythonInvoker::onError(const std::string &exceptionType /* = "" */, const 
   CSingleLock gc(g_graphicsContext);
 
   CGUIDialogKaiToast *pDlgToast = (CGUIDialogKaiToast*)g_windowManager.GetWindow(WINDOW_DIALOG_KAI_TOAST);
-  if (pDlgToast != NULL)
+  if (pDlgToast != nullptr)
   {
     std::string message;
     if (m_addon && !m_addon->Name().empty())
@@ -601,7 +601,7 @@ void CPythonInvoker::onError(const std::string &exceptionType /* = "" */, const 
 
 const char* CPythonInvoker::getInitializationScript() const
 {
-  return NULL;
+  return nullptr;
 }
 
 void CPythonInvoker::initializeModules(const std::map<std::string, PythonModuleInitialization> &modules)
@@ -615,7 +615,7 @@ void CPythonInvoker::initializeModules(const std::map<std::string, PythonModuleI
 
 bool CPythonInvoker::initializeModule(PythonModuleInitialization module)
 {
-  if (module == NULL)
+  if (module == nullptr)
     return false;
 
   module();

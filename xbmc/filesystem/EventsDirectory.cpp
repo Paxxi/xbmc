@@ -64,7 +64,7 @@ bool CEventsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
 CFileItemPtr CEventsDirectory::EventToFileItem(const EventPtr& eventItem)
 {
-  if (eventItem == NULL)
+  if (eventItem == nullptr)
     return CFileItemPtr();
 
   CFileItemPtr item(new CFileItem(eventItem->GetLabel()));

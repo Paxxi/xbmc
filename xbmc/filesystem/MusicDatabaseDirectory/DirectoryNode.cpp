@@ -74,8 +74,8 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   std::vector<std::string> Path = StringUtils::Split(strDirectory, '/');
   Path.insert(Path.begin(), "");
 
-  CDirectoryNode* pNode=NULL;
-  CDirectoryNode* pParent=NULL;
+  CDirectoryNode* pNode=nullptr;
+  CDirectoryNode* pParent=nullptr;
   NODE_TYPE NodeType=NODE_TYPE_ROOT;
 
   for (int i=0; i<(int)Path.size(); ++i)
@@ -151,7 +151,7 @@ CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& st
     break;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 //  Current node name
@@ -184,7 +184,7 @@ CDirectoryNode* CDirectoryNode::GetParent() const
 
 void CDirectoryNode::RemoveParent()
 {
-  m_pParent=NULL;
+  m_pParent=nullptr;
 }
 
 //  should be overloaded by a derived class
@@ -204,7 +204,7 @@ std::string CDirectoryNode::BuildPath() const
     array.insert(array.begin(), m_strName);
 
   CDirectoryNode* pParent=m_pParent;
-  while (pParent!=NULL)
+  while (pParent!=nullptr)
   {
     const std::string& strNodeName=pParent->GetName();
     if (!strNodeName.empty())
@@ -240,7 +240,7 @@ void CDirectoryNode::CollectQueryParams(CQueryParams& params) const
   params.SetQueryParam(m_Type, m_strName);
 
   CDirectoryNode* pParent=m_pParent;
-  while (pParent!=NULL)
+  while (pParent!=nullptr)
   {
     params.SetQueryParam(pParent->GetType(), pParent->GetName());
     pParent=pParent->GetParent();

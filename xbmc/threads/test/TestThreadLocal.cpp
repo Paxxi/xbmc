@@ -33,14 +33,14 @@ public:
   inline ~Thinggy() { destructorCalled = true; }
 };
 
-Thinggy* staticThinggy = NULL;
+Thinggy* staticThinggy = nullptr;
 CEvent gate;
 ThreadLocal<Thinggy> staticThreadLocal;
 
 void cleanup()
 {
   if (destructorCalled)
-    staticThinggy = NULL;
+    staticThinggy = nullptr;
   destructorCalled = false;
 }
 
@@ -62,7 +62,7 @@ public:
     waiter.Wait();
     waiting = false;
 
-    threadLocalHadValue = staticThreadLocal.get() != NULL;
+    threadLocalHadValue = staticThreadLocal.get() != nullptr;
     gate.Set();
   }
 };
@@ -96,8 +96,8 @@ TEST(TestThreadLocal, Simple)
 
   gate.Wait();
   EXPECT_TRUE(runnable.waiting);
-  EXPECT_TRUE(staticThinggy != NULL);
-  EXPECT_TRUE(staticThreadLocal.get() == NULL);
+  EXPECT_TRUE(staticThinggy != nullptr);
+  EXPECT_TRUE(staticThreadLocal.get() == nullptr);
   waiter.Set();
   gate.Wait();
   EXPECT_TRUE(runnable.threadLocalHadValue);
@@ -114,8 +114,8 @@ TEST(TestThreadLocal, Stack)
 
   gate.Wait();
   EXPECT_TRUE(runnable.waiting);
-  EXPECT_TRUE(staticThinggy != NULL);
-  EXPECT_TRUE(runnable.threadLocal.get() == NULL);
+  EXPECT_TRUE(staticThinggy != nullptr);
+  EXPECT_TRUE(runnable.threadLocal.get() == nullptr);
   waiter.Set();
   gate.Wait();
   EXPECT_TRUE(runnable.threadLocalHadValue);
@@ -132,8 +132,8 @@ TEST(TestThreadLocal, Heap)
 
   gate.Wait();
   EXPECT_TRUE(runnable.waiting);
-  EXPECT_TRUE(staticThinggy != NULL);
-  EXPECT_TRUE(runnable.threadLocal.get() == NULL);
+  EXPECT_TRUE(staticThinggy != nullptr);
+  EXPECT_TRUE(runnable.threadLocal.get() == nullptr);
   waiter.Set();
   gate.Wait();
   EXPECT_TRUE(runnable.threadLocalHadValue);
@@ -151,8 +151,8 @@ TEST(TestThreadLocal, HeapDestroyed)
 
     gate.Wait();
     EXPECT_TRUE(runnable.waiting);
-    EXPECT_TRUE(staticThinggy != NULL);
-    EXPECT_TRUE(runnable.threadLocal.get() == NULL);
+    EXPECT_TRUE(staticThinggy != nullptr);
+    EXPECT_TRUE(runnable.threadLocal.get() == nullptr);
     waiter.Set();
     gate.Wait();
     EXPECT_TRUE(runnable.threadLocalHadValue);

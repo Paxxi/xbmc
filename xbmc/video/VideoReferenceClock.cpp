@@ -63,7 +63,7 @@ CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")
   m_MissedVblanks = 0;
   m_VblankTime = 0;
 
-  m_pVideoSync = NULL;
+  m_pVideoSync = nullptr;
 }
 
 CVideoReferenceClock::~CVideoReferenceClock()
@@ -164,7 +164,7 @@ void CVideoReferenceClock::Process()
     {
       m_pVideoSync->Cleanup();
       delete m_pVideoSync;
-      m_pVideoSync = NULL;
+      m_pVideoSync = nullptr;
     }
 
     if (!SetupSuccess)

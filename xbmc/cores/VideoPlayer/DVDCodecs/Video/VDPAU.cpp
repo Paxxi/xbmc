@@ -91,14 +91,14 @@ static float studioCSCKCoeffs709[3] = {0.2126, 0.7152, 0.0722}; //BT709 {Kr, Kg,
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-CVDPAUContext *CVDPAUContext::m_context = 0;
+CVDPAUContext *CVDPAUContext::m_context = nullptr;
 CCriticalSection CVDPAUContext::m_section;
-Display *CVDPAUContext::m_display = 0;
-void *CVDPAUContext::m_dlHandle = 0;
+Display *CVDPAUContext::m_display = nullptr;
+void *CVDPAUContext::m_dlHandle = nullptr;
 
 CVDPAUContext::CVDPAUContext()
 {
-  m_context = 0;
+  m_context = nullptr;
   m_refCount = 0;
 }
 
@@ -111,7 +111,7 @@ void CVDPAUContext::Release()
   {
     Close();
     delete this;
-    m_context = 0;
+    m_context = nullptr;
   }
 }
 
@@ -139,8 +139,8 @@ bool CVDPAUContext::EnsureContext(CVDPAUContext **ctx)
     if (!m_context->LoadSymbols() || !m_context->CreateContext())
     {
       delete m_context;
-      m_context = 0;
-      *ctx = NULL;
+      m_context = nullptr;
+      *ctx = nullptr;
       return false;
     }
   }
@@ -202,7 +202,7 @@ bool CVDPAUContext::CreateContext()
   int mScreen;
   { CSingleLock lock(g_graphicsContext);
     if (!m_display)
-      m_display = XOpenDisplay(NULL);
+      m_display = XOpenDisplay(nullptr);
     mScreen = g_Windowing.GetCurrentScreen();
   }
 
@@ -483,7 +483,7 @@ CDecoder::CDecoder() : m_vdpauOutput(&m_inMsgEvent)
 
   m_vdpauConfigured = false;
   m_DisplayState = VDPAU_OPEN;
-  m_vdpauConfig.context = 0;
+  m_vdpauConfig.context = nullptr;
 }
 
 bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat fmt, unsigned int surfaces)
@@ -523,7 +523,7 @@ bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum A
   m_DisplayState = VDPAU_OPEN;
   m_vdpauConfigured = false;
 
-  m_presentPicture = 0;
+  m_presentPicture = nullptr;
 
   {
     VdpDecoderProfile profile = 0;
@@ -605,7 +605,7 @@ void CDecoder::Close()
 
   if (m_vdpauConfig.context)
     m_vdpauConfig.context->Release();
-  m_vdpauConfig.context = 0;
+  m_vdpauConfig.context = nullptr;
 }
 
 long CDecoder::Release()
@@ -689,7 +689,7 @@ void CDecoder::OnLostDisplay()
   FiniVDPAUOutput();
   if (m_vdpauConfig.context)
     m_vdpauConfig.context->Release();
-  m_vdpauConfig.context = 0;
+  m_vdpauConfig.context = nullptr;
 
   m_DisplayState = VDPAU_LOST;
   lock.Leave();
@@ -744,7 +744,7 @@ int CDecoder::Check(AVCodecContext* avctx)
     FiniVDPAUOutput();
     if (m_vdpauConfig.context)
       m_vdpauConfig.context->Release();
-    m_vdpauConfig.context = 0;
+    m_vdpauConfig.context = nullptr;
 
     if (CVDPAUContext::EnsureContext(&m_vdpauConfig.context))
     {
@@ -989,7 +989,7 @@ int CDecoder::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags)
     vdp->m_videoSurfaces.AddSurface(surf);
   }
 
-  pic->data[1] = pic->data[2] = NULL;
+  pic->data[1] = pic->data[2] = nullptr;
   pic->data[0] = (uint8_t*)(uintptr_t)surf;
   pic->data[3] = (uint8_t*)(uintptr_t)surf;
   pic->linesize[0] = pic->linesize[1] =  pic->linesize[2] = 0;
@@ -1158,7 +1158,7 @@ int CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame)
         if (m_presentPicture)
         {
           m_presentPicture->ReturnUnused();
-          m_presentPicture = 0;
+          m_presentPicture = nullptr;
         }
 
         m_presentPicture = *(CVdpauRenderPicture**)msg->data;
@@ -1436,7 +1436,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
         }
       }
       {
-        std::string portName = port == NULL ? "timer" : port->portName;
+        std::string portName = port == nullptr ? "timer" : port->portName;
         CLog::Log(LOGWARNING, "CMixer::%s - signal: %d form port: %s not handled for state: %d", __FUNCTION__, signal, portName.c_str(), m_state);
       }
       return;
@@ -1503,7 +1503,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case M_TOP_CONFIGURED_WAIT1:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1536,7 +1536,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case M_TOP_CONFIGURED_STEP1:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1581,7 +1581,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case M_TOP_CONFIGURED_WAIT2:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1603,7 +1603,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case M_TOP_CONFIGURED_STEP2:
-       if (port == NULL) // timeout
+       if (port == nullptr) // timeout
        {
          switch (signal)
          {
@@ -1640,8 +1640,8 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
 
 void CMixer::Process()
 {
-  Message *msg = NULL;
-  Protocol *port = NULL;
+  Message *msg = nullptr;
+  Protocol *port = nullptr;
   bool gotMsg;
 
   m_state = M_TOP_UNCONFIGURED;
@@ -1660,7 +1660,7 @@ void CMixer::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -1683,7 +1683,7 @@ void CMixer::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -1698,13 +1698,13 @@ void CMixer::Process()
     {
       msg = m_controlPort.GetMessage();
       msg->signal = CMixerControlProtocol::TIMEOUT;
-      port = 0;
+      port = nullptr;
       // signal timeout to state machine
       StateMachine(msg->signal, port, msg);
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
     }
   }
@@ -2564,7 +2564,7 @@ void CMixer::ProcessPicture()
   // start vdpau video mixer
   vdp_st = m_config.context->GetProcs().vdp_video_mixer_render(m_videoMixer,
                                 VDP_INVALID_HANDLE,
-                                0,
+                                nullptr,
                                 m_mixerfield,
                                 pastCount,
                                 past_surfaces,
@@ -2576,7 +2576,7 @@ void CMixer::ProcessPicture()
                                 &destRect,
                                 &destRect,
                                 0,
-                                NULL);
+                                nullptr);
   CheckStatus(vdp_st, __LINE__);
 }
 
@@ -2721,7 +2721,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         }
       }
       {
-        std::string portName = port == NULL ? "timer" : port->portName;
+        std::string portName = port == nullptr ? "timer" : port->portName;
         CLog::Log(LOGWARNING, "COutput::%s - signal: %d form port: %s not handled for state: %d", __FUNCTION__, signal, portName.c_str(), m_state);
       }
       return;
@@ -2832,7 +2832,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_IDLE:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -2854,7 +2854,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_WORK:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -2892,8 +2892,8 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
 
 void COutput::Process()
 {
-  Message *msg = NULL;
-  Protocol *port = NULL;
+  Message *msg = nullptr;
+  Protocol *port = nullptr;
   bool gotMsg;
 
   m_state = O_TOP_UNCONFIGURED;
@@ -2912,7 +2912,7 @@ void COutput::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -2940,7 +2940,7 @@ void COutput::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -2955,13 +2955,13 @@ void COutput::Process()
     {
       msg = m_controlPort.GetMessage();
       msg->signal = COutputControlProtocol::TIMEOUT;
-      port = 0;
+      port = nullptr;
       // signal timeout to state machine
       StateMachine(msg->signal, port, msg);
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
     }
   }
@@ -3094,7 +3094,7 @@ bool COutput::HasWork()
 
 CVdpauRenderPicture* COutput::ProcessMixerPicture()
 {
-  CVdpauRenderPicture *retPic = NULL;
+  CVdpauRenderPicture *retPic = nullptr;
 
   if (!m_bufferPool.processedPics.empty() && !m_bufferPool.freeRenderPics.empty())
   {
@@ -3416,16 +3416,16 @@ void COutput::InitMixer()
 bool COutput::GLInit()
 {
 #ifdef GL_NV_vdpau_interop
-  glVDPAUInitNV = NULL;
-  glVDPAUFiniNV = NULL;
-  glVDPAURegisterOutputSurfaceNV = NULL;
-  glVDPAURegisterVideoSurfaceNV = NULL;
-  glVDPAUIsSurfaceNV = NULL;
-  glVDPAUUnregisterSurfaceNV = NULL;
-  glVDPAUSurfaceAccessNV = NULL;
-  glVDPAUMapSurfacesNV = NULL;
-  glVDPAUUnmapSurfacesNV = NULL;
-  glVDPAUGetSurfaceivNV = NULL;
+  glVDPAUInitNV = nullptr;
+  glVDPAUFiniNV = nullptr;
+  glVDPAURegisterOutputSurfaceNV = nullptr;
+  glVDPAURegisterVideoSurfaceNV = nullptr;
+  glVDPAUIsSurfaceNV = nullptr;
+  glVDPAUUnregisterSurfaceNV = nullptr;
+  glVDPAUSurfaceAccessNV = nullptr;
+  glVDPAUMapSurfacesNV = nullptr;
+  glVDPAUUnmapSurfacesNV = nullptr;
+  glVDPAUGetSurfaceivNV = nullptr;
 #endif
 
 #ifdef GL_NV_vdpau_interop
@@ -3674,10 +3674,10 @@ bool COutput::DestroyGlxContext()
 {
   if (m_glContext)
   {
-    glXMakeCurrent(m_Display, None, NULL);
+    glXMakeCurrent(m_Display, None, nullptr);
     glXDestroyContext(m_Display, m_glContext);
   }
-  m_glContext = 0;
+  m_glContext = nullptr;
 
   if (m_glPixmap)
     glXDestroyPixmap(m_Display, m_glPixmap);

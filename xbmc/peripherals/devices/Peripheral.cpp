@@ -202,7 +202,7 @@ void CPeripheral::AddSetting(const std::string &strKey, const CSetting *setting,
 
   if (!HasSetting(strKey))
   {
-    PeripheralDeviceSetting deviceSetting = { NULL, order };
+    PeripheralDeviceSetting deviceSetting = { nullptr, order };
     switch(setting->GetType())
     {
     case SettingTypeBool:
@@ -254,7 +254,7 @@ void CPeripheral::AddSetting(const std::string &strKey, const CSetting *setting,
       break;
     }
 
-    if (deviceSetting.m_setting != NULL)
+    if (deviceSetting.m_setting != nullptr)
       m_settings.insert(make_pair(strKey, deviceSetting));
   }
 }

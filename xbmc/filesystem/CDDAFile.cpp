@@ -36,7 +36,7 @@ using namespace XFILE;
 
 CFileCDDA::CFileCDDA(void)
 {
-  m_pCdIo = NULL;
+  m_pCdIo = nullptr;
   m_lsnStart = CDIO_INVALID_LSN;
   m_lsnCurrent = CDIO_INVALID_LSN;
   m_lsnEnd = CDIO_INVALID_LSN;
@@ -77,7 +77,7 @@ bool CFileCDDA::Open(const CURL& url)
   if (m_lsnStart == CDIO_INVALID_LSN || m_lsnEnd == CDIO_INVALID_LSN)
   {
     m_cdio->cdio_destroy(m_pCdIo);
-    m_pCdIo = NULL;
+    m_pCdIo = nullptr;
     return false;
   }
 
@@ -197,7 +197,7 @@ void CFileCDDA::Close()
   if (m_pCdIo)
   {
     m_cdio->cdio_destroy(m_pCdIo);
-    m_pCdIo = NULL;
+    m_pCdIo = nullptr;
   }
 }
 

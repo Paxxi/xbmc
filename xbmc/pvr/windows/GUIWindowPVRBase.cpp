@@ -710,7 +710,7 @@ void CGUIWindowPVRBase::ShowRecordingInfo(CFileItem *item)
 
 void CGUIWindowPVRBase::ShowEPGInfo(CFileItem *item)
 {
-  CFileItem *tag = NULL;
+  CFileItem *tag = nullptr;
   bool bHasChannel(false);
   CPVRChannelPtr channel;
   if (item->IsEPG())

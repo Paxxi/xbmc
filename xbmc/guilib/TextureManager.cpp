@@ -409,7 +409,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
     }
   } // of if (strPath.Right(4).ToLower()==".gif")
 
-  CBaseTexture *pTexture = NULL;
+  CBaseTexture *pTexture = nullptr;
   int width = 0, height = 0;
   if (bundle >= 0)
   {

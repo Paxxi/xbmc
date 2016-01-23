@@ -33,7 +33,7 @@
 
 CGUIDialogSettingsManualBase::CGUIDialogSettingsManualBase(int windowId, const std::string &xmlFile)
     : CGUIDialogSettingsManagerBase(windowId, xmlFile),
-      m_section(NULL)
+      m_section(nullptr)
 {
   m_settingsManager = new CSettingsManager();
 }
@@ -41,7 +41,7 @@ CGUIDialogSettingsManualBase::CGUIDialogSettingsManualBase(int windowId, const s
 CGUIDialogSettingsManualBase::~CGUIDialogSettingsManualBase()
 {
   m_settingsManager->Clear();
-  m_section = NULL;
+  m_section = nullptr;
   delete m_settingsManager;
 }
 
@@ -67,7 +67,7 @@ void CGUIDialogSettingsManualBase::SetupView()
 void CGUIDialogSettingsManualBase::InitializeSettings()
 {
   m_settingsManager->Clear();
-  m_section = NULL;
+  m_section = nullptr;
 
   // create a new section
   m_section = new CSettingSection(GetProperty("xmlfile").asString(), m_settingsManager);
@@ -76,11 +76,11 @@ void CGUIDialogSettingsManualBase::InitializeSettings()
 CSettingCategory* CGUIDialogSettingsManualBase::AddCategory(const std::string &id, int label, int help /* = -1 */)
 {
   if (id.empty())
-    return NULL;
+    return nullptr;
 
   CSettingCategory *category = new CSettingCategory(id, m_settingsManager);
-  if (category == NULL)
-    return NULL;
+  if (category == nullptr)
+    return nullptr;
 
   category->SetLabel(label);
   if (help >= 0)
@@ -92,14 +92,14 @@ CSettingCategory* CGUIDialogSettingsManualBase::AddCategory(const std::string &i
 
 CSettingGroup* CGUIDialogSettingsManualBase::AddGroup(CSettingCategory *category, int label /* = -1 */, int help /* = -1 */, bool separatorBelowLabel /* = true */, bool hideSeparator /* = false */)
 {
-  if (category == NULL)
-    return NULL;
+  if (category == nullptr)
+    return nullptr;
 
   size_t groups = category->GetGroups().size();
 
   CSettingGroup *group = new CSettingGroup(StringUtils::Format("%" PRIuS, groups + 1), m_settingsManager);
-  if (group == NULL)
-    return NULL;
+  if (group == nullptr)
+    return nullptr;
 
   if (label >= 0)
     group->SetLabel(label);
@@ -114,13 +114,13 @@ CSettingGroup* CGUIDialogSettingsManualBase::AddGroup(CSettingCategory *category
 CSettingBool* CGUIDialogSettingsManualBase::AddToggle(CSettingGroup *group, const std::string &id, int label, int level, bool value,
                                                       bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingBool *setting = new CSettingBool(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetCheckmarkControl(delayed));
   setSettingDetails(setting, level, visible, help);
@@ -133,13 +133,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddEdit(CSettingGroup *group, const s
                                                    int minimum /* = 0 */, int step /* = 1 */, int maximum /* = 0 */, bool verifyNewValue /* = false */,
                                                    int heading /* = -1 */, bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, minimum, step, maximum, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetEditControl("integer", delayed, false, verifyNewValue, heading));
   setSettingDetails(setting, level, visible, help);
@@ -153,13 +153,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddEdit(CSettingGroup *group, cons
                                                       bool verifyNewValue /* = false */, int heading /* = -1 */, bool delayed /* = false */,
                                                       bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *setting = new CSettingNumber(id, label, value, minimum, step, maximum, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetEditControl("number", delayed, false, verifyNewValue, heading));
   setSettingDetails(setting, level, visible, help);
@@ -172,13 +172,13 @@ CSettingString* CGUIDialogSettingsManualBase::AddEdit(CSettingGroup *group, cons
                                                       bool allowEmpty /* = false */, bool hidden /* = false */,
                                                       int heading /* = -1 */, bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetEditControl("string", delayed, hidden, false, heading));
   setting->SetAllowEmpty(allowEmpty);
@@ -192,13 +192,13 @@ CSettingString* CGUIDialogSettingsManualBase::AddIp(CSettingGroup *group, const 
                                                     bool allowEmpty /* = false */, int heading /* = -1 */, bool delayed /* = false */,
                                                     bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetEditControl("ip", delayed, false, false, heading));
   setting->SetAllowEmpty(allowEmpty);
@@ -212,13 +212,13 @@ CSettingString* CGUIDialogSettingsManualBase::AddPasswordMd5(CSettingGroup *grou
                                                              bool allowEmpty /* = false */, int heading /* = -1 */, bool delayed /* = false */,
                                                              bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetEditControl("md5", delayed, false, false, heading));
   setting->SetAllowEmpty(allowEmpty);
@@ -231,13 +231,13 @@ CSettingString* CGUIDialogSettingsManualBase::AddPasswordMd5(CSettingGroup *grou
 CSettingAction* CGUIDialogSettingsManualBase::AddButton(CSettingGroup *group, const std::string &id, int label, int level, bool delayed /* = false */,
                                                         bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingAction *setting = new CSettingAction(id, label, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetButtonControl("action", delayed));
   setSettingDetails(setting, level, visible, help);
@@ -249,13 +249,13 @@ CSettingAction* CGUIDialogSettingsManualBase::AddButton(CSettingGroup *group, co
 CSettingString* CGUIDialogSettingsManualBase::AddInfoLabelButton(CSettingGroup *group, const std::string &id, int label, int level, std::string info,
                                                                  bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, info, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetButtonControl("infolabel", false));
   setSettingDetails(setting, level, visible, help);
@@ -269,13 +269,13 @@ CSettingAddon* CGUIDialogSettingsManualBase::AddAddon(CSettingGroup *group, cons
                                                       bool showInstallableAddons /* = false */, bool showMoreAddons /* = true */, bool delayed /* = false */,
                                                       bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingAddon *setting = new CSettingAddon(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetButtonControl("addon", delayed, heading, hideValue, showInstalledAddons, showInstallableAddons, showMoreAddons));
   setting->SetAddonType(addonType);
@@ -291,13 +291,13 @@ CSettingPath* CGUIDialogSettingsManualBase::AddPath(CSettingGroup *group, const 
                                                     int heading /* = -1 */, bool hideValue /* = false */, bool delayed /* = false */,
                                                     bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingPath *setting = new CSettingPath(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetButtonControl("path", delayed, heading, hideValue));
   setting->SetWritable(writable);
@@ -313,13 +313,13 @@ CSettingPath* CGUIDialogSettingsManualBase::AddPath(CSettingGroup *group, const 
 CSettingString* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, const std::string &id, int label, int level, std::string value,
                                                          StringSettingOptionsFiller filler, bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("string", delayed));
   setting->SetOptionsFiller(filler, this);
@@ -333,13 +333,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, cons
                                                       int formatLabel /* = -1 */, int minimumLabel /* = -1 */, bool delayed /* = false */,
                                                       bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("string", delayed, minimumLabel, formatLabel));
   setting->SetMinimum(minimum);
@@ -355,13 +355,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, cons
                                                       const std::string &formatString, int minimumLabel /* = -1 */, bool delayed /* = false */,
                                                       bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("string", delayed, minimumLabel, -1, formatString));
   setting->SetMinimum(minimum);
@@ -376,13 +376,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, cons
 CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, const std::string &id, int label, int level, int value, const StaticIntegerSettingOptions &entries,
                                                       bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || entries.empty() ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || entries.empty() ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("string", delayed));
   setting->SetOptions(entries);
@@ -395,13 +395,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, cons
 CSettingInt* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, const std::string &id, int label, int level, int value, IntegerSettingOptionsFiller filler,
                                                       bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("string", delayed));
   setting->SetOptionsFiller(filler, this);
@@ -415,13 +415,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, c
                                                          int formatLabel /* = -1 */, int minimumLabel /* = -1 */, bool delayed /* = false */,
                                                          bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *setting = new CSettingNumber(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("number", delayed, minimumLabel, formatLabel));
   setting->SetMinimum(minimum);
@@ -437,13 +437,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, c
                                                          const std::string &formatString, int minimumLabel /* = -1 */, bool delayed /* = false */,
                                                          bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *setting = new CSettingNumber(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSpinnerControl("number", delayed, minimumLabel, -1, formatString));
   setting->SetMinimum(minimum);
@@ -458,13 +458,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddSpinner(CSettingGroup *group, c
 CSettingString* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const std::string &id, int label, int level, std::string value,
                                                       StringSettingOptionsFiller filler, int heading, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *setting = new CSettingString(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetListControl("string", false, heading, false));
   setting->SetOptionsFiller(filler, this);
@@ -477,13 +477,13 @@ CSettingString* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, cons
 CSettingInt* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const std::string &id, int label, int level, int value, const StaticIntegerSettingOptions &entries,
                                                   int heading, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || entries.empty() ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || entries.empty() ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetListControl("integer", false, heading, false));
   setting->SetOptions(entries);
@@ -496,13 +496,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const s
 CSettingInt* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const std::string &id, int label, int level, int value, IntegerSettingOptionsFiller filler,
                                                    int heading, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetListControl("integer", false, heading, false));
   setting->SetOptionsFiller(filler, this);
@@ -516,21 +516,21 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
                                                     StringSettingOptionsFiller filler, int heading, int minimumItems /* = 0 */, int maximumItems /* = -1 */,
                                                     bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingString *settingDefinition = new CSettingString(id, m_settingsManager);
-  if (settingDefinition == NULL)
-    return NULL;
+  if (settingDefinition == nullptr)
+    return nullptr;
   
   settingDefinition->SetOptionsFiller(filler, this);
 
   CSettingList *setting = new CSettingList(id, settingDefinition, label, m_settingsManager);
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     delete settingDefinition;
-    return NULL;
+    return nullptr;
   }
 
   std::vector<CVariant> valueList;
@@ -541,7 +541,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
   {
     delete settingDefinition;
     delete setting;
-    return NULL;
+    return nullptr;
   }
   // setting the default will also set the actual value on an unchanged setting
   setting->SetDefault(settingValues);
@@ -559,21 +559,21 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
                                                     const StaticIntegerSettingOptions &entries, int heading, int minimumItems /* = 0 */, int maximumItems /* = -1 */,
                                                     bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 || entries.empty() ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || entries.empty() ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *settingDefinition = new CSettingInt(id, m_settingsManager);
-  if (settingDefinition == NULL)
-    return NULL;
+  if (settingDefinition == nullptr)
+    return nullptr;
   
   settingDefinition->SetOptions(entries);
 
   CSettingList *setting = new CSettingList(id, settingDefinition, label, m_settingsManager);
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     delete settingDefinition;
-    return NULL;
+    return nullptr;
   }
 
   std::vector<CVariant> valueList;
@@ -584,7 +584,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
   {
     delete settingDefinition;
     delete setting;
-    return NULL;
+    return nullptr;
   }
   // setting the default will also set the actual value on an unchanged setting
   setting->SetDefault(settingValues);
@@ -602,21 +602,21 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
                                                     IntegerSettingOptionsFiller filler, int heading, int minimumItems /* = 0 */, int maximumItems /* = -1 */,
                                                     bool visible /* = true */, int help /* = -1 */, SettingControlListValueFormatter formatter /* = NULL */)
 {
-  if (group == NULL || id.empty() || label < 0 || filler == NULL ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 || filler == nullptr ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *settingDefinition = new CSettingInt(id, m_settingsManager);
-  if (settingDefinition == NULL)
-    return NULL;
+  if (settingDefinition == nullptr)
+    return nullptr;
   
   settingDefinition->SetOptionsFiller(filler, this);
 
   CSettingList *setting = new CSettingList(id, settingDefinition, label, m_settingsManager);
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     delete settingDefinition;
-    return NULL;
+    return nullptr;
   }
 
   std::vector<CVariant> valueList;
@@ -627,7 +627,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddList(CSettingGroup *group, const 
   {
     delete settingDefinition;
     delete setting;
-    return NULL;
+    return nullptr;
   }
   // setting the default will also set the actual value on an unchanged setting
   setting->SetDefault(settingValues);
@@ -645,13 +645,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddPercentageSlider(CSettingGroup *gr
                                                                int step /* = 1 */, int heading /* = -1 */, bool usePopup /* = false */, bool delayed /* = false */,
                                                                bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("percentage", delayed, heading, usePopup, formatLabel));
   setting->SetMinimum(0);
@@ -667,13 +667,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddPercentageSlider(CSettingGroup *gr
                                                                int step /* = 1 */, int heading /* = -1 */, bool usePopup /* = false */, bool delayed /* = false */,
                                                                bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("percentage", delayed, heading, usePopup, -1, formatString));
   setting->SetMinimum(0);
@@ -689,13 +689,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSlider(CSettingGroup *group, const
                                                      int maximum, int heading /* = -1 */, bool usePopup /* = false */, bool delayed /* = false */,
                                                      bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("integer", delayed, heading, usePopup, formatLabel));
   setting->SetMinimum(minimum);
@@ -711,13 +711,13 @@ CSettingInt* CGUIDialogSettingsManualBase::AddSlider(CSettingGroup *group, const
                                                      int minimum, int step, int maximum, int heading /* = -1 */, bool usePopup /* = false */, bool delayed /* = false */,
                                                      bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *setting = new CSettingInt(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("integer", delayed, heading, usePopup, -1, formatString));
   setting->SetMinimum(minimum);
@@ -733,13 +733,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddSlider(CSettingGroup *group, co
                                                         float step, float maximum, int heading /* = -1 */, bool usePopup /* = false */, bool delayed /* = false */,
                                                         bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *setting = new CSettingNumber(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("number", delayed, heading, usePopup, formatLabel));
   setting->SetMinimum(minimum);
@@ -755,13 +755,13 @@ CSettingNumber* CGUIDialogSettingsManualBase::AddSlider(CSettingGroup *group, co
                                                         float minimum, float step, float maximum, int heading /* = -1 */, bool usePopup /* = false */,
                                                         bool delayed /* = false */, bool visible /* = true */, int help /* = -1 */)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *setting = new CSettingNumber(id, label, value, m_settingsManager);
-  if (setting == NULL)
-    return NULL;
+  if (setting == nullptr)
+    return nullptr;
 
   setting->SetControl(GetSliderControl("number", delayed, heading, usePopup, -1, formatString));
   setting->SetMinimum(minimum);
@@ -847,23 +847,23 @@ CSettingList* CGUIDialogSettingsManualBase::AddRange(CSettingGroup *group, const
                                                      int step, int maximum, const std::string &format, int formatLabel, int valueFormatLabel,
                                                      const std::string &valueFormatString, bool delayed, bool visible, int help)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingInt *settingDefinition = new CSettingInt(id, m_settingsManager);
-  if (settingDefinition == NULL)
-    return NULL;
+  if (settingDefinition == nullptr)
+    return nullptr;
   
   settingDefinition->SetMinimum(minimum);
   settingDefinition->SetStep(step);
   settingDefinition->SetMaximum(maximum);
 
   CSettingList *setting = new CSettingList(id, settingDefinition, label, m_settingsManager);
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     delete settingDefinition;
-    return NULL;
+    return nullptr;
   }
 
   std::vector<CVariant> valueList;
@@ -874,7 +874,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddRange(CSettingGroup *group, const
   {
     delete settingDefinition;
     delete setting;
-    return NULL;
+    return nullptr;
   }
   // setting the default will also set the actual value on an unchanged setting
   setting->SetDefault(settingValues);
@@ -893,23 +893,23 @@ CSettingList* CGUIDialogSettingsManualBase::AddRange(CSettingGroup *group, const
                                                      float step, float maximum, const std::string &format, int formatLabel, int valueFormatLabel,
                                                      const std::string &valueFormatString, bool delayed, bool visible, int help)
 {
-  if (group == NULL || id.empty() || label < 0 ||
-      GetSetting(id) != NULL)
-    return NULL;
+  if (group == nullptr || id.empty() || label < 0 ||
+      GetSetting(id) != nullptr)
+    return nullptr;
 
   CSettingNumber *settingDefinition = new CSettingNumber(id, m_settingsManager);
-  if (settingDefinition == NULL)
-    return NULL;
+  if (settingDefinition == nullptr)
+    return nullptr;
   
   settingDefinition->SetMinimum(minimum);
   settingDefinition->SetStep(step);
   settingDefinition->SetMaximum(maximum);
 
   CSettingList *setting = new CSettingList(id, settingDefinition, label, m_settingsManager);
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     delete settingDefinition;
-    return NULL;
+    return nullptr;
   }
 
   std::vector<CVariant> valueList;
@@ -920,7 +920,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddRange(CSettingGroup *group, const
   {
     delete settingDefinition;
     delete setting;
-    return NULL;
+    return nullptr;
   }
   // setting the default will also set the actual value on an unchanged setting
   setting->SetDefault(settingValues);
@@ -937,7 +937,7 @@ CSettingList* CGUIDialogSettingsManualBase::AddRange(CSettingGroup *group, const
 
 void CGUIDialogSettingsManualBase::setSettingDetails(CSetting *setting, int level, bool visible, int help)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   if (level < 0)
@@ -974,7 +974,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetEditControl(const std::string 
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
   
   control->SetDelayed(delayed);
@@ -992,7 +992,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetButtonControl(const std::strin
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
   
   control->SetDelayed(delayed);
@@ -1011,7 +1011,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetSpinnerControl(const std::stri
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
   
   control->SetDelayed(delayed);
@@ -1031,7 +1031,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetListControl(const std::string 
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
 
   control->SetDelayed(delayed);
@@ -1049,7 +1049,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetSliderControl(const std::strin
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
 
   control->SetDelayed(delayed);
@@ -1071,7 +1071,7 @@ ISettingControl* CGUIDialogSettingsManualBase::GetRangeControl(const std::string
   if (!control->SetFormat(format))
   {
     delete control;
-    return NULL;
+    return nullptr;
   }
 
   control->SetDelayed(delayed);

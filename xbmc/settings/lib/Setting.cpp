@@ -30,21 +30,21 @@
 
 CSetting::CSetting(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : ISetting(id, settingsManager),
-    m_callback(NULL),
+    m_callback(nullptr),
     m_label(-1), m_help(-1),
     m_enabled(true),
     m_level(SettingLevelStandard),
-    m_control(NULL),
+    m_control(nullptr),
     m_changed(false)
 { }
   
 CSetting::CSetting(const std::string &id, const CSetting &setting)
   : ISetting(id, setting.m_settingsManager),
-    m_callback(NULL),
+    m_callback(nullptr),
     m_label(-1), m_help(-1),
     m_enabled(true),
     m_level(SettingLevelStandard),
-    m_control(NULL),
+    m_control(nullptr),
     m_changed(false)
 {
   m_id = id;
@@ -63,7 +63,7 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
     return false;
 
   const TiXmlElement *element = node->ToElement();
-  if (element == NULL)
+  if (element == nullptr)
     return false;
 
   // get the attributes label and help
@@ -75,7 +75,7 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
   if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &tmp) == TIXML_SUCCESS && tmp > 0)
     m_help = tmp;
   const char *parentSetting = element->Attribute(SETTING_XML_ATTR_PARENT);
-  if (parentSetting != NULL)
+  if (parentSetting != nullptr)
     m_parentSetting = parentSetting;
 
   // get the <level>
@@ -87,10 +87,10 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
     m_level = SettingLevelStandard;
 
   const TiXmlNode *dependencies = node->FirstChild(SETTING_XML_ELM_DEPENDENCIES);
-  if (dependencies != NULL)
+  if (dependencies != nullptr)
   {
     const TiXmlNode *dependencyNode = dependencies->FirstChild(SETTING_XML_ELM_DEPENDENCY);
-    while (dependencyNode != NULL)
+    while (dependencyNode != nullptr)
     {
       CSettingDependency dependency(m_settingsManager);
       if (dependency.Deserialize(dependencyNode))
@@ -103,19 +103,19 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
   }
 
   const TiXmlElement *control = node->FirstChildElement(SETTING_XML_ELM_CONTROL);
-  if (control != NULL)
+  if (control != nullptr)
   {
     const char *controlType = control->Attribute(SETTING_XML_ATTR_TYPE);
-    if (controlType == NULL)
+    if (controlType == nullptr)
     {
       CLog::Log(LOGERROR, "CSetting: error reading \"type\" attribute of <control> tag of \"%s\"", m_id.c_str());
       return false;
     }
 
-    if (m_control != NULL)
+    if (m_control != nullptr)
       delete m_control;
     m_control = m_settingsManager->CreateControl(controlType);
-    if (m_control == NULL || !m_control->Deserialize(control, update))
+    if (m_control == nullptr || !m_control->Deserialize(control, update))
     {
       CLog::Log(LOGERROR, "CSetting: error reading <control> tag of \"%s\"", m_id.c_str());
       return false;
@@ -128,10 +128,10 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
   }
 
   const TiXmlNode *updates = node->FirstChild(SETTING_XML_ELM_UPDATES);
-  if (updates != NULL)
+  if (updates != nullptr)
   {
     const TiXmlElement *updateElem = updates->FirstChildElement(SETTING_XML_ELM_UPDATE);
-    while (updateElem != NULL)
+    while (updateElem != nullptr)
     {
       CSettingUpdate settingUpdate;
       if (settingUpdate.Deserialize(updateElem))
@@ -159,7 +159,7 @@ bool CSetting::IsEnabled() const
   if (!m_parentSetting.empty())
   {
     CSetting *parentSetting = m_settingsManager->GetSetting(m_parentSetting);
-    if (parentSetting != NULL && !parentSetting->IsEnabled())
+    if (parentSetting != nullptr && !parentSetting->IsEnabled())
       return false;
   }
 
@@ -212,7 +212,7 @@ bool CSetting::IsVisible() const
 
 bool CSetting::OnSettingChanging(const CSetting *setting)
 {
-  if (m_callback == NULL)
+  if (m_callback == nullptr)
     return true;
     
   return m_callback->OnSettingChanging(setting);
@@ -220,7 +220,7 @@ bool CSetting::OnSettingChanging(const CSetting *setting)
   
 void CSetting::OnSettingChanged(const CSetting *setting)
 {
-  if (m_callback == NULL)
+  if (m_callback == nullptr)
     return;
 
   m_callback->OnSettingChanged(setting);
@@ -228,7 +228,7 @@ void CSetting::OnSettingChanged(const CSetting *setting)
 
 void CSetting::OnSettingAction(const CSetting *setting)
 {
-  if (m_callback == NULL)
+  if (m_callback == nullptr)
     return;
 
   m_callback->OnSettingAction(setting);
@@ -236,7 +236,7 @@ void CSetting::OnSettingAction(const CSetting *setting)
 
 bool CSetting::OnSettingUpdate(CSetting* &setting, const char *oldSettingId, const TiXmlNode *oldSettingNode)
 {
-  if (m_callback == NULL)
+  if (m_callback == nullptr)
     return false;
 
   return m_callback->OnSettingUpdate(setting, oldSettingId, oldSettingNode);
@@ -244,7 +244,7 @@ bool CSetting::OnSettingUpdate(CSetting* &setting, const char *oldSettingId, con
 
 void CSetting::OnSettingPropertyChanged(const CSetting *setting, const char *propertyName)
 {
-  if (m_callback == NULL)
+  if (m_callback == nullptr)
     return;
 
   m_callback->OnSettingPropertyChanged(setting, propertyName);
@@ -260,13 +260,13 @@ void CSetting::Copy(const CSetting &setting)
   m_level = setting.m_level;
   
   delete m_control;
-  if (setting.m_control != NULL)
+  if (setting.m_control != nullptr)
   {
     m_control = m_settingsManager->CreateControl(setting.m_control->GetType());
     *m_control = *setting.m_control;
   }
   else
-    m_control = NULL;
+    m_control = nullptr;
 
   m_dependencies = setting.m_dependencies;
   m_updates = setting.m_updates;
@@ -291,7 +291,7 @@ CSettingList::CSettingList(const std::string &id, CSetting *settingDefinition, i
 
 CSettingList::CSettingList(const std::string &id, const CSettingList &setting)
   : CSetting(id, setting),
-    m_definition(NULL),
+    m_definition(nullptr),
     m_delimiter("|"),
     m_minimumItems(0), m_maximumItems(-1)
 {
@@ -307,8 +307,8 @@ CSettingList::~CSettingList()
 
 CSetting* CSettingList::Clone(const std::string &id) const
 {
-  if (m_definition == NULL)
-    return NULL;
+  if (m_definition == nullptr)
+    return nullptr;
 
   return new CSettingList(id, *this);
 }
@@ -317,14 +317,14 @@ bool CSettingList::Deserialize(const TiXmlNode *node, bool update /* = false */)
 {
   CExclusiveLock lock(m_critical);
 
-  if (m_definition == NULL)
+  if (m_definition == nullptr)
     return false;
 
   if (!CSetting::Deserialize(node, update))
     return false;
 
   const TiXmlElement *element = node->ToElement();
-  if (element == NULL)
+  if (element == nullptr)
   {
     CLog::Log(LOGWARNING, "CSettingList: unable to read type of list setting of %s", m_id.c_str());
     return false;
@@ -336,7 +336,7 @@ bool CSettingList::Deserialize(const TiXmlNode *node, bool update /* = false */)
     return false;
 
   const TiXmlNode *constraints = node->FirstChild(SETTING_XML_ELM_CONSTRAINTS);
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // read the delimiter
     std::string delimiter;
@@ -375,7 +375,7 @@ int CSettingList::GetElementType() const
 {
   CSharedLock lock(m_critical);
   
-  if (m_definition == NULL)
+  if (m_definition == nullptr)
     return SettingTypeNone;
 
   return m_definition->GetType();
@@ -505,10 +505,10 @@ void CSettingList::copy(const CSettingList &setting)
   copy(setting.m_values, m_values);
   copy(setting.m_defaults, m_defaults);
   
-  if (setting.m_definition != NULL)
+  if (setting.m_definition != nullptr)
   {
     CSetting *definitionCopy = setting.m_definition->Clone(m_id + ".definition");
-    if (definitionCopy != NULL)
+    if (definitionCopy != nullptr)
       m_definition = definitionCopy;
   }
 
@@ -523,11 +523,11 @@ void CSettingList::copy(const SettingPtrList &srcValues, SettingPtrList &dstValu
 
   for (SettingPtrList::const_iterator itValue = srcValues.begin(); itValue != srcValues.end(); ++itValue)
   {
-    if (*itValue == NULL)
+    if (*itValue == nullptr)
       continue;
 
     CSetting *valueCopy = (*itValue)->Clone((*itValue)->GetId());
-    if (valueCopy == NULL)
+    if (valueCopy == nullptr)
       continue;
 
     dstValues.push_back(SettingPtr(valueCopy));
@@ -551,7 +551,7 @@ bool CSettingList::fromValues(const std::vector<std::string> &strValues, Setting
   for (std::vector<std::string>::const_iterator itValue = strValues.begin(); itValue != strValues.end(); ++itValue)
   {
     CSetting *settingValue = m_definition->Clone(StringUtils::Format("%s.%d", m_id.c_str(), index++));
-    if (settingValue == NULL ||
+    if (settingValue == nullptr ||
         !settingValue->FromString(*itValue))
     {
       delete settingValue;
@@ -573,7 +573,7 @@ std::string CSettingList::toString(const SettingPtrList &values) const
   std::vector<std::string> strValues;
   for (SettingPtrList::const_iterator it = values.begin(); it != values.end(); ++it)
   {
-    if (*it != NULL)
+    if (*it != nullptr)
       strValues.push_back((*it)->ToString());
   }
 
@@ -713,14 +713,14 @@ CSettingInt::CSettingInt(const std::string &id, CSettingsManager *settingsManage
   : CSetting(id, settingsManager),
     m_value(0), m_default(0),
     m_min(0), m_step(1), m_max(0),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 { }
   
 CSettingInt::CSettingInt(const std::string &id, const CSettingInt &setting)
   : CSetting(id, setting),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   copy(setting);
 }
@@ -729,8 +729,8 @@ CSettingInt::CSettingInt(const std::string &id, int label, int value, CSettingsM
   : CSetting(id, settingsManager),
     m_value(value), m_default(value),
     m_min(0), m_step(1), m_max(0),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   m_label = label;
 }
@@ -739,8 +739,8 @@ CSettingInt::CSettingInt(const std::string &id, int label, int value, int minimu
   : CSetting(id, settingsManager),
     m_value(value), m_default(value),
     m_min(minimum), m_step(step), m_max(maximum),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   m_label = label;
 }
@@ -750,8 +750,8 @@ CSettingInt::CSettingInt(const std::string &id, int label, int value, const Stat
     m_value(value), m_default(value),
     m_min(0), m_step(1), m_max(0),
     m_options(options),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   m_label = label;
 }
@@ -779,11 +779,11 @@ bool CSettingInt::Deserialize(const TiXmlNode *node, bool update /* = false */)
   }
 
   const TiXmlNode *constraints = node->FirstChild(SETTING_XML_ELM_CONSTRAINTS);
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // get the entries
     const TiXmlNode *options = constraints->FirstChild(SETTING_XML_ELM_OPTIONS);
-    if (options != NULL && options->FirstChild() != NULL)
+    if (options != nullptr && options->FirstChild() != nullptr)
     {
       if (options->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
       {
@@ -791,7 +791,7 @@ bool CSettingInt::Deserialize(const TiXmlNode *node, bool update /* = false */)
         if (!m_optionsFillerName.empty())
         {
           m_optionsFiller = (IntegerSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(this);
-          if (m_optionsFiller == NULL)
+          if (m_optionsFiller == nullptr)
             CLog::Log(LOGWARNING, "CSettingInt: unknown options filler \"%s\" of \"%s\"", m_optionsFillerName.c_str(), m_id.c_str());
         }
       }
@@ -799,12 +799,12 @@ bool CSettingInt::Deserialize(const TiXmlNode *node, bool update /* = false */)
       {
         m_options.clear();
         const TiXmlElement *optionElement = options->FirstChildElement(SETTING_XML_ELM_OPTION);
-        while (optionElement != NULL)
+        while (optionElement != nullptr)
         {
           std::pair<int, int> entry;
           if (optionElement->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &entry.first) == TIXML_SUCCESS && entry.first > 0)
           {
-            entry.second = strtol(optionElement->FirstChild()->Value(), NULL, 10);
+            entry.second = strtol(optionElement->FirstChild()->Value(), nullptr, 10);
             m_options.push_back(entry);
           }
 
@@ -874,7 +874,7 @@ bool CSettingInt::CheckValidity(int value) const
     if (!ok)
       return false;
   }
-  else if (m_optionsFillerName.empty() && m_optionsFiller == NULL &&
+  else if (m_optionsFillerName.empty() && m_optionsFiller == nullptr &&
            m_min != m_max && (value < m_min || value > m_max))
     return false;
 
@@ -925,7 +925,7 @@ SettingOptionsType CSettingInt::GetOptionsType() const
   CSharedLock lock(m_critical);
   if (!m_options.empty())
     return SettingOptionsTypeStatic;
-  if (!m_optionsFillerName.empty() || m_optionsFiller != NULL)
+  if (!m_optionsFillerName.empty() || m_optionsFiller != nullptr)
     return SettingOptionsTypeDynamic;
 
   return SettingOptionsTypeNone;
@@ -935,14 +935,14 @@ DynamicIntegerSettingOptions CSettingInt::UpdateDynamicOptions()
 {
   CExclusiveLock lock(m_critical);
   DynamicIntegerSettingOptions options;
-  if (m_optionsFiller == NULL &&
-     (m_optionsFillerName.empty() || m_settingsManager == NULL))
+  if (m_optionsFiller == nullptr &&
+     (m_optionsFillerName.empty() || m_settingsManager == nullptr))
     return options;
 
-  if (m_optionsFiller == NULL)
+  if (m_optionsFiller == nullptr)
   {
     m_optionsFiller = (IntegerSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(this);
-    if (m_optionsFiller == NULL)
+    if (m_optionsFiller == nullptr)
       return options;
   }
 
@@ -998,9 +998,9 @@ bool CSettingInt::fromString(const std::string &strValue, int &value)
   if (strValue.empty())
     return false;
 
-  char *end = NULL;
+  char *end = nullptr;
   value = (int)strtol(strValue.c_str(), &end, 10);
-  if (end != NULL && *end != '\0')
+  if (end != nullptr && *end != '\0')
     return false; 
 
   return true;
@@ -1057,7 +1057,7 @@ bool CSettingNumber::Deserialize(const TiXmlNode *node, bool update /* = false *
   }
     
   const TiXmlNode *constraints = node->FirstChild(SETTING_XML_ELM_CONSTRAINTS);
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // get the minimum value
     XMLUtils::GetDouble(constraints, SETTING_XML_ELM_MINIMUM, m_min);
@@ -1169,9 +1169,9 @@ bool CSettingNumber::fromString(const std::string &strValue, double &value)
   if (strValue.empty())
     return false;
 
-  char *end = NULL;
+  char *end = nullptr;
   value = strtod(strValue.c_str(), &end);
-  if (end != NULL && *end != '\0')
+  if (end != nullptr && *end != '\0')
     return false;
 
   return true;
@@ -1180,14 +1180,14 @@ bool CSettingNumber::fromString(const std::string &strValue, double &value)
 CSettingString::CSettingString(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : CSetting(id, settingsManager),
     m_allowEmpty(false),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 { }
   
 CSettingString::CSettingString(const std::string &id, const CSettingString &setting)
   : CSetting(id, setting),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   copy(setting);
 }
@@ -1196,8 +1196,8 @@ CSettingString::CSettingString(const std::string &id, int label, const std::stri
   : CSetting(id, settingsManager),
     m_value(value), m_default(value),
     m_allowEmpty(false),
-    m_optionsFiller(NULL),
-    m_optionsFillerData(NULL)
+    m_optionsFiller(nullptr),
+    m_optionsFillerData(nullptr)
 {
   m_label = label;
 }
@@ -1215,21 +1215,21 @@ bool CSettingString::Deserialize(const TiXmlNode *node, bool update /* = false *
     return false;
 
   const TiXmlNode *constraints = node->FirstChild(SETTING_XML_ELM_CONSTRAINTS);
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // get allowempty (needs to be parsed before parsing the default value)
     XMLUtils::GetBoolean(constraints, SETTING_XML_ELM_ALLOWEMPTY, m_allowEmpty);
 
     // get the entries
     const TiXmlNode *options = constraints->FirstChild(SETTING_XML_ELM_OPTIONS);
-    if (options != NULL && options->FirstChild() != NULL &&
+    if (options != nullptr && options->FirstChild() != nullptr &&
         options->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
     {
       m_optionsFillerName = options->FirstChild()->ValueStr();
       if (!m_optionsFillerName.empty())
       {
         m_optionsFiller = (StringSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(this);
-        if (m_optionsFiller == NULL)
+        if (m_optionsFiller == nullptr)
           CLog::Log(LOGWARNING, "CSettingString: unknown options filler \"%s\" of \"%s\"", m_optionsFillerName.c_str(), m_id.c_str());
       }
     }
@@ -1300,7 +1300,7 @@ void CSettingString::SetDefault(const std::string &value)
 SettingOptionsType CSettingString::GetOptionsType() const
 {
   CSharedLock lock(m_critical);
-  if (!m_optionsFillerName.empty() || m_optionsFiller != NULL)
+  if (!m_optionsFillerName.empty() || m_optionsFiller != nullptr)
     return SettingOptionsTypeDynamic;
 
   return SettingOptionsTypeNone;
@@ -1310,14 +1310,14 @@ DynamicStringSettingOptions CSettingString::UpdateDynamicOptions()
 {
   CExclusiveLock lock(m_critical);
   DynamicStringSettingOptions options;
-  if (m_optionsFiller == NULL &&
-     (m_optionsFillerName.empty() || m_settingsManager == NULL))
+  if (m_optionsFiller == nullptr &&
+     (m_optionsFillerName.empty() || m_settingsManager == nullptr))
     return options;
 
-  if (m_optionsFiller == NULL)
+  if (m_optionsFiller == nullptr)
   {
     m_optionsFiller = (StringSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(this);
-    if (m_optionsFiller == NULL)
+    if (m_optionsFiller == nullptr)
       return options;
   }
 

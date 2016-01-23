@@ -60,7 +60,7 @@ CFileDirectoryFactory::~CFileDirectoryFactory(void)
 IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
 {
   if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
-    return NULL;
+    return nullptr;
 
   std::string strExtension=URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
@@ -77,7 +77,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       if (result->ContainsFiles(url))
         return result;
       delete result;
-      return NULL;
+      return nullptr;
     }
   }
 
@@ -130,7 +130,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       pItem->SetURL(zipURL);
       return new CZipDirectory;
     }
-    return NULL;
+    return nullptr;
   }
   if (url.IsFileType("rar") || url.IsFileType("001"))
   {
@@ -142,7 +142,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       if (url.IsFileType("001"))
       {
         if (StringUtils::EqualsNoCase(tokens[tokens.size()-2], "ts")) // .ts.001 - treat as a movie file to scratch some users itch
-          return NULL;
+          return nullptr;
       }
       std::string token = tokens[tokens.size()-2];
       if (StringUtils::StartsWith(token, "part")) // only list '.part01.rar'
@@ -157,7 +157,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         if (atoi(token.substr(4).c_str()) > 1 && CFile::Stat(strPath2,&stat) == 0)
         {
           pItem->m_bIsFolder = true;
-          return NULL;
+          return nullptr;
         }
       }
     }
@@ -180,10 +180,10 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       pItem->SetURL(rarURL);
       return new CRarDirectory;
 #else
-      return NULL;
+      return nullptr;
 #endif
     }
-    return NULL;
+    return nullptr;
   }
   if (url.IsFileType("xbt"))
   {
@@ -217,8 +217,8 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         return pDir;
     }
     delete pDir;
-    return NULL;
+    return nullptr;
   }
-  return NULL;
+  return nullptr;
 }
 

@@ -25,7 +25,7 @@ yajl_callbacks CJSONVariantParser::callbacks = {
   CJSONVariantParser::ParseBoolean,
   CJSONVariantParser::ParseInteger,
   CJSONVariantParser::ParseDouble,
-  NULL,
+  nullptr,
   CJSONVariantParser::ParseString,
   CJSONVariantParser::ParseMapStart,
   CJSONVariantParser::ParseMapKey,
@@ -38,7 +38,7 @@ CJSONVariantParser::CJSONVariantParser(IParseCallback *callback)
 {
   m_callback = callback;
 
-  m_handler = yajl_alloc(&callbacks, NULL, this);
+  m_handler = yajl_alloc(&callbacks, nullptr, this);
 
   yajl_config(m_handler, yajl_allow_comments, 1);
   yajl_config(m_handler, yajl_dont_validate_strings, 0);

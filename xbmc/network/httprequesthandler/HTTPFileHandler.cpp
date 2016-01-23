@@ -97,7 +97,7 @@ void CHTTPFileHandler::SetFile(const std::string& file, int responseStatus)
 #else
         time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-        if (time != NULL)
+        if (time != nullptr)
           m_lastModified = *time;
       }
     }

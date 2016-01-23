@@ -53,17 +53,17 @@ using namespace VAAPI;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-CVAAPIContext *CVAAPIContext::m_context = 0;
+CVAAPIContext *CVAAPIContext::m_context = nullptr;
 CCriticalSection CVAAPIContext::m_section;
-Display *CVAAPIContext::m_X11dpy = 0;
+Display *CVAAPIContext::m_X11dpy = nullptr;
 
 CVAAPIContext::CVAAPIContext()
 {
-  m_context = 0;
+  m_context = nullptr;
   m_refCount = 0;
-  m_attributes = NULL;
-  m_profiles = NULL;
-  m_display = NULL;
+  m_attributes = nullptr;
+  m_profiles = nullptr;
+  m_display = nullptr;
 }
 
 void CVAAPIContext::Release(CDecoder *decoder)
@@ -80,7 +80,7 @@ void CVAAPIContext::Release(CDecoder *decoder)
   {
     Close();
     delete this;
-    m_context = 0;
+    m_context = nullptr;
   }
 }
 
@@ -110,8 +110,8 @@ bool CVAAPIContext::EnsureContext(CVAAPIContext **ctx, CDecoder *decoder)
     if (!m_context->CreateContext())
     {
       delete m_context;
-      m_context = 0;
-      *ctx = NULL;
+      m_context = nullptr;
+      *ctx = nullptr;
       return false;
     }
   }
@@ -128,7 +128,7 @@ bool CVAAPIContext::CreateContext()
 {
   { CSingleLock lock(g_graphicsContext);
     if (!m_X11dpy)
-      m_X11dpy = XOpenDisplay(NULL);
+      m_X11dpy = XOpenDisplay(nullptr);
   }
 
   m_display = vaGetDisplay(m_X11dpy);
@@ -136,7 +136,7 @@ bool CVAAPIContext::CreateContext()
   int major_version, minor_version;
   if (!CheckSuccess(vaInitialize(m_display, &major_version, &minor_version)))
   {
-    m_display = NULL;
+    m_display = nullptr;
     return false;
   }
 
@@ -464,10 +464,10 @@ CDecoder::CDecoder() : m_vaapiOutput(&m_inMsgEvent)
 
   m_vaapiConfigured = false;
   m_DisplayState = VAAPI_OPEN;
-  m_vaapiConfig.context = 0;
+  m_vaapiConfig.context = nullptr;
   m_vaapiConfig.contextId = VA_INVALID_ID;
   m_vaapiConfig.configId = VA_INVALID_ID;
-  m_avctx = NULL;
+  m_avctx = nullptr;
   m_getBufferError = 0;
 }
 
@@ -523,7 +523,7 @@ bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum A
   m_decoderThread = CThread::GetCurrentThreadId();
   m_DisplayState = VAAPI_OPEN;
   m_vaapiConfigured = false;
-  m_presentPicture = 0;
+  m_presentPicture = nullptr;
   m_getBufferError = 0;
 
   VAProfile profile;
@@ -648,7 +648,7 @@ void CDecoder::Close()
 
   if (m_vaapiConfig.context)
     m_vaapiConfig.context->Release(this);
-  m_vaapiConfig.context = 0;
+  m_vaapiConfig.context = nullptr;
 }
 
 long CDecoder::Release()
@@ -730,7 +730,7 @@ int CDecoder::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags)
 
   va->m_getBufferError = 0;
 
-  pic->data[1] = pic->data[2] = NULL;
+  pic->data[1] = pic->data[2] = nullptr;
   pic->data[0] = (uint8_t*)(uintptr_t)surf;
   pic->data[3] = (uint8_t*)(uintptr_t)surf;
   pic->linesize[0] = pic->linesize[1] =  pic->linesize[2] = 0;
@@ -834,7 +834,7 @@ int CDecoder::Decode(AVCodecContext* avctx, AVFrame* pFrame)
         if (m_presentPicture)
         {
           m_presentPicture->ReturnUnused();
-          m_presentPicture = 0;
+          m_presentPicture = nullptr;
         }
 
         m_presentPicture = *(CVaapiRenderPicture**)msg->data;
@@ -917,7 +917,7 @@ int CDecoder::Check(AVCodecContext* avctx)
     FiniVAAPIOutput();
     if (m_vaapiConfig.context)
       m_vaapiConfig.context->Release(this);
-    m_vaapiConfig.context = 0;
+    m_vaapiConfig.context = nullptr;
 
     if (CVAAPIContext::EnsureContext(&m_vaapiConfig.context, this) && ConfigVAAPI())
     {
@@ -1056,7 +1056,7 @@ bool CDecoder::ConfigVAAPI()
                                      m_vaapiConfig.surfaceHeight,
                                      surfaces,
                                      nb_surfaces,
-                                     NULL, 0)))
+                                     nullptr, 0)))
   {
     return false;
   }
@@ -1100,7 +1100,7 @@ bool CDecoder::ConfigVAAPI()
       m_vaapiOutput.Dispose();
       return false;
     }
-    SDiMethods *diMethods = NULL;
+    SDiMethods *diMethods = nullptr;
     diMethods = (SDiMethods*)reply->data;
     if (diMethods)
     {
@@ -1276,7 +1276,7 @@ bool CVaapiRenderPicture::GLMapSurface()
       *attrib++ = glInterop.vaImage.pitches[0];
       *attrib++ = EGL_NONE;
       glInterop.eglImageY = glInterop.eglCreateImageKHR(glInterop.eglDisplay,
-                                          EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, (EGLClientBuffer)NULL,
+                                          EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, (EGLClientBuffer)nullptr,
                                           attribs);
       if (!glInterop.eglImageY)
       {
@@ -1300,7 +1300,7 @@ bool CVaapiRenderPicture::GLMapSurface()
       *attrib++ = glInterop.vaImage.pitches[1];
       *attrib++ = EGL_NONE;
       glInterop.eglImageVU = glInterop.eglCreateImageKHR(glInterop.eglDisplay,
-                                          EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, (EGLClientBuffer)NULL,
+                                          EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, (EGLClientBuffer)nullptr,
                                           attribs);
       if (!glInterop.eglImageVU)
       {
@@ -1547,7 +1547,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         }
       }
       {
-        std::string portName = port == NULL ? "timer" : port->portName;
+        std::string portName = port == nullptr ? "timer" : port->portName;
         CLog::Log(LOGWARNING, "COutput::%s - signal: %d form port: %s not handled for state: %d", __FUNCTION__, signal, portName.c_str(), m_state);
       }
       return;
@@ -1641,7 +1641,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_IDLE:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1663,7 +1663,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_WORK:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1695,7 +1695,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_STEP1:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1727,7 +1727,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_STEP2:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1750,7 +1750,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
       break;
 
     case O_TOP_CONFIGURED_OUTPUT:
-      if (port == NULL) // timeout
+      if (port == nullptr) // timeout
       {
         switch (signal)
         {
@@ -1792,8 +1792,8 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
 
 void COutput::Process()
 {
-  Message *msg = NULL;
-  Protocol *port = NULL;
+  Message *msg = nullptr;
+  Protocol *port = nullptr;
   bool gotMsg;
 
   m_state = O_TOP_UNCONFIGURED;
@@ -1812,7 +1812,7 @@ void COutput::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -1834,7 +1834,7 @@ void COutput::Process()
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
       continue;
     }
@@ -1849,13 +1849,13 @@ void COutput::Process()
     {
       msg = m_controlPort.GetMessage();
       msg->signal = COutputControlProtocol::TIMEOUT;
-      port = 0;
+      port = nullptr;
       // signal timeout to state machine
       StateMachine(msg->signal, port, msg);
       if (!m_bStateMachineSelfTrigger)
       {
         msg->Release();
-        msg = NULL;
+        msg = nullptr;
       }
     }
   }
@@ -1881,7 +1881,7 @@ bool COutput::Init()
   m_pp->PreInit(m_config, &m_diMethods);
   delete m_pp;
 
-  m_pp = NULL;
+  m_pp = nullptr;
 
   m_vaError = false;
 
@@ -1897,7 +1897,7 @@ bool COutput::Uninit()
   }
   ReleaseBufferPool();
   delete m_pp;
-  m_pp = NULL;
+  m_pp = nullptr;
   DestroyEGLContext();
   return true;
 }
@@ -2019,7 +2019,7 @@ void COutput::InitCycle()
     if (m_pp && (method != m_currentDiMethod || !m_pp->Compatible(method)))
     {
       delete m_pp;
-      m_pp = NULL;
+      m_pp = nullptr;
       DropVppProcessedPictures();
     }
     if (!m_pp)
@@ -2043,7 +2043,7 @@ void COutput::InitCycle()
       else
       {
         delete m_pp;
-        m_pp = NULL;
+        m_pp = nullptr;
       }
     }
   }
@@ -2054,7 +2054,7 @@ void COutput::InitCycle()
     if (m_pp && !m_pp->Compatible(method))
     {
       delete m_pp;
-      m_pp = NULL;
+      m_pp = nullptr;
       DropVppProcessedPictures();
     }
     if (!m_pp)
@@ -2075,7 +2075,7 @@ void COutput::InitCycle()
       else
       {
         delete m_pp;
-        m_pp = NULL;
+        m_pp = nullptr;
       }
     }
   }
@@ -2111,7 +2111,7 @@ CVaapiRenderPicture* COutput::ProcessPicture(CVaapiProcessedPicture &pic)
     retPic->DVDPic.format = RENDER_FMT_VAAPINV12;
   }
   else
-    return NULL;
+    return nullptr;
 
   m_bufferPool.freeRenderPics.pop_front();
   m_bufferPool.usedRenderPics.push_back(idx);
@@ -2567,7 +2567,7 @@ bool CVppPostproc::PreInit(CVaapiConfig &config, SDiMethods *methods)
   m_config = config;
 
   // create config
-  if (!CheckSuccess(vaCreateConfig(m_config.dpy, VAProfileNone, VAEntrypointVideoProc, NULL, 0, &m_configId)))
+  if (!CheckSuccess(vaCreateConfig(m_config.dpy, VAProfileNone, VAEntrypointVideoProc, nullptr, 0, &m_configId)))
   {
     if (g_advancedSettings.CanLogComponent(LOGVIDEO))
       CLog::Log(LOGDEBUG, "CVppPostproc::PreInit  - VPP init failed");
@@ -2843,7 +2843,7 @@ bool CVppPostproc::Filter(CVaapiProcessedPicture &outPic)
 
   if (!CheckSuccess(vaCreateBuffer(m_config.dpy, m_contextId,
                     VAProcPipelineParameterBufferType,
-                    sizeof(VAProcPipelineParameterBuffer), 1, NULL, &pipelineBuf)))
+                    sizeof(VAProcPipelineParameterBuffer), 1, nullptr, &pipelineBuf)))
   {
     return false;
   }
@@ -3059,10 +3059,10 @@ bool CVppPostproc::CheckSuccess(VAStatus status)
 
 CFFmpegPostproc::CFFmpegPostproc()
 {
-  m_cache = NULL;
-  m_pFilterFrameIn = NULL;
-  m_pFilterFrameOut = NULL;
-  m_pFilterGraph = NULL;
+  m_cache = nullptr;
+  m_pFilterFrameIn = nullptr;
+  m_pFilterFrameOut = nullptr;
+  m_pFilterGraph = nullptr;
   m_DVDPic.pts = DVD_NOPTS_VALUE;
   m_frametime = 0;
   m_lastOutPts = DVD_NOPTS_VALUE;
@@ -3147,13 +3147,13 @@ bool CFFmpegPostproc::Init(EINTERLACEMETHOD method)
                                         (m_config.aspect.num != 0) ? m_config.aspect.num : 1,
                                         (m_config.aspect.num != 0) ? m_config.aspect.den : 1);
 
-  if (avfilter_graph_create_filter(&m_pFilterIn, srcFilter, "src", args.c_str(), NULL, m_pFilterGraph) < 0)
+  if (avfilter_graph_create_filter(&m_pFilterIn, srcFilter, "src", args.c_str(), nullptr, m_pFilterGraph) < 0)
   {
     CLog::Log(LOGERROR, "CFFmpegPostproc::Init - avfilter_graph_create_filter: src");
     return false;
   }
 
-  if (avfilter_graph_create_filter(&m_pFilterOut, outFilter, "out", NULL, NULL, m_pFilterGraph) < 0)
+  if (avfilter_graph_create_filter(&m_pFilterOut, outFilter, "out", nullptr, nullptr, m_pFilterGraph) < 0)
   {
     CLog::Log(LOGERROR, "CFFmpegPostproc::Init  - avfilter_graph_create_filter: out");
     return false;
@@ -3172,12 +3172,12 @@ bool CFFmpegPostproc::Init(EINTERLACEMETHOD method)
   outputs->name    = av_strdup("in");
   outputs->filter_ctx = m_pFilterIn;
   outputs->pad_idx = 0;
-  outputs->next    = NULL;
+  outputs->next    = nullptr;
 
   inputs->name    = av_strdup("out");
   inputs->filter_ctx = m_pFilterOut;
   inputs->pad_idx = 0;
-  inputs->next    = NULL;
+  inputs->next    = nullptr;
 
   if (method == VS_INTERLACEMETHOD_DEINTERLACE)
   {
@@ -3185,7 +3185,7 @@ bool CFFmpegPostproc::Init(EINTERLACEMETHOD method)
 
     filter = "yadif=1:-1";
 
-    if (avfilter_graph_parse_ptr(m_pFilterGraph, filter.c_str(), &inputs, &outputs, NULL) < 0)
+    if (avfilter_graph_parse_ptr(m_pFilterGraph, filter.c_str(), &inputs, &outputs, nullptr) < 0)
     {
       CLog::Log(LOGERROR, "CFFmpegPostproc::Init  - avfilter_graph_parse");
       avfilter_inout_free(&outputs);
@@ -3196,7 +3196,7 @@ bool CFFmpegPostproc::Init(EINTERLACEMETHOD method)
     avfilter_inout_free(&outputs);
     avfilter_inout_free(&inputs);
 
-    if (avfilter_graph_config(m_pFilterGraph, NULL) < 0)
+    if (avfilter_graph_config(m_pFilterGraph, nullptr) < 0)
     {
       CLog::Log(LOGERROR, "CFFmpegPostproc::Init  - avfilter_graph_config");
       return false;
@@ -3270,8 +3270,8 @@ bool CFFmpegPostproc::AddPicture(CVaapiDecodedPicture &inPic)
 
   m_pFilterFrameIn->linesize[0] = image.pitches[0];
   m_pFilterFrameIn->linesize[1] = image.pitches[1];
-  m_pFilterFrameIn->data[2] = NULL;
-  m_pFilterFrameIn->data[3] = NULL;
+  m_pFilterFrameIn->data[2] = nullptr;
+  m_pFilterFrameIn->data[3] = nullptr;
   m_pFilterFrameIn->pkt_size = image.data_size;
 
   CheckSuccess(vaUnmapBuffer(m_config.dpy, image.buf));

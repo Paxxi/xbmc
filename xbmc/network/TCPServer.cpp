@@ -58,7 +58,7 @@ using namespace ANNOUNCEMENT;
 
 #define RECEIVEBUFFER 1024
 
-CTCPServer *CTCPServer::ServerInstance = NULL;
+CTCPServer *CTCPServer::ServerInstance = nullptr;
 
 bool CTCPServer::StartServer(int port, bool nonlocal)
 {
@@ -82,14 +82,14 @@ void CTCPServer::StopServer(bool bWait)
     if (bWait)
     {
       delete ServerInstance;
-      ServerInstance = NULL;
+      ServerInstance = nullptr;
     }
   }
 }
 
 bool CTCPServer::IsRunning()
 {
-  if (ServerInstance == NULL)
+  if (ServerInstance == nullptr)
     return false;
 
   return ((CThread*)ServerInstance)->IsRunning();
@@ -99,7 +99,7 @@ CTCPServer::CTCPServer(int port, bool nonlocal) : CThread("TCPServer")
 {
   m_port = port;
   m_nonlocal = nonlocal;
-  m_sdpd = NULL;
+  m_sdpd = nullptr;
 }
 
 void CTCPServer::Process()
@@ -127,7 +127,7 @@ void CTCPServer::Process()
         max_fd = m_connections[i]->m_socket;
     }
 
-    int res = select((intptr_t)max_fd+1, &rfds, NULL, NULL, &to);
+    int res = select((intptr_t)max_fd+1, &rfds, nullptr, nullptr, &to);
     if (res < 0)
     {
       CLog::Log(LOGERROR, "JSONRPC Server: Select failed");
@@ -155,7 +155,7 @@ void CTCPServer::Process()
               if (!response.empty())
                 m_connections[i]->Send(response.c_str(), response.size());
 
-              if (websocket != NULL)
+              if (websocket != nullptr)
               {
                 // Replace the CTCPClient with a CWebSocketClient
                 CWebSocketClient *websocketClient = new CWebSocketClient(websocket, *(m_connections[i]));
@@ -627,7 +627,7 @@ CTCPServer::CWebSocketClient& CTCPServer::CWebSocketClient::operator=(const CWeb
 void CTCPServer::CWebSocketClient::Send(const char *data, unsigned int size)
 {
   const CWebSocketMessage *msg = m_websocket->Send(WebSocketTextFrame, data, size);
-  if (msg == NULL || !msg->IsComplete())
+  if (msg == nullptr || !msg->IsComplete())
     return;
 
   std::vector<const CWebSocketFrame *> frames = msg->GetFrames();
@@ -638,11 +638,11 @@ void CTCPServer::CWebSocketClient::Send(const char *data, unsigned int size)
 void CTCPServer::CWebSocketClient::PushBuffer(CTCPServer *host, const char *buffer, int length)
 {
   bool send;
-  const CWebSocketMessage *msg = NULL;
+  const CWebSocketMessage *msg = nullptr;
   size_t len = length;
   do
   {
-    if ((msg = m_websocket->Handle(buffer, len, send)) != NULL && msg->IsComplete())
+    if ((msg = m_websocket->Handle(buffer, len, send)) != nullptr && msg->IsComplete())
     {
       std::vector<const CWebSocketFrame *> frames = msg->GetFrames();
       if (send)
@@ -659,7 +659,7 @@ void CTCPServer::CWebSocketClient::PushBuffer(CTCPServer *host, const char *buff
       delete msg;
     }
   }
-  while (len > 0 && msg != NULL);
+  while (len > 0 && msg != nullptr);
 
   if (m_websocket->GetState() == WebSocketStateClosed)
     Disconnect();

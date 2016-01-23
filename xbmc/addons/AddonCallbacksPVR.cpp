@@ -76,7 +76,7 @@ CPVRClient *CAddonCallbacksPVR::GetPVRClient(void *addonData)
   if (!addon || !addon->GetHelperPVR())
   {
     CLog::Log(LOGERROR, "PVR - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   return dynamic_cast<CPVRClient *>(addon->GetHelperPVR()->m_addon);

@@ -129,7 +129,7 @@ protected:
 #else
     time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-    if (time == NULL)
+    if (time == nullptr)
       return false;
 
     lastModified = *time;
@@ -254,14 +254,14 @@ protected:
     std::string contentType = httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_TYPE);
     std::string contentTypeStart = expectedMimeType + "; boundary=";
     // it must start with "multipart/byteranges; boundary=" followed by the boundary
-    ASSERT_EQ(0, contentType.find(contentTypeStart));
+    ASSERT_EQ(nullptr, contentType.find(contentTypeStart));
     ASSERT_GT(contentType.size(), contentTypeStart.size());
     // extract the boundary
     std::string multipartBoundary = contentType.substr(contentTypeStart.size());
     ASSERT_FALSE(multipartBoundary.empty());
     multipartBoundary = "--" + multipartBoundary;
 
-    ASSERT_EQ(0, result.find(multipartBoundary));
+    ASSERT_EQ(nullptr, result.find(multipartBoundary));
     std::vector<std::string> rangeParts = StringUtils::Split(result, multipartBoundary);
     // the first part is not really a part and is therefore empty (the place before the first boundary)
     ASSERT_TRUE(rangeParts.front().empty());
@@ -306,7 +306,7 @@ protected:
 
       // remove the leading "bytes " string from the range definition
       std::string contentRangeDefinition = contentRangeHeaderParts.front();
-      ASSERT_EQ(0, contentRangeDefinition.find("bytes "));
+      ASSERT_EQ(nullptr, contentRangeDefinition.find("bytes "));
       contentRangeDefinition = contentRangeDefinition.substr(6);
 
       // check the start and end positions of the range

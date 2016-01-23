@@ -44,7 +44,7 @@ bool CRecentlyAddedJob::UpdateVideo()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
 
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
 
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateVideos() - Running RecentlyAdded home screen update");
@@ -192,7 +192,7 @@ bool CRecentlyAddedJob::UpdateMusic()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
   
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
   
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateMusic() - Running RecentlyAdded home screen update");
@@ -299,7 +299,7 @@ bool CRecentlyAddedJob::UpdateTotal()
 {
   CGUIWindow* home = g_windowManager.GetWindow(WINDOW_HOME);
   
-  if ( home == NULL )
+  if ( home == nullptr )
     return false;
   
   CLog::Log(LOGDEBUG, "CRecentlyAddedJob::UpdateTotal() - Running RecentlyAdded home screen update");

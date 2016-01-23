@@ -79,7 +79,7 @@ CUPnPRenderer::SetupServices()
     NPT_CHECK(PLT_MediaRenderer::SetupServices());
 
     // update what we can play
-    PLT_Service* service = NULL;
+    PLT_Service* service = nullptr;
     NPT_CHECK_FATAL(FindServiceByType("urn:schemas-upnp-org:service:ConnectionManager:1", service));
     service->SetStateVariable("SinkProtocolInfo"
         ,"http-get:*:*:*"
@@ -201,7 +201,7 @@ CUPnPRenderer::ProcessHttpGetRequest(NPT_HttpRequest&              request,
         NPT_String filepath = query.GetField("path");
         if (!filepath.IsEmpty()) {
             NPT_HttpEntity* entity = response.GetEntity();
-            if (entity == NULL) return NPT_ERROR_INVALID_STATE;
+            if (entity == nullptr) return NPT_ERROR_INVALID_STATE;
 
             // check the method
             if (request.GetMethod() != NPT_HTTP_METHOD_GET &&
@@ -652,7 +652,7 @@ CUPnPRenderer::OnSetVolume(PLT_ActionReference& action)
 {
     NPT_String volume;
     NPT_CHECK_SEVERE(action->GetArgumentValue("DesiredVolume", volume));
-    g_application.SetVolume((float)strtod((const char*)volume, NULL));
+    g_application.SetVolume((float)strtod((const char*)volume, nullptr));
     return NPT_SUCCESS;
 }
 

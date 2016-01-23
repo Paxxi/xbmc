@@ -32,7 +32,7 @@ static int teletextFadeAmount = 0;
 CGUIDialogTeletext::CGUIDialogTeletext()
     : CGUIDialog(WINDOW_DIALOG_OSD_TELETEXT, "")
 {
-  m_pTxtTexture = NULL;
+  m_pTxtTexture = nullptr;
   m_renderOrder = RENDER_ORDER_DIALOG_TELETEXT;
 }
 
@@ -161,7 +161,7 @@ void CGUIDialogTeletext::OnDeinitWindow(int nextWindowID)
   m_TextDecoder.EndDecoder();
 
   delete m_pTxtTexture;
-  m_pTxtTexture = NULL;
+  m_pTxtTexture = nullptr;
 
   CGUIDialog::OnDeinitWindow(nextWindowID);
 }

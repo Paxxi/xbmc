@@ -948,7 +948,7 @@ int CGUIDialogAudioDSPManager::helper_TranslateModeType(std::string ModeString)
 
 CFileItem *CGUIDialogAudioDSPManager::helper_CreateModeListItem(CActiveAEDSPModePtr &ModePointer, AE_DSP_MENUHOOK_CAT &MenuHook, int *ContinuesNo)
 {
-  CFileItem *pItem = NULL;
+  CFileItem *pItem = nullptr;
 
   if (!ContinuesNo)
   {

@@ -120,7 +120,7 @@ void CGUIControlGroup::Render()
 {
   CPoint pos(GetPosition());
   g_graphicsContext.SetOrigin(pos.x, pos.y);
-  CGUIControl *focusedControl = NULL;
+  CGUIControl *focusedControl = nullptr;
   for (iControls it = m_children.begin(); it != m_children.end(); ++it)
   {
     CGUIControl *control = *it;
@@ -445,7 +445,7 @@ bool CGUIControlGroup::HasVisibleID(int id) const
 
 CGUIControl *CGUIControlGroup::GetControl(int iControl)
 {
-  CGUIControl *pPotential = NULL;
+  CGUIControl *pPotential = nullptr;
   LookupMap::iterator first = m_lookup.find(iControl);
   if (first != m_lookup.end())
   {
@@ -464,7 +464,7 @@ CGUIControl *CGUIControlGroup::GetControl(int iControl)
 
 const CGUIControl* CGUIControlGroup::GetControl(int iControl) const
 {
-  const CGUIControl *pPotential = NULL;
+  const CGUIControl *pPotential = nullptr;
   LookupMap::const_iterator first = m_lookup.find(iControl);
   if (first != m_lookup.end())
   {
@@ -519,13 +519,13 @@ CGUIControl *CGUIControlGroup::GetFocusedControl() const
     else if (control->HasFocus())
       return (CGUIControl *)control;
   }
-  return NULL;
+  return nullptr;
 }
 
 // in the case of id == 0, we don't match id
 CGUIControl *CGUIControlGroup::GetFirstFocusableControl(int id)
 {
-  if (!CanFocus()) return NULL;
+  if (!CanFocus()) return nullptr;
   if (id && id == (int) GetID()) return this; // we're focusable and they want us
   for (iControls it = m_children.begin(); it != m_children.end(); ++it)
   {
@@ -539,7 +539,7 @@ CGUIControl *CGUIControlGroup::GetFirstFocusableControl(int id)
     if ((!id || (int) pControl->GetID() == id) && pControl->CanFocus())
       return pControl;
   }
-  return NULL;
+  return nullptr;
 }
 
 void CGUIControlGroup::AddControl(CGUIControl *control, int position /* = -1*/)

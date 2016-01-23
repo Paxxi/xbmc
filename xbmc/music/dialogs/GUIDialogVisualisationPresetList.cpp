@@ -38,7 +38,7 @@ CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList(void)
 {
   m_currentPreset = 0;
   m_vecPresets = new CFileItemList;
-  m_viz = NULL;
+  m_viz = nullptr;
   m_loadType = KEEP_IN_MEMORY;
 }
 
@@ -70,7 +70,7 @@ bool CGUIDialogVisualisationPresetList::OnMessage(CGUIMessage &message)
     break;
   case GUI_MSG_VISUALISATION_UNLOADING:
     {
-      m_viz = NULL;
+      m_viz = nullptr;
       Update();
     }
     break;
@@ -85,7 +85,7 @@ bool CGUIDialogVisualisationPresetList::OnMessage(CGUIMessage &message)
 
 void CGUIDialogVisualisationPresetList::SetVisualisation(CVisualisation* vis)
 {
-  m_viz = NULL;
+  m_viz = nullptr;
   if (vis)
   {
     m_viz = vis;

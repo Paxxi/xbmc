@@ -29,7 +29,7 @@ using namespace XFILE;
 
 CDVDInputStreamFile::CDVDInputStreamFile(CFileItem& fileitem) : CDVDInputStream(DVDSTREAM_TYPE_FILE, fileitem)
 {
-  m_pFile = NULL;
+  m_pFile = nullptr;
   m_eof = true;
 }
 
@@ -94,7 +94,7 @@ bool CDVDInputStreamFile::Open()
   if (!m_pFile->Open(m_item.GetPath(), flags))
   {
     delete m_pFile;
-    m_pFile = NULL;
+    m_pFile = nullptr;
     return false;
   }
 
@@ -115,7 +115,7 @@ void CDVDInputStreamFile::Close()
   }
 
   CDVDInputStream::Close();
-  m_pFile = NULL;
+  m_pFile = nullptr;
   m_eof = true;
 }
 
@@ -140,7 +140,7 @@ int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
   if(!m_pFile) return -1;
 
   if(whence == SEEK_POSSIBLE)
-    return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
+    return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
 
   int64_t ret = m_pFile->Seek(offset, whence);
 

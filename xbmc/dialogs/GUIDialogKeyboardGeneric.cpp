@@ -69,7 +69,7 @@ using namespace KODI::MESSAGING;
 CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
 : CGUIDialog(WINDOW_DIALOG_KEYBOARD, "DialogKeyboard.xml")
 , CGUIKeyboard()
-, m_pCharCallback(NULL)
+, m_pCharCallback(nullptr)
 {
   m_bIsConfirmed = false;
   m_bShift = false;
@@ -79,7 +79,7 @@ CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
   m_loadType = KEEP_IN_MEMORY;
   m_isKeyboardNavigationMode = false;
   m_previouslyFocusedButton = 0;
-  m_codingtable = NULL;
+  m_codingtable = nullptr;
   m_pos = 0;
   m_listwidth = 600;
   m_hzcode = "";

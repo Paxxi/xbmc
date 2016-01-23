@@ -255,10 +255,10 @@ bool CTagLoaderTagLib::ParseTag(ID3v2::Tag *id3v2, MUSIC_INFO::EmbeddedArt *art,
     else if (it->first == "TPE2")   SetAlbumArtist(tag, GetID3v2StringList(it->second));
     else if (it->first == "TIT2")   tag.SetTitle(it->second.front()->toString().to8Bit(true));
     else if (it->first == "TCON")   SetGenre(tag, GetID3v2StringList(it->second));
-    else if (it->first == "TRCK")   tag.SetTrackNumber(strtol(it->second.front()->toString().toCString(true), NULL, 10));
-    else if (it->first == "TPOS")   tag.SetDiscNumber(strtol(it->second.front()->toString().toCString(true), NULL, 10));
-    else if (it->first == "TYER")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), NULL, 10));
-    else if (it->first == "TCMP")   tag.SetCompilation((strtol(it->second.front()->toString().toCString(true), NULL, 10) == 0) ? false : true);
+    else if (it->first == "TRCK")   tag.SetTrackNumber(strtol(it->second.front()->toString().toCString(true), nullptr, 10));
+    else if (it->first == "TPOS")   tag.SetDiscNumber(strtol(it->second.front()->toString().toCString(true), nullptr, 10));
+    else if (it->first == "TYER")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), nullptr, 10));
+    else if (it->first == "TCMP")   tag.SetCompilation((strtol(it->second.front()->toString().toCString(true), nullptr, 10) == 0) ? false : true);
     else if (it->first == "TENC")   {} // EncodedBy
     else if (it->first == "TCOM")   AddArtistRole(tag, "Composer", GetID3v2StringList(it->second));
     else if (it->first == "TPE3")   AddArtistRole(tag, "Conductor", GetID3v2StringList(it->second));
@@ -266,8 +266,8 @@ bool CTagLoaderTagLib::ParseTag(ID3v2::Tag *id3v2, MUSIC_INFO::EmbeddedArt *art,
     else if (it->first == "TPE4")   AddArtistRole(tag, "Remixer", GetID3v2StringList(it->second));
     else if (it->first == "TPUB")   {} // Publisher. Known unsupported, supress warnings
     else if (it->first == "TCOP")   {} // Copyright message
-    else if (it->first == "TDRC")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), NULL, 10));
-    else if (it->first == "TDRL")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), NULL, 10));
+    else if (it->first == "TDRC")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), nullptr, 10));
+    else if (it->first == "TDRL")   tag.SetYear(strtol(it->second.front()->toString().toCString(true), nullptr, 10));
     else if (it->first == "TDTG")   {} // Tagging time
     else if (it->first == "TLAN")   {} // Languages
     else if (it->first == "TMOO")   tag.SetMood(it->second.front()->toString().to8Bit(true));
@@ -909,7 +909,7 @@ void CTagLoaderTagLib::SetGenre(CMusicInfoTag &tag, const std::vector<std::strin
     std::string genre = *i;
     if (StringUtils::IsNaturalNumber(genre))
     {
-      int number = strtol(i->c_str(), NULL, 10);
+      int number = strtol(i->c_str(), nullptr, 10);
       if (number >= 0 && number < 256)
         genre = ID3v1::genre(number).to8Bit(true);
     }
@@ -989,23 +989,23 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
 
   ID3v1::Tag::setStringHandler(&ID3v1StringHandler);
   ID3v2::Tag::setLatin1StringHandler(&ID3v2StringHandler);
-  TagLib::File*              file = NULL;
-  TagLib::APE::File*         apeFile = NULL;
-  TagLib::ASF::File*         asfFile = NULL;
-  TagLib::FLAC::File*        flacFile = NULL;
-  TagLib::IT::File*          itFile = NULL;
-  TagLib::Mod::File*         modFile = NULL;
-  TagLib::MP4::File*         mp4File = NULL;
-  TagLib::MPC::File*         mpcFile = NULL;
-  TagLib::MPEG::File*        mpegFile = NULL;
-  TagLib::Ogg::Vorbis::File* oggVorbisFile = NULL;
-  TagLib::Ogg::FLAC::File*   oggFlacFile = NULL;
-  TagLib::S3M::File*         s3mFile = NULL;
-  TagLib::TrueAudio::File*   ttaFile = NULL;
-  TagLib::WavPack::File*     wvFile = NULL;
-  TagLib::XM::File*          xmFile = NULL;
-  TagLib::RIFF::WAV::File *  wavFile = NULL;
-  TagLib::RIFF::AIFF::File * aiffFile = NULL;
+  TagLib::File*              file = nullptr;
+  TagLib::APE::File*         apeFile = nullptr;
+  TagLib::ASF::File*         asfFile = nullptr;
+  TagLib::FLAC::File*        flacFile = nullptr;
+  TagLib::IT::File*          itFile = nullptr;
+  TagLib::Mod::File*         modFile = nullptr;
+  TagLib::MP4::File*         mp4File = nullptr;
+  TagLib::MPC::File*         mpcFile = nullptr;
+  TagLib::MPEG::File*        mpegFile = nullptr;
+  TagLib::Ogg::Vorbis::File* oggVorbisFile = nullptr;
+  TagLib::Ogg::FLAC::File*   oggFlacFile = nullptr;
+  TagLib::S3M::File*         s3mFile = nullptr;
+  TagLib::TrueAudio::File*   ttaFile = nullptr;
+  TagLib::WavPack::File*     wvFile = nullptr;
+  TagLib::XM::File*          xmFile = nullptr;
+  TagLib::RIFF::WAV::File *  wavFile = nullptr;
+  TagLib::RIFF::AIFF::File * aiffFile = nullptr;
 
   try
   {
@@ -1047,7 +1047,7 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
       if (!file || !file->isValid())
       {
         delete file;
-        oggFlacFile = NULL;
+        oggFlacFile = nullptr;
         file = oggVorbisFile = new Ogg::Vorbis::File(stream);
       }
     }
@@ -1065,13 +1065,13 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
     return false;
   }
 
-  APE::Tag *ape = NULL;
-  ASF::Tag *asf = NULL;
-  MP4::Tag *mp4 = NULL;
-  ID3v1::Tag *id3v1 = NULL;
-  ID3v2::Tag *id3v2 = NULL;
-  Ogg::XiphComment *xiph = NULL;
-  Tag *generic = NULL;
+  APE::Tag *ape = nullptr;
+  ASF::Tag *asf = nullptr;
+  MP4::Tag *mp4 = nullptr;
+  ID3v1::Tag *id3v1 = nullptr;
+  ID3v2::Tag *id3v2 = nullptr;
+  Ogg::XiphComment *xiph = nullptr;
+  Tag *generic = nullptr;
 
   if (apeFile)
     ape = apeFile->APETag(false);

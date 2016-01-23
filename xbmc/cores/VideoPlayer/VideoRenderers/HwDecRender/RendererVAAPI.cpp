@@ -63,7 +63,7 @@ void CRendererVAAPI::ReleaseBuffer(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
     ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
-  buf.hwDec = NULL;
+  buf.hwDec = nullptr;
 }
 
 CRenderInfo CRendererVAAPI::GetRenderInfo()
@@ -144,7 +144,7 @@ void CRendererVAAPI::DeleteTexture(int index)
 
   if (m_buffers[index].hwDec)
     ((VAAPI::CVaapiRenderPicture*)m_buffers[index].hwDec)->Release();
-  m_buffers[index].hwDec = NULL;
+  m_buffers[index].hwDec = nullptr;
 
   YUVFIELDS &fields = m_buffers[index].fields;
   fields[FIELD_FULL][0].id = None;

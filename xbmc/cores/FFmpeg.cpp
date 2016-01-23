@@ -36,9 +36,9 @@ int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
   {
     case AV_LOCK_CREATE:
     {
-      *lock = NULL;
+      *lock = nullptr;
       *lock = new CCriticalSection();
-      if (*lock == NULL)
+      if (*lock == nullptr)
         return 1;
       break;
     }
@@ -53,7 +53,7 @@ int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
     case AV_LOCK_DESTROY:
     {
       delete *lock;
-      *lock = NULL;
+      *lock = nullptr;
       break;
     }
 
@@ -86,7 +86,7 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
   uintptr_t threadId = (uintptr_t)CThread::GetCurrentThreadId();
   std::string &buffer = g_logbuffer[threadId];
 
-  AVClass* avc= ptr ? *(AVClass**)ptr : NULL;
+  AVClass* avc= ptr ? *(AVClass**)ptr : nullptr;
 
   if(level >= AV_LOG_DEBUG &&
      !g_advancedSettings.CanLogComponent(LOGFFMPEG))

@@ -35,15 +35,15 @@ bool CSettingUpdate::operator<(const CSettingUpdate& rhs) const
 
 bool CSettingUpdate::Deserialize(const TiXmlNode *node)
 {
-  if (node == NULL)
+  if (node == nullptr)
     return false;
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == NULL)
+  if (elem == nullptr)
     return false;
   
   const char *strType = elem->Attribute(SETTING_XML_ATTR_TYPE);
-  if (strType == NULL || strlen(strType) <= 0 || !setType(strType))
+  if (strType == nullptr || strlen(strType) <= 0 || !setType(strType))
   {
     CLog::Log(LOGWARNING, "CSettingUpdate: missing or unknown update type definition");
     return false;
@@ -51,7 +51,7 @@ bool CSettingUpdate::Deserialize(const TiXmlNode *node)
 
   if (m_type == SettingUpdateTypeRename)
   {
-    if (node->FirstChild() == NULL || node->FirstChild()->Type() != TiXmlNode::TINYXML_TEXT)
+    if (node->FirstChild() == nullptr || node->FirstChild()->Type() != TiXmlNode::TINYXML_TEXT)
     {
       CLog::Log(LOGWARNING, "CSettingUpdate: missing or invalid setting id for rename update definition");
       return false;

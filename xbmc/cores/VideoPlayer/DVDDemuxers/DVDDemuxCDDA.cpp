@@ -37,8 +37,8 @@ public:
 
 CDVDDemuxCDDA::CDVDDemuxCDDA() : CDVDDemux()
 {
-  m_pInput = NULL;
-  m_stream = NULL;
+  m_pInput = nullptr;
+  m_stream = nullptr;
   m_bytes  = 0;
 }
 
@@ -76,9 +76,9 @@ bool CDVDDemuxCDDA::Open(CDVDInputStream* pInput)
 void CDVDDemuxCDDA::Dispose()
 {
   delete m_stream;
-  m_stream = NULL;
+  m_stream = nullptr;
 
-  m_pInput = NULL;
+  m_pInput = nullptr;
   m_bytes  = 0;
 }
 
@@ -103,7 +103,7 @@ void CDVDDemuxCDDA::Flush()
 DemuxPacket* CDVDDemuxCDDA::Read()
 {
   if(!m_pInput)
-    return NULL;
+    return nullptr;
 
   DemuxPacket* pPacket = CDVDDemuxUtils::AllocateDemuxPacket(CDDA_READ_SIZE);
 
@@ -111,7 +111,7 @@ DemuxPacket* CDVDDemuxCDDA::Read()
   {
     if (m_pInput)
       m_pInput->Close();
-    return NULL;
+    return nullptr;
   }
 
   pPacket->iSize = m_pInput->Read(pPacket->pData, CDDA_READ_SIZE);
@@ -120,7 +120,7 @@ DemuxPacket* CDVDDemuxCDDA::Read()
   if(pPacket->iSize < 1)
   {
     delete pPacket;
-    pPacket = NULL;
+    pPacket = nullptr;
   }
   else
   {
@@ -169,14 +169,14 @@ int CDVDDemuxCDDA::GetStreamLength()
 CDemuxStream* CDVDDemuxCDDA::GetStream(int iStreamId)
 {
   if(iStreamId != 0)
-    return NULL;
+    return nullptr;
 
   return m_stream;
 }
 
 int CDVDDemuxCDDA::GetNrOfStreams()
 {
-  return (m_stream == NULL ? 0 : 1);
+  return (m_stream == nullptr ? 0 : 1);
 }
 
 std::string CDVDDemuxCDDA::GetFileName()

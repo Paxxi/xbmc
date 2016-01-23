@@ -89,17 +89,17 @@ const int CPVRManager::m_pvrWindowIds[12] = {
 
 CPVRManager::CPVRManager(void) :
     CThread("PVRManager"),
-    m_channelGroups(NULL),
-    m_recordings(NULL),
-    m_timers(NULL),
-    m_addons(NULL),
-    m_guiInfo(NULL),
+    m_channelGroups(nullptr),
+    m_recordings(nullptr),
+    m_timers(nullptr),
+    m_addons(nullptr),
+    m_guiInfo(nullptr),
     m_triggerEvent(true),
-    m_currentFile(NULL),
-    m_database(NULL),
+    m_currentFile(nullptr),
+    m_database(nullptr),
     m_bFirstStart(true),
     m_bEpgsCreated(false),
-    m_progressHandle(NULL),
+    m_progressHandle(nullptr),
     m_managerState(ManagerStateStopped)
 {
   CAnnouncementManager::GetInstance().AddAnnouncer(this);
@@ -153,7 +153,7 @@ bool CPVRManager::RestartManagerOnAddonDisabled(void) const
 
 void CPVRManager::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -178,7 +178,7 @@ void CPVRManager::OnSettingChanged(const CSetting *setting)
 
 void CPVRManager::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -230,7 +230,7 @@ void CPVRManager::OnSettingAction(const CSetting *setting)
   else if (settingId == CSettings::SETTING_PVRCLIENT_MENUHOOK)
   {
     if (IsStarted())
-      m_addons->ProcessMenuHooks(-1, PVR_MENUHOOK_SETTING, NULL);
+      m_addons->ProcessMenuHooks(-1, PVR_MENUHOOK_SETTING, nullptr);
   }
 }
 
@@ -372,7 +372,7 @@ void CPVRManager::Cleanup(void)
   SAFE_DELETE(m_database);
   m_triggerEvent.Set();
 
-  m_currentFile           = NULL;
+  m_currentFile           = nullptr;
   m_bIsSwitchingChannels  = false;
   m_outdatedAddons.clear();
   m_bEpgsCreated = false;
@@ -426,7 +426,7 @@ void CPVRManager::Start(bool bAsync /* = false */)
   if (bAsync)
   {
     CPVRManagerStartJob *job = new CPVRManagerStartJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 
@@ -696,7 +696,7 @@ void CPVRManager::HideProgressDialog(void)
   if (m_progressHandle)
   {
     m_progressHandle->MarkFinished();
-    m_progressHandle = NULL;
+    m_progressHandle = nullptr;
   }
 }
 
@@ -1363,7 +1363,7 @@ bool CPVRManager::PerformChannelSwitch(const CPVRChannelPtr &channel, bool bPrev
 
   // will be deleted by CPVRChannelSwitchJob::DoWork()
   CFileItem* previousFile = m_currentFile;
-  m_currentFile = NULL;
+  m_currentFile = nullptr;
 
   bool bSwitched(false);
 
@@ -1574,7 +1574,7 @@ bool CPVRManager::AllLocalBackendsIdle(CPVRTimerInfoTagPtr& causingEvent) const
     if (IsNextEventWithinBackendIdleTime())
     {
       CFileItemPtr item = m_timers->GetNextActiveTimer();
-      if (item.get() == NULL)
+      if (item.get() == nullptr)
       {
         // Next event is due to automatic daily wakeup of PVR!
         causingEvent.reset();
@@ -1727,7 +1727,7 @@ void CPVRManager::TriggerChannelGroupsUpdate(void)
 
 void CPVRManager::TriggerSearchMissingChannelIcons(void)
 {
-  CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), NULL);
+  CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), nullptr);
 }
 
 void CPVRManager::ExecutePendingJobs(void)

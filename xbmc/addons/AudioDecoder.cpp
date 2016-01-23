@@ -28,10 +28,10 @@ CAudioDecoder::CAudioDecoder(const cp_extension_t* ext)
  : AudioDecoderDll(ext),
    m_extension(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@extension")),
    m_mimetype(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@mimetype")),
-   m_context(NULL),
+   m_context(nullptr),
    m_tags(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@tags") == "true"),
    m_tracks(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@tracks") == "true"),
-   m_channel(NULL)
+   m_channel(nullptr)
 {
   m_CodecName = CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@name");
   m_strExt = CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@name")+"stream";
@@ -66,7 +66,7 @@ bool CAudioDecoder::Init(const std::string& strFile, unsigned int filecache)
   else
     m_format.m_channelLayout = CAEUtil::GuessChLayout(channels);
 
-  return (m_context != NULL);
+  return (m_context != nullptr);
 }
 
 int CAudioDecoder::ReadPCM(uint8_t* buffer, int size, int* actualsize)

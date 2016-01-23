@@ -22,7 +22,7 @@
 #include <algorithm>
 
 CAEBuffer::CAEBuffer() :
-  m_buffer    (NULL),
+  m_buffer    (nullptr),
   m_bufferSize(0   ),
   m_bufferPos (0   ),
   m_cursorPos (0   )
@@ -65,7 +65,7 @@ void CAEBuffer::DeAlloc()
 {
   if (m_buffer)
     _aligned_free(m_buffer);
-  m_buffer     = NULL;
+  m_buffer     = nullptr;
   m_bufferSize = 0;
   m_bufferPos  = 0;
 }

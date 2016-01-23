@@ -154,7 +154,7 @@ void CPeripherals::TriggerDeviceScan(const PeripheralBusType type /* = PERIPHERA
 CPeripheralBus *CPeripherals::GetBusByType(const PeripheralBusType type) const
 {
   CSingleLock lock(m_critSection);
-  CPeripheralBus *bus(NULL);
+  CPeripheralBus *bus(nullptr);
   for (unsigned int iBusPtr = 0; iBusPtr < m_busses.size(); iBusPtr++)
   {
     if (m_busses.at(iBusPtr)->Type() == type)
@@ -170,7 +170,7 @@ CPeripheralBus *CPeripherals::GetBusByType(const PeripheralBusType type) const
 CPeripheral *CPeripherals::GetPeripheralAtLocation(const std::string &strLocation, PeripheralBusType busType /* = PERIPHERAL_BUS_UNKNOWN */) const
 {
   CSingleLock lock(m_critSection);
-  CPeripheral *peripheral(NULL);
+  CPeripheral *peripheral(nullptr);
   for (unsigned int iBusPtr = 0; iBusPtr < m_busses.size(); iBusPtr++)
   {
     /* check whether the bus matches if a bus type other than unknown was passed */
@@ -178,7 +178,7 @@ CPeripheral *CPeripherals::GetPeripheralAtLocation(const std::string &strLocatio
       continue;
 
     /* return the first device that matches */
-    if ((peripheral = m_busses.at(iBusPtr)->GetPeripheral(strLocation)) != NULL)
+    if ((peripheral = m_busses.at(iBusPtr)->GetPeripheral(strLocation)) != nullptr)
       break;
   }
 
@@ -187,7 +187,7 @@ CPeripheral *CPeripherals::GetPeripheralAtLocation(const std::string &strLocatio
 
 bool CPeripherals::HasPeripheralAtLocation(const std::string &strLocation, PeripheralBusType busType /* = PERIPHERAL_BUS_UNKNOWN */) const
 {
-  return (GetPeripheralAtLocation(strLocation, busType) != NULL);
+  return (GetPeripheralAtLocation(strLocation, busType) != nullptr);
 }
 
 CPeripheralBus *CPeripherals::GetBusWithDevice(const std::string &strLocation) const
@@ -200,7 +200,7 @@ CPeripheralBus *CPeripherals::GetBusWithDevice(const std::string &strLocation) c
       return m_busses.at(iBusPtr);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 int CPeripherals::GetPeripheralsWithFeature(std::vector<CPeripheral *> &results, const PeripheralFeature feature, PeripheralBusType busType /* = PERIPHERAL_BUS_UNKNOWN */) const
@@ -239,7 +239,7 @@ bool CPeripherals::HasPeripheralWithFeature(const PeripheralFeature feature, Per
 
 CPeripheral *CPeripherals::CreatePeripheral(CPeripheralBus &bus, const PeripheralScanResult& result)
 {
-  CPeripheral *peripheral = NULL;
+  CPeripheral *peripheral = nullptr;
   PeripheralScanResult mappedResult = result;
   if (mappedResult.m_busType == PERIPHERAL_BUS_UNKNOWN)
     mappedResult.m_busType = bus.Type();
@@ -248,7 +248,7 @@ CPeripheral *CPeripherals::CreatePeripheral(CPeripheralBus &bus, const Periphera
   if (!GetMappingForDevice(bus, mappedResult))
   {
     /* don't create instances for devices that aren't mapped in peripherals.xml */
-    return NULL;
+    return nullptr;
   }
 
   switch(mappedResult.m_mappedType)
@@ -311,7 +311,7 @@ CPeripheral *CPeripherals::CreatePeripheral(CPeripheralBus &bus, const Periphera
     {
       CLog::Log(LOGDEBUG, "%s - failed to initialise peripheral on '%s'", __FUNCTION__, mappedResult.m_strLocation.c_str());
       delete peripheral;
-      peripheral = NULL;
+      peripheral = nullptr;
     }
   }
 
@@ -473,7 +473,7 @@ void CPeripherals::GetSettingsFromMappingsFile(TiXmlElement *xmlNode, std::map<s
 
   while (currentNode)
   {
-    CSetting *setting = NULL;
+    CSetting *setting = nullptr;
     std::string strKey = XMLUtils::GetAttribute(currentNode, "key");
     if (strKey.empty())
       continue;
@@ -576,7 +576,7 @@ void CPeripherals::GetDirectory(const std::string &strPath, CFileItemList &items
 CPeripheral *CPeripherals::GetByPath(const std::string &strPath) const
 {
   if (!StringUtils::StartsWithNoCase(strPath, "peripherals://"))
-    return NULL;
+    return nullptr;
 
   std::string strPathCut = strPath.substr(14);
   std::string strBus = strPathCut.substr(0, strPathCut.find('/'));
@@ -588,7 +588,7 @@ CPeripheral *CPeripherals::GetByPath(const std::string &strPath) const
       return m_busses.at(iBusPtr)->GetByPath(strPath);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 bool CPeripherals::OnAction(const CAction &action)
@@ -699,7 +699,7 @@ bool CPeripherals::GetNextKeypress(float frameTime, CKey &key)
 
 void CPeripherals::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -717,7 +717,7 @@ void CPeripherals::OnSettingChanged(const CSetting *setting)
 
 void CPeripherals::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();

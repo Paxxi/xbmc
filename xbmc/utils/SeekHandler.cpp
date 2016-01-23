@@ -235,7 +235,7 @@ void CSeekHandler::SettingOptionsSeekStepsFiller(const CSetting *setting, std::v
 
 void CSeekHandler::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   if (setting->GetId() == CSettings::SETTING_VIDEOPLAYER_SEEKDELAY ||

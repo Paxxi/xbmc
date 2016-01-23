@@ -81,7 +81,7 @@ JSONRPC_STATUS CSettingsOperations::GetCategories(const std::string &method, ITr
   if (!strSection.empty())
   {
     CSettingSection *section = CSettings::GetInstance().GetSection(strSection);
-    if (section == NULL)
+    if (section == nullptr)
       return InvalidParams;
 
     sections.push_back(section);
@@ -153,7 +153,7 @@ JSONRPC_STATUS CSettingsOperations::GetSettings(const std::string &method, ITran
   if (doFilter)
   {
     CSettingSection *section = CSettings::GetInstance().GetSection(strSection);
-    if (section == NULL)
+    if (section == nullptr)
       return InvalidParams;
 
     sections.push_back(section);
@@ -206,7 +206,7 @@ JSONRPC_STATUS CSettingsOperations::GetSettingValue(const std::string &method, I
   std::string settingId = parameterObject["setting"].asString();
 
   CSetting* setting = CSettings::GetInstance().GetSetting(settingId);
-  if (setting == NULL ||
+  if (setting == nullptr ||
       !setting->IsVisible())
     return InvalidParams;
 
@@ -252,7 +252,7 @@ JSONRPC_STATUS CSettingsOperations::SetSettingValue(const std::string &method, I
   CVariant value = parameterObject["value"];
 
   CSetting* setting = CSettings::GetInstance().GetSetting(settingId);
-  if (setting == NULL ||
+  if (setting == nullptr ||
       !setting->IsVisible())
     return InvalidParams;
 
@@ -313,7 +313,7 @@ JSONRPC_STATUS CSettingsOperations::ResetSettingValue(const std::string &method,
   std::string settingId = parameterObject["setting"].asString();
 
   CSetting* setting = CSettings::GetInstance().GetSetting(settingId);
-  if (setting == NULL ||
+  if (setting == nullptr ||
       !setting->IsVisible())
     return InvalidParams;
 
@@ -350,7 +350,7 @@ int CSettingsOperations::ParseSettingLevel(const std::string &strLevel)
 
 bool CSettingsOperations::SerializeISetting(const ISetting* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["id"] = setting->GetId();
@@ -472,7 +472,7 @@ bool CSettingsOperations::SerializeSetting(const CSetting* setting, CVariant &ob
 
 bool CSettingsOperations::SerializeSettingBool(const CSettingBool* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["value"] = setting->GetValue();
@@ -483,7 +483,7 @@ bool CSettingsOperations::SerializeSettingBool(const CSettingBool* setting, CVar
 
 bool CSettingsOperations::SerializeSettingInt(const CSettingInt* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["value"] = setting->GetValue();
@@ -532,7 +532,7 @@ bool CSettingsOperations::SerializeSettingInt(const CSettingInt* setting, CVaria
 
 bool CSettingsOperations::SerializeSettingNumber(const CSettingNumber* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["value"] = setting->GetValue();
@@ -547,7 +547,7 @@ bool CSettingsOperations::SerializeSettingNumber(const CSettingNumber* setting, 
 
 bool CSettingsOperations::SerializeSettingString(const CSettingString* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["value"] = setting->GetValue();
@@ -585,7 +585,7 @@ bool CSettingsOperations::SerializeSettingString(const CSettingString* setting, 
 
 bool CSettingsOperations::SerializeSettingAction(const CSettingAction* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   return true;
@@ -593,7 +593,7 @@ bool CSettingsOperations::SerializeSettingAction(const CSettingAction* setting, 
 
 bool CSettingsOperations::SerializeSettingList(const CSettingList* setting, CVariant &obj)
 {
-  if (setting == NULL ||
+  if (setting == nullptr ||
       !SerializeSetting(setting->GetDefinition(), obj["definition"]))
     return false;
 
@@ -610,7 +610,7 @@ bool CSettingsOperations::SerializeSettingList(const CSettingList* setting, CVar
 
 bool CSettingsOperations::SerializeSettingPath(const CSettingPath* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["type"] = "path";
@@ -622,7 +622,7 @@ bool CSettingsOperations::SerializeSettingPath(const CSettingPath* setting, CVar
 
 bool CSettingsOperations::SerializeSettingAddon(const CSettingAddon* setting, CVariant &obj)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   obj["type"] = "addon";
@@ -633,7 +633,7 @@ bool CSettingsOperations::SerializeSettingAddon(const CSettingAddon* setting, CV
 
 bool CSettingsOperations::SerializeSettingControl(const ISettingControl* control, CVariant &obj)
 {
-  if (control == NULL)
+  if (control == nullptr)
     return false;
   
   const std::string& type = control->GetType();

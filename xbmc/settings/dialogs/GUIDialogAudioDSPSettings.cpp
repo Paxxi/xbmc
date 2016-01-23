@@ -149,7 +149,7 @@ bool CGUIDialogAudioDSPSettings::OnMessage(CGUIMessage &message)
       if (iControl >= CONTROL_SETTINGS_START_CONTROL && iControl < (int)(CONTROL_SETTINGS_START_CONTROL + m_settingControls.size()))
       {
         CSetting *setting = GetSettingControl(iControl)->GetSetting();
-        if (setting != NULL)
+        if (setting != nullptr)
         {
           if (setting->GetId() == SETTING_AUDIO_MAIN_BUTTON_MASTER)
             OpenMenu(SETTING_AUDIO_CAT_MASTER);
@@ -304,7 +304,7 @@ std::string CGUIDialogAudioDSPSettings::FormatPercentAsDecibel(float value)
 
 void CGUIDialogAudioDSPSettings::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
@@ -362,7 +362,7 @@ void CGUIDialogAudioDSPSettings::OnSettingChanged(const CSetting *setting)
 
 void CGUIDialogAudioDSPSettings::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingAction(setting);
@@ -406,7 +406,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
   CGUIDialogSettingsManualBase::InitializeSettings();
 
   CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_MAIN, -1);
-  if (category == NULL)
+  if (category == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodspmainsettings'");
     return;
@@ -414,25 +414,25 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
 
   // get all necessary setting groups
   CSettingGroup *groupAudioModeSel = AddGroup(category);
-  if (groupAudioModeSel == NULL)
+  if (groupAudioModeSel == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupAudioModeSel'");
     return;
   }
   CSettingGroup *groupAudioVolumeSel = AddGroup(category);
-  if (groupAudioVolumeSel == NULL)
+  if (groupAudioVolumeSel == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupAudioVolumeSel'");
     return;
   }
   CSettingGroup *groupAudioSubmenuSel = AddGroup(category);
-  if (groupAudioSubmenuSel == NULL)
+  if (groupAudioSubmenuSel == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupAudioSubmenuSel'");
     return;
   }
   CSettingGroup *groupSaveAsDefault = AddGroup(category);
-  if (groupSaveAsDefault == NULL)
+  if (groupSaveAsDefault == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupSaveAsDefault'");
     return;
@@ -553,14 +553,14 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
    */
   {
     CSettingCategory *categoryMaster = AddCategory(SETTING_AUDIO_CAT_MASTER, -1);
-    if (categoryMaster == NULL)
+    if (categoryMaster == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodspmastersettings'");
       return;
     }
 
     CSettingGroup *groupMasterMode = AddGroup(categoryMaster);
-    if (groupMasterMode == NULL)
+    if (groupMasterMode == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupMasterMode'");
       return;
@@ -604,21 +604,21 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
    */
   {
     CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_POST_PROCESS, -1);
-    if (category == NULL)
+    if (category == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodsppostsettings'");
       return;
     }
 
     CSettingGroup *groupInternal = AddGroup(category);
-    if (groupInternal == NULL)
+    if (groupInternal == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupInternal'");
       return;
     }
 
     CSettingGroup *groupAddon = AddGroup(category);
-    if (groupAddon == NULL)
+    if (groupAddon == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'groupAddon'");
       return;
@@ -638,13 +638,13 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
    */
   {
     CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_RESAMPLING, -1);
-    if (category == NULL)
+    if (category == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodspresamplesettings'");
       return;
     }
     CSettingGroup *group = AddGroup(category);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'group'");
       return;
@@ -657,13 +657,13 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
    */
   {
     CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_PRE_PROCESS, -1);
-    if (category == NULL)
+    if (category == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodsppresettings'");
       return;
     }
     CSettingGroup *group = AddGroup(category);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'group'");
       return;
@@ -676,13 +676,13 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
    */
   {
     CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_MISC, -1);
-    if (category == NULL)
+    if (category == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodspmiscsettings'");
       return;
     }
     CSettingGroup *group = AddGroup(category);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group 'group'");
       return;
@@ -696,7 +696,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
   {
     CSettingGroup *group;
     CSettingCategory *category = AddCategory(SETTING_AUDIO_CAT_PROC_INFO, -1);
-    if (category == NULL)
+    if (category == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings category 'audiodspprocinfo'");
       return;
@@ -707,7 +707,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
     m_ActiveModesData.resize(m_ActiveModes.size());
 
     group = AddGroup(category, 15089);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group for '%s'", g_localizeStrings.Get(15089).c_str());
       return;
@@ -720,7 +720,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
     AddInfoLabelButton(group, SETTING_STREAM_INFO_INPUT_SAMPLERATE, 613, 0, m_InputSamplerate);
 
     group = AddGroup(category, 15090);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group for '%s'", g_localizeStrings.Get(15090).c_str());
       return;
@@ -733,7 +733,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
     AddInfoLabelButton(group, SETTING_STREAM_INFO_OUTPUT_SAMPLERATE, 613, 0, m_OutputSamplerate);
 
     group = AddGroup(category, 15081);
-    if (group == NULL)
+    if (group == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogAudioDSPSettings: unable to setup settings group for '%s'", g_localizeStrings.Get(15081).c_str());
       return;
@@ -860,7 +860,7 @@ std::string CGUIDialogAudioDSPSettings::SettingFormatterDelay(const CSettingCont
 
 std::string CGUIDialogAudioDSPSettings::SettingFormatterPercentAsDecibel(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum)
 {
-  if (control == NULL || !value.isDouble())
+  if (control == nullptr || !value.isDouble())
     return "";
 
   std::string formatString = control->GetFormatString();

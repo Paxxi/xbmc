@@ -81,12 +81,12 @@ CViewStateSettings& CViewStateSettings::GetInstance()
 
 bool CViewStateSettings::Load(const TiXmlNode *settings)
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   CSingleLock lock(m_critical);
   const TiXmlNode *pElement = settings->FirstChildElement(XML_VIEWSTATESETTINGS);
-  if (pElement == NULL)
+  if (pElement == nullptr)
   {
     CLog::Log(LOGWARNING, "CViewStateSettings: no <viewstates> tag found");
     return false;
@@ -95,13 +95,13 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
   for (std::map<std::string, CViewState*>::iterator viewState = m_viewStates.begin(); viewState != m_viewStates.end(); ++viewState)
   {
     const TiXmlNode* pViewState = pElement->FirstChildElement(viewState->first);
-    if (pViewState == NULL)
+    if (pViewState == nullptr)
       continue;
 
     XMLUtils::GetInt(pViewState, XML_VIEWMODE, viewState->second->m_viewMode, DEFAULT_VIEW_LIST, DEFAULT_VIEW_MAX);
 
     // keep backwards compatibility to the old sorting methods
-    if (pViewState->FirstChild(XML_SORTATTRIBUTES) == NULL)
+    if (pViewState->FirstChild(XML_SORTATTRIBUTES) == nullptr)
     {
       int sortMethod;
       if (XMLUtils::GetInt(pViewState, XML_SORTMETHOD, sortMethod, SORT_METHOD_NONE, SORT_METHOD_MAX))
@@ -122,7 +122,7 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
   }
 
   pElement = settings->FirstChild(XML_GENERAL);
-  if (pElement != NULL)
+  if (pElement != nullptr)
   {
     int settingLevel;
     if (XMLUtils::GetInt(pElement, XML_SETTINGLEVEL, settingLevel, (const int)SettingLevelBasic, (const int)SettingLevelExpert))
@@ -131,7 +131,7 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
       m_settingLevel = SettingLevelStandard;
 
     const TiXmlNode* pEventLogNode = pElement->FirstChild(XML_EVENTLOG);
-    if (pEventLogNode != NULL)
+    if (pEventLogNode != nullptr)
     {
       int eventLevel;
       if (XMLUtils::GetInt(pEventLogNode, XML_EVENTLOG_LEVEL, eventLevel, (const int)EventLevel::Basic, (const int)EventLevel::Error))
@@ -149,14 +149,14 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
 
 bool CViewStateSettings::Save(TiXmlNode *settings) const
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   CSingleLock lock(m_critical);
   // add the <viewstates> tag
   TiXmlElement xmlViewStateElement(XML_VIEWSTATESETTINGS);
   TiXmlNode *pViewStateNode = settings->InsertEndChild(xmlViewStateElement);
-  if (pViewStateNode == NULL)
+  if (pViewStateNode == nullptr)
   {
     CLog::Log(LOGWARNING, "CViewStateSettings: could not create <viewstates> tag");
     return false;
@@ -166,7 +166,7 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement newElement(viewState->first);
     TiXmlNode *pNewNode = pViewStateNode->InsertEndChild(newElement);
-    if (pNewNode == NULL)
+    if (pNewNode == nullptr)
       continue;
 
     XMLUtils::SetInt(pNewNode, XML_VIEWMODE, viewState->second->m_viewMode);
@@ -176,22 +176,22 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   }
 
   TiXmlNode *generalNode = settings->FirstChild(XML_GENERAL);
-  if (generalNode == NULL)
+  if (generalNode == nullptr)
   {
     TiXmlElement generalElement(XML_GENERAL);
     generalNode = settings->InsertEndChild(generalElement);
-    if (generalNode == NULL)
+    if (generalNode == nullptr)
       return false;
   }
 
   XMLUtils::SetInt(generalNode, XML_SETTINGLEVEL, (int)m_settingLevel);
 
   TiXmlNode *eventLogNode = generalNode->FirstChild(XML_EVENTLOG);
-  if (eventLogNode == NULL)
+  if (eventLogNode == nullptr)
   {
     TiXmlElement eventLogElement(XML_EVENTLOG);
     eventLogNode = generalNode->InsertEndChild(eventLogElement);
-    if (eventLogNode == NULL)
+    if (eventLogNode == nullptr)
       return false;
   }
 
@@ -213,7 +213,7 @@ const CViewState* CViewStateSettings::Get(const std::string &viewState) const
   if (view != m_viewStates.end())
     return view->second;
 
-  return NULL;
+  return nullptr;
 }
 
 CViewState* CViewStateSettings::Get(const std::string &viewState)
@@ -223,7 +223,7 @@ CViewState* CViewStateSettings::Get(const std::string &viewState)
   if (view != m_viewStates.end())
     return view->second;
 
-  return NULL;
+  return nullptr;
 }
 
 void CViewStateSettings::SetSettingLevel(SettingLevel settingLevel)
@@ -278,7 +278,7 @@ void CViewStateSettings::AddViewState(const std::string& strTagName, int default
     return;
 
   CViewState *viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
-  if (viewState == NULL)
+  if (viewState == nullptr)
     return;
 
   m_viewStates.insert(make_pair(strTagName, viewState));

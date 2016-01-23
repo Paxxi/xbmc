@@ -332,7 +332,7 @@ CLangInfo::~CLangInfo()
 
 void CLangInfo::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -576,7 +576,7 @@ void CLangInfo::SetDefaults()
 std::string CLangInfo::GetGuiCharSet() const
 {
   CSettingString* charsetSetting = static_cast<CSettingString*>(CSettings::GetInstance().GetSetting(CSettings::SETTING_LOCALE_CHARSET));
-  if (charsetSetting == NULL || charsetSetting->IsDefault())
+  if (charsetSetting == nullptr || charsetSetting->IsDefault())
     return m_strGuiCharSet;
 
   return charsetSetting->GetValue();
@@ -605,7 +605,7 @@ LanguageResourcePtr CLangInfo::GetLanguageAddon(const std::string& locale /* = "
   if (ADDON::CAddonMgr::GetInstance().GetAddon(addonId, addon, ADDON::ADDON_RESOURCE_LANGUAGE, true) && addon != NULL)
     return std::dynamic_pointer_cast<ADDON::CLanguageResource>(addon);
 
-  return NULL;
+  return nullptr;
 }
 
 std::string CLangInfo::GetEnglishLanguageName(const std::string& locale /* = "" */) const

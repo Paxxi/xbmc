@@ -83,7 +83,7 @@ CPluginDirectory *CPluginDirectory::dirFromHandle(int handle)
   if (i != globalHandles.end())
     return i->second;
   CLog::Log(LOGWARNING, "Attempt to use invalid handle %i", handle);
-  return NULL;
+  return nullptr;
 }
 
 bool CPluginDirectory::StartScript(const std::string& strPath, bool retrievingDir)
@@ -454,7 +454,7 @@ bool CPluginDirectory::WaitOnScriptResult(const std::string &scriptPath, int scr
   const unsigned int timeToKillScript = 1000;
 
   unsigned int startTime = XbmcThreads::SystemClockMillis();
-  CGUIDialogProgress *progressBar = NULL;
+  CGUIDialogProgress *progressBar = nullptr;
   bool cancelled = false;
   bool inMainAppThread = g_application.IsCurrentThread();
 
@@ -490,7 +490,7 @@ bool CPluginDirectory::WaitOnScriptResult(const std::string &scriptPath, int scr
       if (progressBar && progressBar->IsActive())
       {
         startTime = XbmcThreads::SystemClockMillis();
-        progressBar = NULL;
+        progressBar = nullptr;
       }
 
       if (progressBar)

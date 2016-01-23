@@ -139,7 +139,7 @@ CDemuxStreamAudio* CDVDDemux::GetStreamFromAudioId(int iAudioIndex)
     if (iAudioIndex == counter)
       return (CDemuxStreamAudio*)pStream;
   }
-  return NULL;
+  return nullptr;
 }
 
 CDemuxStreamVideo* CDVDDemux::GetStreamFromVideoId(int iVideoIndex)
@@ -153,7 +153,7 @@ CDemuxStreamVideo* CDVDDemux::GetStreamFromVideoId(int iVideoIndex)
     if (iVideoIndex == counter)
       return (CDemuxStreamVideo*)pStream;
   }
-  return NULL;
+  return nullptr;
 }
 
 CDemuxStreamSubtitle* CDVDDemux::GetStreamFromSubtitleId(int iSubtitleIndex)
@@ -167,7 +167,7 @@ CDemuxStreamSubtitle* CDVDDemux::GetStreamFromSubtitleId(int iSubtitleIndex)
     if (iSubtitleIndex == counter)
       return (CDemuxStreamSubtitle*)pStream;
   }
-  return NULL;
+  return nullptr;
 }
 
 CDemuxStreamTeletext* CDVDDemux::GetStreamFromTeletextId(int iTeletextIndex)
@@ -181,7 +181,7 @@ CDemuxStreamTeletext* CDVDDemux::GetStreamFromTeletextId(int iTeletextIndex)
     if (iTeletextIndex == counter)
       return (CDemuxStreamTeletext*)pStream;
   }
-  return NULL;
+  return nullptr;
 }
 
 const CDemuxStreamRadioRDS* CDVDDemux::GetStreamFromRadioRDSId(int iRadioRDSIndex)
@@ -195,7 +195,7 @@ const CDemuxStreamRadioRDS* CDVDDemux::GetStreamFromRadioRDSId(int iRadioRDSInde
     if (iRadioRDSIndex == counter)
       return (CDemuxStreamRadioRDS*)pStream;
   }
-  return NULL;
+  return nullptr;
 }
 
 std::string CDemuxStream::GetStreamName()

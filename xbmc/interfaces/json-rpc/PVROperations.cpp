@@ -63,11 +63,11 @@ JSONRPC_STATUS CPVROperations::GetChannelGroups(const std::string &method, ITran
     return FailedToExecute;
   
   CPVRChannelGroupsContainer *channelGroupContainer = g_PVRChannelGroups;
-  if (channelGroupContainer == NULL)
+  if (channelGroupContainer == nullptr)
     return FailedToExecute;
 
   CPVRChannelGroups *channelGroups = channelGroupContainer->Get(parameterObject["channeltype"].asString().compare("radio") == 0);
-  if (channelGroups == NULL)
+  if (channelGroups == nullptr)
     return FailedToExecute;
 
   int start, end;
@@ -86,7 +86,7 @@ JSONRPC_STATUS CPVROperations::GetChannelGroupDetails(const std::string &method,
     return FailedToExecute;
 
   CPVRChannelGroupsContainer *channelGroupContainer = g_PVRChannelGroups;
-  if (channelGroupContainer == NULL)
+  if (channelGroupContainer == nullptr)
     return FailedToExecute;
   
   CPVRChannelGroupPtr channelGroup;
@@ -96,7 +96,7 @@ JSONRPC_STATUS CPVROperations::GetChannelGroupDetails(const std::string &method,
   else if (id.isString())
     channelGroup = channelGroupContainer->GetGroupAll(id.asString() == "allradio");
 
-  if (channelGroup == NULL)
+  if (channelGroup == nullptr)
     return InvalidParams;
   
   FillChannelGroupDetails(channelGroup, parameterObject, result["channelgroupdetails"], false);
@@ -110,7 +110,7 @@ JSONRPC_STATUS CPVROperations::GetChannels(const std::string &method, ITransport
     return FailedToExecute;
   
   CPVRChannelGroupsContainer *channelGroupContainer = g_PVRChannelGroups;
-  if (channelGroupContainer == NULL)
+  if (channelGroupContainer == nullptr)
     return FailedToExecute;
   
   CPVRChannelGroupPtr channelGroup;
@@ -120,7 +120,7 @@ JSONRPC_STATUS CPVROperations::GetChannels(const std::string &method, ITransport
   else if (id.isString())
     channelGroup = channelGroupContainer->GetGroupAll(id.asString() == "allradio");
   
-  if (channelGroup == NULL)
+  if (channelGroup == nullptr)
     return InvalidParams;
   
   CFileItemList channels;
@@ -138,11 +138,11 @@ JSONRPC_STATUS CPVROperations::GetChannelDetails(const std::string &method, ITra
     return FailedToExecute;
   
   CPVRChannelGroupsContainer *channelGroupContainer = g_PVRChannelGroups;
-  if (channelGroupContainer == NULL)
+  if (channelGroupContainer == nullptr)
     return FailedToExecute;
   
   CPVRChannelPtr channel = channelGroupContainer->GetChannelById((int)parameterObject["channelid"].asInteger());
-  if (channel == NULL)
+  if (channel == nullptr)
     return InvalidParams;
 
   HandleFileItem("channelid", false, "channeldetails", CFileItemPtr(new CFileItem(channel)), parameterObject, parameterObject["properties"], result, false);
@@ -156,11 +156,11 @@ JSONRPC_STATUS CPVROperations::GetBroadcasts(const std::string &method, ITranspo
     return FailedToExecute;
 
   CPVRChannelGroupsContainer *channelGroupContainer = g_PVRManager.ChannelGroups();
-  if (channelGroupContainer == NULL)
+  if (channelGroupContainer == nullptr)
     return FailedToExecute;
 
   CPVRChannelPtr channel = channelGroupContainer->GetChannelById((int)parameterObject["channelid"].asInteger());
-  if (channel == NULL)
+  if (channel == nullptr)
     return InvalidParams;
 
   CEpgPtr channelEpg = channel->GetEPG();
@@ -215,7 +215,7 @@ JSONRPC_STATUS CPVROperations::Record(const std::string &method, ITransportLayer
   else if (channel.isInteger())
   {
     CPVRChannelGroupsContainer *channelGroupContainer = g_PVRManager.ChannelGroups();
-    if (channelGroupContainer == NULL)
+    if (channelGroupContainer == nullptr)
       return FailedToExecute;
 
     pChannel = channelGroupContainer->GetChannelById((int)channel.asInteger());
@@ -223,7 +223,7 @@ JSONRPC_STATUS CPVROperations::Record(const std::string &method, ITransportLayer
   else
     return InvalidParams;
 
-  if (pChannel == NULL)
+  if (pChannel == nullptr)
     return InvalidParams;
   else if (!pChannel->CanRecord())
     return FailedToExecute;
@@ -281,7 +281,7 @@ JSONRPC_STATUS CPVROperations::GetPropertyValue(const std::string &property, CVa
 
 void CPVROperations::FillChannelGroupDetails(const CPVRChannelGroupPtr &channelGroup, const CVariant &parameterObject, CVariant &result, bool append /* = false */)
 {
-  if (channelGroup == NULL)
+  if (channelGroup == nullptr)
     return;
 
   CVariant object(CVariant::VariantTypeObject);

@@ -67,7 +67,7 @@ CActiveAEDSPAddon *CAddonCallbacksADSP::GetAudioDSPAddon(void *addonData)
   if (!addon || !addon->GetHelperADSP())
   {
     CLog::Log(LOGERROR, "Audio DSP - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   return dynamic_cast<CActiveAEDSPAddon *>(addon->GetHelperADSP()->m_addon);
@@ -163,14 +163,14 @@ ADSPHANDLE CAddonCallbacksADSP::ADSPSoundPlay_GetHandle(void *addonData, const c
   if (!filename || !addon)
   {
     CLog::Log(LOGERROR, "Audio DSP - %s - invalid sound play data", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   IAESound *sound = CAEFactory::MakeSound(filename);
   if (!sound)
   {
     CLog::Log(LOGERROR, "Audio DSP - %s - failed to make sound play data", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   return sound;

@@ -35,5 +35,5 @@ IListProvider *IListProvider::Create(const TiXmlNode *node, int parentID)
     if (!root->NoChildren())
       return new CDirectoryProvider(root, parentID);
   }
-  return NULL;
+  return nullptr;
 }

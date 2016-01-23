@@ -68,7 +68,7 @@ namespace XBMCAddon
       if (_textColor)
         sscanf(_textColor, "%x", &textColor);
 
-      pGUIControl = NULL;
+      pGUIControl = nullptr;
     }
 
     void ControlFadeLabel::addLabel(const String& label)
@@ -149,7 +149,7 @@ namespace XBMCAddon
 
     String ControlTextBox::getText()
     {
-      if (!pGUIControl) return NULL;
+      if (!pGUIControl) return nullptr;
 
       LOCKGUI;
       return ((CGUITextBox*) pGUIControl)->GetDescription();
@@ -262,7 +262,7 @@ namespace XBMCAddon
 
     String ControlButton::getLabel()
     {
-      if (!pGUIControl) return NULL;
+      if (!pGUIControl) return nullptr;
 
       LOCKGUI;
       return ((CGUIButtonControl*) pGUIControl)->GetLabel();
@@ -270,7 +270,7 @@ namespace XBMCAddon
 
     String ControlButton::getLabel2()
     {
-      if (!pGUIControl) return NULL;
+      if (!pGUIControl) return nullptr;
 
       LOCKGUI;
       return ((CGUIButtonControl*) pGUIControl)->GetLabel2();
@@ -1048,7 +1048,7 @@ namespace XBMCAddon
     String ControlLabel::getLabel()
     {
       if (!pGUIControl)
-        return NULL;
+        return nullptr;
       return strText;
     }
     // ============================================================
@@ -1114,7 +1114,7 @@ namespace XBMCAddon
     String ControlEdit::getLabel()
     {
       if (!pGUIControl)
-        return NULL;
+        return nullptr;
       return strText;
     }
 
@@ -1321,7 +1321,7 @@ namespace XBMCAddon
 
       // create message
       CGUIMessage msg(GUI_MSG_ITEM_SELECTED, iParentId, iControlId);
-      AddonClass::Ref<ListItem> pListItem = NULL;
+      AddonClass::Ref<ListItem> pListItem = nullptr;
 
       // send message
       if (!vecItems.empty() && pGUIControl)

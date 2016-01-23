@@ -61,7 +61,7 @@ void WINAPI Sleep(DWORD dwMilliSeconds)
 
 VOID GetLocalTime(LPSYSTEMTIME sysTime)
 {
-  const time_t t = time(NULL);
+  const time_t t = time(nullptr);
   struct tm now;
 
   localtime_r(&t, &now);
@@ -198,7 +198,7 @@ BOOL   LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFi
 
 BOOL  FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
 
-  if (lpLocalFileTime == NULL || pTimeT == NULL)
+  if (lpLocalFileTime == nullptr || pTimeT == nullptr)
   return false;
 
   ULARGE_INTEGER fileTime;
@@ -220,7 +220,7 @@ BOOL  FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
 
 BOOL  TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime) {
 
-  if (lpLocalFileTime == NULL)
+  if (lpLocalFileTime == nullptr)
   return false;
 
   ULARGE_INTEGER result;
@@ -235,7 +235,7 @@ BOOL  TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime) {
 
 void GetSystemTimeAsFileTime(LPFILETIME lpSystemTimeAsFileTime)
 {
-  TimeTToFileTime(time(NULL), lpSystemTimeAsFileTime);
+  TimeTToFileTime(time(nullptr), lpSystemTimeAsFileTime);
 }
 
 #endif

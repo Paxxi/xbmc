@@ -53,7 +53,7 @@ CEpgInfoTag::CEpgInfoTag(void) :
     m_iEpisodePart(0),
     m_iUniqueBroadcastID(0),
     m_iYear(0),
-    m_epg(NULL),
+    m_epg(nullptr),
     m_iFlags(EPG_TAG_FLAG_UNDEFINED)
 {
 }
@@ -89,7 +89,7 @@ CEpgInfoTag::CEpgInfoTag(const EPG_TAG &data) :
     m_iEpisodeNumber(0),
     m_iEpisodePart(0),
     m_iUniqueBroadcastID(0),
-    m_epg(NULL)
+    m_epg(nullptr)
 {
   m_startTime = (data.startTime + g_advancedSettings.m_iPVRTimeCorrection);
   m_endTime = (data.endTime + g_advancedSettings.m_iPVRTimeCorrection);
@@ -437,7 +437,7 @@ void CEpgInfoTag::SetGenre(int iGenreType, int iGenreSubType, const char* strGen
   {
     m_iGenreType    = iGenreType;
     m_iGenreSubType = iGenreSubType;
-    if ((iGenreType == EPG_GENRE_USE_STRING) && (strGenre != NULL) && (strlen(strGenre) > 0))
+    if ((iGenreType == EPG_GENRE_USE_STRING) && (strGenre != nullptr) && (strlen(strGenre) > 0))
     {
       /* Type and sub type are not given. No EPG color coding possible
        * Use the provided genre description as backup. */
@@ -548,7 +548,7 @@ void CEpgInfoTag::SetPVRChannel(PVR::CPVRChannelPtr channel)
 bool CEpgInfoTag::HasPVRChannel(void) const
 {
   CSingleLock lock(m_critSection);
-  return m_pvrChannel.get() != NULL;
+  return m_pvrChannel.get() != nullptr;
 }
 
 int CEpgInfoTag::PVRChannelNumber(void) const
@@ -743,7 +743,7 @@ void CEpgInfoTag::ClearRecording(void)
 bool CEpgInfoTag::HasRecording(void) const
 {
   CSingleLock lock(m_critSection);
-  return m_recording.get() != NULL;
+  return m_recording.get() != nullptr;
 }
 
 CPVRRecordingPtr CEpgInfoTag::Recording(void) const

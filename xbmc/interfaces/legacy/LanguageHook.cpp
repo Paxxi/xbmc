@@ -40,13 +40,13 @@ namespace XBMCAddon
 
   LanguageHook* LanguageHook::GetLanguageHook()
   {
-    return threadLocalInitilialized ? addonLanguageHookTls.get() : NULL;
+    return threadLocalInitilialized ? addonLanguageHookTls.get() : nullptr;
   }
 
   void LanguageHook::ClearLanguageHook()
   {
     LanguageHook* lh = addonLanguageHookTls.get();
-    addonLanguageHookTls.set(NULL);
+    addonLanguageHookTls.set(nullptr);
     if (lh)
       lh->Release();
   }

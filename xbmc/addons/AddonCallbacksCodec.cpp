@@ -63,7 +63,7 @@ private:
   CCodecIds(void)
   {
     // get ids and names
-    AVCodec* codec = NULL;
+    AVCodec* codec = nullptr;
     xbmc_codec_t tmp;
     while ((codec = av_codec_next(codec)))
     {

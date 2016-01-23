@@ -36,7 +36,7 @@ CConsoleDeviceKitPowerSyscall::CConsoleDeviceKitPowerSyscall()
 bool CConsoleDeviceKitPowerSyscall::Powerdown()
 {
   CDBusMessage message("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", "org.freedesktop.ConsoleKit.Manager", "Stop");
-  return message.SendSystem() != NULL;
+  return message.SendSystem() != nullptr;
 }
 
 bool CConsoleDeviceKitPowerSyscall::Suspend()
@@ -58,7 +58,7 @@ bool CConsoleDeviceKitPowerSyscall::Hibernate()
 bool CConsoleDeviceKitPowerSyscall::Reboot()
 {
   CDBusMessage message("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", "org.freedesktop.ConsoleKit.Manager", "Restart");
-  return message.SendSystem() != NULL;
+  return message.SendSystem() != nullptr;
 }
 
 bool CConsoleDeviceKitPowerSyscall::CanPowerdown()
@@ -132,7 +132,7 @@ bool CConsoleDeviceKitPowerSyscall::ConsoleKitMethodCall(const char *method)
   {
     dbus_bool_t boolean = FALSE;
 
-    if (dbus_message_get_args (reply, NULL, DBUS_TYPE_BOOLEAN, &boolean, DBUS_TYPE_INVALID))
+    if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_BOOLEAN, &boolean, DBUS_TYPE_INVALID))
       return boolean;
   }
 

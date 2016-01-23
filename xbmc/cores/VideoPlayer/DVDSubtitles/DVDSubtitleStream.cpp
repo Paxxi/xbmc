@@ -44,7 +44,7 @@ bool CDVDSubtitleStream::Open(const std::string& strFile)
   CDVDInputStream* pInputStream;
   CFileItem item(strFile, false);
   item.SetContentLookup(false);
-  pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, item);
+  pInputStream = CDVDFactoryInputStream::CreateInputStream(nullptr, item);
   if (pInputStream && pInputStream->Open())
   {
     // prepare buffer
@@ -169,6 +169,6 @@ char* CDVDSubtitleStream::ReadLine(char* buf, int iLen)
   if (m_stringstream.getline(buf, iLen))
     return buf;
   else
-    return NULL;
+    return nullptr;
 }
 

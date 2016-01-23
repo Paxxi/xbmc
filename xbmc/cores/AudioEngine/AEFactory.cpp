@@ -30,7 +30,7 @@
 #include "settings/Settings.h"
 #include "utils/StringUtils.h"
 
-IAE* CAEFactory::AE = NULL;
+IAE* CAEFactory::AE = nullptr;
 static float  g_fVolume = 1.0f;
 static bool   g_bMute = false;
 
@@ -50,10 +50,10 @@ bool CAEFactory::LoadEngine()
   if (AE && !AE->CanInit())
   {
     delete AE;
-    AE = NULL;
+    AE = nullptr;
   }
 
-  return AE != NULL;
+  return AE != nullptr;
 }
 
 void CAEFactory::UnLoadEngine()
@@ -62,7 +62,7 @@ void CAEFactory::UnLoadEngine()
   {
     AE->Shutdown();
     delete AE;
-    AE = NULL;
+    AE = nullptr;
   }
 }
 
@@ -75,7 +75,7 @@ bool CAEFactory::StartEngine()
     return true;
 
   delete AE;
-  AE = NULL;
+  AE = nullptr;
   return false;
 }
 
@@ -110,7 +110,7 @@ IAESound *CAEFactory::MakeSound(const std::string &file)
   if(AE)
     return AE->MakeSound(file);
   
-  return NULL;
+  return nullptr;
 }
 
 void CAEFactory::FreeSound(IAESound *sound)
@@ -283,7 +283,7 @@ IAEStream *CAEFactory::MakeStream(AEAudioFormat &audioFormat, unsigned int optio
   if(AE)
     return AE->MakeStream(audioFormat, options, clock);
 
-  return NULL;
+  return nullptr;
 }
 
 bool CAEFactory::FreeStream(IAEStream *stream)
@@ -387,7 +387,7 @@ void CAEFactory::UnregisterAudioCallback(IAudioCallback* pCallback)
 
 bool CAEFactory::IsSettingVisible(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL || value.empty() || !AE)
+  if (setting == nullptr || value.empty() || !AE)
     return false;
 
   return AE->IsSettingVisible(value);

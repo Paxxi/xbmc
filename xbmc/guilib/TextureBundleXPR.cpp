@@ -56,13 +56,13 @@ class CAutoBuffer
 {
   BYTE* p;
 public:
-  CAutoBuffer() { p = 0; }
+  CAutoBuffer() { p = nullptr; }
   explicit CAutoBuffer(size_t s) { p = (BYTE*)malloc(s); }
   ~CAutoBuffer() { free(p); }
 operator BYTE*() const { return p; }
   void Set(BYTE* buf) { free(p); p = buf; }
   bool Resize(size_t s);
-void Release() { p = 0; }
+void Release() { p = nullptr; }
 
 private:
   CAutoBuffer(const CAutoBuffer&);
@@ -76,7 +76,7 @@ bool CAutoBuffer::Resize(size_t s)
     if (!p)
       return false;
     free(p);
-    p = 0;
+    p = nullptr;
     return true;
   }
   void* q = realloc(p, s);
@@ -93,24 +93,24 @@ class CAutoTexBuffer
 {
   BYTE* p;
 public:
-  CAutoTexBuffer() { p = 0; }
+  CAutoTexBuffer() { p = nullptr; }
   explicit CAutoTexBuffer(size_t s) { p = (BYTE*)XPhysicalAlloc(s, MAXULONG_PTR, 128, PAGE_READWRITE); }
   ~CAutoTexBuffer() { if (p) XPhysicalFree(p); }
 operator BYTE*() const { return p; }
   BYTE* Set(BYTE* buf) { if (p) XPhysicalFree(p); return p = buf; }
-void Release() { p = 0; }
+void Release() { p = nullptr; }
 };
 
 CTextureBundleXPR::CTextureBundleXPR(void)
 {
-  m_hFile = NULL;
+  m_hFile = nullptr;
   m_themeBundle = false;
   m_TimeStamp = 0;
 }
 
 CTextureBundleXPR::~CTextureBundleXPR(void)
 {
-  if (m_hFile != NULL)
+  if (m_hFile != nullptr)
     fclose(m_hFile);
 }
 
@@ -121,7 +121,7 @@ bool CTextureBundleXPR::OpenBundle()
   int Version;
   XPR_HEADER* pXPRHeader;
 
-  if (m_hFile != NULL)
+  if (m_hFile != nullptr)
     Cleanup();
 
   std::string strPath;
@@ -152,7 +152,7 @@ bool CTextureBundleXPR::OpenBundle()
 #else
   m_hFile = fopen(strPath.c_str(), "rb");
 #endif
-  if (m_hFile == NULL)
+  if (m_hFile == nullptr)
     return false;
 
   struct stat fileStat;
@@ -215,23 +215,23 @@ bool CTextureBundleXPR::OpenBundle()
 LoadError:
   CLog::Log(LOGERROR, "Unable to load file: %s: %s", strPath.c_str(), strerror(errno));
   fclose(m_hFile);
-  m_hFile = NULL;
+  m_hFile = nullptr;
 
   return false;
 }
 
 void CTextureBundleXPR::Cleanup()
 {
-  if (m_hFile != NULL)
+  if (m_hFile != nullptr)
     fclose(m_hFile);
-  m_hFile = NULL;
+  m_hFile = nullptr;
 
   m_FileHeaders.clear();
 }
 
 bool CTextureBundleXPR::HasFile(const std::string& Filename)
 {
-  if (m_hFile == NULL && !OpenBundle())
+  if (m_hFile == nullptr && !OpenBundle())
     return false;
 
   struct stat fileStat;
@@ -254,7 +254,7 @@ void CTextureBundleXPR::GetTexturesFromPath(const std::string &path, std::vector
   if (path.size() > 1 && path[1] == ':')
     return;
 
-  if (m_hFile == NULL && !OpenBundle())
+  if (m_hFile == nullptr && !OpenBundle())
     return;
 
   std::string testPath = Normalize(path);
@@ -322,7 +322,7 @@ bool CTextureBundleXPR::LoadFile(const std::string& Filename, CAutoTexBuffer& Un
   // allocate a buffer for our unpacked texture
   lzo_uint s = file->second.UnpackedSize;
   bool success = true;
-  if (lzo1x_decompress(buffer, file->second.PackedSize, UnpackedBuf, &s, NULL) != LZO_E_OK ||
+  if (lzo1x_decompress(buffer, file->second.PackedSize, UnpackedBuf, &s, nullptr) != LZO_E_OK ||
       s != file->second.UnpackedSize)
   {
     CLog::Log(LOGERROR, "Error loading texture: %s: Decompression error", Filename.c_str());
@@ -345,15 +345,15 @@ bool CTextureBundleXPR::LoadTexture(const std::string& Filename, CBaseTexture** 
                                      int &width, int &height)
 {
   DWORD ResDataOffset;
-  *ppTexture = NULL;
+  *ppTexture = nullptr;
 
   CAutoTexBuffer UnpackedBuf;
   if (!LoadFile(Filename, UnpackedBuf))
     return false;
 
   D3DTexture *pTex = (D3DTexture *)(new char[sizeof (D3DTexture)]);
-  D3DPalette* pPal = 0;
-  void* ResData = 0;
+  D3DPalette* pPal = nullptr;
+  void* ResData = nullptr;
 
   WORD RealSize[2];
 
@@ -411,7 +411,7 @@ int CTextureBundleXPR::LoadAnim(const std::string& Filename, CBaseTexture*** ppT
   DWORD ResDataOffset;
   int nTextures = 0;
 
-  *ppTextures = NULL; *ppDelays = NULL;
+  *ppTextures = nullptr; *ppDelays = nullptr;
 
   CAutoTexBuffer UnpackedBuf;
   if (!LoadFile(Filename, UnpackedBuf))
@@ -424,8 +424,8 @@ int CTextureBundleXPR::LoadAnim(const std::string& Filename, CBaseTexture*** ppT
   }
   *pAnimInfo;
 
-  D3DTexture** ppTex = 0;
-  void* ResData = 0;
+  D3DTexture** ppTex = nullptr;
+  void* ResData = nullptr;
 
   BYTE* Next = UnpackedBuf;
 
@@ -474,7 +474,7 @@ int CTextureBundleXPR::LoadAnim(const std::string& Filename, CBaseTexture*** ppT
   }
 
   delete[] ppTex;
-  ppTex = 0;
+  ppTex = nullptr;
 
   width = Endian_SwapLE16(pAnimInfo->RealSize[0]);
   height = Endian_SwapLE16(pAnimInfo->RealSize[1]);

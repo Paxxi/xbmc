@@ -255,8 +255,8 @@ bool CTextureDatabase::GetCachedTexture(const std::string &url, CTextureDetails 
 {
   try
   {
-    if (NULL == m_pDB.get()) return false;
-    if (NULL == m_pDS.get()) return false;
+    if (nullptr == m_pDB.get()) return false;
+    if (nullptr == m_pDS.get()) return false;
 
     std::string sql = PrepareSQL("SELECT id, cachedurl, lasthashcheck, imagehash, width, height FROM texture JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1) WHERE url='%s'", url.c_str());
     m_pDS->query(sql);
@@ -286,8 +286,8 @@ bool CTextureDatabase::GetTextures(CVariant &items, const Filter &filter)
 {
   try
   {
-    if (NULL == m_pDB.get()) return false;
-    if (NULL == m_pDS.get()) return false;
+    if (nullptr == m_pDB.get()) return false;
+    if (nullptr == m_pDS.get()) return false;
 
     std::string sql = "SELECT %s FROM texture JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1)";
     std::string sqlFilter;
@@ -339,8 +339,8 @@ bool CTextureDatabase::AddCachedTexture(const std::string &url, const CTextureDe
 {
   try
   {
-    if (NULL == m_pDB.get()) return false;
-    if (NULL == m_pDS.get()) return false;
+    if (nullptr == m_pDB.get()) return false;
+    if (nullptr == m_pDS.get()) return false;
 
     std::string sql = PrepareSQL("DELETE FROM texture WHERE url='%s'", url.c_str());
     m_pDS->exec(sql);
@@ -364,15 +364,15 @@ bool CTextureDatabase::AddCachedTexture(const std::string &url, const CTextureDe
 bool CTextureDatabase::ClearCachedTexture(const std::string &url, std::string &cacheFile)
 {
   std::string id = GetSingleValue(PrepareSQL("select id from texture where url='%s'", url.c_str()));
-  return !id.empty() ? ClearCachedTexture(strtol(id.c_str(), NULL, 10), cacheFile) : false;
+  return !id.empty() ? ClearCachedTexture(strtol(id.c_str(), nullptr, 10), cacheFile) : false;
 }
 
 bool CTextureDatabase::ClearCachedTexture(int id, std::string &cacheFile)
 {
   try
   {
-    if (NULL == m_pDB.get()) return false;
-    if (NULL == m_pDS.get()) return false;
+    if (nullptr == m_pDB.get()) return false;
+    if (nullptr == m_pDS.get()) return false;
 
     std::string sql = PrepareSQL("select cachedurl from texture where id=%u", id);
     m_pDS->query(sql);
@@ -406,8 +406,8 @@ std::string CTextureDatabase::GetTextureForPath(const std::string &url, const st
 {
   try
   {
-    if (NULL == m_pDB.get()) return "";
-    if (NULL == m_pDS.get()) return "";
+    if (nullptr == m_pDB.get()) return "";
+    if (nullptr == m_pDS.get()) return "";
 
     if (url.empty())
       return "";
@@ -434,8 +434,8 @@ void CTextureDatabase::SetTextureForPath(const std::string &url, const std::stri
 {
   try
   {
-    if (NULL == m_pDB.get()) return;
-    if (NULL == m_pDS.get()) return;
+    if (nullptr == m_pDB.get()) return;
+    if (nullptr == m_pDS.get()) return;
 
     if (url.empty())
       return;
@@ -467,8 +467,8 @@ void CTextureDatabase::ClearTextureForPath(const std::string &url, const std::st
 {
   try
   {
-    if (NULL == m_pDB.get()) return;
-    if (NULL == m_pDS.get()) return;
+    if (nullptr == m_pDB.get()) return;
+    if (nullptr == m_pDS.get()) return;
 
     std::string sql = PrepareSQL("DELETE FROM path WHERE url='%s' and type='%s'", url.c_str(), type.c_str());
     m_pDS->exec(sql);

@@ -38,19 +38,19 @@ using namespace XFILE;
 
 CScraperParser::CScraperParser()
 {
-  m_pRootElement = NULL;
-  m_document = NULL;
+  m_pRootElement = nullptr;
+  m_document = nullptr;
   m_SearchStringEncoding = "UTF-8";
-  m_scraper = NULL;
+  m_scraper = nullptr;
   m_isNoop = true;
 }
 
 CScraperParser::CScraperParser(const CScraperParser& parser)
 {
-  m_pRootElement = NULL;
-  m_document = NULL;
+  m_pRootElement = nullptr;
+  m_document = nullptr;
   m_SearchStringEncoding = "UTF-8";
-  m_scraper = NULL;
+  m_scraper = nullptr;
   m_isNoop = true;
   *this = parser;
 }
@@ -67,7 +67,7 @@ CScraperParser &CScraperParser::operator=(const CScraperParser &parser)
       LoadFromXML();
     }
     else
-      m_scraper = NULL;
+      m_scraper = nullptr;
   }
   return *this;
 }
@@ -79,10 +79,10 @@ CScraperParser::~CScraperParser()
 
 void CScraperParser::Clear()
 {
-  m_pRootElement = NULL;
+  m_pRootElement = nullptr;
   delete m_document;
 
-  m_document = NULL;
+  m_document = nullptr;
   m_strFile.clear();
 }
 
@@ -101,7 +101,7 @@ bool CScraperParser::Load(const std::string& strXMLFile)
     return LoadFromXML();
 
   delete m_document;
-  m_document = NULL;
+  m_document = nullptr;
   return false;
 }
 
@@ -141,8 +141,8 @@ bool CScraperParser::LoadFromXML()
   }
 
   delete m_document;
-  m_document = NULL;
-  m_pRootElement = NULL;
+  m_document = nullptr;
+  m_pRootElement = nullptr;
   return false;
 }
 
@@ -180,7 +180,7 @@ void CScraperParser::ReplaceBuffers(std::string& strDest)
     std::string strInfo = strDest.substr(iIndex+10, iEnd - iIndex - 10);
     std::string strReplace;
     if (m_scraper)
-      strReplace = m_scraper->GetString(strtol(strInfo.c_str(),NULL,10));
+      strReplace = m_scraper->GetString(strtol(strInfo.c_str(),nullptr,10));
     strDest.replace(strDest.begin()+iIndex,strDest.begin()+iEnd+1,strReplace);
     iIndex += strReplace.length();
   }
@@ -363,7 +363,7 @@ TiXmlElement *FirstChildScraperElement(TiXmlElement *element)
     if (child->ValueStr() == "RegExp" || child->ValueStr() == "XSLT")
       return child;
   }
-  return NULL;
+  return nullptr;
 }
 
 TiXmlElement *NextSiblingScraperElement(TiXmlElement *element)
@@ -373,7 +373,7 @@ TiXmlElement *NextSiblingScraperElement(TiXmlElement *element)
     if (next->ValueStr() == "RegExp" || next->ValueStr() == "XSLT")
       return next;
   }
-  return NULL;
+  return nullptr;
 }
 
 void CScraperParser::ParseNext(TiXmlElement* element)
@@ -449,7 +449,7 @@ const std::string CScraperParser::Parse(const std::string& strTag,
                                        CScraper* scraper)
 {
   TiXmlElement* pChildElement = m_pRootElement->FirstChildElement(strTag.c_str());
-  if(pChildElement == NULL)
+  if(pChildElement == nullptr)
   {
     CLog::Log(LOGERROR,"%s: Could not find scraper function %s",__FUNCTION__,strTag.c_str());
     return "";
@@ -557,7 +557,7 @@ void CScraperParser::ConvertJSON(std::string &string)
     int pos2 = reg2.GetSubStart(2);
     std::string szHexValue(reg2.GetMatch(1));
 
-    std::string replace = StringUtils::Format("%li", strtol(szHexValue.c_str(), NULL, 16));
+    std::string replace = StringUtils::Format("%li", strtol(szHexValue.c_str(), nullptr, 16));
     string.replace(string.begin()+pos1-2, string.begin()+pos2+reg2.GetSubLength(2), replace);
   }
 

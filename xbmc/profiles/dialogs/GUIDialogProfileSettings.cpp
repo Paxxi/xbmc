@@ -66,7 +66,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
     return false;
 
   CGUIDialogProfileSettings *dialog = (CGUIDialogProfileSettings *)g_windowManager.GetWindow(WINDOW_DIALOG_PROFILE_SETTINGS);
-  if (dialog == NULL)
+  if (dialog == nullptr)
     return false;
 
   dialog->m_needsSaving = false;
@@ -74,7 +74,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
   dialog->m_showDetails = !firstLogin;
 
   const CProfile *profile = CProfilesManager::GetInstance().GetProfile(iProfile);
-  if (profile == NULL)
+  if (profile == nullptr)
   {
     dialog->m_name.clear();
     dialog->m_dbMode = 2;
@@ -211,7 +211,7 @@ void CGUIDialogProfileSettings::OnWindowLoaded()
 
 void CGUIDialogProfileSettings::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
@@ -232,7 +232,7 @@ void CGUIDialogProfileSettings::OnSettingChanged(const CSetting *setting)
 
 void CGUIDialogProfileSettings::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingAction(setting);
@@ -325,14 +325,14 @@ void CGUIDialogProfileSettings::InitializeSettings()
   CGUIDialogSettingsManualBase::InitializeSettings();
 
   CSettingCategory *category = AddCategory("profilesettings", -1);
-  if (category == NULL)
+  if (category == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogProfileSettings: unable to setup settings");
     return;
   }
 
   CSettingGroup *group = AddGroup(category);
-  if (group == NULL)
+  if (group == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogProfileSettings: unable to setup settings");
     return;
@@ -351,7 +351,7 @@ void CGUIDialogProfileSettings::InitializeSettings()
   if (!m_isDefault && m_showDetails)
   {
     CSettingGroup *groupMedia = AddGroup(category);
-    if (groupMedia == NULL)
+    if (groupMedia == nullptr)
     {
       CLog::Log(LOGERROR, "CGUIDialogProfileSettings: unable to setup settings");
       return;

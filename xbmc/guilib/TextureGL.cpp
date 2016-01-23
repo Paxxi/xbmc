@@ -177,7 +177,7 @@ void CGLTexture::LoadToGPU()
   VerifyGLState();
 
   delete [] m_pixels;
-  m_pixels = NULL;
+  m_pixels = nullptr;
 
   m_loadedToGPU = true;
 }

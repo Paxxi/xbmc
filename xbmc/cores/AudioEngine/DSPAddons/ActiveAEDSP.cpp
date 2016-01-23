@@ -107,7 +107,7 @@ void CActiveAEDSP::Activate(bool bAsync /* = false */)
   if (bAsync)
   {
     CActiveAEDSPStartJob *job = new CActiveAEDSPStartJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 
@@ -149,7 +149,7 @@ void CActiveAEDSP::TriggerModeUpdate(bool bAsync /* = true */)
   if (bAsync)
   {
     CActiveAEDSPModeUpdateJob *job = new CActiveAEDSPModeUpdateJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 
@@ -285,7 +285,7 @@ void CActiveAEDSP::ResetDatabase(void)
 //@{
 void CActiveAEDSP::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();

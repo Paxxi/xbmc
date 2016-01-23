@@ -35,7 +35,7 @@ TEST(TestRegExp, RegFind)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^Test.*"));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
 
   EXPECT_TRUE(regex.RegComp("^string.*"));
   EXPECT_EQ(-1, regex.RegFind("Test string."));
@@ -46,7 +46,7 @@ TEST(TestRegExp, GetReplaceString)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_STREQ("string", regex.GetReplaceString("\\2").c_str());
 }
 
@@ -55,7 +55,7 @@ TEST(TestRegExp, GetFindLen)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_EQ(12, regex.GetFindLen());
 }
 
@@ -64,7 +64,7 @@ TEST(TestRegExp, GetSubCount)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_EQ(2, regex.GetSubCount());
 }
 
@@ -73,9 +73,9 @@ TEST(TestRegExp, GetSubStart)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
-  EXPECT_EQ(0, regex.GetSubStart(0));
-  EXPECT_EQ(0, regex.GetSubStart(1));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.GetSubStart(0));
+  EXPECT_EQ(nullptr, regex.GetSubStart(1));
   EXPECT_EQ(5, regex.GetSubStart(2));
 }
 
@@ -84,7 +84,7 @@ TEST(TestRegExp, GetCaptureTotal)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_EQ(2, regex.GetCaptureTotal());
 }
 
@@ -93,7 +93,7 @@ TEST(TestRegExp, GetMatch)
   CRegExp regex;
 
   EXPECT_TRUE(regex.RegComp("^(Test)\\s*(.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_STREQ("Test string.", regex.GetMatch(0).c_str());
   EXPECT_STREQ("Test", regex.GetMatch(1).c_str());
   EXPECT_STREQ("string", regex.GetMatch(2).c_str());
@@ -113,7 +113,7 @@ TEST(TestRegExp, GetNamedSubPattern)
   std::string match;
 
   EXPECT_TRUE(regex.RegComp("^(?<first>Test)\\s*(?<second>.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   EXPECT_TRUE(regex.GetNamedSubPattern("first", match));
   EXPECT_STREQ("Test", match.c_str());
   EXPECT_TRUE(regex.GetNamedSubPattern("second", match));
@@ -127,7 +127,7 @@ TEST(TestRegExp, operatorEqual)
 
   EXPECT_TRUE(regex.RegComp("^(?<first>Test)\\s*(?<second>.*)\\."));
   regexcopy = regex;
-  EXPECT_EQ(0, regexcopy.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regexcopy.RegFind("Test string."));
   EXPECT_TRUE(regexcopy.GetNamedSubPattern("first", match));
   EXPECT_STREQ("Test", match.c_str());
   EXPECT_TRUE(regexcopy.GetNamedSubPattern("second", match));
@@ -159,7 +159,7 @@ TEST_F(TestRegExpLog, DumpOvector)
   EXPECT_TRUE(XFILE::CFile::Exists(logfile));
 
   EXPECT_TRUE(regex.RegComp("^(?<first>Test)\\s*(?<second>.*)\\."));
-  EXPECT_EQ(0, regex.RegFind("Test string."));
+  EXPECT_EQ(nullptr, regex.RegFind("Test string."));
   regex.DumpOvector(LOGDEBUG);
   CLog::Close();
 

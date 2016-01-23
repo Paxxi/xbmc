@@ -155,7 +155,7 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
         if (!CVideoLibrary::FillFileItem(g_application.CurrentFile(), fileItem, parameterObject))
         {
           const CVideoInfoTag *currentVideoTag = g_infoManager.GetCurrentMovieTag();
-          if (currentVideoTag != NULL)
+          if (currentVideoTag != nullptr)
           {
             std::string originalLabel = fileItem->GetLabel();
             fileItem->SetFromVideoInfoTag(*currentVideoTag);
@@ -170,7 +170,7 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
         if (!CAudioLibrary::FillFileItem(g_application.CurrentFile(), fileItem, parameterObject))
         {
           const MUSIC_INFO::CMusicInfoTag *currentMusicTag = g_infoManager.GetCurrentSongTag();
-          if (currentMusicTag != NULL)
+          if (currentMusicTag != nullptr)
           {
             std::string originalLabel = fileItem->GetLabel();
             fileItem->SetFromMusicInfoTag(*currentMusicTag);
@@ -261,7 +261,7 @@ JSONRPC_STATUS CPlayerOperations::GetItem(const std::string &method, ITransportL
 
 JSONRPC_STATUS CPlayerOperations::PlayPause(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
-  CGUIWindowSlideShow *slideshow = NULL;
+  CGUIWindowSlideShow *slideshow = nullptr;
   switch (GetPlayer(parameterObject["playerid"]))
   {
     case Video:
@@ -537,7 +537,7 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
         if (playlistStartPosition > 0)
         {
           CGUIWindowSlideShow *slideshow = (CGUIWindowSlideShow*)g_windowManager.GetWindow(WINDOW_SLIDESHOW);
-          if (slideshow != NULL)
+          if (slideshow != nullptr)
           {
             CFileItemList list;
             slideshow->GetSlideShowContents(list);
@@ -572,11 +572,11 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
       return FailedToExecute;
 
     CPVRChannelGroupsContainer *channelGroupContainer = g_PVRChannelGroups;
-    if (channelGroupContainer == NULL)
+    if (channelGroupContainer == nullptr)
       return FailedToExecute;
 
     CPVRChannelPtr channel = channelGroupContainer->GetChannelById((int)parameterObject["item"]["channelid"].asInteger());
-    if (channel == NULL)
+    if (channel == nullptr)
       return InvalidParams;
 
     if ((g_PVRManager.IsPlayingRadio() && channel->IsRadio()) ||
@@ -597,11 +597,11 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
       return FailedToExecute;
 
     CPVRRecordings *recordingsContainer = g_PVRRecordings;
-    if (recordingsContainer == NULL)
+    if (recordingsContainer == nullptr)
       return FailedToExecute;
 
     CFileItemPtr fileItem = recordingsContainer->GetById((int)parameterObject["item"]["recordingid"].asInteger());
-    if (fileItem == NULL)
+    if (fileItem == nullptr)
       return InvalidParams;
 
     CFileItemList *l = new CFileItemList; //don't delete,
@@ -766,7 +766,7 @@ JSONRPC_STATUS CPlayerOperations::GoTo(const std::string &method, ITransportLaye
 
 JSONRPC_STATUS CPlayerOperations::SetShuffle(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
-  CGUIWindowSlideShow *slideshow = NULL;
+  CGUIWindowSlideShow *slideshow = nullptr;
   CVariant shuffle = parameterObject["shuffle"];
   switch (GetPlayer(parameterObject["playerid"]))
   {
@@ -800,7 +800,7 @@ JSONRPC_STATUS CPlayerOperations::SetShuffle(const std::string &method, ITranspo
 
     case Picture:
       slideshow = (CGUIWindowSlideShow*)g_windowManager.GetWindow(WINDOW_SLIDESHOW);
-      if (slideshow == NULL)
+      if (slideshow == nullptr)
         return FailedToExecute;
       if (slideshow->IsShuffled())
       {
@@ -1221,7 +1221,7 @@ JSONRPC_STATUS CPlayerOperations::GetPropertyValue(PlayerType player, const std:
   }
   else if (property == "speed")
   {
-    CGUIWindowSlideShow *slideshow = NULL;
+    CGUIWindowSlideShow *slideshow = nullptr;
     switch (player)
     {
       case Video:
@@ -1272,7 +1272,7 @@ JSONRPC_STATUS CPlayerOperations::GetPropertyValue(PlayerType player, const std:
   }
   else if (property == "percentage")
   {
-    CGUIWindowSlideShow *slideshow = NULL;
+    CGUIWindowSlideShow *slideshow = nullptr;
     switch (player)
     {
       case Video:
@@ -1338,7 +1338,7 @@ JSONRPC_STATUS CPlayerOperations::GetPropertyValue(PlayerType player, const std:
   }
   else if (property == "position")
   {
-    CGUIWindowSlideShow *slideshow = NULL;
+    CGUIWindowSlideShow *slideshow = nullptr;
     switch (player)
     {
       case Video:
@@ -1396,7 +1396,7 @@ JSONRPC_STATUS CPlayerOperations::GetPropertyValue(PlayerType player, const std:
   }
   else if (property == "shuffled")
   {
-    CGUIWindowSlideShow *slideshow = NULL;
+    CGUIWindowSlideShow *slideshow = nullptr;
     switch (player)
     {
       case Video:

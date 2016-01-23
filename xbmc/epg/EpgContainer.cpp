@@ -44,7 +44,7 @@ using namespace PVR;
 CEpgContainer::CEpgContainer(void) :
     CThread("EPGUpdater")
 {
-  m_progressHandle = NULL;
+  m_progressHandle = nullptr;
   m_bStop = true;
   m_bIsUpdating = false;
   m_bIsInitialising = true;
@@ -153,7 +153,7 @@ void CEpgContainer::Start(bool bAsync)
   if (bAsync)
   {
     CEPGContainerStartJob *job = new CEPGContainerStartJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 
@@ -214,7 +214,7 @@ void CEpgContainer::Notify(const Observable &obs, const ObservableMessage msg)
 
 void CEpgContainer::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -389,11 +389,11 @@ void CEpgContainer::Process(void)
 CEpgPtr CEpgContainer::GetById(int iEpgId) const
 {
   if (iEpgId < 0)
-    return NULL;
+    return nullptr;
 
   CSingleLock lock(m_critSection);
   const auto &epgEntry = m_epgs.find((unsigned int) iEpgId);
-  return epgEntry != m_epgs.end() ? epgEntry->second : NULL;
+  return epgEntry != m_epgs.end() ? epgEntry->second : nullptr;
 }
 
 CEpgInfoTagPtr CEpgContainer::GetTagById(unsigned int iBroadcastId) const
@@ -415,7 +415,7 @@ CEpgPtr CEpgContainer::GetByChannel(const CPVRChannel &channel) const
       return epgEntry.second;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void CEpgContainer::InsertFromDatabase(int iEpgID, const std::string &strName, const std::string &strScraperName)
@@ -447,7 +447,7 @@ void CEpgContainer::InsertFromDatabase(int iEpgID, const std::string &strName, c
 CEpgPtr CEpgContainer::CreateChannelEpg(CPVRChannelPtr channel)
 {
   if (!channel)
-    return NULL;
+    return nullptr;
 
   WaitForUpdateFinish(true);
   LoadFromDB();
@@ -536,7 +536,7 @@ void CEpgContainer::CloseProgressDialog(void)
   if (m_progressHandle)
   {
     m_progressHandle->MarkFinished();
-    m_progressHandle = NULL;
+    m_progressHandle = nullptr;
   }
 }
 

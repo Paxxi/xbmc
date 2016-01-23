@@ -162,7 +162,7 @@ extern "C" HANDLE WINAPI dllFindFirstFileA(LPCTSTR lpFileName, LPWIN32_FIND_DATA
 
   // change default \\*.* into \\* which the xbox is using
   char* e = strrchr(p, '.');
-  if (e != NULL && strlen(e) > 1 && e[1] == '*')
+  if (e != nullptr && strlen(e) > 1 && e[1] == '*')
   {
     e[0] = '\0';
   }
@@ -355,13 +355,13 @@ extern "C" BOOL WINAPI dllFreeEnvironmentStringsW(LPWSTR lpString)
 extern "C" HMODULE WINAPI dllGetOEMCP()
 {
   not_implement("kernel32.dll fake function GetOEMCP called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllRtlUnwind(PVOID TargetFrame OPTIONAL, PVOID TargetIp OPTIONAL, PEXCEPTION_RECORD ExceptionRecord OPTIONAL, PVOID ReturnValue)
 {
   not_implement("kernel32.dll fake function RtlUnwind called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 extern "C" LPTSTR WINAPI dllGetCommandLineA()
 {
@@ -374,12 +374,12 @@ extern "C" LPTSTR WINAPI dllGetCommandLineA()
 extern "C" HMODULE WINAPI dllExitProcess(UINT uExitCode)
 {
   not_implement("kernel32.dll fake function ExitProcess called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 extern "C" HMODULE WINAPI dllTerminateProcess(HANDLE hProcess, UINT uExitCode)
 {
   not_implement("kernel32.dll fake function TerminateProcess called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 extern "C" HANDLE WINAPI dllGetCurrentProcess()
 {
@@ -415,7 +415,7 @@ extern "C" HANDLE WINAPI dllGetStdHandle(DWORD nStdHandle)
 {
   switch (nStdHandle)
   {
-  case STD_INPUT_HANDLE: return (HANDLE)0;
+  case STD_INPUT_HANDLE: return (HANDLE)nullptr;
   case STD_OUTPUT_HANDLE: return (HANDLE)1;
   case STD_ERROR_HANDLE: return (HANDLE)2;
   }
@@ -447,11 +447,11 @@ extern "C" int WINAPI dllGetStartupInfoA(LPSTARTUPINFOA lpStartupInfo)
   lpStartupInfo->dwYCountChars = 0;
   lpStartupInfo->dwYSize = 0;
   lpStartupInfo->hStdError = (HANDLE)2;
-  lpStartupInfo->hStdInput = (HANDLE)0;
+  lpStartupInfo->hStdInput = (HANDLE)nullptr;
   lpStartupInfo->hStdOutput = (HANDLE)1;
-  lpStartupInfo->lpDesktop = NULL;
-  lpStartupInfo->lpReserved = NULL;
-  lpStartupInfo->lpReserved2 = 0;
+  lpStartupInfo->lpDesktop = nullptr;
+  lpStartupInfo->lpReserved = nullptr;
+  lpStartupInfo->lpReserved2 = nullptr;
   lpStartupInfo->lpTitle = (LPTSTR)CCompileInfo::GetAppName();
   lpStartupInfo->wShowWindow = 0;
   return 1;
@@ -484,7 +484,7 @@ extern "C" LPVOID WINAPI dllGetEnvironmentStringsW()
 #ifdef TARGET_WINDOWS
   return GetEnvironmentStringsW();
 #else  
-  return 0;
+  return nullptr;
 #endif
 }
 
@@ -510,37 +510,37 @@ extern "C" int WINAPI dllGetEnvironmentVariableA(LPCSTR lpName, LPSTR lpBuffer, 
 extern "C" HMODULE WINAPI dllLCMapStringA(LCID Locale, DWORD dwMapFlags, LPCSTR lpSrcStr, int cchSrc, LPSTR lpDestStr, int cchDest)
 {
   not_implement("kernel32.dll fake function LCMapStringA called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllLCMapStringW(LCID Locale, DWORD dwMapFlags, LPCWSTR lpSrcStr, int cchSrc, LPWSTR lpDestStr, int cchDest)
 {
   not_implement("kernel32.dll fake function LCMapStringW called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllSetStdHandle(DWORD nStdHandle, HANDLE hHandle)
 {
   not_implement("kernel32.dll fake function SetStdHandle called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllGetStringTypeA(LCID Locale, DWORD dwInfoType, LPCSTR lpSrcStr, int cchSrc, LPWORD lpCharType)
 {
   not_implement("kernel32.dll fake function GetStringTypeA called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllGetStringTypeW(DWORD dwInfoType, LPCWSTR lpSrcStr, int cchSrc, LPWORD lpCharType)
 {
   not_implement("kernel32.dll fake function GetStringTypeW called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HMODULE WINAPI dllGetCPInfo(UINT CodePage, LPCPINFO lpCPInfo)
 {
   not_implement("kernel32.dll fake function GetCPInfo called\n"); //warning
-  return NULL;
+  return nullptr;
 }
 
 extern "C" LCID WINAPI dllGetThreadLocale(void)
@@ -682,7 +682,7 @@ extern "C" HANDLE WINAPI dllGetProcessHeap()
 {
 #ifdef  TARGET_POSIX
   CLog::Log(LOGWARNING, "KERNEL32!GetProcessHeap() linux cant provide this service!");
-  return 0;
+  return nullptr;
 #else
   HANDLE hHeap;
   hHeap = GetProcessHeap();
@@ -1002,13 +1002,13 @@ extern "C" DWORD WINAPI dllGetTempPathA(DWORD nBufferLength, LPTSTR lpBuffer)
 extern "C" HGLOBAL WINAPI dllLoadResource(HMODULE hModule, HRSRC hResInfo)
 {
   not_implement("kernel32.dll fake function LoadResource called\n");
-  return NULL;
+  return nullptr;
 }
 
 extern "C" HRSRC WINAPI dllFindResourceA(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
 {
   not_implement("kernel32.dll fake function FindResource called\n");
-  return NULL;
+  return nullptr;
 }
 
 
@@ -1055,7 +1055,7 @@ extern "C" BOOL WINAPI dllDVDReadFileLayerChangeHack(HANDLE hFile, LPVOID lpBuff
                 "DVDReadFile() warning - "
                 "invalid data read from block at %i (%i) - rereading",
                 low, high);
-      SetFilePointer(hFile, (int)numChecked - (int)*lpNumberOfBytesRead - DVD_CHUNK_SIZE, NULL, FILE_CURRENT);
+      SetFilePointer(hFile, (int)numChecked - (int)*lpNumberOfBytesRead - DVD_CHUNK_SIZE, nullptr, FILE_CURRENT);
       DWORD numRead;
       ret = ReadFile(hFile, (BYTE *)lpBuffer + numChecked - DVD_CHUNK_SIZE, DVD_CHUNK_SIZE, &numRead, lpOverlapped);
       if (!ret) return FALSE;
@@ -1072,7 +1072,7 @@ extern "C" LPVOID WINAPI dllLockResource(HGLOBAL hResData)
   return LockResource(hResData);
 #else
   not_implement("kernel32.dll fake function LockResource called\n"); //warning
-  return 0;
+  return nullptr;
 #endif
 }
 

@@ -115,7 +115,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage &message)
     }
 
     CFileItemPtr timerTag = g_PVRTimers->GetTimerForEpgTag(m_progItem.get());
-    bool bHasTimer = timerTag != NULL && timerTag->HasPVRTimerInfoTag();
+    bool bHasTimer = timerTag != nullptr && timerTag->HasPVRTimerInfoTag();
 
     if (!bHasTimer)
       ActionStartTimer(tag);

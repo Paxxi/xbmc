@@ -171,7 +171,7 @@ bool CAddonCallbacksAddon::WakeOnLan(const char *mac)
 bool CAddonCallbacksAddon::GetAddonSetting(void *addonData, const char *strSettingName, void *settingValue)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL || strSettingName == NULL || settingValue == NULL)
+  if (addon == nullptr || strSettingName == nullptr || settingValue == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
     return false;
@@ -261,7 +261,7 @@ bool CAddonCallbacksAddon::GetAddonSetting(void *addonData, const char *strSetti
 char* CAddonCallbacksAddon::UnknownToUTF8(const char *strSource)
 {
   std::string string;
-  if (strSource != NULL)
+  if (strSource != nullptr)
     g_charsetConverter.unknownToUTF8(strSource, string);
   else
     string = "";
@@ -273,7 +273,7 @@ char* CAddonCallbacksAddon::GetLocalizedString(const void* addonData, long dwCod
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || g_application.m_bStop)
-    return NULL;
+    return nullptr;
 
   CAddonCallbacksAddon* addonHelper = helper->GetHelperAddon();
 
@@ -293,7 +293,7 @@ char* CAddonCallbacksAddon::GetDVDMenuLanguage(const void* addonData)
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   std::string string = g_langInfo.GetDVDMenuLanguage();
 
@@ -310,28 +310,28 @@ void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileN
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   CFile* file = new CFile;
   if (file->Open(strFileName, flags))
     return ((void*)file);
 
   delete file;
-  return NULL;
+  return nullptr;
 }
 
 void* CAddonCallbacksAddon::OpenFileForWrite(const void* addonData, const char* strFileName, bool bOverwrite)
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   CFile* file = new CFile;
   if (file->OpenForWrite(strFileName, bOverwrite))
     return ((void*)file);
 
   delete file;
-  return NULL;
+  return nullptr;
 }
 
 ssize_t CAddonCallbacksAddon::ReadFile(const void* addonData, void* file, void* lpBuf, size_t uiBufSize)

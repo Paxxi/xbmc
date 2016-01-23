@@ -40,9 +40,9 @@ static void libass_log(int level, const char *fmt, va_list args, void *data)
 CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 {
 
-  m_track = NULL;
-  m_library = NULL;
-  m_renderer = NULL;
+  m_track = nullptr;
+  m_library = nullptr;
+  m_renderer = nullptr;
   m_references = 1;
 
   if(!m_dll.Load())
@@ -66,7 +66,7 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
   //  so translate the path before calling into libass
   m_dll.ass_set_fonts_dir(m_library,  CSpecialProtocol::TranslatePath(strPath).c_str());
   m_dll.ass_set_extract_fonts(m_library, 1);
-  m_dll.ass_set_style_overrides(m_library, NULL);
+  m_dll.ass_set_style_overrides(m_library, nullptr);
 
   CLog::Log(LOGINFO, "CDVDSubtitlesLibass: Initializing ASS Renderer");
 
@@ -87,7 +87,7 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
   // libass uses fontconfig (system lib) which is not wrapped
   //  so translate the path before calling into libass
-  m_dll.ass_set_fonts(m_renderer, CSpecialProtocol::TranslatePath(strPath).c_str(), "Arial", fc, NULL, 1);
+  m_dll.ass_set_fonts(m_renderer, CSpecialProtocol::TranslatePath(strPath).c_str(), "Arial", fc, nullptr, 1);
 }
 
 
@@ -144,8 +144,8 @@ bool CDVDSubtitlesLibass::CreateTrack(char* buf, size_t size)
 
   CLog::Log(LOGINFO, "SSA Parser: Creating m_track from SSA buffer");
 
-  m_track = m_dll.ass_read_memory(m_library, buf, size, 0);
-  if(m_track == NULL)
+  m_track = m_dll.ass_read_memory(m_library, buf, size, nullptr);
+  if(m_track == nullptr)
     return false;
 
   return true;
@@ -157,7 +157,7 @@ ASS_Image* CDVDSubtitlesLibass::RenderImage(int frameWidth, int frameHeight, int
   if(!m_renderer || !m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s - Missing ASS structs(m_track or m_renderer)", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   double storage_aspact = (double)frameWidth / frameHeight;
@@ -177,7 +177,7 @@ ASS_Event* CDVDSubtitlesLibass::GetEvents()
   if(!m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s -  Missing ASS structs(m_track)", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
   return m_track->events;
 }

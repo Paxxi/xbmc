@@ -34,13 +34,13 @@ using namespace XFILE;
 
 CDDSImage::CDDSImage()
 {
-  m_data = NULL;
+  m_data = nullptr;
   memset(&m_desc, 0, sizeof(m_desc));
 }
 
 CDDSImage::CDDSImage(unsigned int width, unsigned int height, unsigned int format)
 {
-  m_data = NULL;
+  m_data = nullptr;
   Allocate(width, height, format);
 }
 
@@ -164,7 +164,7 @@ bool CDDSImage::Compress(unsigned int width, unsigned int height, unsigned int p
   Allocate(width, height, XB_FMT_DXT1);
 
   squish::CompressImage(brga, width, height, pitch, m_data, squish::kDxt1 | squish::kSourceBGRA);
-  const char *fourCC = NULL;
+  const char *fourCC = nullptr;
 
   double colorMSE, alphaMSE;
   squish::ComputeMSE(brga, width, height, pitch, m_data, squish::kDxt1 | squish::kSourceBGRA, colorMSE, alphaMSE);

@@ -97,7 +97,7 @@ CGUIDialogPVRTimerSettings::~CGUIDialogPVRTimerSettings()
 
 void CGUIDialogPVRTimerSettings::SetTimer(CFileItem *item)
 {
-  if (item == NULL)
+  if (item == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::SetTimer - No item");
     return;
@@ -217,20 +217,20 @@ void CGUIDialogPVRTimerSettings::InitializeSettings()
   CGUIDialogSettingsManualBase::InitializeSettings();
 
   CSettingCategory *category = AddCategory("pvrtimersettings", -1);
-  if (category == NULL)
+  if (category == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::InitializeSettings - Unable to add settings category");
     return;
   }
 
   CSettingGroup *group = AddGroup(category);
-  if (group == NULL)
+  if (group == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::InitializeSettings - Unable to add settings group");
     return;
   }
 
-  CSetting *setting = NULL;
+  CSetting *setting = nullptr;
 
   // Timer type
   setting = AddList(group, SETTING_TMR_TYPE, 803, 0, 0, TypesFiller, 803);
@@ -385,7 +385,7 @@ int CGUIDialogPVRTimerSettings::GetWeekdaysFromSetting(const CSetting *setting)
 
 void CGUIDialogPVRTimerSettings::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::OnSettingChanged - No setting");
     return;
@@ -500,7 +500,7 @@ void CGUIDialogPVRTimerSettings::OnSettingChanged(const CSetting *setting)
 
 void CGUIDialogPVRTimerSettings::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::OnSettingAction - No setting");
     return;
@@ -1076,11 +1076,11 @@ void CGUIDialogPVRTimerSettings::AddTypeDependentEnableCondition(CSetting *setti
 
 bool CGUIDialogPVRTimerSettings::TypeReadOnlyCondition(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::TypeReadOnlyCondition - No dialog");
     return false;
@@ -1146,11 +1146,11 @@ void CGUIDialogPVRTimerSettings::AddTypeDependentVisibilityCondition(CSetting *s
 
 bool CGUIDialogPVRTimerSettings::TypeSupportsCondition(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::TypeSupportsCondition - No dialog");
     return false;
@@ -1225,11 +1225,11 @@ void CGUIDialogPVRTimerSettings::AddStartAnytimeDependentVisibilityCondition(CSe
 
 bool CGUIDialogPVRTimerSettings::StartAnytimeSetCondition(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::AnytimeSetCondition - No dialog");
     return false;
@@ -1268,11 +1268,11 @@ void CGUIDialogPVRTimerSettings::AddEndAnytimeDependentVisibilityCondition(CSett
 
 bool CGUIDialogPVRTimerSettings::EndAnytimeSetCondition(const std::string &condition, const std::string &value, const CSetting *setting, void *data)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::AnytimeSetCondition - No dialog");
     return false;

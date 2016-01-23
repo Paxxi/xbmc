@@ -95,7 +95,7 @@ bool CUDiskDevice::Mount()
     if (reply)
     {
       char *mountPoint;
-      if (dbus_message_get_args (reply, NULL, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
       {
         m_MountPath = mountPoint;
         CLog::Log(LOGDEBUG, "UDisks: Successfully mounted %s on %s", m_DeviceKitUDI.c_str(), mountPoint);
@@ -191,7 +191,7 @@ CUDisksProvider::CUDisksProvider()
     CLog::Log(LOGERROR, "UDisks: Failed to attach to signal %s", m_error.message);
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 }
 
@@ -208,7 +208,7 @@ CUDisksProvider::~CUDisksProvider()
   {
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 
   dbus_error_free (&m_error);
@@ -223,7 +223,7 @@ void CUDisksProvider::Initialize()
   CLog::Log(LOGDEBUG, "UDisks: Querying available devices");
   std::vector<std::string> devices = EnumerateDisks();
   for (unsigned int i = 0; i < devices.size(); i++)
-    DeviceAdded(devices[i].c_str(), NULL);
+    DeviceAdded(devices[i].c_str(), nullptr);
 }
 
 bool CUDisksProvider::Eject(const std::string& mountpath)
@@ -259,7 +259,7 @@ bool CUDisksProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
     if (msg)
     {
       char *object;
-      if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (msg, nullptr, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
       {
         result = true;
         if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceAdded"))
@@ -310,7 +310,7 @@ void CUDisksProvider::DeviceAdded(const char *object, IStorageEventsCallback *ca
     delete m_AvailableDevices[object];
   }
 
-  CUDiskDevice *device = NULL;
+  CUDiskDevice *device = nullptr;
     device = new CUDiskDevice(object);
   m_AvailableDevices[object] = device;
 
@@ -350,7 +350,7 @@ void CUDisksProvider::DeviceChanged(const char *object, IStorageEventsCallback *
     CLog::Log(LOGDEBUG, "UDisks: DeviceChanged (%s)", object);
 
   CUDiskDevice *device = m_AvailableDevices[object];
-  if (device == NULL)
+  if (device == nullptr)
   {
     CLog::Log(LOGWARNING, "UDisks: Inconsistency found! DeviceChanged on an unindexed disk");
     DeviceAdded(object, callback);
@@ -381,10 +381,10 @@ std::vector<std::string> CUDisksProvider::EnumerateDisks()
   DBusMessage *reply = message.SendSystem();
   if (reply)
   {
-    char** disks  = NULL;
+    char** disks  = nullptr;
     int    length = 0;
 
-    if (dbus_message_get_args (reply, NULL, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &disks, &length, DBUS_TYPE_INVALID))
+    if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &disks, &length, DBUS_TYPE_INVALID))
     {
       for (int i = 0; i < length; i++)
         devices.push_back(disks[i]);

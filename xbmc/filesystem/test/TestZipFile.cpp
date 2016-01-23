@@ -73,7 +73,7 @@ TEST_F(TestZipFile, Read)
   EXPECT_FALSE(itemlist[0]->GetPath().empty());
   strpathinzip = itemlist[0]->GetPath();
   ASSERT_TRUE(file.Open(strpathinzip));
-  EXPECT_EQ(0, file.GetPosition());
+  EXPECT_EQ(nullptr, file.GetPosition());
   EXPECT_EQ(1616, file.GetLength());
   EXPECT_EQ(sizeof(buf), file.Read(buf, sizeof(buf)));
   file.Flush();
@@ -102,12 +102,12 @@ TEST_F(TestZipFile, Read)
   EXPECT_TRUE(!memcmp("multimedia jukebox.\n", buf, sizeof(buf) - 1));
   EXPECT_EQ(-1, file.Seek(100, SEEK_CUR));
   EXPECT_EQ(1616, file.GetPosition());
-  EXPECT_EQ(0, file.Seek(0, SEEK_SET));
+  EXPECT_EQ(nullptr, file.Seek(0, SEEK_SET));
   EXPECT_EQ(sizeof(buf), file.Read(buf, sizeof(buf)));
   file.Flush();
   EXPECT_EQ(20, file.GetPosition());
   EXPECT_TRUE(!memcmp("About\n-----\nXBMC is ", buf, sizeof(buf) - 1));
-  EXPECT_EQ(0, file.Seek(0, SEEK_SET));
+  EXPECT_EQ(nullptr, file.Seek(0, SEEK_SET));
   EXPECT_EQ(-1, file.Seek(-100, SEEK_SET));
   file.Close();
 }
@@ -138,7 +138,7 @@ TEST_F(TestZipFile, Stat)
     XFILE::DIR_FLAG_NO_FILE_DIRS));
   strpathinzip = itemlist[0]->GetPath();
 
-  EXPECT_EQ(0, XFILE::CFile::Stat(strpathinzip, &buffer));
+  EXPECT_EQ(nullptr, XFILE::CFile::Stat(strpathinzip, &buffer));
   EXPECT_TRUE(buffer.st_mode | _S_IFREG);
 }
 
@@ -157,7 +157,7 @@ TEST_F(TestZipFile, CorruptedFile)
   int64_t count = 0;
 
   reffilepath = XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt.zip");
-  ASSERT_TRUE((file = XBMC_CREATECORRUPTEDFILE(reffilepath, ".zip")) != NULL);
+  ASSERT_TRUE((file = XBMC_CREATECORRUPTEDFILE(reffilepath, ".zip")) != nullptr);
   std::cout << "Reference file generated at '" << XBMC_TEMPFILEPATH(file) << "'" << std::endl;
 
   CURL zipUrl = URIUtils::CreateArchivePath("zip", CURL(reffilepath), "");
@@ -193,7 +193,7 @@ TEST_F(TestZipFile, CorruptedFile)
   std::cout << "File contents:" << std::endl;
   while ((size = file->Read(buf, sizeof(buf))) > 0)
   {
-    str = StringUtils::Format("  %08X", count);
+    str = StringUtils::Format("  %08lX", count);
     std::cout << str << "  ";
     count += size;
     for (i = 0; i < size; i++)

@@ -40,7 +40,7 @@ CLanguageResource::CLanguageResource(const cp_extension_t *ext)
   : CResource(ext),
   m_forceUnicodeFont(false)
 {
-  if (ext != NULL)
+  if (ext != nullptr)
   {
     // parse <extension> attributes
     std::string locale = CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@locale");

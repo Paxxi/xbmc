@@ -36,12 +36,12 @@ CAddonCallbacks::CAddonCallbacks(CAddon* addon)
 {
   m_addon       = addon;
   m_callbacks   = new AddonCB;
-  m_helperAddon = NULL;
-  m_helperADSP  = NULL;
-  m_helperAudioEngine = NULL;
-  m_helperGUI   = NULL;
-  m_helperPVR   = NULL;
-  m_helperCODEC = NULL;
+  m_helperAddon = nullptr;
+  m_helperADSP  = nullptr;
+  m_helperAudioEngine = nullptr;
+  m_helperGUI   = nullptr;
+  m_helperPVR   = nullptr;
+  m_helperCODEC = nullptr;
 
   m_callbacks->libBasePath           = strdup(CSpecialProtocol::TranslatePath("special://xbmcbin/addons").c_str());
   m_callbacks->addonData             = this;
@@ -62,29 +62,29 @@ CAddonCallbacks::CAddonCallbacks(CAddon* addon)
 CAddonCallbacks::~CAddonCallbacks()
 {
   delete m_helperAddon;
-  m_helperAddon = NULL;
+  m_helperAddon = nullptr;
   delete m_helperADSP;
-  m_helperADSP = NULL;
+  m_helperADSP = nullptr;
   delete m_helperAudioEngine;
-  m_helperAudioEngine = NULL;
+  m_helperAudioEngine = nullptr;
   delete m_helperCODEC;
-  m_helperCODEC = NULL;
+  m_helperCODEC = nullptr;
   delete m_helperGUI;
-  m_helperGUI = NULL;
+  m_helperGUI = nullptr;
   delete m_helperPVR;
-  m_helperPVR = NULL;
+  m_helperPVR = nullptr;
   free((char*)m_callbacks->libBasePath);
   delete m_callbacks;
-  m_callbacks = NULL;
+  m_callbacks = nullptr;
 }
 
 CB_AddOnLib* CAddonCallbacks::AddOnLib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperAddon = new CAddonCallbacksAddon(addon->m_addon);
@@ -94,23 +94,23 @@ CB_AddOnLib* CAddonCallbacks::AddOnLib_RegisterMe(void *addonData)
 void CAddonCallbacks::AddOnLib_UnRegisterMe(void *addonData, CB_AddOnLib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperAddon;
-  addon->m_helperAddon = NULL;
+  addon->m_helperAddon = nullptr;
 }
 
 CB_ADSPLib* CAddonCallbacks::ADSPLib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperADSP = new CAddonCallbacksADSP(addon->m_addon);
@@ -120,23 +120,23 @@ CB_ADSPLib* CAddonCallbacks::ADSPLib_RegisterMe(void *addonData)
 void CAddonCallbacks::ADSPLib_UnRegisterMe(void *addonData, CB_ADSPLib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperADSP;
-  addon->m_helperADSP = NULL;
+  addon->m_helperADSP = nullptr;
 }
 
 CB_AudioEngineLib* CAddonCallbacks::AudioEngineLib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperAudioEngine = new CAddonCallbacksAudioEngine(addon->m_addon);
@@ -146,24 +146,24 @@ CB_AudioEngineLib* CAddonCallbacks::AudioEngineLib_RegisterMe(void *addonData)
 void CAddonCallbacks::AudioEngineLib_UnRegisterMe(void *addonData, CB_AudioEngineLib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperAudioEngine;
-  addon->m_helperAudioEngine = NULL;
+  addon->m_helperAudioEngine = nullptr;
 }
 
 
 CB_CODECLib* CAddonCallbacks::CODECLib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperCODEC = new CAddonCallbacksCodec(addon->m_addon);
@@ -173,23 +173,23 @@ CB_CODECLib* CAddonCallbacks::CODECLib_RegisterMe(void *addonData)
 void CAddonCallbacks::CODECLib_UnRegisterMe(void *addonData, CB_CODECLib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperCODEC;
-  addon->m_helperCODEC = NULL;
+  addon->m_helperCODEC = nullptr;
 }
 
 CB_GUILib* CAddonCallbacks::GUILib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperGUI = new CAddonCallbacksGUI(addon->m_addon);
@@ -199,23 +199,23 @@ CB_GUILib* CAddonCallbacks::GUILib_RegisterMe(void *addonData)
 void CAddonCallbacks::GUILib_UnRegisterMe(void *addonData, CB_GUILib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperGUI;
-  addon->m_helperGUI = NULL;
+  addon->m_helperGUI = nullptr;
 }
 
 CB_PVRLib* CAddonCallbacks::PVRLib_RegisterMe(void *addonData)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   addon->m_helperPVR = new CAddonCallbacksPVR(addon->m_addon);
@@ -225,14 +225,14 @@ CB_PVRLib* CAddonCallbacks::PVRLib_RegisterMe(void *addonData)
 void CAddonCallbacks::PVRLib_UnRegisterMe(void *addonData, CB_PVRLib *cbTable)
 {
   CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
-  if (addon == NULL)
+  if (addon == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
     return;
   }
 
   delete addon->m_helperPVR;
-  addon->m_helperPVR = NULL;
+  addon->m_helperPVR = nullptr;
 }
 
 }; /* namespace ADDON */

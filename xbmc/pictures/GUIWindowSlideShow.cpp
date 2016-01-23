@@ -149,7 +149,7 @@ void CBackgroundPicLoader::LoadPic(int iPic, int iSlideNumber, const std::string
 CGUIWindowSlideShow::CGUIWindowSlideShow(void)
     : CGUIWindow(WINDOW_SLIDESHOW, "SlideShow.xml")
 {
-  m_pBackgroundLoader = NULL;
+  m_pBackgroundLoader = nullptr;
   m_slides = new CFileItemList;
   m_Resolution = RES_INVALID;
   m_loadType = KEEP_IN_MEMORY;
@@ -276,7 +276,7 @@ void CGUIWindowSlideShow::OnDeinitWindow(int nextWindowID)
       CLog::Log(LOGDEBUG,"Stopping BackgroundLoader thread");
       m_pBackgroundLoader->StopThread();
       delete m_pBackgroundLoader;
-      m_pBackgroundLoader = NULL;
+      m_pBackgroundLoader = nullptr;
     }
     // and close the images.
     m_Image[0].Close();
@@ -908,7 +908,7 @@ void CGUIWindowSlideShow::RenderErrorMessage()
     return ;
 
   const CGUIControl *control = GetControl(LABEL_ROW1);
-  if (NULL == control || control->GetControlType() != CGUIControl::GUICONTROL_LABEL)
+  if (nullptr == control || control->GetControlType() != CGUIControl::GUICONTROL_LABEL)
   {
      return;
   }
@@ -1207,7 +1207,7 @@ void CGUIWindowSlideShow::AddFromPath(const std::string &strPath,
       AddItems(strPath, &recursivePaths, method, order, sortAttributes);
     }
     else
-      AddItems(strPath, NULL, method, order, sortAttributes);
+      AddItems(strPath, nullptr, method, order, sortAttributes);
   }
 }
 

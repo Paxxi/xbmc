@@ -62,7 +62,7 @@ CPowerManager g_powerManager;
 
 CPowerManager::CPowerManager()
 {
-  m_instance = NULL;
+  m_instance = nullptr;
 }
 
 CPowerManager::~CPowerManager()
@@ -121,7 +121,7 @@ void CPowerManager::Initialize()
   m_instance = new CWin32PowerSyscall();
 #endif
 
-  if (m_instance == NULL)
+  if (m_instance == nullptr)
     m_instance = new CNullPowerSyscall();
 }
 

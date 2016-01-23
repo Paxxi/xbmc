@@ -565,7 +565,7 @@ bool CGUIDialogContextMenu::OnContextButton(const std::string &type, const CFile
 CMediaSource *CGUIDialogContextMenu::GetShare(const std::string &type, const CFileItem *item)
 {
   VECSOURCES *shares = CMediaSourceSettings::GetInstance().GetSources(type);
-  if (!shares || !item) return NULL;
+  if (!shares || !item) return nullptr;
   for (unsigned int i = 0; i < shares->size(); i++)
   {
     CMediaSource &testShare = shares->at(i);
@@ -586,7 +586,7 @@ CMediaSource *CGUIDialogContextMenu::GetShare(const std::string &type, const CFi
       return &testShare;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 void CGUIDialogContextMenu::OnWindowLoaded()

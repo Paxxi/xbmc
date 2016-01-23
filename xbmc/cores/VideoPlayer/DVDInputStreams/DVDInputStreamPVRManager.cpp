@@ -42,10 +42,10 @@ CDVDInputStreamPVRManager::CDVDInputStreamPVRManager(IVideoPlayer* pPlayer, CFil
   : CDVDInputStream(DVDSTREAM_TYPE_PVRMANAGER, fileitem)
 {
   m_pPlayer = pPlayer;
-  m_pFile = NULL;
-  m_pRecordable = NULL;
-  m_pLiveTV = NULL;
-  m_pOtherStream = NULL;
+  m_pFile = nullptr;
+  m_pRecordable = nullptr;
+  m_pLiveTV = nullptr;
+  m_pOtherStream = nullptr;
   m_eof = true;
   m_ScanTimeout.Set(0);
   m_isOtherStreamHack = false;
@@ -92,9 +92,9 @@ bool CDVDInputStreamPVRManager::Open()
   if (!m_pFile->Open(url))
   {
     delete m_pFile;
-    m_pFile = NULL;
-    m_pLiveTV = NULL;
-    m_pRecordable = NULL;
+    m_pFile = nullptr;
+    m_pLiveTV = nullptr;
+    m_pRecordable = nullptr;
     return false;
   }
   m_eof = false;
@@ -127,11 +127,11 @@ bool CDVDInputStreamPVRManager::Open()
     {
       CLog::Log(LOGERROR, "CDVDInputStreamPVRManager::Open - error opening [%s]", CURL::GetRedacted(transFile).c_str());
       delete m_pFile;
-      m_pFile = NULL;
-      m_pLiveTV = NULL;
-      m_pRecordable = NULL;
+      m_pFile = nullptr;
+      m_pLiveTV = nullptr;
+      m_pRecordable = nullptr;
       delete m_pOtherStream;
-      m_pOtherStream = NULL;
+      m_pOtherStream = nullptr;
       return false;
     }
   }
@@ -159,11 +159,11 @@ void CDVDInputStreamPVRManager::Close()
 
   CDVDInputStream::Close();
 
-  m_pPlayer         = NULL;
-  m_pFile           = NULL;
-  m_pLiveTV         = NULL;
-  m_pRecordable     = NULL;
-  m_pOtherStream    = NULL;
+  m_pPlayer         = nullptr;
+  m_pFile           = nullptr;
+  m_pLiveTV         = nullptr;
+  m_pRecordable     = nullptr;
+  m_pOtherStream    = nullptr;
   m_eof             = true;
 
   CLog::Log(LOGDEBUG, "CDVDInputStreamPVRManager::Close - stream closed");
@@ -200,7 +200,7 @@ int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
   else
   {
     if (whence == SEEK_POSSIBLE)
-      return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
+      return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
 
     int64_t ret = m_pFile->Seek(offset, whence);
 

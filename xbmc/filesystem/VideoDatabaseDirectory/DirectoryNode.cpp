@@ -150,7 +150,7 @@ CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& st
     break;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 //  Current node name
@@ -203,7 +203,7 @@ std::string CDirectoryNode::BuildPath() const
     array.insert(array.begin(), m_strName);
 
   CDirectoryNode* pParent=m_pParent;
-  while (pParent != NULL)
+  while (pParent != nullptr)
   {
     const std::string& strNodeName=pParent->GetName();
     if (!strNodeName.empty())
@@ -239,7 +239,7 @@ void CDirectoryNode::CollectQueryParams(CQueryParams& params) const
   params.SetQueryParam(m_Type, m_strName);
 
   CDirectoryNode* pParent=m_pParent;
-  while (pParent != NULL)
+  while (pParent != nullptr)
   {
     params.SetQueryParam(pParent->GetType(), pParent->GetName());
     pParent = pParent->GetParent();

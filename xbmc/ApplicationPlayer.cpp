@@ -118,7 +118,7 @@ PlayBackRet CApplicationPlayer::OpenFile(const CFileItem& item, const CPlayerOpt
 bool CApplicationPlayer::HasPlayer() const 
 { 
   std::shared_ptr<IPlayer> player = GetInternal();
-  return player != NULL; 
+  return player != nullptr; 
 }
 
 int CApplicationPlayer::GetChapter()
@@ -413,7 +413,7 @@ TextCacheStruct_t* CApplicationPlayer::GetTeletextCache()
   if (player)
     return player->GetTeletextCache();
   else
-    return NULL;
+    return nullptr;
 }
 
 std::string CApplicationPlayer::GetRadioText(unsigned int line)

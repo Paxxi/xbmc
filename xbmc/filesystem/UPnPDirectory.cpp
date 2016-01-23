@@ -61,7 +61,7 @@ static std::string GetContentMapping(NPT_String& objectClass)
         , { "object.container.album.photoAlbum"   , "photos"       }
         , { "object.container.album"              , "albums"       }
         , { "object.container.person"             , "artists"      }
-        , { NULL                                  , NULL           }
+        , { nullptr                                  , nullptr           }
     };
     for(const SClassMapping* map = mapping; map->ObjectClass; map++)
     {
@@ -116,7 +116,7 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
     if (!path.EndsWith("/")) path += "/";
 
     if (path.Left(7).Compare("upnp://", true) != 0) {
-        return NULL;
+        return nullptr;
     } else if (path.Compare("upnp://", true) == 0) {
         return "UPnP Media Servers (Auto-Discover)";
     }
@@ -124,7 +124,7 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
     // look for nextslash
     int next_slash = path.Find('/', 7);
     if (next_slash == -1)
-        return NULL;
+        return nullptr;
 
     NPT_String uuid = path.SubString(7, next_slash-7);
     NPT_String object_id = path.SubString(next_slash+1, path.GetLength()-next_slash-2);
@@ -132,7 +132,7 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
     // look for device
     PLT_DeviceDataReference device;
     if(!FindDeviceWait(CUPnP::GetInstance(), uuid, device))
-        return NULL;
+        return nullptr;
 
     return (const char*)device->GetFriendlyName();
 }

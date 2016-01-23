@@ -104,7 +104,7 @@ IFile* CFileFactory::CreateLoader(const std::string& strFileName)
 IFile* CFileFactory::CreateLoader(const CURL& url)
 {
   if (!CWakeOnAccess::GetInstance().WakeUpHost(url))
-    return NULL;
+    return nullptr;
 
 #if defined(TARGET_ANDROID)
   if (url.IsProtocol("apk")) return new CAPKFile();
@@ -120,7 +120,7 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
   }
   else if (url.IsProtocol("xbt")) return new CXbtFile();
   else if (url.IsProtocol("musicdb")) return new CMusicDatabaseFile();
-  else if (url.IsProtocol("videodb")) return NULL;
+  else if (url.IsProtocol("videodb")) return nullptr;
   else if (url.IsProtocol("special")) return new CSpecialProtocolFile();
   else if (url.IsProtocol("multipath")) return new CMultiPathFile();
   else if (url.IsProtocol("image")) return new CImageFile();
@@ -177,5 +177,5 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
   }
 
   CLog::Log(LOGWARNING, "%s - %sunsupported protocol(%s) in %s", __FUNCTION__, networkAvailable ? "" : "Network down or ", url.GetProtocol().c_str(), url.GetRedacted().c_str());
-  return NULL;
+  return nullptr;
 }

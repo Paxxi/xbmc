@@ -55,8 +55,8 @@
 
 HANDLE FindFirstFile(LPCSTR szPath,LPWIN32_FIND_DATA lpFindData)
 {
-  if (lpFindData == NULL || szPath == NULL)
-    return NULL;
+  if (lpFindData == nullptr || szPath == nullptr)
+    return nullptr;
 
   std::string strPath(szPath);
 
@@ -105,13 +105,13 @@ HANDLE FindFirstFile(LPCSTR szPath,LPWIN32_FIND_DATA lpFindData)
   if (!re.RegComp(strFiles.c_str()))
     return(INVALID_HANDLE_VALUE);
 
-  struct dirent **namelist = NULL;
+  struct dirent **namelist = nullptr;
 #if defined(TARGET_ANDROID)
   // android is more strict with the sort function. Let's hope it is implemented correctly.
   typedef int (*sortFunc)(const struct dirent ** a, const struct dirent **b);
   int n = scandir(strDir.c_str(), &namelist, 0, (sortFunc)alphasort);
 #else
-  int n = scandir(strDir.c_str(), &namelist, 0, alphasort);
+  int n = scandir(strDir.c_str(), &namelist, nullptr, alphasort);
 #endif
 
   CXHandle *pHandle = new CXHandle(CXHandle::HND_FIND_FILE);
@@ -141,7 +141,7 @@ HANDLE FindFirstFile(LPCSTR szPath,LPWIN32_FIND_DATA lpFindData)
 
 BOOL   FindNextFile(HANDLE hHandle, LPWIN32_FIND_DATA lpFindData)
 {
-  if (lpFindData == NULL || hHandle == NULL || hHandle->GetType() != CXHandle::HND_FIND_FILE)
+  if (lpFindData == nullptr || hHandle == nullptr || hHandle->GetType() != CXHandle::HND_FIND_FILE)
     return FALSE;
 
   if ((unsigned int) hHandle->m_nFindFileIterator >= hHandle->m_FindFileResults.size())
@@ -197,13 +197,13 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
   DWORD dwFlagsAndAttributes, HANDLE hTemplateFile)
 {
   // Fail on unsupported items
-  if (lpSecurityAttributes != NULL )
+  if (lpSecurityAttributes != nullptr )
   {
     CLog::Log(LOGERROR, "CreateFile does not support security attributes");
     return INVALID_HANDLE_VALUE;
   }
 
-  if (hTemplateFile != (HANDLE) 0)
+  if (hTemplateFile != (HANDLE) nullptr)
   {
     CLog::Log(LOGERROR, "CreateFile does not support template file");
     return INVALID_HANDLE_VALUE;
@@ -557,7 +557,7 @@ BOOL   RemoveDirectory(LPCTSTR lpPathName)
 DWORD  SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
                       int32_t *lpDistanceToMoveHigh, DWORD dwMoveMethod)
 {
-  if (hFile == NULL)
+  if (hFile == nullptr)
     return 0;
 
   LONGLONG offset = lDistanceToMove;
@@ -624,13 +624,13 @@ BOOL GetDiskFreeSpaceEx(
 
 DWORD GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
 {
-  if (lpTimeZoneInformation == NULL)
+  if (lpTimeZoneInformation == nullptr)
     return TIME_ZONE_ID_INVALID;
 
   memset(lpTimeZoneInformation, 0, sizeof(TIME_ZONE_INFORMATION));
 
   struct tm t;
-  time_t tt = time(NULL);
+  time_t tt = time(nullptr);
   if(localtime_r(&tt, &t))
     lpTimeZoneInformation->Bias = -t.tm_gmtoff / 60;
 
@@ -642,7 +642,7 @@ DWORD GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
 
 BOOL SetEndOfFile(HANDLE hFile)
 {
-  if (hFile == NULL)
+  if (hFile == nullptr)
     return false;
 
   // get the current offset
@@ -691,7 +691,7 @@ BOOL SetFilePointerEx(  HANDLE hFile,
 
 BOOL GetFileSizeEx( HANDLE hFile, PLARGE_INTEGER lpFileSize)
 {
-  if (hFile == NULL || lpFileSize == NULL) {
+  if (hFile == nullptr || lpFileSize == nullptr) {
     return false;
   }
 
@@ -706,7 +706,7 @@ BOOL GetFileSizeEx( HANDLE hFile, PLARGE_INTEGER lpFileSize)
 
 BOOL FlushFileBuffers( HANDLE hFile )
 {
-  if (hFile == NULL)
+  if (hFile == nullptr)
   {
     return 0;
   }
@@ -716,7 +716,7 @@ BOOL FlushFileBuffers( HANDLE hFile )
 
 int _fstat64(int fd, struct __stat64 *buffer)
 {
-  if (buffer == NULL)
+  if (buffer == nullptr)
     return -1;
 
   return fstat64(fd, buffer);
@@ -725,7 +725,7 @@ int _fstat64(int fd, struct __stat64 *buffer)
 int _stat64(   const char *path,   struct __stat64 *buffer )
 {
 
-  if (buffer == NULL || path == NULL)
+  if (buffer == nullptr || path == nullptr)
     return -1;
 
   return stat64(path, buffer);
@@ -733,7 +733,7 @@ int _stat64(   const char *path,   struct __stat64 *buffer )
 
 DWORD  GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh)
 {
-  if (hFile == NULL)
+  if (hFile == nullptr)
   {
     return 0;
   }
@@ -753,7 +753,7 @@ DWORD  GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh)
 
 DWORD  GetFileAttributes(LPCTSTR lpFileName)
 {
-  if (lpFileName == NULL)
+  if (lpFileName == nullptr)
   {
     return 0;
   }
@@ -777,10 +777,10 @@ DWORD  GetFileAttributes(LPCTSTR lpFileName)
 
 DWORD  GetCurrentDirectory(DWORD nBufferLength, LPSTR lpBuffer)
 {
-  if (lpBuffer == NULL)
+  if (lpBuffer == nullptr)
     return 0;
 
-  if (getcwd(lpBuffer,nBufferLength) == NULL)
+  if (getcwd(lpBuffer,nBufferLength) == nullptr)
     return 0;
 
     return strlen(lpBuffer);

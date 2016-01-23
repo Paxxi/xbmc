@@ -357,7 +357,7 @@ bool CVisualisation::GetPresetList(std::vector<std::string> &vecpresets)
 bool CVisualisation::GetPresets()
 {
   m_presets.clear();
-  char **presets = NULL;
+  char **presets = nullptr;
   unsigned int entries = 0;
   try
   {
@@ -390,7 +390,7 @@ bool CVisualisation::GetSubModuleList(std::vector<std::string> &vecmodules)
 bool CVisualisation::GetSubModules()
 {
   m_submodules.clear();
-  char **modules = NULL;
+  char **modules = nullptr;
   unsigned int entries = 0;
   try
   {

@@ -102,7 +102,7 @@ private:
 
 CFileCache::CFileCache(const unsigned int flags)
   : CThread("FileCache")
-  , m_pCache(NULL)
+  , m_pCache(nullptr)
   , m_bDeleteCache(true)
   , m_seekPossible(0)
   , m_nSeekResult(0)
@@ -141,7 +141,7 @@ CFileCache::~CFileCache()
   if (m_bDeleteCache && m_pCache)
     delete m_pCache;
 
-  m_pCache = NULL;
+  m_pCache = nullptr;
 }
 
 void CFileCache::SetCacheStrategy(CCacheStrategy *pCache, bool bDeleteCache /* = true */)
@@ -179,7 +179,7 @@ bool CFileCache::Open(const CURL& url)
   m_source.IoControl(IOCTRL_SET_CACHE,this);
 
   // check if source can seek
-  m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
+  m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
   m_chunkSize = CFile::GetChunkSize(m_source.GetChunkSize(), READ_CACHE_CHUNK_SIZE);
   m_fileSize = m_source.GetLength();
 
@@ -253,7 +253,7 @@ void CFileCache::Process()
 
   // create our read buffer
   std::unique_ptr<char[]> buffer(new char[m_chunkSize]);
-  if (buffer.get() == NULL)
+  if (buffer.get() == nullptr)
   {
     CLog::Log(LOGERROR, "%s - failed to allocate read buffer", __FUNCTION__);
     return;
@@ -281,7 +281,7 @@ void CFileCache::Process()
         if (m_nSeekResult != cacheMaxPos)
         {
           CLog::Log(LOGERROR,"CFileCache::Process - Error %d seeking. Seek returned %" PRId64, (int)GetLastError(), m_nSeekResult);
-          m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
+          m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
           sourceSeekFailed = true;
         }
       }

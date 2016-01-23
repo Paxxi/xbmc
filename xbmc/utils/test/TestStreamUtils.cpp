@@ -24,7 +24,7 @@
 
 TEST(TestStreamUtils, General)
 {
-  EXPECT_EQ(0, StreamUtils::GetCodecPriority(""));
+  EXPECT_EQ(nullptr, StreamUtils::GetCodecPriority(""));
   EXPECT_EQ(1, StreamUtils::GetCodecPriority("ac3"));
   EXPECT_EQ(2, StreamUtils::GetCodecPriority("dca"));
   EXPECT_EQ(3, StreamUtils::GetCodecPriority("eac3"));

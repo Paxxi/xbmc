@@ -30,15 +30,15 @@
 
 CAEEncoderFFmpeg::CAEEncoderFFmpeg():
   m_BitRate       (0    ),
-  m_CodecCtx      (NULL ),
-  m_SwrCtx        (NULL ),
+  m_CodecCtx      (nullptr ),
+  m_SwrCtx        (nullptr ),
   m_BufferSize    (0    ),
   m_OutputSize    (0    ),
   m_OutputRatio   (0.0  ),
   m_SampleRateMul (0.0  ),
   m_NeededFrames  (0    ),
   m_NeedConversion(false),
-  m_ResampBuffer  (NULL ),
+  m_ResampBuffer  (nullptr ),
   m_ResampBufferSize(0  )
 {
 }
@@ -104,7 +104,7 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
 
   bool ac3 = CSettings::GetInstance().GetBool(CSettings::SETTING_AUDIOOUTPUT_AC3PASSTHROUGH);
 
-  AVCodec *codec = NULL;
+  AVCodec *codec = nullptr;
 
   /* fallback to ac3 if we support it, we might not have DTS support */
   if (!codec && ac3)
@@ -202,7 +202,7 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
   m_CodecCtx->channels = BuildChannelLayout(m_CodecCtx->channel_layout, m_Layout);
 
   /* open the codec */
-  if (avcodec_open2(m_CodecCtx, codec, NULL))
+  if (avcodec_open2(m_CodecCtx, codec, nullptr))
   {
     av_freep(&m_CodecCtx);
     return false;
@@ -219,10 +219,10 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
 
   if (m_NeedConversion)
   {
-    m_SwrCtx = swr_alloc_set_opts(NULL,
+    m_SwrCtx = swr_alloc_set_opts(nullptr,
                       m_CodecCtx->channel_layout, m_CodecCtx->sample_fmt, m_CodecCtx->sample_rate,
                       m_CodecCtx->channel_layout, AV_SAMPLE_FMT_FLT, m_CodecCtx->sample_rate,
-                      0, NULL);
+                      0, nullptr);
     if (!m_SwrCtx || swr_init(m_SwrCtx) < 0)
     {
       CLog::Log(LOGERROR, "CAEEncoderFFmpeg::Initialize - Failed to initialise resampler.");

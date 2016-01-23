@@ -26,24 +26,24 @@
 
 CGUIDialogSettingsManagerBase::CGUIDialogSettingsManagerBase(int windowId, const std::string &xmlFile)
     : CGUIDialogSettingsBase(windowId, xmlFile),
-      m_settingsManager(NULL)
+      m_settingsManager(nullptr)
 { }
 
 CGUIDialogSettingsManagerBase::~CGUIDialogSettingsManagerBase()
 {
-  m_settingsManager = NULL;
+  m_settingsManager = nullptr;
 }
 
 CSetting* CGUIDialogSettingsManagerBase::GetSetting(const std::string &settingId)
 {
-  assert(m_settingsManager != NULL);
+  assert(m_settingsManager != nullptr);
 
   return m_settingsManager->GetSetting(settingId);
 }
 
 std::set<std::string> CGUIDialogSettingsManagerBase::CreateSettings()
 {
-  assert(m_settingsManager != NULL);
+  assert(m_settingsManager != nullptr);
 
   std::set<std::string> settings = CGUIDialogSettingsBase::CreateSettings();
 
@@ -55,7 +55,7 @@ std::set<std::string> CGUIDialogSettingsManagerBase::CreateSettings()
 
 void CGUIDialogSettingsManagerBase::FreeSettingsControls()
 {
-  assert(m_settingsManager != NULL);
+  assert(m_settingsManager != nullptr);
 
   CGUIDialogSettingsBase::FreeSettingsControls();
 
@@ -64,7 +64,7 @@ void CGUIDialogSettingsManagerBase::FreeSettingsControls()
 
 ISettingControl* CGUIDialogSettingsManagerBase::CreateControl(const std::string &controlType) const
 {
-  assert(m_settingsManager != NULL);
+  assert(m_settingsManager != nullptr);
 
   return m_settingsManager->CreateControl(controlType);
 }

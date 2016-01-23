@@ -242,7 +242,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_New(void *addonData, const char *xmlFilenam
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   CAddonCallbacksGUI* guiHelper = helper->GetHelperGUI();
 
@@ -287,7 +287,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_New(void *addonData, const char *xmlFilenam
     if (!XFILE::CFile::Exists(strSkinPath))
     {
       CLog::Log(LOGERROR, "Window_New: %s/%s - XML File '%s' for Window is missing, contact Developer '%s' of this AddOn", TranslateType(guiHelper->m_addon->Type()).c_str(), guiHelper->m_addon->Name().c_str(), strSkinPath.c_str(), guiHelper->m_addon->Author().c_str());
-      return NULL;
+      return nullptr;
     }
   }
   // window id's 14000 - 14100 are reserved for addons
@@ -299,7 +299,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_New(void *addonData, const char *xmlFilenam
   {
     Unlock();
     CLog::Log(LOGERROR, "Window_New: %s/%s - maximum number of windows reached", TranslateType(guiHelper->m_addon->Type()).c_str(), guiHelper->m_addon->Name().c_str());
-    return NULL;
+    return nullptr;
   }
   while(id < WINDOW_ADDON_END && g_windowManager.GetWindow(id) != NULL) id++;
   Unlock();
@@ -680,20 +680,20 @@ const char* CAddonCallbacksGUI::Window_GetProperty(void *addonData, GUIHANDLE ha
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   CAddonCallbacksGUI* guiHelper = helper->GetHelperGUI();
 
   if (!handle || !key)
   {
     CLog::Log(LOGERROR, "Window_GetProperty: %s/%s - No Window or NULL key", TranslateType(guiHelper->m_addon->Type()).c_str(), guiHelper->m_addon->Name().c_str());
-    return NULL;
+    return nullptr;
   }
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIWindow      *pWindow      = (CGUIWindow*)g_windowManager.GetWindow(pAddonWindow->m_iWindowId);
   if (!pWindow)
-    return NULL;
+    return nullptr;
 
   std::string lowerKey = key;
   StringUtils::ToLower(lowerKey);
@@ -850,7 +850,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_AddItem(void *addonData, GUIHANDLE handle, 
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle || !item)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CFileItemPtr pItem((CFileItem*)item);
@@ -865,7 +865,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_AddStringItem(void *addonData, GUIHANDLE ha
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle || !itemName)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CFileItemPtr item(new CFileItem(itemName));
@@ -895,7 +895,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetListItem(void *addonData, GUIHANDLE hand
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CAddonCallbacksGUI* guiHelper = helper->GetHelperGUI();
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
@@ -906,7 +906,7 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetListItem(void *addonData, GUIHANDLE hand
   {
     Unlock();
     CLog::Log(LOGERROR, "Window_GetListItem: %s/%s - Index out of range", TranslateType(guiHelper->m_addon->Type()).c_str(), guiHelper->m_addon->Name().c_str());
-    return NULL;
+    return nullptr;
   }
   Unlock();
 
@@ -947,12 +947,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_Spin(void *addonData, GUIHANDLE 
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_SPINEX)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -961,12 +961,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_Button(void *addonData, GUIHANDL
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_BUTTON)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -975,12 +975,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_RadioButton(void *addonData, GUI
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_RADIO)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -989,12 +989,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_Edit(void *addonData, GUIHANDLE 
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_EDIT)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -1003,12 +1003,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_Progress(void *addonData, GUIHAN
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_PROGRESS)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -1017,12 +1017,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_RenderAddon(void *addonData, GUI
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_RENDERADDON)
-    return NULL;
+    return nullptr;
 
   CGUIAddonRenderingControl *pProxyControl;
   pProxyControl = new CGUIAddonRenderingControl((CGUIRenderingControl*)pGUIControl);
@@ -1197,7 +1197,7 @@ const char* CAddonCallbacksGUI::Control_Progress_GetDescription(void *addonData,
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIProgressControl *pControl = (CGUIProgressControl*)handle;
   std::string string = pControl->GetDescription();
@@ -1214,12 +1214,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_Slider(void *addonData, GUIHANDL
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_SLIDER)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -1238,7 +1238,7 @@ const char* CAddonCallbacksGUI::Control_Slider_GetDescription(void *addonData, G
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUISliderControl *pControl = (CGUISliderControl*)handle;
   std::string string = pControl->GetDescription();
@@ -1358,12 +1358,12 @@ GUIHANDLE CAddonCallbacksGUI::Window_GetControl_SettingsSlider(void *addonData, 
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUIAddonWindow *pAddonWindow = (CGUIAddonWindow*)handle;
   CGUIControl* pGUIControl = (CGUIControl*)pAddonWindow->GetControl(controlId);
   if (pGUIControl && pGUIControl->GetControlType() != CGUIControl::GUICONTROL_SETTINGS_SLIDER)
-    return NULL;
+    return nullptr;
 
   return pGUIControl;
 }
@@ -1392,7 +1392,7 @@ const char* CAddonCallbacksGUI::Control_SettingsSlider_GetDescription(void *addo
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   CGUISettingsSliderControl *pControl = (CGUISettingsSliderControl*)handle;
   std::string string = pControl->GetDescription();
@@ -1512,12 +1512,12 @@ GUIHANDLE CAddonCallbacksGUI::ListItem_Create(void *addonData, const char *label
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   // create CFileItem
   CFileItem *pItem = new CFileItem();
   if (!pItem)
-    return NULL;
+    return nullptr;
 
   if (label)
     pItem->SetLabel(label);
@@ -1537,7 +1537,7 @@ const char* CAddonCallbacksGUI::ListItem_GetLabel(void *addonData, GUIHANDLE han
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   std::string string = ((CFileItem*)handle)->GetLabel();
   char *buffer = (char*) malloc (string.length()+1);
@@ -1558,7 +1558,7 @@ const char* CAddonCallbacksGUI::ListItem_GetLabel2(void *addonData, GUIHANDLE ha
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   std::string string = ((CFileItem*)handle)->GetLabel2();
 
@@ -1615,7 +1615,7 @@ const char* CAddonCallbacksGUI::ListItem_GetProperty(void *addonData, GUIHANDLE 
 {
   CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
   if (!helper || !handle)
-    return NULL;
+    return nullptr;
 
   std::string string = ((CFileItem*)handle)->GetProperty(key).asString();
   char *buffer = (char*) malloc (string.length()+1);

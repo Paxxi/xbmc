@@ -30,7 +30,7 @@
 #define TRUEHD_BUF_SIZE 61440
 
 CDVDAudioCodecPassthrough::CDVDAudioCodecPassthrough(void) :
-  m_buffer(NULL),
+  m_buffer(nullptr),
   m_bufferSize(0),
   m_trueHDoffset(0)
 {
@@ -94,7 +94,7 @@ void CDVDAudioCodecPassthrough::Dispose()
   if (m_buffer)
   {
     delete[] m_buffer;
-    m_buffer = NULL;
+    m_buffer = nullptr;
   }
 
   m_bufferSize = 0;

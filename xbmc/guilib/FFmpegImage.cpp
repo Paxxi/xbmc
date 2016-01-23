@@ -142,7 +142,7 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
   buf.pos = 0;
 
   AVIOContext* ioctx = avio_alloc_context(fbuffer, FFMPEG_FILE_BUFFER_SIZE, 0, &buf,
-                                          mem_file_read, NULL, mem_file_seek);
+                                          mem_file_read, nullptr, mem_file_seek);
 
   if (!ioctx)
   {
@@ -189,7 +189,7 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
   else if (m_strMimeType == "image/tiff")
     inp = av_find_input_format("tiff_pipe");
 
-  if (avformat_open_input(&fctx, "", inp, NULL) < 0)
+  if (avformat_open_input(&fctx, "", inp, nullptr) < 0)
   {
     CLog::Log(LOGERROR, "Could not find suitable input format: %s", m_strMimeType.c_str());
     avformat_close_input(&fctx);
@@ -199,7 +199,7 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
 
   AVCodecContext* codec_ctx = fctx->streams[0]->codec;
   AVCodec* codec = avcodec_find_decoder(codec_ctx->codec_id);
-  if (avcodec_open2(codec_ctx, codec, NULL) < 0)
+  if (avcodec_open2(codec_ctx, codec, nullptr) < 0)
   {
     avformat_close_input(&fctx);
     FreeIOCtx(ioctx);
@@ -231,10 +231,10 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
         m_hasAlpha = true;
 
       AVDictionary* dic = av_frame_get_metadata(m_pFrame);
-      AVDictionaryEntry* entry = NULL;
+      AVDictionaryEntry* entry = nullptr;
       if (dic)
       {
-          entry = av_dict_get(dic, "Orientation", NULL, AV_DICT_MATCH_CASE);
+          entry = av_dict_get(dic, "Orientation", nullptr, AV_DICT_MATCH_CASE);
           if (entry && entry->value)
           {
              int orientation = atoi(entry->value);
@@ -308,7 +308,7 @@ bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int width, unsi
     return false;
   }
 
-  int size = avpicture_fill(pictureRGB, NULL, AV_PIX_FMT_RGB32, width, height);
+  int size = avpicture_fill(pictureRGB, nullptr, AV_PIX_FMT_RGB32, width, height);
   if (size < 0)
   {
     CLog::LogFunction(LOGERROR, __FUNCTION__, "Could not allocate AVPicture member with %i x %i pixes", width, height);
@@ -356,7 +356,7 @@ bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int width, unsi
   }
 
   struct SwsContext* context = sws_getContext(m_originalWidth, m_originalHeight, pixFormat,
-    nWidth, nHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+    nWidth, nHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, nullptr, nullptr, nullptr);
 
   if (range == AVCOL_RANGE_JPEG)
   {
@@ -483,7 +483,7 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
     return false;
   }
 
-  if (avcodec_open2(tdm.avOutctx, tdm.codec, NULL) < 0)
+  if (avcodec_open2(tdm.avOutctx, tdm.codec, nullptr) < 0)
   {
     CLog::Log(LOGERROR, "Could not open avcodec context thumbnail: %s", destFile.c_str());
     CleanupLocalOutputBuffer();
@@ -514,11 +514,11 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
     return false;
   }
 
-  uint8_t* src[] = { bufferin, NULL, NULL, NULL };
+  uint8_t* src[] = { bufferin, nullptr, nullptr, nullptr };
   int srcStride[] = { (int) pitch, 0, 0, 0};
 
   //input size == output size which means only pix_fmt conversion
-  tdm.sws = sws_getContext(width, height, AV_PIX_FMT_RGB32, width, height, jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, 0, 0, 0, 0);
+  tdm.sws = sws_getContext(width, height, AV_PIX_FMT_RGB32, width, height, jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, 0, nullptr, nullptr, nullptr);
   if (!tdm.sws)
   {
     CLog::Log(LOGERROR, "Could not setup scaling context for thumbnail: %s", destFile.c_str());

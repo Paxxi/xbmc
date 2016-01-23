@@ -27,7 +27,7 @@
 static const uint64_t DefaultFirstPosition = 1;
 static const uint64_t DefaultLastPosition = 0;
 static const uint64_t DefaultLength = 0;
-static const void* DefaultData = NULL;
+static const void* DefaultData = nullptr;
 
 TEST(TestHttpRange, FirstPosition)
 {
@@ -142,7 +142,7 @@ TEST(TestHttpResponseRange, SetData)
 
   range.SetData(validData, validDataLength);
   EXPECT_EQ(validData, range.GetData());
-  EXPECT_EQ(0, range.GetFirstPosition());
+  EXPECT_EQ(nullptr, range.GetFirstPosition());
   EXPECT_EQ(validDataLength - 1, range.GetLastPosition());
   EXPECT_EQ(validDataLength, range.GetLength());
   EXPECT_TRUE(range.IsValid());
@@ -166,7 +166,7 @@ TEST(TestHttpRanges, Ctor)
 
   CHttpRanges ranges_empty;
 
-  EXPECT_EQ(0, ranges_empty.Size());
+  EXPECT_EQ(nullptr, ranges_empty.Size());
   EXPECT_TRUE(ranges_empty.Get().empty());
 
   EXPECT_FALSE(ranges_empty.Get(0, range));
@@ -175,7 +175,7 @@ TEST(TestHttpRanges, Ctor)
 
   EXPECT_FALSE(ranges_empty.GetFirstPosition(position));
   EXPECT_FALSE(ranges_empty.GetLastPosition(position));
-  EXPECT_EQ(0, ranges_empty.GetLength());
+  EXPECT_EQ(nullptr, ranges_empty.GetLength());
   EXPECT_FALSE(ranges_empty.GetTotalRange(range));
 }
 
@@ -273,7 +273,7 @@ TEST(TestHttpRanges, Size)
   ranges_raw.push_back(range_2);
 
   CHttpRanges ranges_empty;
-  EXPECT_EQ(0, ranges_empty.Size());
+  EXPECT_EQ(nullptr, ranges_empty.Size());
 
   CHttpRanges ranges(ranges_raw);
   EXPECT_EQ(ranges_raw.size(), ranges.Size());
@@ -430,7 +430,7 @@ TEST(TestHttpRanges, Remove)
 
   // remove remaining range
   ranges.Remove(0);
-  EXPECT_EQ(0, ranges.Size());
+  EXPECT_EQ(nullptr, ranges.Size());
 }
 
 TEST(TestHttpRanges, Clear)
@@ -456,7 +456,7 @@ TEST(TestHttpRanges, Clear)
   EXPECT_EQ(range_2, range);
 
   ranges.Clear();
-  EXPECT_EQ(0, ranges.Size());
+  EXPECT_EQ(nullptr, ranges.Size());
 }
 
 TEST(TestHttpRanges, ParseInvalid)

@@ -38,7 +38,7 @@ static const std::string ImageBasePath = "/image/";
 CHTTPImageTransformationHandler::CHTTPImageTransformationHandler()
   : m_url(),
     m_lastModified(),
-    m_buffer(NULL),
+    m_buffer(nullptr),
     m_responseData()
 { }
 
@@ -46,7 +46,7 @@ CHTTPImageTransformationHandler::CHTTPImageTransformationHandler(const HTTPReque
   : IHTTPRequestHandler(request),
     m_url(),
     m_lastModified(),
-    m_buffer(NULL),
+    m_buffer(nullptr),
     m_responseData()
 {
   m_url = m_request.pathUrl.substr(ImageBasePath.size());
@@ -88,7 +88,7 @@ CHTTPImageTransformationHandler::CHTTPImageTransformationHandler(const HTTPReque
 #else
   time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-  if (time == NULL)
+  if (time == nullptr)
     return;
 
   m_lastModified = *time;
@@ -98,7 +98,7 @@ CHTTPImageTransformationHandler::~CHTTPImageTransformationHandler()
 {
   m_responseData.clear();
   delete m_buffer;
-  m_buffer = NULL;
+  m_buffer = nullptr;
 }
 
 bool CHTTPImageTransformationHandler::CanHandleRequest(const HTTPRequest &request)

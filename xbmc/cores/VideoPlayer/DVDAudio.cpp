@@ -30,7 +30,7 @@
 
 CDVDAudio::CDVDAudio(volatile bool &bStop, CDVDClock *clock) : m_bStop(bStop), m_pClock(clock)
 {
-  m_pAudioStream = NULL;
+  m_pAudioStream = nullptr;
   m_bPassthrough = false;
   m_iBitsPerSample = 0;
   m_sampeRate = 0;
@@ -92,7 +92,7 @@ void CDVDAudio::Destroy()
   if (m_pAudioStream)
     CAEFactory::FreeStream(m_pAudioStream);
 
-  m_pAudioStream = NULL;
+  m_pAudioStream = nullptr;
   m_sampeRate = 0;
   m_iBitsPerSample = 0;
   m_bPassthrough = false;

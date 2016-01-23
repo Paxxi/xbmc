@@ -39,7 +39,7 @@ CActiveAEStream::CActiveAEStream(AEAudioFormat *format)
 {
   m_format = *format;
   m_bufferedTime = 0;
-  m_currentBuffer = NULL;
+  m_currentBuffer = nullptr;
   m_drain = false;
   m_paused = false;
   m_rgain = 1.0;
@@ -54,18 +54,18 @@ CActiveAEStream::CActiveAEStream(AEAudioFormat *format)
   m_streamIsBuffering = false;
   m_streamIsFlushed = false;
   m_bypassDSP = false;
-  m_streamSlave = NULL;
+  m_streamSlave = nullptr;
   m_leftoverBuffer = new uint8_t[m_format.m_frameSize];
   m_leftoverBytes = 0;
   m_forceResampler = false;
-  m_remapper = NULL;
-  m_remapBuffer = NULL;
+  m_remapper = nullptr;
+  m_remapBuffer = nullptr;
   m_streamResampleRatio = 1.0;
   m_streamResampleMode = 0;
   m_profile = 0;
   m_matrixEncoding = AV_MATRIX_ENCODING_NONE;
   m_audioServiceType = AV_AUDIO_SERVICE_TYPE_MAIN;
-  m_pClock = NULL;
+  m_pClock = nullptr;
 }
 
 CActiveAEStream::~CActiveAEStream()
@@ -286,7 +286,7 @@ unsigned int CActiveAEStream::AddData(uint8_t* const *data, unsigned int offset,
         msgData.stream = this;
         RemapBuffer();
         m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData, sizeof(MsgStreamSample));
-        m_currentBuffer = NULL;
+        m_currentBuffer = nullptr;
       }
       continue;
     }
@@ -381,7 +381,7 @@ void CActiveAEStream::Drain(bool wait)
     msgData.stream = this;
     RemapBuffer();
     m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData, sizeof(MsgStreamSample));
-    m_currentBuffer = NULL;
+    m_currentBuffer = nullptr;
   }
 
   XbmcThreads::EndTime timer(2000);
@@ -428,7 +428,7 @@ void CActiveAEStream::Flush()
 {
   if (!m_streamIsFlushed)
   {
-    m_currentBuffer = NULL;
+    m_currentBuffer = nullptr;
     m_leftoverBytes = 0;
     AE.FlushStream(this);
     ResetFreeBuffers();

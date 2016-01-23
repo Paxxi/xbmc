@@ -93,7 +93,7 @@ bool IFile::ReadString(char *szLine, int iLineLength)
 }
 
 CRedirectException::CRedirectException() : 
-  m_pNewFileImp(NULL), m_pNewUrl(NULL)
+  m_pNewFileImp(nullptr), m_pNewUrl(nullptr)
 {
 }
 

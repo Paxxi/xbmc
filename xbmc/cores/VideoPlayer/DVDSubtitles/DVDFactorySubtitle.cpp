@@ -33,13 +33,13 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
 {
   char line[1024];
   int i;
-  CDVDSubtitleParser* pParser = NULL;
+  CDVDSubtitleParser* pParser = nullptr;
 
   CDVDSubtitleStream* pStream = new CDVDSubtitleStream();
   if(!pStream->Open(strFile))
   {
     delete pStream;
-    return NULL;
+    return nullptr;
   }
 
   for (int t = 0; !pParser && t < 256; t++)
@@ -50,27 +50,27 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
           (sscanf (line, "{%d}{%d}", &i, &i)==2))
       {
         pParser = new CDVDSubtitleParserMicroDVD(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       else if (sscanf(line, "[%d][%d]", &i, &i) == 2)
       {
         pParser = new CDVDSubtitleParserMPL2(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       else if (sscanf(line, "%d:%d:%d%*c%d --> %d:%d:%d%*c%d", &i, &i, &i, &i, &i, &i, &i, &i) == 8)
       {
         pParser = new CDVDSubtitleParserSubrip(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       else if (sscanf(line, "%d:%d:%d:", &i, &i, &i) == 3)
       {
         pParser = new CDVDSubtitleParserVplayer(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       else if ((!memcmp(line, "Dialogue: Marked", 16)) || (!memcmp(line, "Dialogue: ", 10)))
       {
         pParser =  new CDVDSubtitleParserSSA(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       //   if (sscanf (line, "%d:%d:%d.%d,%d:%d:%d.%d",     &i, &i, &i, &i, &i, &i, &i, &i)==8){
       //     this->uses_time=1;
@@ -87,7 +87,7 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
       else if (strstr (line, "<SAMI>"))
       {
         pParser = new CDVDSubtitleParserSami(pStream, strFile.c_str());
-        pStream = NULL;
+        pStream = nullptr;
       }
       //   /*
       //   * A RealText format is a markup language, starts with <window> tag,

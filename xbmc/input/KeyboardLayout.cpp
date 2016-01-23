@@ -31,7 +31,7 @@
 
 CKeyboardLayout::CKeyboardLayout()
 {
-  m_codingtable = NULL;
+  m_codingtable = nullptr;
 }
 
 CKeyboardLayout::~CKeyboardLayout()
@@ -40,7 +40,7 @@ CKeyboardLayout::~CKeyboardLayout()
 bool CKeyboardLayout::Load(const TiXmlElement* element)
 {
   const char* language = element->Attribute("language");
-  if (language == NULL)
+  if (language == nullptr)
   {
     CLog::Log(LOGWARNING, "CKeyboardLayout: invalid \"language\" attribute");
     return false;
@@ -54,7 +54,7 @@ bool CKeyboardLayout::Load(const TiXmlElement* element)
   }
 
   const char* layout = element->Attribute("layout");
-  if (layout == NULL)
+  if (layout == nullptr)
   {
     CLog::Log(LOGWARNING, "CKeyboardLayout: invalid \"layout\" attribute");
     return false;
@@ -71,14 +71,14 @@ bool CKeyboardLayout::Load(const TiXmlElement* element)
   if (element->Attribute("codingtable"))
     m_codingtable = CInputCodingTableFactory::CreateCodingTable(element->Attribute("codingtable"), element);
   else
-    m_codingtable = NULL;
-  while (keyboard != NULL)
+    m_codingtable = nullptr;
+  while (keyboard != nullptr)
   {
     // parse modifiers keys
     std::set<unsigned int> modifierKeysSet;
 
     const char* strModifiers = keyboard->Attribute("modifiers");
-    if (strModifiers != NULL)
+    if (strModifiers != nullptr)
     {
       std::string modifiers = strModifiers;
       StringUtils::ToLower(modifiers);
@@ -103,7 +103,7 @@ bool CKeyboardLayout::Load(const TiXmlElement* element)
 
     // parse keyboard rows
     const TiXmlNode *row = keyboard->FirstChild("row");
-    while (row != NULL)
+    while (row != nullptr)
     {
       if (!row->NoChildren())
       {

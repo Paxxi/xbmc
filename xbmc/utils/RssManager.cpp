@@ -70,7 +70,7 @@ void CRssManager::OnSettingsUnloaded()
 
 void CRssManager::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   const std::string &settingId = setting->GetId();
@@ -118,7 +118,7 @@ bool CRssManager::Load()
   }
 
   const TiXmlElement *pRootElement = rssDoc.RootElement();
-  if (pRootElement == NULL || !StringUtils::EqualsNoCase(pRootElement->ValueStr(), "rssfeeds"))
+  if (pRootElement == nullptr || !StringUtils::EqualsNoCase(pRootElement->ValueStr(), "rssfeeds"))
   {
     CLog::Log(LOGERROR, "CRssManager: error loading %s, no <rssfeeds> node", rssXML.c_str());
     return false;
@@ -126,15 +126,15 @@ bool CRssManager::Load()
 
   m_mapRssUrls.clear();
   const TiXmlElement* pSet = pRootElement->FirstChildElement("set");
-  while (pSet != NULL)
+  while (pSet != nullptr)
   {
     int iId;
     if (pSet->QueryIntAttribute("id", &iId) == TIXML_SUCCESS)
     {
       RssSet set;
-      set.rtl = pSet->Attribute("rtl") != NULL && strcasecmp(pSet->Attribute("rtl"), "true") == 0;
+      set.rtl = pSet->Attribute("rtl") != nullptr && strcasecmp(pSet->Attribute("rtl"), "true") == 0;
       const TiXmlElement* pFeed = pSet->FirstChildElement("feed");
-      while (pFeed != NULL)
+      while (pFeed != nullptr)
       {
         int iInterval;
         if (pFeed->QueryIntAttribute("updateinterval", &iInterval) != TIXML_SUCCESS)
@@ -143,7 +143,7 @@ bool CRssManager::Load()
           CLog::Log(LOGDEBUG, "CRssManager: no interval set, default to 30!");
         }
 
-        if (pFeed->FirstChild() != NULL)
+        if (pFeed->FirstChild() != nullptr)
         {
           // TODO: UTF-8: Do these URLs need to be converted to UTF-8?
           //              What about the xml encoding?

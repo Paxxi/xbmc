@@ -68,7 +68,7 @@ CGUIWindow::CGUIWindow(int id, const std::string &xmlFile)
   m_manualRunActions = false;
   m_exclusiveMouseControl = 0;
   m_clearBackground = 0xff000000; // opaque black -> always clear
-  m_windowXMLRootElement = NULL;
+  m_windowXMLRootElement = nullptr;
   m_menuControlID = 0;
   m_menuLastFocusedControlID = 0;
 }
@@ -84,7 +84,7 @@ bool CGUIWindow::Load(const std::string& strFileName, bool bContainsPath)
   CPerformanceSample aSample("WindowLoad-" + strFileName, true);
 #endif
 
-  if (m_windowLoaded || g_SkinInfo == NULL)
+  if (m_windowLoaded || g_SkinInfo == nullptr)
     return true;      // no point loading if it's already there
 
 #ifdef _DEBUG
@@ -263,7 +263,7 @@ bool CGUIWindow::Load(TiXmlElement* pRootElement)
       {
         if (strcmpi(pControl->Value(), "control") == 0)
         {
-          LoadControl(pControl, NULL, CRect(0, 0, (float)m_coordsRes.iWidth, (float)m_coordsRes.iHeight));
+          LoadControl(pControl, nullptr, CRect(0, 0, (float)m_coordsRes.iWidth, (float)m_coordsRes.iHeight));
         }
         pControl = pControl->NextSiblingElement();
       }
@@ -809,7 +809,7 @@ void CGUIWindow::FreeResources(bool forceUnload /*= FALSE */)
   if (forceUnload)
   {
     delete m_windowXMLRootElement;
-    m_windowXMLRootElement = NULL;
+    m_windowXMLRootElement = nullptr;
     m_xmlIncludeConditions.clear();
   }
 }

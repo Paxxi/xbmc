@@ -968,11 +968,11 @@ const AxesConfig* CButtonTranslator::GetAxesConfigFor(const std::string& joyName
 {
   JoystickFamilyMap::const_iterator familyIt = FindJoystickFamily(joyName);
   if (familyIt == m_joystickFamilies.end())
-    return NULL;
+    return nullptr;
   else {
     std::map<std::string, AxesConfig>::const_iterator it = m_joystickAxesConfigs.find(familyIt->first);
     if (it == m_joystickAxesConfigs.end())
-      return NULL;
+      return nullptr;
     else
       return &it->second;
   }
@@ -1284,7 +1284,7 @@ void CButtonTranslator::MapAction(uint32_t buttonCode, const char *szAction, but
 
 bool CButtonTranslator::HasDeviceType(TiXmlNode *pWindow, std::string type)
 {
-  return pWindow->FirstChild(type) != NULL;
+  return pWindow->FirstChild(type) != nullptr;
 }
 
 void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
@@ -1294,7 +1294,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
 
   TiXmlNode* pDevice;
 
-  const char* types[] = {"gamepad", "remote", "universalremote", "keyboard", "mouse", "appcommand", NULL};
+  const char* types[] = {"gamepad", "remote", "universalremote", "keyboard", "mouse", "appcommand", nullptr};
   for (int i = 0; types[i]; ++i)
   {
     std::string type(types[i]);
@@ -1352,7 +1352,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
   }
 
 #if defined(HAS_SDL_JOYSTICK) || defined(HAS_EVENT_SERVER)
-  if ((pDevice = pWindow->FirstChild("joystick")) != NULL)
+  if ((pDevice = pWindow->FirstChild("joystick")) != nullptr)
   {
     // map joystick actions
     while (pDevice)
@@ -1363,7 +1363,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
   }
 #endif
 
-  if ((pDevice = pWindow->FirstChild("touch")) != NULL)
+  if ((pDevice = pWindow->FirstChild("touch")) != nullptr)
   {
     // map touch actions
     while (pDevice)
@@ -1726,18 +1726,18 @@ void CButtonTranslator::Clear()
 uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButtonAction &action)
 {
   const char *szButton = pButton->Value();
-  if (szButton == NULL || pButton->FirstChild() == NULL)
+  if (szButton == nullptr || pButton->FirstChild() == nullptr)
     return ACTION_NONE;
 
   const char *szAction = pButton->FirstChild()->Value();
-  if (szAction == NULL)
+  if (szAction == nullptr)
     return ACTION_NONE;
 
   std::string strTouchCommand = szButton;
   StringUtils::ToLower(strTouchCommand);
 
   const char *attrVal = pButton->Attribute("direction");
-  if (attrVal != NULL)
+  if (attrVal != nullptr)
     strTouchCommand += attrVal;
 
   uint32_t actionId = ACTION_NONE;
@@ -1757,9 +1757,9 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
   }
 
   attrVal = pButton->Attribute("pointers");
-  if (attrVal != NULL)
+  if (attrVal != nullptr)
   {
-    int pointers = (int)strtol(attrVal, NULL, 0);
+    int pointers = (int)strtol(attrVal, nullptr, 0);
     if (pointers >= 1)
       actionId += pointers - 1;
   }
@@ -1773,7 +1773,7 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
 
 void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 {
-  if (pTouch == NULL)
+  if (pTouch == nullptr)
     return;
 
   buttonMap map;
@@ -1789,11 +1789,11 @@ void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 
   uint32_t actionId = 0;
   TiXmlElement *pTouchElem = pTouch->ToElement();
-  if (pTouchElem == NULL)
+  if (pTouchElem == nullptr)
     return;
 
   TiXmlElement *pButton = pTouchElem->FirstChildElement();
-  while (pButton != NULL)
+  while (pButton != nullptr)
   {
     CButtonAction action;
     actionId = TranslateTouchCommand(pButton, action);

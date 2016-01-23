@@ -237,7 +237,7 @@ HttpParser::getBody() const
     if ( _contentLength > 0 ) {
         return &_data[_contentStart];
     } else  {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -255,7 +255,7 @@ HttpParser::getValue( const char* key ) const
 
     }
 
-    return NULL;
+    return nullptr;
 }
 
 unsigned

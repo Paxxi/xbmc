@@ -149,7 +149,7 @@ using namespace KODI::MESSAGING;
 
 CGUIWindowManager::CGUIWindowManager(void)
 {
-  m_pCallback = NULL;
+  m_pCallback = nullptr;
   m_iNested = 0;
   m_initialized = false;
 }
@@ -1145,7 +1145,7 @@ CGUIWindow* CGUIWindowManager::GetWindow(int id) const
 {
   CGUIWindow *window;
   if (id == 0 || id == WINDOW_INVALID)
-    return NULL;
+    return nullptr;
 
   CSingleLock lock(g_graphicsContext);
 
@@ -1157,7 +1157,7 @@ CGUIWindow* CGUIWindowManager::GetWindow(int id) const
   if (it != m_mapWindows.end())
     window = (*it).second;
   else
-    window = NULL;
+    window = nullptr;
   m_idCache.Set(id, window);
   return window;
 }
@@ -1514,7 +1514,7 @@ CGUIWindow *CGUIWindowManager::GetTopMostDialog() const
   stable_sort(renderList.begin(), renderList.end(), RenderOrderSortFunction);
 
   if (!renderList.size())
-    return NULL;
+    return nullptr;
 
   // return the last window in the list
   return *renderList.rbegin();

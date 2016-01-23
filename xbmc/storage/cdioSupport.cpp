@@ -100,7 +100,7 @@ cdio_log_handler (cdio_log_level_t level, const char message[])
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-CLibcdio::CLibcdio(): s_defaultDevice(NULL)
+CLibcdio::CLibcdio(): s_defaultDevice(nullptr)
 {
   cdio_log_set_handler( cdio_log_handler );
 }
@@ -108,7 +108,7 @@ CLibcdio::CLibcdio(): s_defaultDevice(NULL)
 CLibcdio::~CLibcdio()
 {
   free(s_defaultDevice);
-  s_defaultDevice = NULL;
+  s_defaultDevice = nullptr;
 }
 
 void CLibcdio::ReleaseInstance()
@@ -205,18 +205,18 @@ char* CLibcdio::GetDeviceFileName()
   if (s_defaultDevice && strlen(s_defaultDevice) == 0)
   {
     free(s_defaultDevice);
-    s_defaultDevice = NULL;
+    s_defaultDevice = nullptr;
   }
 
-  if (s_defaultDevice == NULL)
+  if (s_defaultDevice == nullptr)
   {
     std::string strEnvDvd = CEnvironment::getenv("XBMC_DVD_DEVICE");
     if (!strEnvDvd.empty())
       s_defaultDevice = strdup(strEnvDvd.c_str());
     else
     {
-      CdIo_t *p_cdio = ::cdio_open(NULL, DRIVER_UNKNOWN);
-      if (p_cdio != NULL)
+      CdIo_t *p_cdio = ::cdio_open(nullptr, DRIVER_UNKNOWN);
+      if (p_cdio != nullptr)
       {
         s_defaultDevice = strdup(::cdio_get_arg(p_cdio, "source"));
         ::cdio_destroy(p_cdio);
@@ -287,7 +287,7 @@ INT CCdIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == NULL )
+  if ( cdio == nullptr )
     return -1;
 
   if ( ::cdio_read_mode1_sector( cdio, lpczBuffer, dwSector, false ) == 0 )
@@ -301,7 +301,7 @@ INT CCdIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuff
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == NULL )
+  if ( cdio == nullptr )
     return -1;
 
   if ( ::cdio_read_mode2_sector( cdio, lpczBuffer, dwSector, false ) == 0 )
@@ -315,7 +315,7 @@ INT CCdIoSupport::ReadSectorCDDA(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffe
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == NULL )
+  if ( cdio == nullptr )
     return -1;
 
   if ( ::cdio_read_audio_sector( cdio, lpczBuffer, dwSector ) == 0 )
@@ -330,7 +330,7 @@ VOID CCdIoSupport::CloseCDROM(HANDLE hDevice)
 
   CdIo* cdio = (CdIo*) hDevice;
 
-  if ( cdio == NULL )
+  if ( cdio == nullptr )
     return ;
 
   ::cdio_destroy( cdio );
@@ -643,7 +643,7 @@ void CCdIoSupport::GetCdTextInfo(xbmc_cdtext_t &xcdt, int trackNum)
   cdtext_t *pcdtext = (cdtext_t *)::cdio_get_cdtext(cdio, trackNum);
 #endif 
   
-  if (pcdtext == NULL)
+  if (pcdtext == nullptr)
     return ;
 
 #if defined (LIBCDIO_VERSION_NUM) && (LIBCDIO_VERSION_NUM > 83)
@@ -664,16 +664,16 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
   CSingleLock lock(*m_cdio);
 
   char* source_name;
-  if(cDeviceFileName == NULL)
+  if(cDeviceFileName == nullptr)
     source_name = m_cdio->GetDeviceFileName();
   else
     source_name = cDeviceFileName;
 
   cdio = ::cdio_open(source_name, DRIVER_UNKNOWN);
-  if (cdio == NULL)
+  if (cdio == nullptr)
   {
     CLog::Log(LOGERROR, "%s: Error in automatically selecting driver with input", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   bool bIsCDRom = true;
@@ -683,7 +683,7 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
   {
 #if !defined(TARGET_DARWIN)
     ::cdio_destroy(cdio);
-    return NULL;
+    return nullptr;
 #else
     m_nFirstTrackNum = 1;
     bIsCDRom = false;
@@ -695,7 +695,7 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
   {
 #if !defined(TARGET_DARWIN)
     ::cdio_destroy(cdio);
-    return NULL;
+    return nullptr;
 #else
     m_nNumTracks = 1;
     bIsCDRom = false;
@@ -723,7 +723,7 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
       CLog::Log(LOGDEBUG, "cdio_track_msf for track %i failed, I give up.", i);
       delete info;
       ::cdio_destroy(cdio);
-      return NULL;
+      return nullptr;
     }
 
     trackinfo ti;

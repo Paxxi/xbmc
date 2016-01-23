@@ -33,14 +33,14 @@ struct FILEWRAP : public FILE
 
 
 CPosixInterfaceForCLog::CPosixInterfaceForCLog() :
-  m_file(NULL)
+  m_file(nullptr)
 { }
 
 CPosixInterfaceForCLog::~CPosixInterfaceForCLog()
 {
   if (m_file)
     fclose(m_file);
-  m_file = NULL;
+  m_file = nullptr;
 }
 
 bool CPosixInterfaceForCLog::OpenLogFile(const std::string &logFilename, const std::string &backupOldLogToFilename)
@@ -66,7 +66,7 @@ void CPosixInterfaceForCLog::CloseLogFile()
   if (m_file)
   {
     fclose(m_file);
-    m_file = NULL;
+    m_file = nullptr;
   }
 }
 
@@ -98,7 +98,7 @@ void CPosixInterfaceForCLog::GetCurrentLocalTime(int &hour, int &minute, int &se
 {
   time_t curTime;
   struct tm localTime;
-  if (time(&curTime) != -1 && localtime_r(&curTime, &localTime) != NULL)
+  if (time(&curTime) != -1 && localtime_r(&curTime, &localTime) != nullptr)
   {
     hour   = localTime.tm_hour;
     minute = localTime.tm_min;

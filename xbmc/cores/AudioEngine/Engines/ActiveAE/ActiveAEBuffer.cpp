@@ -43,7 +43,7 @@ CSoundPacket::~CSoundPacket()
     AE.FreeSoundSample(data);
 }
 
-CSampleBuffer::CSampleBuffer() : pkt(NULL), pool(NULL)
+CSampleBuffer::CSampleBuffer() : pkt(nullptr), pool(nullptr)
 {
   refCount = 0;
   timestamp = 0;
@@ -93,7 +93,7 @@ CActiveAEBufferPool::~CActiveAEBufferPool()
 
 CSampleBuffer* CActiveAEBufferPool::GetFreeBuffer()
 {
-  CSampleBuffer* buf = NULL;
+  CSampleBuffer* buf = nullptr;
 
   if (!m_freeSamples.empty())
   {
@@ -156,13 +156,13 @@ CActiveAEBufferPoolResample::CActiveAEBufferPoolResample(AEAudioFormat inputForm
     m_inputFormat.m_channelLayout.Reset();
     m_inputFormat.m_channelLayout += AE_CH_FC;
   }
-  m_resampler = NULL;
+  m_resampler = nullptr;
   m_fillPackets = false;
   m_drain = false;
   m_empty = true;
-  m_procSample = NULL;
-  m_dspSample = NULL;
-  m_dspBuffer = NULL;
+  m_procSample = nullptr;
+  m_dspSample = nullptr;
+  m_dspBuffer = nullptr;
   m_resampleRatio = 1.0;
   m_resampleQuality = quality;
   m_forceResampler = false;
@@ -274,7 +274,7 @@ bool CActiveAEBufferPoolResample::Create(unsigned int totaltime, bool remap, boo
                                 CAEUtil::DataFormatToDitherBits(m_inputFormat.m_dataFormat),
                                 upmix,
                                 m_normalize,
-                                remap ? &m_format.m_channelLayout : NULL,
+                                remap ? &m_format.m_channelLayout : nullptr,
                                 m_resampleQuality,
                                 m_forceResampler);
   }
@@ -289,7 +289,7 @@ void CActiveAEBufferPoolResample::ChangeResampler()
   if (m_resampler)
   {
     delete m_resampler;
-    m_resampler = NULL;
+    m_resampler = nullptr;
   }
 
   bool upmix = m_stereoUpmix;
@@ -311,7 +311,7 @@ void CActiveAEBufferPoolResample::ChangeResampler()
                                 CAEUtil::DataFormatToDitherBits(m_inputFormat.m_dataFormat),
                                 upmix,
                                 m_normalize,
-                                m_remap ? &m_format.m_channelLayout : NULL,
+                                m_remap ? &m_format.m_channelLayout : nullptr,
                                 m_resampleQuality,
                                 m_forceResampler);
 
@@ -349,9 +349,9 @@ void CActiveAEBufferPoolResample::ChangeAudioDSP()
         !m_useResampler)
     {
       delete m_resampler;
-      m_resampler = NULL;
+      m_resampler = nullptr;
       delete m_dspBuffer;
-      m_dspBuffer = NULL;
+      m_dspBuffer = nullptr;
       m_changeResampler = false;
     }
     else
@@ -423,7 +423,7 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
         m_inputSamples.pop_front();
       }
       else
-        in = NULL;
+        in = nullptr;
 
       /*
        * DSP need always a available input packet! To pass it step by step
@@ -438,12 +438,12 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
         {
           in->Return();
           in = m_dspSample;
-          m_dspSample = NULL;
+          m_dspSample = nullptr;
         }
         else
         {
           in->Return();
-          in = NULL;
+          in = nullptr;
         }
       }
 
@@ -459,7 +459,7 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
 
       int out_samples = m_resampler->Resample(m_planes,
                                               m_procSample->pkt->max_nb_samples - m_procSample->pkt->nb_samples,
-                                              in ? in->pkt->data : NULL,
+                                              in ? in->pkt->data : nullptr,
                                               in ? in->pkt->nb_samples : 0,
                                               m_resampleRatio);
       // in case of error, trigger re-create of resampler
@@ -521,7 +521,7 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
         else
           m_outputSamples.push_back(m_procSample);
 
-        m_procSample = NULL;
+        m_procSample = nullptr;
         if (m_changeDSP)
           ChangeAudioDSP();
         if (m_changeResampler)
@@ -531,7 +531,7 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
       else if (!m_fillPackets || (m_procSample->pkt->nb_samples == m_procSample->pkt->max_nb_samples))
       {
         m_outputSamples.push_back(m_procSample);
-        m_procSample = NULL;
+        m_procSample = nullptr;
       }
 
       if (in)
@@ -580,12 +580,12 @@ void CActiveAEBufferPoolResample::Flush()
   if (m_procSample)
   {
     m_procSample->Return();
-    m_procSample = NULL;
+    m_procSample = nullptr;
   }
   if (m_dspSample)
   {
     m_dspSample->Return();
-    m_dspSample = NULL;
+    m_dspSample = nullptr;
   }
   while (!m_inputSamples.empty())
   {

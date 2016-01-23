@@ -57,7 +57,7 @@ void CRendererVDPAU::ReleaseBuffer(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
     ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
-  buf.hwDec = NULL;
+  buf.hwDec = nullptr;
 }
 
 CRenderInfo CRendererVDPAU::GetRenderInfo()
@@ -258,7 +258,7 @@ void CRendererVDPAU::DeleteVDPAUTexture(int index)
 
   if (m_buffers[index].hwDec)
     ((VDPAU::CVdpauRenderPicture*)m_buffers[index].hwDec)->Release();
-  m_buffers[index].hwDec = NULL;
+  m_buffers[index].hwDec = nullptr;
 
   plane.id = 0;
 }
@@ -320,9 +320,9 @@ bool CRendererVDPAU::CreateVDPAUTexture420(int index)
   im.cshift_x = 1;
   im.cshift_y = 1;
 
-  im.plane[0] = NULL;
-  im.plane[1] = NULL;
-  im.plane[2] = NULL;
+  im.plane[0] = nullptr;
+  im.plane[1] = nullptr;
+  im.plane[2] = nullptr;
 
   for(int p=0; p<3; p++)
   {
@@ -340,7 +340,7 @@ void CRendererVDPAU::DeleteVDPAUTexture420(int index)
 
   if (m_buffers[index].hwDec)
     ((VDPAU::CVdpauRenderPicture*)m_buffers[index].hwDec)->Release();
-  m_buffers[index].hwDec = NULL;
+  m_buffers[index].hwDec = nullptr;
 
   fields[0][0].id = 0;
   fields[1][0].id = 0;

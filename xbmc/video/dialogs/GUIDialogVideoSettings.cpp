@@ -73,7 +73,7 @@ CGUIDialogVideoSettings::~CGUIDialogVideoSettings()
 
 void CGUIDialogVideoSettings::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
@@ -156,7 +156,7 @@ void CGUIDialogVideoSettings::OnSettingChanged(const CSetting *setting)
 
 void CGUIDialogVideoSettings::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
@@ -209,7 +209,7 @@ void CGUIDialogVideoSettings::InitializeSettings()
   CGUIDialogSettingsManualBase::InitializeSettings();
 
   CSettingCategory *category = AddCategory("videosettings", -1);
-  if (category == NULL)
+  if (category == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
@@ -217,31 +217,31 @@ void CGUIDialogVideoSettings::InitializeSettings()
 
   // get all necessary setting groups
   CSettingGroup *groupVideoStream = AddGroup(category);
-  if (groupVideoStream == NULL)
+  if (groupVideoStream == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupVideo = AddGroup(category);
-  if (groupVideo == NULL)
+  if (groupVideo == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupVideoPlayback = AddGroup(category);
-  if (groupVideoPlayback == NULL)
+  if (groupVideoPlayback == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupStereoscopic = AddGroup(category);
-  if (groupStereoscopic == NULL)
+  if (groupStereoscopic == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupSaveAsDefault = AddGroup(category);
-  if (groupSaveAsDefault == NULL)
+  if (groupSaveAsDefault == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogVideoSettings: unable to setup settings");
     return;
@@ -385,7 +385,7 @@ void CGUIDialogVideoSettings::InitializeSettings()
 
 void CGUIDialogVideoSettings::AddVideoStreams(CSettingGroup *group, const std::string &settingId)
 {
-  if (group == NULL || settingId.empty())
+  if (group == nullptr || settingId.empty())
     return;
 
   m_videoStream = g_application.m_pPlayer->GetVideoStream();

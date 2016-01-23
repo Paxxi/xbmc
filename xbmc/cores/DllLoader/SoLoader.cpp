@@ -28,7 +28,7 @@
 
 SoLoader::SoLoader(const std::string &so, bool bGlobal) : LibraryLoader(so)
 {
-  m_soHandle = NULL;
+  m_soHandle = nullptr;
   m_bGlobal = bGlobal;
   m_bLoaded = false;
 }
@@ -41,7 +41,7 @@ SoLoader::~SoLoader()
 
 bool SoLoader::Load()
 {
-  if (m_soHandle != NULL)
+  if (m_soHandle != nullptr)
     return true;
 
   std::string strFileName= CSpecialProtocol::TranslatePath(GetFileName());
@@ -84,7 +84,7 @@ void SoLoader::Unload()
        CLog::Log(LOGERROR, "Unable to unload %s, reason: %s", GetName(), dlerror());
   }
   m_bLoaded = false;
-  m_soHandle = NULL;
+  m_soHandle = nullptr;
 }
 
 int SoLoader::ResolveExport(const char* symbol, void** f, bool logging)

@@ -69,8 +69,8 @@ CVideoPlayerVideo::CVideoPlayerVideo(CDVDClock* pClock
 {
   m_pClock = pClock;
   m_pOverlayContainer = pOverlayContainer;
-  m_pTempOverlayPicture = NULL;
-  m_pVideoCodec = NULL;
+  m_pTempOverlayPicture = nullptr;
+  m_pVideoCodec = nullptr;
   m_speed = DVD_PLAYSPEED_NORMAL;
 
   m_bRenderSubs = false;
@@ -216,13 +216,13 @@ void CVideoPlayerVideo::CloseStream(bool bWaitForBuffers)
   {
     m_pVideoCodec->Dispose();
     delete m_pVideoCodec;
-    m_pVideoCodec = NULL;
+    m_pVideoCodec = nullptr;
   }
 
   if (m_pTempOverlayPicture)
   {
     CDVDCodecUtils::FreePicture(m_pTempOverlayPicture);
-    m_pTempOverlayPicture = NULL;
+    m_pTempOverlayPicture = nullptr;
   }
 }
 
@@ -279,7 +279,7 @@ void CVideoPlayerVideo::Process()
 
       // check if decoder has produced some output
       m_pVideoCodec->SetCodecControl(DVD_CODEC_CTRL_DRAIN);
-      int decoderState = m_pVideoCodec->Decode(NULL, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+      int decoderState = m_pVideoCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
       ProcessDecoderOutput(decoderState, frametime, pts);
 
       //Okey, start rendering at stream fps now instead, we are likely in a stillframe
@@ -377,7 +377,7 @@ void CVideoPlayerVideo::Process()
       while (!m_bStop && m_pVideoCodec)
       {
         m_pVideoCodec->SetCodecControl(DVD_CODEC_CTRL_DRAIN);
-        int decoderState = m_pVideoCodec->Decode(NULL, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+        int decoderState = m_pVideoCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
 
         bool cont = ProcessDecoderOutput(decoderState, frametime, pts);
 
@@ -389,7 +389,7 @@ void CVideoPlayerVideo::Process()
       }
 
       OpenStream(msg->m_hints, msg->m_codec);
-      msg->m_codec = NULL;
+      msg->m_codec = nullptr;
       m_picture.iFlags &= ~DVP_FLAG_ALLOCATED;
     }
     else if (pMsg->IsType(CDVDMsg::VIDEO_DRAIN))
@@ -397,7 +397,7 @@ void CVideoPlayerVideo::Process()
       while (!m_bStop && m_pVideoCodec)
       {
         m_pVideoCodec->SetCodecControl(DVD_CODEC_CTRL_DRAIN);
-        int decoderState = m_pVideoCodec->Decode(NULL, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+        int decoderState = m_pVideoCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
 
         bool cont = ProcessDecoderOutput(decoderState, frametime, pts);
 
@@ -503,7 +503,7 @@ void CVideoPlayerVideo::Process()
           break;
 
         // the decoder didn't need more data, flush the remaning buffer
-        iDecoderState = m_pVideoCodec->Decode(NULL, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+        iDecoderState = m_pVideoCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
       }
     }
 
@@ -651,7 +651,7 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(int &decoderState, double &frametim
         //flushing the video codec things break for some reason
         //i think the decoder (libmpeg2 atleast) still has a pointer
         //to the data, and when the packet is freed that will fail.
-        decoderState = m_pVideoCodec->Decode(NULL, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+        decoderState = m_pVideoCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
         return false;
       }
 

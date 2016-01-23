@@ -124,7 +124,7 @@ std::string CGUIDialogAudioSubtitleSettings::FormatPercentAsDecibel(float value)
 
 void CGUIDialogAudioSubtitleSettings::OnSettingChanged(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
@@ -185,7 +185,7 @@ void CGUIDialogAudioSubtitleSettings::OnSettingChanged(const CSetting *setting)
 
 void CGUIDialogAudioSubtitleSettings::OnSettingAction(const CSetting *setting)
 {
-  if (setting == NULL)
+  if (setting == nullptr)
     return;
 
   CGUIDialogSettingsManualBase::OnSettingAction(setting);
@@ -270,7 +270,7 @@ void CGUIDialogAudioSubtitleSettings::InitializeSettings()
   CGUIDialogSettingsManualBase::InitializeSettings();
 
   CSettingCategory *category = AddCategory("audiosubtitlesettings", -1);
-  if (category == NULL)
+  if (category == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioSubtitleSettings: unable to setup settings");
     return;
@@ -278,19 +278,19 @@ void CGUIDialogAudioSubtitleSettings::InitializeSettings()
 
   // get all necessary setting groups
   CSettingGroup *groupAudio = AddGroup(category);
-  if (groupAudio == NULL)
+  if (groupAudio == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioSubtitleSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupSubtitles = AddGroup(category);
-  if (groupSubtitles == NULL)
+  if (groupSubtitles == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioSubtitleSettings: unable to setup settings");
     return;
   }
   CSettingGroup *groupSaveAsDefault = AddGroup(category);
-  if (groupSaveAsDefault == NULL)
+  if (groupSaveAsDefault == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogAudioSubtitleSettings: unable to setup settings");
     return;
@@ -406,7 +406,7 @@ bool CGUIDialogAudioSubtitleSettings::SupportsSubtitleFeature(int feature)
 
 void CGUIDialogAudioSubtitleSettings::AddAudioStreams(CSettingGroup *group, const std::string &settingId)
 {
-  if (group == NULL || settingId.empty())
+  if (group == nullptr || settingId.empty())
     return;
 
   m_audioStream = g_application.m_pPlayer->GetAudioStream();
@@ -418,7 +418,7 @@ void CGUIDialogAudioSubtitleSettings::AddAudioStreams(CSettingGroup *group, cons
 
 void CGUIDialogAudioSubtitleSettings::AddSubtitleStreams(CSettingGroup *group, const std::string &settingId)
 {
-  if (group == NULL || settingId.empty())
+  if (group == nullptr || settingId.empty())
     return;
 
   m_subtitleStream = g_application.m_pPlayer->GetSubtitle();
@@ -517,7 +517,7 @@ std::string CGUIDialogAudioSubtitleSettings::SettingFormatterDelay(const CSettin
 
 std::string CGUIDialogAudioSubtitleSettings::SettingFormatterPercentAsDecibel(const CSettingControlSlider *control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum)
 {
-  if (control == NULL || !value.isDouble())
+  if (control == nullptr || !value.isDouble())
     return "";
 
   std::string formatString = control->GetFormatString();

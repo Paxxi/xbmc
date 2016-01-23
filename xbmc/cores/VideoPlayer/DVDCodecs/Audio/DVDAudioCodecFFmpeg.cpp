@@ -37,13 +37,13 @@ extern "C" {
 
 CDVDAudioCodecFFmpeg::CDVDAudioCodecFFmpeg() : CDVDAudioCodec()
 {
-  m_pCodecContext = NULL;
+  m_pCodecContext = nullptr;
   m_bOpenedCodec = false;
 
   m_channels = 0;
   m_layout = 0;
   
-  m_pFrame1 = NULL;
+  m_pFrame1 = nullptr;
   m_iSampleFormat = AV_SAMPLE_FMT_NONE;
   m_gotFrame = 0;
 }
@@ -55,7 +55,7 @@ CDVDAudioCodecFFmpeg::~CDVDAudioCodecFFmpeg()
 
 bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
 {
-  AVCodec* pCodec = NULL;
+  AVCodec* pCodec = nullptr;
   m_bOpenedCodec = false;
   bool allowdtshddecode = true;
 
@@ -108,7 +108,7 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   if (g_advancedSettings.m_audioApplyDrc >= 0.0)
     av_opt_set_double(m_pCodecContext, "drc_scale", g_advancedSettings.m_audioApplyDrc, AV_OPT_SEARCH_CHILDREN);
 
-  if (avcodec_open2(m_pCodecContext, pCodec, NULL) < 0)
+  if (avcodec_open2(m_pCodecContext, pCodec, nullptr) < 0)
   {
     CLog::Log(LOGDEBUG,"CDVDAudioCodecFFmpeg::Open() Unable to open codec");
     Dispose();
@@ -126,14 +126,14 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 void CDVDAudioCodecFFmpeg::Dispose()
 {
   if (m_pFrame1) av_free(m_pFrame1);
-  m_pFrame1 = NULL;
+  m_pFrame1 = nullptr;
 
   if (m_pCodecContext)
   {
     if (m_bOpenedCodec) avcodec_close(m_pCodecContext);
     m_bOpenedCodec = false;
     av_free(m_pCodecContext);
-    m_pCodecContext = NULL;
+    m_pCodecContext = nullptr;
   }
 }
 

@@ -41,7 +41,7 @@
 CDVDInputStreamNavigator::CDVDInputStreamNavigator(IVideoPlayer* player, CFileItem& fileitem)
   : CDVDInputStream(DVDSTREAM_TYPE_DVD, fileitem)
 {
-  m_dvdnav = 0;
+  m_dvdnav = nullptr;
   m_pVideoPlayer = player;
   m_bCheckButtons = false;
   m_iCellStart = 0;
@@ -226,7 +226,7 @@ void CDVDInputStreamNavigator::Close()
   }
 
   CDVDInputStream::Close();
-  m_dvdnav = NULL;
+  m_dvdnav = nullptr;
   m_bEOF = true;
 }
 
@@ -259,7 +259,7 @@ int CDVDInputStreamNavigator::Read(uint8_t* buf, int buf_size)
       {
         m_bEOF = true;
         CLog::Log(LOGERROR,"CDVDInputStreamNavigator: Stopping playback due to infinite loop, caused by badly authored DVD navigation structure. Try enabling 'Attempt to skip introduction before DVD menu'.");
-        m_pVideoPlayer->OnDVDNavResult(NULL, DVDNAV_STOP);
+        m_pVideoPlayer->OnDVDNavResult(nullptr, DVDNAV_STOP);
         return -1; // fail and stop playback.
       }
     }
@@ -472,7 +472,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
         // get chapters' timestamps if we have not cached them yet
         if (m_mapTitleChapters.find(m_iTitle) == m_mapTitleChapters.end())
         {
-          uint64_t* times = NULL;
+          uint64_t* times = nullptr;
           uint64_t duration;
           //dvdnav_describe_title_chapters returns 0 on failure and NULL for times
           int entries = m_dll.dvdnav_describe_title_chapters(m_dvdnav, m_iTitle, &times, &duration);
@@ -568,7 +568,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
       // This event is issued whenever a non-seamless operation has been executed.
       // Applications with fifos should drop the fifos content to speed up responsiveness.
       {
-        iNavresult = m_pVideoPlayer->OnDVDNavResult(NULL, DVDNAV_HOP_CHANNEL);
+        iNavresult = m_pVideoPlayer->OnDVDNavResult(nullptr, DVDNAV_HOP_CHANNEL);
       }
       break;
 
@@ -580,7 +580,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
         // the disc. reading further results in a crash
         m_bEOF = true;
 
-        m_pVideoPlayer->OnDVDNavResult(NULL, DVDNAV_STOP);
+        m_pVideoPlayer->OnDVDNavResult(nullptr, DVDNAV_STOP);
         iNavresult = NAVRESULT_ERROR;
       }
       break;
@@ -1492,7 +1492,7 @@ int CDVDInputStreamNavigator::ConvertSubtitleStreamId_ExternalToXBMC(int id)
 bool CDVDInputStreamNavigator::GetDVDTitleString(std::string& titleStr)
 {
   if (!m_dvdnav) return false;
-  const char* str = NULL;
+  const char* str = nullptr;
   m_dll.dvdnav_get_title_string(m_dvdnav, &str);
   titleStr.assign(str);
   return true;
@@ -1501,7 +1501,7 @@ bool CDVDInputStreamNavigator::GetDVDTitleString(std::string& titleStr)
 bool CDVDInputStreamNavigator::GetDVDSerialString(std::string& serialStr)
 {
   if (!m_dvdnav) return false;
-  const char* str = NULL;
+  const char* str = nullptr;
   m_dll.dvdnav_get_serial_string(m_dvdnav, &str);
   serialStr.assign(str);
   return true;

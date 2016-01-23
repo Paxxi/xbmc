@@ -265,7 +265,7 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
      return result;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    char iface[16];
    char dst[128];
    char gateway[128];
@@ -437,7 +437,7 @@ void CNetworkLinux::queryInterfaceList()
      return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    int n;
    char* p;
@@ -521,7 +521,7 @@ void CNetworkLinux::SetNameServers(const std::vector<std::string>& nameServers)
 {
 #if !defined(TARGET_ANDROID)
    FILE* fp = fopen("/etc/resolv.conf", "w");
-   if (fp != NULL)
+   if (fp != nullptr)
    {
       for (unsigned int i = 0; i < nameServers.size(); i++)
       {
@@ -701,14 +701,14 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
    //    2. The scanning is not complete (EAGAIN) and we need to try again. We cap this with 15 seconds.
    //    3. We're good.
    int duration = 0; // ms
-   unsigned char* res_buf = NULL;
+   unsigned char* res_buf = nullptr;
    int res_buf_len = IW_SCAN_MAX_DATA;
    while (duration < 15000)
    {
       if (!res_buf)
          res_buf = (unsigned char*) malloc(res_buf_len);
 
-      if (res_buf == NULL)
+      if (res_buf == nullptr)
       {
          CLog::Log(LOGWARNING, "Cannot alloc memory for wireless scanning");
          return result;
@@ -726,7 +726,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
       if (errno == E2BIG && res_buf_len < 100000)
       {
          free(res_buf);
-         res_buf = NULL;
+         res_buf = nullptr;
          res_buf_len *= 2;
          CLog::Log(LOGDEBUG, "Scan results did not fit - trying larger buffer (%lu bytes)",
                         (unsigned long) res_buf_len);
@@ -885,7 +885,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
       result.push_back(NetworkAccessPoint(essId, macAddress, signalLevel, encryption, channel));
 
    free(res_buf);
-   res_buf = NULL;
+   res_buf = nullptr;
 #endif
 
    return result;
@@ -909,7 +909,7 @@ void CNetworkInterfaceLinux::GetSettings(NetworkAssignment& assignment, std::str
       return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    std::string s;
    bool foundInterface = false;
@@ -994,7 +994,7 @@ void CNetworkInterfaceLinux::SetSettings(NetworkAssignment& assignment, std::str
       return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    std::string s;
    bool foundInterface = false;

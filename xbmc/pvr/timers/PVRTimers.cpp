@@ -145,7 +145,7 @@ bool CPVRTimers::UpdateEntries(const CPVRTimers &timers)
         newTimer->UpdateEntry(*timerIt);
         UpdateEpgEvent(newTimer);
 
-        VecTimerInfoTag* addEntry = NULL;
+        VecTimerInfoTag* addEntry = nullptr;
         MapTags::iterator itr = m_tags.find(newTimer->m_bStartAnyTime ? CDateTime() : newTimer->StartAsUTC());
         if (itr == m_tags.end())
         {
@@ -233,7 +233,7 @@ bool CPVRTimers::UpdateEntries(const CPVRTimers &timers)
   /* reinsert timers with changed timer start */
   for (VecTimerInfoTag::const_iterator timerIt = timersToMove.begin(); timerIt != timersToMove.end(); ++timerIt)
   {
-    VecTimerInfoTag* addEntry = NULL;
+    VecTimerInfoTag* addEntry = nullptr;
     MapTags::const_iterator itr = m_tags.find((*timerIt)->m_bStartAnyTime ? CDateTime() : (*timerIt)->StartAsUTC());
     if (itr == m_tags.end())
     {
@@ -299,7 +299,7 @@ bool CPVRTimers::UpdateFromClient(const CPVRTimerInfoTagPtr &timer)
   if (!tag)
   {
     tag = CPVRTimerInfoTagPtr(new CPVRTimerInfoTag());
-    VecTimerInfoTag* addEntry = NULL;
+    VecTimerInfoTag* addEntry = nullptr;
     MapTags::iterator itr = m_tags.find(timer->m_bStartAnyTime ? CDateTime() : timer->StartAsUTC());
     if (itr == m_tags.end())
     {

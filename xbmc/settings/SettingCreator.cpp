@@ -30,5 +30,5 @@ CSetting* CSettingCreator::CreateSetting(const std::string &settingType, const s
   else if (StringUtils::EqualsNoCase(settingType, "path"))
     return new CSettingPath(settingId, settingsManager);
 
-  return NULL;
+  return nullptr;
 }

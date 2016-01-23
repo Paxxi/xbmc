@@ -145,12 +145,12 @@ namespace XBMCAddon
 #endif
 
     WsgiInputStream::WsgiInputStream()
-      : m_request(NULL)
+      : m_request(nullptr)
     { }
 
     WsgiInputStream::~WsgiInputStream()
     {
-      m_request = NULL;
+      m_request = nullptr;
     }
 
 #ifndef SWIG
@@ -166,7 +166,7 @@ namespace XBMCAddon
 
     void WsgiInputStream::SetRequest(HTTPPythonRequest* request)
     {
-      if (m_request != NULL)
+      if (m_request != nullptr)
         return;
 
       m_request = request;

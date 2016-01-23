@@ -40,7 +40,7 @@ namespace XFILE
   {
     const std::string pathToUrl = url.Get();
     std::unique_ptr<CPlayList> pPlayList (CPlayListFactory::Create(pathToUrl));
-    if ( NULL != pPlayList.get())
+    if ( nullptr != pPlayList.get())
     {
       // load it
       if (!pPlayList->Load(pathToUrl))
@@ -62,7 +62,7 @@ namespace XFILE
   {
     const std::string pathToUrl = url.Get();
     std::unique_ptr<CPlayList> pPlayList (CPlayListFactory::Create(pathToUrl));
-    if ( NULL != pPlayList.get())
+    if ( nullptr != pPlayList.get())
     {
       // load it
       if (!pPlayList->Load(pathToUrl))

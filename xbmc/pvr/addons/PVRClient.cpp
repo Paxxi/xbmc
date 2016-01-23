@@ -1493,7 +1493,7 @@ DemuxPacket* CPVRClient::DemuxRead(void)
     try { return m_pStruct->DemuxRead(); }
     catch (std::exception &e) { LogException(e, __FUNCTION__); }
   }
-  return NULL;
+  return nullptr;
 }
 
 bool CPVRClient::HaveMenuHooks(PVR_MENUHOOK_CAT cat) const

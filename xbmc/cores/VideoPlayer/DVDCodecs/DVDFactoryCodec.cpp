@@ -187,7 +187,7 @@ CDVDVideoCodec* CDVDFactoryCodec::CreateVideoCodec(CDVDStreamInfo &hint, const C
 
 CDVDAudioCodec* CDVDFactoryCodec::CreateAudioCodec(CDVDStreamInfo &hint, bool allowpassthrough, bool allowdtshddecode)
 {
-  CDVDAudioCodec* pCodec = NULL;
+  CDVDAudioCodec* pCodec = nullptr;
   CDVDCodecOptions options;
 
   if (!allowdtshddecode)
@@ -210,7 +210,7 @@ CDVDAudioCodec* CDVDFactoryCodec::CreateAudioCodec(CDVDStreamInfo &hint, bool al
 
 CDVDOverlayCodec* CDVDFactoryCodec::CreateOverlayCodec( CDVDStreamInfo &hint )
 {
-  CDVDOverlayCodec* pCodec = NULL;
+  CDVDOverlayCodec* pCodec = nullptr;
   CDVDCodecOptions options;
 
   switch (hint.codec)

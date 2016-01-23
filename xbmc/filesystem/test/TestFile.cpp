@@ -47,17 +47,17 @@ TEST(TestFile, Read)
   int currentPos;
   ASSERT_TRUE(file.Open(
     XBMC_REF_FILE_PATH("/xbmc/filesystem/test/reffile.txt")));
-  EXPECT_EQ(0, file.GetPosition());
+  EXPECT_EQ(nullptr, file.GetPosition());
   EXPECT_EQ(realSize, file.GetLength());
   EXPECT_EQ(firstBuf.length(), file.Read(buf, firstBuf.length()));
   file.Flush();
   currentPos = firstBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(firstBuf.c_str(), buf, firstBuf.length()));
+  EXPECT_EQ(nullptr, memcmp(firstBuf.c_str(), buf, firstBuf.length()));
   EXPECT_EQ(secondBuf.length(), file.Read(buf, secondBuf.length()));
   currentPos += secondBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(secondBuf.c_str(), buf, secondBuf.length()));
+  EXPECT_EQ(nullptr, memcmp(secondBuf.c_str(), buf, secondBuf.length()));
   currentPos = 100 + addPerLine * 3;
   EXPECT_EQ(currentPos, file.Seek(currentPos));
   EXPECT_EQ(currentPos, file.GetPosition());
@@ -65,7 +65,7 @@ TEST(TestFile, Read)
   file.Flush();
   currentPos += thirdBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(thirdBuf.c_str(), buf, thirdBuf.length()));
+  EXPECT_EQ(nullptr, memcmp(thirdBuf.c_str(), buf, thirdBuf.length()));
   currentPos += 100 + addPerLine * 1;
   EXPECT_EQ(currentPos, file.Seek(100 + addPerLine * 1, SEEK_CUR));
   EXPECT_EQ(currentPos, file.GetPosition());
@@ -73,7 +73,7 @@ TEST(TestFile, Read)
   file.Flush();
   currentPos += fourthBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(fourthBuf.c_str(), buf, fourthBuf.length()));
+  EXPECT_EQ(nullptr, memcmp(fourthBuf.c_str(), buf, fourthBuf.length()));
   currentPos = realSize - fifthBuf.length();
   EXPECT_EQ(currentPos, file.Seek(-(int64_t)fifthBuf.length(), SEEK_END));
   EXPECT_EQ(currentPos, file.GetPosition());
@@ -81,7 +81,7 @@ TEST(TestFile, Read)
   file.Flush();
   currentPos += fifthBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(fifthBuf.c_str(), buf, fifthBuf.length()));
+  EXPECT_EQ(nullptr, memcmp(fifthBuf.c_str(), buf, fifthBuf.length()));
   currentPos += 100;
   EXPECT_EQ(currentPos, file.Seek(100, SEEK_CUR));
   EXPECT_EQ(currentPos, file.GetPosition());
@@ -91,8 +91,8 @@ TEST(TestFile, Read)
   file.Flush();
   currentPos += firstBuf.length();
   EXPECT_EQ(currentPos, file.GetPosition());
-  EXPECT_EQ(0, memcmp(firstBuf.c_str(), buf, firstBuf.length()));
-  EXPECT_EQ(0, file.Seek(0, SEEK_SET));
+  EXPECT_EQ(nullptr, memcmp(firstBuf.c_str(), buf, firstBuf.length()));
+  EXPECT_EQ(nullptr, file.Seek(0, SEEK_SET));
   EXPECT_EQ(-1, file.Seek(-100, SEEK_SET));
   file.Close();
 }
@@ -112,14 +112,14 @@ TEST(TestFile, Write)
   EXPECT_EQ((int64_t)sizeof(str), file->GetPosition());
   file->Close();
   ASSERT_TRUE(file->Open(XBMC_TEMPFILEPATH(file)));
-  EXPECT_EQ(0, file->GetPosition());
+  EXPECT_EQ(nullptr, file->GetPosition());
   EXPECT_EQ((int64_t)sizeof(str), file->Seek(0, SEEK_END));
-  EXPECT_EQ(0, file->Seek(0, SEEK_SET));
+  EXPECT_EQ(nullptr, file->Seek(0, SEEK_SET));
   EXPECT_EQ((int64_t)sizeof(str), file->GetLength());
   EXPECT_EQ(sizeof(str), file->Read(buf, sizeof(buf)));
   file->Flush();
   EXPECT_EQ((int64_t)sizeof(str), file->GetPosition());
-  EXPECT_EQ(0, memcmp(str, buf, sizeof(str)));
+  EXPECT_EQ(nullptr, memcmp(str, buf, sizeof(str)));
   file->Close();
   EXPECT_TRUE(XBMC_DELETETEMPFILE(file));
 }
@@ -141,7 +141,7 @@ TEST(TestFile, Stat)
   struct __stat64 buffer;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
-  EXPECT_EQ(0, file->Stat(&buffer));
+  EXPECT_EQ(nullptr, file->Stat(&buffer));
   file->Close();
   EXPECT_NE(0, buffer.st_mode | _S_IFREG);
   EXPECT_EQ(-1, XFILE::CFile::Stat("", &buffer));
