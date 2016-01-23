@@ -39,9 +39,7 @@ CZipManager::CZipManager()
 }
 
 CZipManager::~CZipManager()
-{
-
-}
+= default;
 
 bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
 {

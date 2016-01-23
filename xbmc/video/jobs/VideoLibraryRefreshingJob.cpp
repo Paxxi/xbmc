@@ -47,7 +47,7 @@ CVideoLibraryRefreshingJob::CVideoLibraryRefreshingJob(CFileItemPtr item, bool f
 { }
 
 CVideoLibraryRefreshingJob::~CVideoLibraryRefreshingJob()
-{ }
+= default;
 
 bool CVideoLibraryRefreshingJob::operator==(const CJob* job) const
 {

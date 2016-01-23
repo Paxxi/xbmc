@@ -35,7 +35,7 @@ CVideoLibraryCleaningJob::CVideoLibraryCleaningJob(const std::set<int>& paths, C
 { }
 
 CVideoLibraryCleaningJob::~CVideoLibraryCleaningJob()
-{ }
+= default;
 
 bool CVideoLibraryCleaningJob::operator==(const CJob* job) const
 {

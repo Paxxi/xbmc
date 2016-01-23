@@ -59,7 +59,7 @@ CGUIDialogLockSettings::CGUIDialogLockSettings()
 { }
 
 CGUIDialogLockSettings::~CGUIDialogLockSettings()
-{ }
+= default;
 
 bool CGUIDialogLockSettings::ShowAndGetLock(LockType &lockMode, std::string &password, int header /* = 20091 */)
 {

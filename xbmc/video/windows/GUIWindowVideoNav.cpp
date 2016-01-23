@@ -82,8 +82,7 @@ CGUIWindowVideoNav::CGUIWindowVideoNav()
 }
 
 CGUIWindowVideoNav::~CGUIWindowVideoNav()
-{
-}
+= default;
 
 bool CGUIWindowVideoNav::OnAction(const CAction &action)
 {

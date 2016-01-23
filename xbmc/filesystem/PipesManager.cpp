@@ -43,8 +43,7 @@ Pipe::Pipe(const std::string &name, int nMaxSize)
 }
 
 Pipe::~Pipe()
-{
-}
+= default;
 
 void Pipe::SetOpenThreashold(int threashold)
 {
@@ -272,8 +271,7 @@ PipesManager::PipesManager() : m_nGenIdHelper(1)
 }
 
 PipesManager::~PipesManager()
-{
-}
+= default;
 
 PipesManager &PipesManager::GetInstance()
 {

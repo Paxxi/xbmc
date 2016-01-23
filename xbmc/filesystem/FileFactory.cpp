@@ -88,12 +88,10 @@
 using namespace XFILE;
 
 CFileFactory::CFileFactory()
-{
-}
+= default;
 
 CFileFactory::~CFileFactory()
-{
-}
+= default;
 
 IFile* CFileFactory::CreateLoader(const std::string& strFileName)
 {

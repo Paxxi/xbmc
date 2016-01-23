@@ -42,7 +42,7 @@ CVirtualDirectory::CVirtualDirectory()
 }
 
 CVirtualDirectory::~CVirtualDirectory()
-{}
+= default;
 
 /*!
  \brief Add shares to the virtual directory

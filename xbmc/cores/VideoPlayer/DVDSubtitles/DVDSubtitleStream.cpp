@@ -36,8 +36,7 @@ CDVDSubtitleStream::CDVDSubtitleStream()
 }
 
 CDVDSubtitleStream::~CDVDSubtitleStream()
-{
-}
+= default;
 
 bool CDVDSubtitleStream::Open(const std::string& strFile)
 {

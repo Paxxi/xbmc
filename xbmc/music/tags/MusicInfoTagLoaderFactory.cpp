@@ -37,10 +37,10 @@ using namespace ADDON;
 using namespace MUSIC_INFO;
 
 CMusicInfoTagLoaderFactory::CMusicInfoTagLoaderFactory()
-{}
+= default;
 
 CMusicInfoTagLoaderFactory::~CMusicInfoTagLoaderFactory()
-{}
+= default;
 
 IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& item)
 {

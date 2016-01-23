@@ -25,7 +25,7 @@ CVideoLibraryJob::CVideoLibraryJob()
 { }
 
 CVideoLibraryJob::~CVideoLibraryJob()
-{ }
+= default;
 
 bool CVideoLibraryJob::DoWork()
 {

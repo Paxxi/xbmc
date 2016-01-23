@@ -37,7 +37,7 @@ CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(const CFileItemPtr &ite
 { }
 
 CVideoLibraryMarkWatchedJob::~CVideoLibraryMarkWatchedJob()
-{ }
+= default;
 
 bool CVideoLibraryMarkWatchedJob::operator==(const CJob* job) const
 {

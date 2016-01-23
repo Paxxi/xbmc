@@ -40,8 +40,7 @@ CAEChannelInfo::CAEChannelInfo(const AEStdChLayout rhs)
 }
 
 CAEChannelInfo::~CAEChannelInfo()
-{
-}
+= default;
 
 void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
 {

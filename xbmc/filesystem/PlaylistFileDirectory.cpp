@@ -33,8 +33,7 @@ namespace XFILE
   }
 
   CPlaylistFileDirectory::~CPlaylistFileDirectory()
-  {
-  }
+  = default;
 
   bool CPlaylistFileDirectory::GetDirectory(const CURL& url, CFileItemList& items)
   {

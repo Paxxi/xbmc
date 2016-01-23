@@ -35,7 +35,7 @@ CDNSNameCache::CDNSNameCache()
 {}
 
 CDNSNameCache::~CDNSNameCache()
-{}
+= default;
 
 bool CDNSNameCache::Lookup(const std::string& strHostName, std::string& strIpAddress)
 {

@@ -31,7 +31,7 @@ CGUIDialogTextViewer::CGUIDialogTextViewer()
 }
 
 CGUIDialogTextViewer::~CGUIDialogTextViewer()
-{}
+= default;
 
 bool CGUIDialogTextViewer::OnAction(const CAction &action)
 {

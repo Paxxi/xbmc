@@ -43,7 +43,7 @@ CGUIDialog::CGUIDialog(int id, const std::string &xmlFile, DialogModalityType mo
 }
 
 CGUIDialog::~CGUIDialog()
-{}
+= default;
 
 void CGUIDialog::OnWindowLoaded()
 {

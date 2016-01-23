@@ -53,8 +53,7 @@ CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo()
 }
 
 CGUIDialogPVRGuideInfo::~CGUIDialogPVRGuideInfo()
-{
-}
+= default;
 
 bool CGUIDialogPVRGuideInfo::ActionStartTimer(const CEpgInfoTagPtr &tag)
 {

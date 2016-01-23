@@ -29,7 +29,7 @@ namespace XBMCAddon
     { }
 
     WsgiResponseBody::~WsgiResponseBody()
-    { }
+    = default;
 
     void WsgiResponseBody::operator()(const String& data)
     {

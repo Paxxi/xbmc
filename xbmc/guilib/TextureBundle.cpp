@@ -28,8 +28,7 @@ CTextureBundle::CTextureBundle()
 }
 
 CTextureBundle::~CTextureBundle()
-{
-}
+= default;
 
 bool CTextureBundle::HasFile(const std::string& Filename)
 {

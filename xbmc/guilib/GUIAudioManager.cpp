@@ -40,8 +40,7 @@ CGUIAudioManager::CGUIAudioManager()
 }
 
 CGUIAudioManager::~CGUIAudioManager()
-{
-}
+= default;
 
 void CGUIAudioManager::OnSettingChanged(const CSetting *setting)
 {

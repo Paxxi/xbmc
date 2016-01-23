@@ -58,7 +58,7 @@ CGUIDialogProfileSettings::CGUIDialogProfileSettings()
 { }
 
 CGUIDialogProfileSettings::~CGUIDialogProfileSettings()
-{ }
+= default;
 
 bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool firstLogin)
 {

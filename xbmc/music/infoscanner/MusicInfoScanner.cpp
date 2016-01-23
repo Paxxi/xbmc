@@ -76,8 +76,7 @@ CMusicInfoScanner::CMusicInfoScanner() : CThread("MusicInfoScanner"), m_fileCoun
 }
 
 CMusicInfoScanner::~CMusicInfoScanner()
-{
-}
+= default;
 
 void CMusicInfoScanner::Process()
 {

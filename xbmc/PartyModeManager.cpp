@@ -54,8 +54,7 @@ CPartyModeManager::CPartyModeManager()
 }
 
 CPartyModeManager::~CPartyModeManager()
-{
-}
+= default;
 
 bool CPartyModeManager::Enable(PartyModeContext context /*= PARTYMODECONTEXT_MUSIC*/, const std::string& strXspPath /*= ""*/)
 {

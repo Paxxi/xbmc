@@ -43,8 +43,7 @@ CTextureCache::CTextureCache() : CJobQueue(false, 1, CJob::PRIORITY_LOW_PAUSABLE
 }
 
 CTextureCache::~CTextureCache()
-{
-}
+= default;
 
 void CTextureCache::Initialize()
 {

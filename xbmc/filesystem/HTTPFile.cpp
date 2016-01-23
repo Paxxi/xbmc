@@ -29,8 +29,7 @@ CHTTPFile::CHTTPFile()
 
 
 CHTTPFile::~CHTTPFile()
-{
-}
+= default;
 
 bool CHTTPFile::OpenForWrite(const CURL& url, bool bOverWrite)
 {

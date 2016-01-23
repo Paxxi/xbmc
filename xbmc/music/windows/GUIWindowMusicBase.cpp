@@ -89,8 +89,7 @@ CGUIWindowMusicBase::CGUIWindowMusicBase(int id, const std::string &xmlFile)
 }
 
 CGUIWindowMusicBase::~CGUIWindowMusicBase ()
-{
-}
+= default;
 
 bool CGUIWindowMusicBase::OnBack(int actionID)
 {

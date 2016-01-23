@@ -39,8 +39,7 @@ CPVRDirectory::CPVRDirectory()
 }
 
 CPVRDirectory::~CPVRDirectory()
-{
-}
+= default;
 
 bool CPVRDirectory::Exists(const CURL& url)
 {

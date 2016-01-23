@@ -34,8 +34,7 @@ CGUIPanelContainer::CGUIPanelContainer(int parentID, int controlID, float posX, 
 }
 
 CGUIPanelContainer::~CGUIPanelContainer()
-{
-}
+= default;
 
 void CGUIPanelContainer::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

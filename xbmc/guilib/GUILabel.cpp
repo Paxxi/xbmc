@@ -36,8 +36,7 @@ CGUILabel::CGUILabel(float posX, float posY, float width, float height, const CL
 }
 
 CGUILabel::~CGUILabel()
-{
-}
+= default;
 
 bool CGUILabel::SetScrolling(bool scrolling)
 {

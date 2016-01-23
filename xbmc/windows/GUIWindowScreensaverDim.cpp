@@ -35,8 +35,7 @@ CGUIWindowScreensaverDim::CGUIWindowScreensaverDim()
 }
 
 CGUIWindowScreensaverDim::~CGUIWindowScreensaverDim()
-{
-}
+= default;
 
 void CGUIWindowScreensaverDim::UpdateVisibility()
 {

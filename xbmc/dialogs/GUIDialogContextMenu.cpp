@@ -80,8 +80,7 @@ CGUIDialogContextMenu::CGUIDialogContextMenu()
 }
 
 CGUIDialogContextMenu::~CGUIDialogContextMenu()
-{
-}
+= default;
 
 bool CGUIDialogContextMenu::OnMessage(CGUIMessage &message)
 {

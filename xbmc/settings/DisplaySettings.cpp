@@ -92,7 +92,7 @@ CDisplaySettings::CDisplaySettings()
 }
 
 CDisplaySettings::~CDisplaySettings()
-{ }
+= default;
 
 CDisplaySettings& CDisplaySettings::GetInstance()
 {

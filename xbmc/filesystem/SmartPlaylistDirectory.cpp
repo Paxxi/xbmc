@@ -46,8 +46,7 @@ namespace XFILE
   }
 
   CSmartPlaylistDirectory::~CSmartPlaylistDirectory()
-  {
-  }
+  = default;
 
   bool CSmartPlaylistDirectory::GetDirectory(const CURL& url, CFileItemList& items)
   {

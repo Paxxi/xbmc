@@ -44,8 +44,7 @@ CXBApplicationEx::CXBApplicationEx()
 }
 
 CXBApplicationEx::~CXBApplicationEx()
-{
-}
+= default;
 
 /* Create the app */
 bool CXBApplicationEx::Create()

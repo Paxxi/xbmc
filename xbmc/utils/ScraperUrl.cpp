@@ -53,8 +53,7 @@ CScraperUrl::CScraperUrl()
 }
 
 CScraperUrl::~CScraperUrl()
-{
-}
+= default;
 
 void CScraperUrl::Clear()
 {

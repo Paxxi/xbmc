@@ -58,7 +58,7 @@ CPlayListPLS::CPlayListPLS()
 {}
 
 CPlayListPLS::~CPlayListPLS()
-{}
+= default;
 
 bool CPlayListPLS::Load(const std::string &strFile)
 {

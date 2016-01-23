@@ -42,7 +42,7 @@ CGUIMoverControl::CGUIMoverControl(int parentID, int controlID, float posX, floa
 }
 
 CGUIMoverControl::~CGUIMoverControl()
-{}
+= default;
 
 void CGUIMoverControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

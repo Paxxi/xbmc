@@ -47,8 +47,7 @@ CGUIDialogSelect::CGUIDialogSelect()
 }
 
 CGUIDialogSelect::~CGUIDialogSelect()
-{
-}
+= default;
 
 bool CGUIDialogSelect::OnMessage(CGUIMessage& message)
 {

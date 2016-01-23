@@ -67,8 +67,7 @@ CWinSystemX11::CWinSystemX11() : CWinSystemBase()
 }
 
 CWinSystemX11::~CWinSystemX11()
-{
-}
+= default;
 
 bool CWinSystemX11::InitWindowSystem()
 {

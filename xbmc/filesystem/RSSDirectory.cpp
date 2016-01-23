@@ -75,8 +75,7 @@ CRSSDirectory::CRSSDirectory()
 }
 
 CRSSDirectory::~CRSSDirectory()
-{
-}
+= default;
 
 bool CRSSDirectory::ContainsFiles(const CURL& url)
 {

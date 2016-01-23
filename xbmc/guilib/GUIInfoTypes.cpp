@@ -36,8 +36,7 @@ CGUIInfoBool::CGUIInfoBool(bool value)
 }
 
 CGUIInfoBool::~CGUIInfoBool()
-{
-}
+= default;
 
 void CGUIInfoBool::Parse(const std::string &expression, int context)
 {
@@ -73,11 +72,7 @@ CGUIInfoColor &CGUIInfoColor::operator=(color_t color)
 }
 
 CGUIInfoColor &CGUIInfoColor::operator=(const CGUIInfoColor &color)
-{
-  m_color = color.m_color;
-  m_info = color.m_info;
-  return *this;
-}
+= default;
 
 bool CGUIInfoColor::Update()
 {

@@ -80,8 +80,7 @@ CGUIEditControl::CGUIEditControl(const CGUIButtonControl &button)
 }
 
 CGUIEditControl::~CGUIEditControl()
-{
-}
+= default;
 
 bool CGUIEditControl::OnMessage(CGUIMessage &message)
 {

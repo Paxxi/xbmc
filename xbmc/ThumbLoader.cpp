@@ -71,8 +71,7 @@ CProgramThumbLoader::CProgramThumbLoader()
 }
 
 CProgramThumbLoader::~CProgramThumbLoader()
-{
-}
+= default;
 
 bool CProgramThumbLoader::LoadItem(CFileItem *pItem)
 {

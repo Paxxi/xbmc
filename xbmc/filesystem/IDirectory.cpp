@@ -34,7 +34,7 @@ IDirectory::IDirectory()
 }
 
 IDirectory::~IDirectory()
-{}
+= default;
 
 /*!
  \brief Test if file have an allowed extension, as specified with SetMask()

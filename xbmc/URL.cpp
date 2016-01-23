@@ -48,8 +48,7 @@ CURL::CURL()
 }
 
 CURL::~CURL()
-{
-}
+= default;
 
 void CURL::Reset()
 {

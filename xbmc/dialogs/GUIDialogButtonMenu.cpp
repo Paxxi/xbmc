@@ -29,7 +29,7 @@ CGUIDialogButtonMenu::CGUIDialogButtonMenu(int id, const std::string &xmlFile)
 }
 
 CGUIDialogButtonMenu::~CGUIDialogButtonMenu()
-{}
+= default;
 
 bool CGUIDialogButtonMenu::OnMessage(CGUIMessage &message)
 {

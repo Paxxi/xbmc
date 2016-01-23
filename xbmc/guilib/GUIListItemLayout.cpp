@@ -48,8 +48,7 @@ CGUIListItemLayout::CGUIListItemLayout(const CGUIListItemLayout &from)
 }
 
 CGUIListItemLayout::~CGUIListItemLayout()
-{
-}
+= default;
 
 bool CGUIListItemLayout::IsAnimating(ANIMATION_TYPE animType)
 {

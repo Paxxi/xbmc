@@ -49,8 +49,7 @@ CGUIDialogNetworkSetup::CGUIDialogNetworkSetup()
 }
 
 CGUIDialogNetworkSetup::~CGUIDialogNetworkSetup()
-{
-}
+= default;
 
 bool CGUIDialogNetworkSetup::OnBack(int actionID)
 {

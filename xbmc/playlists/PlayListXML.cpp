@@ -67,7 +67,7 @@ CPlayListXML::CPlayListXML()
 {}
 
 CPlayListXML::~CPlayListXML()
-{}
+= default;
 
 
 static inline std::string GetString( const TiXmlElement* pRootElement, const char *tagName )

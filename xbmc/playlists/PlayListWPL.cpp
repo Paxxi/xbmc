@@ -56,7 +56,7 @@ CPlayListWPL::CPlayListWPL()
 {}
 
 CPlayListWPL::~CPlayListWPL()
-{}
+= default;
 
 
 bool CPlayListWPL::LoadData(std::istream& stream)

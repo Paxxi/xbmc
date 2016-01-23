@@ -60,8 +60,7 @@ CGUIDialogSongInfo::CGUIDialogSongInfo()
 }
 
 CGUIDialogSongInfo::~CGUIDialogSongInfo()
-{
-}
+= default;
 
 bool CGUIDialogSongInfo::OnMessage(CGUIMessage& message)
 {

@@ -221,9 +221,7 @@ CLangInfo::CRegion::CRegion()
 }
 
 CLangInfo::CRegion::~CRegion()
-{
-
-}
+= default;
 
 void CLangInfo::CRegion::SetDefaults()
 {
@@ -325,8 +323,7 @@ CLangInfo::CLangInfo()
 }
 
 CLangInfo::~CLangInfo()
-{
-}
+= default;
 
 void CLangInfo::OnSettingChanged(const CSetting *setting)
 {

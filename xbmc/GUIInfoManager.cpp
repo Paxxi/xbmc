@@ -119,7 +119,7 @@ class CSetCurrentItemJob : public CJob
   CFileItemPtr m_itemCurrentFile;
 public:
   CSetCurrentItemJob(const CFileItemPtr item) : m_itemCurrentFile(item) { }
-  ~CSetCurrentItemJob() {}
+  ~CSetCurrentItemJob() = default;
 
   bool DoWork()
   {

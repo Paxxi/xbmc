@@ -55,8 +55,7 @@ COverlay::COverlay()
 }
 
 COverlay::~COverlay()
-{
-}
+= default;
 
 unsigned int CRenderer::m_textureid = 1;
 

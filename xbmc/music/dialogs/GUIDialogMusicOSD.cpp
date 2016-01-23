@@ -36,8 +36,7 @@ CGUIDialogMusicOSD::CGUIDialogMusicOSD()
 }
 
 CGUIDialogMusicOSD::~CGUIDialogMusicOSD()
-{
-}
+= default;
 
 bool CGUIDialogMusicOSD::OnMessage(CGUIMessage &message)
 {

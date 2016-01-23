@@ -45,8 +45,7 @@ CGUIWindowPrograms::CGUIWindowPrograms()
 
 
 CGUIWindowPrograms::~CGUIWindowPrograms()
-{
-}
+= default;
 
 bool CGUIWindowPrograms::OnMessage(CGUIMessage& message)
 {

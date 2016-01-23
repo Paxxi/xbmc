@@ -39,8 +39,7 @@ CGUIDialogKaiToast::CGUIDialogKaiToast()
 }
 
 CGUIDialogKaiToast::~CGUIDialogKaiToast()
-{
-}
+= default;
 
 bool CGUIDialogKaiToast::OnMessage(CGUIMessage& message)
 {

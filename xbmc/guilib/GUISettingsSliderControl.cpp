@@ -30,8 +30,7 @@ CGUISettingsSliderControl::CGUISettingsSliderControl(int parentID, int controlID
 }
 
 CGUISettingsSliderControl::~CGUISettingsSliderControl()
-{
-}
+= default;
 
 void CGUISettingsSliderControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

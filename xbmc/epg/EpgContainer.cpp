@@ -139,7 +139,7 @@ class CEPGContainerStartJob : public CJob
 {
 public:
   CEPGContainerStartJob() {}
-  ~CEPGContainerStartJob() {}
+  ~CEPGContainerStartJob() = default;
 
   bool DoWork()
   {

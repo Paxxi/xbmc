@@ -76,7 +76,7 @@ CProfilesManager::CProfilesManager()
 { }
 
 CProfilesManager::~CProfilesManager()
-{ }
+= default;
 
 CProfilesManager& CProfilesManager::GetInstance()
 {

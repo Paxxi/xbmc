@@ -155,8 +155,7 @@ CGUIWindowManager::CGUIWindowManager()
 }
 
 CGUIWindowManager::~CGUIWindowManager()
-{
-}
+= default;
 
 void CGUIWindowManager::Initialize()
 {

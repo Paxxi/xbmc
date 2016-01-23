@@ -92,8 +92,7 @@ CGUIDialogPVRTimerSettings::CGUIDialogPVRTimerSettings() :
 }
 
 CGUIDialogPVRTimerSettings::~CGUIDialogPVRTimerSettings()
-{
-}
+= default;
 
 void CGUIDialogPVRTimerSettings::SetTimer(CFileItem *item)
 {

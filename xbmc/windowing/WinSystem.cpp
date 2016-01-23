@@ -43,9 +43,7 @@ CWinSystemBase::CWinSystemBase()
 }
 
 CWinSystemBase::~CWinSystemBase()
-{
-
-}
+= default;
 
 bool CWinSystemBase::InitWindowSystem()
 {

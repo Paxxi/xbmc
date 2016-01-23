@@ -31,8 +31,7 @@ CGUIDialogYesNo::CGUIDialogYesNo(int overrideId /* = -1 */)
 }
 
 CGUIDialogYesNo::~CGUIDialogYesNo()
-{
-}
+= default;
 
 bool CGUIDialogYesNo::OnMessage(CGUIMessage& message)
 {

@@ -38,7 +38,7 @@ CPosixDirectory::CPosixDirectory()
 {}
 
 CPosixDirectory::~CPosixDirectory()
-{}
+= default;
 
 bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

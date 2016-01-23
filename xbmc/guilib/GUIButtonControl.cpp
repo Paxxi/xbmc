@@ -38,8 +38,7 @@ CGUIButtonControl::CGUIButtonControl(int parentID, int controlID, float posX, fl
 }
 
 CGUIButtonControl::~CGUIButtonControl()
-{
-}
+= default;
 
 void CGUIButtonControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

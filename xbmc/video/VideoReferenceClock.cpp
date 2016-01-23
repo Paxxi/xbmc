@@ -67,8 +67,7 @@ CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")
 }
 
 CVideoReferenceClock::~CVideoReferenceClock()
-{
-}
+= default;
 
 void CVideoReferenceClock::Start()
 {

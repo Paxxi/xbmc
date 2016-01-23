@@ -36,8 +36,7 @@ CSourcesDirectory::CSourcesDirectory()
 }
 
 CSourcesDirectory::~CSourcesDirectory()
-{
-}
+= default;
 
 bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

@@ -46,8 +46,7 @@ CGUIProgressControl::CGUIProgressControl(int parentID, int controlID,
 }
 
 CGUIProgressControl::~CGUIProgressControl()
-{
-}
+= default;
 
 void CGUIProgressControl::SetPosition(float posX, float posY)
 {

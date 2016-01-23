@@ -33,8 +33,7 @@ CGUIDialogSeekBar::CGUIDialogSeekBar()
 }
 
 CGUIDialogSeekBar::~CGUIDialogSeekBar()
-{
-}
+= default;
 
 bool CGUIDialogSeekBar::OnMessage(CGUIMessage& message)
 {

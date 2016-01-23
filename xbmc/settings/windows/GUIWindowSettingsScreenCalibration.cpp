@@ -56,7 +56,7 @@ CGUIWindowSettingsScreenCalibration::CGUIWindowSettingsScreenCalibration()
 }
 
 CGUIWindowSettingsScreenCalibration::~CGUIWindowSettingsScreenCalibration()
-{}
+= default;
 
 
 bool CGUIWindowSettingsScreenCalibration::OnAction(const CAction &action)

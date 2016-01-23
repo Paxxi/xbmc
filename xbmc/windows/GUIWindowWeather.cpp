@@ -65,7 +65,7 @@ CGUIWindowWeather::CGUIWindowWeather()
 }
 
 CGUIWindowWeather::~CGUIWindowWeather()
-{}
+= default;
 
 bool CGUIWindowWeather::OnMessage(CGUIMessage& message)
 {

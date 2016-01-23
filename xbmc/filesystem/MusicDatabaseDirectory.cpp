@@ -38,8 +38,7 @@ CMusicDatabaseDirectory::CMusicDatabaseDirectory()
 }
 
 CMusicDatabaseDirectory::~CMusicDatabaseDirectory()
-{
-}
+= default;
 
 bool CMusicDatabaseDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

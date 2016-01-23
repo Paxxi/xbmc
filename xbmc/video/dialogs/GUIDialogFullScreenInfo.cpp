@@ -28,8 +28,7 @@ CGUIDialogFullScreenInfo::CGUIDialogFullScreenInfo()
 }
 
 CGUIDialogFullScreenInfo::~CGUIDialogFullScreenInfo()
-{
-}
+= default;
 
 bool CGUIDialogFullScreenInfo::OnAction(const CAction &action)
 {

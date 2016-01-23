@@ -51,7 +51,7 @@ CWebinterface::CWebinterface(const cp_extension_t *ext)
 }
 
 CWebinterface::~CWebinterface()
-{ }
+= default;
 
 std::string CWebinterface::GetEntryPoint(const std::string &path) const
 {

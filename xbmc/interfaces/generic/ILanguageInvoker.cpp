@@ -31,7 +31,7 @@ ILanguageInvoker::ILanguageInvoker(ILanguageInvocationHandler *invocationHandler
 { }
 
 ILanguageInvoker::~ILanguageInvoker()
-{ }
+= default;
 
 bool ILanguageInvoker::Execute(const std::string &script, const std::vector<std::string> &arguments /* = std::vector<std::string>() */)
 {

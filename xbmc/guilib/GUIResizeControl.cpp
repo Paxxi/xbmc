@@ -42,7 +42,7 @@ CGUIResizeControl::CGUIResizeControl(int parentID, int controlID, float posX, fl
 }
 
 CGUIResizeControl::~CGUIResizeControl()
-{}
+= default;
 
 void CGUIResizeControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

@@ -31,7 +31,7 @@ CVideoDbUrl::CVideoDbUrl()
 { }
 
 CVideoDbUrl::~CVideoDbUrl()
-{ }
+= default;
 
 bool CVideoDbUrl::parse()
 {

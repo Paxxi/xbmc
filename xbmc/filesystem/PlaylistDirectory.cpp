@@ -32,9 +32,7 @@ CPlaylistDirectory::CPlaylistDirectory()
 }
 
 CPlaylistDirectory::~CPlaylistDirectory()
-{
-
-}
+= default;
 
 bool CPlaylistDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

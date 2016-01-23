@@ -82,8 +82,7 @@ CGUIDialogAddonSettings::CGUIDialogAddonSettings()
 }
 
 CGUIDialogAddonSettings::~CGUIDialogAddonSettings()
-{
-}
+= default;
 
 bool CGUIDialogAddonSettings::OnMessage(CGUIMessage& message)
 {

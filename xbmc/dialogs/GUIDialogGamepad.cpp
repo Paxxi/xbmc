@@ -41,7 +41,7 @@ CGUIDialogGamepad::CGUIDialogGamepad()
 }
 
 CGUIDialogGamepad::~CGUIDialogGamepad()
-{}
+= default;
 
 void CGUIDialogGamepad::OnInitWindow()
 {

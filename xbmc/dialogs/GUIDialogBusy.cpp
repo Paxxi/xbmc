@@ -95,8 +95,7 @@ CGUIDialogBusy::CGUIDialogBusy()
 }
 
 CGUIDialogBusy::~CGUIDialogBusy()
-{
-}
+= default;
 
 void CGUIDialogBusy::Open_Internal(const std::string &param /* = "" */)
 {

@@ -39,7 +39,7 @@ CViewDatabase::CViewDatabase()
 { }
 
 CViewDatabase::~CViewDatabase()
-{ }
+= default;
 
 bool CViewDatabase::Open()
 {

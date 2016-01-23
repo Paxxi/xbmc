@@ -37,8 +37,7 @@ CGUIDialogTeletext::CGUIDialogTeletext()
 }
 
 CGUIDialogTeletext::~CGUIDialogTeletext()
-{
-}
+= default;
 
 bool CGUIDialogTeletext::OnAction(const CAction& action)
 {

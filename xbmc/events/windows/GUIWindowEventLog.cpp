@@ -42,7 +42,7 @@ CGUIWindowEventLog::CGUIWindowEventLog()
 { }
 
 CGUIWindowEventLog::~CGUIWindowEventLog()
-{ }
+= default;
 
 bool CGUIWindowEventLog::OnMessage(CGUIMessage& message)
 {

@@ -81,7 +81,7 @@ CGUIWindowSettingsCategory::CGUIWindowSettingsCategory()
 }
 
 CGUIWindowSettingsCategory::~CGUIWindowSettingsCategory()
-{ }
+= default;
 
 bool CGUIWindowSettingsCategory::OnMessage(CGUIMessage &message)
 {

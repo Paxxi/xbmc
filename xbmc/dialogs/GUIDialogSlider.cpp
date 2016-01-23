@@ -37,8 +37,7 @@ CGUIDialogSlider::CGUIDialogSlider()
 }
 
 CGUIDialogSlider::~CGUIDialogSlider()
-{
-}
+= default;
 
 bool CGUIDialogSlider::OnAction(const CAction &action)
 {

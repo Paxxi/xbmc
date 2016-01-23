@@ -28,6 +28,5 @@ CGUIDialogPlayerControls::CGUIDialogPlayerControls()
 }
 
 CGUIDialogPlayerControls::~CGUIDialogPlayerControls()
-{
-}
+= default;
 

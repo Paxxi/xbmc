@@ -57,7 +57,7 @@ CGUISpinControl::CGUISpinControl(int parentID, int controlID, float posX, float 
 }
 
 CGUISpinControl::~CGUISpinControl()
-{}
+= default;
 
 bool CGUISpinControl::OnAction(const CAction &action)
 {

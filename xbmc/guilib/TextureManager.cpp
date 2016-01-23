@@ -65,9 +65,7 @@ CTextureArray::CTextureArray()
 }
 
 CTextureArray::~CTextureArray()
-{
-
-}
+= default;
 
 unsigned int CTextureArray::size() const
 {

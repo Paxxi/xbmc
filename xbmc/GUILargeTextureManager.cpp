@@ -138,8 +138,7 @@ CGUILargeTextureManager::CGUILargeTextureManager()
 }
 
 CGUILargeTextureManager::~CGUILargeTextureManager()
-{
-}
+= default;
 
 void CGUILargeTextureManager::CleanupUnusedImages(bool immediately)
 {

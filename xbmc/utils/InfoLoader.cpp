@@ -31,8 +31,7 @@ CInfoLoader::CInfoLoader(unsigned int timeToRefresh)
 }
 
 CInfoLoader::~CInfoLoader()
-{
-}
+= default;
 
 void CInfoLoader::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 {

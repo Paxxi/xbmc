@@ -56,7 +56,7 @@ CGUISelectButtonControl::CGUISelectButtonControl(int parentID, int controlID,
 }
 
 CGUISelectButtonControl::~CGUISelectButtonControl()
-{}
+= default;
 
 void CGUISelectButtonControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

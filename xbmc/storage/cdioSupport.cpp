@@ -250,8 +250,7 @@ CCdIoSupport::CCdIoSupport()
 }
 
 CCdIoSupport::~CCdIoSupport()
-{
-}
+= default;
 
 HRESULT CCdIoSupport::EjectTray()
 {

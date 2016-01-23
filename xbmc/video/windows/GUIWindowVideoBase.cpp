@@ -90,8 +90,7 @@ CGUIWindowVideoBase::CGUIWindowVideoBase(int id, const std::string &xmlFile)
 }
 
 CGUIWindowVideoBase::~CGUIWindowVideoBase()
-{
-}
+= default;
 
 bool CGUIWindowVideoBase::OnAction(const CAction &action)
 {

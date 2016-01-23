@@ -36,8 +36,7 @@ CEmuFileWrapper::CEmuFileWrapper()
 }
 
 CEmuFileWrapper::~CEmuFileWrapper()
-{
-}
+= default;
 
 void CEmuFileWrapper::CleanUp()
 {

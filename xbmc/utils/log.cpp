@@ -39,7 +39,7 @@ CLog::CLog()
 {}
 
 CLog::~CLog()
-{}
+= default;
 
 void CLog::Close()
 {

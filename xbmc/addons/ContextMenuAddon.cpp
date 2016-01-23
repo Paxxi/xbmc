@@ -37,7 +37,7 @@ CContextMenuAddon::CContextMenuAddon(const AddonProps &props)
 { }
 
 CContextMenuAddon::~CContextMenuAddon()
-{ }
+= default;
 
 CContextMenuAddon::CContextMenuAddon(const cp_extension_t *ext)
   : CAddon(ext)

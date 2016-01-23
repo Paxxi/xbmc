@@ -66,8 +66,7 @@ CGUIWindowMusicPlayList::CGUIWindowMusicPlayList()
 }
 
 CGUIWindowMusicPlayList::~CGUIWindowMusicPlayList()
-{
-}
+= default;
 
 bool CGUIWindowMusicPlayList::OnMessage(CGUIMessage& message)
 {

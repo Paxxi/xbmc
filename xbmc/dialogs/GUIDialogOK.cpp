@@ -29,7 +29,7 @@ CGUIDialogOK::CGUIDialogOK()
 }
 
 CGUIDialogOK::~CGUIDialogOK()
-{}
+= default;
 
 bool CGUIDialogOK::OnMessage(CGUIMessage& message)
 {

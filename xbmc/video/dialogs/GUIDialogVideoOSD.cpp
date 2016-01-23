@@ -34,8 +34,7 @@ CGUIDialogVideoOSD::CGUIDialogVideoOSD()
 }
 
 CGUIDialogVideoOSD::~CGUIDialogVideoOSD()
-{
-}
+= default;
 
 void CGUIDialogVideoOSD::FrameMove()
 {

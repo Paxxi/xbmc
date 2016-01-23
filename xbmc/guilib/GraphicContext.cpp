@@ -63,8 +63,7 @@ CGraphicContext::CGraphicContext() :
 }
 
 CGraphicContext::~CGraphicContext()
-{
-}
+= default;
 
 void CGraphicContext::OnSettingChanged(const CSetting *setting)
 {

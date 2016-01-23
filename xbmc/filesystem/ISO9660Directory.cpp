@@ -32,7 +32,7 @@ CISO9660Directory::CISO9660Directory()
 {}
 
 CISO9660Directory::~CISO9660Directory()
-{}
+= default;
 
 bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
 {

@@ -35,9 +35,7 @@ CRenderSystemBase::CRenderSystemBase()
 }
 
 CRenderSystemBase::~CRenderSystemBase()
-{
-
-}
+= default;
 
 void CRenderSystemBase::GetRenderVersion(unsigned int& major, unsigned int& minor) const
 {

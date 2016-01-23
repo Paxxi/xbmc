@@ -30,7 +30,7 @@ CMultiPathFile::CMultiPathFile()
 { }
 
 CMultiPathFile::~CMultiPathFile()
-{ }
+= default;
 
 bool CMultiPathFile::Open(const CURL& url)
 {

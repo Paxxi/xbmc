@@ -36,7 +36,7 @@ CUrlOptions::CUrlOptions(const std::string &options, const char *strLead /* = ""
 }
 
 CUrlOptions::~CUrlOptions()
-{ }
+= default;
 
 std::string CUrlOptions::GetOptionsString(bool withLeadingSeperator /* = false */) const
 {

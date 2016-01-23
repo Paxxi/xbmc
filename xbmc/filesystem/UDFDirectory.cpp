@@ -34,8 +34,7 @@ CUDFDirectory::CUDFDirectory()
 }
 
 CUDFDirectory::~CUDFDirectory()
-{
-}
+= default;
 
 bool CUDFDirectory::GetDirectory(const CURL& url,
                                  CFileItemList &items)

@@ -38,8 +38,7 @@ CRenderCaptureBase::CRenderCaptureBase()
 }
 
 CRenderCaptureBase::~CRenderCaptureBase()
-{
-}
+= default;
 
 bool CRenderCaptureBase::UseOcclusionQuery()
 {

@@ -207,7 +207,7 @@ CGUIControlRadioButtonSetting::CGUIControlRadioButtonSetting(CGUIRadioButtonCont
 }
 
 CGUIControlRadioButtonSetting::~CGUIControlRadioButtonSetting()
-{ }
+= default;
 
 bool CGUIControlRadioButtonSetting::OnClick()
 {
@@ -238,7 +238,7 @@ CGUIControlSpinExSetting::CGUIControlSpinExSetting(CGUISpinControlEx *pSpin, int
 }
 
 CGUIControlSpinExSetting::~CGUIControlSpinExSetting()
-{ }
+= default;
 
 bool CGUIControlSpinExSetting::OnClick()
 {
@@ -354,7 +354,7 @@ CGUIControlListSetting::CGUIControlListSetting(CGUIButtonControl *pButton, int i
 }
 
 CGUIControlListSetting::~CGUIControlListSetting()
-{ }
+= default;
 
 bool CGUIControlListSetting::OnClick()
 {
@@ -523,7 +523,7 @@ CGUIControlButtonSetting::CGUIControlButtonSetting(CGUIButtonControl *pButton, i
 }
 
 CGUIControlButtonSetting::~CGUIControlButtonSetting()
-{ }
+= default;
 
 bool CGUIControlButtonSetting::OnClick()
 {
@@ -768,7 +768,7 @@ CGUIControlEditSetting::CGUIControlEditSetting(CGUIEditControl *pEdit, int id, C
 }
 
 CGUIControlEditSetting::~CGUIControlEditSetting()
-{ }
+= default;
 
 bool CGUIControlEditSetting::OnClick()
 {
@@ -845,7 +845,7 @@ CGUIControlSliderSetting::CGUIControlSliderSetting(CGUISettingsSliderControl *pS
 }
 
 CGUIControlSliderSetting::~CGUIControlSliderSetting()
-{ }
+= default;
 
 bool CGUIControlSliderSetting::OnClick()
 {
@@ -989,7 +989,7 @@ CGUIControlRangeSetting::CGUIControlRangeSetting(CGUISettingsSliderControl *pSli
 }
 
 CGUIControlRangeSetting::~CGUIControlRangeSetting()
-{ }
+= default;
 
 bool CGUIControlRangeSetting::OnClick()
 {
@@ -1156,7 +1156,7 @@ CGUIControlSeparatorSetting::CGUIControlSeparatorSetting(CGUIImage *pImage, int 
 }
 
 CGUIControlSeparatorSetting::~CGUIControlSeparatorSetting()
-{ }
+= default;
 
 CGUIControlGroupTitleSetting::CGUIControlGroupTitleSetting(CGUILabelControl *pLabel, int id)
   : CGUIControlBaseSetting(id, nullptr)
@@ -1169,4 +1169,4 @@ CGUIControlGroupTitleSetting::CGUIControlGroupTitleSetting(CGUILabelControl *pLa
 }
 
 CGUIControlGroupTitleSetting::~CGUIControlGroupTitleSetting()
-{ }
+= default;

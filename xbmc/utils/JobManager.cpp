@@ -218,8 +218,7 @@ void CJobManager::CancelJobs()
 }
 
 CJobManager::~CJobManager()
-{
-}
+= default;
 
 unsigned int CJobManager::AddJob(CJob *job, IJobCallback *callback, CJob::PRIORITY priority)
 {

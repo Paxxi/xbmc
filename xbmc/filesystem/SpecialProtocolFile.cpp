@@ -29,7 +29,7 @@ CSpecialProtocolFile::CSpecialProtocolFile()
 { }
 
 CSpecialProtocolFile::~CSpecialProtocolFile()
-{ }
+= default;
 
 std::string CSpecialProtocolFile::TranslatePath(const CURL& url)
 {

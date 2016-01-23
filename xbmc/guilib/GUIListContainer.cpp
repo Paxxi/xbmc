@@ -31,8 +31,7 @@ CGUIListContainer::CGUIListContainer(int parentID, int controlID, float posX, fl
 }
 
 CGUIListContainer::~CGUIListContainer()
-{
-}
+= default;
 
 bool CGUIListContainer::OnAction(const CAction &action)
 {

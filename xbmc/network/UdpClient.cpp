@@ -38,8 +38,7 @@ CUdpClient::CUdpClient() : CThread("UDPClient")
 {}
 
 CUdpClient::~CUdpClient()
-{
-}
+= default;
 
 bool CUdpClient::Create()
 {

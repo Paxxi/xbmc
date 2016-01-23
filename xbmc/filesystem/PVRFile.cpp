@@ -37,8 +37,7 @@ CPVRFile::CPVRFile()
 }
 
 CPVRFile::~CPVRFile()
-{
-}
+= default;
 
 bool CPVRFile::Open(const CURL& url)
 {

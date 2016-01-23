@@ -40,11 +40,7 @@ CPVRRecordingUid::CPVRRecordingUid() :
 {
 }
 
-CPVRRecordingUid::CPVRRecordingUid(const CPVRRecordingUid &recordingId) :
-  m_iClientId(recordingId.m_iClientId),
-  m_strRecordingId(recordingId.m_strRecordingId)
-{
-}
+CPVRRecordingUid::CPVRRecordingUid(const CPVRRecordingUid &recordingId) = default;
 
 CPVRRecordingUid::CPVRRecordingUid(int iClientId, const std::string& strRecordingId) :
   m_iClientId(iClientId),

@@ -50,7 +50,7 @@ CGUIRadioButtonControl::CGUIRadioButtonControl(int parentID, int controlID, floa
 }
 
 CGUIRadioButtonControl::~CGUIRadioButtonControl()
-{}
+= default;
 
 void CGUIRadioButtonControl::Render()
 {

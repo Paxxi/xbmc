@@ -61,8 +61,7 @@ CGUIWindowVideoPlaylist::CGUIWindowVideoPlaylist()
 }
 
 CGUIWindowVideoPlaylist::~CGUIWindowVideoPlaylist()
-{
-}
+= default;
 
 bool CGUIWindowVideoPlaylist::OnMessage(CGUIMessage& message)
 {

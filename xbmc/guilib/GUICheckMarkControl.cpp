@@ -35,7 +35,7 @@ CGUICheckMarkControl::CGUICheckMarkControl(int parentID, int controlID, float po
 }
 
 CGUICheckMarkControl::~CGUICheckMarkControl()
-{}
+= default;
 
 void CGUICheckMarkControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

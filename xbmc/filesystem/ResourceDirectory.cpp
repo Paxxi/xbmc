@@ -32,7 +32,7 @@ CResourceDirectory::CResourceDirectory()
 { }
 
 CResourceDirectory::~CResourceDirectory()
-{ }
+= default;
 
 bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

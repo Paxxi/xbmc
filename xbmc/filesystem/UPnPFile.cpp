@@ -31,8 +31,7 @@ CUPnPFile::CUPnPFile()
 }
 
 CUPnPFile::~CUPnPFile()
-{
-}
+= default;
 
 bool CUPnPFile::Open(const CURL& url)
 {

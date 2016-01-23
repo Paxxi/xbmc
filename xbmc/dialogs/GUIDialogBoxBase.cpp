@@ -38,8 +38,7 @@ CGUIDialogBoxBase::CGUIDialogBoxBase(int id, const std::string &xmlFile)
 }
 
 CGUIDialogBoxBase::~CGUIDialogBoxBase()
-{
-}
+= default;
 
 bool CGUIDialogBoxBase::OnMessage(CGUIMessage& message)
 {

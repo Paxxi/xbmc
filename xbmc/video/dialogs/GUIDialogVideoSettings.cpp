@@ -69,7 +69,7 @@ CGUIDialogVideoSettings::CGUIDialogVideoSettings()
 { }
 
 CGUIDialogVideoSettings::~CGUIDialogVideoSettings()
-{ }
+= default;
 
 void CGUIDialogVideoSettings::OnSettingChanged(const CSetting *setting)
 {

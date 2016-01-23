@@ -104,7 +104,7 @@ CGUIWindowFullScreen::CGUIWindowFullScreen()
 }
 
 CGUIWindowFullScreen::~CGUIWindowFullScreen()
-{}
+= default;
 
 bool CGUIWindowFullScreen::OnAction(const CAction &action)
 {

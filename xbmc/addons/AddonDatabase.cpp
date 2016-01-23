@@ -38,8 +38,7 @@ CAddonDatabase::CAddonDatabase()
 }
 
 CAddonDatabase::~CAddonDatabase()
-{
-}
+= default;
 
 bool CAddonDatabase::Open()
 {

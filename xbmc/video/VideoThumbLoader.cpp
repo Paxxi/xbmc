@@ -68,8 +68,7 @@ CThumbExtractor::CThumbExtractor(const CFileItem& item,
 }
 
 CThumbExtractor::~CThumbExtractor()
-{
-}
+= default;
 
 bool CThumbExtractor::operator==(const CJob* job) const
 {

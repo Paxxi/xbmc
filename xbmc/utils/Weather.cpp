@@ -309,8 +309,7 @@ CWeather::CWeather() : CInfoLoader(30 * 60 * 1000) // 30 minutes
 }
 
 CWeather::~CWeather()
-{
-}
+= default;
 
 std::string CWeather::BusyInfo(int info) const
 {

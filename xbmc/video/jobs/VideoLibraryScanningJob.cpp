@@ -29,7 +29,7 @@ CVideoLibraryScanningJob::CVideoLibraryScanningJob(const std::string& directory,
 { }
 
 CVideoLibraryScanningJob::~CVideoLibraryScanningJob()
-{ }
+= default;
 
 bool CVideoLibraryScanningJob::Cancel()
 {

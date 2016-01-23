@@ -412,7 +412,7 @@ class CPVRManagerStartJob : public CJob
 {
 public:
   CPVRManagerStartJob() {}
-  ~CPVRManagerStartJob() {}
+  ~CPVRManagerStartJob() = default;
 
   bool DoWork()
   {

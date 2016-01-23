@@ -100,8 +100,7 @@ CPVRTimerType::CPVRTimerType(const PVR_TIMER_TYPE &type, int iClientId) :
 }
 
 CPVRTimerType::~CPVRTimerType()
-{
-}
+= default;
 
 bool CPVRTimerType::operator ==(const CPVRTimerType& right) const
 {

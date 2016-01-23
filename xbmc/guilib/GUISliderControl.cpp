@@ -61,8 +61,7 @@ CGUISliderControl::CGUISliderControl(int parentID, int controlID, float posX, fl
 }
 
 CGUISliderControl::~CGUISliderControl()
-{
-}
+= default;
 
 void CGUISliderControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

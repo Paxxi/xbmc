@@ -71,7 +71,7 @@ CGUIDialogAudioSubtitleSettings::CGUIDialogAudioSubtitleSettings()
 { }
 
 CGUIDialogAudioSubtitleSettings::~CGUIDialogAudioSubtitleSettings()
-{ }
+= default;
 
 void CGUIDialogAudioSubtitleSettings::FrameMove()
 {

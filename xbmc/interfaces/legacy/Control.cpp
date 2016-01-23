@@ -976,7 +976,7 @@ namespace XBMCAddon
       */
     }
 
-    ControlSpin::~ControlSpin() {}
+    ControlSpin::~ControlSpin() = default;
     // ============================================================
 
     // ============================================================
@@ -1008,7 +1008,7 @@ namespace XBMCAddon
         sscanf( p_disabledColor, "%x", &disabledColor );
     }
 
-    ControlLabel::~ControlLabel() {}
+    ControlLabel::~ControlLabel() = default;
 
     CGUIControl* ControlLabel::Create()
     {
@@ -1179,7 +1179,7 @@ namespace XBMCAddon
       pControlSpin->dwPosY = dwHeight - 15;
     }
 
-    ControlList::~ControlList() { }
+    ControlList::~ControlList() = default;
 
     CGUIControl* ControlList::Create()
     {

@@ -59,8 +59,7 @@ CStaticListProvider::CStaticListProvider(const std::vector<CGUIStaticItemPtr> &i
 }
 
 CStaticListProvider::~CStaticListProvider()
-{
-}
+= default;
 
 bool CStaticListProvider::Update(bool forceRefresh)
 {

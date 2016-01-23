@@ -35,7 +35,7 @@ namespace ADDON
 class CCodecIds
 {
 public:
-  virtual ~CCodecIds() {}
+  virtual ~CCodecIds() = default;
 
   static CCodecIds& GetInstance()
   {

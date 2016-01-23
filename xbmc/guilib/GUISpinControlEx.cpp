@@ -30,8 +30,7 @@ CGUISpinControlEx::CGUISpinControlEx(int parentID, int controlID, float posX, fl
 }
 
 CGUISpinControlEx::~CGUISpinControlEx()
-{
-}
+= default;
 
 void CGUISpinControlEx::AllocResources()
 {

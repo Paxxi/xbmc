@@ -44,7 +44,7 @@ namespace XFILE
 
 CAddonsDirectory::CAddonsDirectory() {}
 
-CAddonsDirectory::~CAddonsDirectory() {}
+CAddonsDirectory::~CAddonsDirectory() = default;
 
 const auto CATEGORY_INFO_PROVIDERS = "category.infoproviders";
 const auto CATEGORY_LOOK_AND_FEEL = "category.lookandfeel";

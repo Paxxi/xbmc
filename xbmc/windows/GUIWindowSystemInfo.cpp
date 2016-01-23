@@ -47,8 +47,7 @@ CGUIWindowSystemInfo::CGUIWindowSystemInfo() :
 }
 
 CGUIWindowSystemInfo::~CGUIWindowSystemInfo()
-{
-}
+= default;
 
 bool CGUIWindowSystemInfo::OnMessage(CGUIMessage& message)
 {

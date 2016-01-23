@@ -30,9 +30,7 @@ CDVDInputStream::CDVDInputStream(DVDStreamType streamType, CFileItem& fileitem)
 }
 
 CDVDInputStream::~CDVDInputStream()
-{
-
-}
+= default;
 
 bool CDVDInputStream::Open()
 {

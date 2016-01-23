@@ -45,8 +45,7 @@ CDatabaseManager::CDatabaseManager()
 }
 
 CDatabaseManager::~CDatabaseManager()
-{
-}
+= default;
 
 void CDatabaseManager::Initialize(bool addonsOnly)
 {

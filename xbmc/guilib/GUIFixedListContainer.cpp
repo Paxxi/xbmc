@@ -32,8 +32,7 @@ CGUIFixedListContainer::CGUIFixedListContainer(int parentID, int controlID, floa
 }
 
 CGUIFixedListContainer::~CGUIFixedListContainer()
-{
-}
+= default;
 
 bool CGUIFixedListContainer::OnAction(const CAction &action)
 {

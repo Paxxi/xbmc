@@ -34,8 +34,7 @@ LibraryLoader::LibraryLoader(const std::string& libraryFile):
 }
 
 LibraryLoader::~LibraryLoader()
-{
-}
+= default;
 
 const char *LibraryLoader::GetName() const
 {

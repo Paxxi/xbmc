@@ -53,8 +53,7 @@ CGUIMultiSelectTextControl::CGUIMultiSelectTextControl(int parentID, int control
 }
 
 CGUIMultiSelectTextControl::~CGUIMultiSelectTextControl()
-{
-}
+= default;
 
 bool CGUIMultiSelectTextControl::UpdateColors()
 {

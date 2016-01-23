@@ -31,8 +31,7 @@ protected:
   {
   }
   ~TestSystemInfo()
-  {
-  }
+  = default;
 };
 
 TEST_F(TestSystemInfo, Print_System_Info)

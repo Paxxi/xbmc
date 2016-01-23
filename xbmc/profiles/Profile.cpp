@@ -57,7 +57,7 @@ CProfile::CProfile(const std::string &directory, const std::string &name, const 
 }
 
 CProfile::~CProfile()
-{}
+= default;
 
 void CProfile::setDate()
 {

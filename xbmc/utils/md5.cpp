@@ -35,7 +35,7 @@ XBMC::XBMC_MD5::XBMC_MD5()
 }
 
 XBMC::XBMC_MD5::~XBMC_MD5()
-{}
+= default;
 
 void XBMC::XBMC_MD5::append(const void *inBuf, size_t inLen)
 {

@@ -39,8 +39,7 @@ CDAVFile::CDAVFile()
 }
 
 CDAVFile::~CDAVFile()
-{
-}
+= default;
 
 bool CDAVFile::Execute(const CURL& url)
 {

@@ -31,7 +31,7 @@ CGUIDialogVolumeBar::CGUIDialogVolumeBar()
 }
 
 CGUIDialogVolumeBar::~CGUIDialogVolumeBar()
-{}
+= default;
 
 bool CGUIDialogVolumeBar::OnAction(const CAction &action)
 {

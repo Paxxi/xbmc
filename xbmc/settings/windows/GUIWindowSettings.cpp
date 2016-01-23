@@ -29,5 +29,4 @@ CGUIWindowSettings::CGUIWindowSettings()
 }
 
 CGUIWindowSettings::~CGUIWindowSettings()
-{
-}
+= default;

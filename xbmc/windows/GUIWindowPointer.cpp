@@ -35,8 +35,7 @@ CGUIWindowPointer::CGUIWindowPointer()
 }
 
 CGUIWindowPointer::~CGUIWindowPointer()
-{
-}
+= default;
 
 void CGUIWindowPointer::SetPointer(int pointer)
 {

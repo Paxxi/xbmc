@@ -193,7 +193,7 @@ CGUIViewState::CGUIViewState(const CFileItemList& items) : m_items(items)
 }
 
 CGUIViewState::~CGUIViewState()
-{ }
+= default;
 
 SortOrder CGUIViewState::SetNextSortOrder()
 {

@@ -133,8 +133,7 @@ bool CAEStreamInfo::operator==(const CAEStreamInfo& info) const
 }
 
 CAEStreamParser::~CAEStreamParser()
-{
-}
+= default;
 
 int CAEStreamParser::AddData(uint8_t *data, unsigned int size, uint8_t **buffer/* = NULL */, unsigned int *bufferSize/* = 0 */)
 {

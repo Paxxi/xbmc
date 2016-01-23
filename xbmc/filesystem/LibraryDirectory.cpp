@@ -41,8 +41,7 @@ CLibraryDirectory::CLibraryDirectory()
 }
 
 CLibraryDirectory::~CLibraryDirectory()
-{
-}
+= default;
 
 bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

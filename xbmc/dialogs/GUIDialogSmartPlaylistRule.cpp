@@ -52,8 +52,7 @@ CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule()
 }
 
 CGUIDialogSmartPlaylistRule::~CGUIDialogSmartPlaylistRule()
-{
-}
+= default;
 
 bool CGUIDialogSmartPlaylistRule::OnBack(int actionID)
 {

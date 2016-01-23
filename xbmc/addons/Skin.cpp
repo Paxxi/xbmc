@@ -186,8 +186,7 @@ CSkinInfo::CSkinInfo(const cp_extension_t *ext)
 }
 
 CSkinInfo::~CSkinInfo()
-{
-}
+= default;
 
 AddonPtr CSkinInfo::Clone() const
 {

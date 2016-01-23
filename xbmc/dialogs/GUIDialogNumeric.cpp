@@ -57,8 +57,7 @@ CGUIDialogNumeric::CGUIDialogNumeric()
 }
 
 CGUIDialogNumeric::~CGUIDialogNumeric()
-{
-}
+= default;
 
 void CGUIDialogNumeric::OnInitWindow()
 {

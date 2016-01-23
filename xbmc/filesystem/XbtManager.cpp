@@ -33,7 +33,7 @@ CXbtManager::CXbtManager()
 { }
 
 CXbtManager::~CXbtManager()
-{ }
+= default;
 
 CXbtManager& CXbtManager::GetInstance()
 {

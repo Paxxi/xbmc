@@ -135,14 +135,7 @@ CXBTFFile::CXBTFFile()
 { }
 
 CXBTFFile::CXBTFFile(const CXBTFFile& ref)
-  : m_path(ref.m_path),
-    m_loop(ref.m_loop),
-    m_frames(ref.m_frames)
-{ }
-
-const std::string& CXBTFFile::GetPath() const
-{
-  return m_path;
+  = default;
 }
 
 void CXBTFFile::SetPath(const std::string& path)

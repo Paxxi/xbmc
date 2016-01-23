@@ -35,8 +35,7 @@ CGUIBorderedImage::CGUIBorderedImage(const CGUIBorderedImage &right)
 }
 
 CGUIBorderedImage::~CGUIBorderedImage()
-{
-}
+= default;
 
 void CGUIBorderedImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

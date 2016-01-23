@@ -112,7 +112,7 @@ CAddonPythonInvoker::CAddonPythonInvoker(ILanguageInvocationHandler *invocationH
 { }
 
 CAddonPythonInvoker::~CAddonPythonInvoker()
-{ }
+= default;
 
 std::map<std::string, CPythonInvoker::PythonModuleInitialization> CAddonPythonInvoker::getModules() const
 {

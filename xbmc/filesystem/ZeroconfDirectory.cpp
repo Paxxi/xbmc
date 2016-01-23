@@ -37,8 +37,7 @@ CZeroconfDirectory::CZeroconfDirectory()
 }
 
 CZeroconfDirectory::~CZeroconfDirectory()
-{
-}
+= default;
 
 namespace
 {

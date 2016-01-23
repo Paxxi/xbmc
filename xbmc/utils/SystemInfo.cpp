@@ -400,8 +400,7 @@ CSysInfo::CSysInfo() : CInfoLoader(15 * 1000)
 }
 
 CSysInfo::~CSysInfo()
-{
-}
+= default;
 
 bool CSysInfo::Load(const TiXmlNode *settings)
 {

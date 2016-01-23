@@ -54,7 +54,7 @@ CPlayListB4S::CPlayListB4S()
 {}
 
 CPlayListB4S::~CPlayListB4S()
-{}
+= default;
 
 
 bool CPlayListB4S::LoadData(std::istream& stream)

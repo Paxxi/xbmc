@@ -34,7 +34,7 @@
 using namespace XFILE;
 
 CHTTPDirectory::CHTTPDirectory(){}
-CHTTPDirectory::~CHTTPDirectory(){}
+CHTTPDirectory::~CHTTPDirectory()= default;
 
 bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

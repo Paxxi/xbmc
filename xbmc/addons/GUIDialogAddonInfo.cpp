@@ -70,8 +70,7 @@ CGUIDialogAddonInfo::CGUIDialogAddonInfo()
 }
 
 CGUIDialogAddonInfo::~CGUIDialogAddonInfo()
-{
-}
+= default;
 
 bool CGUIDialogAddonInfo::OnMessage(CGUIMessage& message)
 {

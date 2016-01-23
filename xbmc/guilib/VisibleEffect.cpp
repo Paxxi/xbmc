@@ -51,8 +51,7 @@ CAnimEffect::CAnimEffect(unsigned int delay, unsigned int length, EFFECT_TYPE ef
 }
 
 CAnimEffect::~CAnimEffect()
-{
-}
+= default;
 
 CAnimEffect::CAnimEffect(const CAnimEffect &src)
 {
@@ -732,8 +731,7 @@ CScroller& CScroller::operator=(const CScroller &right)
 }
 
 CScroller::~CScroller()
-{
-}
+= default;
 
 void CScroller::ScrollTo(float endPos)
 {

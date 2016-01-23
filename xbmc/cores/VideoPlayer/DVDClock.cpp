@@ -47,8 +47,7 @@ CDVDClock::CDVDClock()
 }
 
 CDVDClock::~CDVDClock()
-{
-}
+= default;
 
 // Returns the current absolute clock in units of DVD_TIME_BASE (usually microseconds).
 double CDVDClock::GetAbsoluteClock(bool interpolated /*= true*/)

@@ -52,9 +52,7 @@ CGUIImage::CGUIImage(const CGUIImage &left)
 }
 
 CGUIImage::~CGUIImage()
-{
-
-}
+= default;
 
 void CGUIImage::UpdateVisibility(const CGUIListItem *item)
 {

@@ -86,8 +86,7 @@ CGUIIncludes::CGUIIncludes()
 }
 
 CGUIIncludes::~CGUIIncludes()
-{
-}
+= default;
 
 void CGUIIncludes::ClearIncludes()
 {

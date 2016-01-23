@@ -32,8 +32,7 @@ CGUIWrappingListContainer::CGUIWrappingListContainer(int parentID, int controlID
 }
 
 CGUIWrappingListContainer::~CGUIWrappingListContainer()
-{
-}
+= default;
 
 void CGUIWrappingListContainer::UpdatePageControl(int offset)
 {

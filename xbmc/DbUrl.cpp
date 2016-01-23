@@ -30,7 +30,7 @@ CDbUrl::CDbUrl()
 }
 
 CDbUrl::~CDbUrl()
-{ }
+= default;
 
 void CDbUrl::Reset()
 {

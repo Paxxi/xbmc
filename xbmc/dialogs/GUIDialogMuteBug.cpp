@@ -28,7 +28,7 @@ CGUIDialogMuteBug::CGUIDialogMuteBug()
 }
 
 CGUIDialogMuteBug::~CGUIDialogMuteBug()
-{}
+= default;
 
 void CGUIDialogMuteBug::UpdateVisibility()
 {

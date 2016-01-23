@@ -72,7 +72,7 @@ CLocale::CLocale(const std::string& language, const std::string& territory, cons
 }
 
 CLocale::~CLocale()
-{ }
+= default;
 
 CLocale CLocale::FromString(const std::string& locale)
 {

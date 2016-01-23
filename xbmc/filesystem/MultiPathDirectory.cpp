@@ -44,7 +44,7 @@ CMultiPathDirectory::CMultiPathDirectory()
 {}
 
 CMultiPathDirectory::~CMultiPathDirectory()
-{}
+= default;
 
 bool CMultiPathDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

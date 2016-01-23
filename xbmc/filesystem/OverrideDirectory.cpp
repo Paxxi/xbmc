@@ -30,7 +30,7 @@ COverrideDirectory::COverrideDirectory()
 
 
 COverrideDirectory::~COverrideDirectory()
-{ }
+= default;
 
 bool COverrideDirectory::Create(const CURL& url)
 {

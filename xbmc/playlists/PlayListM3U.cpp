@@ -64,7 +64,7 @@ CPlayListM3U::CPlayListM3U()
 {}
 
 CPlayListM3U::~CPlayListM3U()
-{}
+= default;
 
 
 bool CPlayListM3U::Load(const std::string& strFileName)

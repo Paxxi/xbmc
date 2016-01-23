@@ -40,8 +40,7 @@ CContextItemAddonInvoker::CContextItemAddonInvoker(
 }
 
 CContextItemAddonInvoker::~CContextItemAddonInvoker()
-{
-}
+= default;
 
 void CContextItemAddonInvoker::onPythonModuleInitialization(void* moduleDict)
 {

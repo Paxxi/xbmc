@@ -55,8 +55,7 @@ CGUIFadeLabelControl::CGUIFadeLabelControl(const CGUIFadeLabelControl &from)
 }
 
 CGUIFadeLabelControl::~CGUIFadeLabelControl()
-{
-}
+= default;
 
 void CGUIFadeLabelControl::SetInfo(const std::vector<CGUIInfoLabel> &infoLabels)
 {

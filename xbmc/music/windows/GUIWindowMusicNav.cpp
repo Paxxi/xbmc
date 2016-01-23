@@ -84,8 +84,7 @@ CGUIWindowMusicNav::CGUIWindowMusicNav()
 }
 
 CGUIWindowMusicNav::~CGUIWindowMusicNav()
-{
-}
+= default;
 
 bool CGUIWindowMusicNav::OnMessage(CGUIMessage& message)
 {

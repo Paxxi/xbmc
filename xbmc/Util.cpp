@@ -108,11 +108,10 @@ unsigned int CUtil::s_randomSeed = time(nullptr);
 #endif
 
 CUtil::CUtil()
-{
-}
+= default;
 
 CUtil::~CUtil()
-{}
+= default;
 
 std::string CUtil::GetTitleFromPath(const std::string& strFileNameAndPath, bool bIsFolder /* = false */)
 {

@@ -44,8 +44,7 @@ CGUIWindowDebugInfo::CGUIWindowDebugInfo()
 }
 
 CGUIWindowDebugInfo::~CGUIWindowDebugInfo()
-{
-}
+= default;
 
 void CGUIWindowDebugInfo::UpdateVisibility()
 {

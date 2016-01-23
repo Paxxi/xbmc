@@ -68,7 +68,7 @@ CMediaSettings::CMediaSettings()
 }
 
 CMediaSettings::~CMediaSettings()
-{ }
+= default;
 
 CMediaSettings& CMediaSettings::GetInstance()
 {

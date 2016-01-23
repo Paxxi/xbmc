@@ -39,7 +39,7 @@ CGUIWindowTestPattern::CGUIWindowTestPattern()
 }
 
 CGUIWindowTestPattern::~CGUIWindowTestPattern()
-{}
+= default;
 
 
 bool CGUIWindowTestPattern::OnAction(const CAction &action)

@@ -32,7 +32,7 @@ CGUIVideoControl::CGUIVideoControl(int parentID, int controlID, float posX, floa
 }
 
 CGUIVideoControl::~CGUIVideoControl()
-{}
+= default;
 
 void CGUIVideoControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

@@ -44,8 +44,7 @@ CMusicInfoTagLoaderCDDA::CMusicInfoTagLoaderCDDA()
 }
 
 CMusicInfoTagLoaderCDDA::~CMusicInfoTagLoaderCDDA()
-{
-}
+= default;
 
 bool CMusicInfoTagLoaderCDDA::Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art)
 {

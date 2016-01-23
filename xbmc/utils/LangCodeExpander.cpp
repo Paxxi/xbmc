@@ -56,7 +56,7 @@ CLangCodeExpander::CLangCodeExpander()
 { }
 
 CLangCodeExpander::~CLangCodeExpander()
-{ }
+= default;
 
 void CLangCodeExpander::Clear()
 {

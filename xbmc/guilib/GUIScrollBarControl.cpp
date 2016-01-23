@@ -43,8 +43,7 @@ GUIScrollBarControl::GUIScrollBarControl(int parentID, int controlID, float posX
 }
 
 GUIScrollBarControl::~GUIScrollBarControl()
-{
-}
+= default;
 
 void GUIScrollBarControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {

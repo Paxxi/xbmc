@@ -35,9 +35,7 @@ CGUIDialogProgress::CGUIDialogProgress()
 }
 
 CGUIDialogProgress::~CGUIDialogProgress()
-{
-
-}
+= default;
 
 void CGUIDialogProgress::Reset()
 {

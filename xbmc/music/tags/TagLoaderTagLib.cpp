@@ -57,8 +57,8 @@ template<class T>
 class TagStringHandler : public T
 {
 public:
-  TagStringHandler() {}
-  virtual ~TagStringHandler() {}
+  TagStringHandler() = default;
+  virtual ~TagStringHandler() = default;
   virtual String parse(const ByteVector &data) const
   {
     std::string strSource(data.data(), data.size());
@@ -76,8 +76,7 @@ CTagLoaderTagLib::CTagLoaderTagLib()
 }
 
 CTagLoaderTagLib::~CTagLoaderTagLib()
-{
-}
+= default;
 
 static const std::vector<std::string> StringListToVectorString(const StringList& stringList)
 {

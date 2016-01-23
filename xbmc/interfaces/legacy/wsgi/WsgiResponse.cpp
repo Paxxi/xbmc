@@ -38,7 +38,7 @@ namespace XBMCAddon
     { }
 
     WsgiResponse::~WsgiResponse()
-    { }
+    = default;
 
     WsgiResponseBody* WsgiResponse::operator()(const String& status, const std::vector<WsgiHttpHeader>& response_headers, void* exc_info /* = NULL */)
     {

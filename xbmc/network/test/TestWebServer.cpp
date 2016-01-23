@@ -55,7 +55,7 @@ protected:
       baseUrl(StringUtils::Format("http://" WEBSERVER_HOST ":%d", WEBSERVER_PORT)),
       sourcePath(XBMC_REF_FILE_PATH("xbmc/network/test/data/webserver/"))
   { }
-  virtual ~TestWebServer() { }
+  virtual ~TestWebServer() = default;
 
 protected:
   virtual void SetUp()

@@ -37,8 +37,7 @@ namespace XBMCAddon
     }
 
     InfoTagRadioRDS::~InfoTagRadioRDS()
-    {
-    }
+    = default;
 
     String InfoTagRadioRDS::getTitle()
     {

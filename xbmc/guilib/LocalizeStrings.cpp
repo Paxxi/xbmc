@@ -36,9 +36,7 @@ CLocalizeStrings::CLocalizeStrings()
 }
 
 CLocalizeStrings::~CLocalizeStrings()
-{
-
-}
+= default;
 
 std::string CLocalizeStrings::ToUTF8(const std::string& strEncoding, const std::string& str)
 {

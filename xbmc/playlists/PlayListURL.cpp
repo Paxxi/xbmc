@@ -36,7 +36,7 @@ CPlayListURL::CPlayListURL()
 {}
 
 CPlayListURL::~CPlayListURL()
-{}
+= default;
 
 bool CPlayListURL::Load(const std::string& strFileName)
 {

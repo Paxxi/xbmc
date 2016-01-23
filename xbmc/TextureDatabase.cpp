@@ -157,8 +157,7 @@ CTextureDatabase::CTextureDatabase()
 }
 
 CTextureDatabase::~CTextureDatabase()
-{
-}
+= default;
 
 bool CTextureDatabase::Open()
 {

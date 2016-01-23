@@ -64,7 +64,7 @@ CAddonInstaller::CAddonInstaller()
 { }
 
 CAddonInstaller::~CAddonInstaller()
-{ }
+= default;
 
 CAddonInstaller &CAddonInstaller::GetInstance()
 {

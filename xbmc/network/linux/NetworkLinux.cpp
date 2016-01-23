@@ -82,8 +82,7 @@ CNetworkInterfaceLinux::CNetworkInterfaceLinux(CNetworkLinux* network, std::stri
 }
 
 CNetworkInterfaceLinux::~CNetworkInterfaceLinux()
-{
-}
+= default;
 
 std::string& CNetworkInterfaceLinux::GetName()
 {

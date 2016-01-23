@@ -93,7 +93,7 @@ class CActiveAEDSPStartJob : public CJob
 {
 public:
   CActiveAEDSPStartJob() {}
-  ~CActiveAEDSPStartJob() {}
+  ~CActiveAEDSPStartJob() = default;
 
   bool DoWork()
   {
@@ -135,7 +135,7 @@ class CActiveAEDSPModeUpdateJob : public CJob
 {
 public:
   CActiveAEDSPModeUpdateJob() {}
-  ~CActiveAEDSPModeUpdateJob() {}
+  ~CActiveAEDSPModeUpdateJob() = default;
 
   bool DoWork()
   {

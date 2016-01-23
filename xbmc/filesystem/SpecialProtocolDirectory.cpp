@@ -33,8 +33,7 @@ CSpecialProtocolDirectory::CSpecialProtocolDirectory()
 }
 
 CSpecialProtocolDirectory::~CSpecialProtocolDirectory()
-{
-}
+= default;
 
 bool CSpecialProtocolDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

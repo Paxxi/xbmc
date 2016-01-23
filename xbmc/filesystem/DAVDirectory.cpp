@@ -32,7 +32,7 @@
 using namespace XFILE;
 
 CDAVDirectory::CDAVDirectory() {}
-CDAVDirectory::~CDAVDirectory() {}
+CDAVDirectory::~CDAVDirectory() = default;
 
 /*
  * Parses a <response>

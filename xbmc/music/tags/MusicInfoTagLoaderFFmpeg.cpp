@@ -48,8 +48,7 @@ CMusicInfoTagLoaderFFmpeg::CMusicInfoTagLoaderFFmpeg()
 }
 
 CMusicInfoTagLoaderFFmpeg::~CMusicInfoTagLoaderFFmpeg()
-{
-}
+= default;
 
 bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art)
 {

@@ -39,8 +39,7 @@ CVideoDatabaseDirectory::CVideoDatabaseDirectory()
 }
 
 CVideoDatabaseDirectory::~CVideoDatabaseDirectory()
-{
-}
+= default;
 
 bool CVideoDatabaseDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

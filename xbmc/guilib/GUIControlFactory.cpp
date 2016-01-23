@@ -128,10 +128,10 @@ std::string CGUIControlFactory::TranslateControlType(CGUIControl::GUICONTROLTYPE
 }
 
 CGUIControlFactory::CGUIControlFactory()
-{}
+= default;
 
 CGUIControlFactory::~CGUIControlFactory()
-{}
+= default;
 
 bool CGUIControlFactory::GetIntRange(const TiXmlNode* pRootNode, const char* strTag, int& iMinValue, int& iMaxValue, int& iIntervalValue)
 {

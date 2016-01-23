@@ -31,7 +31,7 @@
 using namespace XFILE;
 
 CFTPDirectory::CFTPDirectory(){}
-CFTPDirectory::~CFTPDirectory(){}
+CFTPDirectory::~CFTPDirectory()= default;
 
 bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
 {
