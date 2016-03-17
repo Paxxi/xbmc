@@ -29,6 +29,8 @@
 #include "interfaces/python/XBPython.h"
 #include "utils/log.h"
 
+#include <iterator>
+
 using namespace ADDON;
 
 typedef std::pair<unsigned int, CContextMenuItem> Item;
