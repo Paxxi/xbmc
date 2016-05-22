@@ -44,13 +44,7 @@
 #define strncasecmp _strnicmp
 #endif
 
-#ifdef USE_LZO_PACKING
-#ifdef TARGET_WINDOWS
-#include "win32/liblzo/LZO1X.H"
-#else
 #include <lzo/lzo1x.h>
-#endif
-#endif
 
 using namespace std;
 
