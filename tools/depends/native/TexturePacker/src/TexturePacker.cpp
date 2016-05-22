@@ -137,7 +137,6 @@ void CreateSkeletonHeader(CXBTFWriter& xbtfWriter, std::string fullPath)
 CXBTFFrame appendContent(CXBTFWriter &writer, int width, int height, unsigned char *data, unsigned int size, unsigned int format, bool hasAlpha, unsigned int flags)
 {
   CXBTFFrame frame;
-#ifdef USE_LZO_PACKING
   lzo_uint packedSize = size;
 
   if ((flags & FLAGS_USE_LZO) == FLAGS_USE_LZO)
@@ -172,9 +171,6 @@ CXBTFFrame appendContent(CXBTFWriter &writer, int width, int height, unsigned ch
     }
   }
   else
-#else
-  unsigned int packedSize = size;
-#endif
   {
     writer.AppendContent(data, size);
   }
@@ -223,7 +219,6 @@ void Usage()
   puts("  -input <dir>     Input directory. Default: current dir");
   puts("  -output <dir>    Output directory/filename. Default: Textures.xbt");
   puts("  -dupecheck       Enable duplicate file detection. Reduces output file size. Default: off");
-  puts("  -disable_lzo     Disable lz0 packing");
 }
 
 static bool checkDupe(struct MD5Context* ctx,
@@ -351,19 +346,15 @@ int createBundle(const std::string& InputDir, const std::string& OutputFile, dou
 
 int main(int argc, char* argv[])
 {
-#ifdef USE_LZO_PACKING
   if (lzo_init() != LZO_E_OK)
     return 1;
-#endif
   bool valid = false;
   unsigned int flags = 0;
   bool dupecheck = false;
   CmdLineArgs args(argc, (const char**)argv);
 
   // setup some defaults, lzo packing,
-#ifdef USE_LZO_PACKING
   flags = FLAGS_USE_LZO;
-#endif
 
   if (args.size() == 1)
   {
@@ -399,12 +390,6 @@ int main(int argc, char* argv[])
       while ((c = (char *)strchr(OutputFilename.c_str(), '\\')) != NULL) *c = '/';
 #endif
     }
-#ifdef USE_LZO_PACKING
-    else if (!platform_stricmp(args[i], "-disable_lzo"))
-    {
-      flags &= ~FLAGS_USE_LZO;
-    }
-#endif
     else
     {
       fprintf(stderr, "Unrecognized command line flag: %s\n", args[i]);
