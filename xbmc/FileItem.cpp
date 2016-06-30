@@ -49,6 +49,7 @@
 #include "threads/SingleLock.h"
 #include "music/tags/MusicInfoTag.h"
 #include "pictures/PictureInfoTag.h"
+#include "MediaSource.h"
 #include "music/Artist.h"
 #include "music/Album.h"
 #include "URL.h"

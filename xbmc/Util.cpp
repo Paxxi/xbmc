@@ -95,6 +95,7 @@
 #endif
 
 #include "cores/VideoPlayer/DVDDemuxers/DVDDemux.h"
+#include "MediaSource.h"
 
 #ifdef HAS_DVD_DRIVE
 using namespace MEDIA_DETECT;
@@ -644,145 +645,6 @@ std::string CUtil::GetNextPathname(const std::string &path_template, int max)
   return "";
 }
 
-void CUtil::StatToStatI64(struct _stati64 *result, struct stat *stat)
-{
-  result->st_dev = stat->st_dev;
-  result->st_ino = stat->st_ino;
-  result->st_mode = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid = stat->st_uid;
-  result->st_gid = stat->st_gid;
-  result->st_rdev = stat->st_rdev;
-  result->st_size = (int64_t)stat->st_size;
-
-#ifndef TARGET_POSIX
-  result->st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
-#else
-  result->_st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->_st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->_st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
-#endif
-}
-
-void CUtil::Stat64ToStatI64(struct _stati64 *result, struct __stat64 *stat)
-{
-  result->st_dev = stat->st_dev;
-  result->st_ino = stat->st_ino;
-  result->st_mode = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid = stat->st_uid;
-  result->st_gid = stat->st_gid;
-  result->st_rdev = stat->st_rdev;
-  result->st_size = stat->st_size;
-#ifndef TARGET_POSIX
-  result->st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
-#else
-  result->_st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->_st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->_st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
-#endif
-}
-
-void CUtil::StatI64ToStat64(struct __stat64 *result, struct _stati64 *stat)
-{
-  result->st_dev = stat->st_dev;
-  result->st_ino = stat->st_ino;
-  result->st_mode = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid = stat->st_uid;
-  result->st_gid = stat->st_gid;
-  result->st_rdev = stat->st_rdev;
-  result->st_size = stat->st_size;
-#ifndef TARGET_POSIX
-  result->st_atime = stat->st_atime;
-  result->st_mtime = stat->st_mtime;
-  result->st_ctime = stat->st_ctime;
-#else
-  result->st_atime = stat->_st_atime;
-  result->st_mtime = stat->_st_mtime;
-  result->st_ctime = stat->_st_ctime;
-#endif
-}
-
-void CUtil::StatToStat64(struct __stat64 *result, const struct stat *stat)
-{
-  memset(result, 0, sizeof(*result));
-  result->st_dev   = stat->st_dev;
-  result->st_ino   = stat->st_ino;
-  result->st_mode  = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid   = stat->st_uid;
-  result->st_gid   = stat->st_gid;
-  result->st_rdev  = stat->st_rdev;
-  result->st_size  = stat->st_size;
-  result->st_atime = stat->st_atime;
-  result->st_mtime = stat->st_mtime;
-  result->st_ctime = stat->st_ctime;
-}
-
-void CUtil::Stat64ToStat(struct stat *result, struct __stat64 *stat)
-{
-  result->st_dev = stat->st_dev;
-  result->st_ino = stat->st_ino;
-  result->st_mode = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid = stat->st_uid;
-  result->st_gid = stat->st_gid;
-  result->st_rdev = stat->st_rdev;
-#ifndef TARGET_POSIX
-  if (stat->st_size <= LONG_MAX)
-    result->st_size = (_off_t)stat->st_size;
-#else
-  if (sizeof(stat->st_size) <= sizeof(result->st_size) )
-    result->st_size = stat->st_size;
-#endif
-  else
-  {
-    result->st_size = 0;
-    CLog::Log(LOGWARNING, "WARNING: File is larger than 32bit stat can handle, file size will be reported as 0 bytes");
-  }
-  result->st_atime = (time_t)(stat->st_atime & 0xFFFFFFFF);
-  result->st_mtime = (time_t)(stat->st_mtime & 0xFFFFFFFF);
-  result->st_ctime = (time_t)(stat->st_ctime & 0xFFFFFFFF);
-}
-
-#ifdef TARGET_WINDOWS
-void CUtil::Stat64ToStat64i32(struct _stat64i32 *result, struct __stat64 *stat)
-{
-  result->st_dev = stat->st_dev;
-  result->st_ino = stat->st_ino;
-  result->st_mode = stat->st_mode;
-  result->st_nlink = stat->st_nlink;
-  result->st_uid = stat->st_uid;
-  result->st_gid = stat->st_gid;
-  result->st_rdev = stat->st_rdev;
-#ifndef TARGET_POSIX
-  if (stat->st_size <= LONG_MAX)
-    result->st_size = (_off_t)stat->st_size;
-#else
-  if (sizeof(stat->st_size) <= sizeof(result->st_size) )
-    result->st_size = stat->st_size;
-#endif
-  else
-  {
-    result->st_size = 0;
-    CLog::Log(LOGWARNING, "WARNING: File is larger than 32bit stat can handle, file size will be reported as 0 bytes");
-  }
-#ifndef TARGET_POSIX
-  result->st_atime = stat->st_atime;
-  result->st_mtime = stat->st_mtime;
-  result->st_ctime = stat->st_ctime;
-#else
-  result->st_atime = stat->_st_atime;
-  result->st_mtime = stat->_st_mtime;
-  result->st_ctime = stat->_st_ctime;
-#endif
-}
-#endif
 
 bool CUtil::CreateDirectoryEx(const std::string& strPath)
 {
@@ -1043,7 +905,7 @@ void CUtil::SplitParams(const std::string &paramString, std::vector<std::string>
     parameters.push_back(parameter);
 }
 
-int CUtil::GetMatchingSource(const std::string& strPath1, VECSOURCES& VECSOURCES, bool& bIsSourceName)
+int CUtil::GetMatchingSource(const std::string& strPath1, std::vector<CMediaSource>& VECSOURCES, bool& bIsSourceName)
 {
   if (strPath1.empty())
     return -1;

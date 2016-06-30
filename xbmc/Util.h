@@ -24,7 +24,6 @@
 #include <vector>
 #include <string.h>
 #include <stdint.h>
-#include "MediaSource.h" // Definition of VECSOURCES
 
 #define ARRAY_SIZE(X)         (sizeof(X)/sizeof((X)[0]))
 
@@ -34,6 +33,7 @@
 #define LEGAL_FATX            2
 
 class CFileItemList;
+class CMediaSource;
 class CURL;
 
 struct ExternalStreamInfo
@@ -98,14 +98,6 @@ public:
   static int64_t ToInt64(uint32_t high, uint32_t low);
   static std::string GetNextFilename(const std::string &fn_template, int max);
   static std::string GetNextPathname(const std::string &path_template, int max);
-  static void StatToStatI64(struct _stati64 *result, struct stat *stat);
-  static void StatToStat64(struct __stat64 *result, const struct stat *stat);
-  static void Stat64ToStatI64(struct _stati64 *result, struct __stat64 *stat);
-  static void StatI64ToStat64(struct __stat64 *result, struct _stati64 *stat);
-  static void Stat64ToStat(struct stat *result, struct __stat64 *stat);
-#ifdef TARGET_WINDOWS
-  static void Stat64ToStat64i32(struct _stat64i32 *result, struct __stat64 *stat);
-#endif
   static bool CreateDirectoryEx(const std::string& strPath);
 
 #ifdef TARGET_WINDOWS
@@ -136,7 +128,7 @@ public:
    */
   static void SplitParams(const std::string &paramString, std::vector<std::string> &parameters);
   static void SplitExecFunction(const std::string &execString, std::string &function, std::vector<std::string> &parameters);
-  static int GetMatchingSource(const std::string& strPath, VECSOURCES& VECSOURCES, bool& bIsSourceName);
+  static int GetMatchingSource(const std::string& strPath, std::vector<CMediaSource>& VECSOURCES, bool& bIsSourceName);
   static std::string TranslateSpecialSource(const std::string &strSpecial);
   static void DeleteDirectoryCache(const std::string &prefix = "");
   static void DeleteMusicDatabaseDirectoryCache();
