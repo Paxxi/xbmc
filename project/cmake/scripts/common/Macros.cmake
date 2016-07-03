@@ -3,6 +3,50 @@
 # include system specific macros
 include(${CORE_SOURCE_DIR}/project/cmake/scripts/${CORE_SYSTEM_NAME}/Macros.cmake)
 
+# IDEs: Group source files in target in folders (file system hierarchy)
+# Arguments:
+#   target The target that shall be grouped by folders.
+# Optional Arguments:
+#   RELATIVE allows to specify a different reference folder.
+function(source_group_by_folder target)
+  if(NOT TARGET ${target})
+    message(FATAL_ERROR "There is no target named '${target}'")
+  endif()
+
+  set(SOURCE_GROUP_DELIMITER "/")
+
+  cmake_parse_arguments(arg "" "RELATIVE" "" ${ARGN})
+  if(arg_RELATIVE)
+    set(relative_dir ${arg_RELATIVE})
+  else()
+    set(relative_dir ${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
+
+  # Sort the sources, otherwise the generated directories will be unsorted.
+  get_property(files TARGET ${target} PROPERTY SOURCES)
+  list(SORT files)
+  set_target_properties(${target} PROPERTIES SOURCES "${files}")
+
+  foreach(file ${files})
+    if(NOT IS_ABSOLUTE ${file})
+      set(file ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+    endif()
+    file(RELATIVE_PATH relative_file ${relative_dir} ${file})
+    get_filename_component(dir "${relative_file}" PATH)
+    if(NOT dir STREQUAL "${last_dir}")
+      if(files)
+        source_group("${last_dir}" FILES ${files})
+      endif()
+      set(files "")
+    endif()
+    set(files ${files} ${file})
+    set(last_dir "${dir}")
+  endforeach(file)
+  if(files)
+    source_group("${last_dir}" FILES ${files})
+  endif()
+endfunction()
+
 # Add a library, optionally as a dependency of the main application
 # Arguments:
 #   name name of the library to add
@@ -149,6 +193,7 @@ function(copy_file_to_buildtree file relative)
       file(REMOVE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ExportFiles.cmake)
       add_custom_target(export-files ALL COMMENT "Copying files into build tree"
                         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ExportFiles.cmake)
+      set_target_properties(export-files PROPERTIES FOLDER "Build helpers")
     endif()
     if(VERBOSE)
       message(STATUS "copy_file_to_buildtree - copying file: ${file} -> ${CMAKE_BINARY_DIR}/${outfile}")
@@ -158,6 +203,7 @@ function(copy_file_to_buildtree file relative)
   else()
     if(NOT TARGET export-files)
       add_custom_target(export-files ALL)
+      set_target_properties(export-files PROPERTIES FOLDER "Build helpers")
     endif()
   endif()
   if(NOT arg_NO_INSTALL)

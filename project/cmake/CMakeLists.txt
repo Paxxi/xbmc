@@ -236,6 +236,7 @@ list(APPEND install_data addons/xbmc.addon/addon.xml)
 list(APPEND install_data addons/xbmc.json/addon.xml)
 list(APPEND install_data addons/kodi.guilib/addon.xml)
 add_library(compileinfo OBJECT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp)
+set_target_properties(compileinfo PROPERTIES FOLDER "Build helpers")
 target_compile_options(compileinfo PRIVATE "${SYSTEM_DEFINES}")
 
 # RC File
@@ -281,6 +282,7 @@ endforeach()
 
 add_custom_target(pack-skins ALL
                   DEPENDS TexturePacker::TexturePacker export-files ${XBT_FILES})
+set_target_properties(pack-skins PROPERTIES FOLDER "Build helpers")
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/VideoPlayer)
 
@@ -336,11 +338,13 @@ if(NOT CMAKE_CROSSCOMPILING)
   enable_testing()
   gtest_add_tests(${APP_NAME_LC}-test "" ${test_sources})
   add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+  set_target_properties(check PROPERTIES FOLDER "Build helpers")
   add_dependencies(check ${APP_NAME_LC}-test)
 
   # For testing commit series
   add_custom_target(check-commits ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/scripts/common/CheckCommits.cmake
                                                    -DCMAKE_BINARY_DIR=${CMAKE_BINARY_DIR})
+  set_target_properties(check-commits PROPERTIES FOLDER "Build helpers")
 endif()
 
 # code coverage
