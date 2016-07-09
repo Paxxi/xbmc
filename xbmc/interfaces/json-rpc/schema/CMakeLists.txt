@@ -25,5 +25,5 @@ add_custom_target(generate_json_header ALL
 set_target_properties(generate_json_header PROPERTIES FOLDER "Build helpers")
 
 if(BOOTSTRAP_IN_TREE)
-  add_dependencies(generate_json_header JsonSchemaBuilder::JsonSchemaBuilder)
+  #add_dependencies(generate_json_header JsonSchemaBuilder::JsonSchemaBuilder)
 endif()

@@ -133,6 +133,9 @@ else()
 
   if(LIBDVD_FOUND)
     set(LIBDVD_INCLUDE_DIRS ${LIBDVD_INCLUDE_DIR})
+
+    add_custom_target(dvdnav)
+    set_target_properties(dvdnav PROPERTIES FOLDER ExternalProjectTargets)
   endif()
 
   mark_as_advanced(LIBDVD_INCLUDE_DIR)

@@ -217,16 +217,36 @@ if(CORE_SYSTEM_NAME STREQUAL windows)
                     guishader_video.hlsl
                     guishader_video_control.hlsl)
   foreach(shader ${SHADERS_VERTEX})
-    add_shader_dx(guilib
-                  ${CORE_SOURCE_DIR}/system/shaders/${shader}
-                  vs_4_0_level_9_1
-                  VS)
+    get_filename_component(file ${shader} NAME_WE)
+    add_custom_command(OUTPUT ${file}.h
+                       COMMAND ${FXC} /Fh ${file}.h
+                                      /E VS
+                                      /T vs_4_0_level_9_1
+                                      /Vn ${file}
+                                      /Qstrip_reflect
+                                      ${CORE_SOURCE_DIR}/system/shaders/${shader}
+                       DEPENDS ${CORE_SOURCE_DIR}/system/shaders/${shader}
+                       COMMENT "FX compile ${shader}"
+                       VERBATIM)
+    list(APPEND SHADERS ${file}.h)
   endforeach()
   foreach(shader ${SHADERS_PIXEL})
-    add_shader_dx(guilib
-                  ${CORE_SOURCE_DIR}/system/shaders/${shader}
-                  ps_4_0_level_9_1
-                  PS)
+    get_filename_component(file ${shader} NAME_WE)
+    add_custom_command(OUTPUT ${file}.h
+                       COMMAND ${FXC} /Fh ${file}.h
+                                      /E PS
+                                      /T ps_4_0_level_9_1
+                                      /Vn ${file}
+                                      /Qstrip_reflect
+                                      ${CORE_SOURCE_DIR}/system/shaders/${shader}
+                       DEPENDS ${CORE_SOURCE_DIR}/system/shaders/${shader}
+                       COMMENT "FX compile ${shader}"
+                       VERBATIM)
+    list(APPEND SHADERS ${file}.h)
   endforeach()
-  add_dependencies(guilib d3dx11effects)
+  add_library(shader STATIC ${SHADERS})
+  set_target_properties(shader PROPERTIES FOLDER "Build helpers"
+                                          LINKER_LANGUAGE CXX)
+  add_dependencies(lib${APP_NAME_LC} shader)
+  target_include_directories(lib${APP_NAME_LC} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 endif()

@@ -7,5 +7,5 @@ set(HEADERS ProcessInfo.h ${OVERRIDES_H})
 
 core_add_library(process)
 if(OVERRIDES_CPP)
-  target_compile_definitions(process PRIVATE -DPLATFORM_OVERRIDE)
+  target_compile_definitions(lib${APP_NAME_LC} PRIVATE -DPLATFORM_OVERRIDE)
 endif()

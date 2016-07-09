@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(kodi)
+project(kodi LANGUAGES CXX C ASM)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 if(DEPENDS_DIR)
@@ -9,6 +9,7 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp")
 
 # general
 option(VERBOSE            "Enable verbose output?" OFF)
@@ -244,11 +245,14 @@ if(WIN32)
   configure_file(${CORE_SOURCE_DIR}/xbmc/win32/XBMC_PC.rc.in
                  ${CORE_BUILD_DIR}/xbmc/win32/XBMC_PC.rc @ONLY)
   add_library(resources OBJECT ${CORE_BUILD_DIR}/xbmc/win32/XBMC_PC.rc)
+  set_target_properties(resources PROPERTIES FOLDER "Build helpers")
   target_include_directories(resources PRIVATE ${CORE_SOURCE_DIR}/tools/windows/packaging/media)
   set(RESOURCES $<TARGET_OBJECTS:resources>)
 endif()
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
+include_directories(${CORE_SOURCE_DIR}/xbmc/cores/AudioEngine)
+
 add_compile_options(${ARCH_DEFINES} "${SYSTEM_DEFINES}" ${DEP_DEFINES} ${PATH_DEFINES})
 
 set(core_DEPENDS "" CACHE STRING "" FORCE)
@@ -259,12 +263,7 @@ mark_as_advanced(test_archives)
 mark_as_advanced(test_sources)
 
 add_subdirectory(${CORE_SOURCE_DIR}/lib/gtest ${CORE_BUILD_DIR}/gtest EXCLUDE_FROM_ALL)
-
-# Subdirs
-core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
-                               ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt)
-core_add_optional_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt
-                                        ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
+set_target_properties(gtest PROPERTIES FOLDER ExternalProjectTargets)
 
 # copy files to build tree
 copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/common/*.txt
@@ -295,11 +294,30 @@ elseif(CORE_SYSTEM_NAME STREQUAL android)
                  ${CORE_BUILD_DIR}/DllPaths_generated_android.h @ONLY)
 endif()
 
+# main library (used for main binary and tests)
+add_library(lib${APP_NAME_LC} STATIC "")
+set_target_properties(lib${APP_NAME_LC} PROPERTIES PREFIX "")
+add_dependencies(lib${APP_NAME_LC} libcpluff ffmpeg dvdnav crossguid generate_json_header)
+
 # Codegen
 add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig build/swig)
 
 # Other files (IDE)
 set(OTHER_FILES README.md)
+
+# Subdirs
+core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
+                               ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt)
+core_add_optional_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt
+                                        ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
+
+target_link_libraries(lib${APP_NAME_LC} PUBLIC ${core_DEPENDS} ${SYSTEM_LDFLAGS} ${DEPLIBS} ${CMAKE_DL_LIBS})
+set_target_properties(lib${APP_NAME_LC} PROPERTIES PROJECT_LABEL "xbmc")
+source_group_by_folder(lib${APP_NAME_LC} RELATIVE ${CORE_SOURCE_DIR}/xbmc)
+if(WIN32)
+  add_precompiled_header(lib${APP_NAME_LC} pch.h ${CORE_SOURCE_DIR}/xbmc/win32/pch.cpp PCH_TARGET kodi)
+  set_language_cxx(lib${APP_NAME_LC})
+endif()
 
 # main binary
 if(NOT CORE_SYSTEM_NAME STREQUAL android)
@@ -311,8 +329,7 @@ else()
   # the libraries as a dependency. This requires to build the all target on android (and not only kodi).
   add_dependencies(${APP_NAME_LC} export-files pack-skins)
 endif()
-whole_archive(_MAIN_LIBRARIES ${core_DEPENDS})
-target_link_libraries(${APP_NAME_LC} ${SYSTEM_LDFLAGS} ${_MAIN_LIBRARIES} ${DEPLIBS} ${CMAKE_DL_LIBS})
+target_link_libraries(${APP_NAME_LC} lib${APP_NAME_LC} ${core_DEPENDS} lib${APP_NAME_LC} ${SYSTEM_LDFLAGS} ${DEPLIBS} ${CMAKE_DL_LIBS})
 unset(_MAIN_LIBRARIES)
 
 if(WIN32)
@@ -329,7 +346,7 @@ endif()
 copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt NO_INSTALL)
 add_executable(${APP_NAME_LC}-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp $<TARGET_OBJECTS:compileinfo>)
 whole_archive(_TEST_LIBRARIES ${core_DEPENDS} gtest ${test_archives})
-target_link_libraries(${APP_NAME_LC}-test ${SYSTEM_LDFLAGS} ${_TEST_LIBRARIES} ${DEPLIBS} ${CMAKE_DL_LIBS})
+target_link_libraries(${APP_NAME_LC}-test ${SYSTEM_LDFLAGS} ${_TEST_LIBRARIES} lib${APP_NAME_LC} ${DEPLIBS} ${CMAKE_DL_LIBS})
 unset(_TEST_LIBRARIES)
 add_dependencies(${APP_NAME_LC}-test ${APP_NAME_LC}-libraries export-files)
 

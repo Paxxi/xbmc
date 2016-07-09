@@ -89,6 +89,7 @@ else()
                          ${FFMPEG_LIBAVUTIL} ${FFMPEG_LIBSWSCALE} ${FFMPEG_LIBPOSTPROC})
     add_custom_target(ffmpeg DEPENDS ${FFMPEG_LIBRARIES})
   endif()
+  set_target_properties(ffmpeg PROPERTIES FOLDER ExternalProjectTargets)
 
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(FFMPEG DEFAULT_MSG FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES)

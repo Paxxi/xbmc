@@ -57,31 +57,25 @@ endfunction()
 # On return:
 #   Library will be built, optionally added to ${core_DEPENDS}
 function(core_add_library name)
-  if(NOT SOURCES)
-      message(STATUS "No sources added to ${name} skipping")
-      return()
-  endif()
+  foreach(file IN LISTS SOURCES HEADERS OTHERS)
+    if(IS_ABSOLUTE ${file})
+      list(APPEND FILES ${file})
+    else()
+      list(APPEND FILES ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+    endif()
+  endforeach()
+  target_sources(lib${APP_NAME_LC} PRIVATE ${FILES})
 
-  add_library(${name} STATIC ${SOURCES} ${HEADERS} ${OTHERS})
-  set_target_properties(${name} PROPERTIES PREFIX "")
-  set(core_DEPENDS ${name} ${core_DEPENDS} CACHE STRING "" FORCE)
-  add_dependencies(${name} libcpluff ffmpeg)
+  #add_library(${name} STATIC ${SOURCES} ${HEADERS} ${OTHERS})
+  #set_target_properties(${name} PROPERTIES PREFIX "")
+  #set(core_DEPENDS ${name} ${core_DEPENDS} CACHE STRING "" FORCE)
+  #add_dependencies(${name} libcpluff ffmpeg)
 
   # Add precompiled headers to Kodi main libraries
-  if(CORE_SYSTEM_NAME STREQUAL windows AND CMAKE_CURRENT_LIST_DIR MATCHES "^${CORE_SOURCE_DIR}/xbmc")
-    add_precompiled_header(${name} pch.h ${CORE_SOURCE_DIR}/xbmc/win32/pch.cpp
-                           PCH_TARGET kodi)
-  endif()
-
-  # IDE support
-  if(CMAKE_GENERATOR MATCHES "Xcode")
-    file(RELATIVE_PATH parentfolder ${CORE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..)
-    set_target_properties(${name} PROPERTIES FOLDER "${parentfolder}")
-  elseif(CMAKE_GENERATOR MATCHES "Visual Studio")
-    file(RELATIVE_PATH foldername ${CORE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
-    set_target_properties(${name} PROPERTIES FOLDER "${foldername}")
-    source_group(" " REGULAR_EXPRESSION ".*")
-  endif()
+  #if(CORE_SYSTEM_NAME STREQUAL windows AND CMAKE_CURRENT_LIST_DIR MATCHES "^${CORE_SOURCE_DIR}/xbmc")
+  #  add_precompiled_header(${name} pch.h ${CORE_SOURCE_DIR}/xbmc/win32/pch.cpp
+  #                         PCH_TARGET kodi)
+  #endif()
 endfunction()
 
 # Add a test library, and add sources to list for gtest integration macros
@@ -90,7 +84,8 @@ function(core_add_test_library name)
   set(TEST_ONLY_SOURCES ${SOURCES})
   add_library(${name} STATIC ${SOURCES} ${SUPPORTED_SOURCES} ${HEADERS} ${OTHERS})
   set_target_properties(${name} PROPERTIES PREFIX ""
-                                           EXCLUDE_FROM_ALL 1)
+                                           EXCLUDE_FROM_ALL 1
+                                           FOLDER "Build helpers/tests")
 
   # Add precompiled headers to Kodi main libraries
   if(CORE_SYSTEM_NAME STREQUAL windows AND CMAKE_CURRENT_LIST_DIR MATCHES "^${CORE_SOURCE_DIR}/xbmc")

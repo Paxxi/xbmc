@@ -17,4 +17,4 @@ set(HEADERS OMXAudio.h
             OMXVideoCodec.h)
 
 core_add_library(omxplayer)
-add_definitions(-D__STDC_FORMAT_MACROS)
+target_compile_definitions(lib${APP_NAME_LC} PRIVATE -D__STDC_FORMAT_MACROS)
