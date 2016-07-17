@@ -26,8 +26,7 @@
 #include "WindowHelper.h"
 #include "Application.h"
 #include <shlobj.h>
-#include "filesystem/SpecialProtocol.h"
-#include "my_ntddscsi.h"
+#include <ntddscsi.h>
 #include "Setupapi.h"
 #include "storage/MediaManager.h"
 #include "windowing/WindowingFactory.h"
@@ -36,29 +35,26 @@
 #include "utils/log.h"
 #include "powermanagement/PowerManager.h"
 #include "utils/SystemInfo.h"
-#include "utils/Environment.h"
 #include "utils/StringUtils.h"
-#include "win32/crts_caller.h"
 
 #include <cassert>
-
-
 #include <locale.h>
+
+#include <memory>
+#include <utility>
 
 extern HWND g_hWnd;
 
 using namespace MEDIA_DETECT;
 
-CWIN32Util::CWIN32Util(void)
-{
-}
-
-CWIN32Util::~CWIN32Util(void)
-{
-}
-
 int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
 {
+  constexpr int MAX_SENSE_LEN = 18;
+  struct T_SPDT_SBUF {
+    SCSI_PASS_THROUGH_DIRECT sptd;
+    UCHAR SenseBuf[MAX_SENSE_LEN];
+  };
+
   HANDLE hDevice;               // handle to the drive to be examined
   int iResult;                  // results flag
   ULONG ulChanges=0;
@@ -71,10 +67,10 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
   hDevice = CreateFile( strPath.c_str(),                  // drive
                         0,                                // no access to the drive
                         FILE_SHARE_READ,                  // share mode
-                        NULL,                             // default security attributes
+                        nullptr,                          // default security attributes
                         OPEN_EXISTING,                    // disposition
                         FILE_ATTRIBUTE_READONLY,          // file attributes
-                        NULL);
+                        nullptr);
 
   if (hDevice == INVALID_HANDLE_VALUE)                    // cannot open the drive
   {
@@ -83,14 +79,14 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
   }
 
   CLog::Log(LOGDEBUG, __FUNCTION__": Requesting media status for drive %s.", strPath.c_str());
-  iResult = DeviceIoControl((HANDLE) hDevice,             // handle to device
+  iResult = DeviceIoControl(hDevice,                      // handle to device
                              IOCTL_STORAGE_CHECK_VERIFY2, // dwIoControlCode
-                             NULL,                        // lpInBuffer
+                             nullptr,                     // lpInBuffer
                              0,                           // nInBufferSize
                              &ulChanges,                  // lpOutBuffer
                              sizeof(ULONG),               // nOutBufferSize
                              &dwBytesReturned ,           // number of bytes returned
-                             NULL );                      // OVERLAPPED structure
+                             nullptr );                      // OVERLAPPED structure
 
   CloseHandle(hDevice);
 
@@ -104,10 +100,10 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
   hDevice = CreateFile( strPath.c_str(),
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        NULL,
+                        nullptr,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_READONLY,
-                        NULL);
+                        nullptr);
 
   if (hDevice == INVALID_HANDLE_VALUE)
   {
@@ -124,7 +120,7 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
   sptd_sb.sptd.DataIn=SCSI_IOCTL_DATA_IN;
   sptd_sb.sptd.DataTransferLength=sizeof(DataBuf);
   sptd_sb.sptd.TimeOutValue=2;
-  sptd_sb.sptd.DataBuffer=(PVOID)&(DataBuf);
+  sptd_sb.sptd.DataBuffer=static_cast<PVOID>(&(DataBuf));
   sptd_sb.sptd.SenseInfoOffset=sizeof(SCSI_PASS_THROUGH_DIRECT);
 
   sptd_sb.sptd.Cdb[0]=0x4a;
@@ -149,12 +145,14 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
 
   //Send the command to drive
   CLog::Log(LOGDEBUG, __FUNCTION__": Requesting tray status for drive %s.", strPath.c_str());
-  iResult = DeviceIoControl((HANDLE) hDevice,
+  iResult = DeviceIoControl(hDevice,
                             IOCTL_SCSI_PASS_THROUGH_DIRECT,
-                            (PVOID)&sptd_sb, (DWORD)sizeof(sptd_sb),
-                            (PVOID)&sptd_sb, (DWORD)sizeof(sptd_sb),
+                            static_cast<PVOID>(&sptd_sb),
+                            static_cast<DWORD>(sizeof(sptd_sb)),
+                            static_cast<PVOID>(&sptd_sb),
+                            static_cast<DWORD>(sizeof(sptd_sb)),
                             &dwBytesReturned,
-                            NULL);
+                            nullptr);
 
   CloseHandle(hDevice);
 
@@ -163,10 +161,10 @@ int CWIN32Util::GetDriveStatus(const std::string &strPath, bool bStatusEx)
 
     if(DataBuf[5] == 0) // tray close
       return 0;
-    else if(DataBuf[5] == 1) // tray open
+    if(DataBuf[5] == 1) // tray open
       return 1;
-    else
-      return 2; // tray closed, media present
+    
+    return 2; // tray closed, media present
   }
   CLog::Log(LOGERROR, __FUNCTION__": Could not determine tray status %d", GetLastError());
   return -1;
@@ -194,12 +192,12 @@ bool CWIN32Util::PowerManagement(PowerState State)
     {
       // Get the LUID for the shutdown privilege.
       TOKEN_PRIVILEGES tkp = {};
-      if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid))
+      if (LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid))
       {
         tkp.PrivilegeCount = 1;  // one privilege to set
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         // Get the shutdown privilege for this process.
-        if (AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
+        if (AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0))
           gotShutdownPrivileges = true;
       }
       CloseHandle(hToken);
@@ -214,31 +212,26 @@ bool CWIN32Util::PowerManagement(PowerState State)
   case POWERSTATE_HIBERNATE:
     CLog::Log(LOGINFO, "Asking Windows to hibernate...");
     return SetSuspendState(true, true, false) == TRUE;
-    break;
   case POWERSTATE_SUSPEND:
     CLog::Log(LOGINFO, "Asking Windows to suspend...");
     return SetSuspendState(false, true, false) == TRUE;
-    break;
   case POWERSTATE_SHUTDOWN:
     CLog::Log(LOGINFO, "Shutdown Windows...");
+    DWORD flags = SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF;
     if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin8))
-      return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_HYBRID | SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF,
-                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
-    return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF,
-                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
-    break;
+      flags |= SHUTDOWN_HYBRID;
+
+    return ERROR_SUCCESS == InitiateShutdownW(nullptr, nullptr, 0, flags,
+        SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED);
   case POWERSTATE_REBOOT:
     CLog::Log(LOGINFO, "Rebooting Windows...");
-    if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin8))
-      return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_RESTART,
-                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
-    return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_RESTART,
-                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
-    break;
+    return ERROR_SUCCESS == InitiateShutdownW(nullptr, nullptr, 0, 
+      SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_RESTART,
+      SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER |
+      SHTDN_REASON_FLAG_PLANNED);
   default:
     CLog::Log(LOGERROR, "Unknown PowerState called.");
     return false;
-    break;
   }
 }
 
@@ -261,10 +254,9 @@ bool CWIN32Util::XBMCShellExecute(const std::string &strPath, bool bWaitForScrip
 
   StringUtils::Trim(strCommand);
   if (strCommand.empty())
-  {
     return false;
-  }
-  size_t iIndex = std::string::npos;
+
+  auto iIndex = std::string::npos;
   char split = ' ';
   if (strCommand[0] == '\"')
   {
@@ -295,13 +287,13 @@ bool CWIN32Util::XBMCShellExecute(const std::string &strPath, bool bWaitForScrip
   SHELLEXECUTEINFOW ShExecInfo = {0};
   ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
   ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-  ShExecInfo.hwnd = NULL;
-  ShExecInfo.lpVerb = NULL;
+  ShExecInfo.hwnd = nullptr;
+  ShExecInfo.lpVerb = nullptr;
   ShExecInfo.lpFile = WstrExe.c_str();
   ShExecInfo.lpParameters = WstrParams.c_str();
   ShExecInfo.lpDirectory = WstrWorkingDir.c_str();
   ShExecInfo.nShow = SW_SHOW;
-  ShExecInfo.hInstApp = NULL;
+  ShExecInfo.hInstApp = nullptr;
 
   g_windowHelper.StopThread();
 
@@ -331,7 +323,7 @@ std::vector<std::string> CWIN32Util::GetDiskUsage()
   ULARGE_INTEGER ULTotal= { { 0 } };
   ULARGE_INTEGER ULTotalFree= { { 0 } };
 
-  char* pcBuffer= NULL;
+  char* pcBuffer= nullptr;
   DWORD dwStrLength= GetLogicalDriveStrings( 0, pcBuffer );
   if( dwStrLength != 0 )
   {
@@ -344,8 +336,8 @@ std::vector<std::string> CWIN32Util::GetDiskUsage()
     do
     {
       std::string strDrive = pcBuffer + iPos;
-      if( DRIVE_FIXED == GetDriveType( strDrive.c_str()  ) &&
-        GetDiskFreeSpaceEx( ( strDrive.c_str() ), NULL, &ULTotal, &ULTotalFree ) )
+      if( DRIVE_FIXED == GetDriveType(strDrive.c_str()) &&
+        GetDiskFreeSpaceEx(strDrive.c_str(), nullptr, &ULTotal, &ULTotalFree ) )
       {
         strRet = StringUtils::Format("%s %d MB %s",strDrive.c_str(), int(ULTotalFree.QuadPart/(1024*1024)),g_localizeStrings.Get(160).c_str());
         result.push_back(strRet);
@@ -362,7 +354,7 @@ std::string CWIN32Util::GetResInfoString()
   DEVMODE devmode;
   ZeroMemory(&devmode, sizeof(devmode));
   devmode.dmSize = sizeof(devmode);
-  EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devmode);
+  EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &devmode);
   return StringUtils::Format("Desktop Resolution: %dx%d %dBit at %dHz",devmode.dmPelsWidth,devmode.dmPelsHeight,devmode.dmBitsPerPel,devmode.dmDisplayFrequency);
 }
 
@@ -371,26 +363,22 @@ int CWIN32Util::GetDesktopColorDepth()
   DEVMODE devmode;
   ZeroMemory(&devmode, sizeof(devmode));
   devmode.dmSize = sizeof(devmode);
-  EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devmode);
-  return (int)devmode.dmBitsPerPel;
+  EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &devmode);
+  return static_cast<int>(devmode.dmBitsPerPel);
 }
 
 std::string CWIN32Util::GetSpecialFolder(int csidl)
 {
   std::string strProfilePath;
-  static const int bufSize = MAX_PATH;
-  WCHAR* buf = new WCHAR[bufSize];
+  auto buf = std::make_unique<WCHAR[]>(MAX_PATH);
 
-  if(SUCCEEDED(SHGetFolderPathW(NULL, csidl, NULL, SHGFP_TYPE_CURRENT, buf)))
+  if(SUCCEEDED(SHGetFolderPathW(NULL, csidl, NULL, SHGFP_TYPE_CURRENT, buf.get())))
   {
-    buf[bufSize-1] = 0;
-    g_charsetConverter.wToUTF8(buf, strProfilePath);
-    strProfilePath = UncToSmb(strProfilePath);
+    buf[MAX_PATH-1] = 0;
+    g_charsetConverter.wToUTF8(buf.get(), strProfilePath);
+    return UncToSmb(strProfilePath);
   }
-  else
-    strProfilePath = "";
   
-  delete[] buf;
   return strProfilePath;
 }
 
@@ -757,49 +745,6 @@ bool CWIN32Util::EjectDrive(const char cDriveLetter)
   return bSuccess;
 }
 
-#ifdef HAS_GL
-void CWIN32Util::CheckGLVersion()
-{
-  if(CWIN32Util::HasGLDefaultDrivers())
-  {
-    MessageBox(NULL, "MS default OpenGL drivers detected. Please get OpenGL drivers from your video card vendor", "XBMC: Fatal Error", MB_OK|MB_ICONERROR);
-    exit(1);
-  }
-
-  if(!CWIN32Util::HasReqGLVersion())
-  {
-    if(MessageBox(NULL, "Your OpenGL version doesn't meet the XBMC requirements", "XBMC: Warning", MB_OKCANCEL|MB_ICONWARNING) == IDCANCEL)
-    {
-      exit(1);
-    }
-  }
-}
-
-bool CWIN32Util::HasGLDefaultDrivers()
-{
-  unsigned int a=0,b=0;
-
-  std::string strVendor = g_Windowing.GetRenderVendor();
-  g_Windowing.GetRenderVersion(a, b);
-
-  if(strVendor.find("Microsoft")!=strVendor.npos && a==1 && b==1)
-    return true;
-  else
-    return false;
-}
-
-bool CWIN32Util::HasReqGLVersion()
-{
-  unsigned int a=0,b=0;
-
-  g_Windowing.GetRenderVersion(a, b);
-  if((a>=2) || (a == 1 && b >= 3))
-    return true;
-  else
-    return false;
-}
-#endif
-
 BOOL CWIN32Util::IsCurrentUserLocalAdministrator()
 {
   BOOL b;
@@ -933,7 +878,7 @@ std::string CWIN32Util::GetFirstOpticalDrive()
 {
   VECSOURCES vShare;
   std::string strdevice = "\\\\.\\";
-  CWIN32Util::GetDrivesByType(vShare, DVD_DRIVES);
+  GetDrivesByType(vShare, DVD_DRIVES);
   if(!vShare.empty())
     return strdevice.append(vShare.front().strPath);
   else
@@ -1632,6 +1577,6 @@ std::string CWIN32Util::WUSysMsg(DWORD dwError)
 bool CWIN32Util::SetThreadLocalLocale(bool enable /* = true */)
 {
   const int param = enable ? _ENABLE_PER_THREAD_LOCALE : _DISABLE_PER_THREAD_LOCALE;
-  return CALL_IN_CRTS(_configthreadlocale, param) != -1;
+  return _configthreadlocale(param) != -1;
 }
 

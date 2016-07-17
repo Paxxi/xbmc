@@ -28,7 +28,7 @@
 #include "IoSupport.h"
 #include "utils/log.h"
 #ifdef TARGET_WINDOWS
-#include "my_ntddcdrm.h"
+#include <ntddcdrm.h>
 #endif
 #if defined(TARGET_LINUX)
 #include <linux/limits.h>
