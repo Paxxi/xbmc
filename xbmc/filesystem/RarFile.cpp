@@ -653,6 +653,7 @@ bool CRarFile::OpenInArchive()
 
     strncpy(m_pCmd->ExtrPath, m_strCacheDir.c_str(), sizeof (m_pCmd->ExtrPath) - 2);
     m_pCmd->ExtrPath[sizeof (m_pCmd->ExtrPath) - 2] = 0;
+    m_pCmd->ExtrPath[sizeof (m_pCmd->ExtrPath) - 1] = 0;
     AddEndSlash(m_pCmd->ExtrPath);
 
     // Set password for encrypted archives

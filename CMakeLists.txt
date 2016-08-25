@@ -40,7 +40,6 @@ set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp")
 option(VERBOSE            "Enable verbose output?" OFF)
 option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_UPNP        "Enable UPnP support?" ON)
-option(ENABLE_NONFREE     "Enable non-free components?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
 option(ENABLE_OPTICAL     "Enable optical support?" ON)
 # use ffmpeg from depends or system
@@ -162,10 +161,6 @@ endif()
 
 if(ENABLE_UPNP)
   list(APPEND DEP_DEFINES "-DUSE_UPNP=1")
-endif()
-
-if(ENABLE_NONFREE)
-  list(APPEND DEP_DEFINES "-DHAVE_XBMC_NONFREE=1")
 endif()
 
 if(ENABLE_OPTICAL)

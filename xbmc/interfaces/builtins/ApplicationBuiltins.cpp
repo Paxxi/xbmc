@@ -22,9 +22,6 @@
 
 #include "Application.h"
 #include "ServiceBroker.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
 #include "filesystem/ZipManager.h"
 #include "messaging/ApplicationMessenger.h"
 #include "input/Key.h"
@@ -61,10 +58,16 @@ static int Extract(const std::vector<std::string>& params)
 
     if (URIUtils::IsZIP(params[0]))
       g_ZipManager.ExtractArchive(params[0],strDestDirect);
-#ifdef HAS_FILESYSTEM_RAR
-    else if (URIUtils::IsRAR(params[0]))
-      g_RarManager.ExtractArchive(params[0],strDestDirect);
-#endif
+  else if (URIUtils::IsRAR(params[0]))
+  {
+    CURL rarURL = URIUtils::CreateArchivePath("rar", CURL(params[0]), "");
+    CFileItemList items;
+    items.Add(CFileItemPtr(new CFileItem(rarURL.Get(), true)));
+    items[0]->Select(true);
+    CFileOperationJob job(CFileOperationJob::ActionCopy,
+                          items, strDestDirect, false);
+    job.DoWork();
+  }
     else
       CLog::Log(LOGERROR, "Extract, No archive given");
 
