@@ -143,10 +143,6 @@
 #endif
 #endif
 
-#ifdef HAVE_LIBSSH
-#define HAS_FILESYSTEM_SFTP
-#endif
-
 #if defined(HAVE_X11)
 #define HAS_EGL
 #if !defined(HAVE_LIBGLESV2)

@@ -47,8 +47,6 @@ set(SOURCES AddonsDirectory.cpp
             ResourceDirectory.cpp
             ResourceFile.cpp
             RSSDirectory.cpp
-            SFTPDirectory.cpp
-            SFTPFile.cpp
             ShoutcastFile.cpp
             SmartPlaylistDirectory.cpp
             SourcesDirectory.cpp
@@ -122,8 +120,6 @@ set(HEADERS AddonsDirectory.h
             RSSDirectory.h
             ResourceDirectory.h
             ResourceFile.h
-            SFTPDirectory.h
-            SFTPFile.h
             ShoutcastFile.h
             SmartPlaylistDirectory.h
             SourcesDirectory.h

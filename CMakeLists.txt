@@ -113,7 +113,7 @@ if(CORE_SYSTEM_NAME STREQUAL android)
 endif()
 
 # Optional dependencies
-set(optional_deps MicroHttpd MySqlClient SSH XSLT
+set(optional_deps MicroHttpd MySqlClient XSLT
                   Alsa UDEV DBus Avahi MDNS SmbClient CCache
                   PulseAudio VDPAU VAAPI Bluetooth CAP)
 
