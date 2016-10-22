@@ -198,6 +198,9 @@ public:
 
   void RegisterReceiver(IMessageTarget* target);
 
+  void SetMainThreadId(ThreadIdentifier tId) { m_threadId = tId; }
+  void SignalShutdown() { m_bStop = true; }
+
 private:
   // private construction, and no assignments; use the provided singleton methods
   CApplicationMessenger();
@@ -207,6 +210,10 @@ private:
 
   int SendMsg(ThreadMessage&& msg, bool wait);
   void ProcessMessage(ThreadMessage *pMsg);
+
+  ThreadIdentifier m_threadId;
+
+  bool m_bStop;
 
   std::queue<ThreadMessage*> m_vecMessages;
   std::queue<ThreadMessage*> m_vecWindowMessages;

@@ -23,8 +23,9 @@
 #include <memory>
 #include <utility>
 
-#include "Application.h"
 #include "guilib/GraphicContext.h"
+#include "guilib/GUIMessage.h"
+#include "messaging/IMessageTarget.h"
 #include "threads/SingleLock.h"
 
 namespace KODI
@@ -55,6 +56,8 @@ CApplicationMessenger& CApplicationMessenger::GetInstance()
 }
 
 CApplicationMessenger::CApplicationMessenger()
+  : m_threadId{ 0 }
+  , m_bStop{ false }
 {
 }
 
@@ -101,7 +104,7 @@ int CApplicationMessenger::SendMsg(ThreadMessage&& message, bool wait)
     message.result = std::make_shared<int>(-1);
     // check that we're not being called from our application thread, else we'll be waiting
     // forever!
-    if (!g_application.IsCurrentThread())
+    if (CThread::GetCurrentThreadId() != m_threadId)
     {
       message.waitEvent.reset(new CEvent(true));
       waitEvent = message.waitEvent;
@@ -117,7 +120,7 @@ int CApplicationMessenger::SendMsg(ThreadMessage&& message, bool wait)
   }
 
 
-  if (g_application.m_bStop)
+  if (m_bStop)
     return -1;
 
   ThreadMessage* msg = new ThreadMessage(std::move(message));

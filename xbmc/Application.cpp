@@ -436,6 +436,8 @@ bool CApplication::SetupNetwork()
 
 bool CApplication::Create()
 {
+  CApplicationMessenger::GetInstance().SetMainThreadId(CThread::GetCurrentThreadId());
+
   m_ServiceManager.reset(new CServiceManager());
   if (!m_ServiceManager->Init1())
   {
@@ -2898,6 +2900,8 @@ void CApplication::Stop(int exitCode)
     m_AppFocused = false;
     m_ExitCode = exitCode;
     CLog::Log(LOGNOTICE, "stop all");
+
+    CApplicationMessenger::GetInstance().SignalShutdown();
 
     // cancel any jobs from the jobmanager
     CJobManager::GetInstance().CancelJobs();
