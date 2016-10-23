@@ -35,7 +35,6 @@
 #define DLLEXPORT
 #endif
 
-using namespace std;
 using namespace V1::KodiAPI::PVR;
 
 extern "C"

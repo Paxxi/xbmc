@@ -32,7 +32,6 @@
 #define DLLEXPORT
 #endif
 
-using namespace std;
 using namespace V1::KodiAPI::AudioEngine;
 
 #define LIBRARY_NAME "libKODI_audioengine"

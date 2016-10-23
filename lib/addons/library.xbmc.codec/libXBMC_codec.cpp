@@ -32,7 +32,6 @@
 #define DLLEXPORT
 #endif
 
-using namespace std;
 using namespace V1::KodiAPI::Codec;
 
 extern "C"

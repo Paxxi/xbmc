@@ -32,7 +32,6 @@
 #define DLLEXPORT
 #endif
 
-using namespace std;
 using namespace V1::KodiAPI::GUI;
 
 extern "C"
@@ -620,7 +619,7 @@ int CAddonGUIProgressControl::GetInfo() const
   return ((CB_GUILib*)m_cb)->Control_Progress_GetInfo(((AddonCB*)m_Handle)->addonData, m_ProgressHandle);
 }
 
-string CAddonGUIProgressControl::GetDescription() const
+std::string CAddonGUIProgressControl::GetDescription() const
 {
   if (!m_ProgressHandle)
     return "";
@@ -657,7 +656,7 @@ void CAddonGUISliderControl::SetVisible(bool yesNo)
     ((CB_GUILib*)m_cb)->Control_Slider_SetVisible(((AddonCB*)m_Handle)->addonData, m_SliderHandle, yesNo);
 }
 
-string CAddonGUISliderControl::GetDescription() const
+  std::string CAddonGUISliderControl::GetDescription() const
 {
   if (!m_SliderHandle)
     return "";
@@ -764,7 +763,7 @@ void CAddonGUISettingsSliderControl::SetText(const char *label)
     ((CB_GUILib*)m_cb)->Control_SettingsSlider_SetText(((AddonCB*)m_Handle)->addonData, m_SettingsSliderHandle, label);
 }
 
-string CAddonGUISettingsSliderControl::GetDescription() const
+std::string CAddonGUISettingsSliderControl::GetDescription() const
 {
   if (!m_SettingsSliderHandle)
     return "";

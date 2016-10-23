@@ -4,7 +4,6 @@
 #include "smallfn.cpp"
 #include <memory>
 
-using namespace std;
 
 #ifdef _DJGPP
 extern "C" char **__crt0_glob_function (char *arg) { return 0; }
@@ -146,7 +145,7 @@ int urarlib_get(char *rarfile, char *targetPath, char *fileToExtract, char *libp
   int bRes = 1;
 
   // Set the arguments for the extract command
-  auto_ptr<CommandData> pCmd (new CommandData);
+  std::auto_ptr<CommandData> pCmd (new CommandData);
 
   if( pCmd.get() )
   {
@@ -179,7 +178,7 @@ int urarlib_get(char *rarfile, char *targetPath, char *fileToExtract, char *libp
       }
 
     // Opent the archive    
-    auto_ptr<Archive> pArc( new Archive(pCmd.get()) );
+    std::auto_ptr<Archive> pArc( new Archive(pCmd.get()) );
     
     if( pArc.get() )
     {
@@ -188,7 +187,7 @@ int urarlib_get(char *rarfile, char *targetPath, char *fileToExtract, char *libp
 
       if (pArc->IsOpened() && pArc->IsArchive(true))
       {
-        auto_ptr<CmdExtract> pExtract( new CmdExtract );
+        std::auto_ptr<CmdExtract> pExtract( new CmdExtract );
         
         if( pExtract.get() )
         {
@@ -281,7 +280,7 @@ int urarlib_list(char *rarfile, ArchiveList_struct **ppList, char *libpassword, 
   InitCRC();
 
   // Set the arguments for the extract command
-  auto_ptr<CommandData> pCmd( new CommandData );
+  std::auto_ptr<CommandData> pCmd( new CommandData );
 
   {
     strcpy(pCmd->Command, "L");
@@ -297,7 +296,7 @@ int urarlib_list(char *rarfile, ArchiveList_struct **ppList, char *libpassword, 
     }
 
     // Opent the archive
-    auto_ptr<Archive> pArc( new Archive(pCmd.get()) );
+    std::auto_ptr<Archive> pArc( new Archive(pCmd.get()) );
     if ( pArc.get() )
     {
       if (!pArc->WOpen(rarfile,NULL))

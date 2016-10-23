@@ -35,7 +35,6 @@
 #endif
 
 
-using namespace std;
 using namespace ADDON;
 using namespace V1::KodiAPI::AddOn;
 
