@@ -31,6 +31,11 @@ public:
   explicit CTextureBundle(bool useXBT);
   ~CTextureBundle() = default;
 
+  CTextureBundle(const CTextureBundle& other) = delete;
+  CTextureBundle(CTextureBundle&& other) noexcept = default;
+  CTextureBundle& operator=(const CTextureBundle& other) = delete;
+  CTextureBundle& operator=(CTextureBundle&& other) noexcept = default;
+
   void SetThemeBundle(bool themeBundle);
   bool HasFile(const std::string& Filename);
   void GetTexturesFromPath(const std::string &path, std::vector<std::string> &textures);

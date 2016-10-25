@@ -19,34 +19,16 @@
  *
  */
 
-#include <memory>
-#include <string>
 #include <vector>
 
-#include <stdint.h>
+class CXBTFFile;
+class CURL;
 
-#include "XBTF.h"
-#include "URL.h"
-
-class CXBTFReader : public CXBTFBase
+namespace KODI
 {
-public:
-  CXBTFReader();
-  ~CXBTFReader();
-
-  bool Open(const std::string& path);
-  bool Open(const CURL& url);
-  bool IsOpen() const;
-  bool IsLoaded() const;
-  void Close();
-
-  time_t GetLastModificationTimestamp() const;
-
-  bool Load(const CXBTFFrame& frame, unsigned char* buffer) const;
-
-private:
-  std::string m_path;
-  FILE* m_file;
-};
-
-typedef std::shared_ptr<CXBTFReader> CXBTFReaderPtr;
+namespace GUILIB
+{
+bool HasTextureFiles(const CURL& path);
+bool GetTextureFiles(const CURL& path, std::vector<CXBTFFile>& files);
+}
+}

@@ -43,7 +43,6 @@ public:
 
   bool GetReader(const CURL& path, CXBTFReaderPtr& reader) const;
 
-  void Release(const CURL& path);
 
 private:
   CXbtManager();

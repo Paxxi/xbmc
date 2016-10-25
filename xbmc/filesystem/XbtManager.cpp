@@ -66,15 +66,6 @@ bool CXbtManager::GetReader(const CURL& path, CXBTFReaderPtr& reader) const
   return true;
 }
 
-void CXbtManager::Release(const CURL& path)
-{
-  const auto& it = GetReader(path);
-  if (it == m_readers.end())
-    return;
-
-  RemoveReader(it);
-}
-
 CXbtManager::XBTFReaders::iterator CXbtManager::GetReader(const CURL& path) const
 {
   return GetReader(NormalizePath(path));

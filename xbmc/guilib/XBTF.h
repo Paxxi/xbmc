@@ -116,6 +116,7 @@ public:
 
   uint64_t GetHeaderSize() const;
 
+  bool HasFiles() const { return !m_files.empty(); }
   bool Exists(const std::string& name) const;
   bool Get(const std::string& name, CXBTFFile& file) const;
   std::vector<CXBTFFile> GetFiles() const;

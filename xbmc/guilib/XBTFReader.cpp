@@ -179,9 +179,22 @@ bool CXBTFReader::Open(const std::string& path)
   return true;
 }
 
+bool CXBTFReader::Open(const CURL& url)
+{
+  if (url.IsProtocol("xbt"))
+    return Open(url.GetHostName());
+
+  return Open(url.Get());
+}
+
 bool CXBTFReader::IsOpen() const
 {
   return m_file != nullptr;
+}
+
+bool CXBTFReader::IsLoaded() const
+{
+  return !m_files.empty();
 }
 
 void CXBTFReader::Close()
@@ -191,9 +204,6 @@ void CXBTFReader::Close()
     fclose(m_file);
     m_file = nullptr;
   }
-
-  m_path.clear();
-  m_files.clear();
 }
 
 time_t CXBTFReader::GetLastModificationTimestamp() const

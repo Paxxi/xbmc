@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -19,34 +18,34 @@
  *
  */
 
-#include <memory>
-#include <string>
-#include <vector>
+#include "XBTFHelpers.h"
 
-#include <stdint.h>
-
-#include "XBTF.h"
+#include "guilib/XBTF.h"
+#include "guilib/XBTFReader.h"
 #include "URL.h"
 
-class CXBTFReader : public CXBTFBase
+namespace KODI
 {
-public:
-  CXBTFReader();
-  ~CXBTFReader();
+namespace GUILIB
+{
+bool HasTextureFiles (const CURL& path)
+{
+  CXBTFReader reader;
+  if (!reader.Open(path))
+    return false;
 
-  bool Open(const std::string& path);
-  bool Open(const CURL& url);
-  bool IsOpen() const;
-  bool IsLoaded() const;
-  void Close();
+  return reader.HasFiles();
+}
 
-  time_t GetLastModificationTimestamp() const;
+bool GetTextureFiles(const CURL& path, std::vector<CXBTFFile>& files)
+{
+  CXBTFReader reader;
+  if (!reader.Open(path))
+    return false;
 
-  bool Load(const CXBTFFrame& frame, unsigned char* buffer) const;
+  files = reader.GetFiles();
 
-private:
-  std::string m_path;
-  FILE* m_file;
-};
-
-typedef std::shared_ptr<CXBTFReader> CXBTFReaderPtr;
+  return !files.empty();
+}
+}
+}

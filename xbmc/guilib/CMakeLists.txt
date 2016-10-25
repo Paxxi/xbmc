@@ -70,6 +70,7 @@ set(SOURCES DDSImage.cpp
             TextureManager.cpp
             VisibleEffect.cpp
             XBTF.cpp
+            XBTFHelpers.cpp
             XBTFReader.cpp)
 
 set(HEADERS DDSImage.h
@@ -160,6 +161,7 @@ set(HEADERS DDSImage.h
             VisibleEffect.h
             WindowIDs.h
             XBTF.h
+            XBTFHelpers.h
             XBTFReader.h)
 
 if(OPENGL_FOUND)
