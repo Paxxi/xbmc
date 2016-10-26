@@ -56,6 +56,7 @@ set(_nodefaultlibs_RELEASE libcmt)
 set(_nodefaultlibs_DEBUG libcmt msvcrt)
 foreach(_lib ${_nodefaultlibs_RELEASE})
   set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /NODEFAULTLIB:\"${_lib}\"")
+  set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} /NODEFAULTLIB:\"${_lib}\"")
 endforeach()
 foreach(_lib ${_nodefaultlibs_DEBUG})
   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /NODEFAULTLIB:\"${_lib}\"")
@@ -73,6 +74,7 @@ endforeach()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 # Minimize the size or the resulting DLLs
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF")
+set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:REF")
 
 
 # -------- Visual Studio options ---------
