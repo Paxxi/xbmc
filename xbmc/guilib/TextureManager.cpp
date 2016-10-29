@@ -300,7 +300,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
   int size = 0;
 
   // To avoid keeping Textures.xbt open and blocking skin updates we
-  // open and it close it here.
+  // make sure that we never leave this method with an open file handle
   auto deleter = [](CTextureBundleXBT* tex)
   {
     tex->Close();
@@ -562,8 +562,9 @@ void CGUITextureManager::Cleanup()
     i = m_vecTextures.erase(i);
   }
 
-  m_TexBundle[0] = std::move(CTextureBundleXBT(true));
-  m_TexBundle[1] = std::move(CTextureBundleXBT());
+  m_TexBundle[0] = CTextureBundleXBT();
+  m_TexBundle[1] = CTextureBundleXBT();
+
   FreeUnusedTextures();
 }
 

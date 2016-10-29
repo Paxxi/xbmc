@@ -64,7 +64,6 @@ set(SOURCES DDSImage.cpp
             Resolution.cpp
             Shader.cpp
             StereoscopicsManager.cpp
-            TextureBundle.cpp
             TextureBundleXBT.cpp
             Texture.cpp
             TextureManager.cpp
@@ -153,7 +152,6 @@ set(HEADERS DDSImage.h
             Shader.h
             StereoscopicsManager.h
             Texture.h
-            TextureBundle.h
             TextureBundleXBT.h
             TextureManager.h
             TransformMatrix.h

@@ -40,25 +40,9 @@
 #endif
 #endif
 
-CTextureBundleXBT::CTextureBundleXBT()
-  : CTextureBundleXBT(false)
-{
-}
-
-CTextureBundleXBT::CTextureBundleXBT(bool themeBundle)
-  : m_themeBundle{themeBundle}
-{
-  m_XBTFReader.reset(new CXBTFReader());
-}
-
-CTextureBundleXBT::~CTextureBundleXBT(void)
-{
-}
-
 bool CTextureBundleXBT::Open()
 {
   // Find the correct texture file (skin or theme)
-
   auto mediaDir = g_graphicsContext.GetMediaDir();
   if (mediaDir.empty())
   {
@@ -86,6 +70,9 @@ bool CTextureBundleXBT::Open()
   m_path = CSpecialProtocol::TranslatePathConvertCase(m_path);
 
   // Load the texture file
+  if (!m_XBTFReader)
+    m_XBTFReader.reset(new CXBTFReader());
+
   if (!m_XBTFReader->Open(CURL(m_path)))
     return false;
 
@@ -99,13 +86,13 @@ bool CTextureBundleXBT::Open()
 
 void CTextureBundleXBT::Close() const
 {
-  if (m_XBTFReader && m_XBTFReader->IsOpen())
+  if (m_XBTFReader)
     m_XBTFReader->Close();
 }
 
 bool CTextureBundleXBT::HasFile(const std::string& filename) const
 {
-  if (!m_XBTFReader || !m_XBTFReader->IsLoaded())
+  if (!m_XBTFReader || !m_XBTFReader->HasFiles())
     return false;
 
   return m_XBTFReader->Exists(Normalize(filename));
@@ -116,7 +103,7 @@ void CTextureBundleXBT::GetTexturesFromPath(const std::string &path, std::vector
   if (path.size() > 1 && path[1] == ':')
     return;
 
-  if (!m_XBTFReader || !m_XBTFReader->IsLoaded())
+  if (!m_XBTFReader || !m_XBTFReader->HasFiles())
     return;
 
   auto testPath = Normalize(path);

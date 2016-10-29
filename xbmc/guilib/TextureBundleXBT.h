@@ -33,15 +33,6 @@ class CXBTFFrame;
 class CTextureBundleXBT
 {
 public:
-  CTextureBundleXBT();
-  explicit CTextureBundleXBT(bool themeBundle);
-  ~CTextureBundleXBT();
-
-  CTextureBundleXBT(const CTextureBundleXBT& other) = delete;
-  CTextureBundleXBT(CTextureBundleXBT&& other) noexcept = default;
-  CTextureBundleXBT& operator=(const CTextureBundleXBT& other) = delete;
-  CTextureBundleXBT& operator=(CTextureBundleXBT&& other) noexcept = default;
-
   bool Open();
   void Close() const;
 
@@ -61,7 +52,7 @@ public:
 private:
   bool ConvertFrameToTexture(const std::string& name, CXBTFFrame& frame, CBaseTexture** ppTexture) const;
 
-  bool m_themeBundle;
+  bool m_themeBundle{false};
   std::string m_path;
   std::unique_ptr<CXBTFReader> m_XBTFReader;
 };
