@@ -96,6 +96,11 @@ bool CTextureBundleXBT::HasFile(const std::string& filename) const
   return m_XBTFReader->Exists(Normalize(filename));
 }
 
+std::vector<CXBTFFile> CTextureBundleXBT::GetFiles() const
+{
+  return m_XBTFReader->GetFiles();
+}
+
 void CTextureBundleXBT::GetTexturesFromPath(const std::string &path, std::vector<std::string> &textures) const
 {
   if (path.size() > 1 && path[1] == ':')

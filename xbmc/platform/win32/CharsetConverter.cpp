@@ -58,7 +58,7 @@ std::wstring ToW(const char* str, size_t length)
   if (result == 0)
     return std::wstring();
 
-  return std::wstring(newStr.get());
+  return std::wstring(newStr.get(), result);
 }
 
 std::wstring ToW(const std::string& str)

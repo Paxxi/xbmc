@@ -618,6 +618,8 @@ bool CApplication::Create()
   if (!CSettings::GetInstance().Initialize())
     return false;
 
+  g_TextureManager.LoadBundle();
+
   g_powerManager.SetDefaults();
 
   // load the actual values
@@ -1700,6 +1702,8 @@ bool CApplication::LoadSkin(const std::string& skinID)
   CLog::Log(LOGINFO, "  load fonts for skin...");
   g_graphicsContext.SetMediaDir(skin->Path());
   g_directoryCache.ClearSubPaths(skin->Path());
+
+  g_TextureManager.LoadBundle();
 
   g_colorManager.Load(CSettings::GetInstance().GetString(CSettings::SETTING_LOOKANDFEEL_SKINCOLORS));
 
@@ -4559,8 +4563,6 @@ void CApplication::ProcessSlow()
   g_curlInterface.CheckIdle();
 
   g_largeTextureManager.CleanupUnusedImages();
-
-  g_TextureManager.FreeUnusedTextures(5000);
 
 #ifdef HAS_DVD_DRIVE
   // checks whats in the DVD drive and tries to autostart the content (xbox games, dvd, cdda, avi files...)

@@ -110,8 +110,9 @@ public:
 
   bool HasTexture(const std::string &textureName, std::string *path = nullptr, int *bundle = nullptr, int *size = nullptr);
   static bool CanLoad(const std::string &texturePath); ///< Returns true if the texture manager can load this texture
-  const CTextureArray& Load(const std::string& strTextureName, bool checkBundleOnly = false);
-  void ReleaseTexture(const std::string& strTextureName, bool immediately = false);
+  void Load(const CTextureBundleXBT& bundle, const std::string& strTextureName);
+  CTextureArray GetTexture(const std::string& strTextureName);
+  bool LoadBundle();
   void Cleanup();
   void Dump() const;
   uint32_t GetMemoryUsage() const;
@@ -123,17 +124,12 @@ public:
   void SetTexturePath(const std::string &texturePath);    ///< Set a single path as the path to check when loading media (clear then add)
   void RemoveTexturePath(const std::string &texturePath); ///< Remove a path from the paths to check when loading media
 
-  void FreeUnusedTextures(unsigned int timeDelay = 0); ///< Free textures (called from app thread only)
-  void ReleaseHwTexture(unsigned int texture);
 protected:
-  const CTextureArray& GetTextureGif(const std::string& strTextureName, CTextureArray& emptyTexture, int bundle);
-  const CTextureArray& GetTextureGifOrPng(const std::string& strTextureName, std::string strPath, CTextureArray& emptyTexture);
-  const CTextureArray& GetTexture(const std::string& strTextureName, std::string strPath, CTextureArray& emptyTexture, int bundle);
-  std::vector<CTextureMap*> m_vecTextures;
-  std::list<std::pair<CTextureMap*, unsigned int> > m_unusedTextures;
-  std::vector<unsigned int> m_unusedHwTextures;
-  // we have 2 texture bundles (one for the base textures, one for the theme)
-  CTextureBundleXBT m_TexBundle[2];
+  bool LoadBundleInternal(bool themeBundle);
+  void LoadTextureGif(const CTextureBundleXBT& bundle, const std::string& strTextureName);
+  void LoadTextureGifOrPng(const CTextureBundleXBT& bundle, const std::string& strTextureName, std::string strPath);
+  void LoadTexture(const CTextureBundleXBT& bundle, const std::string& strTextureName, std::string strPath);
+  std::vector<std::unique_ptr<CTextureMap>> m_vecTextures;
 
   std::vector<std::string> m_texturePaths;
   CCriticalSection m_section;

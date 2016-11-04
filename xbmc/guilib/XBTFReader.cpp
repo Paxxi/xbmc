@@ -27,6 +27,7 @@
 
 #include "URL.h"
 #include "utils/EndianSwap.h"
+#include "CharsetConverter.h"
 
 #ifdef TARGET_WINDOWS
 #include "filesystem/SpecialProtocol.h"
@@ -74,8 +75,8 @@ bool CXBTFReader::Open(const CURL& url)
     return false;
 
 #ifdef TARGET_WINDOWS
-  std::wstring strPathW;
-  g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(m_path), strPathW, false);
+  auto strPathW = KODI::PLATFORM::WINDOWS::ToW(
+    CSpecialProtocol::TranslatePath(m_path));
   m_file.attach(_wfopen(strPathW.c_str(), L"rb"));
 #else
   m_file.attach(fopen(m_path.c_str(), "rb"));

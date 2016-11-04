@@ -298,7 +298,7 @@ bool CGUITextureBase::AllocResources()
     if (!IsAllocated())
     {
       CTextureArray texture;
-      texture = g_TextureManager.Load(m_info.filename, true);
+      texture = g_TextureManager.GetTexture(m_info.filename);
       if (texture.size())
       {
         m_isAllocated = NORMAL;
@@ -326,7 +326,7 @@ bool CGUITextureBase::AllocResources()
   }
   else if (!IsAllocated())
   {
-    CTextureArray texture = g_TextureManager.Load(m_info.filename);
+    CTextureArray texture = g_TextureManager.GetTexture(m_info.filename);
 
     // set allocated to true even if we couldn't load the image to save
     // us hitting the disk every frame
@@ -342,7 +342,7 @@ bool CGUITextureBase::AllocResources()
   // load the diffuse texture (if necessary)
   if (!m_info.diffuse.empty())
   {
-    m_diffuse = g_TextureManager.Load(m_info.diffuse);
+    m_diffuse = g_TextureManager.GetTexture(m_info.diffuse);
   }
 
   CalculateSize();
@@ -452,11 +452,7 @@ void CGUITextureBase::FreeResources(bool immediately /* = false */)
 {
   if (m_isAllocated == LARGE || m_isAllocated == LARGE_FAILED)
     g_largeTextureManager.ReleaseImage(m_info.filename, immediately || (m_isAllocated == LARGE_FAILED));
-  else if (m_isAllocated == NORMAL && m_texture.size())
-    g_TextureManager.ReleaseTexture(m_info.filename, immediately);
 
-  if (m_diffuse.size())
-    g_TextureManager.ReleaseTexture(m_info.diffuse, immediately);
   m_diffuse.Reset();
 
   m_texture.Reset();
