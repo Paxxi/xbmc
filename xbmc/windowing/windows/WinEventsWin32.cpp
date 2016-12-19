@@ -401,6 +401,7 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
   XBMC_Event newEvent;
   ZeroMemory(&newEvent, sizeof(newEvent));
   static HDEVNOTIFY hDeviceNotify;
+  static HPOWERNOTIFY hPowerNotify = nullptr;
 
 #if 0
   if (uMsg == WM_NCCREATE)
@@ -425,6 +426,7 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     long fEvents = SHCNE_DRIVEADD | SHCNE_DRIVEREMOVED | SHCNE_MEDIAREMOVED | SHCNE_MEDIAINSERTED;
     SHChangeNotifyRegister(hWnd, SHCNRF_ShellLevel | SHCNRF_NewDelivery, fEvents, WM_MEDIA_CHANGE, 1, &shcne);
     RegisterDeviceInterfaceToHwnd(USB_HID_GUID, hWnd, &hDeviceNotify);
+    hPowerNotify = RegisterPowerSettingNotification(g_hWnd, &GUID_SYSTEM_AWAYMODE, DEVICE_NOTIFY_WINDOW_HANDLE);
     return 0;
   }
 
@@ -449,6 +451,11 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
           hDeviceNotify = 0;
         else
           CLog::Log(LOGNOTICE, "%s: UnregisterDeviceNotification failed (%d)", __FUNCTION__, GetLastError());
+      }
+      if (hPowerNotify)
+      {
+        UnregisterPowerSettingNotification(hPowerNotify);
+        hPowerNotify = nullptr;
       }
       newEvent.type = XBMC_QUIT;
       m_pEventFunc(newEvent);
@@ -788,7 +795,21 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
         CLog::Log(LOGDEBUG,"WM_POWERBROADCAST: PBT_APMRESUMEAUTOMATIC event was sent");
         CWin32PowerSyscall::SetOnResume();
       }
+      else if (wParam == PBT_POWERSETTINGCHANGE)
+      {
+        CLog::Log(LOGDEBUG,"WM_POWERBROADCAST: PBT_POWERSETTINGCHANGE event was sent");
+        auto setting = reinterpret_cast<POWERBROADCAST_SETTING*>(lParam);
+        if (setting->PowerSetting == GUID_SYSTEM_AWAYMODE)
+        {
+          if (reinterpret_cast<DWORD>(setting->Data) == 1)
+            CWin32PowerSyscall::SetOnSuspend();
+          else
+            CWin32PowerSyscall::SetOnResume();
+        }
+        
+      }
       break;
+      
     case WM_DEVICECHANGE:
       {
         switch(wParam)
