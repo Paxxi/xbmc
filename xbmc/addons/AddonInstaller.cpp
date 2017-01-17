@@ -445,7 +445,7 @@ void CAddonInstaller::InstallUpdates()
 int64_t CAddonInstaller::EnumeratePackageFolder(std::map<std::string,CFileItemList*>& result)
 {
   CFileItemList items;
-  CDirectory::GetDirectory("special://home/addons/packages/",items,".zip",DIR_FLAG_NO_FILE_DIRS);
+  CDirectory::GetDirectory("special://temp/packages/",items,".zip",DIR_FLAG_NO_FILE_DIRS);
   int64_t size = 0;
   for (int i = 0; i < items.Size(); i++)
   {
@@ -508,8 +508,8 @@ bool CAddonInstallJob::DoWork()
     // packages folder, then extracting from the local .zip package into the addons folder
     // Both these functions are achieved by "copying" using the vfs.
 
-    std::string dest = "special://home/addons/packages/";
-    std::string package = URIUtils::AddFileToFolder("special://home/addons/packages/",
+    std::string dest = "special://temp/packages/";
+    std::string package = URIUtils::AddFileToFolder("special://temp/packages/",
                                                     URIUtils::GetFileName(m_addon->Path()));
     if (URIUtils::HasSlashAtEnd(m_addon->Path()))
     { // passed in a folder - all we need do is copy it across
