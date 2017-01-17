@@ -273,7 +273,7 @@ void CGUIDialogAddonInfo::OnUpdate()
   database.GetAvailableVersions(m_localAddon->ID(), versions);
 
   CFileItemList items;
-  if (XFILE::CDirectory::GetDirectory("special://home/addons/packages/", items, ".zip", DIR_FLAG_NO_FILE_DIRS))
+  if (XFILE::CDirectory::GetDirectory("special:/temp/packages/", items, ".zip", DIR_FLAG_NO_FILE_DIRS))
   {
     for (int i = 0; i < items.Size(); ++i)
     {
@@ -310,7 +310,7 @@ void CGUIDialogAddonInfo::OnUpdate()
 
       if (versions[i].second == LOCAL_CACHE)
         CAddonInstaller::GetInstance().InstallFromZip(StringUtils::Format(
-            "special://home/addons/packages/%s-%s.zip", m_localAddon->ID().c_str(),
+            "special:/temp/packages/%s-%s.zip", m_localAddon->ID().c_str(),
             versions[i].first.asString().c_str()));
       else
         CAddonInstaller::GetInstance().Install(m_localAddon->ID(), versions[i].first, versions[i].second);
