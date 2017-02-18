@@ -367,10 +367,6 @@ bool CApplication::OnEvent(XBMC_Event& newEvent)
   return true;
 }
 
-extern "C" void __stdcall init_emu_environ();
-extern "C" void __stdcall update_emu_environ();
-extern "C" void __stdcall cleanup_emu_environ();
-
 //
 // Utility function used to copy files from the application bundle
 // over to the user data directory in Application Support/Kodi.
@@ -488,9 +484,6 @@ bool CApplication::Create()
     fprintf(stderr,"Could not init logging classes. Log folder error (%s)\n", CSpecialProtocol::TranslatePath("special://logpath").c_str());
     return false;
   }
-
-  // Init our DllLoaders emu env
-  init_emu_environ();
 
   CProfilesManager::GetInstance().Load();
 
@@ -626,8 +619,6 @@ bool CApplication::Create()
   CDirectory::Create(CProfilesManager::GetInstance().GetUserDataFolder());
   CDirectory::Create(CProfilesManager::GetInstance().GetProfileUserDataFolder());
   CProfilesManager::GetInstance().CreateProfileFolders();
-
-  update_emu_environ();//apply the GUI settings
 
   //! @todo - move to CPlatformXXX
 #ifdef TARGET_WINDOWS
@@ -2988,8 +2979,6 @@ void CApplication::Stop(int exitCode)
   {
     CLog::Log(LOGERROR, "Exception in CApplication::Stop()");
   }
-
-  cleanup_emu_environ();
 
   Sleep(200);
 }

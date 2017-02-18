@@ -26,7 +26,6 @@
 #include "Win32DllLoader.h"
 #endif
 #include "DllLoader.h"
-#include "dll_tracker.h" // for python unload hack
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"

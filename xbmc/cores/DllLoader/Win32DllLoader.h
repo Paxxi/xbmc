@@ -20,30 +20,24 @@
  *
  */
 
-#include <vector>
+#include <string>
 
 #include "LibraryLoader.h"
 
 class Win32DllLoader : public LibraryLoader
 {
 public:
-  class Import
-  {
-  public:
-    void *table;
-    DWORD function;
-  };
 
   Win32DllLoader(const std::string& dll, bool isSystemDll);
   ~Win32DllLoader();
 
-  virtual bool Load();
-  virtual void Unload();
+  bool Load() override;
+  void Unload() override;
 
-  virtual int ResolveExport(const char* symbol, void** ptr, bool logging = true);
-  virtual bool IsSystemDll();
-  virtual HMODULE GetHModule();
-  virtual bool HasSymbols();
+  int ResolveExport(const char* symbol, void** ptr, bool logging = true) override;
+  bool IsSystemDll() override;
+  HMODULE GetHModule() override;
+  bool HasSymbols() override;
 
 private:
   void OverrideImports(const std::string &dll);
@@ -54,8 +48,5 @@ private:
 
   HMODULE m_dllHandle;
   bool bIsSystemDll;
-
-  std::vector<Import> m_overriddenImports;
-  std::vector<HMODULE> m_referencedDlls;
 };
 
