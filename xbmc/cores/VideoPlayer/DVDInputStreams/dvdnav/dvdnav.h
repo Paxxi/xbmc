@@ -1,18 +1,18 @@
-/* 
+/*
  * Copyright (C) 2001 Rich Wareham <richwareham@users.sourceforge.net>
- * 
+ *
  * This file is part of libdvdnav, a DVD navigation library.
- * 
+ *
  * libdvdnav is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * libdvdnav is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with libdvdnav; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -27,6 +27,7 @@
 #define LIBDVDNAV_DVDNAV_H
 
 #define MP_DVDNAV 1
+#define DVDNAV_VERSION 50400
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +56,8 @@ typedef struct dvdnav_s dvdnav_t;
 /* Status as reported by most of libdvdnav's functions */
 typedef int32_t dvdnav_status_t;
 
+typedef dvd_reader_stream_cb dvdnav_stream_cb;
+
 /*
  * Unless otherwise stated, all functions return DVDNAV_STATUS_OK if
  * they succeeded, otherwise DVDNAV_STATUS_ERR is returned and the error may
@@ -79,18 +82,25 @@ typedef int32_t dvdnav_status_t;
  */
 
 /*
- * Attempts to open the DVD drive at the specified path and pre-cache
- * the CSS-keys. libdvdread is used to access the DVD, so any source
- * supported by libdvdread can be given with "path". Currently,
- * libdvdread can access: DVD drives, DVD image files, DVD file-by-file
- * copies.
+ * Attempts to open the DVD drive at the specified path or using external
+ * seek/read functions (dvdnav_open_stream) and pre-cache the CSS-keys.
+ * libdvdread is used to access the DVD, so any source supported by libdvdread
+ * can be given with "path" or "stream_cb".  Currently, using dvdnav_open,
+ * libdvdread can access : DVD drives, DVD image files, DVD file-by-file
+ * copies. Using dvdnav_open_stream, libdvdread can access any kind of DVD
+ * storage via custom implementation of seek/read functions.
  *
  * The resulting dvdnav_t handle will be written to *dest.
  */
 dvdnav_status_t dvdnav_open(dvdnav_t **dest, const char *path);
+dvdnav_status_t
+dvdnav_open_stream(dvdnav_t **dest, void *stream, dvdnav_stream_cb *stream_cb);
+
+dvdnav_status_t dvdnav_dup(dvdnav_t **dest, dvdnav_t *src);
+dvdnav_status_t dvdnav_free_dup(dvdnav_t * _this);
 
 /*
- * Closes a dvdnav_t previously opened with dvdnav_open(), freeing any 
+ * Closes a dvdnav_t previously opened with dvdnav_open(), freeing any
  * memory associated with it.
  */
 dvdnav_status_t dvdnav_close(dvdnav_t *self);
@@ -126,7 +136,7 @@ const char* dvdnav_err_to_string(dvdnav_t *self);
  * Sets the region mask (bit 0 set implies region 1, bit 1 set implies
  * region 2, etc) of the virtual machine. Generally you will only need to set
  * this if you are playing RCE discs which query the virtual machine as to its
- * region setting. 
+ * region setting.
  *
  * This has _nothing_ to do with the region setting of the DVD drive.
  */
@@ -185,7 +195,7 @@ dvdnav_status_t dvdnav_get_PGC_positioning_flag(dvdnav_t *self, int32_t *pgc_bas
  */
 
 /*
- * Attempts to get the next block off the DVD and copies it into the buffer 'buf'. 
+ * Attempts to get the next block off the DVD and copies it into the buffer 'buf'.
  * If there is any special actions that may need to be performed, the value
  * pointed to by 'event' gets set accordingly.
  *
@@ -199,7 +209,7 @@ dvdnav_status_t dvdnav_get_PGC_positioning_flag(dvdnav_t *self, int32_t *pgc_bas
  * See the dvdnav_events.h header for information on the various events.
  */
 dvdnav_status_t dvdnav_get_next_block(dvdnav_t *self, uint8_t *buf,
-				      int32_t *event, int32_t *len);
+                                      int32_t *event, int32_t *len);
 
 /*
  * This basically does the same as dvdnav_get_next_block. The only difference is
@@ -210,7 +220,7 @@ dvdnav_status_t dvdnav_get_next_block(dvdnav_t *self, uint8_t *buf,
  * dvdnav_free_cache_block().
  */
 dvdnav_status_t dvdnav_get_next_cache_block(dvdnav_t *self, uint8_t **buf,
-					    int32_t *event, int32_t *len);
+                                            int32_t *event, int32_t *len);
 
 /*
  * All buffers which came from the internal cache (when dvdnav_get_next_cache_block()
@@ -299,7 +309,7 @@ uint32_t dvdnav_describe_title_chapters(dvdnav_t *self, int32_t title, uint64_t 
  * Currently unimplemented!
  */
 dvdnav_status_t dvdnav_part_play_auto_stop(dvdnav_t *self, int32_t title,
-					   int32_t part, int32_t parts_to_play);
+                                           int32_t part, int32_t parts_to_play);
 
 /*
  * Play the specified title starting from the specified time.
@@ -307,7 +317,7 @@ dvdnav_status_t dvdnav_part_play_auto_stop(dvdnav_t *self, int32_t title,
  * Currently unimplemented!
  */
 dvdnav_status_t dvdnav_time_play(dvdnav_t *self, int32_t title,
-				 uint64_t time);
+                                 uint64_t time);
 
 /*
  * Stop playing the current position and jump to the specified menu.
@@ -322,25 +332,25 @@ dvdnav_status_t dvdnav_menu_call(dvdnav_t *self, DVDMenuID_t menu);
  * is set to the current menu's ID.
  */
 dvdnav_status_t dvdnav_current_title_info(dvdnav_t *self, int32_t *title,
-					  int32_t *part);
+                                          int32_t *part);
 
 /*
  * Return the title number, pgcn and pgn currently being played.
  * A title of 0 indicates, we are in a menu.
  */
 dvdnav_status_t dvdnav_current_title_program(dvdnav_t *self, int32_t *title,
-					  int32_t *pgcn, int32_t *pgn);
+                                          int32_t *pgcn, int32_t *pgn);
 
 /*
  * Return the current position (in blocks) within the current
  * title and the length (in blocks) of said title.
- * 
+ *
  * Current implementation is wrong and likely to behave unpredictably!
  * Use is discouraged!
  */
 dvdnav_status_t dvdnav_get_position_in_title(dvdnav_t *self,
-					     uint32_t *pos,
-					     uint32_t *len);
+                                             uint32_t *pos,
+                                             uint32_t *len);
 
 /*
  * This function is only available for compatibility reasons.
@@ -369,8 +379,8 @@ dvdnav_status_t dvdnav_part_search(dvdnav_t *self, int32_t part);
  * 'origin' can be one of SEEK_SET, SEEK_CUR, SEEK_END as defined in
  * fcntl.h.
  */
-dvdnav_status_t dvdnav_sector_search(dvdnav_t *self, 
-				     uint64_t offset, int32_t origin);
+dvdnav_status_t dvdnav_sector_search(dvdnav_t *self,
+                                     int64_t offset, int32_t origin);
 
 /*
  returns the current stream time in PTS ticks as reported by the IFO structures
@@ -379,13 +389,22 @@ dvdnav_status_t dvdnav_sector_search(dvdnav_t *self,
 int64_t dvdnav_get_current_time(dvdnav_t *self);
 
 /*
+ * Find the nearest vobu and jump to it
+ *
+ * Alternative to dvdnav_time_search
+ */
+dvdnav_status_t dvdnav_jump_to_sector_by_time(dvdnav_t *self, 
+                                              uint64_t time_in_pts_ticks, int32_t mode);
+
+/*
  * Stop playing the current position and start playback of the title
  * from the specified timecode.
  *
- * Currently implemented using interpolation, which is slightly inaccurate.
+ * Currently implemented using interpolation. That interpolation is slightly
+ * inaccurate.
  */
-dvdnav_status_t dvdnav_time_search(dvdnav_t *self, 
-				   uint64_t time);
+dvdnav_status_t dvdnav_time_search(dvdnav_t *self,
+                                   uint64_t time);
 
 /*
  * Stop playing current position and play the "GoUp"-program chain.
@@ -420,7 +439,7 @@ dvdnav_status_t dvdnav_next_pg_search(dvdnav_t *self);
  * relative position in and the length of the current program chain.
  */
 dvdnav_status_t dvdnav_get_position(dvdnav_t *self, uint32_t *pos,
-				    uint32_t *len);
+                                    uint32_t *len);
 
 
 /*********************************************************************
@@ -438,7 +457,7 @@ dvdnav_status_t dvdnav_get_position(dvdnav_t *self, uint32_t *pos,
  */
 
 /*
- * Get the currently highlighted button 
+ * Get the currently highlighted button
  * number (1..36) or 0 if no button is highlighted.
  */
 dvdnav_status_t dvdnav_get_current_highlight(dvdnav_t *self, int32_t *button);
@@ -465,7 +484,7 @@ dsi_t* dvdnav_get_current_nav_dsi(dvdnav_t *self);
  * Get the area associated with a certain button.
  */
 dvdnav_status_t dvdnav_get_highlight_area(pci_t *nav_pci , int32_t button, int32_t mode,
-					  dvdnav_highlight_area_t *highlight);
+                                          dvdnav_highlight_area_t *highlight);
 
 /*
  * Move button highlight around as suggested by function name (e.g. with arrow keys).
@@ -510,7 +529,7 @@ dvdnav_status_t dvdnav_mouse_activate(dvdnav_t *self, pci_t *pci, int32_t x, int
  * languages                                                         *
  *********************************************************************/
 
-/* 
+/*
  * The language codes expected by these functions are two character
  * codes as defined in ISO639.
  */
@@ -519,19 +538,19 @@ dvdnav_status_t dvdnav_mouse_activate(dvdnav_t *self, pci_t *pci, int32_t x, int
  * Set which menu language we should use per default.
  */
 dvdnav_status_t dvdnav_menu_language_select(dvdnav_t *self,
-					   char *code);
+                                           char *code);
 
 /*
  * Set which audio language we should use per default.
  */
 dvdnav_status_t dvdnav_audio_language_select(dvdnav_t *self,
-					    char *code);
+                                            char *code);
 
 /*
  * Set which spu language we should use per default.
  */
 dvdnav_status_t dvdnav_spu_language_select(dvdnav_t *self,
-					  char *code);
+                                          char *code);
 
 
 /*********************************************************************
@@ -559,7 +578,7 @@ dvdnav_status_t dvdnav_get_serial_string(dvdnav_t *self, const char **serial_str
  * Get video aspect code.
  * The aspect code does only change on VTS boundaries.
  * See the DVDNAV_VTS_CHANGE event.
- * 
+ *
  * 0 -- 4:3, 2 -- 16:9
  */
 uint8_t dvdnav_get_video_aspect(dvdnav_t *self);
@@ -597,7 +616,7 @@ uint16_t dvdnav_audio_stream_format(dvdnav_t *self, uint8_t stream);
 uint16_t dvdnav_audio_stream_channels(dvdnav_t *self, uint8_t stream);
 
 /*
- * Converts a *logical* subpicture stream id into country code 
+ * Converts a *logical* subpicture stream id into country code
  * (returns 0xffff if no such stream).
  */
 uint16_t dvdnav_spu_stream_to_lang(dvdnav_t *self, uint8_t stream);
@@ -669,7 +688,7 @@ dvdnav_status_t dvdnav_angle_change(dvdnav_t *self, int32_t angle);
  * Returns the current angle and number of angles present.
  */
 dvdnav_status_t dvdnav_get_angle_info(dvdnav_t *self, int32_t *current_angle,
-				      int32_t *number_of_angles);
+                                      int32_t *number_of_angles);
 
 /*********************************************************************
  * domain queries                                                    *
@@ -694,6 +713,8 @@ int8_t dvdnav_is_domain_vtsm(dvdnav_t *self);
  * Are we in the Video Title Set domain?
  */
 int8_t dvdnav_is_domain_vts(dvdnav_t *self);
+
+void dvdnav_free(void* pdata);
 
 /* XBMC added functions */
 int dvdnav_get_button_info(dvdnav_t* self, int alpha[2][4], int color[2][4]);

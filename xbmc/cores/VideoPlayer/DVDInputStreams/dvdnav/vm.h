@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2000, 2001 Håkan Hjort
  * Copyright (C) 2001 Rich Wareham <richwareham@users.sourceforge.net>
- * 
+ *
  * This file is part of libdvdnav, a DVD navigation library. It is modified
  * from a file originally part of the Ogle DVD player.
- * 
+ *
  * libdvdnav is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * libdvdnav is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with libdvdnav; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -40,16 +40,16 @@ typedef enum {
  */
 typedef struct {
   registers_t registers;
-  
-  domain_t  domain;
+
+  DVDDomain_t  domain;
   int       vtsN;         /* 0 is vmgm? */
   pgc_t    *pgc;          /* either this or 'int pgcN' is enough? */
   int       pgcN;         /* but provide pgcN for quick lookup */
-  int       pgN;          /* is this needed? can always fid pgN from cellN? */
+  int       pgN;          /* is this needed? can allways fid pgN from cellN? */
   int       cellN;
   int32_t   cell_restart; /* get cell to restart */
   int       blockN;
-  
+
   /* Resume info */
   int      rsm_vtsN;
   int      rsm_blockN;    /* of nav_packet */
@@ -61,7 +61,7 @@ typedef struct {
 typedef struct vm_position_s {
   int16_t  button;        /* Button highlighted */
   int32_t  vts;           /* vts number to use */
-  domain_t domain;        /* domain to use */
+  DVDDomain_t domain;     /* domain to use */
   int32_t  spu_channel;   /* spu channel to use */
   int32_t  angle_channel; /* angle channel to use */
   int32_t  audio_channel; /* audio channel to use */
@@ -127,7 +127,8 @@ dvd_reader_t *vm_get_dvd_reader(vm_t *vm);
 /* Basic Handling */
 int  vm_start(vm_t *vm);
 void vm_stop(vm_t *vm);
-int  vm_reset(vm_t *vm, const char *dvdroot);
+int  vm_reset(vm_t *vm, const char *dvdroot, void *stream,
+              dvdnav_stream_cb *stream_cb);
 
 /* copying and merging  - useful for try-running an operation */
 vm_t *vm_new_copy(vm_t *vm);
@@ -182,6 +183,8 @@ int vm_set_state(vm_t *vm, dvd_state_t *save_state);
 /* Debug */
 void vm_position_print(vm_t *vm, vm_position_t *position);
 #endif
+
+int ifoOpenNewVTSI(vm_t *vm, dvd_reader_t *dvd, int vtsN);
 
 /* XBMC added functions */
 vm_t* dvdnav_get_vm(dvdnav_t *self);

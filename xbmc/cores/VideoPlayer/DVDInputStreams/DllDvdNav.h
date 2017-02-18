@@ -49,6 +49,7 @@ class DllDvdNavInterface
 public:
   virtual ~DllDvdNavInterface() {}
   virtual dvdnav_status_t dvdnav_open(dvdnav_t **dest, const char *path)=0;
+  virtual dvdnav_status_t dvdnav_open_stream(dvdnav_t **dest, void *stream, dvdnav_stream_cb *stream_cb)=0;
   virtual dvdnav_status_t dvdnav_close(dvdnav_t *self)=0;
   virtual dvdnav_status_t dvdnav_reset(dvdnav_t *self)=0;
   virtual const char* dvdnav_err_to_string(dvdnav_t *self)=0;
@@ -98,6 +99,7 @@ public:
   virtual dvdnav_status_t dvdnav_get_audio_attr(dvdnav_t * self, int32_t streamid, audio_attr_t* audio_attributes)=0;
   virtual dvdnav_status_t dvdnav_get_spu_attr(dvdnav_t * self, int32_t streamid, subp_attr_t* stitle_attributes)=0;
   virtual dvdnav_status_t dvdnav_time_search(dvdnav_t * self, uint64_t timepos)=0;
+  virtual dvdnav_status_t dvdnav_jump_to_sector_by_time(dvdnav_t * p1, uint64_t p2, int32_t p3)=0;
   virtual int64_t dvdnav_convert_time(dvd_time_t *time)=0;
   virtual dvdnav_status_t dvdnav_get_state(dvdnav_t *self, dvd_state_t *save_state)=0;
   virtual dvdnav_status_t dvdnav_set_state(dvdnav_t *self, dvd_state_t *save_state)=0;
@@ -254,6 +256,7 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
   DECLARE_DLL_WRAPPER(DllDvdNav, DLL_PATH_LIBDVDNAV)
 
   DEFINE_METHOD2(dvdnav_status_t, dvdnav_open, (dvdnav_t **p1, const char *p2))
+  DEFINE_METHOD3(dvdnav_status_t, dvdnav_open_stream, (dvdnav_t **p1, void *p2, dvdnav_stream_cb *p3))
   DEFINE_METHOD1(dvdnav_status_t, dvdnav_close, (dvdnav_t *p1))
   DEFINE_METHOD1(dvdnav_status_t, dvdnav_reset, (dvdnav_t *p1))
   DEFINE_METHOD1(const char*, dvdnav_err_to_string, (dvdnav_t *p1))
@@ -319,6 +322,7 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
   DEFINE_METHOD3(int, dvdnav_get_video_resolution, (dvdnav_t* p1, uint32_t* p2, uint32_t* p3))
   BEGIN_METHOD_RESOLVE()
     RESOLVE_METHOD(dvdnav_open)
+    RESOLVE_METHOD(dvdnav_open_stream)
     RESOLVE_METHOD(dvdnav_close)
     RESOLVE_METHOD(dvdnav_reset)
     RESOLVE_METHOD(dvdnav_err_to_string)

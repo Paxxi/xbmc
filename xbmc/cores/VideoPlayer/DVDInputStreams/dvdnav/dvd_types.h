@@ -3,17 +3,17 @@
  *
  * This file is part of libdvdnav, a DVD navigation library. It is a modified
  * file originally part of the Ogle DVD player project.
- * 
+ *
  * libdvdnav is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * libdvdnav is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with libdvdnav; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -25,6 +25,8 @@
 
 #ifndef LIBDVDNAV_DVD_TYPES_H
 #define LIBDVDNAV_DVD_TYPES_H
+
+#include <stdint.h>
 
 /*
  * DVD Menu ID
@@ -42,14 +44,21 @@ typedef enum {
   DVD_MENU_Part       = 7
 } DVDMenuID_t;
 
+/* Domain */
+typedef enum {
+  DVD_DOMAIN_FirstPlay = 1,  /* First Play Domain */
+  DVD_DOMAIN_VTSTitle  = 2,  /* Video Title Set Domain */
+  DVD_DOMAIN_VMGM      = 4,  /* Video Manager Domain */
+  DVD_DOMAIN_VTSMenu   = 8   /* Video Title Set Menu Domain */
+} DVDDomain_t;
 
 /*
  * Structure containing info on highlight areas
  * (see dvdnav_get_highlight_area())
  */
 typedef struct {
-  uint32_t palette;     /* The CLUT entries for the highlight palette 
-			   (4-bits per entry -> 4 entries) */
+  uint32_t palette;     /* The CLUT entries for the highlight palette
+                           (4-bits per entry -> 4 entries) */
   uint16_t sx,sy,ex,ey; /* The start/end x,y positions */
   uint32_t pts;         /* Highlight PTS to match with SPU */
 
@@ -57,32 +66,33 @@ typedef struct {
   uint32_t buttonN;
 } dvdnav_highlight_area_t;
 
+/* The audio format */
+typedef enum {
+  DVD_AUDIO_FORMAT_AC3        = 0,
+  DVD_AUDIO_FORMAT_UNKNOWN_1  = 1,
+  DVD_AUDIO_FORMAT_MPEG       = 2,
+  DVD_AUDIO_FORMAT_MPEG2_EXT  = 3,
+  DVD_AUDIO_FORMAT_LPCM       = 4,
+  DVD_AUDIO_FORMAT_UNKNOWN_5  = 5,
+  DVD_AUDIO_FORMAT_DTS        = 6,
+  DVD_AUDIO_FORMAT_SDDS       = 7
+} DVDAudioFormat_t;
 
 /* the following types are currently unused */
 
-//XBMC Needs some of these
 #if 1
-
-/* Domain */
-typedef enum {
-  DVD_DOMAIN_FirstPlay,  /* First Play Domain */
-  DVD_DOMAIN_VMG,        /* Video Manager Domain */
-  DVD_DOMAIN_VTSMenu,    /* Video Title Set Menu Domain */
-  DVD_DOMAIN_VTSTitle,   /* Video Title Set Domain */
-  DVD_DOMAIN_Stop        /* Stop Domain */
-} DVDDomain_t;
 
 /* User operation permissions */
 typedef enum {
-  UOP_FLAG_TitleOrTimePlay            = 0x00000001, 
-  UOP_FLAG_ChapterSearchOrPlay        = 0x00000002, 
-  UOP_FLAG_TitlePlay                  = 0x00000004, 
-  UOP_FLAG_Stop                       = 0x00000008,  
+  UOP_FLAG_TitleOrTimePlay            = 0x00000001,
+  UOP_FLAG_ChapterSearchOrPlay        = 0x00000002,
+  UOP_FLAG_TitlePlay                  = 0x00000004,
+  UOP_FLAG_Stop                       = 0x00000008,
   UOP_FLAG_GoUp                       = 0x00000010,
-  UOP_FLAG_TimeOrChapterSearch        = 0x00000020, 
-  UOP_FLAG_PrevOrTopPGSearch          = 0x00000040,  
-  UOP_FLAG_NextPGSearch               = 0x00000080,   
-  UOP_FLAG_ForwardScan                = 0x00000100,  
+  UOP_FLAG_TimeOrChapterSearch        = 0x00000020,
+  UOP_FLAG_PrevOrTopPGSearch          = 0x00000040,
+  UOP_FLAG_NextPGSearch               = 0x00000080,
+  UOP_FLAG_ForwardScan                = 0x00000100,
   UOP_FLAG_BackwardScan               = 0x00000200,
   UOP_FLAG_TitleMenuCall              = 0x00000400,
   UOP_FLAG_RootMenuCall               = 0x00000800,
@@ -98,7 +108,7 @@ typedef enum {
   UOP_FLAG_SubPicStreamChange         = 0x00200000,
   UOP_FLAG_AngleChange                = 0x00400000,
   UOP_FLAG_KaraokeAudioPresModeChange = 0x00800000,
-  UOP_FLAG_VideoPresModeChange        = 0x01000000 
+  UOP_FLAG_VideoPresModeChange        = 0x01000000
 } DVDUOP_t;
 
 /* Parental Level */
@@ -125,7 +135,7 @@ typedef uint16_t DVDRegister_t;
 typedef enum {
   DVDFalse = 0,
   DVDTrue = 1
-} DVDBool_t; 
+} DVDBool_t;
 typedef DVDRegister_t DVDGPRMArray_t[16];
 typedef DVDRegister_t DVDSPRMArray_t[24];
 
@@ -146,10 +156,10 @@ typedef struct {
 } DVDTimecode_t;
 
 /* Subpicture stream number (0-31,62,63) */
-typedef int DVDSubpictureStream_t;  
+typedef int DVDSubpictureStream_t;
 
 /* Audio stream number (0-7, 15(none)) */
-typedef int DVDAudioStream_t;  
+typedef int DVDAudioStream_t;
 
 /* The audio application mode */
 typedef enum {
@@ -158,18 +168,6 @@ typedef enum {
   DVD_AUDIO_APP_MODE_Surround = 2,
   DVD_AUDIO_APP_MODE_Other    = 3
 } DVDAudioAppMode_t;
-
-/* The audio format */
-typedef enum {
-  DVD_AUDIO_FORMAT_AC3        = 0,
-  DVD_AUDIO_FORMAT_UNKNOWN_1  = 1,
-  DVD_AUDIO_FORMAT_MPEG       = 2,
-  DVD_AUDIO_FORMAT_MPEG2_EXT  = 3,
-  DVD_AUDIO_FORMAT_LPCM       = 4,
-  DVD_AUDIO_FORMAT_UNKNOWN_5  = 5,
-  DVD_AUDIO_FORMAT_DTS        = 6,
-  DVD_AUDIO_FORMAT_SDDS       = 7
-} DVDAudioFormat_t;
 
 /* Audio language extension */
 typedef enum {
@@ -193,7 +191,7 @@ typedef enum {
   DVD_SUBPICTURE_LANG_EXT_NormalDirectorsComments  = 13,
   DVD_SUBPICTURE_LANG_EXT_BigDirectorsComments  = 14,
   DVD_SUBPICTURE_LANG_EXT_ChildrensDirectorsComments  = 15,
-} DVDSubpictureLangExt_t;  
+} DVDSubpictureLangExt_t;
 
 /* Karaoke Downmix mode */
 typedef enum {
@@ -219,13 +217,12 @@ typedef enum {
   DVD_DISPLAY_MODE_ContentDefault = 0,
   DVD_DISPLAY_MODE_16x9 = 1,
   DVD_DISPLAY_MODE_4x3PanScan = 2,
-  DVD_DISPLAY_MODE_4x3Letterboxed = 3  
+  DVD_DISPLAY_MODE_4x3Letterboxed = 3
 } DVDDisplayMode_t;
 
 typedef int DVDAudioSampleFreq_t;
 typedef int DVDAudioSampleQuant_t;
 typedef int DVDChannelNumber_t;
-
 /* Audio attributes */
 typedef struct {
   DVDAudioAppMode_t     AppMode;
@@ -257,7 +254,6 @@ typedef struct {
 } DVDSubpictureAttributes_t;
 
 typedef int DVDVideoCompression_t;
-
 /* Video attributes */
 typedef struct {
   DVDBool_t PanscanPermitted;
