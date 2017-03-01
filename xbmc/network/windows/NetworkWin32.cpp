@@ -18,11 +18,10 @@
  *
  */
 
-#include <errno.h>
+#include "NetworkWin32.h"
 #include <iphlpapi.h>
 #include <IcmpAPI.h>
 #include "PlatformDefs.h"
-#include "NetworkWin32.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
 #include "utils/CharsetConverter.h"
@@ -46,11 +45,11 @@ CNetworkInterfaceWin32::CNetworkInterfaceWin32(CNetworkWin32* network, const IP_
   m_adapter = adapter;
 }
 
-CNetworkInterfaceWin32::~CNetworkInterfaceWin32(void)
+CNetworkInterfaceWin32::~CNetworkInterfaceWin32()
 {
 }
 
-std::string& CNetworkInterfaceWin32::GetName(void)
+std::string& CNetworkInterfaceWin32::GetName()
 {
   g_charsetConverter.unknownToUTF8(m_adaptername);
   return m_adaptername;
@@ -85,55 +84,56 @@ void CNetworkInterfaceWin32::GetMacAddressRaw(char rawMac[6])
   memcpy(rawMac, m_adapter.Address, 6);
 }
 
-std::string CNetworkInterfaceWin32::GetCurrentIPAddress(void)
+std::string CNetworkInterfaceWin32::GetCurrentIPAddress()
 {
   return m_adapter.IpAddressList.IpAddress.String;
 }
 
-std::string CNetworkInterfaceWin32::GetCurrentNetmask(void)
+std::string CNetworkInterfaceWin32::GetCurrentNetmask()
 {
   return m_adapter.IpAddressList.IpMask.String;
 }
 
-std::string CNetworkInterfaceWin32::GetCurrentWirelessEssId(void)
+std::string CNetworkInterfaceWin32::GetCurrentWirelessEssId()
 {
   std::string result = "";
 
 #ifdef HAS_WIN32_WLAN_API
   if (IsWireless())
   {
-    HANDLE hClientHdl = NULL;
+    HANDLE hClientHdl = nullptr;
     DWORD dwVersion = 0;
-    DWORD dwret = 0;
     PWLAN_CONNECTION_ATTRIBUTES pAttributes;
     DWORD dwSize = 0;
 
-    if (WlanOpenHandle(1, NULL, &dwVersion, &hClientHdl) == ERROR_SUCCESS)
+    if (WlanOpenHandle(1, nullptr, &dwVersion, &hClientHdl) == ERROR_SUCCESS)
     {
       PWLAN_INTERFACE_INFO_LIST ppInterfaceList;
-      if (WlanEnumInterfaces(hClientHdl, NULL, &ppInterfaceList) == ERROR_SUCCESS)
+      if (WlanEnumInterfaces(hClientHdl, nullptr, &ppInterfaceList) == ERROR_SUCCESS)
       {
         for (unsigned int i = 0; i < ppInterfaceList->dwNumberOfItems; i++)
         {
-          GUID guid = ppInterfaceList->InterfaceInfo[i].InterfaceGuid;
+          auto guid = ppInterfaceList->InterfaceInfo[i].InterfaceGuid;
           WCHAR wcguid[64];
-          StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
+          StringFromGUID2(guid, reinterpret_cast<LPOLESTR>(&wcguid), 64);
           std::wstring strGuid = wcguid;
           std::wstring strAdaptername;
           g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
           if (strGuid == strAdaptername)
           {
-            if (WlanQueryInterface(hClientHdl, &ppInterfaceList->InterfaceInfo[i].InterfaceGuid, wlan_intf_opcode_current_connection, NULL, &dwSize, (PVOID*)&pAttributes, NULL) == ERROR_SUCCESS)
+            if (WlanQueryInterface(hClientHdl, &ppInterfaceList->InterfaceInfo[i].InterfaceGuid,
+              wlan_intf_opcode_current_connection,
+              nullptr, &dwSize, reinterpret_cast<PVOID*>(&pAttributes), nullptr) == ERROR_SUCCESS)
             {
-              result = (char*)pAttributes->wlanAssociationAttributes.dot11Ssid.ucSSID;
-              WlanFreeMemory((PVOID*)&pAttributes);
+              result = reinterpret_cast<char*>(pAttributes->wlanAssociationAttributes.dot11Ssid.ucSSID);
+              WlanFreeMemory(reinterpret_cast<PVOID*>(&pAttributes));
             }
             else
               CLog::Log(LOGERROR, "%s: Can't query wlan interface", __FUNCTION__);
           }
         }
       }
-      WlanCloseHandle(&hClientHdl, NULL);
+      WlanCloseHandle(&hClientHdl, nullptr);
     }
     else
       CLog::Log(LOGERROR, "%s: Can't open wlan handle", __FUNCTION__);
@@ -142,17 +142,17 @@ std::string CNetworkInterfaceWin32::GetCurrentWirelessEssId(void)
   return result;
 }
 
-std::string CNetworkInterfaceWin32::GetCurrentDefaultGateway(void)
+std::string CNetworkInterfaceWin32::GetCurrentDefaultGateway()
 {
   return m_adapter.GatewayList.IpAddress.String;
 }
 
-CNetworkWin32::CNetworkWin32(void)
+CNetworkWin32::CNetworkWin32()
 {
   queryInterfaceList();
 }
 
-CNetworkWin32::~CNetworkWin32(void)
+CNetworkWin32::~CNetworkWin32()
 {
   CleanInterfaceList();
   m_netrefreshTimer.Stop();
@@ -169,7 +169,7 @@ void CNetworkWin32::CleanInterfaceList()
   }
 }
 
-std::vector<CNetworkInterface*>& CNetworkWin32::GetInterfaceList(void)
+std::vector<CNetworkInterface*>& CNetworkWin32::GetInterfaceList()
 {
   CSingleLock lock(m_critSection);
   if (m_netrefreshTimer.GetElapsedSeconds() >= 5.0f)
@@ -184,19 +184,19 @@ void CNetworkWin32::queryInterfaceList()
   m_netrefreshTimer.StartZero();
 
   PIP_ADAPTER_INFO adapterInfo;
-  PIP_ADAPTER_INFO adapter = NULL;
+  PIP_ADAPTER_INFO adapter;
 
   ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
 
-  adapterInfo = (IP_ADAPTER_INFO *)malloc(sizeof(IP_ADAPTER_INFO));
-  if (adapterInfo == NULL)
+  adapterInfo = static_cast<IP_ADAPTER_INFO *>(malloc(sizeof(IP_ADAPTER_INFO)));
+  if (adapterInfo == nullptr)
     return;
 
   if (GetAdaptersInfo(adapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
   {
     free(adapterInfo);
-    adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
-    if (adapterInfo == NULL)
+    adapterInfo = static_cast<IP_ADAPTER_INFO *>(malloc(ulOutBufLen));
+    if (adapterInfo == nullptr)
       return;
   }
 
@@ -212,7 +212,7 @@ void CNetworkWin32::queryInterfaceList()
   free(adapterInfo);
 }
 
-std::vector<std::string> CNetworkWin32::GetNameServers(void)
+std::vector<std::string> CNetworkWin32::GetNameServers()
 {
   std::vector<std::string> result;
 
@@ -220,16 +220,16 @@ std::vector<std::string> CNetworkWin32::GetNameServers(void)
   ULONG ulOutBufLen;
   IP_ADDR_STRING *pIPAddr;
 
-  pFixedInfo = (FIXED_INFO *)malloc(sizeof(FIXED_INFO));
-  if (pFixedInfo == NULL)
+  pFixedInfo = static_cast<FIXED_INFO *>(malloc(sizeof(FIXED_INFO)));
+  if (pFixedInfo == nullptr)
     return result;
 
   ulOutBufLen = sizeof(FIXED_INFO);
   if (GetNetworkParams(pFixedInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
   {
     free(pFixedInfo);
-    pFixedInfo = (FIXED_INFO *)malloc(ulOutBufLen);
-    if (pFixedInfo == NULL)
+    pFixedInfo = static_cast<FIXED_INFO *>(malloc(ulOutBufLen));
+    if (pFixedInfo == nullptr)
       return result;
   }
 
@@ -263,7 +263,7 @@ bool CNetworkWin32::PingHost(unsigned long host, unsigned int timeout_ms /* = 20
   SetLastError(ERROR_SUCCESS);
 
   DWORD dwRetVal = IcmpSendEcho(hIcmpFile, host, SendData, sizeof(SendData),
-    NULL, ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
+    nullptr, ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
 
   DWORD lastErr = GetLastError();
   if (lastErr != ERROR_SUCCESS && lastErr != IP_REQ_TIMED_OUT)
@@ -273,7 +273,7 @@ bool CNetworkWin32::PingHost(unsigned long host, unsigned int timeout_ms /* = 20
 
   if (dwRetVal != 0)
   {
-    PICMP_ECHO_REPLY pEchoReply = (PICMP_ECHO_REPLY)ReplyBuffer;
+    PICMP_ECHO_REPLY pEchoReply = reinterpret_cast<PICMP_ECHO_REPLY>(ReplyBuffer);
     return (pEchoReply->Status == IP_SUCCESS);
   }
   return false;
@@ -306,7 +306,7 @@ bool CNetworkInterfaceWin32::GetHostMacAddress(unsigned long host, std::string& 
   return false;
 }
 
-std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
+std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints()
 {
   std::vector<NetworkAccessPoint> result;
 #ifdef HAS_WIN32_WLAN_API
@@ -320,10 +320,10 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
   static const int xpWlanClientVersion = 1;
   DWORD negotiated_version;
   DWORD dwResult;
-  HANDLE wlan_handle = NULL;
+  HANDLE wlan_handle = nullptr;
 
   // Get the handle to the WLAN API
-  dwResult = WlanOpenHandle(xpWlanClientVersion, NULL, &negotiated_version, &wlan_handle);
+  dwResult = WlanOpenHandle(xpWlanClientVersion, nullptr, &negotiated_version, &wlan_handle);
   if (dwResult != ERROR_SUCCESS || !wlan_handle)
   {
     CLog::Log(LOGERROR, "Could not load the client WLAN API");
@@ -331,11 +331,11 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
   }
 
   // Get the list of interfaces (WlanEnumInterfaces allocates interface_list)
-  WLAN_INTERFACE_INFO_LIST *interface_list = NULL;
-  dwResult = WlanEnumInterfaces(wlan_handle, NULL, &interface_list);
+  WLAN_INTERFACE_INFO_LIST *interface_list = nullptr;
+  dwResult = WlanEnumInterfaces(wlan_handle, nullptr, &interface_list);
   if (dwResult != ERROR_SUCCESS || !interface_list)
   {
-    WlanCloseHandle(wlan_handle, NULL);
+    WlanCloseHandle(wlan_handle, nullptr);
     CLog::Log(LOGERROR, "Failed to get the list of interfaces");
     return result;
   }
@@ -344,7 +344,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
   {
     GUID guid = interface_list->InterfaceInfo[i].InterfaceGuid;
     WCHAR wcguid[64];
-    StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
+    StringFromGUID2(guid, reinterpret_cast<LPOLESTR>(&wcguid), 64);
     std::wstring strGuid = wcguid;
     std::wstring strAdaptername;
     g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
@@ -353,10 +353,10 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
       WLAN_BSS_LIST *bss_list;
       HRESULT rv = WlanGetNetworkBssList(wlan_handle,
         &interface_list->InterfaceInfo[i].InterfaceGuid,
-        NULL,               // Get all SSIDs
+        nullptr,               // Get all SSIDs
         dot11_BSS_type_any, // unused
         false,              // bSecurityEnabled - unused
-        NULL,               // reserved
+        nullptr,               // reserved
         &bss_list);
       if (rv != ERROR_SUCCESS || !bss_list)
         break;
@@ -364,7 +364,8 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
       {
         const WLAN_BSS_ENTRY bss_entry = bss_list->wlanBssEntries[j];
         // Add the access point info to the list of results
-        std::string essId((char*)bss_entry.dot11Ssid.ucSSID, (unsigned int)bss_entry.dot11Ssid.uSSIDLength);
+        std::string essId(reinterpret_cast<const char*>(bss_entry.dot11Ssid.ucSSID),
+          static_cast<unsigned int>(bss_entry.dot11Ssid.uSSIDLength));
         std::string macAddress;
         // macAddress is big-endian, write in byte chunks
         macAddress = StringUtils::Format("%02x-%02x-%02x-%02x-%02x-%02x",
@@ -372,7 +373,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
           bss_entry.dot11Bssid[3], bss_entry.dot11Bssid[4], bss_entry.dot11Bssid[5]);
         int signalLevel = bss_entry.lRssi;
         EncMode encryption = ENC_NONE; //! @todo implement
-        int channel = NetworkAccessPoint::FreqToChannel((float)bss_entry.ulChCenterFrequency * 1000);
+        int channel = NetworkAccessPoint::FreqToChannel(static_cast<float>(bss_entry.ulChCenterFrequency) * 1000);
         result.push_back(NetworkAccessPoint(essId, macAddress, signalLevel, encryption, channel));
       }
       WlanFreeMemory(bss_list);
@@ -384,7 +385,7 @@ std::vector<NetworkAccessPoint> CNetworkInterfaceWin32::GetAccessPoints(void)
   WlanFreeMemory(interface_list);
 
   // Close the handle
-  WlanCloseHandle(wlan_handle, NULL);
+  WlanCloseHandle(wlan_handle, nullptr);
 
 #endif
 
@@ -403,19 +404,19 @@ void CNetworkInterfaceWin32::GetSettings(NetworkAssignment& assignment, std::str
 
 
   PIP_ADAPTER_INFO adapterInfo;
-  PIP_ADAPTER_INFO adapter = NULL;
+  PIP_ADAPTER_INFO adapter;
 
   ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
 
-  adapterInfo = (IP_ADAPTER_INFO *)malloc(sizeof(IP_ADAPTER_INFO));
-  if (adapterInfo == NULL)
+  adapterInfo = static_cast<IP_ADAPTER_INFO *>(malloc(sizeof(IP_ADAPTER_INFO)));
+  if (adapterInfo == nullptr)
     return;
 
   if (GetAdaptersInfo(adapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
   {
     free(adapterInfo);
-    adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
-    if (adapterInfo == NULL)
+    adapterInfo = static_cast<IP_ADAPTER_INFO *>(malloc(ulOutBufLen));
+    if (adapterInfo == nullptr)
       return;
   }
 
@@ -443,30 +444,31 @@ void CNetworkInterfaceWin32::GetSettings(NetworkAssignment& assignment, std::str
 #ifdef HAS_WIN32_WLAN_API
   if (IsWireless())
   {
-    HANDLE hClientHdl = NULL;
+    HANDLE hClientHdl = nullptr;
     DWORD dwVersion = 0;
-    DWORD dwret = 0;
     PWLAN_CONNECTION_ATTRIBUTES pAttributes;
     DWORD dwSize = 0;
 
-    if (WlanOpenHandle(1, NULL, &dwVersion, &hClientHdl) == ERROR_SUCCESS)
+    if (WlanOpenHandle(1, nullptr, &dwVersion, &hClientHdl) == ERROR_SUCCESS)
     {
       PWLAN_INTERFACE_INFO_LIST ppInterfaceList;
-      if (WlanEnumInterfaces(hClientHdl, NULL, &ppInterfaceList) == ERROR_SUCCESS)
+      if (WlanEnumInterfaces(hClientHdl, nullptr, &ppInterfaceList) == ERROR_SUCCESS)
       {
         for (unsigned int i = 0; i < ppInterfaceList->dwNumberOfItems; i++)
         {
           GUID guid = ppInterfaceList->InterfaceInfo[i].InterfaceGuid;
           WCHAR wcguid[64];
-          StringFromGUID2(guid, (LPOLESTR)&wcguid, 64);
+          StringFromGUID2(guid, reinterpret_cast<LPOLESTR>(&wcguid), 64);
           std::wstring strGuid = wcguid;
           std::wstring strAdaptername;
           g_charsetConverter.utf8ToW(m_adapter.AdapterName, strAdaptername);
           if (strGuid == strAdaptername)
           {
-            if (WlanQueryInterface(hClientHdl, &ppInterfaceList->InterfaceInfo[i].InterfaceGuid, wlan_intf_opcode_current_connection, NULL, &dwSize, (PVOID*)&pAttributes, NULL) == ERROR_SUCCESS)
+            if (WlanQueryInterface(hClientHdl, &ppInterfaceList->InterfaceInfo[i].InterfaceGuid,
+              wlan_intf_opcode_current_connection,
+              nullptr, &dwSize, reinterpret_cast<PVOID*>(&pAttributes), nullptr) == ERROR_SUCCESS)
             {
-              essId = (char*)pAttributes->wlanAssociationAttributes.dot11Ssid.ucSSID;
+              essId = reinterpret_cast<char*>(pAttributes->wlanAssociationAttributes.dot11Ssid.ucSSID);
               if (pAttributes->wlanSecurityAttributes.bSecurityEnabled)
               {
                 switch (pAttributes->wlanSecurityAttributes.dot11AuthAlgorithm)
@@ -481,16 +483,18 @@ void CNetworkInterfaceWin32::GetSettings(NetworkAssignment& assignment, std::str
                 case DOT11_AUTH_ALGO_RSNA:
                 case DOT11_AUTH_ALGO_RSNA_PSK:
                   encryptionMode = ENC_WPA2;
+                default:
+                  break;
                 }
               }
-              WlanFreeMemory((PVOID*)&pAttributes);
+              WlanFreeMemory(reinterpret_cast<PVOID*>(&pAttributes));
             }
             else
               CLog::Log(LOGERROR, "%s: Can't query wlan interface", __FUNCTION__);
           }
         }
       }
-      WlanCloseHandle(&hClientHdl, NULL);
+      WlanCloseHandle(&hClientHdl, nullptr);
     }
     else
       CLog::Log(LOGERROR, "%s: Can't open wlan handle", __FUNCTION__);
