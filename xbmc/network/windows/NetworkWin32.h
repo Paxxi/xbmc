@@ -19,7 +19,7 @@
  */
 #ifndef NETWORK_LINUX_H_
 #define NETWORK_LINUX_H_
- 
+
 #include <string>
 #include <vector>
 #include "network/Network.h"
@@ -32,64 +32,64 @@ class CNetworkWin32;
 class CNetworkInterfaceWin32 : public CNetworkInterface
 {
 public:
-   CNetworkInterfaceWin32(CNetworkWin32* network, const IP_ADAPTER_INFO& adapter);
-   ~CNetworkInterfaceWin32(void);
+  CNetworkInterfaceWin32(CNetworkWin32* network, const IP_ADAPTER_INFO& adapter);
+  ~CNetworkInterfaceWin32(void);
 
-   virtual std::string& GetName(void);
+  virtual std::string& GetName(void);
 
-   virtual bool IsEnabled(void);
-   virtual bool IsConnected(void);
-   virtual bool IsWireless(void);
+  virtual bool IsEnabled(void);
+  virtual bool IsConnected(void);
+  virtual bool IsWireless(void);
 
-   virtual std::string GetMacAddress(void);
-   virtual void GetMacAddressRaw(char rawMac[6]);
+  virtual std::string GetMacAddress(void);
+  virtual void GetMacAddressRaw(char rawMac[6]);
 
-   virtual bool GetHostMacAddress(unsigned long host, std::string& mac);
+  virtual bool GetHostMacAddress(unsigned long host, std::string& mac);
 
-   virtual std::string GetCurrentIPAddress();
-   virtual std::string GetCurrentNetmask();
-   virtual std::string GetCurrentDefaultGateway(void);
-   virtual std::string GetCurrentWirelessEssId(void);
+  virtual std::string GetCurrentIPAddress();
+  virtual std::string GetCurrentNetmask();
+  virtual std::string GetCurrentDefaultGateway(void);
+  virtual std::string GetCurrentWirelessEssId(void);
 
-   virtual void GetSettings(NetworkAssignment& assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
-   virtual void SetSettings(NetworkAssignment& assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
+  virtual void GetSettings(NetworkAssignment& assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
+  virtual void SetSettings(NetworkAssignment& assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
 
-   // Returns the list of access points in the area
-   virtual std::vector<NetworkAccessPoint> GetAccessPoints(void);
+  // Returns the list of access points in the area
+  virtual std::vector<NetworkAccessPoint> GetAccessPoints(void);
 
 private:
-   void WriteSettings(FILE* fw, NetworkAssignment assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
-   IP_ADAPTER_INFO m_adapter;
-   CNetworkWin32* m_network;
-   std::string m_adaptername;
+  void WriteSettings(FILE* fw, NetworkAssignment assignment, std::string& ipAddress, std::string& networkMask, std::string& defaultGateway, std::string& essId, std::string& key, EncMode& encryptionMode);
+  IP_ADAPTER_INFO m_adapter;
+  CNetworkWin32* m_network;
+  std::string m_adaptername;
 };
 
 class CNetworkWin32 : public CNetwork
 {
 public:
-   CNetworkWin32(void);
-   virtual ~CNetworkWin32(void);
+  CNetworkWin32(void);
+  virtual ~CNetworkWin32(void);
 
-   // Return the list of interfaces
-   virtual std::vector<CNetworkInterface*>& GetInterfaceList(void);
+  // Return the list of interfaces
+  virtual std::vector<CNetworkInterface*>& GetInterfaceList(void);
 
-   // Ping remote host
-   virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000);
+  // Ping remote host
+  virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000);
 
-   // Get/set the nameserver(s)
-   virtual std::vector<std::string> GetNameServers(void);
-   virtual void SetNameServers(const std::vector<std::string>& nameServers);
+  // Get/set the nameserver(s)
+  virtual std::vector<std::string> GetNameServers(void);
+  virtual void SetNameServers(const std::vector<std::string>& nameServers);
 
-   friend class CNetworkInterfaceWin32;
+  friend class CNetworkInterfaceWin32;
 
 private:
-   int GetSocket() { return m_sock; }
-   void queryInterfaceList();
-   void CleanInterfaceList();
-   std::vector<CNetworkInterface*> m_interfaces;
-   int m_sock;
-   CStopWatch m_netrefreshTimer;
-   CCriticalSection m_critSection;
+  int GetSocket() { return m_sock; }
+  void queryInterfaceList();
+  void CleanInterfaceList();
+  std::vector<CNetworkInterface*> m_interfaces;
+  int m_sock;
+  CStopWatch m_netrefreshTimer;
+  CCriticalSection m_critSection;
 };
 
 #endif
