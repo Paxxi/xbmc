@@ -4241,6 +4241,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
 
   try
   {
+    auto pDS = std::unique_ptr<dbiplus::Dataset>(m_pDB->CreateDataset());
     unsigned int time = XbmcThreads::SystemClockMillis();
     int total = -1;
 
@@ -4263,7 +4264,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
       return false;
     
     // Count number of songs that satisfy selection criteria
-    total = (int)strtol(GetSingleValue("SELECT COUNT(1) FROM songview " + strSQLExtra, m_pDS).c_str(), NULL, 10);
+    total = (int)strtol(GetSingleValue("SELECT COUNT(1) FROM songview " + strSQLExtra, pDS).c_str(), NULL, 10);
 
     // Apply any limiting directly in SQL if there is either no special sorting or random sort
     // When limited, random sort is also applied in SQL
@@ -4297,13 +4298,13 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
 
     CLog::Log(LOGDEBUG, "%s query = %s", __FUNCTION__, strSQL.c_str());
     // run query
-    if (!m_pDS->query(strSQL))
+    if (!pDS->query(strSQL))
       return false;
 
-    int iRowsFound = m_pDS->num_rows();
+    int iRowsFound = pDS->num_rows();
     if (iRowsFound == 0)
     {
-      m_pDS->close();
+      pDS->close();
       return true;
     }
 
@@ -4318,7 +4319,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
     sorting = sortDescription;
     if (artistData && sortDescription.sortBy != SortByNone)
       sorting.sortBy = SortByNone;
-    if (!SortUtils::SortFromDataset(sorting, MediaTypeSong, m_pDS, results))
+    if (!SortUtils::SortFromDataset(sorting, MediaTypeSong, pDS, results))
       return false;
 
     // Get songs from returned rows. If join songartistview then there is a row for every artist
@@ -4326,7 +4327,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
     int songArtistOffset = song_enumCount;
     int songId = -1;
     VECARTISTCREDITS artistCredits;
-    const dbiplus::query_data &data = m_pDS->get_result_set().records;
+    const dbiplus::query_data &data = pDS->get_result_set().records;
     int count = 0;
     for (const auto &i : results)
     {
@@ -4362,7 +4363,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
       }
       catch (...)
       {
-        m_pDS->close();
+        pDS->close();
         CLog::Log(LOGERROR, "%s: out of memory loading query: %s", __FUNCTION__, filter.where.c_str());
         return (items.Size() > 0);
       }
@@ -4374,7 +4375,7 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
       artistCredits.clear();
     }
     // cleanup
-    m_pDS->close();
+    pDS->close();
 
     // Finally do any sorting in items list we have not been able to do before in SQL or dataset,
     // that is when have join with songartistview and sorting other than random with limit
@@ -4393,7 +4394,6 @@ bool CMusicDatabase::GetSongsFullByWhere(const std::string &baseDir, const Filte
   catch (...)
   {
     // cleanup
-    m_pDS->close();
     CLog::Log(LOGERROR, "%s(%s) failed", __FUNCTION__, filter.where.c_str());
   }
   return false;
