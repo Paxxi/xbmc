@@ -35,23 +35,22 @@ namespace XbmcThreads
   public:
     inline ThreadLocal()
     {
-       if ((key = TlsAlloc()) == TLS_OUT_OF_INDEXES)
-          throw XbmcCommons::UncheckedException("Ran out of Windows TLS Indexes. Windows Error Code %d",(int)GetLastError());
+      if ((key = TlsAlloc()) == TLS_OUT_OF_INDEXES)
+        throw XbmcCommons::UncheckedException("Ran out of Windows TLS Indexes. Windows Error Code %d", (int)GetLastError());
     }
 
-    inline ~ThreadLocal() 
+    inline ~ThreadLocal()
     {
-       if (!TlsFree(key))
-          throw XbmcCommons::UncheckedException("Failed to free Tls %d, Windows Error Code %d",(int)key, (int)GetLastError());
+      TlsFree(key);
     }
 
     inline void set(T* val)
     {
-       if (!TlsSetValue(key,(LPVOID)val))
-          throw XbmcCommons::UncheckedException("Failed to set Tls %d, Windows Error Code %d",(int)key, (int)GetLastError());
+      if (!TlsSetValue(key, (LPVOID)val))
+        throw XbmcCommons::UncheckedException("Failed to set Tls %d, Windows Error Code %d", (int)key, (int)GetLastError());
     }
 
-    inline T* get() { return (T*)TlsGetValue(key); }
+    inline T* get() { return static_cast<T*>(TlsGetValue(key)); }
   };
 }
 
