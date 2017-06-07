@@ -30,7 +30,7 @@ namespace XFILE
 {
 
 CXbtManager::CXbtManager()
-{ }
+= default;
 
 CXbtManager::~CXbtManager()
 { }

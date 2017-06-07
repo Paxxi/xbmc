@@ -53,10 +53,10 @@ extern const ISO639 LanguageCodes[189];
 extern const ISO3166_1 RegionCodes[245];
 
 CLangCodeExpander::CLangCodeExpander()
-{ }
+= default;
 
 CLangCodeExpander::~CLangCodeExpander()
-{ }
+= default;
 
 void CLangCodeExpander::Clear()
 {

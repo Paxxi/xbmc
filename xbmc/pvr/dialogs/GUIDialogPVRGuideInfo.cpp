@@ -53,8 +53,7 @@ using namespace KODI::MESSAGING;
 
 CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo()
     : CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_INFO, "DialogPVRInfo.xml")
-{
-}
+= default;
 
 CGUIDialogPVRGuideInfo::~CGUIDialogPVRGuideInfo(void)
 {

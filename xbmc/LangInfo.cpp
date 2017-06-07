@@ -227,9 +227,7 @@ CLangInfo::CRegion::CRegion()
 }
 
 CLangInfo::CRegion::~CRegion()
-{
-
-}
+= default;
 
 void CLangInfo::CRegion::SetDefaults()
 {

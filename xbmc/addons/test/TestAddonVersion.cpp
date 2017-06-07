@@ -45,8 +45,7 @@ public:
     v1_0_0_alpha2("1.0.0~alpha2"),
     v1_0_0_alpha3("1.0.0~alpha3"),
     v1_0_0_alpha10("1.0.0~alpha10")
-  {
-  }
+  = default;ault;
 
   AddonVersion v1_0;
   AddonVersion v1_00;

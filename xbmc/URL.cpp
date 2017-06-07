@@ -38,8 +38,7 @@
 using namespace ADDON;
 
 CURL::~CURL()
-{
-}
+= default;
 
 void CURL::Reset()
 {

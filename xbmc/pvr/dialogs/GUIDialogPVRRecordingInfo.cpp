@@ -33,8 +33,7 @@ using namespace PVR;
 CGUIDialogPVRRecordingInfo::CGUIDialogPVRRecordingInfo()
   : CGUIDialog(WINDOW_DIALOG_PVR_RECORDING_INFO, "DialogPVRInfo.xml")
   , m_recordItem(new CFileItem)
-{
-}
+= default;
 
 bool CGUIDialogPVRRecordingInfo::OnMessage(CGUIMessage& message)
 {

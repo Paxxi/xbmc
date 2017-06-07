@@ -154,7 +154,7 @@ bool CSettingConditionsManager::Check(const std::string &condition, const std::s
 }
 
 CSettingConditionsManager::CSettingConditionsManager()
-{ }
+= default;
 
 CSettingConditionsManager::~CSettingConditionsManager()
 {

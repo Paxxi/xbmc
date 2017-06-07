@@ -30,8 +30,7 @@
 using namespace XFILE;
 
 CSplash::CSplash()
-{
-}
+= default;
 
 CSplash& CSplash::GetInstance()
 {

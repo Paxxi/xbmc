@@ -28,8 +28,7 @@ using namespace PVR;
 
 CGUIWindowPVRTVTimerRules::CGUIWindowPVRTVTimerRules() :
   CGUIWindowPVRTimersBase(false, WINDOW_TV_TIMER_RULES, "MyPVRTimers.xml")
-{
-}
+= default;
 
 std::string CGUIWindowPVRTVTimerRules::GetDirectoryPath()
 {
@@ -39,8 +38,7 @@ std::string CGUIWindowPVRTVTimerRules::GetDirectoryPath()
 
 CGUIWindowPVRRadioTimerRules::CGUIWindowPVRRadioTimerRules() :
 CGUIWindowPVRTimersBase(true, WINDOW_RADIO_TIMER_RULES, "MyPVRTimers.xml")
-{
-}
+= default;
 
 std::string CGUIWindowPVRRadioTimerRules::GetDirectoryPath()
 {

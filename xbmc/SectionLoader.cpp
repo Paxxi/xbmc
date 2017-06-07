@@ -35,7 +35,7 @@
 //#define LOGALL
 
 CSectionLoader::CSectionLoader()
-{}
+= default;
 
 CSectionLoader::~CSectionLoader(void)
 {

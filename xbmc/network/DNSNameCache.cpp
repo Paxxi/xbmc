@@ -32,7 +32,7 @@ CDNSNameCache g_DNSCache;
 CCriticalSection CDNSNameCache::m_critical;
 
 CDNSNameCache::CDNSNameCache()
-{}
+= default;
 
 CDNSNameCache::~CDNSNameCache(void)
 {}

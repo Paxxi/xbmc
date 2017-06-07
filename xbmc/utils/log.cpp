@@ -36,7 +36,7 @@ static const char* const logLevelNames[] =
 #define s_globals XBMC_GLOBAL_USE(CLog).m_globalInstance
 
 CLog::CLog()
-{}
+= default;
 
 CLog::~CLog()
 {}

@@ -104,8 +104,7 @@ CStereoscopicsManager::CStereoscopicsManager()
 }
 
 CStereoscopicsManager::~CStereoscopicsManager()
-{
-}
+= default;
 
 CStereoscopicsManager& CStereoscopicsManager::GetInstance()
 {

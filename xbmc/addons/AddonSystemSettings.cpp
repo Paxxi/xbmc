@@ -47,7 +47,7 @@ CAddonSystemSettings::CAddonSystemSettings() :
       {ADDON_SKIN, CSettings::SETTING_LOOKANDFEEL_SKIN},
       {ADDON_RESOURCE_UISOUNDS, CSettings::SETTING_LOOKANDFEEL_SOUNDSKIN},
   }
-{}
+= default;
 
 CAddonSystemSettings& CAddonSystemSettings::GetInstance()
 {

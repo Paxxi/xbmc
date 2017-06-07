@@ -28,8 +28,7 @@ using namespace GAME;
 CGameServices::CGameServices() :
   m_controllerManager(new CControllerManager),
   m_portManager(new CPortManager)
-{
-}
+= default;
 
 CGameServices::~CGameServices()
 {

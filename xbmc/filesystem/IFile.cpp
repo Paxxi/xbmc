@@ -32,12 +32,10 @@ using namespace XFILE;
 //////////////////////////////////////////////////////////////////////
 
 IFile::IFile()
-{
-}
+= default;
 
 IFile::~IFile()
-{
-}
+= default;
 
 int IFile::Stat(struct __stat64* buffer)
 {

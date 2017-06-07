@@ -51,10 +51,10 @@ using namespace XFILE;
 using namespace PLAYLIST;
 
 CFileDirectoryFactory::CFileDirectoryFactory()
-{}
+= default;
 
 CFileDirectoryFactory::~CFileDirectoryFactory()
-{}
+= default;
 
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.
 IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)

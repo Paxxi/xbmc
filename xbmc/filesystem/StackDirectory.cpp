@@ -34,8 +34,7 @@ namespace XFILE
   }
 
   CStackDirectory::~CStackDirectory()
-  {
-  }
+  = default;
 
   bool CStackDirectory::GetDirectory(const CURL& url, CFileItemList& items)
   {

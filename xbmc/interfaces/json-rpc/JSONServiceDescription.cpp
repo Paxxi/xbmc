@@ -1190,8 +1190,7 @@ void JSONSchemaTypeDefinition::Set(const JSONSchemaTypeDefinitionPtr typeDefinit
 
 JSONSchemaTypeDefinition::CJsonSchemaPropertiesMap::CJsonSchemaPropertiesMap() :
    m_propertiesmap(std::map<std::string, JSONSchemaTypeDefinitionPtr>())
-{
-}
+= default;
 
 void JSONSchemaTypeDefinition::CJsonSchemaPropertiesMap::add(JSONSchemaTypeDefinitionPtr property)
 {
@@ -2041,8 +2040,7 @@ void CJSONServiceDescription::getReferencedTypes(const JSONSchemaTypeDefinitionP
 
 CJSONServiceDescription::CJsonRpcMethodMap::CJsonRpcMethodMap():
   m_actionmap(std::map<std::string, JsonRpcMethod>())
-{
-}
+= default;
 
 void CJSONServiceDescription::CJsonRpcMethodMap::clear()
 {

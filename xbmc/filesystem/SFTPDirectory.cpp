@@ -31,8 +31,7 @@ CSFTPDirectory::CSFTPDirectory()
 }
 
 CSFTPDirectory::~CSFTPDirectory()
-{
-}
+= default;
 
 bool CSFTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {

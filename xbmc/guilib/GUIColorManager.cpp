@@ -32,8 +32,7 @@
 CGUIColorManager g_colorManager;
 
 CGUIColorManager::CGUIColorManager()
-{
-}
+= default;
 
 CGUIColorManager::~CGUIColorManager(void)
 {

@@ -32,7 +32,7 @@
 
 CGUIDialogAddonSettings::CGUIDialogAddonSettings()
   : CGUIDialogSettingsManagerBase(WINDOW_DIALOG_ADDON_SETTINGS, "DialogAddonSettings.xml")
-{ }
+= default;
 
 bool CGUIDialogAddonSettings::OnMessage(CGUIMessage &message)
 {

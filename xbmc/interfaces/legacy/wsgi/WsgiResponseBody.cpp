@@ -26,7 +26,7 @@ namespace XBMCAddon
   {
     WsgiResponseBody::WsgiResponseBody()
       : m_data()
-    { }
+    = default;
 
     WsgiResponseBody::~WsgiResponseBody()
     { }

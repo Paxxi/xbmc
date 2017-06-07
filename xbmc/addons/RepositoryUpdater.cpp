@@ -43,7 +43,7 @@ namespace ADDON
 CRepositoryUpdater::CRepositoryUpdater() :
   m_timer(this),
   m_doneEvent(true)
-{}
+= default;
 
 CRepositoryUpdater &CRepositoryUpdater::GetInstance()
 {

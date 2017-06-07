@@ -107,7 +107,7 @@ class CActiveAEDSPModeUpdateJob : public CJob
 {
 public:
   CActiveAEDSPModeUpdateJob() {}
-  ~CActiveAEDSPModeUpdateJob() {}
+  ~CActiveAEDSPModeUpdateJob() = default;
 
   bool DoWork()
   {

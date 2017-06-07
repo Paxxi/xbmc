@@ -25,8 +25,7 @@
 
 CGUIDialogOK::CGUIDialogOK()
     : CGUIDialogBoxBase(WINDOW_DIALOG_OK, "DialogConfirm.xml")
-{
-}
+= default;
 
 CGUIDialogOK::~CGUIDialogOK(void)
 {}

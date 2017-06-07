@@ -43,7 +43,7 @@ CXbtDirectory::CXbtDirectory()
 { }
 
 CXbtDirectory::~CXbtDirectory()
-{ }
+= default;
 
 bool CXbtDirectory::GetDirectory(const CURL& urlOrig, CFileItemList& items)
 {

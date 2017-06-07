@@ -1953,7 +1953,7 @@ void CPVRClient::cb_epg_event_state_change(void* kodiInstance, EPG_TAG* tag, uns
 class CCodecIds
 {
 public:
-  virtual ~CCodecIds() {}
+  virtual ~CCodecIds() = default;
 
   static CCodecIds& GetInstance()
   {

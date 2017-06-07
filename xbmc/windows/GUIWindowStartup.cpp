@@ -25,8 +25,7 @@
 
 CGUIWindowStartup::CGUIWindowStartup()
     : CGUIWindow(WINDOW_STARTUP_ANIM, "Startup.xml")
-{
-}
+= default;
 
 CGUIWindowStartup::~CGUIWindowStartup(void)
 {

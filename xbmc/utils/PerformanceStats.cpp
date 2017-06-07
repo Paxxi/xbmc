@@ -23,8 +23,7 @@
 #include "log.h"
 
 CPerformanceStats::CPerformanceStats()
-{
-}
+= default;
 
 
 CPerformanceStats::~CPerformanceStats()

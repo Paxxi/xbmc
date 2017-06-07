@@ -140,8 +140,7 @@ public:
 
 
   ~CUPnPPlayerController()
-  {
-  }
+  = default;
 
   PLT_MediaController*     m_control;
   PLT_Service *            m_transport;

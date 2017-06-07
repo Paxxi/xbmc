@@ -40,9 +40,7 @@ HttpParser::HttpParser() :
 }
 
 HttpParser::~HttpParser()
-{
-
-}
+= default;
 
 void
 HttpParser::parseHeader()

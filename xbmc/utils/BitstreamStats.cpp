@@ -38,8 +38,7 @@ BitstreamStats::BitstreamStats(unsigned int nEstimatedBitrate)
 }
 
 BitstreamStats::~BitstreamStats()
-{
-}
+= default;
 
 void BitstreamStats::AddSampleBytes(unsigned int nBytes)
 {

@@ -30,8 +30,7 @@ CLinuxResourceCounter::CLinuxResourceCounter()
 }
 
 CLinuxResourceCounter::~CLinuxResourceCounter()
-{
-}
+= default;
 
 double CLinuxResourceCounter::GetCPUUsage()
 {

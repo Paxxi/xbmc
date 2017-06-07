@@ -560,8 +560,7 @@ for (unsigned int i=0; i < fields_object->size(); i++)
 
 DbErrors::DbErrors():
   msg_("Unknown Database Error")
-{
-}
+= default;
 
 
 DbErrors::DbErrors(const char *msg, ...) {

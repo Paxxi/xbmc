@@ -63,7 +63,7 @@ public:
       m_limit(limit),
       m_parentID(parentID)
   { }
-  virtual ~CDirectoryJob() { }
+  virtual ~CDirectoryJob() = default;
 
   virtual const char* GetType() const { return "directory"; }
   virtual bool operator==(const CJob *job) const

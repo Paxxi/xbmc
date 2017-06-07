@@ -49,8 +49,7 @@ namespace GAME
 
 CPortManager::CPortManager() :
   m_portMapper(new CPortMapper)
-{
-}
+= default;
 
 CPortManager::~CPortManager()
 {

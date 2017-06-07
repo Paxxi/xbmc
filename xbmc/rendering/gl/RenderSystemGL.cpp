@@ -44,8 +44,7 @@ CRenderSystemGL::CRenderSystemGL() : CRenderSystemBase()
 }
 
 CRenderSystemGL::~CRenderSystemGL()
-{
-}
+= default;
 
 void CRenderSystemGL::CheckOpenGLQuirks()
 

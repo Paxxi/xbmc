@@ -324,8 +324,7 @@ void CGUIWindowPVRChannelsBase::OnInputDone()
 
 CGUIWindowPVRTVChannels::CGUIWindowPVRTVChannels()
   : CGUIWindowPVRChannelsBase(false, WINDOW_TV_CHANNELS, "MyPVRChannels.xml")
-{
-}
+= default;
 
 std::string CGUIWindowPVRTVChannels::GetDirectoryPath()
 {
@@ -335,8 +334,7 @@ std::string CGUIWindowPVRTVChannels::GetDirectoryPath()
 
 CGUIWindowPVRRadioChannels::CGUIWindowPVRRadioChannels()
   : CGUIWindowPVRChannelsBase(true, WINDOW_RADIO_CHANNELS, "MyPVRChannels.xml")
-{
-}
+= default;
 
 std::string CGUIWindowPVRRadioChannels::GetDirectoryPath()
 {

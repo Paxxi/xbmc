@@ -22,7 +22,7 @@
 
 
 IWindowManagerCallback::IWindowManagerCallback()
-{}
+= default;
 
 IWindowManagerCallback::~IWindowManagerCallback()
-{}
+= default;

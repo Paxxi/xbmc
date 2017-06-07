@@ -33,10 +33,10 @@
 #define METHOD_BYFOLDERTHUMBS 4
 
 CAutoSwitch::CAutoSwitch()
-{}
+= default;
 
 CAutoSwitch::~CAutoSwitch()
-{}
+= default;
 
 /// \brief Generic function to add a layer of transparency to the calling window
 /// \param vecItems Vector of FileItems passed from the calling window

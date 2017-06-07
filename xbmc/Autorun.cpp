@@ -65,7 +65,7 @@ CAutorun::CAutorun()
 }
 
 CAutorun::~CAutorun()
-{}
+= default;
 
 void CAutorun::ExecuteAutorun(const std::string& path, bool bypassSettings, bool ignoreplaying, bool startFromBeginning )
 {

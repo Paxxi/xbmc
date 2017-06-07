@@ -38,8 +38,7 @@ using namespace JOYSTICK;
 
 CDefaultJoystick::CDefaultJoystick() :
   m_handler(new CKeymapHandler)
-{
-}
+= default;
 
 CDefaultJoystick::~CDefaultJoystick(void)
 {

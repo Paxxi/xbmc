@@ -31,8 +31,7 @@ CMusicInfoTagLoaderDatabase::CMusicInfoTagLoaderDatabase()
 }
 
 CMusicInfoTagLoaderDatabase::~CMusicInfoTagLoaderDatabase()
-{
-}
+= default;
 
 bool CMusicInfoTagLoaderDatabase::Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art)
 {

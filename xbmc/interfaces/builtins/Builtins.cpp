@@ -78,8 +78,7 @@ CBuiltins::CBuiltins()
 }
 
 CBuiltins::~CBuiltins()
-{
-}
+= default;
 
 CBuiltins& CBuiltins::GetInstance()
 {

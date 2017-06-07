@@ -34,8 +34,7 @@ CMouseStat::CMouseStat()
 }
 
 CMouseStat::~CMouseStat()
-{
-}
+= default;
 
 void CMouseStat::Initialize()
 {

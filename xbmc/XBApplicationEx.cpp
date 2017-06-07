@@ -50,8 +50,7 @@ CXBApplicationEx::CXBApplicationEx()
 }
 
 CXBApplicationEx::~CXBApplicationEx()
-{
-}
+= default;
 
 /* Destroy the app */
 VOID CXBApplicationEx::Destroy()

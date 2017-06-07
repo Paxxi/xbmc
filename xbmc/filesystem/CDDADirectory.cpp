@@ -35,8 +35,7 @@ CCDDADirectory::CCDDADirectory()
 }
 
 CCDDADirectory::~CCDDADirectory()
-{
-}
+= default;
 
 
 bool CCDDADirectory::GetDirectory(const CURL& url, CFileItemList &items)

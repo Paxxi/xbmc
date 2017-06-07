@@ -50,8 +50,7 @@ CKeyboardStat::CKeyboardStat()
 }
 
 CKeyboardStat::~CKeyboardStat()
-{
-}
+= default;
 
 void CKeyboardStat::Initialize()
 {

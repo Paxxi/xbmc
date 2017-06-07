@@ -42,11 +42,10 @@ CGUIKeyboard *CGUIKeyboardFactory::g_activeKeyboard = NULL;
 FILTERING CGUIKeyboardFactory::m_filtering = FILTERING_NONE;
 
 CGUIKeyboardFactory::CGUIKeyboardFactory()
-{
-}
+= default;
 
 CGUIKeyboardFactory::~CGUIKeyboardFactory()
-{}
+= default;
 
 void CGUIKeyboardFactory::keyTypedCB(CGUIKeyboard *ref, const std::string &typedString)
 {

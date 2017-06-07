@@ -25,7 +25,7 @@ CVideoLibraryProgressJob::CVideoLibraryProgressJob(CGUIDialogProgressBarHandle* 
 { }
 
 CVideoLibraryProgressJob::~CVideoLibraryProgressJob()
-{ }
+= default;
 
 bool CVideoLibraryProgressJob::DoWork()
 {

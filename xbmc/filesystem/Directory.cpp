@@ -117,10 +117,10 @@ public:
 
 
 CDirectory::CDirectory()
-{}
+= default;
 
 CDirectory::~CDirectory()
-{}
+= default;
 
 bool CDirectory::GetDirectory(const std::string& strPath, CFileItemList &items, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
 {

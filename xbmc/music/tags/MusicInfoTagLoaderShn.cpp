@@ -28,7 +28,7 @@ CMusicInfoTagLoaderSHN::CMusicInfoTagLoaderSHN()
 {}
 
 CMusicInfoTagLoaderSHN::~CMusicInfoTagLoaderSHN()
-{}
+= default;
 
 bool CMusicInfoTagLoaderSHN::Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art)
 {

@@ -33,7 +33,7 @@ namespace XFILE
   { }
 
   CBlurayFile::~CBlurayFile()
-  { }
+  = default;
 
   std::string CBlurayFile::TranslatePath(const CURL& url)
   {

@@ -70,14 +70,14 @@ public:
 class GlobalThreadLocal : public Runnable
 {
 public:
-  GlobalThreadLocal() : Runnable(staticThreadLocal) {}
+  GlobalThreadLocal() : Runnable(staticThreadLocal) = default;default;
 };
 
 class StackThreadLocal : public Runnable
 {
 public:
   ThreadLocal<Thingy> threadLocal;
-  inline StackThreadLocal() : Runnable(threadLocal) {}
+  inline StackThreadLocal() : Runnable(threadLocal) = default;default;
 };
 
 TEST(TestThreadLocal, Simple)

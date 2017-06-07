@@ -56,8 +56,7 @@ const CSkinVariableString* CSkinVariable::CreateFromXML(const TiXmlElement& node
 }
 
 CSkinVariableString::CSkinVariableString()
-{
-}
+= default;
 
 int CSkinVariableString::GetContext() const
 {

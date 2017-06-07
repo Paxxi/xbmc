@@ -28,8 +28,7 @@ namespace PVR
 
 CPVRChannelNumberInputHandler::CPVRChannelNumberInputHandler()
 : CPVRChannelNumberInputHandler(g_advancedSettings.m_iPVRNumericChannelSwitchTimeout, CHANNEL_NUMBER_INPUT_MAX_DIGITS)
-{
-}
+= default;
 
 CPVRChannelNumberInputHandler::CPVRChannelNumberInputHandler(int iDelay, int iMaxDigits /* = CHANNEL_NUMBER_INPUT_MAX_DIGITS */)
 : m_iDelay(iDelay),
