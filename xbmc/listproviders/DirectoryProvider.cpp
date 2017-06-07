@@ -59,7 +59,7 @@ class CDirectoryJob : public CJob
 public:
   CDirectoryJob(const std::string &url, SortDescription sort, int limit, int parentID)
     : m_url(url),
-      m_sort(sort),
+      m_sort(std::move(sort)),
       m_limit(limit),
       m_parentID(parentID)
   { }

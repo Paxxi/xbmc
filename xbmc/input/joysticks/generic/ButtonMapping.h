@@ -84,7 +84,7 @@ namespace JOYSTICK
   class CAxisDetector
   {
   public:
-    CAxisDetector(CButtonMapping* buttonMapping, unsigned int axisIndex, const AxisConfiguration& config);
+    CAxisDetector(CButtonMapping* buttonMapping, unsigned int axisIndex, AxisConfiguration  config);
 
     /*!
      * \brief Axis state has been updated

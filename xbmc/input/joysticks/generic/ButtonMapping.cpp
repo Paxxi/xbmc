@@ -88,10 +88,10 @@ bool CHatDetector::OnMotion(HAT_STATE state)
 
 // --- CAxisDetector -----------------------------------------------------------
 
-CAxisDetector::CAxisDetector(CButtonMapping* buttonMapping, unsigned int axisIndex, const AxisConfiguration& config) :
+CAxisDetector::CAxisDetector(CButtonMapping* buttonMapping, unsigned int axisIndex, AxisConfiguration  config) :
   m_buttonMapping(buttonMapping),
   m_axisIndex(axisIndex),
-  m_config(config),
+  m_config(std::move(config)),
   m_state(AXIS_STATE::INACTIVE),
   m_type(AXIS_TYPE::UNKNOWN),
   m_initialPositionKnown(false),

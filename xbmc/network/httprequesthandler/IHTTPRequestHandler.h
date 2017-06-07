@@ -238,7 +238,7 @@ public:
 
 protected:
   IHTTPRequestHandler();
-  explicit IHTTPRequestHandler(const HTTPRequest &request);
+  explicit IHTTPRequestHandler(HTTPRequest request);
 
 #if (MHD_VERSION >= 0x00040001)
   virtual bool appendPostData(const char *data, size_t size)

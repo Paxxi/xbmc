@@ -69,8 +69,8 @@ IHTTPRequestHandler::IHTTPRequestHandler()
     m_ranged(false)
 { }
 
-IHTTPRequestHandler::IHTTPRequestHandler(const HTTPRequest &request)
-  : m_request(request),
+IHTTPRequestHandler::IHTTPRequestHandler(HTTPRequest request)
+  : m_request(std::move(request)),
     m_response(),
     m_postFields(),
     m_ranged(false)
