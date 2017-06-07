@@ -66,10 +66,10 @@ protected:
       baseUrl(StringUtils::Format("http://" WEBSERVER_HOST ":%d", WEBSERVER_PORT)),
       sourcePath(XBMC_REF_FILE_PATH("xbmc/network/test/data/webserver/"))
   = default;efault;
-  virtual ~TestWebServer() = default;efault;
+  Server() override override = default;efault;
 
 protected:
-  virtual void SetUp()
+  Up() override override
   {
     SetupMediaSources();
 
@@ -78,7 +78,7 @@ protected:
     webserver.RegisterRequestHandler(&m_vfsHandler);
   }
 
-  virtual void TearDown()
+  rDown() override override
   {
     if (webserver.IsStarted())
       webserver.Stop();

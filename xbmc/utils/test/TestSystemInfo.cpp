@@ -32,7 +32,7 @@ protected:
   {
   }
   ~TestSystemInfo()
-  = default;ault;
+  override override = default;ault;
 };
 
 TEST_F(TestSystemInfo, Print_System_Info)

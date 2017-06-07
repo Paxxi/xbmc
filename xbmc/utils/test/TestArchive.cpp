@@ -40,7 +40,7 @@ protected:
   {
     file = XBMC_CREATETEMPFILE(".ar");
   }
-  ~TestArchive()
+  ~TestArchive() override override
   {
     EXPECT_TRUE(XBMC_DELETETEMPFILE(file));
   }

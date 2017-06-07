@@ -53,7 +53,7 @@ protected:
     */
   }
 
-  ~TestZipFile()
+  ~TestZipFile() override override
   {
     CServiceBroker::GetSettings().Unload();
   }

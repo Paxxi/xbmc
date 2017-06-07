@@ -127,9 +127,9 @@ class CSetCurrentItemJob : public CJob
   CFileItemPtr m_itemCurrentFile;
 public:
   CSetCurrentItemJob(const CFileItemPtr item) : m_itemCurrentFile(item) { }
-  ~CSetCurrentItemJob() = default;
+  ~CSetCurrentItemJob() override = default;
 
-  bool DoWork()
+  bool DoWork() override
   {
     g_infoManager.SetCurrentItemJob(m_itemCurrentFile);
     return true;
