@@ -21,8 +21,8 @@
 #include "IWindowManagerCallback.h"
 
 
-IWindowManagerCallback::IWindowManagerCallback(void)
+IWindowManagerCallback::IWindowManagerCallback()
 {}
 
-IWindowManagerCallback::~IWindowManagerCallback(void)
+IWindowManagerCallback::~IWindowManagerCallback()
 {}

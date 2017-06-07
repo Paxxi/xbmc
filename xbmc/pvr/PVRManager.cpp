@@ -146,7 +146,7 @@ bool CPVRManagerJobQueue::WaitForJobs(unsigned int milliSeconds)
   return m_triggerEvent.WaitMSec(milliSeconds);
 }
 
-CPVRManager::CPVRManager(void) :
+CPVRManager::CPVRManager() :
     CThread("PVRManager"),
     m_addons(new CPVRClients),
     m_guiActions(new CPVRGUIActions),
@@ -198,7 +198,7 @@ void CPVRManager::SaveLastPlayedChannel() const
     playingChannel->SetWasPlayingOnLastQuit(true);
 }
 
-CPVRDatabasePtr CPVRManager::GetTVDatabase(void) const
+CPVRDatabasePtr CPVRManager::GetTVDatabase() const
 {
   CSingleLock lock(m_critSection);
   if (!m_database || !m_database->IsOpen())
@@ -207,31 +207,31 @@ CPVRDatabasePtr CPVRManager::GetTVDatabase(void) const
   return m_database;
 }
 
-CPVRChannelGroupsContainerPtr CPVRManager::ChannelGroups(void) const
+CPVRChannelGroupsContainerPtr CPVRManager::ChannelGroups() const
 {
   CSingleLock lock(m_critSection);
   return m_channelGroups;
 }
 
-CPVRRecordingsPtr CPVRManager::Recordings(void) const
+CPVRRecordingsPtr CPVRManager::Recordings() const
 {
   CSingleLock lock(m_critSection);
   return m_recordings;
 }
 
-CPVRTimersPtr CPVRManager::Timers(void) const
+CPVRTimersPtr CPVRManager::Timers() const
 {
   CSingleLock lock(m_critSection);
   return m_timers;
 }
 
-CPVRClientsPtr CPVRManager::Clients(void) const
+CPVRClientsPtr CPVRManager::Clients() const
 {
   // note: m_addons is const (only set/reset in ctor/dtor). no need for a lock here.
   return m_addons;
 }
 
-CPVRGUIActionsPtr CPVRManager::GUIActions(void) const
+CPVRGUIActionsPtr CPVRManager::GUIActions() const
 {
   // note: m_guiActions is const (only set/reset in ctor/dtor). no need for a lock here.
   return m_guiActions;
@@ -243,7 +243,7 @@ CPVREpgContainer& CPVRManager::EpgContainer()
   return m_epgContainer;
 }
 
-void CPVRManager::Clear(void)
+void CPVRManager::Clear()
 {
   m_pendingUpdates.Clear();
 
@@ -263,7 +263,7 @@ void CPVRManager::Clear(void)
   HideProgressDialog();
 }
 
-void CPVRManager::ResetProperties(void)
+void CPVRManager::ResetProperties()
 {
   CSingleLock lock(m_critSection);
   Clear();
@@ -325,7 +325,7 @@ void CPVRManager::Start()
   SetPriority(-1);
 }
 
-void CPVRManager::Stop(void)
+void CPVRManager::Stop()
 {
   CSingleLock initLock(m_startStopMutex);
 
@@ -386,7 +386,7 @@ void CPVRManager::Deinit()
   m_addons.reset();
 }
 
-CPVRManager::ManagerState CPVRManager::GetState(void) const
+CPVRManager::ManagerState CPVRManager::GetState() const
 {
   CSingleLock lock(m_managerStateMutex);
   return m_managerState;
@@ -443,7 +443,7 @@ void CPVRManager::PublishEvent(PVREvent event)
   m_events.Publish(event);
 }
 
-void CPVRManager::Process(void)
+void CPVRManager::Process()
 {
   m_epgContainer.Stop();
 
@@ -505,7 +505,7 @@ void CPVRManager::Process(void)
   }
 }
 
-bool CPVRManager::SetWakeupCommand(void)
+bool CPVRManager::SetWakeupCommand()
 {
   if (!m_settings.GetBoolValue(CSettings::SETTING_PVRPOWERMANAGEMENT_ENABLED))
     return false;
@@ -618,7 +618,7 @@ void CPVRManager::ShowProgressDialog(const std::string &strText, int iProgress)
   }
 }
 
-void CPVRManager::HideProgressDialog(void)
+void CPVRManager::HideProgressDialog()
 {
   if (m_progressHandle)
   {
@@ -679,13 +679,13 @@ bool CPVRManager::ChannelUpDown(unsigned int *iNewChannelNumber, bool bPreview, 
   return bReturn;
 }
 
-void CPVRManager::TriggerContinueLastChannel(void)
+void CPVRManager::TriggerContinueLastChannel()
 {
   if (IsStarted())
     CJobManager::GetInstance().AddJob(new CPVRContinueLastChannelJob(), nullptr);
 }
 
-bool CPVRManager::IsPlaying(void) const
+bool CPVRManager::IsPlaying() const
 {
   return IsStarted() && m_addons->IsPlaying();
 }
@@ -718,12 +718,12 @@ bool CPVRManager::IsPlayingRecording(const CPVRRecordingPtr &recording) const
   return bReturn;
 }
 
-CPVRChannelPtr CPVRManager::GetCurrentChannel(void) const
+CPVRChannelPtr CPVRManager::GetCurrentChannel() const
 {
   return m_addons->GetPlayingChannel();
 }
 
-CPVRRecordingPtr CPVRManager::GetCurrentRecording(void) const
+CPVRRecordingPtr CPVRManager::GetCurrentRecording() const
 {
   return m_addons->GetPlayingRecording();
 }
@@ -741,7 +741,7 @@ int CPVRManager::GetCurrentEpg(CFileItemList &results) const
   return iReturn;
 }
 
-void CPVRManager::ResetPlayingTag(void)
+void CPVRManager::ResetPlayingTag()
 {
   CSingleLock lock(m_critSection);
   if (IsStarted() && m_guiInfo)
@@ -858,7 +858,7 @@ bool CPVRManager::OpenRecordedStream(const CPVRRecordingPtr &tag)
   return bReturn;
 }
 
-void CPVRManager::CloseStream(void)
+void CPVRManager::CloseStream()
 {
   CPVRChannelPtr channel(m_addons->GetPlayingChannel());
   if (channel)
@@ -876,7 +876,7 @@ void CPVRManager::CloseStream(void)
   m_currentFile.reset();
 }
 
-void CPVRManager::UpdateCurrentChannel(void)
+void CPVRManager::UpdateCurrentChannel()
 {
   CSingleLock lock(m_critSection);
 
@@ -891,7 +891,7 @@ void CPVRManager::UpdateCurrentChannel(void)
   }
 }
 
-void CPVRManager::UpdateCurrentFile(void)
+void CPVRManager::UpdateCurrentFile()
 {
   CSingleLock lock(m_critSection);
   if (m_currentFile)
@@ -1081,12 +1081,12 @@ bool CPVRManager::IsChannelPreview() const
   return m_isChannelPreview;
 }
 
-int CPVRManager::GetTotalTime(void) const
+int CPVRManager::GetTotalTime() const
 {
   return IsStarted() && m_guiInfo ? m_guiInfo->GetDuration() : 0;
 }
 
-int CPVRManager::GetStartTime(void) const
+int CPVRManager::GetStartTime() const
 {
   return IsStarted() && m_guiInfo ? m_guiInfo->GetStartTime() : 0;
 }
@@ -1106,7 +1106,7 @@ int CPVRManager::TranslateIntInfo(DWORD dwInfo) const
   return IsStarted() && m_guiInfo ? m_guiInfo->TranslateIntInfo(dwInfo) : 0;
 }
 
-bool CPVRManager::IsRecording(void) const
+bool CPVRManager::IsRecording() const
 {
   return IsStarted() && m_timers ? m_timers->IsRecording() : false;
 }
@@ -1252,7 +1252,7 @@ bool CPVRManager::EventOccursOnLocalBackend(const CFileItemPtr& item) const
   return false;
 }
 
-bool CPVRManager::IsNextEventWithinBackendIdleTime(void) const
+bool CPVRManager::IsNextEventWithinBackendIdleTime() const
 {
   // timers going off soon?
   const CDateTime now(CDateTime::GetUTCDateTime());
@@ -1269,7 +1269,7 @@ void CPVRManager::ShowPlayerInfo(int iTimeout)
     m_guiInfo->ShowPlayerInfo(iTimeout);
 }
 
-void CPVRManager::LocalizationChanged(void)
+void CPVRManager::LocalizationChanged()
 {
   CSingleLock lock(m_critSection);
   if (IsStarted())
@@ -1279,59 +1279,59 @@ void CPVRManager::LocalizationChanged(void)
   }
 }
 
-bool CPVRManager::EpgsCreated(void) const
+bool CPVRManager::EpgsCreated() const
 {
   CSingleLock lock(m_critSection);
   return m_bEpgsCreated;
 }
 
-bool CPVRManager::IsPlayingTV(void) const
+bool CPVRManager::IsPlayingTV() const
 {
   return IsStarted() && m_addons->IsPlayingTV();
 }
 
-bool CPVRManager::IsPlayingRadio(void) const
+bool CPVRManager::IsPlayingRadio() const
 {
   return IsStarted() && m_addons->IsPlayingRadio();
 }
 
-bool CPVRManager::IsPlayingRecording(void) const
+bool CPVRManager::IsPlayingRecording() const
 {
   return IsStarted() && m_addons->IsPlayingRecording();
 }
 
-void CPVRManager::SearchMissingChannelIcons(void)
+void CPVRManager::SearchMissingChannelIcons()
 {
   if (IsStarted() && m_channelGroups)
     m_channelGroups->SearchMissingChannelIcons();
 }
 
-void CPVRManager::TriggerEpgsCreate(void)
+void CPVRManager::TriggerEpgsCreate()
 {
   m_pendingUpdates.AppendJob(new CPVREpgsCreateJob());
 }
 
-void CPVRManager::TriggerRecordingsUpdate(void)
+void CPVRManager::TriggerRecordingsUpdate()
 {
   m_pendingUpdates.AppendJob(new CPVRRecordingsUpdateJob());
 }
 
-void CPVRManager::TriggerTimersUpdate(void)
+void CPVRManager::TriggerTimersUpdate()
 {
   m_pendingUpdates.AppendJob(new CPVRTimersUpdateJob());
 }
 
-void CPVRManager::TriggerChannelsUpdate(void)
+void CPVRManager::TriggerChannelsUpdate()
 {
   m_pendingUpdates.AppendJob(new CPVRChannelsUpdateJob());
 }
 
-void CPVRManager::TriggerChannelGroupsUpdate(void)
+void CPVRManager::TriggerChannelGroupsUpdate()
 {
   m_pendingUpdates.AppendJob(new CPVRChannelGroupsUpdateJob());
 }
 
-void CPVRManager::TriggerSearchMissingChannelIcons(void)
+void CPVRManager::TriggerSearchMissingChannelIcons()
 {
   if (IsStarted())
     CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), NULL);
@@ -1343,7 +1343,7 @@ void CPVRManager::ConnectionStateChange(CPVRClient *client, std::string connectS
   CJobManager::GetInstance().AddJob(new CPVRClientConnectionJob(client, connectString, state, message), NULL);
 }
 
-bool CPVRManager::CreateChannelEpgs(void)
+bool CPVRManager::CreateChannelEpgs()
 {
   if (EpgsCreated())
     return true;

@@ -39,7 +39,7 @@
 #include "linux/XMemUtils.h"
 #endif
 
-CGUIWindowDebugInfo::CGUIWindowDebugInfo(void)
+CGUIWindowDebugInfo::CGUIWindowDebugInfo()
   : CGUIDialog(WINDOW_DEBUG_INFO, "", DialogModalityType::MODELESS)
 {
   m_needsScaling = false;

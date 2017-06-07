@@ -195,12 +195,12 @@ ADDON_STATUS CPVRClient::Create(int iClientId)
   return status;
 }
 
-bool CPVRClient::DllLoaded(void) const
+bool CPVRClient::DllLoaded() const
 {
   return CAddonDll::DllLoaded();
 }
 
-void CPVRClient::Destroy(void)
+void CPVRClient::Destroy()
 {
   if (!m_bReadyToUse)
     return;
@@ -216,7 +216,7 @@ void CPVRClient::Destroy(void)
   ResetProperties();
 }
 
-void CPVRClient::ReCreate(void)
+void CPVRClient::ReCreate()
 {
   int iClientID(m_iClientId);
   Destroy();
@@ -225,12 +225,12 @@ void CPVRClient::ReCreate(void)
   Create(iClientID);
 }
 
-bool CPVRClient::ReadyToUse(void) const
+bool CPVRClient::ReadyToUse() const
 {
   return m_bReadyToUse;
 }
 
-PVR_CONNECTION_STATE CPVRClient::GetConnectionState(void) const
+PVR_CONNECTION_STATE CPVRClient::GetConnectionState() const
 {
   CSingleLock lock(m_critSection);
   return m_connectionState;
@@ -250,19 +250,19 @@ void CPVRClient::SetConnectionState(PVR_CONNECTION_STATE state)
     m_ignoreClient = true;
 }
 
-PVR_CONNECTION_STATE CPVRClient::GetPreviousConnectionState(void) const
+PVR_CONNECTION_STATE CPVRClient::GetPreviousConnectionState() const
 {
   CSingleLock lock(m_critSection);
   return m_prevConnectionState;
 }
 
-bool CPVRClient::IgnoreClient(void) const
+bool CPVRClient::IgnoreClient() const
 {
   CSingleLock lock(m_critSection);
   return m_ignoreClient;
 }
 
-int CPVRClient::GetID(void) const
+int CPVRClient::GetID() const
 {
   return m_iClientId;
 }
@@ -377,7 +377,7 @@ void CPVRClient::WriteClientChannelInfo(const CPVRChannelPtr &xbmcChannel, PVR_C
   strncpy(addonChannel.strStreamURL, xbmcChannel->StreamURL().c_str(), sizeof(addonChannel.strStreamURL) - 1);
 }
 
-bool CPVRClient::GetAddonProperties(void)
+bool CPVRClient::GetAddonProperties()
 {
   std::string strBackendName, strConnectionString, strFriendlyName, strBackendVersion, strBackendHostname;
   PVR_ADDON_CAPABILITIES addonCapabilities;
@@ -528,33 +528,33 @@ bool CPVRClient::GetAddonProperties(void)
   return true;
 }
 
-PVR_ADDON_CAPABILITIES CPVRClient::GetAddonCapabilities(void) const
+PVR_ADDON_CAPABILITIES CPVRClient::GetAddonCapabilities() const
 {
   PVR_ADDON_CAPABILITIES addonCapabilities(m_addonCapabilities);
   return addonCapabilities;
 }
 
-const std::string& CPVRClient::GetBackendName(void) const
+const std::string& CPVRClient::GetBackendName() const
 {
   return m_strBackendName;
 }
 
-const std::string& CPVRClient::GetBackendVersion(void) const
+const std::string& CPVRClient::GetBackendVersion() const
 {
   return m_strBackendVersion;
 }
 
-const std::string& CPVRClient::GetBackendHostname(void) const
+const std::string& CPVRClient::GetBackendHostname() const
 {
   return m_strBackendHostname;
 }
 
-const std::string& CPVRClient::GetConnectionString(void) const
+const std::string& CPVRClient::GetConnectionString() const
 {
   return m_strConnectionString;
 }
 
-const std::string& CPVRClient::GetFriendlyName(void) const
+const std::string& CPVRClient::GetFriendlyName() const
 {
   return m_strFriendlyName;
 }
@@ -571,7 +571,7 @@ PVR_ERROR CPVRClient::GetDriveSpace(long long *iTotal, long long *iUsed)
   return m_struct.toAddon.GetDriveSpace(iTotal, iUsed);
 }
 
-PVR_ERROR CPVRClient::StartChannelScan(void)
+PVR_ERROR CPVRClient::StartChannelScan()
 {
   if (!m_bReadyToUse)
     return PVR_ERROR_SERVER_ERROR;
@@ -723,7 +723,7 @@ PVR_ERROR CPVRClient::SetEPGTimeFrame(int iDays)
   return retVal;
 }
 
-int CPVRClient::GetChannelGroupsAmount(void)
+int CPVRClient::GetChannelGroupsAmount()
 {
   int iReturn(-EINVAL);
 
@@ -776,7 +776,7 @@ PVR_ERROR CPVRClient::GetChannelGroupMembers(CPVRChannelGroup *group)
   return retVal;
 }
 
-int CPVRClient::GetChannelsAmount(void)
+int CPVRClient::GetChannelsAmount()
 {
   return m_struct.toAddon.GetChannelsAmount();
 }
@@ -965,7 +965,7 @@ std::vector<PVR_EDL_ENTRY> CPVRClient::GetRecordingEdl(const CPVRRecording &reco
   return edl;
 }
 
-int CPVRClient::GetTimersAmount(void)
+int CPVRClient::GetTimersAmount()
 {
   if (!m_bReadyToUse)
     return -EINVAL;
@@ -1106,7 +1106,7 @@ bool CPVRClient::SeekTime(double time, bool backwards, double *startpts)
   return false;
 }
 
-int64_t CPVRClient::GetStreamPosition(void)
+int64_t CPVRClient::GetStreamPosition()
 {
   if (IsPlayingLiveStream())
   {
@@ -1119,7 +1119,7 @@ int64_t CPVRClient::GetStreamPosition(void)
   return -EINVAL;
 }
 
-int64_t CPVRClient::GetStreamLength(void)
+int64_t CPVRClient::GetStreamLength()
 {
   if (IsPlayingLiveStream())
   {
@@ -1183,7 +1183,7 @@ PVR_ERROR CPVRClient::GetStreamProperties(PVR_STREAM_PROPERTIES *props)
   return m_struct.toAddon.GetStreamProperties(props);
 }
 
-void CPVRClient::DemuxReset(void)
+void CPVRClient::DemuxReset()
 {
   if (m_bReadyToUse && m_addonCapabilities.bHandlesDemuxing)
   {
@@ -1191,7 +1191,7 @@ void CPVRClient::DemuxReset(void)
   }
 }
 
-void CPVRClient::DemuxAbort(void)
+void CPVRClient::DemuxAbort()
 {
   if (m_bReadyToUse && m_addonCapabilities.bHandlesDemuxing)
   {
@@ -1199,7 +1199,7 @@ void CPVRClient::DemuxAbort(void)
   }
 }
 
-void CPVRClient::DemuxFlush(void)
+void CPVRClient::DemuxFlush()
 {
   if (m_bReadyToUse && m_addonCapabilities.bHandlesDemuxing)
   {
@@ -1207,7 +1207,7 @@ void CPVRClient::DemuxFlush(void)
   }
 }
 
-DemuxPacket* CPVRClient::DemuxRead(void)
+DemuxPacket* CPVRClient::DemuxRead()
 {
   if (m_bReadyToUse && m_addonCapabilities.bHandlesDemuxing)
   {
@@ -1233,7 +1233,7 @@ bool CPVRClient::HasMenuHooks(PVR_MENUHOOK_CAT cat) const
   return bReturn;
 }
 
-PVR_MENUHOOKS *CPVRClient::GetMenuHooks(void)
+PVR_MENUHOOKS *CPVRClient::GetMenuHooks()
 {
   return &m_menuhooks;
 }
@@ -1286,107 +1286,107 @@ bool CPVRClient::CanPlayChannel(const CPVRChannelPtr &channel) const
             (m_addonCapabilities.bSupportsRadio && channel->IsRadio())));
 }
 
-bool CPVRClient::SupportsChannelGroups(void) const
+bool CPVRClient::SupportsChannelGroups() const
 {
   return m_addonCapabilities.bSupportsChannelGroups;
 }
 
-bool CPVRClient::SupportsChannelScan(void) const
+bool CPVRClient::SupportsChannelScan() const
 {
   return m_addonCapabilities.bSupportsChannelScan;
 }
 
-bool CPVRClient::SupportsChannelSettings(void) const
+bool CPVRClient::SupportsChannelSettings() const
 {
   return m_addonCapabilities.bSupportsChannelSettings;
 }
 
-bool CPVRClient::SupportsEPG(void) const
+bool CPVRClient::SupportsEPG() const
 {
   return m_addonCapabilities.bSupportsEPG;
 }
 
-bool CPVRClient::SupportsLastPlayedPosition(void) const
+bool CPVRClient::SupportsLastPlayedPosition() const
 {
   return m_addonCapabilities.bSupportsLastPlayedPosition;
 }
 
-bool CPVRClient::SupportsRadio(void) const
+bool CPVRClient::SupportsRadio() const
 {
   return m_addonCapabilities.bSupportsRadio;
 }
 
-bool CPVRClient::SupportsRecordings(void) const
+bool CPVRClient::SupportsRecordings() const
 {
   return m_addonCapabilities.bSupportsRecordings;
 }
 
-bool CPVRClient::SupportsRecordingsUndelete(void) const
+bool CPVRClient::SupportsRecordingsUndelete() const
 {
   return m_addonCapabilities.bSupportsRecordingsUndelete;
 }
 
-bool CPVRClient::SupportsRecordingPlayCount(void) const
+bool CPVRClient::SupportsRecordingPlayCount() const
 {
   return m_addonCapabilities.bSupportsRecordingPlayCount;
 }
 
-bool CPVRClient::SupportsRecordingEdl(void) const
+bool CPVRClient::SupportsRecordingEdl() const
 {
   return m_addonCapabilities.bSupportsRecordingEdl;
 }
 
-bool CPVRClient::SupportsTimers(void) const
+bool CPVRClient::SupportsTimers() const
 {
   return m_addonCapabilities.bSupportsTimers;
 }
 
-bool CPVRClient::SupportsTV(void) const
+bool CPVRClient::SupportsTV() const
 {
   return m_addonCapabilities.bSupportsTV;
 }
 
-bool CPVRClient::HandlesDemuxing(void) const
+bool CPVRClient::HandlesDemuxing() const
 {
   return m_addonCapabilities.bHandlesDemuxing;
 }
 
-bool CPVRClient::HandlesInputStream(void) const
+bool CPVRClient::HandlesInputStream() const
 {
   return m_addonCapabilities.bHandlesInputStream;
 }
 
-bool CPVRClient::IsPlayingLiveStream(void) const
+bool CPVRClient::IsPlayingLiveStream() const
 {
   CSingleLock lock(m_critSection);
   return m_bReadyToUse && m_bIsPlayingTV;
 }
 
-bool CPVRClient::IsPlayingLiveTV(void) const
+bool CPVRClient::IsPlayingLiveTV() const
 {
   CSingleLock lock(m_critSection);
   return m_bReadyToUse && m_bIsPlayingTV && !m_playingChannel->IsRadio();
 }
 
-bool CPVRClient::IsPlayingLiveRadio(void) const
+bool CPVRClient::IsPlayingLiveRadio() const
 {
   CSingleLock lock(m_critSection);
   return m_bReadyToUse && m_bIsPlayingTV && m_playingChannel->IsRadio();
 }
 
-bool CPVRClient::IsPlayingEncryptedChannel(void) const
+bool CPVRClient::IsPlayingEncryptedChannel() const
 {
   CSingleLock lock(m_critSection);
   return m_bReadyToUse && m_bIsPlayingTV && m_playingChannel->IsEncrypted();
 }
 
-bool CPVRClient::IsPlayingRecording(void) const
+bool CPVRClient::IsPlayingRecording() const
 {
   CSingleLock lock(m_critSection);
   return m_bReadyToUse && m_bIsPlayingRecording;
 }
 
-bool CPVRClient::IsPlaying(void) const
+bool CPVRClient::IsPlaying() const
 {
   return IsPlayingLiveStream() ||
          IsPlayingRecording();
@@ -1401,7 +1401,7 @@ CPVRChannelPtr CPVRClient::GetPlayingChannel() const
   return CPVRChannelPtr();
 }
 
-CPVRRecordingPtr CPVRClient::GetPlayingRecording(void) const
+CPVRRecordingPtr CPVRClient::GetPlayingRecording() const
 {
   CSingleLock lock(m_critSection);
   if (m_bReadyToUse && m_bIsPlayingRecording)
@@ -1473,7 +1473,7 @@ bool CPVRClient::OpenStream(const CPVRRecordingPtr &recording)
   return bReturn;
 }
 
-void CPVRClient::CloseStream(void)
+void CPVRClient::CloseStream()
 {
   if (IsPlayingLiveStream())
   {
@@ -1507,7 +1507,7 @@ void CPVRClient::SetSpeed(int speed)
   }
 }
 
-bool CPVRClient::CanPauseStream(void) const
+bool CPVRClient::CanPauseStream() const
 {
   bool bReturn(false);
   if (IsPlaying())
@@ -1518,7 +1518,7 @@ bool CPVRClient::CanPauseStream(void) const
   return bReturn;
 }
 
-bool CPVRClient::CanSeekStream(void) const
+bool CPVRClient::CanSeekStream() const
 {
   bool bReturn(false);
   if (IsPlaying())
@@ -1528,7 +1528,7 @@ bool CPVRClient::CanSeekStream(void) const
   return bReturn;
 }
 
-bool CPVRClient::IsTimeshifting(void) const
+bool CPVRClient::IsTimeshifting() const
 {
   bool bReturn(false);
   if (IsPlaying())
@@ -1539,7 +1539,7 @@ bool CPVRClient::IsTimeshifting(void) const
   return bReturn;
 }
 
-time_t CPVRClient::GetPlayingTime(void) const
+time_t CPVRClient::GetPlayingTime() const
 {
   time_t time = 0;
   if (IsPlaying())
@@ -1554,7 +1554,7 @@ time_t CPVRClient::GetPlayingTime(void) const
   return time;
 }
 
-time_t CPVRClient::GetBufferTimeStart(void) const
+time_t CPVRClient::GetBufferTimeStart() const
 {
   time_t time = 0;
   if (IsPlaying())
@@ -1564,7 +1564,7 @@ time_t CPVRClient::GetBufferTimeStart(void) const
   return time;
 }
 
-time_t CPVRClient::GetBufferTimeEnd(void) const
+time_t CPVRClient::GetBufferTimeEnd() const
 {
   time_t time = 0;
   if (IsPlaying())
@@ -1574,7 +1574,7 @@ time_t CPVRClient::GetBufferTimeEnd(void) const
   return time;
 }
 
-bool CPVRClient::IsRealTimeStream(void) const
+bool CPVRClient::IsRealTimeStream() const
 {
   bool bReturn(false);
   if (IsPlaying())
@@ -1584,7 +1584,7 @@ bool CPVRClient::IsRealTimeStream(void) const
   return bReturn;
 }
 
-void CPVRClient::OnSystemSleep(void)
+void CPVRClient::OnSystemSleep()
 {
   if (!m_bReadyToUse)
     return;
@@ -1592,7 +1592,7 @@ void CPVRClient::OnSystemSleep(void)
   m_struct.toAddon.OnSystemSleep();
 }
 
-void CPVRClient::OnSystemWake(void)
+void CPVRClient::OnSystemWake()
 {
   if (!m_bReadyToUse)
     return;
@@ -1600,7 +1600,7 @@ void CPVRClient::OnSystemWake(void)
   m_struct.toAddon.OnSystemWake();
 }
 
-void CPVRClient::OnPowerSavingActivated(void)
+void CPVRClient::OnPowerSavingActivated()
 {
   if (!m_bReadyToUse)
     return;
@@ -1608,7 +1608,7 @@ void CPVRClient::OnPowerSavingActivated(void)
   m_struct.toAddon.OnPowerSavingActivated();
 }
 
-void CPVRClient::OnPowerSavingDeactivated(void)
+void CPVRClient::OnPowerSavingDeactivated()
 {
   if (!m_bReadyToUse)
     return;
@@ -1953,7 +1953,7 @@ void CPVRClient::cb_epg_event_state_change(void* kodiInstance, EPG_TAG* tag, uns
 class CCodecIds
 {
 public:
-  virtual ~CCodecIds(void) {}
+  virtual ~CCodecIds() {}
 
   static CCodecIds& GetInstance()
   {
@@ -1978,7 +1978,7 @@ public:
   }
 
 private:
-  CCodecIds(void)
+  CCodecIds()
   {
     // get ids and names
     AVCodec* codec = NULL;

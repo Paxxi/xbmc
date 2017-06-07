@@ -127,9 +127,9 @@ class CSetCurrentItemJob : public CJob
   CFileItemPtr m_itemCurrentFile;
 public:
   CSetCurrentItemJob(const CFileItemPtr item) : m_itemCurrentFile(item) { }
-  ~CSetCurrentItemJob(void) {}
+  ~CSetCurrentItemJob() {}
 
-  bool DoWork(void)
+  bool DoWork()
   {
     g_infoManager.SetCurrentItemJob(m_itemCurrentFile);
     return true;
@@ -142,7 +142,7 @@ bool InfoBoolComparator(const InfoPtr &right, const InfoPtr &left)
 }
 
 
-CGUIInfoManager::CGUIInfoManager(void) :
+CGUIInfoManager::CGUIInfoManager() :
     Observable(),
     m_bools(&InfoBoolComparator)
 {

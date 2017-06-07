@@ -82,7 +82,7 @@ bool CAddonButtonMapping::OnAxisMotion(unsigned int axisIndex, float position, i
   return false;
 }
 
-void CAddonButtonMapping::ProcessAxisMotions(void)
+void CAddonButtonMapping::ProcessAxisMotions()
 {
   if (m_buttonMapping)
     m_buttonMapping->ProcessAxisMotions();

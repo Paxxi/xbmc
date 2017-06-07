@@ -21,7 +21,7 @@
 #include "GUIDialogFullScreenInfo.h"
 #include "input/Key.h"
 
-CGUIDialogFullScreenInfo::CGUIDialogFullScreenInfo(void)
+CGUIDialogFullScreenInfo::CGUIDialogFullScreenInfo()
     : CGUIDialog(WINDOW_DIALOG_FULLSCREEN_INFO, "DialogFullScreenInfo.xml")
 {
   m_loadType = KEEP_IN_MEMORY;

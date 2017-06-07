@@ -28,11 +28,11 @@
 namespace XFILE
 {
 
-  CBlurayFile::CBlurayFile(void)
+  CBlurayFile::CBlurayFile()
     : COverrideFile(false)
   { }
 
-  CBlurayFile::~CBlurayFile(void)
+  CBlurayFile::~CBlurayFile()
   { }
 
   std::string CBlurayFile::TranslatePath(const CURL& url)

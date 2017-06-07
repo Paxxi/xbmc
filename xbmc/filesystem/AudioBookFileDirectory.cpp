@@ -43,7 +43,7 @@ static int64_t cfile_file_seek(void *h, int64_t pos, int whence)
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
 }
 
-CAudioBookFileDirectory::CAudioBookFileDirectory(void) :
+CAudioBookFileDirectory::CAudioBookFileDirectory() :
   m_ioctx(nullptr), m_fctx(nullptr)
 {
 }

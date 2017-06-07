@@ -33,7 +33,7 @@ using namespace JOYSTICK;
 #define HOLD_TIMEOUT_MS     500
 #define REPEAT_TIMEOUT_MS   50
 
-CKeymapHandler::CKeymapHandler(void) :
+CKeymapHandler::CKeymapHandler() :
     m_lastButtonPress(0),
     m_lastDigitalActionMs(0)
 {

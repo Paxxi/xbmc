@@ -26,7 +26,7 @@
 #include "system_gl.h"
 #include "GUIWindowTestPatternGL.h"
 
-CGUIWindowTestPatternGL::CGUIWindowTestPatternGL(void) : CGUIWindowTestPattern()
+CGUIWindowTestPatternGL::CGUIWindowTestPatternGL() : CGUIWindowTestPattern()
 {
 }
 

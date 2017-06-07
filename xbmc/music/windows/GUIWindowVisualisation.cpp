@@ -37,7 +37,7 @@ using namespace MUSIC_INFO;
 
 #define CONTROL_VIS          2
 
-CGUIWindowVisualisation::CGUIWindowVisualisation(void)
+CGUIWindowVisualisation::CGUIWindowVisualisation()
     : CGUIWindow(WINDOW_VISUALISATION, "MusicVisualisation.xml"),
       m_initTimer(true), m_lockedTimer(true)
 {

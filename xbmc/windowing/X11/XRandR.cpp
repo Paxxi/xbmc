@@ -392,7 +392,7 @@ XMode CXRandR::GetPreferredMode(const std::string& outputName)
   return result;
 }
 
-void CXRandR::LoadCustomModeLinesToAllOutputs(void)
+void CXRandR::LoadCustomModeLinesToAllOutputs()
 {
   Query();
   CXBMCTinyXML xmlDoc;

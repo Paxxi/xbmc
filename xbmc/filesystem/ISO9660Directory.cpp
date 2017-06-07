@@ -34,7 +34,7 @@
 
 using namespace XFILE;
 
-CISO9660Directory::CISO9660Directory(void)
+CISO9660Directory::CISO9660Directory()
 {}
 
 CISO9660Directory::~CISO9660Directory(void)

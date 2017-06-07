@@ -86,7 +86,7 @@ void CGUIWindowPVRBase::UpdateSelectedItemPath()
   m_selectedItemPaths[m_bRadio] = m_viewControl.GetSelectedItemPath();
 }
 
-void CGUIWindowPVRBase::RegisterObservers(void)
+void CGUIWindowPVRBase::RegisterObservers()
 {
   CServiceBroker::GetPVRManager().RegisterObserver(this);
 
@@ -95,7 +95,7 @@ void CGUIWindowPVRBase::RegisterObservers(void)
     m_channelGroup->RegisterObserver(this);
 };
 
-void CGUIWindowPVRBase::UnregisterObservers(void)
+void CGUIWindowPVRBase::UnregisterObservers()
 {
   {
     CSingleLock lock(m_critSection);
@@ -153,7 +153,7 @@ void CGUIWindowPVRBase::ClearData()
   m_channelGroup.reset();
 }
 
-void CGUIWindowPVRBase::OnInitWindow(void)
+void CGUIWindowPVRBase::OnInitWindow()
 {
   SetProperty("IsRadio", m_bRadio ? "true" : "");
 
@@ -261,7 +261,7 @@ bool CGUIWindowPVRBase::CanBeActivated() const
   return true;
 }
 
-bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog(void)
+bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog()
 {
   CGUIDialogSelect *dialog = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
   if (!dialog)
@@ -307,7 +307,7 @@ bool CGUIWindowPVRBase::InitChannelGroup()
   return false;
 }
 
-CPVRChannelGroupPtr CGUIWindowPVRBase::GetChannelGroup(void)
+CPVRChannelGroupPtr CGUIWindowPVRBase::GetChannelGroup()
 {
   CSingleLock lock(m_critSection);
   return m_channelGroup;
@@ -371,7 +371,7 @@ bool CGUIWindowPVRBase::Update(const std::string &strDirectory, bool updateFilte
   return bReturn;
 }
 
-void CGUIWindowPVRBase::UpdateButtons(void)
+void CGUIWindowPVRBase::UpdateButtons()
 {
   CGUIMediaWindow::UpdateButtons();
   SET_CONTROL_LABEL(CONTROL_BTNCHANNELGROUPS, g_localizeStrings.Get(19141) + ": " + m_channelGroup->GroupName());
@@ -394,7 +394,7 @@ void CGUIWindowPVRBase::ShowProgressDialog(const std::string &strText, int iProg
   m_progressHandle->SetText(strText);
 }
 
-void CGUIWindowPVRBase::HideProgressDialog(void)
+void CGUIWindowPVRBase::HideProgressDialog()
 {
   if (m_progressHandle)
   {

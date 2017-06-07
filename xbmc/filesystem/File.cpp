@@ -950,14 +950,14 @@ int CFile::GetChunkSize()
   return 0;
 }
 
-std::string CFile::GetContentMimeType(void)
+std::string CFile::GetContentMimeType()
 {
   if (!m_pFile)
     return "";
   return m_pFile->GetContent();
 }
 
-std::string CFile::GetContentCharset(void)
+std::string CFile::GetContentCharset()
 {
   if (!m_pFile)
     return "";

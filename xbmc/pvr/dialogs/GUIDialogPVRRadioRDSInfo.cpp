@@ -48,7 +48,7 @@ using namespace PVR;
 #define INFO_CINEMA       8
 #define INFO_HOROSCOPE    9
 
-CGUIDialogPVRRadioRDSInfo::CGUIDialogPVRRadioRDSInfo(void)
+CGUIDialogPVRRadioRDSInfo::CGUIDialogPVRRadioRDSInfo()
   : CGUIDialog(WINDOW_DIALOG_PVR_RADIO_RDS_INFO, "DialogPVRRadioRDSInfo.xml")
   , m_rdsItem(new CFileItem)
   , m_InfoPresent(false)

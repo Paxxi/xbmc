@@ -41,14 +41,14 @@ CController::CController(ADDON::CAddonInfo addonInfo) :
 {
 }
 
-std::string CController::Label(void)
+std::string CController::Label()
 {
   if (m_layout.Label() > 0)
     return g_localizeStrings.GetAddonString(ID(), m_layout.Label());
   return "";
 }
 
-std::string CController::ImagePath(void) const
+std::string CController::ImagePath() const
 {
   if (!m_layout.Image().empty())
     return URIUtils::AddFileToFolder(URIUtils::GetDirectory(LibPath()), m_layout.Image());
@@ -75,7 +75,7 @@ JOYSTICK::INPUT_TYPE CController::GetInputType(const std::string& feature) const
   return JOYSTICK::INPUT_TYPE::UNKNOWN;
 }
 
-bool CController::LoadLayout(void)
+bool CController::LoadLayout()
 {
   if (!m_bLoaded)
   {

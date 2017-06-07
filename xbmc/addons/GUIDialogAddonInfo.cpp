@@ -63,7 +63,7 @@
 using namespace ADDON;
 using namespace XFILE;
 
-CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
+CGUIDialogAddonInfo::CGUIDialogAddonInfo()
   : CGUIDialog(WINDOW_DIALOG_ADDON_INFO, "DialogAddonInfo.xml"),
   m_addonEnabled(false)
 {

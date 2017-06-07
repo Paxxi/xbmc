@@ -31,7 +31,7 @@
 
 using namespace XFILE;
 
-CSourcesDirectory::CSourcesDirectory(void)
+CSourcesDirectory::CSourcesDirectory()
 {
 }
 

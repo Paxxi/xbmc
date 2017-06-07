@@ -574,7 +574,7 @@ std::string CFileCache::GetContent()
   return m_source.GetImplementation()->GetContent();
 }
 
-std::string CFileCache::GetContentCharset(void)
+std::string CFileCache::GetContentCharset()
 {
   IFile* impl = m_source.GetImplementation();
   if (!impl)

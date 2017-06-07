@@ -26,14 +26,14 @@
 using namespace KODI;
 using namespace JOYSTICK;
 
-CDefaultController::CDefaultController(void) :
+CDefaultController::CDefaultController() :
   m_rumbleGenerator(GetControllerID())
 {
   // initialize CDefaultJoystick
   m_easterEgg.reset(new CJoystickEasterEgg(GetControllerID()));
 }
 
-std::string CDefaultController::GetControllerID(void) const
+std::string CDefaultController::GetControllerID() const
 {
   return DEFAULT_CONTROLLER_ID;
 }

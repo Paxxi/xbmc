@@ -65,7 +65,7 @@ void CGameLoop::SetSpeed(double speedFactor)
   m_sleepEvent.Set();
 }
 
-void CGameLoop::Process(void)
+void CGameLoop::Process()
 {
   double nextFrameMs = NowMs();
 

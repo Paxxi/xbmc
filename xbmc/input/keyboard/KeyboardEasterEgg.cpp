@@ -38,7 +38,7 @@ std::vector<XBMCVKey> CKeyboardEasterEgg::m_sequence = {
   XBMCVK_A,
 };
 
-CKeyboardEasterEgg::CKeyboardEasterEgg(void) :
+CKeyboardEasterEgg::CKeyboardEasterEgg() :
   m_state(0)
 {
 }

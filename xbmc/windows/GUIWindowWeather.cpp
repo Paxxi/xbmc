@@ -57,7 +57,7 @@ FIXME'S
 >strings are not centered
 */
 
-CGUIWindowWeather::CGUIWindowWeather(void)
+CGUIWindowWeather::CGUIWindowWeather()
     : CGUIWindow(WINDOW_WEATHER, "MyWeather.xml"), m_maxLocation(0)
 {
   m_loadType = KEEP_IN_MEMORY;

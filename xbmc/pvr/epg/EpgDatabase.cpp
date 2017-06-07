@@ -33,12 +33,12 @@
 using namespace dbiplus;
 using namespace PVR;
 
-bool CPVREpgDatabase::Open(void)
+bool CPVREpgDatabase::Open()
 {
   return CDatabase::Open(g_advancedSettings.m_databaseEpg);
 }
 
-void CPVREpgDatabase::CreateTables(void)
+void CPVREpgDatabase::CreateTables()
 {
   CLog::Log(LOGINFO, "EpgDB - %s - creating tables", __FUNCTION__);
 
@@ -122,7 +122,7 @@ void CPVREpgDatabase::UpdateTables(int iVersion)
   }
 }
 
-bool CPVREpgDatabase::DeleteEpg(void)
+bool CPVREpgDatabase::DeleteEpg()
 {
   bool bReturn(false);
   CLog::Log(LOGDEBUG, "EpgDB - %s - deleting all EPG data from the database", __FUNCTION__);
@@ -403,7 +403,7 @@ int CPVREpgDatabase::Persist(const CPVREpgInfoTag &tag, bool bSingleUpdate /* = 
   return iReturn;
 }
 
-int CPVREpgDatabase::GetLastEPGId(void)
+int CPVREpgDatabase::GetLastEPGId()
 {
   std::string strQuery = PrepareSQL("SELECT MAX(idEpg) FROM epg");
   std::string strValue = GetSingleValue(strQuery);

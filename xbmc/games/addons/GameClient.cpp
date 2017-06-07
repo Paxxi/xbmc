@@ -207,7 +207,7 @@ bool CGameClient::IsExtensionValid(const std::string& strExtension) const
   return m_extensions.find(NormalizeExtension(strExtension)) != m_extensions.end();
 }
 
-bool CGameClient::Initialize(void)
+bool CGameClient::Initialize()
 {
   using namespace XFILE;
 
@@ -815,19 +815,19 @@ void CGameClient::UpdatePort(unsigned int port, const ControllerPtr& controller)
   }
 }
 
-bool CGameClient::AcceptsInput(void) const
+bool CGameClient::AcceptsInput() const
 {
   return g_application.IsAppFocused() &&
          g_windowManager.GetActiveWindowID() == WINDOW_FULLSCREEN_GAME;
 }
 
-void CGameClient::ClearPorts(void)
+void CGameClient::ClearPorts()
 {
   while (!m_ports.empty())
     ClosePort(m_ports.begin()->first);
 }
 
-ControllerVector CGameClient::GetControllers(void) const
+ControllerVector CGameClient::GetControllers() const
 {
   using namespace ADDON;
 
@@ -881,17 +881,17 @@ bool CGameClient::SetRumble(unsigned int port, const std::string& feature, float
   return bHandled;
 }
 
-void CGameClient::OpenKeyboard(void)
+void CGameClient::OpenKeyboard()
 {
   m_keyboard.reset(new CGameClientKeyboard(this, &m_struct.toAddon));
 }
 
-void CGameClient::CloseKeyboard(void)
+void CGameClient::CloseKeyboard()
 {
   m_keyboard.reset();
 }
 
-void CGameClient::OpenMouse(void)
+void CGameClient::OpenMouse()
 {
   m_mouse.reset(new CGameClientMouse(this, &m_struct.toAddon));
 
@@ -908,7 +908,7 @@ void CGameClient::OpenMouse(void)
   }
 }
 
-void CGameClient::CloseMouse(void)
+void CGameClient::CloseMouse()
 {
   {
     CSingleLock lock(m_critSection);
@@ -923,7 +923,7 @@ void CGameClient::CloseMouse(void)
   m_mouse.reset();
 }
 
-void CGameClient::LogAddonProperties(void) const
+void CGameClient::LogAddonProperties() const
 {
   CLog::Log(LOGINFO, "GAME: ------------------------------------");
   CLog::Log(LOGINFO, "GAME: Loaded DLL for %s", ID().c_str());

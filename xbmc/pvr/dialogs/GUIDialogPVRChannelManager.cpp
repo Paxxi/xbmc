@@ -62,7 +62,7 @@
 
 using namespace PVR;
 
-CGUIDialogPVRChannelManager::CGUIDialogPVRChannelManager(void) :
+CGUIDialogPVRChannelManager::CGUIDialogPVRChannelManager() :
     CGUIDialog(WINDOW_DIALOG_PVR_CHANNEL_MANAGER, "DialogPVRChannelManager.xml"),
     m_bIsRadio(false),
     m_bMovingMode(false),
@@ -530,7 +530,7 @@ bool CGUIDialogPVRChannelManager::OnMessage(CGUIMessage& message)
   return CGUIDialog::OnMessage(message);
 }
 
-void CGUIDialogPVRChannelManager::OnWindowLoaded(void)
+void CGUIDialogPVRChannelManager::OnWindowLoaded()
 {
   CGUIDialog::OnWindowLoaded();
 
@@ -539,7 +539,7 @@ void CGUIDialogPVRChannelManager::OnWindowLoaded(void)
   m_viewControl.AddView(GetControl(CONTROL_LIST_CHANNELS));
 }
 
-void CGUIDialogPVRChannelManager::OnWindowUnload(void)
+void CGUIDialogPVRChannelManager::OnWindowUnload()
 {
   CGUIDialog::OnWindowUnload();
   m_viewControl.Reset();
@@ -725,7 +725,7 @@ void CGUIDialogPVRChannelManager::Update()
   g_graphicsContext.Unlock();
 }
 
-void CGUIDialogPVRChannelManager::Clear(void)
+void CGUIDialogPVRChannelManager::Clear()
 {
   m_viewControl.Clear();
   m_channelItems->Clear();
@@ -762,7 +762,7 @@ bool CGUIDialogPVRChannelManager::PersistChannel(const CFileItemPtr &pItem, cons
   return group->UpdateChannel(*pItem, bHidden, bEPGEnabled, bParentalLocked, iEPGSource, ++(*iChannelNumber), strChannelName, strIconPath, strStreamURL, bUserSetIcon);
 }
 
-void CGUIDialogPVRChannelManager::SaveList(void)
+void CGUIDialogPVRChannelManager::SaveList()
 {
   if (!m_bContainsChanges)
    return;
@@ -805,7 +805,7 @@ void CGUIDialogPVRChannelManager::SaveList(void)
   pDlgProgress->Close();
 }
 
-void CGUIDialogPVRChannelManager::SetItemsUnchanged(void)
+void CGUIDialogPVRChannelManager::SetItemsUnchanged()
 {
   for (int iItemPtr = 0; iItemPtr < m_channelItems->Size(); ++iItemPtr)
   {
@@ -815,7 +815,7 @@ void CGUIDialogPVRChannelManager::SetItemsUnchanged(void)
   }
 }
 
-void CGUIDialogPVRChannelManager::Renumber(void)
+void CGUIDialogPVRChannelManager::Renumber()
 {
   int iNextChannelNumber(0);
   std::string strNumber;

@@ -93,7 +93,7 @@ bool CAddonInputHandling::OnAxisMotion(unsigned int axisIndex, float position, i
   return false;
 }
 
-void CAddonInputHandling::ProcessAxisMotions(void)
+void CAddonInputHandling::ProcessAxisMotions()
 {
   if (m_driverHandler)
     m_driverHandler->ProcessAxisMotions();

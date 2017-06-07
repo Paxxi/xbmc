@@ -32,7 +32,7 @@ using namespace KODI;
 using namespace GAME;
 using namespace JOYSTICK;
 
-void CControllerFeature::Reset(void)
+void CControllerFeature::Reset()
 {
   m_type = FEATURE_TYPE::UNKNOWN;
   m_category = FEATURE_CATEGORY::UNKNOWN;

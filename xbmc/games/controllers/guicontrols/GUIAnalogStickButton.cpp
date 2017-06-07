@@ -80,12 +80,12 @@ bool CGUIAnalogStickButton::PromptForInput(CEvent& waitEvent)
   return bInterrupted;
 }
 
-bool CGUIAnalogStickButton::IsFinished(void) const
+bool CGUIAnalogStickButton::IsFinished() const
 {
   return m_state >= STATE::FINISHED;
 }
 
-JOYSTICK::ANALOG_STICK_DIRECTION CGUIAnalogStickButton::GetDirection(void) const
+JOYSTICK::ANALOG_STICK_DIRECTION CGUIAnalogStickButton::GetDirection() const
 {
   using namespace JOYSTICK;
 
@@ -102,7 +102,7 @@ JOYSTICK::ANALOG_STICK_DIRECTION CGUIAnalogStickButton::GetDirection(void) const
   return ANALOG_STICK_DIRECTION::UNKNOWN;
 }
 
-void CGUIAnalogStickButton::Reset(void)
+void CGUIAnalogStickButton::Reset()
 {
   m_state = STATE::ANALOG_STICK_UP;
 }

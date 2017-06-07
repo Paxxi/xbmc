@@ -547,7 +547,7 @@ unsigned int CActiveAEDSPProcess::GetProcessSamplerate()
   return m_addonSettings.iProcessSamplerate;
 }
 
-float CActiveAEDSPProcess::GetCPUUsage(void) const
+float CActiveAEDSPProcess::GetCPUUsage() const
 {
   return m_fLastProcessUsage;
 }

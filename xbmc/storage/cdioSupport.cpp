@@ -505,31 +505,31 @@ bool CCdIoSupport::IsIt(int num)
   return 0 == memcmp(&buffer[sigp->buf_num][sigp->offset], sigp->sig_str, len);
 }
 
-int CCdIoSupport::IsHFS(void)
+int CCdIoSupport::IsHFS()
 {
   return (0 == memcmp(&buffer[1][512], "PM", 2)) ||
          (0 == memcmp(&buffer[1][512], "TS", 2)) ||
          (0 == memcmp(&buffer[1][1024], "BD", 2));
 }
 
-int CCdIoSupport::Is3DO(void)
+int CCdIoSupport::Is3DO()
 {
   return (0 == memcmp(&buffer[1][0], "\x01\x5a\x5a\x5a\x5a\x5a\x01", 7)) &&
          (0 == memcmp(&buffer[1][40], "CD-ROM", 6));
 }
 
-int CCdIoSupport::IsJoliet(void)
+int CCdIoSupport::IsJoliet()
 {
   return 2 == buffer[3][0] && buffer[3][88] == 0x25 && buffer[3][89] == 0x2f;
 }
 
-int CCdIoSupport::IsUDF(void)
+int CCdIoSupport::IsUDF()
 {
   return 2 == ((uint16_t)buffer[5][0] | ((uint16_t)buffer[5][1] << 8));
 }
 
 /* ISO 9660 volume space in M2F1_SECTOR_SIZE byte units */
-int CCdIoSupport::GetSize(void)
+int CCdIoSupport::GetSize()
 {
   return ((buffer[0][80] & 0xff) |
           ((buffer[0][81] & 0xff) << 8) |
@@ -537,7 +537,7 @@ int CCdIoSupport::GetSize(void)
           ((buffer[0][83] & 0xff) << 24));
 }
 
-int CCdIoSupport::GetJolietLevel( void )
+int CCdIoSupport::GetJolietLevel( )
 {
   switch (buffer[3][90])
   {

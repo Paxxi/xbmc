@@ -76,7 +76,7 @@ static const translateType types[] = { { CGUIDialogSmartPlaylistEditor::TYPE_SON
 
 #define NUM_TYPES (sizeof(types) / sizeof(translateType))
 
-CGUIDialogSmartPlaylistEditor::CGUIDialogSmartPlaylistEditor(void)
+CGUIDialogSmartPlaylistEditor::CGUIDialogSmartPlaylistEditor()
     : CGUIDialog(WINDOW_DIALOG_SMART_PLAYLIST_EDITOR, "SmartPlaylistEditor.xml")
 {
   m_cancelled = false;

@@ -39,7 +39,7 @@ using namespace CDDB;
 #define CDTEXT_GENRE CDTEXT_FIELD_GENRE
 #endif
 
-CMusicInfoTagLoaderCDDA::CMusicInfoTagLoaderCDDA(void)
+CMusicInfoTagLoaderCDDA::CMusicInfoTagLoaderCDDA()
 {
 }
 

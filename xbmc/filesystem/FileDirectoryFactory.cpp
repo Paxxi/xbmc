@@ -50,10 +50,10 @@ using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
 
-CFileDirectoryFactory::CFileDirectoryFactory(void)
+CFileDirectoryFactory::CFileDirectoryFactory()
 {}
 
-CFileDirectoryFactory::~CFileDirectoryFactory(void)
+CFileDirectoryFactory::~CFileDirectoryFactory()
 {}
 
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.

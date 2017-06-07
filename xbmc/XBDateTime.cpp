@@ -897,12 +897,12 @@ bool CDateTime::SetFromUTCDateTime(const CDateTime &dateTime)
 
 static bool bGotTimezoneBias = false;
 
-void CDateTime::ResetTimezoneBias(void)
+void CDateTime::ResetTimezoneBias()
 {
   bGotTimezoneBias = false;
 }
 
-CDateTimeSpan CDateTime::GetTimezoneBias(void)
+CDateTimeSpan CDateTime::GetTimezoneBias()
 {
   static CDateTimeSpan timezoneBias;
 

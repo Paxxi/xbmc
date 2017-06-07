@@ -28,7 +28,7 @@
 #define POPUP_SEEK_PROGRESS     401
 #define POPUP_SEEK_LABEL        402
 
-CGUIDialogSeekBar::CGUIDialogSeekBar(void)
+CGUIDialogSeekBar::CGUIDialogSeekBar()
   : CGUIDialog(WINDOW_DIALOG_SEEK_BAR, "DialogSeekBar.xml", DialogModalityType::MODELESS)
 {
   m_loadType = LOAD_ON_GUI_INIT;    // the application class handles our resources

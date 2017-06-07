@@ -31,7 +31,7 @@
 
 CGUIColorManager g_colorManager;
 
-CGUIColorManager::CGUIColorManager(void)
+CGUIColorManager::CGUIColorManager()
 {
 }
 

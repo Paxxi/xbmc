@@ -51,7 +51,7 @@ using namespace KODI::MESSAGING;
 #define CONTROL_BTN_ADD_TIMER           9
 #define CONTROL_BTN_CHANNEL_GUIDE       10
 
-CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo(void)
+CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo()
     : CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_INFO, "DialogPVRInfo.xml")
 {
 }

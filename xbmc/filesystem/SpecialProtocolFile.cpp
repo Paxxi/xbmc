@@ -24,7 +24,7 @@
 
 using namespace XFILE;
 
-CSpecialProtocolFile::CSpecialProtocolFile(void)
+CSpecialProtocolFile::CSpecialProtocolFile()
   : COverrideFile(true)
 { }
 

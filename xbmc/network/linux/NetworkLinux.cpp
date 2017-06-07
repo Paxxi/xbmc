@@ -80,11 +80,11 @@ CNetworkInterfaceLinux::CNetworkInterfaceLinux(CNetworkLinux* network, std::stri
    memcpy(m_interfaceMacAddrRaw, interfaceMacAddrRaw, sizeof(m_interfaceMacAddrRaw));
 }
 
-CNetworkInterfaceLinux::~CNetworkInterfaceLinux(void)
+CNetworkInterfaceLinux::~CNetworkInterfaceLinux()
 {
 }
 
-std::string& CNetworkInterfaceLinux::GetName(void)
+std::string& CNetworkInterfaceLinux::GetName()
 {
    return m_interfaceName;
 }
@@ -142,7 +142,7 @@ void CNetworkInterfaceLinux::GetMacAddressRaw(char rawMac[6])
   memcpy(rawMac, m_interfaceMacAddrRaw, 6);
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentIPAddress(void)
+std::string CNetworkInterfaceLinux::GetCurrentIPAddress()
 {
    std::string result;
 
@@ -157,7 +157,7 @@ std::string CNetworkInterfaceLinux::GetCurrentIPAddress(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentNetmask(void)
+std::string CNetworkInterfaceLinux::GetCurrentNetmask()
 {
    std::string result;
 
@@ -172,7 +172,7 @@ std::string CNetworkInterfaceLinux::GetCurrentNetmask(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId(void)
+std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId()
 {
    std::string result;
 
@@ -194,7 +194,7 @@ std::string CNetworkInterfaceLinux::GetCurrentWirelessEssId(void)
    return result;
 }
 
-std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
+std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway()
 {
    std::string result;
 
@@ -307,7 +307,7 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway(void)
    return result;
 }
 
-CNetworkLinux::CNetworkLinux(void)
+CNetworkLinux::CNetworkLinux()
 {
    m_sock = socket(AF_INET, SOCK_DGRAM, 0);
    queryInterfaceList();
@@ -337,7 +337,7 @@ std::vector<CNetworkInterface*>& CNetworkLinux::GetInterfaceList(void)
 //! the interface list if no connected device is found
 //! this fixes a bug when no network is available after first start of xbmc
 //! and the interface comes up during runtime
-CNetworkInterface* CNetworkLinux::GetFirstConnectedInterface(void)
+CNetworkInterface* CNetworkLinux::GetFirstConnectedInterface()
 {
     CNetworkInterface *pNetIf=CNetwork::GetFirstConnectedInterface();
     

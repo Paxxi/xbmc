@@ -403,7 +403,7 @@ void CSysInfo::Reset()
   m_info.Reset();
 }
 
-CSysInfo::CSysInfo(void) : CInfoLoader(15 * 1000)
+CSysInfo::CSysInfo() : CInfoLoader(15 * 1000)
 {
   memset(MD5_Sign, 0, sizeof(MD5_Sign));
   m_iSystemTimeTotalUp = 0;
@@ -443,7 +443,7 @@ bool CSysInfo::Save(TiXmlNode *settings) const
   return true;
 }
 
-const std::string& CSysInfo::GetAppName(void)
+const std::string& CSysInfo::GetAppName()
 {
   assert(CCompileInfo::GetAppName() != NULL);
   static const std::string appName(CCompileInfo::GetAppName());
@@ -546,7 +546,7 @@ std::string CSysInfo::GetKernelName(bool emptyIfUnknown /*= false*/)
   return kernelName;
 }
 
-std::string CSysInfo::GetKernelVersionFull(void)
+std::string CSysInfo::GetKernelVersionFull()
 {
   static std::string kernelVersionFull;
   if (!kernelVersionFull.empty())
@@ -568,7 +568,7 @@ std::string CSysInfo::GetKernelVersionFull(void)
   return kernelVersionFull;
 }
 
-std::string CSysInfo::GetKernelVersion(void)
+std::string CSysInfo::GetKernelVersion()
 {
   static std::string kernelVersionClear;
   if (kernelVersionClear.empty())
@@ -615,7 +615,7 @@ std::string CSysInfo::GetOsName(bool emptyIfUnknown /* = false*/)
   return osName;
 }
 
-std::string CSysInfo::GetOsVersion(void)
+std::string CSysInfo::GetOsVersion()
 {
   static std::string osVersion;
   if (!osVersion.empty())
@@ -654,7 +654,7 @@ std::string CSysInfo::GetOsVersion(void)
   return osVersion;
 }
 
-std::string CSysInfo::GetOsPrettyNameWithVersion(void)
+std::string CSysInfo::GetOsPrettyNameWithVersion()
 {
   static std::string osNameVer;
   if (!osNameVer.empty())
@@ -739,7 +739,7 @@ std::string CSysInfo::GetOsPrettyNameWithVersion(void)
 
 }
 
-std::string CSysInfo::GetManufacturerName(void)
+std::string CSysInfo::GetManufacturerName()
 {
   static std::string manufName;
   static bool inited = false;
@@ -760,7 +760,7 @@ std::string CSysInfo::GetManufacturerName(void)
   return manufName;
 }
 
-std::string CSysInfo::GetModelName(void)
+std::string CSysInfo::GetModelName()
 {
   static std::string modelName;
   static bool inited = false;
@@ -852,7 +852,7 @@ CSysInfo::WindowsVersion CSysInfo::GetWindowsVersion()
   return m_WinVer;
 }
 
-int CSysInfo::GetKernelBitness(void)
+int CSysInfo::GetKernelBitness()
 {
   static int kernelBitness = -1;
   if (kernelBitness == -1)
@@ -894,7 +894,7 @@ int CSysInfo::GetKernelBitness(void)
   return kernelBitness;
 }
 
-const std::string& CSysInfo::GetKernelCpuFamily(void)
+const std::string& CSysInfo::GetKernelCpuFamily()
 {
   static std::string kernelCpuFamily;
   if (kernelCpuFamily.empty())
@@ -946,7 +946,7 @@ const std::string& CSysInfo::GetKernelCpuFamily(void)
   return kernelCpuFamily;
 }
 
-int CSysInfo::GetXbmcBitness(void)
+int CSysInfo::GetXbmcBitness()
 {
   return static_cast<int>(sizeof(void*) * 8);
 }
@@ -1196,7 +1196,7 @@ bool CSysInfo::HasVideoToolBoxDecoder()
 #endif
 }
 
-std::string CSysInfo::GetBuildTargetPlatformName(void)
+std::string CSysInfo::GetBuildTargetPlatformName()
 {
 #if defined(TARGET_DARWIN_OSX)
   return "OS X";
@@ -1219,7 +1219,7 @@ std::string CSysInfo::GetBuildTargetPlatformName(void)
 #endif
 }
 
-std::string CSysInfo::GetBuildTargetPlatformVersion(void)
+std::string CSysInfo::GetBuildTargetPlatformVersion()
 {
 #if defined(TARGET_DARWIN_OSX)
   return XSTR_MACRO(__MAC_OS_X_VERSION_MIN_REQUIRED);
@@ -1242,7 +1242,7 @@ std::string CSysInfo::GetBuildTargetPlatformVersion(void)
 #endif
 }
 
-std::string CSysInfo::GetBuildTargetPlatformVersionDecoded(void)
+std::string CSysInfo::GetBuildTargetPlatformVersionDecoded()
 {
 #if defined(TARGET_DARWIN_OSX)
 #if defined(MAC_OS_X_VERSION_10_10) && __MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
@@ -1291,7 +1291,7 @@ std::string CSysInfo::GetBuildTargetPlatformVersionDecoded(void)
 #endif
 }
 
-std::string CSysInfo::GetBuildTargetCpuFamily(void)
+std::string CSysInfo::GetBuildTargetCpuFamily()
 {
 #if defined(__thumb__) || defined(_M_ARMT) 
   return "ARM (Thumb)";
@@ -1311,7 +1311,7 @@ std::string CSysInfo::GetBuildTargetCpuFamily(void)
 #endif
 }
 
-std::string CSysInfo::GetUsedCompilerNameAndVer(void)
+std::string CSysInfo::GetUsedCompilerNameAndVer()
 {
 #if defined(__clang__)
 #ifdef __clang_version__

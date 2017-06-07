@@ -192,7 +192,7 @@ bool CPeripheralBusAddon::SendRumbleEvent(const std::string& strLocation, unsign
   return bHandled;
 }
 
-void CPeripheralBusAddon::ProcessEvents(void)
+void CPeripheralBusAddon::ProcessEvents()
 {
   PeripheralAddonVector addons;
 
@@ -428,7 +428,7 @@ bool CPeripheralBusAddon::SplitLocation(const std::string& strLocation, Peripher
   return false;
 }
 
-void CPeripheralBusAddon::UpdateAddons(void)
+void CPeripheralBusAddon::UpdateAddons()
 {
   auto GetPeripheralAddonID = [](const PeripheralAddonPtr& addon) { return addon->ID(); };
 

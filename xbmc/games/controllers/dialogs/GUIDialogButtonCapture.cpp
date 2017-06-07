@@ -43,7 +43,7 @@ CGUIDialogButtonCapture::CGUIDialogButtonCapture() :
 {
 }
 
-std::string CGUIDialogButtonCapture::ControllerID(void) const
+std::string CGUIDialogButtonCapture::ControllerID() const
 {
   return DEFAULT_CONTROLLER_ID;
 }
@@ -114,13 +114,13 @@ bool CGUIDialogButtonCapture::MapPrimitive(JOYSTICK::IButtonMap* buttonMap,
   return MapPrimitiveInternal(buttonMap, actionMap, primitive);
 }
 
-void CGUIDialogButtonCapture::InstallHooks(void)
+void CGUIDialogButtonCapture::InstallHooks()
 {
   CServiceBroker::GetPeripherals().RegisterJoystickButtonMapper(this);
   CServiceBroker::GetPeripherals().RegisterObserver(this);
 }
 
-void CGUIDialogButtonCapture::RemoveHooks(void)
+void CGUIDialogButtonCapture::RemoveHooks()
 {
   CServiceBroker::GetPeripherals().UnregisterObserver(this);
   CServiceBroker::GetPeripherals().UnregisterJoystickButtonMapper(this);

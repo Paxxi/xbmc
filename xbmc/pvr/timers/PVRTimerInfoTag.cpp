@@ -316,14 +316,14 @@ void CPVRTimerInfoTag::Serialize(CVariant &value) const
   value["epguid"]            = m_iEpgUid;
 }
 
-void CPVRTimerInfoTag::UpdateEpgInfoTag(void)
+void CPVRTimerInfoTag::UpdateEpgInfoTag()
 {
   CSingleLock lock(m_critSection);
   m_epgTag.reset();
   GetEpgInfoTag();
 }
 
-void CPVRTimerInfoTag::UpdateSummary(void)
+void CPVRTimerInfoTag::UpdateSummary()
 {
   CSingleLock lock(m_critSection);
   m_strSummary.clear();
@@ -519,7 +519,7 @@ std::string CPVRTimerInfoTag::GetWeekdaysString() const
   return GetWeekdaysString(m_iWeekdays, m_timerType ? m_timerType->IsEpgBased() : false, false);
 }
 
-bool CPVRTimerInfoTag::AddToClient(void) const
+bool CPVRTimerInfoTag::AddToClient() const
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->AddTimer(*this);
   if (error != PVR_ERROR_NO_ERROR)
@@ -856,39 +856,39 @@ CPVRTimerInfoTagPtr CPVRTimerInfoTag::CreateFromEpg(const CPVREpgInfoTagPtr &tag
   return newTag;
 }
 
-CDateTime CPVRTimerInfoTag::StartAsUTC(void) const
+CDateTime CPVRTimerInfoTag::StartAsUTC() const
 {
   CDateTime retVal = m_StartTime;
   return retVal;
 }
 
-CDateTime CPVRTimerInfoTag::StartAsLocalTime(void) const
+CDateTime CPVRTimerInfoTag::StartAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_StartTime);
   return retVal;
 }
 
-CDateTime CPVRTimerInfoTag::EndAsUTC(void) const
+CDateTime CPVRTimerInfoTag::EndAsUTC() const
 {
   CDateTime retVal = m_StopTime;
   return retVal;
 }
 
-CDateTime CPVRTimerInfoTag::EndAsLocalTime(void) const
+CDateTime CPVRTimerInfoTag::EndAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_StopTime);
   return retVal;
 }
 
-CDateTime CPVRTimerInfoTag::FirstDayAsUTC(void) const
+CDateTime CPVRTimerInfoTag::FirstDayAsUTC() const
 {
   CDateTime retVal = m_FirstDay;
   return retVal;
 }
 
-CDateTime CPVRTimerInfoTag::FirstDayAsLocalTime(void) const
+CDateTime CPVRTimerInfoTag::FirstDayAsLocalTime() const
 {
   CDateTime retVal;
   retVal.SetFromUTCDateTime(m_FirstDay);
@@ -1012,17 +1012,17 @@ void CPVRTimerInfoTag::SetEpgTag(const CPVREpgInfoTagPtr &tag)
     previousTag->ClearTimer();
 }
 
-void CPVRTimerInfoTag::ClearEpgTag(void)
+void CPVRTimerInfoTag::ClearEpgTag()
 {
   SetEpgTag(CPVREpgInfoTagPtr());
 }
 
-CPVRChannelPtr CPVRTimerInfoTag::ChannelTag(void) const
+CPVRChannelPtr CPVRTimerInfoTag::ChannelTag() const
 {
   return m_channel;
 }
 
-CPVRChannelPtr CPVRTimerInfoTag::UpdateChannel(void)
+CPVRChannelPtr CPVRTimerInfoTag::UpdateChannel()
 {
   const CPVRChannelPtr channel(CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bIsRadio)->GetGroupAll()->GetByUniqueID(m_iClientChannelUid, m_iClientId));
 
@@ -1031,17 +1031,17 @@ CPVRChannelPtr CPVRTimerInfoTag::UpdateChannel(void)
   return m_channel;
 }
 
-const std::string& CPVRTimerInfoTag::Title(void) const
+const std::string& CPVRTimerInfoTag::Title() const
 {
   return m_strTitle;
 }
 
-const std::string& CPVRTimerInfoTag::Summary(void) const
+const std::string& CPVRTimerInfoTag::Summary() const
 {
   return m_strSummary;
 }
 
-const std::string& CPVRTimerInfoTag::Path(void) const
+const std::string& CPVRTimerInfoTag::Path() const
 {
   return m_strFileNameAndPath;
 }

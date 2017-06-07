@@ -33,7 +33,7 @@ CPeripheralBusApplication::CPeripheralBusApplication(CPeripherals& manager) :
   m_bNeedsPolling = false;
 }
 
-void CPeripheralBusApplication::Initialise(void)
+void CPeripheralBusApplication::Initialise()
 {
   CPeripheralBus::Initialise();
   TriggerDeviceScan();

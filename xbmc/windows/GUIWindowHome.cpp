@@ -33,7 +33,7 @@
 
 using namespace ANNOUNCEMENT;
 
-CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), 
+CGUIWindowHome::CGUIWindowHome() : CGUIWindow(WINDOW_HOME, "Home.xml"), 
                                        m_recentlyAddedRunning(false),
                                        m_cumulativeUpdateFlag(0)
 {

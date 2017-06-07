@@ -198,7 +198,7 @@ const PeripheralType CPeripheralBusUSB::GetType(int iDeviceClass)
   }
 }
 
-void CPeripheralBusUSB::Process(void)
+void CPeripheralBusUSB::Process()
 {
   bool bUpdated(false);
   ScanForDevices();
@@ -210,7 +210,7 @@ void CPeripheralBusUSB::Process(void)
   }
 }
 
-void CPeripheralBusUSB::Clear(void)
+void CPeripheralBusUSB::Clear()
 {
   StopThread(false);
 

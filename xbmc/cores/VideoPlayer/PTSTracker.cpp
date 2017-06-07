@@ -34,7 +34,7 @@ CPtsTracker::CPtsTracker()
   Flush();
 }
 
-void CPtsTracker::ResetVFRDetection(void)
+void CPtsTracker::ResetVFRDetection()
 {
   m_minframeduration = DVD_NOPTS_VALUE;
   m_maxframeduration = DVD_NOPTS_VALUE;

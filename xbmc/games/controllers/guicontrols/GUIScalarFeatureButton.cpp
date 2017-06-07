@@ -59,12 +59,12 @@ bool CGUIScalarFeatureButton::PromptForInput(CEvent& waitEvent)
   return bInterrupted;
 }
 
-bool CGUIScalarFeatureButton::IsFinished(void) const
+bool CGUIScalarFeatureButton::IsFinished() const
 {
   return m_state >= STATE::FINISHED;
 }
 
-void CGUIScalarFeatureButton::Reset(void)
+void CGUIScalarFeatureButton::Reset()
 {
   m_state = STATE::NEED_INPUT;
 }

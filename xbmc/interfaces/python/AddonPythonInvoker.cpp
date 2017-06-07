@@ -77,11 +77,11 @@
 #endif
 
 namespace PythonBindings {
-  void initModule_xbmcgui(void);
-  void initModule_xbmc(void);
-  void initModule_xbmcplugin(void);
-  void initModule_xbmcaddon(void);
-  void initModule_xbmcvfs(void);
+  void initModule_xbmcgui();
+  void initModule_xbmc();
+  void initModule_xbmcplugin();
+  void initModule_xbmcaddon();
+  void initModule_xbmcvfs();
 }
 
 using namespace PythonBindings;

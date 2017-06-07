@@ -102,7 +102,7 @@ bool CScalarFeature::OnAnalogMotion(const CDriverPrimitive& source, float magnit
   return true;
 }
 
-void CScalarFeature::ProcessMotions(void)
+void CScalarFeature::ProcessMotions()
 {
   if (m_analogEvent)
   {
@@ -284,7 +284,7 @@ bool CAnalogStick::OnAnalogMotion(const CDriverPrimitive& source, float magnitud
   return true;
 }
 
-void CAnalogStick::ProcessMotions(void)
+void CAnalogStick::ProcessMotions()
 {
   const float newVertState = m_vertAxis.GetPosition();
   const float newHorizState = m_horizAxis.GetPosition();
@@ -368,7 +368,7 @@ bool CAccelerometer::OnAnalogMotion(const CDriverPrimitive& source, float magnit
   return true;
 }
 
-void CAccelerometer::ProcessMotions(void)
+void CAccelerometer::ProcessMotions()
 {
   const float newXAxis = m_xAxis.GetPosition();
   const float newYAxis = m_yAxis.GetPosition();

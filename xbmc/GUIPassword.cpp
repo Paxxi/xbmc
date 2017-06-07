@@ -43,12 +43,12 @@
 
 using namespace KODI::MESSAGING;
 
-CGUIPassword::CGUIPassword(void)
+CGUIPassword::CGUIPassword()
 {
   iMasterLockRetriesLeft = -1;
   bMasterUser = false;
 }
-CGUIPassword::~CGUIPassword(void)
+CGUIPassword::~CGUIPassword()
 {}
 
 bool CGUIPassword::IsItemUnlocked(CFileItem* pItem, const std::string &strType)

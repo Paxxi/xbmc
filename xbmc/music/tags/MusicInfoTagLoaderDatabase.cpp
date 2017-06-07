@@ -26,7 +26,7 @@
 
 using namespace MUSIC_INFO;
 
-CMusicInfoTagLoaderDatabase::CMusicInfoTagLoaderDatabase(void)
+CMusicInfoTagLoaderDatabase::CMusicInfoTagLoaderDatabase()
 {
 }
 

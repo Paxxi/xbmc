@@ -181,7 +181,7 @@ bool CAddon::HasSettingsToSave() const
   return SettingsLoaded();
 }
 
-void CAddon::SaveSettings(void)
+void CAddon::SaveSettings()
 {
   if (!HasSettingsToSave())
     return; // no settings to save

@@ -35,7 +35,7 @@
 #define CONTROL_BTNSORTASC     4
 #define CONTROL_LABELFILES    12
 
-CGUIWindowPrograms::CGUIWindowPrograms(void)
+CGUIWindowPrograms::CGUIWindowPrograms()
     : CGUIMediaWindow(WINDOW_PROGRAMS, "MyPrograms.xml")
 {
   m_thumbLoader.SetObserver(this);

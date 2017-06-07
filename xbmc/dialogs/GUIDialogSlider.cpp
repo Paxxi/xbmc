@@ -28,7 +28,7 @@
 #define CONTROL_SLIDER  11
 #define CONTROL_LABEL   12
 
-CGUIDialogSlider::CGUIDialogSlider(void)
+CGUIDialogSlider::CGUIDialogSlider()
     : CGUIDialog(WINDOW_DIALOG_SLIDER, "DialogSlider.xml")
 {
   m_callback = NULL;

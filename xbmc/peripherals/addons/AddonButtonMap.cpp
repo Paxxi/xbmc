@@ -49,12 +49,12 @@ CAddonButtonMap::~CAddonButtonMap(void)
     addon->UnregisterButtonMap(this);
 }
 
-std::string CAddonButtonMap::DeviceName(void) const
+std::string CAddonButtonMap::DeviceName() const
 {
   return m_device->DeviceName();
 }
 
-bool CAddonButtonMap::Load(void)
+bool CAddonButtonMap::Load()
 {
   FeatureMap features;
   DriverMap driverMap;
@@ -88,13 +88,13 @@ bool CAddonButtonMap::Load(void)
   return true;
 }
 
-void CAddonButtonMap::Reset(void)
+void CAddonButtonMap::Reset()
 {
   if (auto addon = m_addon.lock())
     addon->ResetButtonMap(m_device, m_strControllerId);
 }
 
-bool CAddonButtonMap::IsEmpty(void) const
+bool CAddonButtonMap::IsEmpty() const
 {
   CSingleLock lock(m_mutex);
 

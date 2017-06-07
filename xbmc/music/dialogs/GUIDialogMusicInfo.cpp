@@ -49,7 +49,7 @@ using namespace XFILE;
 
 #define CONTROL_LIST            50
 
-CGUIDialogMusicInfo::CGUIDialogMusicInfo(void)
+CGUIDialogMusicInfo::CGUIDialogMusicInfo()
     : CGUIDialog(WINDOW_DIALOG_MUSIC_INFO, "DialogMusicInfo.xml")
       , m_albumItem(new CFileItem)
 {

@@ -36,7 +36,7 @@
 using namespace KODI;
 using namespace JOYSTICK;
 
-CDefaultJoystick::CDefaultJoystick(void) :
+CDefaultJoystick::CDefaultJoystick() :
   m_handler(new CKeymapHandler)
 {
 }
@@ -46,7 +46,7 @@ CDefaultJoystick::~CDefaultJoystick(void)
   delete m_handler;
 }
 
-std::string CDefaultJoystick::ControllerID(void) const
+std::string CDefaultJoystick::ControllerID() const
 {
   return GetControllerID();
 }

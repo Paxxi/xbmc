@@ -28,7 +28,7 @@
 
 using namespace XFILE;
 
-CMusicSearchDirectory::CMusicSearchDirectory(void)
+CMusicSearchDirectory::CMusicSearchDirectory()
 {
 }
 

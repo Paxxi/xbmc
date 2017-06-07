@@ -147,7 +147,7 @@ void CPVRDatabase::UpdateTables(int iVersion)
 
 /********** Channel methods **********/
 
-bool CPVRDatabase::DeleteChannels(void)
+bool CPVRDatabase::DeleteChannels()
 {
   CLog::Log(LOGDEBUG, "PVR - %s - deleting all channels from the database", __FUNCTION__);
   return DeleteValues("channels");
@@ -368,7 +368,7 @@ bool CPVRDatabase::RemoveStaleChannelsFromGroup(const CPVRChannelGroup &group)
   return bDelete;
 }
 
-bool CPVRDatabase::DeleteChannelGroups(void)
+bool CPVRDatabase::DeleteChannelGroups()
 {
   CLog::Log(LOGDEBUG, "PVR - %s - deleting all channel groups from the database", __FUNCTION__);
 
@@ -555,7 +555,7 @@ bool CPVRDatabase::PersistGroupMembers(const CPVRChannelGroup &group)
 
 /********** Client methods **********/
 
-bool CPVRDatabase::ResetEPG(void)
+bool CPVRDatabase::ResetEPG()
 {
   std::string strQuery = PrepareSQL("UPDATE channels SET idEpg = 0");
   return ExecuteQuery(strQuery);

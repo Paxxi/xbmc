@@ -43,7 +43,7 @@
 #define SETTING_PASSWORD        "password"
 #define SETTING_REMOTE_PATH     "remotepath"
 
-CGUIDialogNetworkSetup::CGUIDialogNetworkSetup(void)
+CGUIDialogNetworkSetup::CGUIDialogNetworkSetup()
     : CGUIDialogSettingsManualBase(WINDOW_DIALOG_NETWORK_SETUP, "DialogSettings.xml")
 {
   m_protocol = NET_PROTOCOL_SMB;

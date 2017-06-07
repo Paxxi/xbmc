@@ -43,7 +43,7 @@
 #define CONTROL_BACKSPACE     23
 
 
-CGUIDialogNumeric::CGUIDialogNumeric(void)
+CGUIDialogNumeric::CGUIDialogNumeric()
   : CGUIDialog(WINDOW_DIALOG_NUMERIC, "DialogNumeric.xml")
   , m_bConfirmed{false}
   , m_bCanceled{false}

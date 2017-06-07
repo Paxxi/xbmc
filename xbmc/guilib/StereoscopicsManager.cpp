@@ -97,13 +97,13 @@ static const struct StereoModeMap StringToGuiModeMap[] =
 };
 
 
-CStereoscopicsManager::CStereoscopicsManager(void)
+CStereoscopicsManager::CStereoscopicsManager()
 {
   m_stereoModeSetByUser = RENDER_STEREO_MODE_UNDEFINED;
   m_lastStereoModeSetByUser = RENDER_STEREO_MODE_UNDEFINED;
 }
 
-CStereoscopicsManager::~CStereoscopicsManager(void)
+CStereoscopicsManager::~CStereoscopicsManager()
 {
 }
 
@@ -113,13 +113,13 @@ CStereoscopicsManager& CStereoscopicsManager::GetInstance()
   return sStereoscopicsManager;
 }
 
-void CStereoscopicsManager::Initialize(void)
+void CStereoscopicsManager::Initialize()
 {
   // turn off stereo mode on XBMC startup
   SetStereoMode(RENDER_STEREO_MODE_OFF);
 }
 
-RENDER_STEREO_MODE CStereoscopicsManager::GetStereoMode(void)
+RENDER_STEREO_MODE CStereoscopicsManager::GetStereoMode()
 {
   return (RENDER_STEREO_MODE) CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOSCREEN_STEREOSCOPICMODE);
 }
@@ -247,7 +247,7 @@ RENDER_STEREO_MODE CStereoscopicsManager::GetStereoModeByUserChoice(const std::s
   return mode;
 }
 
-RENDER_STEREO_MODE CStereoscopicsManager::GetStereoModeOfPlayingVideo(void)
+RENDER_STEREO_MODE CStereoscopicsManager::GetStereoModeOfPlayingVideo()
 {
   RENDER_STEREO_MODE mode = RENDER_STEREO_MODE_OFF;
   std::string playerMode = GetVideoStereoMode();
@@ -292,7 +292,7 @@ const std::string &CStereoscopicsManager::GetLabelForStereoMode(const RENDER_STE
   return g_localizeStrings.Get(msgId);
 }
 
-RENDER_STEREO_MODE CStereoscopicsManager::GetPreferredPlaybackMode(void)
+RENDER_STEREO_MODE CStereoscopicsManager::GetPreferredPlaybackMode()
 {
   return (RENDER_STEREO_MODE) CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOSCREEN_PREFEREDSTEREOSCOPICMODE);
 }
@@ -518,7 +518,7 @@ bool CStereoscopicsManager::IsVideoStereoscopic()
   return !mode.empty() && mode != "mono";
 }
 
-void CStereoscopicsManager::OnPlaybackStarted(void)
+void CStereoscopicsManager::OnPlaybackStarted()
 {
   STEREOSCOPIC_PLAYBACK_MODE playbackMode = (STEREOSCOPIC_PLAYBACK_MODE) CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_STEREOSCOPICPLAYBACKMODE);
   RENDER_STEREO_MODE mode = GetStereoMode();
@@ -615,7 +615,7 @@ void CStereoscopicsManager::OnPlaybackStarted(void)
   }
 }
 
-void CStereoscopicsManager::OnPlaybackStopped(void)
+void CStereoscopicsManager::OnPlaybackStopped()
 {
   RENDER_STEREO_MODE mode = GetStereoMode();
   if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_VIDEOPLAYER_QUITSTEREOMODEONSTOP) && mode != RENDER_STEREO_MODE_OFF)

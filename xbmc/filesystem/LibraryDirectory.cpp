@@ -36,7 +36,7 @@
 
 using namespace XFILE;
 
-CLibraryDirectory::CLibraryDirectory(void)
+CLibraryDirectory::CLibraryDirectory()
 {
 }
 

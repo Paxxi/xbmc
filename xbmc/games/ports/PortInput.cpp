@@ -29,7 +29,7 @@ CPortInput::CPortInput(CGameClient &gameClient) :
 {
 }
 
-bool CPortInput::AcceptsInput(void)
+bool CPortInput::AcceptsInput()
 {
   return m_gameClient.AcceptsInput();
 }

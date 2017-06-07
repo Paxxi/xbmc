@@ -1633,7 +1633,7 @@ void CVideoPlayer::Process()
   }
 }
 
-bool CVideoPlayer::CheckDelayedChannelEntry(void)
+bool CVideoPlayer::CheckDelayedChannelEntry()
 {
   bool bReturn(false);
 
@@ -4303,7 +4303,7 @@ void CVideoPlayer::GetVideoResolution(unsigned int &width, unsigned int &height)
   height = res.iHeight;
 }
 
-bool CVideoPlayer::ShowPVRChannelInfo(void)
+bool CVideoPlayer::ShowPVRChannelInfo()
 {
   bool bReturn(false);
 

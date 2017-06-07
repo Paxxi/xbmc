@@ -313,18 +313,18 @@ bool CGUIControl::SendWindowMessage(CGUIMessage &message) const
   return g_windowManager.SendMessage(message);
 }
 
-int CGUIControl::GetID(void) const
+int CGUIControl::GetID() const
 {
   return m_controlID;
 }
 
 
-int CGUIControl::GetParentID(void) const
+int CGUIControl::GetParentID() const
 {
   return m_parentID;
 }
 
-bool CGUIControl::HasFocus(void) const
+bool CGUIControl::HasFocus() const
 {
   return m_bHasFocus;
 }

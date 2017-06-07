@@ -289,17 +289,17 @@ int CStreamDetails::GetStreamCount(CStreamDetail::StreamType type) const
   return retVal;
 }
 
-int CStreamDetails::GetVideoStreamCount(void) const
+int CStreamDetails::GetVideoStreamCount() const
 {
   return GetStreamCount(CStreamDetail::VIDEO);
 }
 
-int CStreamDetails::GetAudioStreamCount(void) const
+int CStreamDetails::GetAudioStreamCount() const
 {
   return GetStreamCount(CStreamDetail::AUDIO);
 }
 
-int CStreamDetails::GetSubtitleStreamCount(void) const
+int CStreamDetails::GetSubtitleStreamCount() const
 {
   return GetStreamCount(CStreamDetail::SUBTITLE);
 }
@@ -318,7 +318,7 @@ void CStreamDetails::AddStream(CStreamDetail *item)
   m_vecItems.push_back(item);
 }
 
-void CStreamDetails::Reset(void)
+void CStreamDetails::Reset()
 {
   m_pBestVideo = nullptr;
   m_pBestAudio = nullptr;
@@ -523,7 +523,7 @@ void CStreamDetails::Serialize(CVariant& value) const
   }
 }
 
-void CStreamDetails::DetermineBestStreams(void)
+void CStreamDetails::DetermineBestStreams()
 {
   m_pBestVideo = NULL;
   m_pBestAudio = NULL;

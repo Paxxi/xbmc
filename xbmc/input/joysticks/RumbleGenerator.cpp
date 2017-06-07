@@ -72,7 +72,7 @@ bool CRumbleGenerator::DoTest(IInputReceiver* receiver)
   return  false;
 }
 
-void CRumbleGenerator::Process(void)
+void CRumbleGenerator::Process()
 {
   switch (m_type)
   {

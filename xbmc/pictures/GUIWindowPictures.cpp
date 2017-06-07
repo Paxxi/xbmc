@@ -65,7 +65,7 @@ using namespace PLAYLIST;
 #define CONTROL_BTNSLIDESHOW_RECURSIVE   7
 #define CONTROL_SHUFFLE      9
 
-CGUIWindowPictures::CGUIWindowPictures(void)
+CGUIWindowPictures::CGUIWindowPictures()
     : CGUIMediaWindow(WINDOW_PICTURES, "MyPics.xml")
 {
   m_thumbLoader.SetObserver(this);

@@ -55,7 +55,7 @@ CGUIControllerList::CGUIControllerList(CGUIWindow* window, IFeatureList* feature
   assert(m_featureList != nullptr);
 }
 
-bool CGUIControllerList::Initialize(void)
+bool CGUIControllerList::Initialize()
 {
   m_controllerList = dynamic_cast<CGUIControlGroupList*>(m_guiWindow->GetControl(CONTROL_CONTROLLER_LIST));
   m_controllerButton = dynamic_cast<CGUIButtonControl*>(m_guiWindow->GetControl(CONTROL_CONTROLLER_BUTTON_TEMPLATE));
@@ -70,7 +70,7 @@ bool CGUIControllerList::Initialize(void)
          m_controllerButton != nullptr;
 }
 
-void CGUIControllerList::Deinitialize(void)
+void CGUIControllerList::Deinitialize()
 {
   CAddonMgr::GetInstance().Events().Unsubscribe(this);
 
@@ -80,7 +80,7 @@ void CGUIControllerList::Deinitialize(void)
   m_controllerButton = nullptr;
 }
 
-bool CGUIControllerList::Refresh(void)
+bool CGUIControllerList::Refresh()
 {
   if (!RefreshControllers())
     return false;
@@ -127,7 +127,7 @@ void CGUIControllerList::OnSelect(unsigned int controllerIndex)
   m_featureList->OnSelect(0);
 }
 
-void CGUIControllerList::ResetController(void)
+void CGUIControllerList::ResetController()
 {
   if (0 <= m_focusedController && m_focusedController < (int)m_controllers.size())
   {
@@ -154,7 +154,7 @@ void CGUIControllerList::OnEvent(const ADDON::AddonEvent& event)
   }
 }
 
-bool CGUIControllerList::RefreshControllers(void)
+bool CGUIControllerList::RefreshControllers()
 {
   // Get current controllers
   CGameServices& gameServices = CServiceBroker::GetGameServices();
@@ -191,7 +191,7 @@ bool CGUIControllerList::RefreshControllers(void)
   return bChanged;
 }
 
-void CGUIControllerList::CleanupButtons(void)
+void CGUIControllerList::CleanupButtons()
 {
   if (m_controllerList)
     m_controllerList->ClearAll();

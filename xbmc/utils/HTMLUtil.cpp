@@ -24,10 +24,10 @@
 
 using namespace HTML;
 
-CHTMLUtil::CHTMLUtil(void)
+CHTMLUtil::CHTMLUtil()
 {}
 
-CHTMLUtil::~CHTMLUtil(void)
+CHTMLUtil::~CHTMLUtil()
 {}
 
 void CHTMLUtil::RemoveTags(std::string& strHTML)

@@ -185,7 +185,7 @@ void CGUIWindowPVRGuideBase::UpdateSelectedItemPath()
   }
 }
 
-void CGUIWindowPVRGuideBase::UpdateButtons(void)
+void CGUIWindowPVRGuideBase::UpdateButtons()
 {
   CGUIWindowPVRBase::UpdateButtons();
   SET_CONTROL_LABEL(CONTROL_LABEL_HEADER1, g_localizeStrings.Get(19032));

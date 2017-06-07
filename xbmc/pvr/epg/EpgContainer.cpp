@@ -42,7 +42,7 @@
 
 using namespace PVR;
 
-CPVREpgContainer::CPVREpgContainer(void) :
+CPVREpgContainer::CPVREpgContainer() :
   CThread("EPGUpdater"),
   m_bUpdateNotificationPending(false),
   m_settings({
@@ -71,19 +71,19 @@ CPVREpgContainer::~CPVREpgContainer(void)
   Unload();
 }
 
-void CPVREpgContainer::Unload(void)
+void CPVREpgContainer::Unload()
 {
   Stop();
   Clear(false);
 }
 
-bool CPVREpgContainer::IsStarted(void) const
+bool CPVREpgContainer::IsStarted() const
 {
   CSingleLock lock(m_critSection);
   return m_bStarted;
 }
 
-unsigned int CPVREpgContainer::NextEpgId(void)
+unsigned int CPVREpgContainer::NextEpgId()
 {
   CSingleLock lock(m_critSection);
   return ++m_iNextEpgId;
@@ -138,9 +138,9 @@ class CPVREpgContainerStartJob : public CJob
 {
 public:
   CPVREpgContainerStartJob() = default;
-  virtual ~CPVREpgContainerStartJob(void) = default;
+  virtual ~CPVREpgContainerStartJob() = default;
 
-  bool DoWork(void)
+  bool DoWork()
   {
     CServiceBroker::GetPVRManager().EpgContainer().Start(false);
     return true;
@@ -196,7 +196,7 @@ void CPVREpgContainer::Start(bool bAsync)
   }
 }
 
-bool CPVREpgContainer::Stop(void)
+bool CPVREpgContainer::Stop()
 {
   StopThread();
 
@@ -224,7 +224,7 @@ void CPVREpgContainer::Notify(const Observable &obs, const ObservableMessage msg
   NotifyObservers(msg);
 }
 
-void CPVREpgContainer::LoadFromDB(void)
+void CPVREpgContainer::LoadFromDB()
 {
   CSingleLock lock(m_critSection);
 
@@ -274,7 +274,7 @@ void CPVREpgContainer::LoadFromDB(void)
   m_bLoaded = bLoaded;
 }
 
-bool CPVREpgContainer::PersistAll(void)
+bool CPVREpgContainer::PersistAll()
 {
   bool bReturn(true);
   m_critSection.lock();
@@ -293,7 +293,7 @@ bool CPVREpgContainer::PersistAll(void)
   return bReturn;
 }
 
-void CPVREpgContainer::Process(void)
+void CPVREpgContainer::Process()
 {
   time_t iNow(0), iLastSave(0);
   bool bUpdateEpg(true);
@@ -496,7 +496,7 @@ CPVREpgPtr CPVREpgContainer::CreateChannelEpg(const CPVRChannelPtr &channel)
   return epg;
 }
 
-bool CPVREpgContainer::RemoveOldEntries(void)
+bool CPVREpgContainer::RemoveOldEntries()
 {
   const CDateTime cleanupTime(CDateTime::GetUTCDateTime() -
     CDateTimeSpan(0, g_advancedSettings.m_iEpgLingerTime / 60, g_advancedSettings.m_iEpgLingerTime % 60, 0));
@@ -536,7 +536,7 @@ bool CPVREpgContainer::DeleteEpg(const CPVREpg &epg, bool bDeleteFromDatabase /*
   return true;
 }
 
-void CPVREpgContainer::CloseProgressDialog(void)
+void CPVREpgContainer::CloseProgressDialog()
 {
   if (m_progressHandle)
   {
@@ -572,7 +572,7 @@ bool CPVREpgContainer::IgnoreDB() const
   return m_settings.GetBoolValue(CSettings::SETTING_EPG_IGNOREDBFORCLIENT);
 }
 
-bool CPVREpgContainer::InterruptUpdate(void) const
+bool CPVREpgContainer::InterruptUpdate() const
 {
   bool bReturn(false);
   CSingleLock lock(m_critSection);
@@ -716,7 +716,7 @@ bool CPVREpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
   return !bInterrupted;
 }
 
-const CDateTime CPVREpgContainer::GetFirstEPGDate(void)
+const CDateTime CPVREpgContainer::GetFirstEPGDate()
 {
   CDateTime returnValue;
 
@@ -733,7 +733,7 @@ const CDateTime CPVREpgContainer::GetFirstEPGDate(void)
   return returnValue;
 }
 
-const CDateTime CPVREpgContainer::GetLastEPGDate(void)
+const CDateTime CPVREpgContainer::GetLastEPGDate()
 {
   CDateTime returnValue;
 
@@ -768,7 +768,7 @@ int CPVREpgContainer::GetEPGSearch(CFileItemList &results, const CPVREpgSearchFi
   return results.Size() - iInitialSize;
 }
 
-bool CPVREpgContainer::CheckPlayingEvents(void)
+bool CPVREpgContainer::CheckPlayingEvents()
 {
   bool bReturn(false);
   bool bFoundChanges(false);

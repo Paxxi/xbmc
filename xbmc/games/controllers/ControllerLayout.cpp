@@ -61,7 +61,7 @@ struct FeatureTypeEqual
 
 // --- CControllerLayout ---------------------------------------------------
 
-void CControllerLayout::Reset(void)
+void CControllerLayout::Reset()
 {
   m_label = 0;
   m_strImage.clear();

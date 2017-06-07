@@ -34,7 +34,7 @@
 
 using namespace XFILE;
 
-CPosixDirectory::CPosixDirectory(void)
+CPosixDirectory::CPosixDirectory()
 {}
 
 CPosixDirectory::~CPosixDirectory(void)

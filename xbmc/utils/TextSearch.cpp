@@ -34,7 +34,7 @@ CTextSearch::~CTextSearch(void)
   m_NOT.clear();
 }
 
-bool CTextSearch::IsValid(void) const
+bool CTextSearch::IsValid() const
 {
   return m_AND.size() > 0 || m_OR.size() > 0 || m_NOT.size() > 0;
 }

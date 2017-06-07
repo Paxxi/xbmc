@@ -41,12 +41,12 @@ using namespace XFILE;
 #include <limits.h>
 #include <nfsc/libnfs-raw-nfs.h>
 
-CNFSDirectory::CNFSDirectory(void)
+CNFSDirectory::CNFSDirectory()
 {
   gNfsConnection.AddActiveConnection();
 }
 
-CNFSDirectory::~CNFSDirectory(void)
+CNFSDirectory::~CNFSDirectory()
 {
   gNfsConnection.AddIdleConnection();
 }

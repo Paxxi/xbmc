@@ -31,7 +31,7 @@ CEventRateHandle::CEventRateHandle(double RateHz, IEventRateCallback* callback) 
   assert(m_callback != nullptr);
 }
 
-void CEventRateHandle::Release(void)
+void CEventRateHandle::Release()
 {
   m_callback->Release(this);
 }

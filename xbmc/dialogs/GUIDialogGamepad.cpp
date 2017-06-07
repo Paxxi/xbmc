@@ -30,7 +30,7 @@
 
 #include <utility>
 
-CGUIDialogGamepad::CGUIDialogGamepad(void)
+CGUIDialogGamepad::CGUIDialogGamepad()
     : CGUIDialogBoxBase(WINDOW_DIALOG_GAMEPAD, "DialogConfirm.xml")
 {
   m_bCanceled = false;

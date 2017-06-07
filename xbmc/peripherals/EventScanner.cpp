@@ -38,12 +38,12 @@ CEventScanner::CEventScanner(IEventScannerCallback* callback) :
   assert(m_callback != nullptr);
 }
 
-void CEventScanner::Start(void)
+void CEventScanner::Start()
 {
   Create();
 }
 
-void CEventScanner::Stop(void)
+void CEventScanner::Stop()
 {
   StopThread(false);
   m_scanEvent.Set();
@@ -83,7 +83,7 @@ void CEventScanner::Release(CEventRateHandle* handle)
   CLog::Log(LOGDEBUG, "PERIPHERALS: Event sampling rate set from %.2f to %.2f", oldRate, newRate);
 }
 
-void CEventScanner::Process(void)
+void CEventScanner::Process()
 {
   double nextScanMs = static_cast<double>(SystemClockMillis());
 
@@ -110,7 +110,7 @@ void CEventScanner::Process(void)
   }
 }
 
-double CEventScanner::GetRateHz(void) const
+double CEventScanner::GetRateHz() const
 {
   CSingleLock lock(m_mutex);
 

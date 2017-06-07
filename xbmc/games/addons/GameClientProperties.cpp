@@ -44,7 +44,7 @@ CGameClientProperties::CGameClientProperties(const CGameClient* parent, AddonPro
 {
 }
 
-void CGameClientProperties::ReleaseResources(void)
+void CGameClientProperties::ReleaseResources()
 {
   for (std::vector<char*>::const_iterator it = m_proxyDllPaths.begin(); it != m_proxyDllPaths.end(); ++it)
     delete[] *it;
@@ -59,7 +59,7 @@ void CGameClientProperties::ReleaseResources(void)
   m_extensions.clear();
 }
 
-void CGameClientProperties::InitializeProperties(void)
+void CGameClientProperties::InitializeProperties()
 {
   ReleaseResources();
 
@@ -74,7 +74,7 @@ void CGameClientProperties::InitializeProperties(void)
   m_properties.extension_count          = GetExtensionCount();
 }
 
-const char* CGameClientProperties::GetLibraryPath(void)
+const char* CGameClientProperties::GetLibraryPath()
 {
   if (m_strLibraryPath.empty())
   {
@@ -85,7 +85,7 @@ const char* CGameClientProperties::GetLibraryPath(void)
   return m_strLibraryPath.c_str();
 }
 
-const char** CGameClientProperties::GetProxyDllPaths(void)
+const char** CGameClientProperties::GetProxyDllPaths()
 {
   if (m_proxyDllPaths.empty())
   {
@@ -121,7 +121,7 @@ const char** CGameClientProperties::GetProxyDllPaths(void)
   return nullptr;
 }
 
-const char** CGameClientProperties::GetResourceDirectories(void)
+const char** CGameClientProperties::GetResourceDirectories()
 {
   if (m_resourceDirectories.empty())
   {
@@ -171,7 +171,7 @@ const char** CGameClientProperties::GetResourceDirectories(void)
   return nullptr;
 }
 
-const char* CGameClientProperties::GetProfileDirectory(void)
+const char* CGameClientProperties::GetProfileDirectory()
 {
   if (m_strProfileDirectory.empty())
     m_strProfileDirectory = CSpecialProtocol::TranslatePath(m_parent->Profile());
@@ -179,7 +179,7 @@ const char* CGameClientProperties::GetProfileDirectory(void)
   return m_strProfileDirectory.c_str();
 }
 
-const char** CGameClientProperties::GetExtensions(void)
+const char** CGameClientProperties::GetExtensions()
 {
   for (auto& extension : m_parent->GetExtensions())
   {

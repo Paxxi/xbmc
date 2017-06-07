@@ -25,7 +25,7 @@
 
 using namespace XFILE;
 
-CMultiPathFile::CMultiPathFile(void)
+CMultiPathFile::CMultiPathFile()
   : COverrideFile(false)
 { }
 

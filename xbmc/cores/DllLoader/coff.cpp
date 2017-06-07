@@ -510,7 +510,7 @@ char *CoffLoader::GetSymbolName(int index)
   return GetSymbolName(sym);
 }
 
-void CoffLoader::PrintStringTable(void)
+void CoffLoader::PrintStringTable()
 {
   int size = SizeOfStringTable;
   int index = 0;
@@ -527,7 +527,7 @@ void CoffLoader::PrintStringTable(void)
 }
 
 
-void CoffLoader::PrintSymbolTable(void)
+void CoffLoader::PrintSymbolTable()
 {
   int SymIndex;
 
@@ -952,7 +952,7 @@ int CoffLoader::ParseCoff(FILE *fp)
   return 1;
 }
 
-void CoffLoader::PerformFixups(void)
+void CoffLoader::PerformFixups()
 {
   int FixupDataSize;
   char *FixupData;

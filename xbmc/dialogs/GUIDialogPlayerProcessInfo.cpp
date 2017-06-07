@@ -22,7 +22,7 @@
 
 #include "input/Key.h"
 
-CGUIDialogPlayerProcessInfo::CGUIDialogPlayerProcessInfo(void)
+CGUIDialogPlayerProcessInfo::CGUIDialogPlayerProcessInfo()
     : CGUIDialog(WINDOW_DIALOG_PLAYER_PROCESS_INFO, "DialogPlayerProcessInfo.xml")
 {
   m_loadType = KEEP_IN_MEMORY;

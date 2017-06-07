@@ -112,7 +112,7 @@ void CPeripheralJoystickEmulation::OnKeyRelease(const CKey& key)
     it->second.handler->OnKeyRelease(key);
 }
 
-unsigned int CPeripheralJoystickEmulation::ControllerNumber(void) const
+unsigned int CPeripheralJoystickEmulation::ControllerNumber() const
 {
   unsigned int number;
   std::istringstream str(m_strLocation);

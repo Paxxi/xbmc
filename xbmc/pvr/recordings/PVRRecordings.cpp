@@ -42,7 +42,7 @@
 
 using namespace PVR;
 
-CPVRRecordings::CPVRRecordings(void) :
+CPVRRecordings::CPVRRecordings() :
     m_bIsUpdating(false),
     m_iLastId(0),
     m_bDeletedTVRecordings(false),
@@ -60,7 +60,7 @@ CPVRRecordings::~CPVRRecordings()
     m_database.Close();
 }
 
-void CPVRRecordings::UpdateFromClients(void)
+void CPVRRecordings::UpdateFromClients()
 {
   CSingleLock lock(m_critSection);
   Clear();
@@ -147,14 +147,14 @@ void CPVRRecordings::GetSubDirectories(const CPVRRecordingsPath &recParentPath, 
     item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, false);
 }
 
-int CPVRRecordings::Load(void)
+int CPVRRecordings::Load()
 {
   Update();
 
   return m_recordings.size();
 }
 
-void CPVRRecordings::Update(void)
+void CPVRRecordings::Update()
 {
   CSingleLock lock(m_critSection);
   if (m_bIsUpdating)

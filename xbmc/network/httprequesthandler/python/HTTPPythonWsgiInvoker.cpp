@@ -76,8 +76,8 @@
 #endif
 
 namespace PythonBindings {
-  void initModule_xbmc(void);
-  void initModule_xbmcwsgi(void);
+  void initModule_xbmc();
+  void initModule_xbmcwsgi();
 }
 
 using namespace PythonBindings;

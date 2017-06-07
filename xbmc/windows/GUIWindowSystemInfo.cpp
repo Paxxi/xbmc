@@ -42,7 +42,7 @@
 #define CONTROL_START       CONTROL_BT_STORAGE
 #define CONTROL_END         CONTROL_BT_POLICY
 
-CGUIWindowSystemInfo::CGUIWindowSystemInfo(void) :
+CGUIWindowSystemInfo::CGUIWindowSystemInfo() :
     CGUIWindow(WINDOW_SYSTEM_INFORMATION, "SettingsSystemInfo.xml")
 {
   m_section = CONTROL_BT_DEFAULT;

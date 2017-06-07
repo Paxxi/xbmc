@@ -52,7 +52,7 @@ using namespace PLAYLIST;
 ------------------------ end of example wpl playlist file ---------------------------------*/
 //Note: File is utf-8 encoded by default
 
-CPlayListWPL::CPlayListWPL(void)
+CPlayListWPL::CPlayListWPL()
 {}
 
 CPlayListWPL::~CPlayListWPL(void)

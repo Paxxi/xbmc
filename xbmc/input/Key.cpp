@@ -21,12 +21,12 @@
 #include "system.h"
 #include "input/Key.h"
 
-CKey::CKey(void)
+CKey::CKey()
 {
   Reset();
 }
 
-CKey::~CKey(void)
+CKey::~CKey()
 {}
 
 CKey::CKey(uint32_t buttonCode, uint8_t leftTrigger, uint8_t rightTrigger, float leftThumbX, float leftThumbY, float rightThumbX, float rightThumbY, float repeat)

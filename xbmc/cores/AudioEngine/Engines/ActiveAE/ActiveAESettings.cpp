@@ -79,7 +79,7 @@ bool CActiveAESettings::IsSettingVisible(const std::string & condition, const st
   return CServiceBroker::GetActiveAE().IsSettingVisible(value);
 }
 
-bool CActiveAESettings::SupportsQualitySetting(void)
+bool CActiveAESettings::SupportsQualitySetting()
 {
     return ((CServiceBroker::GetActiveAE().SupportsQualityLevel(AE_QUALITY_LOW) ? 1 : 0) +
             (CServiceBroker::GetActiveAE().SupportsQualityLevel(AE_QUALITY_MID) ? 1 : 0) +

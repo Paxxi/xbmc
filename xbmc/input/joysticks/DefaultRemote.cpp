@@ -26,13 +26,13 @@
 using namespace KODI;
 using namespace JOYSTICK;
 
-CDefaultRemote::CDefaultRemote(void)
+CDefaultRemote::CDefaultRemote()
 {
   // initialize CDefaultJoystick
   m_easterEgg.reset(new CJoystickEasterEgg(GetControllerID()));
 }
 
-std::string CDefaultRemote::GetControllerID(void) const
+std::string CDefaultRemote::GetControllerID() const
 {
   return DEFAULT_REMOTE_ID;
 }

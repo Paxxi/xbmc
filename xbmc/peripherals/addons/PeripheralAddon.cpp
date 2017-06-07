@@ -84,7 +84,7 @@ CPeripheralAddon::~CPeripheralAddon(void)
   DestroyAddon();
 }
 
-void CPeripheralAddon::ResetProperties(void)
+void CPeripheralAddon::ResetProperties()
 {
   // Initialise members
   m_strUserPath = CSpecialProtocol::TranslatePath(Profile());
@@ -100,7 +100,7 @@ void CPeripheralAddon::ResetProperties(void)
   m_struct.toKodi.TriggerScan = cb_trigger_scan;
 }
 
-ADDON::AddonPtr CPeripheralAddon::GetRunningInstance(void) const
+ADDON::AddonPtr CPeripheralAddon::GetRunningInstance() const
 {
   PeripheralBusAddonPtr addonBus = std::static_pointer_cast<CPeripheralBusAddon>(CServiceBroker::GetPeripherals().GetBusByType(PERIPHERAL_BUS_ADDON));
   if (addonBus)
@@ -112,7 +112,7 @@ ADDON::AddonPtr CPeripheralAddon::GetRunningInstance(void) const
   return CAddon::GetRunningInstance();
 }
 
-ADDON_STATUS CPeripheralAddon::CreateAddon(void)
+ADDON_STATUS CPeripheralAddon::CreateAddon()
 {
   CExclusiveLock lock(m_dllSection);
 
@@ -157,7 +157,7 @@ void CPeripheralAddon::DestroyAddon()
   }
 }
 
-bool CPeripheralAddon::GetAddonProperties(void)
+bool CPeripheralAddon::GetAddonProperties()
 {
   PERIPHERAL_CAPABILITIES addonCapabilities = { };
 
@@ -410,7 +410,7 @@ bool CPeripheralAddon::PerformDeviceScan(PeripheralScanResults &results)
   return false;
 }
 
-bool CPeripheralAddon::ProcessEvents(void)
+bool CPeripheralAddon::ProcessEvents()
 {
   if (!m_bProvidesJoysticks)
     return false;

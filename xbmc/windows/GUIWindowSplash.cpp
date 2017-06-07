@@ -25,7 +25,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "utils/log.h"
 
-CGUIWindowSplash::CGUIWindowSplash(void) : CGUIWindow(WINDOW_SPLASH, "")
+CGUIWindowSplash::CGUIWindowSplash() : CGUIWindow(WINDOW_SPLASH, "")
 {
   m_loadType = LOAD_ON_GUI_INIT;
   m_image = nullptr;

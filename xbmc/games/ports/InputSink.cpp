@@ -30,12 +30,12 @@ CInputSink::CInputSink(CGameClient &gameClient) :
 {
 }
 
-std::string CInputSink::ControllerID(void) const
+std::string CInputSink::ControllerID() const
 {
   return DEFAULT_CONTROLLER_ID;
 }
 
-bool CInputSink::AcceptsInput(void)
+bool CInputSink::AcceptsInput()
 {
   return m_gameClient.AcceptsInput();
 }

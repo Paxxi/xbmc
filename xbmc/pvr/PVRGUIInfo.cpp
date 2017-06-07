@@ -40,7 +40,7 @@
 
 using namespace PVR;
 
-CPVRGUIInfo::CPVRGUIInfo(void) :
+CPVRGUIInfo::CPVRGUIInfo() :
     CThread("PVRGUIInfo")
 {
   ResetProperties();
@@ -51,7 +51,7 @@ CPVRGUIInfo::~CPVRGUIInfo(void)
   Stop();
 }
 
-void CPVRGUIInfo::ResetProperties(void)
+void CPVRGUIInfo::ResetProperties()
 {
   CSingleLock lock(m_critSection);
   m_anyTimersInfo.ResetProperties();
@@ -99,14 +99,14 @@ void CPVRGUIInfo::ClearQualityInfo(PVR_SIGNAL_STATUS &qualityInfo)
   strncpy(qualityInfo.strAdapterStatus, g_localizeStrings.Get(13106).c_str(), PVR_ADDON_NAME_STRING_LENGTH - 1);
 }
 
-void CPVRGUIInfo::Start(void)
+void CPVRGUIInfo::Start()
 {
   ResetProperties();
   Create();
   SetPriority(-1);
 }
 
-void CPVRGUIInfo::Stop(void)
+void CPVRGUIInfo::Stop()
 {
   StopThread();
   CServiceBroker::GetPVRManager().UnregisterObserver(this);
@@ -130,7 +130,7 @@ void CPVRGUIInfo::ShowPlayerInfo(int iTimeout)
   g_infoManager.SetShowInfo(true);
 }
 
-void CPVRGUIInfo::ToggleShowInfo(void)
+void CPVRGUIInfo::ToggleShowInfo()
 {
   CSingleLock lock(m_critSection);
 
@@ -155,7 +155,7 @@ void CPVRGUIInfo::ToggleShowInfo(void)
   }
 }
 
-void CPVRGUIInfo::Process(void)
+void CPVRGUIInfo::Process()
 {
   unsigned int mLoop(0);
   int toggleInterval = g_advancedSettings.m_iPVRInfoToggleInterval / 1000;
@@ -212,7 +212,7 @@ void CPVRGUIInfo::Process(void)
     ResetPlayingTag();
 }
 
-void CPVRGUIInfo::UpdateQualityData(void)
+void CPVRGUIInfo::UpdateQualityData()
 {
   PVR_SIGNAL_STATUS qualityInfo;
   ClearQualityInfo(qualityInfo);
@@ -227,7 +227,7 @@ void CPVRGUIInfo::UpdateQualityData(void)
   memcpy(&m_qualityInfo, &qualityInfo, sizeof(m_qualityInfo));
 }
 
-void CPVRGUIInfo::UpdateMisc(void)
+void CPVRGUIInfo::UpdateMisc()
 {
   bool bStarted = CServiceBroker::GetPVRManager().IsStarted();
   /* safe to fetch these unlocked, since they're updated from the same thread as this one */
@@ -255,7 +255,7 @@ void CPVRGUIInfo::UpdateMisc(void)
   m_strPlayingTVGroup         = strPlayingTVGroup;
 }
 
-void CPVRGUIInfo::UpdateTimeshift(void)
+void CPVRGUIInfo::UpdateTimeshift()
 {
   bool bStarted = CServiceBroker::GetPVRManager().IsStarted();
 
@@ -717,7 +717,7 @@ void CPVRGUIInfo::CharInfoProvider(std::string &strValue) const
     strValue = m_qualityInfo.strProviderName;
 }
 
-void CPVRGUIInfo::UpdateBackendCache(void)
+void CPVRGUIInfo::UpdateBackendCache()
 {
   CSingleLock lock(m_critSection);
 
@@ -776,34 +776,34 @@ void CPVRGUIInfo::UpdateBackendCache(void)
     m_iCurrentActiveClient = 0;
 }
 
-void CPVRGUIInfo::UpdateTimersCache(void)
+void CPVRGUIInfo::UpdateTimersCache()
 {
   m_anyTimersInfo.UpdateTimersCache();
   m_tvTimersInfo.UpdateTimersCache();
   m_radioTimersInfo.UpdateTimersCache();
 }
 
-void CPVRGUIInfo::UpdateTimersToggle(void)
+void CPVRGUIInfo::UpdateTimersToggle()
 {
   m_anyTimersInfo.UpdateTimersToggle();
   m_tvTimersInfo.UpdateTimersToggle();
   m_radioTimersInfo.UpdateTimersToggle();
 }
 
-void CPVRGUIInfo::UpdateNextTimer(void)
+void CPVRGUIInfo::UpdateNextTimer()
 {
   m_anyTimersInfo.UpdateNextTimer();
   m_tvTimersInfo.UpdateNextTimer();
   m_radioTimersInfo.UpdateNextTimer();
 }
 
-int CPVRGUIInfo::GetDuration(void) const
+int CPVRGUIInfo::GetDuration() const
 {
   CSingleLock lock(m_critSection);
   return m_iDuration;
 }
 
-int CPVRGUIInfo::GetStartTime(void) const
+int CPVRGUIInfo::GetStartTime() const
 {
   CSingleLock lock(m_critSection);
   if (m_playingEpgTag || m_iTimeshiftStartTime)
@@ -825,7 +825,7 @@ int CPVRGUIInfo::GetStartTime(void) const
   }
 }
 
-void CPVRGUIInfo::ResetPlayingTag(void)
+void CPVRGUIInfo::ResetPlayingTag()
 {
   CSingleLock lock(m_critSection);
   m_playingEpgTag.reset();
@@ -838,7 +838,7 @@ CPVREpgInfoTagPtr CPVRGUIInfo::GetPlayingTag() const
   return m_playingEpgTag;
 }
 
-void CPVRGUIInfo::UpdatePlayingTag(void)
+void CPVRGUIInfo::UpdatePlayingTag()
 {
   CPVRChannelPtr currentChannel(CServiceBroker::GetPVRManager().GetCurrentChannel());
   if (currentChannel)
@@ -884,12 +884,12 @@ std::string CPVRGUIInfo::GetPlayingTVGroup()
   return m_strPlayingTVGroup;
 }
 
-CPVRGUIInfo::TimerInfo::TimerInfo(void)
+CPVRGUIInfo::TimerInfo::TimerInfo()
 {
   ResetProperties();
 }
 
-void CPVRGUIInfo::TimerInfo::ResetProperties(void)
+void CPVRGUIInfo::TimerInfo::ResetProperties()
 {
   CSingleLock lock(m_critSection);
   m_strActiveTimerTitle         .clear();
@@ -961,7 +961,7 @@ void CPVRGUIInfo::TimerInfo::UpdateTimersToggle()
   m_strActiveTimerTime        = strActiveTimerTime;
 }
 
-void CPVRGUIInfo::TimerInfo::UpdateTimersCache(void)
+void CPVRGUIInfo::TimerInfo::UpdateTimersCache()
 {
   int iTimerAmount          = AmountActiveTimers();
   int iRecordingTimerAmount = AmountActiveRecordings();

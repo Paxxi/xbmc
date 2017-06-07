@@ -90,7 +90,7 @@ using namespace KODI::MESSAGING;
 #define CONTROL_CURRENTDIRLABEL_LEFT    101
 #define CONTROL_CURRENTDIRLABEL_RIGHT   102
 
-CGUIWindowFileManager::CGUIWindowFileManager(void)
+CGUIWindowFileManager::CGUIWindowFileManager()
     : CGUIWindow(WINDOW_FILES, "FileManager.xml"),
       CJobQueue(false,2)
 {

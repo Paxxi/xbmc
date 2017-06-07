@@ -24,7 +24,7 @@
 #include "windowing/WindowingFactory.h"
 
 
-CGUIWindowTestPattern::CGUIWindowTestPattern(void)
+CGUIWindowTestPattern::CGUIWindowTestPattern()
     : CGUIWindow(WINDOW_TEST_PATTERN, "")
     , m_white(1.0)
     , m_black(0.0)

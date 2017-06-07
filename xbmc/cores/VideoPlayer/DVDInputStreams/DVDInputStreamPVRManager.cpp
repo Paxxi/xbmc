@@ -460,7 +460,7 @@ bool CDVDInputStreamPVRManager::CloseAndOpen(const std::string& strFile)
   return false;
 }
 
-bool CDVDInputStreamPVRManager::IsOtherStreamHack(void)
+bool CDVDInputStreamPVRManager::IsOtherStreamHack()
 {
   return m_isOtherStreamHack;
 }

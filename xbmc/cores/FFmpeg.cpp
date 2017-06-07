@@ -92,7 +92,7 @@ int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
 static CCriticalSection m_logSection;
 std::map<uintptr_t, std::string> g_logbuffer;
 
-void ff_flush_avutil_log_buffers(void)
+void ff_flush_avutil_log_buffers()
 {
   CSingleLock lock(m_logSection);
   /* Loop through the logbuffer list and remove any blank buffers

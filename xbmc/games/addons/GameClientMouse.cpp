@@ -41,7 +41,7 @@ CGameClientMouse::~CGameClientMouse()
   CInputManager::GetInstance().UnregisterMouseHandler(this);
 }
 
-std::string CGameClientMouse::ControllerID(void) const
+std::string CGameClientMouse::ControllerID() const
 {
   return m_controllerId;
 }

@@ -26,11 +26,11 @@
 
 using namespace XFILE;
 
-CSFTPDirectory::CSFTPDirectory(void)
+CSFTPDirectory::CSFTPDirectory()
 {
 }
 
-CSFTPDirectory::~CSFTPDirectory(void)
+CSFTPDirectory::~CSFTPDirectory()
 {
 }
 

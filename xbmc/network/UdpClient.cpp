@@ -34,14 +34,14 @@
 
 #define UDPCLIENT_DEBUG_LEVEL LOGDEBUG
 
-CUdpClient::CUdpClient(void) : CThread("UDPClient")
+CUdpClient::CUdpClient() : CThread("UDPClient")
 {}
 
 CUdpClient::~CUdpClient(void)
 {
 }
 
-bool CUdpClient::Create(void)
+bool CUdpClient::Create()
 {
   m_bStop = false;
 

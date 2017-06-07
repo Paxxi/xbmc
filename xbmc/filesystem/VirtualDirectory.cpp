@@ -34,14 +34,14 @@ using namespace XFILE;
 namespace XFILE
 {
 
-CVirtualDirectory::CVirtualDirectory(void)
+CVirtualDirectory::CVirtualDirectory()
 {
   m_flags = DIR_FLAG_ALLOW_PROMPT;
   m_allowNonLocalSources = true;
   m_allowThreads = true;
 }
 
-CVirtualDirectory::~CVirtualDirectory(void)
+CVirtualDirectory::~CVirtualDirectory()
 {}
 
 /*!

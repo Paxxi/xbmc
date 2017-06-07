@@ -31,7 +31,7 @@
 CGUIDialogKaiToast::TOASTQUEUE CGUIDialogKaiToast::m_notifications;
 CCriticalSection CGUIDialogKaiToast::m_critical;
 
-CGUIDialogKaiToast::CGUIDialogKaiToast(void)
+CGUIDialogKaiToast::CGUIDialogKaiToast()
   : CGUIDialog(WINDOW_DIALOG_KAI_TOAST, "DialogNotification.xml", DialogModalityType::MODELESS)
 {
   m_loadType = LOAD_ON_GUI_INIT;

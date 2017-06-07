@@ -54,7 +54,7 @@ CGUIConfigurationWizard::~CGUIConfigurationWizard(void)
 {
 }
 
-void CGUIConfigurationWizard::InitializeState(void)
+void CGUIConfigurationWizard::InitializeState()
 {
   m_currentButton = nullptr;
   m_currentDirection = JOYSTICK::ANALOG_STICK_DIRECTION::UNKNOWN;
@@ -110,7 +110,7 @@ bool CGUIConfigurationWizard::Abort(bool bWait /* = true */)
   return false;
 }
 
-void CGUIConfigurationWizard::Process(void)
+void CGUIConfigurationWizard::Process()
 {
   CLog::Log(LOGDEBUG, "Starting configuration wizard");
 
@@ -334,7 +334,7 @@ bool CGUIConfigurationWizard::OnButtonPress(const std::string& button)
   return Abort(false);
 }
 
-void CGUIConfigurationWizard::InstallHooks(void)
+void CGUIConfigurationWizard::InstallHooks()
 {
   CServiceBroker::GetPeripherals().RegisterJoystickButtonMapper(this);
   CServiceBroker::GetPeripherals().RegisterObserver(this);
@@ -346,7 +346,7 @@ void CGUIConfigurationWizard::InstallHooks(void)
   CInputManager::GetInstance().RegisterMouseHandler(this);
 }
 
-void CGUIConfigurationWizard::RemoveHooks(void)
+void CGUIConfigurationWizard::RemoveHooks()
 {
   CInputManager::GetInstance().UnregisterMouseHandler(this);
 

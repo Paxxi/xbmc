@@ -64,7 +64,7 @@ CPVREpg::CPVREpg(const CPVRChannelPtr &channel, bool bLoadedFromDb /* = false */
 {
 }
 
-CPVREpg::CPVREpg(void) :
+CPVREpg::CPVREpg() :
     m_bChanged(false),
     m_bTagsChanged(false),
     m_bLoaded(false),
@@ -123,12 +123,12 @@ void CPVREpg::SetUpdatePending(bool bUpdatePending /* = true */)
     CServiceBroker::GetPVRManager().EpgContainer().SetHasPendingUpdates(true);
 }
 
-void CPVREpg::ForceUpdate(void)
+void CPVREpg::ForceUpdate()
 {
   SetUpdatePending();
 }
 
-bool CPVREpg::HasValidEntries(void) const
+bool CPVREpg::HasValidEntries() const
 {
   CSingleLock lock(m_critSection);
 
@@ -137,13 +137,13 @@ bool CPVREpg::HasValidEntries(void) const
       m_tags.rbegin()->second->EndAsUTC() >= CDateTime::GetCurrentDateTime().GetAsUTCDateTime()); /* the last end time hasn't passed yet */
 }
 
-void CPVREpg::Clear(void)
+void CPVREpg::Clear()
 {
   CSingleLock lock(m_critSection);
   m_tags.clear();
 }
 
-void CPVREpg::Cleanup(void)
+void CPVREpg::Cleanup()
 {
   CDateTime cleanupTime = CDateTime::GetCurrentDateTime().GetAsUTCDateTime() -
       CDateTimeSpan(0, g_advancedSettings.m_iEpgLingerTime / 60, g_advancedSettings.m_iEpgLingerTime % 60, 0);
@@ -229,7 +229,7 @@ CPVREpgInfoTagPtr CPVREpg::GetTagNext() const
   return CPVREpgInfoTagPtr();
 }
 
-bool CPVREpg::CheckPlayingEvent(void)
+bool CPVREpg::CheckPlayingEvent()
 {
   CPVREpgInfoTagPtr previousTag(GetTagNow(false));
   CPVREpgInfoTagPtr newTag(GetTagNow(true));
@@ -317,7 +317,7 @@ void CPVREpg::AddEntry(const CPVREpgInfoTag &tag)
   }
 }
 
-bool CPVREpg::Load(void)
+bool CPVREpg::Load()
 {
   bool bReturn(false);
   CPVREpgDatabase *database = CServiceBroker::GetPVRManager().EpgContainer().GetDatabase();
@@ -378,7 +378,7 @@ bool CPVREpg::UpdateEntries(const CPVREpg &epg, bool bStoreInDb /* = true */)
   return true;
 }
 
-CDateTime CPVREpg::GetLastScanTime(void)
+CDateTime CPVREpg::GetLastScanTime()
 {
   CDateTime lastScanTime;
   {
@@ -590,7 +590,7 @@ int CPVREpg::Get(CFileItemList &results, const CPVREpgSearchFilter &filter) cons
   return results.Size() - iInitialSize;
 }
 
-bool CPVREpg::Persist(void)
+bool CPVREpg::Persist()
 {
   if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_IGNOREDBFORCLIENT) || !NeedsSave())
     return true;
@@ -634,7 +634,7 @@ bool CPVREpg::Persist(void)
   return database->CommitInsertQueries();
 }
 
-CDateTime CPVREpg::GetFirstDate(void) const
+CDateTime CPVREpg::GetFirstDate() const
 {
   CDateTime first;
 
@@ -645,7 +645,7 @@ CDateTime CPVREpg::GetFirstDate(void) const
   return first;
 }
 
-CDateTime CPVREpg::GetLastDate(void) const
+CDateTime CPVREpg::GetLastDate() const
 {
   CDateTime last;
 
@@ -832,13 +832,13 @@ CPVREpgInfoTagPtr CPVREpg::GetNextEvent(const CPVREpgInfoTag& tag) const
   return retVal;
 }
 
-CPVRChannelPtr CPVREpg::Channel(void) const
+CPVRChannelPtr CPVREpg::Channel() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel;
 }
 
-int CPVREpg::ChannelID(void) const
+int CPVREpg::ChannelID() const
 {
   CSingleLock lock(m_critSection);
   return m_pvrChannel ? m_pvrChannel->ChannelID() : -1;
@@ -860,7 +860,7 @@ void CPVREpg::SetChannel(const PVR::CPVRChannelPtr &channel)
   }
 }
 
-bool CPVREpg::UpdatePending(void) const
+bool CPVREpg::UpdatePending() const
 {
   CSingleLock lock(m_critSection);
   return m_bUpdatePending;
@@ -872,13 +872,13 @@ size_t CPVREpg::Size(void) const
   return m_tags.size();
 }
 
-bool CPVREpg::NeedsSave(void) const
+bool CPVREpg::NeedsSave() const
 {
   CSingleLock lock(m_critSection);
   return !m_changedTags.empty() || !m_deletedTags.empty() || m_bChanged;
 }
 
-bool CPVREpg::IsValid(void) const
+bool CPVREpg::IsValid() const
 {
   CSingleLock lock(m_critSection);
   if (ScraperName() == "client")

@@ -246,7 +246,7 @@ using KODI::MESSAGING::HELPERS::DialogResponse;
 #define MAX_FFWD_SPEED 5
 
 //extern IDirectSoundRenderer* m_pAudioDecoder;
-CApplication::CApplication(void)
+CApplication::CApplication()
   : m_pPlayer(new CApplicationPlayer)
 #ifdef HAS_DVD_DRIVE
   , m_Autorun(new CAutorun())
@@ -4717,7 +4717,7 @@ bool CApplication::IsMuted() const
   return m_ServiceManager->GetActiveAE().IsMuted();
 }
 
-void CApplication::ToggleMute(void)
+void CApplication::ToggleMute()
 {
   if (m_muted)
     UnMute();

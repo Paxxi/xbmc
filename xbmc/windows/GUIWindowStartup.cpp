@@ -23,7 +23,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "guilib/WindowIDs.h"
 
-CGUIWindowStartup::CGUIWindowStartup(void)
+CGUIWindowStartup::CGUIWindowStartup()
     : CGUIWindow(WINDOW_STARTUP_ANIM, "Startup.xml")
 {
 }

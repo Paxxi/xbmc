@@ -58,7 +58,7 @@ bool CJoystickMonitor::OnAxisMotion(unsigned int axisIndex, float position, int 
   return false;
 }
 
-bool CJoystickMonitor::ResetTimers(void)
+bool CJoystickMonitor::ResetTimers()
 {
   g_application.ResetSystemIdleTimer();
   g_application.ResetScreenSaver();

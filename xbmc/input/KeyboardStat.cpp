@@ -191,7 +191,7 @@ void CKeyboardStat::ProcessKeyDown(XBMC_keysym& keysym)
   }
 }
 
-void CKeyboardStat::ProcessKeyUp(void)
+void CKeyboardStat::ProcessKeyUp()
 {
   memset(&m_lastKeysym, 0, sizeof(m_lastKeysym));
   m_lastKeyTime = 0;

@@ -99,7 +99,7 @@ bool CJoystickEasterEgg::OnButtonPress(const FeatureName& feature)
   return bHandled;
 }
 
-void CJoystickEasterEgg::OnFinish(void)
+void CJoystickEasterEgg::OnFinish()
 {
   CServiceBroker::GetSettings().ToggleBool(CSettings::SETTING_GAMES_ENABLE);
 

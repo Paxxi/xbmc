@@ -55,7 +55,7 @@ using namespace PVR;
 #define CONTROL_BTN_IGNORE_REC    27
 #define CONTROL_BTN_DEFAULTS      28
 
-CGUIDialogPVRGuideSearch::CGUIDialogPVRGuideSearch(void) :
+CGUIDialogPVRGuideSearch::CGUIDialogPVRGuideSearch() :
     CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_SEARCH, "DialogPVRGuideSearch.xml"),
     m_bConfirmed(false),
     m_bCanceled(false),
@@ -63,7 +63,7 @@ CGUIDialogPVRGuideSearch::CGUIDialogPVRGuideSearch(void) :
 {
 }
 
-void CGUIDialogPVRGuideSearch::UpdateChannelSpin(void)
+void CGUIDialogPVRGuideSearch::UpdateChannelSpin()
 {
   int iChannelGroup = GetSpinValue(CONTROL_SPIN_GROUPS);
 
@@ -89,7 +89,7 @@ void CGUIDialogPVRGuideSearch::UpdateChannelSpin(void)
   SET_CONTROL_LABELS(CONTROL_SPIN_CHANNELS, m_searchFilter->GetChannelNumber(), &labels);
 }
 
-void CGUIDialogPVRGuideSearch::UpdateGroupsSpin(void)
+void CGUIDialogPVRGuideSearch::UpdateGroupsSpin()
 {
   std::vector< std::pair<std::string, int> > labels;
 
@@ -101,7 +101,7 @@ void CGUIDialogPVRGuideSearch::UpdateGroupsSpin(void)
   SET_CONTROL_LABELS(CONTROL_SPIN_GROUPS, m_searchFilter->GetChannelGroup(), &labels);
 }
 
-void CGUIDialogPVRGuideSearch::UpdateGenreSpin(void)
+void CGUIDialogPVRGuideSearch::UpdateGenreSpin()
 {
   std::vector< std::pair<std::string, int> > labels;
   labels.push_back(std::make_pair(g_localizeStrings.Get(593),   EPG_SEARCH_UNSET));
@@ -121,7 +121,7 @@ void CGUIDialogPVRGuideSearch::UpdateGenreSpin(void)
   SET_CONTROL_LABELS(CONTROL_SPIN_GENRE, m_searchFilter->GetGenreType(), &labels);
 }
 
-void CGUIDialogPVRGuideSearch::UpdateDurationSpin(void)
+void CGUIDialogPVRGuideSearch::UpdateDurationSpin()
 {
   /* minimum duration */
   std::vector< std::pair<std::string, int> > labels;

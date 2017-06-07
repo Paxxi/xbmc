@@ -25,7 +25,7 @@
 #include "guilib/GraphicContext.h"
 #include "guilib/GUITexture.h"
 
-CGUIWindowScreensaverDim::CGUIWindowScreensaverDim(void)
+CGUIWindowScreensaverDim::CGUIWindowScreensaverDim()
   : CGUIDialog(WINDOW_SCREENSAVER_DIM, "", DialogModalityType::MODELESS),
     m_dimLevel(100.0f),
     m_newDimLevel(100.0f),

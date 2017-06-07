@@ -35,7 +35,7 @@
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
 
-CVideoDatabaseDirectory::CVideoDatabaseDirectory(void)
+CVideoDatabaseDirectory::CVideoDatabaseDirectory()
 {
 }
 

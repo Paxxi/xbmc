@@ -141,7 +141,7 @@ void CPeripheral::GetFeatures(std::vector<PeripheralFeature> &features) const
     m_subDevices.at(iSubdevicePtr)->GetFeatures(features);
 }
 
-bool CPeripheral::Initialise(void)
+bool CPeripheral::Initialise()
 {
   bool bReturn(false);
 
@@ -205,7 +205,7 @@ void CPeripheral::GetSubdevices(PeripheralVector &subDevices) const
   subDevices = m_subDevices;
 }
 
-bool CPeripheral::IsMultiFunctional(void) const
+bool CPeripheral::IsMultiFunctional() const
 {
   return m_subDevices.size() > 0;
 }
@@ -296,12 +296,12 @@ bool CPeripheral::HasSetting(const std::string &strKey) const
   return it != m_settings.end();
 }
 
-bool CPeripheral::HasSettings(void) const
+bool CPeripheral::HasSettings() const
 {
   return !m_settings.empty();
 }
 
-bool CPeripheral::HasConfigurableSettings(void) const
+bool CPeripheral::HasConfigurableSettings() const
 {
   bool bReturn(false);
   std::map<std::string, PeripheralDeviceSetting>::const_iterator it = m_settings.begin();
@@ -524,7 +524,7 @@ void CPeripheral::PersistSettings(bool bExiting /* = false */)
   m_changedSettings.clear();
 }
 
-void CPeripheral::LoadPersistedSettings(void)
+void CPeripheral::LoadPersistedSettings()
 {
   CXBMCTinyXML doc;
   if (doc.LoadFile(m_strSettingsFile))
@@ -541,7 +541,7 @@ void CPeripheral::LoadPersistedSettings(void)
   }
 }
 
-void CPeripheral::ResetDefaultSettings(void)
+void CPeripheral::ResetDefaultSettings()
 {
   ClearSettings();
   m_manager.GetSettingsFromMapping(*this);
@@ -556,7 +556,7 @@ void CPeripheral::ResetDefaultSettings(void)
   PersistSettings();
 }
 
-void CPeripheral::ClearSettings(void)
+void CPeripheral::ClearSettings()
 {
   m_settings.clear();
 }

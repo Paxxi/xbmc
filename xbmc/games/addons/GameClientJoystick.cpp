@@ -40,7 +40,7 @@ CGameClientJoystick::CGameClientJoystick(CGameClient* gameClient, int port, cons
   assert(m_controller.get() != NULL);
 }
 
-std::string CGameClientJoystick::ControllerID(void) const
+std::string CGameClientJoystick::ControllerID() const
 {
   return m_controller->ID();
 }
@@ -59,7 +59,7 @@ bool CGameClientJoystick::HasFeature(const std::string& feature) const
   return false;
 }
 
-bool CGameClientJoystick::AcceptsInput(void)
+bool CGameClientJoystick::AcceptsInput()
 {
   return m_gameClient->AcceptsInput();
 }

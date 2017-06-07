@@ -85,7 +85,7 @@ bool CGUIDialogBusy::WaitOnEvent(CEvent &event, unsigned int displaytime /* = 10
   return !cancelled;
 }
 
-CGUIDialogBusy::CGUIDialogBusy(void)
+CGUIDialogBusy::CGUIDialogBusy()
   : CGUIDialog(WINDOW_DIALOG_BUSY, "DialogBusy.xml", DialogModalityType::PARENTLESS_MODAL),
     m_bLastVisible(false)
 {

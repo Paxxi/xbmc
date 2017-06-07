@@ -44,7 +44,7 @@
 
 using namespace GAME;
 
-CGUIControllerWindow::CGUIControllerWindow(void) :
+CGUIControllerWindow::CGUIControllerWindow() :
   CGUIDialog(WINDOW_DIALOG_GAME_CONTROLLERS, "DialogGameControllers.xml"),
   m_controllerList(nullptr),
   m_featureList(nullptr)
@@ -202,7 +202,7 @@ void CGUIControllerWindow::OnEvent(const ADDON::CRepositoryUpdater::RepositoryUp
   UpdateButtons();
 }
 
-void CGUIControllerWindow::OnInitWindow(void)
+void CGUIControllerWindow::OnInitWindow()
 {
   CGUIDialog::OnInitWindow();
 
@@ -284,7 +284,7 @@ void CGUIControllerWindow::OnFeatureSelected(unsigned int featureIndex)
     m_featureList->OnSelect(featureIndex);
 }
 
-void CGUIControllerWindow::UpdateButtons(void)
+void CGUIControllerWindow::UpdateButtons()
 {
   using namespace ADDON;
 
@@ -292,7 +292,7 @@ void CGUIControllerWindow::UpdateButtons(void)
   CONTROL_ENABLE_ON_CONDITION(CONTROL_GET_MORE, CAddonMgr::GetInstance().GetInstallableAddons(addons, ADDON::ADDON_GAME_CONTROLLER) && !addons.empty());
 }
 
-void CGUIControllerWindow::GetMoreControllers(void)
+void CGUIControllerWindow::GetMoreControllers()
 {
   std::string strAddonId;
   if (CGUIWindowAddonBrowser::SelectAddonID(ADDON::ADDON_GAME_CONTROLLER, strAddonId, false, true, false, true, false) < 0)
@@ -304,20 +304,20 @@ void CGUIControllerWindow::GetMoreControllers(void)
   }
 }
 
-void CGUIControllerWindow::ResetController(void)
+void CGUIControllerWindow::ResetController()
 {
   if (m_controllerList)
     m_controllerList->ResetController();
 }
 
-void CGUIControllerWindow::ShowHelp(void)
+void CGUIControllerWindow::ShowHelp()
 {
   // "Help"
   // <help text>
   CGUIDialogOK::ShowAndGetInput(CVariant{10043}, CVariant{35055});
 }
 
-void CGUIControllerWindow::ShowButtonCaptureDialog(void)
+void CGUIControllerWindow::ShowButtonCaptureDialog()
 {
   CGUIDialogIgnoreInput dialog;
   dialog.Show();

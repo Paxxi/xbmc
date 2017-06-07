@@ -262,7 +262,7 @@ CFileItem::CFileItem(const CGUIListItem& item)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(void)
+CFileItem::CFileItem()
 {
   Initialize();
 }

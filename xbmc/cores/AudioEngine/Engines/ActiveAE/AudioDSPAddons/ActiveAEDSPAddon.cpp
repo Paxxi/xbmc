@@ -145,12 +145,12 @@ ADDON_STATUS CActiveAEDSPAddon::Create(int iClientId)
   return status;
 }
 
-bool CActiveAEDSPAddon::DllLoaded(void) const
+bool CActiveAEDSPAddon::DllLoaded() const
 {
   return CAddonDll::DllLoaded();
 }
 
-void CActiveAEDSPAddon::Destroy(void)
+void CActiveAEDSPAddon::Destroy()
 {
   /* reset 'ready to use' to false */
   if (!m_bReadyToUse)
@@ -166,7 +166,7 @@ void CActiveAEDSPAddon::Destroy(void)
   ResetProperties();
 }
 
-void CActiveAEDSPAddon::ReCreate(void)
+void CActiveAEDSPAddon::ReCreate()
 {
   int iClientID(m_iClientId);
   Destroy();
@@ -175,12 +175,12 @@ void CActiveAEDSPAddon::ReCreate(void)
   Create(iClientID);
 }
 
-bool CActiveAEDSPAddon::ReadyToUse(void) const
+bool CActiveAEDSPAddon::ReadyToUse() const
 {
   return m_bReadyToUse;
 }
 
-int CActiveAEDSPAddon::GetID(void) const
+int CActiveAEDSPAddon::GetID() const
 {
   return m_iClientId;
 }
@@ -190,7 +190,7 @@ bool CActiveAEDSPAddon::IsInUse() const
   return m_isInUse;
 }
 
-bool CActiveAEDSPAddon::GetAddonProperties(void)
+bool CActiveAEDSPAddon::GetAddonProperties()
 {
   AE_DSP_ADDON_CAPABILITIES addonCapabilities;
 
@@ -221,23 +221,23 @@ bool CActiveAEDSPAddon::GetAddonProperties(void)
   return true;
 }
 
-AE_DSP_ADDON_CAPABILITIES CActiveAEDSPAddon::GetAddonCapabilities(void) const
+AE_DSP_ADDON_CAPABILITIES CActiveAEDSPAddon::GetAddonCapabilities() const
 {
   AE_DSP_ADDON_CAPABILITIES addonCapabilities(m_addonCapabilities);
   return addonCapabilities;
 }
 
-const std::string &CActiveAEDSPAddon::GetAudioDSPName(void) const
+const std::string &CActiveAEDSPAddon::GetAudioDSPName() const
 {
   return m_strAudioDSPName;
 }
 
-const std::string &CActiveAEDSPAddon::GetAudioDSPVersion(void) const
+const std::string &CActiveAEDSPAddon::GetAudioDSPVersion() const
 {
   return m_strAudioDSPVersion;
 }
 
-const std::string &CActiveAEDSPAddon::GetFriendlyName(void) const
+const std::string &CActiveAEDSPAddon::GetFriendlyName() const
 {
   return m_strFriendlyName;
 }
@@ -255,7 +255,7 @@ bool CActiveAEDSPAddon::HaveMenuHooks(AE_DSP_MENUHOOK_CAT cat) const
   return false;
 }
 
-AE_DSP_MENUHOOKS *CActiveAEDSPAddon::GetMenuHooks(void)
+AE_DSP_MENUHOOKS *CActiveAEDSPAddon::GetMenuHooks()
 {
   return &m_menuhooks;
 }
@@ -418,32 +418,32 @@ float CActiveAEDSPAddon::OutputResampleGetDelay(const ADDON_HANDLE handle)
   return m_struct.toAddon.OutputResampleGetDelay(handle);
 }
 
-bool CActiveAEDSPAddon::SupportsInputInfoProcess(void) const
+bool CActiveAEDSPAddon::SupportsInputInfoProcess() const
 {
   return m_addonCapabilities.bSupportsInputProcess;
 }
 
-bool CActiveAEDSPAddon::SupportsInputResample(void) const
+bool CActiveAEDSPAddon::SupportsInputResample() const
 {
   return m_addonCapabilities.bSupportsInputResample;
 }
 
-bool CActiveAEDSPAddon::SupportsPreProcess(void) const
+bool CActiveAEDSPAddon::SupportsPreProcess() const
 {
   return m_addonCapabilities.bSupportsPreProcess;
 }
 
-bool CActiveAEDSPAddon::SupportsMasterProcess(void) const
+bool CActiveAEDSPAddon::SupportsMasterProcess() const
 {
   return m_addonCapabilities.bSupportsMasterProcess;
 }
 
-bool CActiveAEDSPAddon::SupportsPostProcess(void) const
+bool CActiveAEDSPAddon::SupportsPostProcess() const
 {
   return m_addonCapabilities.bSupportsPostProcess;
 }
 
-bool CActiveAEDSPAddon::SupportsOutputResample(void) const
+bool CActiveAEDSPAddon::SupportsOutputResample() const
 {
   return m_addonCapabilities.bSupportsOutputResample;
 }

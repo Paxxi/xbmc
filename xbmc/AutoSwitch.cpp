@@ -32,10 +32,10 @@
 #define METHOD_BYFILECOUNT 3
 #define METHOD_BYFOLDERTHUMBS 4
 
-CAutoSwitch::CAutoSwitch(void)
+CAutoSwitch::CAutoSwitch()
 {}
 
-CAutoSwitch::~CAutoSwitch(void)
+CAutoSwitch::~CAutoSwitch()
 {}
 
 /// \brief Generic function to add a layer of transparency to the calling window

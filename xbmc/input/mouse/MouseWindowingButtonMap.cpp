@@ -38,7 +38,7 @@ std::vector<std::pair<unsigned int, std::string>> CMouseWindowingButtonMap::m_bu
 
 std::string CMouseWindowingButtonMap::m_pointerName = "pointer";
 
-std::string CMouseWindowingButtonMap::ControllerID(void) const
+std::string CMouseWindowingButtonMap::ControllerID() const
 {
   return CONTROLLER_PROFILE;
 }

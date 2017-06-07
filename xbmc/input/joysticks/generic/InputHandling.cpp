@@ -91,7 +91,7 @@ bool CInputHandling::OnAxisMotion(unsigned int axisIndex, float position, int ce
   return bHandled;
 }
 
-void CInputHandling::ProcessAxisMotions(void)
+void CInputHandling::ProcessAxisMotions()
 {
   for (std::map<FeatureName, FeaturePtr>::iterator it = m_features.begin(); it != m_features.end(); ++it)
     it->second->ProcessMotions();

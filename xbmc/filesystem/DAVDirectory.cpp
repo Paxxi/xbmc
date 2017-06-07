@@ -31,7 +31,7 @@
 
 using namespace XFILE;
 
-CDAVDirectory::CDAVDirectory(void) {}
+CDAVDirectory::CDAVDirectory() {}
 CDAVDirectory::~CDAVDirectory(void) {}
 
 /*

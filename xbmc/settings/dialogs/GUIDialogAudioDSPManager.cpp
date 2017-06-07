@@ -70,7 +70,7 @@ static const DSP_MODE_TYPES dsp_mode_types[] = {
   { "undefined",        AE_DSP_MODE_TYPE_UNDEFINED,       0,     0 }
 };
 
-CGUIDialogAudioDSPManager::CGUIDialogAudioDSPManager(void)
+CGUIDialogAudioDSPManager::CGUIDialogAudioDSPManager()
  : CGUIDialog(WINDOW_DIALOG_AUDIO_DSP_MANAGER, "DialogAudioDSPManager.xml")
 {
   m_bMovingMode               = false;
@@ -431,7 +431,7 @@ bool CGUIDialogAudioDSPManager::OnMessage(CGUIMessage& message)
   return CGUIDialog::OnMessage(message);
 }
 
-void CGUIDialogAudioDSPManager::OnWindowLoaded(void)
+void CGUIDialogAudioDSPManager::OnWindowLoaded()
 {
   g_graphicsContext.Lock();
 
@@ -448,7 +448,7 @@ void CGUIDialogAudioDSPManager::OnWindowLoaded(void)
   CGUIDialog::OnWindowLoaded();
 }
 
-void CGUIDialogAudioDSPManager::OnWindowUnload(void)
+void CGUIDialogAudioDSPManager::OnWindowUnload()
 {
   CGUIDialog::OnWindowUnload();
 
@@ -724,7 +724,7 @@ void CGUIDialogAudioDSPManager::Update()
   pDlgBusy->Close();
 }
 
-void CGUIDialogAudioDSPManager::SetSelectedModeType(void)
+void CGUIDialogAudioDSPManager::SetSelectedModeType()
 {
   /* lock our display, as this window is rendered from the player thread */
   g_graphicsContext.Lock();
@@ -740,7 +740,7 @@ void CGUIDialogAudioDSPManager::SetSelectedModeType(void)
   g_graphicsContext.Unlock();
 }
 
-void CGUIDialogAudioDSPManager::Clear(void)
+void CGUIDialogAudioDSPManager::Clear()
 {
   m_availableViewControl.Clear();
   m_activeViewControl.Clear();
@@ -752,7 +752,7 @@ void CGUIDialogAudioDSPManager::Clear(void)
   }
 }
 
-void CGUIDialogAudioDSPManager::SaveList(void)
+void CGUIDialogAudioDSPManager::SaveList()
 {
   if (!m_bContainsChanges)
    return;
@@ -879,7 +879,7 @@ void CGUIDialogAudioDSPManager::SetItemsUnchanged()
   }
 }
 
-void CGUIDialogAudioDSPManager::Renumber(void)
+void CGUIDialogAudioDSPManager::Renumber()
 {
   int iNextModeNumber(0);
   std::string strNumber;

@@ -25,7 +25,7 @@
 
 using namespace XFILE;
 
-CVideoDatabaseFile::CVideoDatabaseFile(void)
+CVideoDatabaseFile::CVideoDatabaseFile()
   : COverrideFile(true)
 { }
 

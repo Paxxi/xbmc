@@ -85,7 +85,7 @@ void CPVRTimersContainer::InsertTimer(const CPVRTimerInfoTagPtr &newTimer)
   }
 }
 
-CPVRTimers::CPVRTimers(void)
+CPVRTimers::CPVRTimers()
 : m_bIsUpdating(false),
   m_settings({
     CSettings::SETTING_PVRPOWERMANAGEMENT_DAILYWAKEUP,
@@ -103,7 +103,7 @@ CPVRTimers::~CPVRTimers(void)
   Unload();
 }
 
-bool CPVRTimers::Load(void)
+bool CPVRTimers::Load()
 {
   // unload previous timers
   Unload();
@@ -125,7 +125,7 @@ void CPVRTimers::Unload()
   m_tags.clear();
 }
 
-bool CPVRTimers::Update(void)
+bool CPVRTimers::Update()
 {
   {
     CSingleLock lock(m_critSection);
@@ -141,7 +141,7 @@ bool CPVRTimers::Update(void)
   return UpdateEntries(newTimerList, failedClients);
 }
 
-bool CPVRTimers::IsRecording(void) const
+bool CPVRTimers::IsRecording() const
 {
   CSingleLock lock(m_critSection);
 
@@ -402,17 +402,17 @@ CFileItemPtr CPVRTimers::GetNextActiveTimer(const TimerKind &eKind) const
   return CFileItemPtr();
 }
 
-CFileItemPtr CPVRTimers::GetNextActiveTimer(void) const
+CFileItemPtr CPVRTimers::GetNextActiveTimer() const
 {
   return GetNextActiveTimer(TimerKindAny);
 }
 
-CFileItemPtr CPVRTimers::GetNextActiveTVTimer(void) const
+CFileItemPtr CPVRTimers::GetNextActiveTVTimer() const
 {
   return GetNextActiveTimer(TimerKindTV);
 }
 
-CFileItemPtr CPVRTimers::GetNextActiveRadioTimer(void) const
+CFileItemPtr CPVRTimers::GetNextActiveRadioTimer() const
 {
   return GetNextActiveTimer(TimerKindRadio);
 }
@@ -457,17 +457,17 @@ int CPVRTimers::AmountActiveTimers(const TimerKind &eKind) const
   return iReturn;
 }
 
-int CPVRTimers::AmountActiveTimers(void) const
+int CPVRTimers::AmountActiveTimers() const
 {
   return AmountActiveTimers(TimerKindAny);
 }
 
-int CPVRTimers::AmountActiveTVTimers(void) const
+int CPVRTimers::AmountActiveTVTimers() const
 {
   return AmountActiveTimers(TimerKindTV);
 }
 
-int CPVRTimers::AmountActiveRadioTimers(void) const
+int CPVRTimers::AmountActiveRadioTimers() const
 {
   return AmountActiveTimers(TimerKindRadio);
 }
@@ -528,22 +528,22 @@ int CPVRTimers::AmountActiveRecordings(const TimerKind &eKind) const
   return iReturn;
 }
 
-int CPVRTimers::AmountActiveRecordings(void) const
+int CPVRTimers::AmountActiveRecordings() const
 {
   return AmountActiveRecordings(TimerKindAny);
 }
 
-int CPVRTimers::AmountActiveTVRecordings(void) const
+int CPVRTimers::AmountActiveTVRecordings() const
 {
   return AmountActiveRecordings(TimerKindTV);
 }
 
-int CPVRTimers::AmountActiveRadioRecordings(void) const
+int CPVRTimers::AmountActiveRadioRecordings() const
 {
   return AmountActiveRecordings(TimerKindRadio);
 }
 
-bool CPVRTimers::HasActiveTimers(void) const
+bool CPVRTimers::HasActiveTimers() const
 {
   CSingleLock lock(m_critSection);
   for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it)
@@ -872,7 +872,7 @@ void CPVRTimers::Notify(const Observable &obs, const ObservableMessage msg)
     CServiceBroker::GetPVRManager().TriggerTimersUpdate();
 }
 
-CDateTime CPVRTimers::GetNextEventTime(void) const
+CDateTime CPVRTimers::GetNextEventTime() const
 {
   const bool dailywakup = m_settings.GetBoolValue(CSettings::SETTING_PVRPOWERMANAGEMENT_DAILYWAKEUP);
   const CDateTime now = CDateTime::GetUTCDateTime();
@@ -917,7 +917,7 @@ CDateTime CPVRTimers::GetNextEventTime(void) const
   return retVal;
 }
 
-void CPVRTimers::UpdateChannels(void)
+void CPVRTimers::UpdateChannels()
 {
   CSingleLock lock(m_critSection);
   for (MapTags::iterator it = m_tags.begin(); it != m_tags.end(); ++it)

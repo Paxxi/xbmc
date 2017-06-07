@@ -33,7 +33,7 @@
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
 
-CMusicDatabaseDirectory::CMusicDatabaseDirectory(void)
+CMusicDatabaseDirectory::CMusicDatabaseDirectory()
 {
 }
 

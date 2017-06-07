@@ -78,7 +78,7 @@ using namespace ADDON;
 using namespace KODI::MESSAGING;
 
 //********************************************************************************************************************************
-CVideoDatabase::CVideoDatabase(void)
+CVideoDatabase::CVideoDatabase()
 {
 }
 

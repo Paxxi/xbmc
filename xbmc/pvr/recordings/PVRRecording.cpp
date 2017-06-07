@@ -196,7 +196,7 @@ void CPVRRecording::Serialize(CVariant& value) const
     value["art"]["fanart"] = m_strFanartPath;
 }
 
-void CPVRRecording::Reset(void)
+void CPVRRecording::Reset()
 {
   m_strRecordingId     .clear();
   m_iClientId          = 0;
@@ -222,7 +222,7 @@ void CPVRRecording::Reset(void)
   CVideoInfoTag::Reset();
 }
 
-bool CPVRRecording::Delete(void)
+bool CPVRRecording::Delete()
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->DeleteRecording(*this);
   if (error != PVR_ERROR_NO_ERROR)
@@ -232,7 +232,7 @@ bool CPVRRecording::Delete(void)
   return true;
 }
 
-void CPVRRecording::OnDelete(void)
+void CPVRRecording::OnDelete()
 {
   if (m_iEpgEventId != EPG_TAG_INVALID_UID)
   {
@@ -246,7 +246,7 @@ void CPVRRecording::OnDelete(void)
   }
 }
 
-bool CPVRRecording::Undelete(void)
+bool CPVRRecording::Undelete()
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->UndeleteRecording(*this);
   if (error != PVR_ERROR_NO_ERROR)
@@ -403,7 +403,7 @@ void CPVRRecording::Update(const CPVRRecording &tag)
   UpdatePath();
 }
 
-void CPVRRecording::UpdatePath(void)
+void CPVRRecording::UpdatePath()
 {
   if (!m_strStreamURL.empty())
   {
@@ -416,7 +416,7 @@ void CPVRRecording::UpdatePath(void)
   }
 }
 
-const CDateTime &CPVRRecording::RecordingTimeAsLocalTime(void) const
+const CDateTime &CPVRRecording::RecordingTimeAsLocalTime() const
 {
   static CDateTime tmp;
   tmp.SetFromUTCDateTime(m_recordingTime);
@@ -442,7 +442,7 @@ std::string CPVRRecording::GetTitleFromURL(const std::string &url)
   return CPVRRecordingsPath(url).GetTitle();
 }
 
-CPVRChannelPtr CPVRRecording::Channel(void) const
+CPVRChannelPtr CPVRRecording::Channel() const
 {
   if (m_iChannelUid != PVR_CHANNEL_INVALID_UID)
     return CServiceBroker::GetPVRManager().ChannelGroups()->GetByUniqueID(m_iChannelUid, m_iClientId);
@@ -450,12 +450,12 @@ CPVRChannelPtr CPVRRecording::Channel(void) const
   return CPVRChannelPtr();
 }
 
-int CPVRRecording::ChannelUid(void) const
+int CPVRRecording::ChannelUid() const
 {
   return m_iChannelUid;
 }
 
-int CPVRRecording::ClientID(void) const
+int CPVRRecording::ClientID() const
 {
   return m_iClientId;
 }

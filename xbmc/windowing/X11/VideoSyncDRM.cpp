@@ -30,7 +30,7 @@
 #include "guilib/GraphicContext.h"
 #include "utils/log.h"
 
-static drmVBlankSeqType CrtcSel(void)
+static drmVBlankSeqType CrtcSel()
 {
   int crtc = g_Windowing.GetCrtc();
   int ret = 0;

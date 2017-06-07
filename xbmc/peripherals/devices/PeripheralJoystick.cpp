@@ -285,7 +285,7 @@ bool CPeripheralJoystick::OnAxisMotion(unsigned int axisIndex, float position)
   return bHandled;
 }
 
-void CPeripheralJoystick::ProcessAxisMotions(void)
+void CPeripheralJoystick::ProcessAxisMotions()
 {
   CSingleLock lock(m_handlerMutex);
 

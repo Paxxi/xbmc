@@ -31,7 +31,7 @@ CDNSNameCache g_DNSCache;
 
 CCriticalSection CDNSNameCache::m_critical;
 
-CDNSNameCache::CDNSNameCache(void)
+CDNSNameCache::CDNSNameCache()
 {}
 
 CDNSNameCache::~CDNSNameCache(void)

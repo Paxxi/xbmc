@@ -248,7 +248,7 @@ bool CNetwork::HasInterfaceForIP(unsigned long address)
    return false;
 }
 
-bool CNetwork::IsAvailable(void)
+bool CNetwork::IsAvailable()
 {
   std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
   return (ifaces.size() != 0);

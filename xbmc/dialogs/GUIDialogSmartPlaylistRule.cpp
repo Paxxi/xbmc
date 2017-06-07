@@ -45,7 +45,7 @@
 #define CONTROL_CANCEL          19
 #define CONTROL_BROWSE          20
 
-CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule(void)
+CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule()
     : CGUIDialog(WINDOW_DIALOG_SMART_PLAYLIST_RULE, "SmartPlaylistRule.xml")
 {
   m_cancelled = false;

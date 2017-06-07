@@ -81,7 +81,7 @@ CJpegParse::CJpegParse():
 //--------------------------------------------------------------------------
 // Process a SOFn marker.  This is useful for the image dimensions
 //--------------------------------------------------------------------------
-void CJpegParse::ProcessSOFn (void)
+void CJpegParse::ProcessSOFn ()
 {
   m_ExifInfo.Height = CExifParse::Get16(m_SectionBuffer+3);
   m_ExifInfo.Width  = CExifParse::Get16(m_SectionBuffer+5);
@@ -136,7 +136,7 @@ bool CJpegParse::GetSection (CFile& infile, const unsigned short sectionLength)
 // Deallocate memory allocated in GetSection. This function must always
 // be paired by a preceeding GetSection call.
 //--------------------------------------------------------------------------
-void CJpegParse::ReleaseSection (void)
+void CJpegParse::ReleaseSection ()
 {
   delete[] m_SectionBuffer;
   m_SectionBuffer = NULL;

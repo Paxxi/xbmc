@@ -68,7 +68,7 @@ void CContextButtons::Add(unsigned int button, int label)
   push_back(std::pair<unsigned int, std::string>(button, g_localizeStrings.Get(label)));
 }
 
-CGUIDialogContextMenu::CGUIDialogContextMenu(void)
+CGUIDialogContextMenu::CGUIDialogContextMenu()
   : CGUIDialog(WINDOW_DIALOG_CONTEXT_MENU, "DialogContextMenu.xml")
 {
   m_clickedButton = -1;

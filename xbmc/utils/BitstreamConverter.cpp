@@ -501,7 +501,7 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
   return false;
 }
 
-void CBitstreamConverter::Close(void)
+void CBitstreamConverter::Close()
 {
   if (m_sps_pps_context.sps_pps_data)
     av_free(m_sps_pps_context.sps_pps_data), m_sps_pps_context.sps_pps_data = NULL;
@@ -663,7 +663,7 @@ int CBitstreamConverter::GetExtraSize() const
     return m_extrasize;
 }
 
-void CBitstreamConverter::ResetStartDecode(void)
+void CBitstreamConverter::ResetStartDecode()
 {
   m_start_decode = false;
 }

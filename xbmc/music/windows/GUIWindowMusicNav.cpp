@@ -77,7 +77,7 @@ using namespace KODI::MESSAGING;
 
 #define CONTROL_UPDATE_LIBRARY    20
 
-CGUIWindowMusicNav::CGUIWindowMusicNav(void)
+CGUIWindowMusicNav::CGUIWindowMusicNav()
     : CGUIWindowMusicBase(WINDOW_MUSIC_NAV, "MyMusicNav.xml")
 {
   m_vecItems->SetPath("?");

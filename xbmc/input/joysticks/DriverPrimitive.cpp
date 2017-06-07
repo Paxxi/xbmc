@@ -23,7 +23,7 @@
 using namespace KODI;
 using namespace JOYSTICK;
 
-CDriverPrimitive::CDriverPrimitive(void)
+CDriverPrimitive::CDriverPrimitive()
   : m_type(),
     m_driverIndex(0),
     m_hatDirection(),
@@ -119,7 +119,7 @@ bool CDriverPrimitive::operator<(const CDriverPrimitive& rhs) const
   return false;
 }
 
-bool CDriverPrimitive::IsValid(void) const
+bool CDriverPrimitive::IsValid() const
 {
   if (m_type == BUTTON || m_type == MOTOR)
     return true;

@@ -116,7 +116,7 @@ bool CActiveAEDSPDatabase::ContainsModes(int modeType)
   return !GetSingleValue(PrepareSQL("SELECT 1 FROM modes WHERE modes.iType='%i'", modeType)).empty();
 }
 
-bool CActiveAEDSPDatabase::DeleteModes(void)
+bool CActiveAEDSPDatabase::DeleteModes()
 {
   CLog::Log(LOGDEBUG, "Audio DSP - %s - deleting all modes from the database", __FUNCTION__);
   return DeleteValues("modes");

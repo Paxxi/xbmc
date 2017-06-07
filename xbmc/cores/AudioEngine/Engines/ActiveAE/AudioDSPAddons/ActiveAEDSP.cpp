@@ -81,7 +81,7 @@ CActiveAEDSP::~CActiveAEDSP()
 
 /*! @name initialization and configuration methods */
 //@{
-void CActiveAEDSP::Init(void)
+void CActiveAEDSP::Init()
 {
   /* create and open database */
   if (!m_databaseDSP.IsOpen())
@@ -107,9 +107,9 @@ class CActiveAEDSPModeUpdateJob : public CJob
 {
 public:
   CActiveAEDSPModeUpdateJob() {}
-  ~CActiveAEDSPModeUpdateJob(void) {}
+  ~CActiveAEDSPModeUpdateJob() {}
 
-  bool DoWork(void)
+  bool DoWork()
   {
     return true;
   }
@@ -162,7 +162,7 @@ void CActiveAEDSP::TriggerModeUpdate(bool bAsync /* = true */)
   }
 }
 
-void CActiveAEDSP::Shutdown(void)
+void CActiveAEDSP::Shutdown()
 {
   /* check whether the audio dsp is loaded */
   if (!m_isActive)
@@ -182,7 +182,7 @@ void CActiveAEDSP::Shutdown(void)
     m_databaseDSP.Close();
 }
 
-void CActiveAEDSP::Cleanup(void)
+void CActiveAEDSP::Cleanup()
 {
   CActiveAEDSPProcessPtr tmp;
   for (unsigned int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
@@ -203,7 +203,7 @@ bool CActiveAEDSP::InstallAddonAllowed(const std::string &strAddonId) const
          m_usedProcessesCnt == 0;
 }
 
-void CActiveAEDSP::ResetDatabase(void)
+void CActiveAEDSP::ResetDatabase()
 {
   CLog::Log(LOGNOTICE, "ActiveAE DSP - clearing the audio DSP database");
 
@@ -542,20 +542,20 @@ CActiveAEDSPProcessPtr CActiveAEDSP::GetDSPProcess(int streamId)
   return CActiveAEDSPProcessPtr();
 }
 
-unsigned int CActiveAEDSP::GetProcessingStreamsAmount(void)
+unsigned int CActiveAEDSP::GetProcessingStreamsAmount()
 {
   CSingleLock lock(m_critSection);
   return m_usedProcessesCnt;
 }
 
-int CActiveAEDSP::GetActiveStreamId(void)
+int CActiveAEDSP::GetActiveStreamId()
 {
   CSingleLock lock(m_critSection);
 
   return m_activeProcessId;
 }
 
-bool CActiveAEDSP::HasAvailableModes(void) const
+bool CActiveAEDSP::HasAvailableModes() const
 {
   CSingleLock lock(m_critSection);
 
@@ -667,7 +667,7 @@ void CActiveAEDSP::UpdateAddons()
 /*! @name Played source settings methods
  *  @note for save of settings see CSaveFileStateJob */
 //@{
-AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings(void)
+AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings()
 {
   CSingleLock lock(m_critSection);
 
@@ -694,17 +694,17 @@ AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings(void)
 /*! @name Backend methods */
 //@{
 
-bool CActiveAEDSP::IsProcessing(void) const
+bool CActiveAEDSP::IsProcessing() const
 {
   return m_isActive && m_usedProcessesCnt > 0;
 }
 
-bool CActiveAEDSP::IsActivated(void) const
+bool CActiveAEDSP::IsActivated() const
 {
   return m_isActive;
 }
 
-int CActiveAEDSP::EnabledAudioDSPAddonAmount(void) const
+int CActiveAEDSP::EnabledAudioDSPAddonAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critUpdateSection);
@@ -718,7 +718,7 @@ int CActiveAEDSP::EnabledAudioDSPAddonAmount(void) const
   return iReturn;
 }
 
-bool CActiveAEDSP::HasEnabledAudioDSPAddons(void) const
+bool CActiveAEDSP::HasEnabledAudioDSPAddons() const
 {
   return EnabledAudioDSPAddonAmount() > 0;
 }
@@ -740,7 +740,7 @@ int CActiveAEDSP::GetEnabledAudioDSPAddons(AE_DSP_ADDONMAP &addons) const
   return iReturn;
 }
 
-int CActiveAEDSP::ReadyAudioDSPAddonAmount(void) const
+int CActiveAEDSP::ReadyAudioDSPAddonAmount() const
 {
   int iReturn(0);
   CSingleLock lock(m_critSection);
@@ -754,7 +754,7 @@ int CActiveAEDSP::ReadyAudioDSPAddonAmount(void) const
   return iReturn;
 }
 
-bool CActiveAEDSP::HasReadyAudioDSPAddons(void) const
+bool CActiveAEDSP::HasReadyAudioDSPAddons() const
 {
   return ReadyAudioDSPAddonAmount() > 0;
 }

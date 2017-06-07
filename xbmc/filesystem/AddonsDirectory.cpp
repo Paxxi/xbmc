@@ -48,7 +48,7 @@ using namespace ADDON;
 namespace XFILE
 {
 
-CAddonsDirectory::CAddonsDirectory(void) {}
+CAddonsDirectory::CAddonsDirectory() {}
 
 CAddonsDirectory::~CAddonsDirectory(void) {}
 

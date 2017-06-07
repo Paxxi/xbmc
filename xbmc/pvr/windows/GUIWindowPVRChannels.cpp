@@ -94,7 +94,7 @@ bool CGUIWindowPVRChannelsBase::Update(const std::string &strDirectory, bool upd
   return bReturn;
 }
 
-void CGUIWindowPVRChannelsBase::UpdateButtons(void)
+void CGUIWindowPVRChannelsBase::UpdateButtons()
 {
   CGUIRadioButtonControl *btnShowHidden = (CGUIRadioButtonControl*) GetControl(CONTROL_BTNSHOWHIDDEN);
   if (btnShowHidden)
@@ -291,7 +291,7 @@ void CGUIWindowPVRChannelsBase::ShowChannelManager()
     dialog->Open();
 }
 
-void CGUIWindowPVRChannelsBase::ShowGroupManager(void)
+void CGUIWindowPVRChannelsBase::ShowGroupManager()
 {
   /* Load group manager dialog */
   CGUIDialogPVRGroupManager* pDlgInfo = g_windowManager.GetWindow<CGUIDialogPVRGroupManager>(WINDOW_DIALOG_PVR_GROUP_MANAGER);

@@ -27,7 +27,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "settings/Settings.h"
 
-CGUIWindowScreensaver::CGUIWindowScreensaver(void)
+CGUIWindowScreensaver::CGUIWindowScreensaver()
   : CGUIWindow(WINDOW_SCREENSAVER, ""),
     m_addon(nullptr)
 {

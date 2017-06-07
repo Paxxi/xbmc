@@ -58,7 +58,7 @@ CPVRChannelGroupInternal::~CPVRChannelGroupInternal(void)
   CServiceBroker::GetPVRManager().Events().Unsubscribe(this);
 }
 
-bool CPVRChannelGroupInternal::Load(void)
+bool CPVRChannelGroupInternal::Load()
 {
   if (CPVRChannelGroup::Load())
   {
@@ -71,7 +71,7 @@ bool CPVRChannelGroupInternal::Load(void)
   return false;
 }
 
-void CPVRChannelGroupInternal::CheckGroupName(void)
+void CPVRChannelGroupInternal::CheckGroupName()
 {
   CSingleLock lock(m_critSection);
 
@@ -84,7 +84,7 @@ void CPVRChannelGroupInternal::CheckGroupName(void)
   }
 }
 
-void CPVRChannelGroupInternal::UpdateChannelPaths(void)
+void CPVRChannelGroupInternal::UpdateChannelPaths()
 {
   CSingleLock lock(m_critSection);
   m_iHiddenChannels = 0;
@@ -121,7 +121,7 @@ CPVRChannelPtr CPVRChannelGroupInternal::UpdateFromClient(const CPVRChannelPtr &
   return channel;
 }
 
-bool CPVRChannelGroupInternal::Update(void)
+bool CPVRChannelGroupInternal::Update()
 {
   CPVRChannelGroupInternal PVRChannels_tmp(m_bRadio);
   PVRChannels_tmp.SetPreventSortAndRenumber();
@@ -243,7 +243,7 @@ int CPVRChannelGroupInternal::LoadFromDb(bool bCompress /* = false */)
   return Size() - iChannelCount;
 }
 
-bool CPVRChannelGroupInternal::LoadFromClients(void)
+bool CPVRChannelGroupInternal::LoadFromClients()
 {
   /* get the channels from the backends */
   return CServiceBroker::GetPVRManager().Clients()->GetChannels(this) == PVR_ERROR_NO_ERROR;

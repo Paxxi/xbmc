@@ -385,7 +385,7 @@ void CAddonDll::DestroyInstance(const std::string& instanceID)
     Destroy();
 }
 
-bool CAddonDll::DllLoaded(void) const
+bool CAddonDll::DllLoaded() const
 {
   return m_pDll != NULL;
 }
