@@ -278,7 +278,7 @@ void CViewStateSettings::AddViewState(const std::string& strTagName, int default
   if (strTagName.empty() || m_viewStates.find(strTagName) != m_viewStates.end())
     return;
 
-  CViewState *viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
+  auto viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
   if (viewState == NULL)
     return;
 

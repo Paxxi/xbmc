@@ -171,7 +171,7 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
     DebugLog("GetPacket, missing end of data 0xff");
   }
 
-  CDVDOverlaySpu* pSPUInfo = new CDVDOverlaySpu();
+  auto  pSPUInfo = new CDVDOverlaySpu();
   uint8_t* p = pSPUData->data; // pointer to walk through all data
 
   // get data length

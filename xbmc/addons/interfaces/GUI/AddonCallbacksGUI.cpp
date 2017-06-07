@@ -1519,7 +1519,7 @@ GUIHANDLE CAddonCallbacksGUI::ListItem_Create(void *addonData, const char *label
     return NULL;
 
   // create CFileItem
-  CFileItem *pItem = new CFileItem();
+  auto pItem = new CFileItem();
   if (!pItem)
     return NULL;
 

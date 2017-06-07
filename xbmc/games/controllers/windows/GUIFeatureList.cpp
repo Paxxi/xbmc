@@ -124,14 +124,14 @@ void CGUIFeatureList::Load(const ControllerPtr& controller)
       // Add a separator if the group list isn't empty
       if (m_guiFeatureSeparator && m_guiList->GetTotalSize() > 0)
       {
-        CGUIFeatureSeparator* pSeparator = new CGUIFeatureSeparator(*m_guiFeatureSeparator, featureIndex);
+        auto  pSeparator = new CGUIFeatureSeparator(*m_guiFeatureSeparator, featureIndex);
         m_guiList->AddControl(pSeparator);
       }
 
       // Add the group title
       if (m_guiGroupTitle && !groupName.empty())
       {
-        CGUIFeatureGroupTitle* pGroupTitle = new CGUIFeatureGroupTitle(*m_guiGroupTitle, groupName, featureIndex);
+        auto  pGroupTitle = new CGUIFeatureGroupTitle(*m_guiGroupTitle, groupName, featureIndex);
         m_guiList->AddControl(pGroupTitle);
       }
 

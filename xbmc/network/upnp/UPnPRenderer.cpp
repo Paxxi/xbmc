@@ -625,7 +625,7 @@ CUPnPRenderer::PlayMedia(const NPT_String& uri, const NPT_String& meta, PLT_Acti
     if (item->IsPicture()) {
       CApplicationMessenger::GetInstance().PostMsg(TMSG_PICTURE_SHOW, -1, -1, nullptr, item->GetPath());
     } else {
-      CFileItemList *l = new CFileItemList; //don't delete,
+      auto l = new CFileItemList; //don't delete,
       l->Add(std::make_shared<CFileItem>(*item));
       CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, -1, -1, static_cast<void*>(l));
     }

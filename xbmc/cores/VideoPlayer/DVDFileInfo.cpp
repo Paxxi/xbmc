@@ -487,7 +487,7 @@ bool CDVDFileInfo::AddExternalSubtitleToDetails(const std::string &path, CStream
       return false;
   }
 
-  CStreamDetailSubtitle *dsub = new CStreamDetailSubtitle();
+  auto dsub = new CStreamDetailSubtitle();
   ExternalStreamInfo info = CUtil::GetExternalStreamDetailsFromFilename(path, filename);
   dsub->m_strLanguage = g_LangCodeExpander.ConvertToISO6392T(info.language);
   details.AddStream(dsub);

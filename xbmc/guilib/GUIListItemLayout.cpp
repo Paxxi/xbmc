@@ -202,12 +202,12 @@ void CGUIListItemLayout::CreateListControlLayouts(float width, float height, boo
   m_height = height;
   m_focused = focused;
   m_isPlaying.Parse("listitem.isplaying", 0);
-  CGUIImage *tex = new CGUIImage(0, 0, 0, 0, width, texHeight, texture);
+  auto tex = new CGUIImage(0, 0, 0, 0, width, texHeight, texture);
   tex->SetVisibleCondition(nofocusCondition);
   m_group.AddControl(tex);
   if (focused)
   {
-    CGUIImage *tex = new CGUIImage(0, 0, 0, 0, width, texHeight, textureFocus);
+    auto tex = new CGUIImage(0, 0, 0, 0, width, texHeight, textureFocus);
     tex->SetVisibleCondition(focusCondition);
     m_group.AddControl(tex);
   }

@@ -245,7 +245,7 @@ namespace XBMCAddon
         throw WindowException("Index out of range (%i)",position);
       }
 
-      ListItem* sListItem = new ListItem();
+      auto  sListItem = new ListItem();
       sListItem->item = fi;
 
       // let's hope someone reference counts this.

@@ -25,9 +25,9 @@
 TEST(TestStreamDetails, General)
 {
   CStreamDetails a;
-  CStreamDetailVideo *video = new CStreamDetailVideo();
-  CStreamDetailAudio *audio = new CStreamDetailAudio();
-  CStreamDetailSubtitle *subtitle = new CStreamDetailSubtitle();
+  auto reamDetailVideo();
+  auto reamDetailAudio();
+  auto reamDetailSubtitle();
 
   video->m_iWidth = 1920;
   video->m_iHeight = 1080;

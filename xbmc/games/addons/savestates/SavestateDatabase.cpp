@@ -84,7 +84,7 @@ CFileItem* CSavestateDatabase::CreateFileItem(const CVariant& object) const
 
   CSavestate save;
   save.Deserialize(object);
-  CFileItem* item = new CFileItem(save.Label());
+  auto  item = new CFileItem(save.Label());
 
   item->SetPath(save.Path());
   if (!save.Thumbnail().empty())

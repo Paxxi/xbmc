@@ -78,7 +78,7 @@ bool CDVDOverlayCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &optio
 
     // start parsing of extra data - create a copy to be safe and make it zero-terminating to avoid access violations!
     unsigned int parse_extrasize = hints.extrasize;
-    char* parse_extra = new char[parse_extrasize + 1];
+    auto  parse_extra = new char[parse_extrasize + 1];
     memcpy(parse_extra, hints.extradata, parse_extrasize);
     parse_extra[parse_extrasize] = '\0';
 
@@ -207,7 +207,7 @@ CDVDOverlay* CDVDOverlayCodecFFmpeg::GetOverlay()
   if(m_Subtitle.num_rects == 0 && m_SubtitleIndex == 0)
   {
     // we must add an empty overlay to replace the previous one
-    CDVDOverlay* o = new CDVDOverlay(DVDOVERLAY_TYPE_NONE);
+    auto  o = new CDVDOverlay(DVDOVERLAY_TYPE_NONE);
     o->iPTSStartTime = m_StartTime;
     o->iPTSStopTime  = 0;
     o->replace  = true;
@@ -258,7 +258,7 @@ CDVDOverlay* CDVDOverlayCodecFFmpeg::GetOverlay()
       }
     }
 
-    CDVDOverlayImage* overlay = new CDVDOverlayImage();
+    auto  overlay = new CDVDOverlayImage();
 
     overlay->iPTSStartTime = m_StartTime;
     overlay->iPTSStopTime  = m_StopTime;

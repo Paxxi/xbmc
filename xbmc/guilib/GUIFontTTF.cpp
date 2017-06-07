@@ -639,7 +639,7 @@ CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
   // increase the size of the buffer if we need it
   if (m_numChars >= m_maxChars)
   { // need to increase the size of the buffer
-    Character *newTable = new Character[m_maxChars + CHAR_CHUNK];
+    auto newTable = new Character[m_maxChars + CHAR_CHUNK];
     if (m_char)
     {
       memcpy(newTable, m_char, low * sizeof(Character));

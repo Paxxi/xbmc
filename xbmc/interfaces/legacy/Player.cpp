@@ -98,7 +98,7 @@ namespace XBMCAddon
         }
         else
         {
-          CFileItemList *l = new CFileItemList; //don't delete,
+          auto l = new CFileItemList; //don't delete,
           l->Add(std::make_shared<CFileItem>(item, false));
           CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, -1, -1, static_cast<void*>(l));
         }

@@ -118,7 +118,7 @@ void CDirectoryCache::SetDirectory(const std::string& strPath, const CFileItemLi
 
   CheckIfFull();
 
-  CDir* dir = new CDir(cacheType);
+  auto  dir = new CDir(cacheType);
   dir->m_Items->Copy(items);
   dir->SetLastAccess(m_accessCounter);
   m_cache.insert(std::pair<std::string, CDir*>(storedPath, dir));

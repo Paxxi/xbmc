@@ -42,7 +42,7 @@ extern "C" void tracker_file_track(uintptr_t caller, uintptr_t handle, TrackedFi
   if (pInfo)
   {
     CSingleLock lock(g_trackerLock);
-    TrackedFile* file = new TrackedFile;
+    auto  file = new TrackedFile;
     file->handle = handle;
     file->type = type;
     file->name = strdup(sFile);

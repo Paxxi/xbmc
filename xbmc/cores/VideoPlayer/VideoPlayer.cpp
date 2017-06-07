@@ -2416,7 +2416,7 @@ void CVideoPlayer::SynchronizeDemuxer()
   if(!m_messenger.IsInited())
     return;
 
-  CDVDMsgGeneralSynchronize* message = new CDVDMsgGeneralSynchronize(500, SYNCSOURCE_PLAYER);
+  auto  message = new CDVDMsgGeneralSynchronize(500, SYNCSOURCE_PLAYER);
   m_messenger.Put(message->Acquire());
   message->Wait(m_bStop, 0);
   message->Release();
@@ -4030,7 +4030,7 @@ void CVideoPlayer::FlushBuffers(double pts, bool accurate, bool sync)
      m_playSpeed == DVD_PLAYSPEED_PAUSE)
   {
     // make sure players are properly flushed, should put them in stalled state
-    CDVDMsgGeneralSynchronize* msg = new CDVDMsgGeneralSynchronize(1000, SYNCSOURCE_AUDIO | SYNCSOURCE_VIDEO);
+    auto  msg = new CDVDMsgGeneralSynchronize(1000, SYNCSOURCE_AUDIO | SYNCSOURCE_VIDEO);
     m_VideoPlayerAudio->SendMessage(msg->Acquire(), 1);
     m_VideoPlayerVideo->SendMessage(msg->Acquire(), 1);
     msg->Wait(m_bStop, 0);

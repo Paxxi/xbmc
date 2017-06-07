@@ -130,7 +130,7 @@ bool CXBMCTestUtils::SetReferenceFileBasePath()
 
 XFILE::CFile *CXBMCTestUtils::CreateTempFile(std::string const& suffix)
 {
-  CTempFile *f = new CTempFile();
+  auto w CTempFile();
   if (f->Create(suffix))
     return f;
   delete f;

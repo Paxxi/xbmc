@@ -566,7 +566,7 @@ void CPeripheral::RegisterJoystickInputHandler(IInputHandler* handler, bool bPro
   auto it = m_inputHandlers.find(handler);
   if (it == m_inputHandlers.end())
   {
-    CAddonInputHandling* addonInput = new CAddonInputHandling(m_manager, this, handler, GetDriverReceiver());
+    auto  addonInput = new CAddonInputHandling(m_manager, this, handler, GetDriverReceiver());
     RegisterJoystickDriverHandler(addonInput, bPromiscuous);
     m_inputHandlers[handler].reset(addonInput);
   }

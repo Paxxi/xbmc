@@ -145,7 +145,7 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
   fcntl(fd, F_GETFL, &flags);
   fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
 
-  HANDLE result = new CXHandle(CXHandle::HND_FILE);
+  auto  result = new CXHandle(CXHandle::HND_FILE);
   result->fd = fd;
 
 #if (defined(TARGET_LINUX) || defined(TARGET_FREEBSD)) && defined(HAS_DVD_DRIVE) 

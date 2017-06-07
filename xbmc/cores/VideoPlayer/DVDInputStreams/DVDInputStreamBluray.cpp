@@ -90,7 +90,7 @@ int64_t DllLibbluray::file_write(BD_FILE_H *file, const uint8_t *buf, int64_t si
 
 BD_FILE_H * DllLibbluray::file_open(const char* filename, const char *mode)
 {
-    BD_FILE_H *file = new BD_FILE_H;
+    auto file = new BD_FILE_H;
 
     file->close = file_close;
     file->seek  = file_seek;
@@ -99,7 +99,7 @@ BD_FILE_H * DllLibbluray::file_open(const char* filename, const char *mode)
     file->tell  = file_tell;
     file->eof   = file_eof;
 
-    CFile* fp = new CFile();
+    auto  fp = new CFile();
     if (mode != nullptr && StringUtils::EqualsNoCase(mode, "wb") && fp->OpenForWrite(filename, true))
     {
       file->internal = (void*)fp;
@@ -157,7 +157,7 @@ int DllLibbluray::dir_read(BD_DIR_H *dir, BD_DIRENT *entry)
 BD_DIR_H *DllLibbluray::dir_open(const char* dirname)
 {
     CLog::Log(LOGDEBUG, "CDVDInputStreamBluray - Opening dir %s\n", dirname);
-    SDirState *st = new SDirState();
+    auto st = new SDirState();
 
     std::string strDirname(dirname);
 
@@ -168,7 +168,7 @@ BD_DIR_H *DllLibbluray::dir_open(const char* dirname)
       return NULL;
     }
 
-    BD_DIR_H *dir = new BD_DIR_H;
+    auto dir = new BD_DIR_H;
     dir->close    = dir_close;
     dir->read     = dir_read;
     dir->internal = (void*)st;
@@ -731,7 +731,7 @@ void CDVDInputStreamBluray::OverlayClose()
 #if(BD_OVERLAY_INTERFACE_VERSION >= 2)
   for(unsigned i = 0; i < 2; ++i)
     m_planes[i].o.clear();
-  CDVDOverlayGroup* group   = new CDVDOverlayGroup();
+  auto  group   = new CDVDOverlayGroup();
   group->bForced = true;
   m_player->OnDiscNavResult(static_cast<void*>(group), BD_EVENT_MENU_OVERLAY);
   group->Release();
@@ -793,7 +793,7 @@ void CDVDInputStreamBluray::OverlayClear(SPlane& plane, int x, int y, int w, int
 void CDVDInputStreamBluray::OverlayFlush(int64_t pts)
 {
 #if(BD_OVERLAY_INTERFACE_VERSION >= 2)
-  CDVDOverlayGroup* group   = new CDVDOverlayGroup();
+  auto  group   = new CDVDOverlayGroup();
   group->bForced       = true;
   group->iPTSStartTime = (double) pts;
   group->iPTSStopTime  = 0;

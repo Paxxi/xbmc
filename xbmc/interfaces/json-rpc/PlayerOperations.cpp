@@ -582,7 +582,7 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
       g_application.m_pPlayer->SwitchChannel(channel);
     else
     {
-      CFileItemList *l = new CFileItemList; //don't delete,
+      auto l = new CFileItemList; //don't delete,
       l->Add(std::make_shared<CFileItem>(channel));
       CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, -1, -1, static_cast<void*>(l));
     }
@@ -602,7 +602,7 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
     if (fileItem == NULL)
       return InvalidParams;
 
-    CFileItemList *l = new CFileItemList; //don't delete,
+    auto l = new CFileItemList; //don't delete,
     l->Add(std::make_shared<CFileItem>(*fileItem));
     CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, -1, -1, static_cast<void*>(l));
 

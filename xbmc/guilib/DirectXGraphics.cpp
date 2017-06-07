@@ -350,20 +350,20 @@ void GetTextureFromData(D3DTexture *pTex, void *texData, CBaseTexture **ppTextur
     if (fmt == XB_D3DFMT_DXT1)
     {
       pitch = width * 4;
-      BYTE *decoded = new BYTE[pitch * height];
+      auto decoded = new BYTE[pitch * height];
       ConvertDXT1(texDataStart, width, height, decoded);
       texDataStart = decoded;
     }
     else if (fmt == XB_D3DFMT_DXT2 || fmt == XB_D3DFMT_DXT4)
     {
       pitch = width * 4;
-      BYTE *decoded = new BYTE[pitch * height];
+      auto decoded = new BYTE[pitch * height];
       ConvertDXT4(texDataStart, width, height, decoded);
       texDataStart = decoded;
     }
     if (IsSwizzledFormat(fmt))
     { // first we unswizzle
-      BYTE *unswizzled = new BYTE[pitch * height];
+      auto unswizzled = new BYTE[pitch * height];
       Unswizzle(texDataStart, BytesPerPixelFromFormat(fmt), width, height, unswizzled);
       texDataStart = unswizzled;
     }

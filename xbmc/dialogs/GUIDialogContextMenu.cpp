@@ -132,7 +132,7 @@ void CGUIDialogContextMenu::SetupButtons()
   // add our buttons
   for (unsigned int i = 0; i < m_buttons.size(); i++)
   {
-    CGUIButtonControl *pButton = new CGUIButtonControl(*pButtonTemplate);
+    auto pButton = new CGUIButtonControl(*pButtonTemplate);
     if (pButton)
     { // set the button's ID and position
       int id = BUTTON_START + i;

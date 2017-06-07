@@ -36,7 +36,7 @@ TrackedDllList g_trackedDlls;
 
 void tracker_dll_add(DllLoader* pDll)
 {
-  DllTrackInfo* trackInfo = new DllTrackInfo;
+  auto  trackInfo = new DllTrackInfo;
   trackInfo->pDll = pDll;
   trackInfo->lMinAddr = 0;
   trackInfo->lMaxAddr = 0;

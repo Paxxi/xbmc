@@ -188,7 +188,7 @@ void CGUIBaseContainer::ProcessItem(float posX, float posY, CGUIListItemPtr& ite
       item->GetFocusedLayout()->SetFocusedItem(0);  // focus is not set
     if (!item->GetLayout())
     {
-      CGUIListItemLayout *layout = new CGUIListItemLayout(*m_layout);
+      auto layout = new CGUIListItemLayout(*m_layout);
       layout->SetParentControl(this);
       item->SetLayout(layout);
     }

@@ -354,7 +354,7 @@ void CGUIEPGGridContainer::ProcessItem(float posX, float posY, const CFileItemPt
   {
     if (!item->GetFocusedLayout())
     {
-      CGUIListItemLayout *layout = new CGUIListItemLayout(*focusedlayout);
+      auto layout = new CGUIListItemLayout(*focusedlayout);
       item->SetFocusedLayout(layout);
     }
 
@@ -387,7 +387,7 @@ void CGUIEPGGridContainer::ProcessItem(float posX, float posY, const CFileItemPt
   {
     if (!item->GetLayout())
     {
-      CGUIListItemLayout *layout = new CGUIListItemLayout(*normallayout);
+      auto layout = new CGUIListItemLayout(*normallayout);
       item->SetLayout(layout);
     }
 

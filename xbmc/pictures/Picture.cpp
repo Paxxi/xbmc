@@ -242,7 +242,7 @@ bool CPicture::CacheTexture(uint8_t *pixels, uint32_t width, uint32_t height, ui
 
     // create a buffer large enough for the resulting image
     GetScale(width, height, dest_width, dest_height);
-    uint32_t *buffer = new uint32_t[dest_width * dest_height];
+    auto buffer = new uint32_t[dest_width * dest_height];
     if (buffer)
     {
       if (ScaleImage(pixels, width, height, pitch,
@@ -438,7 +438,7 @@ bool CPicture::Rotate180CCW(uint32_t *&pixels, unsigned int &width, unsigned int
 
 bool CPicture::Rotate90CCW(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
-  uint32_t *dest = new uint32_t[width * height * 4];
+  auto dest = new uint32_t[width * height * 4];
   if (dest)
   {
     unsigned int d_height = width, d_width = height;
@@ -462,7 +462,7 @@ bool CPicture::Rotate90CCW(uint32_t *&pixels, unsigned int &width, unsigned int 
 
 bool CPicture::Rotate270CCW(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
-  uint32_t *dest = new uint32_t[width * height * 4];
+  auto dest = new uint32_t[width * height * 4];
   if (!dest)
     return false;
 
@@ -486,7 +486,7 @@ bool CPicture::Rotate270CCW(uint32_t *&pixels, unsigned int &width, unsigned int
 
 bool CPicture::Transpose(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
-  uint32_t *dest = new uint32_t[width * height * 4];
+  auto dest = new uint32_t[width * height * 4];
   if (!dest)
     return false;
 
@@ -510,7 +510,7 @@ bool CPicture::Transpose(uint32_t *&pixels, unsigned int &width, unsigned int &h
 
 bool CPicture::TransposeOffAxis(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
-  uint32_t *dest = new uint32_t[width * height * 4];
+  auto dest = new uint32_t[width * height * 4];
   if (!dest)
     return false;
 

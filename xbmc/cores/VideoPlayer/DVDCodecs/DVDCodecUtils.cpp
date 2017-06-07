@@ -32,7 +32,7 @@ extern "C" {
 // allocate a new picture (AV_PIX_FMT_YUV420P)
 VideoPicture* CDVDCodecUtils::AllocatePicture(int iWidth, int iHeight)
 {
-  VideoPicture* pPicture = new VideoPicture;
+  auto  pPicture = new VideoPicture;
   if (pPicture)
   {
     pPicture->iWidth = iWidth;
@@ -166,7 +166,7 @@ bool CDVDCodecUtils::CopyPicture(YV12Image* pImage, VideoPicture *pSrc)
 VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
 {
   // Clone a YV12 picture to new NV12 picture.
-  VideoPicture* pPicture = new VideoPicture;
+  auto  pPicture = new VideoPicture;
   if (pPicture)
   {
     *pPicture = *pSrc;
@@ -223,7 +223,7 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
 VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, ERenderFormat format)
 {
   // Clone a YV12 picture to new YUY2 or UYVY picture.
-  VideoPicture* pPicture = new VideoPicture;
+  auto  pPicture = new VideoPicture;
   if (pPicture)
   {
     *pPicture = *pSrc;

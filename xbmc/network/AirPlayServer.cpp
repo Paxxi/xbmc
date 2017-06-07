@@ -978,7 +978,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
       fileToPlay.SetProperty("StartPercent", position*100.0f);
       ServerInstance->AnnounceToClients(EVENT_LOADING);
 
-      CFileItemList *l = new CFileItemList; //don't delete,
+      auto l = new CFileItemList; //don't delete,
       l->Add(std::make_shared<CFileItem>(fileToPlay));
       CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_PLAY, -1, -1, static_cast<void*>(l));
 

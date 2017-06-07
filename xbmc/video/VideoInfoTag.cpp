@@ -1115,7 +1115,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
       const TiXmlNode *nodeDetail = NULL;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("audio", nodeDetail)))
       {
-        CStreamDetailAudio *p = new CStreamDetailAudio();
+        auto p = new CStreamDetailAudio();
         if (XMLUtils::GetString(nodeDetail, "codec", value))
           p->m_strCodec = StringUtils::Trim(value);
 
@@ -1130,7 +1130,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
       nodeDetail = NULL;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("video", nodeDetail)))
       {
-        CStreamDetailVideo *p = new CStreamDetailVideo();
+        auto p = new CStreamDetailVideo();
         if (XMLUtils::GetString(nodeDetail, "codec", value))
           p->m_strCodec = StringUtils::Trim(value);
 
@@ -1151,7 +1151,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
       nodeDetail = NULL;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("subtitle", nodeDetail)))
       {
-        CStreamDetailSubtitle *p = new CStreamDetailSubtitle();
+        auto p = new CStreamDetailSubtitle();
         if (XMLUtils::GetString(nodeDetail, "language", value))
           p->m_strLanguage = StringUtils::Trim(value);
         StringUtils::ToLower(p->m_strLanguage);

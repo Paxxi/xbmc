@@ -492,7 +492,7 @@ CUPnP::ReleaseInstance(bool bWait)
         } else {
             // since it takes a while to clean up
             // starts a detached thread to do this
-            CUPnPCleaner* cleaner = new CUPnPCleaner(_upnp);
+            auto  cleaner = new CUPnPCleaner(_upnp);
             cleaner->Start();
         }
     }

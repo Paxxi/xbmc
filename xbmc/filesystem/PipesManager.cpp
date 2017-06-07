@@ -297,7 +297,7 @@ XFILE::Pipe *PipesManager::CreatePipe(const std::string &name, int nMaxPipeSize)
   if (m_pipes.find(pName) != m_pipes.end())
     return NULL;
   
-  XFILE::Pipe *p = new XFILE::Pipe(pName, nMaxPipeSize);
+  auto p = new XFILE::Pipe(pName, nMaxPipeSize);
   m_pipes[pName] = p;
   return p;
 }

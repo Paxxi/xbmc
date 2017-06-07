@@ -145,7 +145,7 @@ private:
 BroadcastingJob *
 WaitForJobToStartProcessing(CJob::PRIORITY priority, JobControlPackage &package)
 {
-  BroadcastingJob* job = new BroadcastingJob(package);
+  auto BroadcastingJob(package);
   CJobManager::GetInstance().AddJob(job, NULL, priority);
 
   // We're now ready to wait, wait and then unblock once ready

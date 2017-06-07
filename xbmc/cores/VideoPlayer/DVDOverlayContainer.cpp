@@ -84,7 +84,7 @@ void CDVDOverlayContainer::CleanUp(double pts)
 {
   CSingleLock lock(*this);
 
-  VecOverlaysIter it = m_overlays.begin();
+  auto it = m_overlays.begin();
   while (it != m_overlays.end())
   {
     CDVDOverlay* pOverlay = *it;
@@ -143,7 +143,7 @@ bool CDVDOverlayContainer::ContainsOverlayType(DVDOverlayType type)
 
   CSingleLock lock(*this);
 
-  VecOverlaysIter it = m_overlays.begin();
+  auto it = m_overlays.begin();
   while (!result && it != m_overlays.end())
   {
     if (((CDVDOverlay*)*it)->IsOverlayType(type)) result = true;
@@ -163,7 +163,7 @@ void CDVDOverlayContainer::UpdateOverlayInfo(CDVDInputStreamNavigator* pStream, 
   pStream->CheckButtons();
 
   //Update any forced overlays.
-  for(VecOverlays::iterator it = m_overlays.begin(); it != m_overlays.end(); ++it )
+  for(auto it = m_overlays.begin(); it != m_overlays.end(); ++it )
   {
     if ((*it)->IsOverlayType(DVDOVERLAY_TYPE_SPU))
     {

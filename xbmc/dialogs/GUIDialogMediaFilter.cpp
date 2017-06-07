@@ -856,7 +856,7 @@ bool CGUIDialogMediaFilter::GetMinMax(const std::string &table, const std::strin
   CDbUrl *dbUrl = NULL;
   if (m_mediaType == "movies" || m_mediaType == "tvshows" || m_mediaType == "episodes" || m_mediaType == "musicvideos")
   {
-    CVideoDatabase *videodb = new CVideoDatabase();
+    auto videodb = new CVideoDatabase();
     if (!videodb->Open())
     {
       delete videodb;
@@ -868,7 +868,7 @@ bool CGUIDialogMediaFilter::GetMinMax(const std::string &table, const std::strin
   }
   else if (m_mediaType == "artists" || m_mediaType == "albums" || m_mediaType == "songs")
   {
-    CMusicDatabase *musicdb = new CMusicDatabase();
+    auto musicdb = new CMusicDatabase();
     if (!musicdb->Open())
     {
       delete musicdb;

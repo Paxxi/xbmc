@@ -291,7 +291,7 @@ int CoffLoader::LoadSymTable(FILE *fp)
   if (fseek(fp, CoffFileHeader->PointerToSymbolTable /* + CoffBeginOffset*/, SEEK_SET) != 0)
     return 0;
 
-  SymbolTable_t *tmp = new SymbolTable_t[CoffFileHeader->NumberOfSymbols];
+  auto tmp = new SymbolTable_t[CoffFileHeader->NumberOfSymbols];
   if (!tmp)
   {
     printf("Could not allocate memory for symbol table!\n");

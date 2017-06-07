@@ -614,7 +614,7 @@ void CRenderManager::DeleteRenderer()
 
 unsigned int CRenderManager::AllocRenderCapture()
 {
-  CRenderCapture *capture = new CRenderCapture;
+  auto capture = new CRenderCapture;
   m_captures[m_nextCaptureId] = capture;
   return m_nextCaptureId++;
 }

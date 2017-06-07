@@ -458,7 +458,7 @@ BuildObject(CFileItem&                    item,
         object->m_ParentID = "4";
 #endif
     } else {
-        PLT_MediaContainer* container = new PLT_MediaContainer;
+        auto  container = new PLT_MediaContainer;
         object = container;
 
         /* Assign a title and id for this container */
@@ -867,7 +867,7 @@ PopulateTagFromObject(CVideoInfoTag&         tag,
         int width, height;
         if (sscanf(resource->m_Resolution, "%dx%d", &width, &height) == 2)
         {
-          CStreamDetailVideo* detail = new CStreamDetailVideo;
+          auto  detail = new CStreamDetailVideo;
           detail->m_iWidth = width;
           detail->m_iHeight = height;
           detail->m_iDuration = tag.GetDuration();
@@ -876,7 +876,7 @@ PopulateTagFromObject(CVideoInfoTag&         tag,
       }
       if (resource->m_NbAudioChannels > 0)
       {
-        CStreamDetailAudio* detail = new CStreamDetailAudio;
+        auto  detail = new CStreamDetailAudio;
         detail->m_iChannels = resource->m_NbAudioChannels;
         tag.m_streamDetails.AddStream(detail);
       }

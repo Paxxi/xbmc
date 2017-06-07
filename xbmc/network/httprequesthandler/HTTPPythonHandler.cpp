@@ -134,7 +134,7 @@ int CHTTPPythonHandler::HandleRequest()
 
   try
   {
-    HTTPPythonRequest* pythonRequest = new HTTPPythonRequest();
+    auto  pythonRequest = new HTTPPythonRequest();
     pythonRequest->connection = m_request.connection;
     pythonRequest->file = URIUtils::GetFileName(m_request.pathUrl);
     HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_GET_ARGUMENT_KIND, pythonRequest->getValues);

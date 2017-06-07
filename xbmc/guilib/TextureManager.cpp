@@ -398,7 +398,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
       return emptyTexture;
     }
 
-    CTextureMap* pMap = new CTextureMap(strTextureName, 0, 0, 0);
+    auto  pMap = new CTextureMap(strTextureName, 0, 0, 0);
     unsigned int maxWidth = 0;
     unsigned int maxHeight = 0;
     uint64_t maxMemoryUsage = 91238400;// 1920*1080*4*11 bytes, i.e, a total of approx. 12 full hd frames
@@ -456,7 +456,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
 
   if (!pTexture) return emptyTexture;
 
-  CTextureMap* pMap = new CTextureMap(strTextureName, width, height, 0);
+  auto  pMap = new CTextureMap(strTextureName, width, height, 0);
   pMap->Add(pTexture, 100);
   m_vecTextures.push_back(pMap);
 

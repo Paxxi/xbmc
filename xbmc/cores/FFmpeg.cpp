@@ -32,7 +32,7 @@ static XbmcThreads::ThreadLocal<CFFmpegLog> CFFmpegLogTls;
 void CFFmpegLog::SetLogLevel(int level)
 {
   CFFmpegLog::ClearLogLevel();
-  CFFmpegLog *log = new CFFmpegLog();
+  auto log = new CFFmpegLog();
   log->level = level;
   CFFmpegLogTls.set(log);
 }

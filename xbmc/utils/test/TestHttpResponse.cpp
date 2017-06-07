@@ -25,7 +25,7 @@
 TEST(TestHttpResponse, General)
 {
   CHttpResponse a(HTTP::POST, HTTP::OK);
-  char *buf = new char(100);
+  auto uf = new char(100);
   std::string response, content, refstr;
   unsigned int size;
   memset(buf, 0, sizeof(*buf));

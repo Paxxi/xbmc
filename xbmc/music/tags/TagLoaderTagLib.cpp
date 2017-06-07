@@ -1119,7 +1119,7 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
   }
 
   StringUtils::ToLower(strExtension);
-  TagLibVFSStream*           stream = new TagLibVFSStream(strFileName, true);
+  auto            stream = new TagLibVFSStream(strFileName, true);
   if (!stream)
   {
     CLog::Log(LOGERROR, "could not create TagLib VFS stream for: %s", strFileName.c_str());

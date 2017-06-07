@@ -233,7 +233,7 @@ extern "C" HMODULE WINAPI dllGetModuleHandleA(LPCSTR lpModuleName)
   if( lpModuleName == NULL )
     return NULL;
 
-  char* strModuleName = new char[strlen(lpModuleName) + 5];
+  auto  strModuleName = new char[strlen(lpModuleName) + 5];
   strcpy(strModuleName, lpModuleName);
 
   if (strrchr(strModuleName, '.') == 0) strcat(strModuleName, ".dll");

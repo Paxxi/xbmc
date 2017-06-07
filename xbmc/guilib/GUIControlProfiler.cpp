@@ -84,7 +84,7 @@ void CGUIControlProfilerItem::EndRender()
 
 void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
 {
-  TiXmlElement *xmlControl = new TiXmlElement("control");
+  auto xmlControl = new TiXmlElement("control");
   parent->LinkEndChild(xmlControl);
 
   const char *lpszType = NULL;
@@ -169,7 +169,7 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
 
   if (!m_strDescription.empty())
   {
-    TiXmlElement *elem = new TiXmlElement("description");
+    auto elem = new TiXmlElement("description");
     xmlControl->LinkEndChild(elem);
     TiXmlText *text = new TiXmlText(m_strDescription.c_str());
     elem->LinkEndChild(text);
@@ -181,7 +181,7 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
   if (vis || rend)
   {
     std::string val;
-    TiXmlElement *elem = new TiXmlElement("rendertime");
+    auto elem = new TiXmlElement("rendertime");
     xmlControl->LinkEndChild(elem);
     val = StringUtils::Format("%u", rend);
     TiXmlText *text = new TiXmlText(val.c_str());
@@ -196,7 +196,7 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
 
   if (m_vecChildren.size())
   {
-    TiXmlElement *xmlChilds = new TiXmlElement("children");
+    auto xmlChilds = new TiXmlElement("children");
     xmlControl->LinkEndChild(xmlChilds);
     const unsigned int dwSize = m_vecChildren.size();
     for (unsigned int i=0; i<dwSize; ++i)
@@ -334,7 +334,7 @@ bool CGUIControlProfiler::SaveResults()
   TiXmlDeclaration decl("1.0", "", "yes");
   doc.InsertEndChild(decl);
 
-  TiXmlElement *root = new TiXmlElement("guicontrolprofiler");
+  auto root = new TiXmlElement("guicontrolprofiler");
   std::string str = StringUtils::Format("%d", m_iFrameCount);
   root->SetAttribute("framecount", str.c_str());
   root->SetAttribute("timeunit", "ms");

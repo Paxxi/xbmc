@@ -185,7 +185,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
             int cc_count = buf[5] & 0x1f;
             if (cc_count > 0 && len >= 7 + cc_count * 3)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
+              auto cc = new CCaptionBlock(cc_count * 3);
               memcpy(cc->m_data, buf + 7, cc_count * 3);
               cc->m_pts = pSrcPacket->pts;
               if (picType == 1 || picType == 2)
@@ -205,7 +205,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
 
             if (cc_count > 0 && len >= 5 + cc_count * 3 * 2)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
+              auto cc = new CCaptionBlock(cc_count * 3);
               uint8_t *src = buf + 5;
               uint8_t *dst = cc->m_data;
 
@@ -267,7 +267,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
             int cc_count = userdata[0] & 0x1f;
             if (len >= cc_count * 3 + 10)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
+              auto cc = new CCaptionBlock(cc_count * 3);
               memcpy(cc->m_data, userdata + 2, cc_count * 3);
               cc->m_pts = pSrcPacket->pts;
               m_ccTempBuffer.push_back(cc);

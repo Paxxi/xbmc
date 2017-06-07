@@ -38,7 +38,7 @@ CDVDSubtitleLineCollection::~CDVDSubtitleLineCollection()
 
 void CDVDSubtitleLineCollection::Add(CDVDOverlay* pOverlay)
 {
-  ListElement* pElement = new ListElement;
+  auto  pElement = new ListElement;
   pElement->pOverlay = pOverlay;
   pElement->pNext = NULL;
 

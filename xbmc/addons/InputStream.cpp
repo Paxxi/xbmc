@@ -295,7 +295,7 @@ void CInputStream::UpdateStreams()
 
     if (stream.m_streamType == INPUTSTREAM_INFO::TYPE_AUDIO)
     {
-      CDemuxStreamAudio *audioStream = new CDemuxStreamAudio();
+      auto audioStream = new CDemuxStreamAudio();
 
       audioStream->iChannels = stream.m_Channels;
       audioStream->iSampleRate = stream.m_SampleRate;
@@ -306,7 +306,7 @@ void CInputStream::UpdateStreams()
     }
     else if (stream.m_streamType == INPUTSTREAM_INFO::TYPE_VIDEO)
     {
-      CDemuxStreamVideo *videoStream = new CDemuxStreamVideo();
+      auto videoStream = new CDemuxStreamVideo();
 
       videoStream->iFpsScale = stream.m_FpsScale;
       videoStream->iFpsRate = stream.m_FpsRate;

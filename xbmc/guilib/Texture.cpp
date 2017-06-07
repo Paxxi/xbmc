@@ -211,7 +211,7 @@ CBaseTexture *CBaseTexture::LoadFromFile(const std::string& texturePath, unsigne
     }
   }
 #endif
-  CTexture *texture = new CTexture();
+  auto texture = new CTexture();
   if (texture->LoadFromFileInternal(texturePath, idealWidth, idealHeight, requirePixels, strMimeType))
     return texture;
   delete texture;

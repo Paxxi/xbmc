@@ -706,7 +706,7 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
 #endif
   }
 
-  CCdInfo* info = new CCdInfo;
+  auto  info = new CCdInfo;
   info->SetFirstTrack( m_nFirstTrackNum );
   info->SetTrackCount( m_nNumTracks );
 

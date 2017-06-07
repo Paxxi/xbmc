@@ -1583,7 +1583,7 @@ bool MysqlDataset::query(const std::string &query) {
   // returned rows
   while ((row = mysql_fetch_row(stmt)))
   { // have a row of data
-    sql_record *res = new sql_record;
+    auto res = new sql_record;
     res->resize(numColumns);
     for (unsigned int i = 0; i < numColumns; i++)
     {

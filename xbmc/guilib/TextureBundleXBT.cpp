@@ -215,7 +215,7 @@ int CTextureBundleXBT::LoadAnim(const std::string& Filename, CBaseTexture*** ppT
 bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFrame& frame, CBaseTexture** ppTexture)
 {
   // found texture - allocate the necessary buffers
-  unsigned char *buffer = new unsigned char [(size_t)frame.GetPackedSize()];
+  auto buffer = new unsigned char [(size_t)frame.GetPackedSize()];
   if (buffer == NULL)
   {
     CLog::Log(LOGERROR, "Out of memory loading texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetPackedSize());
@@ -233,7 +233,7 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFram
   // check if it's packed with lzo
   if (frame.IsPacked())
   { // unpack
-    unsigned char *unpacked = new unsigned char[(size_t)frame.GetUnpackedSize()];
+    auto unpacked = new unsigned char[(size_t)frame.GetUnpackedSize()];
     if (unpacked == NULL)
     {
       CLog::Log(LOGERROR, "Out of memory unpacking texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetUnpackedSize());
@@ -282,7 +282,7 @@ std::string CTextureBundleXBT::Normalize(const std::string &name)
 
 uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFrame& frame)
 {
-  uint8_t* packedBuffer = new uint8_t[static_cast<size_t>(frame.GetPackedSize())];
+  auto  packedBuffer = new uint8_t[static_cast<size_t>(frame.GetPackedSize())];
   if (packedBuffer == nullptr)
   {
     CLog::Log(LOGERROR, "CTextureBundleXBT: out of memory loading frame with %" PRIu64" packed bytes", frame.GetPackedSize());
@@ -301,7 +301,7 @@ uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFr
   if (!frame.IsPacked())
     return packedBuffer;
 
-  uint8_t* unpackedBuffer = new uint8_t[static_cast<size_t>(frame.GetUnpackedSize())];
+  auto  unpackedBuffer = new uint8_t[static_cast<size_t>(frame.GetUnpackedSize())];
   if (unpackedBuffer == nullptr)
   {
     CLog::Log(LOGERROR, "CTextureBundleXBT: out of memory loading frame with %" PRIu64" unpacked bytes", frame.GetPackedSize());

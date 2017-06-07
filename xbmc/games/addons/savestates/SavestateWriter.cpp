@@ -128,7 +128,7 @@ void CSavestateWriter::WriteThumb()
   }
 
   // Allocate pixels
-  uint8_t* pixels = new uint8_t[height * width * 4];
+  auto  pixels = new uint8_t[height * width * 4];
 
   // Capture picture
   unsigned int captureId = g_application.m_pPlayer->RenderCaptureAlloc();

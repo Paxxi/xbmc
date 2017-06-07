@@ -364,7 +364,7 @@ const char* DllLoader::ResolveReferencedDll(const char* dll)
   }
   else if (!pDll->IsSystemDll())
   {
-    LoadedList* entry=new LoadedList;
+    auto  entry=new LoadedList;
     entry->pDll=pDll;
     entry->pNext=m_pDlls;
     m_pDlls=entry;

@@ -118,7 +118,7 @@ static std::string getValueFromOs_release(std::string key)
   if (!os_rel)
     return "";
 
-  char* buf = new char[10 * 1024]; // more than enough
+  auto  buf = new char[10 * 1024]; // more than enough
   size_t len = fread(buf, 1, 10 * 1024, os_rel);
   fclose(os_rel);
   if (len == 0)

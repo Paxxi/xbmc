@@ -90,7 +90,7 @@ bool CSavestate::Serialize(const std::string& path) const
 
   TiXmlDocument xmlFile;
 
-  TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+  auto  decl = new TiXmlDeclaration("1.0", "", "");
   xmlFile.LinkEndChild(decl);
 
   TiXmlElement rootElement(SAVESTATE_XML_ROOT);

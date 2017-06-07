@@ -318,7 +318,7 @@ void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileN
   if (!helper)
     return NULL;
 
-  CFile* file = new CFile;
+  auto  file = new CFile;
   if (file->Open(strFileName, flags))
     return ((void*)file);
 
@@ -332,7 +332,7 @@ void* CAddonCallbacksAddon::OpenFileForWrite(const void* addonData, const char* 
   if (!helper)
     return NULL;
 
-  CFile* file = new CFile;
+  auto  file = new CFile;
   if (file->OpenForWrite(strFileName, bOverwrite))
     return ((void*)file);
 
@@ -617,7 +617,7 @@ void* CAddonCallbacksAddon::CURLCreate(const void* addonData, const char* strURL
   if (!helper)
     return nullptr;
 
-  CFile* file = new CFile;
+  auto  file = new CFile;
   if (file->CURLCreate(strURL))
     return ((void*)file);
 

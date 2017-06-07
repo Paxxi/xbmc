@@ -522,7 +522,7 @@ extern "C"
         str[size-1] = '\0';
     }
 
-    CFile* pFile = new CFile();
+    auto  pFile = new CFile();
     bool bWrite = false;
     if ((iMode & O_RDWR) || (iMode & O_WRONLY))
       bWrite = true;

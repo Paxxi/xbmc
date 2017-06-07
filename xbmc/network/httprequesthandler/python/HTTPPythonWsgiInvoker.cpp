@@ -412,7 +412,7 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   }
   {
     // wsgi.input
-    XBMCAddon::xbmcwsgi::WsgiInputStream* wsgiInputStream = new XBMCAddon::xbmcwsgi::WsgiInputStream();
+    auto  wsgiInputStream = new XBMCAddon::xbmcwsgi::WsgiInputStream();
     if (request != NULL)
       wsgiInputStream->SetRequest(request);
 
@@ -423,7 +423,7 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   }
   {
     // wsgi.errors
-    XBMCAddon::xbmcwsgi::WsgiErrorStream* wsgiErrorStream = new XBMCAddon::xbmcwsgi::WsgiErrorStream();
+    auto  wsgiErrorStream = new XBMCAddon::xbmcwsgi::WsgiErrorStream();
     if (request != NULL)
       wsgiErrorStream->SetRequest(request);
 
