@@ -278,9 +278,9 @@ void CVisualisation::ClearBuffers()
     delete pAudioBuffer;
     m_vecBuffers.pop_front();
   }
-  for (int j = 0; j < AUDIO_BUFFER_SIZE; j++)
+  for (float & j : m_fFreq)
   {
-    m_fFreq[j] = 0.0f;
+    j = 0.0f;
   }
 }
 

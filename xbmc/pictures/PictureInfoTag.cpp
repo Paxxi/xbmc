@@ -142,8 +142,8 @@ void CPictureInfoTag::Archive(CArchive& ar)
     m_exifInfo.CommentsCharset = EXIF_COMMENT_CHARSET_CONVERTED; // Store and restore the comment charset converted
     GetStringFromArchive(ar, m_exifInfo.Description, sizeof(m_exifInfo.Description));
     GetStringFromArchive(ar, m_exifInfo.DateTime, sizeof(m_exifInfo.DateTime));
-    for (int i = 0; i < 10; i++)
-      ar >> m_exifInfo.DateTimeOffsets[i];
+    for (int & DateTimeOffset : m_exifInfo.DateTimeOffsets)
+      ar >> DateTimeOffset;
     ar >> m_exifInfo.DigitalZoomRatio;
     ar >> m_exifInfo.Distance;
     ar >> m_exifInfo.ExposureBias;

@@ -398,13 +398,13 @@ void CGUIWindowFileManager::UpdateButtons()
 
 void CGUIWindowFileManager::UpdateItemCounts()
 {
-  for (int i = 0; i < 2; i++)
+  for (auto & m_vecItem : m_vecItems)
   {
     unsigned int selectedCount = 0;
     unsigned int totalCount = 0;
     int64_t selectedSize = 0;
     int64_t totalSize = 0;
-    for (int j = 0; j < m_vecItems[i]->Size(); j++)
+    for (int j = 0; j < m_vecItem->Size(); j++)
     {
       CFileItemPtr item = m_vecItems[i]->Get(j);
       if (item->IsParentFolder()) continue;

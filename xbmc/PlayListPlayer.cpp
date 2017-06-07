@@ -51,8 +51,8 @@ CPlayListPlayer::CPlayListPlayer(void)
   m_bPlayedFirstFile = false;
   m_bPlaybackStarted = false;
   m_iCurrentPlayList = PLAYLIST_NONE;
-  for (int i = 0; i < 2; i++)
-    m_repeatState[i] = REPEAT_NONE;
+  for (auto & i : m_repeatState)
+    i = REPEAT_NONE;
   m_iFailedSongs = 0;
   m_failedSongsStart = 0;
 }

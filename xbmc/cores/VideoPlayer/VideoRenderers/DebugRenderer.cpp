@@ -28,9 +28,9 @@ using namespace OVERLAY;
 
 CDebugRenderer::CDebugRenderer()
 {
-  for (int i=0; i<4; i++)
+  for (auto & i : m_overlay)
   {
-    m_overlay[i] = nullptr;
+    i = nullptr;
     m_strDebug[i] = " ";
   }
 }

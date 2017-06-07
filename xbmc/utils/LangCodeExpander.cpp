@@ -152,11 +152,11 @@ bool CLangCodeExpander::ConvertISO6391ToISO6392T(const std::string& strISO6391, 
   StringUtils::ToLower(strISO6391Lower);
   StringUtils::Trim(strISO6391Lower);
 
-  for (unsigned int index = 0; index < ARRAY_SIZE(LanguageCodes); ++index)
+  for (const auto & LanguageCode : LanguageCodes)
   {
     if (strISO6391Lower == LanguageCodes[index].iso639_1)
     {
-      if (checkWin32Locales && LanguageCodes[index].win_id)
+      if (checkWin32Locales && LanguageCode.win_id)
       {
         strISO6392T = LanguageCodes[index].win_id;
         return true;
@@ -204,11 +204,11 @@ bool CLangCodeExpander::ConvertToISO6392T(const std::string& strCharCode, std::s
   }
   else if (strCharCode.size() > 3)
   {
-    for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_2)
     {
-      if (StringUtils::EqualsNoCase(strCharCode, g_iso639_2[i].name))
+      if (StringUtils::EqualsNoCase(strCharCode, i.name))
       {
-        CodeToString(g_iso639_2[i].code, strISO6392T);
+        CodeToString(i.code, strISO6392T);
         return true;
       }
     }
@@ -344,20 +344,20 @@ bool CLangCodeExpander::ReverseLookup(const std::string& desc, std::string& code
     }
   }
 
-  for (unsigned int i = 0; i < sizeof(g_iso639_1) / sizeof(LCENTRY); i++)
+  for (auto i : g_iso639_1)
   {
     if (StringUtils::EqualsNoCase(descTmp, g_iso639_1[i].name))
     {
-      CodeToString(g_iso639_1[i].code, code);
+      CodeToString(i.code, code);
       return true;
     }
   }
 
-  for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+  for (auto i : g_iso639_2)
   {
     if (StringUtils::EqualsNoCase(descTmp, g_iso639_2[i].name))
     {
-      CodeToString(g_iso639_2[i].code, code);
+      CodeToString(i.code, code);
       return true;
     }
   }
@@ -398,9 +398,9 @@ bool CLangCodeExpander::LookupInISO639Tables(const std::string& code, std::strin
   if (sCode.length() == 2)
   {
     longcode = MAKECODE('\0', '\0', sCode[0], sCode[1]);
-    for (unsigned int i = 0; i < sizeof(g_iso639_1) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_1)
     {
-      if (g_iso639_1[i].code == longcode)
+      if (i.code == longcode)
       {
         desc = g_iso639_1[i].name;
         return true;
@@ -410,9 +410,9 @@ bool CLangCodeExpander::LookupInISO639Tables(const std::string& code, std::strin
   else if (sCode.length() == 3)
   {
     longcode = MAKECODE('\0', sCode[0], sCode[1], sCode[2]);
-    for (unsigned int i = 0; i < sizeof(g_iso639_2) / sizeof(LCENTRY); i++)
+    for (auto i : g_iso639_2)
     {
-      if (g_iso639_2[i].code == longcode)
+      if (i.code == longcode)
       {
         desc = g_iso639_2[i].name;
         return true;

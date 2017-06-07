@@ -197,8 +197,8 @@ std::string CWebSocketV8::calculateKey(const std::string &key)
   unsigned int digest[5];
   hash.get_digest(digest);
 
-  for (unsigned int index = 0; index < 5; index++)
-    digest[index] = Endian_SwapBE32(digest[index]);
+  for (unsigned int & index : digest)
+    index = Endian_SwapBE32(index);
 
   return Base64::Encode((const char*)digest, sizeof(digest));
 }

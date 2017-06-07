@@ -168,10 +168,10 @@ void CDVDTeletextData::ResetTeletextCache()
           if (p->ext->p27)
             free(p->ext->p27);
 
-          for (int d26 = 0; d26 < 16; d26++)
+          for (auto & d26 : p->ext->p26)
           {
-            if (p->ext->p26[d26])
-              free(p->ext->p26[d26]);
+            if (d26)
+              free(d26);
           }
           free(p->ext);
         }

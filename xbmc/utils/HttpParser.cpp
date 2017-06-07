@@ -104,37 +104,37 @@ HttpParser::parseHeader()
         char c = _data[i];
         State nextState = p_error;
 
-        for ( unsigned d = 0; d < sizeof(fsm) / sizeof(FSM); ++d ) {
-            if ( fsm[d].curState == _state && 
-                    ( c == fsm[d].c || fsm[d].c == ANY ) ) {
+        for (auto d : fsm) {
+            if ( d.curState == _state && 
+                    ( c == d.c || d.c == ANY ) ) {
 
-                nextState = fsm[d].nextState;
+                nextState = d.nextState;
 
-                if ( fsm[d].actions & LOWER ) {
+                if ( d.actions & LOWER ) {
                     _data[i] = tolower( _data[i] );
                 }
 
-                if ( fsm[d].actions & NULLIFY ) {
+                if ( d.actions & NULLIFY ) {
                     _data[i] = 0;
                 }
 
-                if ( fsm[d].actions & SET_HEADER_START ) {
+                if ( d.actions & SET_HEADER_START ) {
                     _headerStart = i;
                 }
 
-                if ( fsm[d].actions & SET_KEY ) {
+                if ( d.actions & SET_KEY ) {
                     _keyIndex = i;
                 }
 
-                if ( fsm[d].actions & SET_VALUE ) {
+                if ( d.actions & SET_VALUE ) {
                     _valueIndex = i;
                 }
 
-                if ( fsm[d].actions & SET_CONTENT_START ) {
+                if ( d.actions & SET_CONTENT_START ) {
                     _contentStart = i + 1;
                 }
 
-                if ( fsm[d].actions & STORE_KEY_VALUE ) {
+                if ( d.actions & STORE_KEY_VALUE ) {
                     // store position of first character of key.
                     _keys.push_back( _keyIndex );
                 }

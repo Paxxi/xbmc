@@ -589,10 +589,10 @@ void CDVDRadioRDSData::ResetRDSCache()
 
   m_PS_Present = false;
   m_PS_Index = 0;
-  for (int i = 0; i < PS_TEXT_ENTRIES; ++i)
+  for (auto & i : m_PS_Text)
   {
-    memset(m_PS_Text[i], 0x20, 8);
-    m_PS_Text[i][8] = 0;
+    memset(i, 0x20, 8);
+    i[8] = 0;
   }
 
   m_DI_IsStereo = true;

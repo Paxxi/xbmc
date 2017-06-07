@@ -568,9 +568,9 @@ void CDVDDemuxSPU::FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySp
 
 
   int nrOfUsedColors = 0;
-  for (int i = 0; i < 4; i++)
+  for (int i : pSPU->alpha)
   {
-    if (pSPU->alpha[i] > 0) nrOfUsedColors++;
+    if (i > 0) nrOfUsedColors++;
   }
 
   if (nrOfUsedColors == 0)

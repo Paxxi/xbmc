@@ -399,10 +399,10 @@ bool CRendererVDPAU::UploadVDPAUTexture420(int index)
     planes[2].texwidth  = planes[1].texwidth;
     planes[2].texheight = planes[1].texheight;
 
-    for (int p = 0; p < 3; p++)
+    for (auto & plane : planes)
     {
-      planes[p].pixpertex_x = 1;
-      planes[p].pixpertex_y = 1;
+      plane.pixpertex_x = 1;
+      plane.pixpertex_y = 1;
     }
   }
   // crop

@@ -70,8 +70,8 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
       triggerDetectors(event, pointer);
 
       setGestureState(TouchGestureUnknown);
-      for (unsigned int pIndex = 0; pIndex < TOUCH_MAX_POINTERS; pIndex++)
-        m_pointers[pIndex].reset();
+      for (auto & m_pointer : m_pointers)
+        m_pointer.reset();
 
       OnTouchAbort();
       break;
@@ -213,9 +213,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
         break;
 
       bool moving = false;
-      for (unsigned int index = 0; index < TOUCH_MAX_POINTERS; index++)
+      for (auto & m_pointer : m_pointers)
       {
-        if (m_pointers[index].valid() && m_pointers[index].moving)
+        if (m_pointer.valid() && m_pointer.moving)
         {
           moving = true;
           break;
@@ -321,8 +321,8 @@ bool CGenericTouchInputHandler::UpdateTouchPointer(int32_t pointer, float x, flo
 
 void CGenericTouchInputHandler::saveLastTouch()
 {
-  for (unsigned int pointer = 0; pointer < TOUCH_MAX_POINTERS; pointer++)
-    m_pointers[pointer].last.copy(m_pointers[pointer].current);
+  for (auto & m_pointer : m_pointers)
+    m_pointer.last.copy(m_pointer.current);
 }
 
 void CGenericTouchInputHandler::OnTimeout()

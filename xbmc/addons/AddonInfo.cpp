@@ -84,9 +84,8 @@ static const TypeMapping types[] =
 
 std::string CAddonInfo::TranslateType(ADDON::TYPE type, bool pretty/*=false*/)
 {
-  for (unsigned int index=0; index < ARRAY_SIZE(types); ++index)
+  for (const auto & map : types)
   {
-    const TypeMapping &map = types[index];
     if (type == map.type)
     {
       if (pretty && map.pretty)
@@ -100,9 +99,8 @@ std::string CAddonInfo::TranslateType(ADDON::TYPE type, bool pretty/*=false*/)
 
 TYPE CAddonInfo::TranslateType(const std::string& string)
 {
-  for (unsigned int index=0; index < ARRAY_SIZE(types); ++index)
+  for (const auto & map : types)
   {
-    const TypeMapping &map = types[index];
     if (string == map.name)
       return map.type;
   }
@@ -112,9 +110,8 @@ TYPE CAddonInfo::TranslateType(const std::string& string)
 
 std::string CAddonInfo::TranslateIconType(ADDON::TYPE type)
 {
-  for (unsigned int index = 0; index < ARRAY_SIZE(types); ++index)
+  for (const auto & map : types)
   {
-    const TypeMapping &map = types[index];
     if (type == map.type)
       return map.icon;
   }

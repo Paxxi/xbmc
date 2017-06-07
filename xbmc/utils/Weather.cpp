@@ -283,11 +283,11 @@ void CWeatherJob::SetFromProperties()
     else
       m_info.currentHumidity = StringUtils::Format("%s%%", window->GetProperty("Current.Humidity").asString().c_str());
     m_info.location = window->GetProperty("Current.Location").asString();
-    for (int i=0;i<NUM_DAYS;++i)
+    for (auto & i : m_info.forecast)
     {
       std::string strDay = StringUtils::Format("Day%i.Title",i);
       m_info.forecast[i].m_day = window->GetProperty(strDay).asString();
-      LocalizeOverviewToken(m_info.forecast[i].m_day);
+      LocalizeOverviewToken(i.m_day);
       strDay = StringUtils::Format("Day%i.HighTemp",i);
       FormatTemperature(m_info.forecast[i].m_high,
                     strtod(window->GetProperty(strDay).asString().c_str(), nullptr));
@@ -298,7 +298,7 @@ void CWeatherJob::SetFromProperties()
       m_info.forecast[i].m_icon = ConstructPath(window->GetProperty(strDay).asString());
       strDay = StringUtils::Format("Day%i.Outlook",i);
       m_info.forecast[i].m_overview = window->GetProperty(strDay).asString();
-      LocalizeOverview(m_info.forecast[i].m_overview);
+      LocalizeOverview(i.m_overview);
     }
   }
 }

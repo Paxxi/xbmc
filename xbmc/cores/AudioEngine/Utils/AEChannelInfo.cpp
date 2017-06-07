@@ -135,8 +135,8 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
 void CAEChannelInfo::Reset()
 {
   m_channelCount = 0;
-  for (unsigned int i = 0; i < AE_CH_MAX; ++i)
-    m_channels[i] = AE_CH_NULL;
+  for (auto & m_channel : m_channels)
+    m_channel = AE_CH_NULL;
 }
 
 CAEChannelInfo& CAEChannelInfo::operator=(const CAEChannelInfo& rhs)

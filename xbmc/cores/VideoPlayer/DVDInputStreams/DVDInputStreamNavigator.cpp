@@ -754,12 +754,12 @@ int CDVDInputStreamNavigator::GetTotalButtons()
   pci_t* pci = m_dll.dvdnav_get_current_nav_pci(m_dvdnav);
 
   int counter = 0;
-  for (int i = 0; i < 36; i++)
+  for (auto & i : pci->hli.btnit)
   {
-    if (pci->hli.btnit[i].x_start ||
-        pci->hli.btnit[i].x_end ||
-        pci->hli.btnit[i].y_start ||
-        pci->hli.btnit[i].y_end)
+    if (i.x_start ||
+        i.x_end ||
+        i.y_start ||
+        i.y_end)
     {
       counter++;
     }
@@ -958,9 +958,9 @@ int CDVDInputStreamNavigator::GetSubTitleStreamCount()
   if (vm->state.domain == VTS_DOMAIN)
   {
     int streamN = 0;
-    for (int i = 0; i < 32; i++)
+    for (unsigned int i : vm->state.pgc->subp_control)
     {
-      if (vm->state.pgc->subp_control[i] & (1<<31))
+      if (i & (1<<31))
         streamN++;
     }
     return streamN;
@@ -1111,9 +1111,9 @@ int CDVDInputStreamNavigator::GetAudioStreamCount()
   if (vm->state.domain == VTS_DOMAIN)
   {
     int streamN = 0;
-    for (int i = 0; i < 8; i++)
+    for (unsigned short i : vm->state.pgc->audio_control)
     {
-      if (vm->state.pgc->audio_control[i] & (1<<15))
+      if (i & (1<<15))
         streamN++;
     }
     return streamN;

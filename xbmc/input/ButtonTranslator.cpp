@@ -880,10 +880,10 @@ void CButtonTranslator::GetWindows(std::vector<std::string> &windowList)
 
 int CButtonTranslator::GetFallbackWindow(int windowID)
 {
-  for (unsigned int index = 0; index < ARRAY_SIZE(fallbackWindows); ++index)
+  for (auto fallbackWindow : fallbackWindows)
   {
-    if (fallbackWindows[index].origin == windowID)
-      return fallbackWindows[index].target;
+    if (fallbackWindow.origin == windowID)
+      return fallbackWindow.target;
   }
   // for addon windows use WINDOW_ADDON_START because id is dynamic
   if (windowID > WINDOW_ADDON_START && windowID <= WINDOW_ADDON_END)
@@ -1211,11 +1211,11 @@ bool CButtonTranslator::TranslateActionString(const char *szAction, int &action)
   if (CBuiltins::GetInstance().HasCommand(strAction))
     action = ACTION_BUILT_IN_FUNCTION;
 
-  for (unsigned int index=0;index < ARRAY_SIZE(actions);++index)
+  for (auto index : actions)
   {
     if (strAction == actions[index].name)
     {
-      action = actions[index].action;
+      action = index.action;
       break;
     }
   }
@@ -1264,10 +1264,10 @@ int CButtonTranslator::TranslateWindow(const std::string &window)
   }
 
   // run through the window structure
-  for (unsigned int index = 0; index < ARRAY_SIZE(windows); ++index)
+  for (auto window : windows)
   {
     if (strWindow == windows[index].name)
-      return windows[index].action;
+      return window.action;
   }
 
   CLog::Log(LOGERROR, "Window Translator: Can't find window %s", strWindow.c_str());
@@ -1509,11 +1509,11 @@ uint32_t CButtonTranslator::TranslateMouseCommand(TiXmlElement *pButton)
     if (!szKey.empty())
     {
       StringUtils::ToLower(szKey);
-      for (unsigned int i = 0; i < ARRAY_SIZE(mousekeys); i++)
+      for (auto mousekey : mousekeys)
       {
         if (szKey == mousekeys[i].name)
         {
-          buttonId = mousekeys[i].action;
+          buttonId = mousekey.action;
           break;
         }
       }
@@ -1566,11 +1566,11 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
     strTouchCommand += attrVal;
 
   uint32_t actionId = ACTION_NONE;
-  for (unsigned int i = 0; i < ARRAY_SIZE(touchcommands); i++)
+  for (auto touchcommand : touchcommands)
   {
     if (strTouchCommand == touchcommands[i].name)
     {
-      actionId = touchcommands[i].action;
+      actionId = touchcommand.action;
       break;
     }
   }

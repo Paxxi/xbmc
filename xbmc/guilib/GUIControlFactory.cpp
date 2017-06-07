@@ -108,9 +108,9 @@ static const ControlMapping controls[] =
 
 CGUIControl::GUICONTROLTYPES CGUIControlFactory::TranslateControlType(const std::string &type)
 {
-  for (unsigned int i = 0; i < ARRAY_SIZE(controls); ++i)
-    if (StringUtils::EqualsNoCase(type, controls[i].name))
-      return controls[i].type;
+  for (auto control : controls)
+    if (StringUtils::EqualsNoCase(type, control.name))
+      return control.type;
   return CGUIControl::GUICONTROL_UNKNOWN;
 }
 

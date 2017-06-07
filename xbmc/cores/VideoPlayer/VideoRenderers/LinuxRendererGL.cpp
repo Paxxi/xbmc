@@ -1750,16 +1750,16 @@ bool CLinuxRendererGL::CreateYV12Texture(int index)
   }
 
   glEnable(m_textureTarget);
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
     for(p = 0;p<MAX_PLANES;p++)
     {
-      if (!glIsTexture(fields[f][p].id))
+      if (!glIsTexture(field[p].id))
       {
-        glGenTextures(1, &fields[f][p].id);
+        glGenTextures(1, &field[p].id);
         VerifyGLState();
       }
-      fields[f][p].pbo = pbo[p];
+      field[p].pbo = pbo[p];
     }
   }
 
@@ -1777,18 +1777,18 @@ bool CLinuxRendererGL::CreateYV12Texture(int index)
     planes[2].texwidth  = planes[0].texwidth  >> im.cshift_x;
     planes[2].texheight = planes[0].texheight >> im.cshift_y;
 
-    for (int p = 0; p < 3; p++)
+    for (auto & plane : planes)
     {
-      planes[p].pixpertex_x = 1;
-      planes[p].pixpertex_y = 1;
+      plane.pixpertex_x = 1;
+      plane.pixpertex_y = 1;
     }
 
     if(m_renderMethod & RENDER_POT)
     {
-      for(int p = 0; p < 3; p++)
+      for(auto & plane : planes)
       {
-        planes[p].texwidth  = NP2(planes[p].texwidth);
-        planes[p].texheight = NP2(planes[p].texheight);
+        plane.texwidth  = NP2(plane.texwidth);
+        plane.texheight = NP2(plane.texheight);
       }
     }
 
@@ -1903,15 +1903,15 @@ void CLinuxRendererGL::DeleteYV12Texture(int index)
   if( fields[FIELD_FULL][0].id == 0 ) return;
 
   /* finish up all textures, and delete them */
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
-    for(int p = 0;p<MAX_PLANES;p++)
+    for(auto & p : field)
     {
-      if( fields[f][p].id )
+      if( p.id )
       {
-        if (glIsTexture(fields[f][p].id))
-          glDeleteTextures(1, &fields[f][p].id);
-        fields[f][p].id = 0;
+        if (glIsTexture(p.id))
+          glDeleteTextures(1, &p.id);
+        p.id = 0;
       }
     }
   }
@@ -2083,18 +2083,18 @@ bool CLinuxRendererGL::CreateNV12Texture(int index)
   }
 
   glEnable(m_textureTarget);
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
     for(int p = 0;p<2;p++)
     {
-      if (!glIsTexture(fields[f][p].id))
+      if (!glIsTexture(field[p].id))
       {
-        glGenTextures(1, &fields[f][p].id);
+        glGenTextures(1, &field[p].id);
         VerifyGLState();
       }
-      fields[f][p].pbo = pbo[p];
+      field[p].pbo = pbo[p];
     }
-    fields[f][2].id = fields[f][1].id;
+    field[2].id = field[1].id;
   }
 
   // YUV
@@ -2111,18 +2111,18 @@ bool CLinuxRendererGL::CreateNV12Texture(int index)
     planes[2].texwidth  = planes[1].texwidth;
     planes[2].texheight = planes[1].texheight;
 
-    for (int p = 0; p < 3; p++)
+    for (auto & plane : planes)
     {
-      planes[p].pixpertex_x = 1;
-      planes[p].pixpertex_y = 1;
+      plane.pixpertex_x = 1;
+      plane.pixpertex_y = 1;
     }
 
     if(m_renderMethod & RENDER_POT)
     {
-      for(int p = 0; p < 3; p++)
+      for(auto & plane : planes)
       {
-        planes[p].texwidth  = NP2(planes[p].texwidth);
-        planes[p].texheight = NP2(planes[p].texheight);
+        plane.texwidth  = NP2(plane.texwidth);
+        plane.texheight = NP2(plane.texheight);
       }
     }
 
@@ -2158,20 +2158,20 @@ void CLinuxRendererGL::DeleteNV12Texture(int index)
   if( fields[FIELD_FULL][0].id == 0 ) return;
 
   // finish up all textures, and delete them
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
     for(int p = 0;p<2;p++)
     {
-      if( fields[f][p].id )
+      if( field[p].id )
       {
-        if (glIsTexture(fields[f][p].id))
+        if (glIsTexture(field[p].id))
         {
-          glDeleteTextures(1, &fields[f][p].id);
+          glDeleteTextures(1, &field[p].id);
         }
-        fields[f][p].id = 0;
+        field[p].id = 0;
       }
     }
-    fields[f][2].id = 0;
+    field[2].id = 0;
   }
 
   for(int p = 0;p<2;p++)
@@ -2255,18 +2255,18 @@ void CLinuxRendererGL::DeleteYUV422PackedTexture(int index)
   if( fields[FIELD_FULL][0].id == 0 ) return;
 
   // finish up all textures, and delete them
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
-    if( fields[f][0].id )
+    if( field[0].id )
     {
-      if (glIsTexture(fields[f][0].id))
+      if (glIsTexture(field[0].id))
       {
-        glDeleteTextures(1, &fields[f][0].id);
+        glDeleteTextures(1, &field[0].id);
       }
-      fields[f][0].id = 0;
+      field[0].id = 0;
     }
-    fields[f][1].id = 0;
-    fields[f][2].id = 0;
+    field[1].id = 0;
+    field[2].id = 0;
   }
 
   if (pbo[0])
@@ -2359,16 +2359,16 @@ bool CLinuxRendererGL::CreateYUV422PackedTexture(int index)
   }
 
   glEnable(m_textureTarget);
-  for(int f = 0;f<MAX_FIELDS;f++)
+  for(auto & field : fields)
   {
-    if (!glIsTexture(fields[f][0].id))
+    if (!glIsTexture(field[0].id))
     {
-      glGenTextures(1, &fields[f][0].id);
+      glGenTextures(1, &field[0].id);
       VerifyGLState();
     }
-    fields[f][0].pbo = pbo[0];
-    fields[f][1].id = fields[f][0].id;
-    fields[f][2].id = fields[f][1].id;
+    field[0].pbo = pbo[0];
+    field[1].id = field[0].id;
+    field[2].id = field[1].id;
   }
 
   // YUV
@@ -2384,18 +2384,18 @@ bool CLinuxRendererGL::CreateYUV422PackedTexture(int index)
     planes[2].texwidth  = planes[1].texwidth;
     planes[2].texheight = planes[1].texheight;
 
-    for (int p = 0; p < 3; p++)
+    for (auto & plane : planes)
     {
-      planes[p].pixpertex_x = 2;
-      planes[p].pixpertex_y = 1;
+      plane.pixpertex_x = 2;
+      plane.pixpertex_y = 1;
     }
 
     if(m_renderMethod & RENDER_POT)
     {
-      for(int p = 0; p < 3; p++)
+      for(auto & plane : planes)
       {
-        planes[p].texwidth  = NP2(planes[p].texwidth);
-        planes[p].texheight = NP2(planes[p].texheight);
+        plane.texwidth  = NP2(plane.texwidth);
+        plane.texheight = NP2(plane.texheight);
       }
     }
 

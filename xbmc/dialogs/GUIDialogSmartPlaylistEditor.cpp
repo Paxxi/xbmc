@@ -514,9 +514,9 @@ void CGUIDialogSmartPlaylistEditor::OnDeinitWindow(int nextWindowID)
 
 CGUIDialogSmartPlaylistEditor::PLAYLIST_TYPE CGUIDialogSmartPlaylistEditor::ConvertType(const std::string &type)
 {
-  for (unsigned int i = 0; i < NUM_TYPES; i++)
+  for (const auto & type : types)
     if (type == types[i].string)
-      return types[i].type;
+      return type.type;
   assert(false);
   return TYPE_SONGS;
 }
