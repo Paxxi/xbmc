@@ -154,7 +154,7 @@ const CWebSocketFrame* CWebSocketV13::Close(WebSocketCloseReason reason /* = Web
   if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking || m_state == WebSocketStateClosed)
   {
     CLog::Log(LOGINFO, "WebSocket [RFC6455]: Cannot send a closing handshake if no connection has been established");
-    return NULL;
+    return nullptr;
   }
 
   return close(reason, message);

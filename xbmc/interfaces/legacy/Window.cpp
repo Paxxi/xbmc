@@ -87,7 +87,7 @@ namespace XBMCAddon
     CGUIWindow* ProxyExistingWindowInterceptor::get() { XBMC_TRACE; return cguiwindow; }
 
     Window::Window(bool discrim): 
-      isDisposed(false), window(NULL), iWindowId(-1),
+      isDisposed(false), window(nullptr), iWindowId(-1),
       iOldWindowId(0), iCurrentControlId(3000), bModal(false), m_actionEvent(true),
       canPulse(true), existingWindow(false), destroyAfterDeInit(false)
     {
@@ -98,7 +98,7 @@ namespace XBMCAddon
      * This just creates a default window.
      */
     Window::Window(int existingWindowId) : 
-      isDisposed(false), window(NULL), iWindowId(-1),
+      isDisposed(false), window(nullptr), iWindowId(-1),
       iOldWindowId(0), iCurrentControlId(3000), bModal(false), m_actionEvent(true),
       canPulse(false), existingWindow(true), destroyAfterDeInit(false)
     {
@@ -280,7 +280,7 @@ namespace XBMCAddon
       // allocate a new control with a new reference
       CLabelInfo li;
 
-      Control* pControl = NULL;
+      Control* pControl = nullptr;
 
       //! @todo Yuck! Should probably be done with a Factory pattern
       switch(pGUIControl->GetControlType())
@@ -505,7 +505,7 @@ namespace XBMCAddon
     void Window::setFocus(Control* pControl)
     {
       XBMC_TRACE;
-      if(pControl == NULL)
+      if(pControl == nullptr)
         throw WindowException("Object should be of type Control");
 
       CGUIMessage msg = CGUIMessage(GUI_MSG_SETFOCUS,pControl->iParentId, pControl->iControlId);
@@ -528,7 +528,7 @@ namespace XBMCAddon
       if(iControlId == -1)
         throw WindowException("No control in this window has focus");
       // Sine I'm already holding the lock theres no reason to give it to GetFocusedControlID
-      return GetControlById(iControlId,NULL);
+      return GetControlById(iControlId,nullptr);
     }
 
     long Window::getFocusId()
@@ -552,7 +552,7 @@ namespace XBMCAddon
     {
       XBMC_TRACE;
       // type checking, object should be of type Control
-      if(pControl == NULL)
+      if(pControl == nullptr)
         throw WindowException("Object should be of type Control");
 
       {
@@ -577,7 +577,7 @@ namespace XBMCAddon
       CApplicationMessenger::GetInstance().SendGUIMessage(msg, iWindowId, wait);
 
       // initialize control to zero
-      pControl->pGUIControl = NULL;
+      pControl->pGUIControl = nullptr;
       pControl->iControlId = 0;
       pControl->iParentId = 0;
     }
@@ -720,7 +720,7 @@ namespace XBMCAddon
     void Window::doAddControl(Control* pControl, CCriticalSection* gcontext, bool wait)
     {
       XBMC_TRACE;
-      if(pControl == NULL)
+      if(pControl == nullptr)
         throw WindowException("NULL Control passed to WindowBase::addControl");
 
       if(pControl->iControlId != 0)

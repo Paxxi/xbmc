@@ -51,7 +51,7 @@ CPVREpgContainer::CPVREpgContainer() :
     CSettings::SETTING_EPG_DAYSTODISPLAY
   })
 {
-  m_progressHandle = NULL;
+  m_progressHandle = nullptr;
   m_bStop = true;
   m_bIsUpdating = false;
   m_bIsInitialising = true;
@@ -152,7 +152,7 @@ void CPVREpgContainer::Start(bool bAsync)
   if (bAsync)
   {
     auto job = new CPVREpgContainerStartJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 
@@ -541,7 +541,7 @@ void CPVREpgContainer::CloseProgressDialog()
   if (m_progressHandle)
   {
     m_progressHandle->MarkFinished();
-    m_progressHandle = NULL;
+    m_progressHandle = nullptr;
   }
 }
 

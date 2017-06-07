@@ -287,14 +287,14 @@ CAddonMgr &CAddonMgr::GetInstance()
 IAddonMgrCallback* CAddonMgr::GetCallbackForType(TYPE type)
 {
   if (m_managers.find(type) == m_managers.end())
-    return NULL;
+    return nullptr;
   else
     return m_managers[type];
 }
 
 bool CAddonMgr::RegisterAddonMgrCallback(const TYPE type, IAddonMgrCallback* cb)
 {
-  if (cb == NULL)
+  if (cb == nullptr)
     return false;
 
   m_managers.erase(type);
@@ -978,7 +978,7 @@ bool CAddonMgr::PlatformSupportsAddon(const cp_plugin_info_t *plugin)
 
 cp_cfg_element_t *CAddonMgr::GetExtElement(cp_cfg_element_t *base, const char *path)
 {
-  cp_cfg_element_t *element = NULL;
+  cp_cfg_element_t *element = nullptr;
   if (base)
     element = m_cpluff->lookup_cfg_element(base, path);
   return element;
@@ -1002,13 +1002,13 @@ bool CAddonMgr::GetExtElements(cp_cfg_element_t *base, const char *path, ELEMENT
 const cp_extension_t *CAddonMgr::GetExtension(const cp_plugin_info_t *props, const char *extension) const
 {
   if (!props)
-    return NULL;
+    return nullptr;
   for (unsigned int i = 0; i < props->num_extensions; ++i)
   {
     if (0 == strcmp(props->extensions[i].ext_point_id, extension))
       return &props->extensions[i];
   }
-  return NULL;
+  return nullptr;
 }
 
 std::string CAddonMgr::GetExtValue(cp_cfg_element_t *base, const char *path) const

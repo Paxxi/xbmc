@@ -168,11 +168,11 @@ DemuxPacket* CDVDDemuxVobsub::Read()
   } while(m_Streams[current->id]->m_discard == true);
 
   if(!m_Demuxer->SeekByte(current->pos))
-    return NULL;
+    return nullptr;
 
   DemuxPacket *packet = m_Demuxer->Read();
   if(!packet)
-    return NULL;
+    return nullptr;
 
   packet->iStreamId = current->id;
   packet->pts = current->pts;

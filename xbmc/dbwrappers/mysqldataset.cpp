@@ -55,7 +55,7 @@ MysqlDatabase::MysqlDatabase() {
   db = "mysql";
   login = "root";
   passwd = "null";
-  conn = NULL;
+  conn = nullptr;
   default_charset = "";
 }
 
@@ -127,7 +127,7 @@ void MysqlDatabase::configure_connection() {
 
     if (res)
     {
-      if ((row = mysql_fetch_row(res)) != NULL)
+      if ((row = mysql_fetch_row(res)) != nullptr)
       {
         std::string column = row[0];
         std::vector<std::string> split = StringUtils::Split(column, ',');
@@ -160,7 +160,7 @@ int MysqlDatabase::connect(bool create_new) {
   {
     disconnect();
 
-    if (conn == NULL) {
+    if (conn == nullptr) {
       conn = mysql_init(conn);
       mysql_ssl_set(
         conn,
@@ -253,10 +253,10 @@ int MysqlDatabase::connect(bool create_new) {
 }
 
 void MysqlDatabase::disconnect() {
-  if (conn != NULL)
+  if (conn != nullptr)
   {
     mysql_close(conn);
-    conn = NULL;
+    conn = nullptr;
   }
 
   active = false;
@@ -281,7 +281,7 @@ int MysqlDatabase::drop() {
 }
 
 int MysqlDatabase::copy(const char *backup_name) {
-  if ( !active || conn == NULL)
+  if ( !active || conn == nullptr)
     throw DbErrors("Can't copy database: no active connection...");
 
   char sql[4096];
@@ -318,7 +318,7 @@ int MysqlDatabase::copy(const char *backup_name) {
     MYSQL_ROW row;
 
     // duplicate each table from old db to new db
-    while ( (row=mysql_fetch_row(res)) != NULL )
+    while ( (row=mysql_fetch_row(res)) != nullptr )
     {
       // copy the table definition
       sprintf(sql, "CREATE TABLE `%s`.%s LIKE %s",
@@ -350,7 +350,7 @@ int MysqlDatabase::copy(const char *backup_name) {
 }
 
 int MysqlDatabase::drop_analytics() {
-  if ( !active || conn == NULL)
+  if ( !active || conn == nullptr)
     throw DbErrors("Can't clean database: no active connection...");
 
   char sql[4096];
@@ -374,7 +374,7 @@ int MysqlDatabase::drop_analytics() {
 
   if (res)
   {
-    while ( (row=mysql_fetch_row(res)) != NULL )
+    while ( (row=mysql_fetch_row(res)) != nullptr )
     {
       sprintf(sql, "ALTER TABLE `%s`.%s DROP INDEX %s", db.c_str(), row[0], row[1]);
 
@@ -398,7 +398,7 @@ int MysqlDatabase::drop_analytics() {
 
   if (res)
   {
-    while ( (row=mysql_fetch_row(res)) != NULL )
+    while ( (row=mysql_fetch_row(res)) != nullptr )
     {
       /* we do not need IF EXISTS because these views are exist */
       sprintf(sql, "DROP VIEW `%s`.%s", db.c_str(), row[0]);
@@ -423,7 +423,7 @@ int MysqlDatabase::drop_analytics() {
 
   if (res)
   {
-    while ( (row=mysql_fetch_row(res)) != NULL )
+    while ( (row=mysql_fetch_row(res)) != nullptr )
     {
       sprintf(sql, "DROP TRIGGER `%s`.%s", db.c_str(), row[0]);
 
@@ -531,14 +531,14 @@ void MysqlDatabase::rollback_transaction() {
 bool MysqlDatabase::exists() {
   bool ret = false;
 
-  if ( conn == NULL || mysql_ping(conn) )
+  if ( conn == nullptr || mysql_ping(conn) )
   {
     CLog::Log(LOGERROR, "Not connected to database, test of existence is not possible.");
     return ret;
   }
 
   MYSQL_RES* result = mysql_list_dbs(conn, db.c_str());
-  if (result == NULL)
+  if (result == nullptr)
   {
     CLog::Log(LOGERROR,"Database is not present, does the user has CREATE DATABASE permission");
     return false;
@@ -550,8 +550,8 @@ bool MysqlDatabase::exists() {
   // Check if there is some tables ( to permit user with no create database rights
   if (ret)
   {
-    result = mysql_list_tables(conn, NULL);
-    if (result != NULL)
+    result = mysql_list_tables(conn, nullptr);
+    if (result != nullptr)
       ret = (mysql_num_rows(result) > 0);
 
     mysql_free_result(result);
@@ -804,7 +804,7 @@ void MysqlDatabase::mysqlVXPrintf(
   size_t idx2;
 
   length = 0;
-  bufpt = 0;
+  bufpt = nullptr;
   for(; (c=(*fmt))!=0; ++fmt){
     bool isLike = false;
     if( c!='%' ){
@@ -897,7 +897,7 @@ void MysqlDatabase::mysqlVXPrintf(
         break;
       }
     }
-    zExtra = 0;
+    zExtra = nullptr;
 
     /* Limit the precision to prevent overflowing buf[] during conversion */
     if( precision>etBUFSIZE-40 && (infop->flags & FLAG_STRING)==0 ){
@@ -1158,7 +1158,7 @@ void MysqlDatabase::mysqlVXPrintf(
       case etSTRING:
       case etDYNSTRING:
         bufpt = va_arg(ap,char*);
-        if( bufpt==0 ){
+        if( bufpt==nullptr ){
           bufpt = (char *)"";
         }else if( xtype==etDYNSTRING ){
           zExtra = bufpt;
@@ -1181,7 +1181,7 @@ void MysqlDatabase::mysqlVXPrintf(
           StringUtils::Replace(arg, "\\", "\\\\");
         const char *escarg = arg.c_str();
 
-        isnull = escarg==0;
+        isnull = escarg==nullptr;
         if( isnull ) escarg = (xtype==etSQLESCAPE2 ? "NULL" : "(NULL)");
         k = precision;
         for(i=0; k!=0 && (ch=escarg[i])!=0; i++, k--);
@@ -1189,7 +1189,7 @@ void MysqlDatabase::mysqlVXPrintf(
         n = i*2 + 1 + needQuote*2;
         if( n>etBUFSIZE ){
           bufpt = zExtra = (char *)malloc(n);
-          if( bufpt==0 ){
+          if( bufpt==nullptr ){
             pAccum->mallocFailed = 1;
             return;
           }
@@ -1250,7 +1250,7 @@ bool MysqlDatabase::mysqlStrAccumAppend(StrAccum *p, const char *z, int N) {
   if( N<0 ){
     N = strlen(z);
   }
-  if( N==0 || z==0 ){
+  if( N==0 || z==nullptr ){
     return false;
   }
   if( p->nChar+N >= p->nAlloc ){
@@ -1317,7 +1317,7 @@ void MysqlDatabase::mysqlStrAccumReset(StrAccum *p){
   if( p->zText!=p->zBase ){
     free(p->zText);
   }
-  p->zText = 0;
+  p->zText = nullptr;
 }
 
 /*
@@ -1351,15 +1351,15 @@ char *MysqlDatabase::mysql_vmprintf(const char *zFormat, va_list ap) {
 
 MysqlDataset::MysqlDataset():Dataset() {
   haveError = false;
-  db = NULL;
-  errmsg = NULL;
+  db = nullptr;
+  errmsg = nullptr;
   autorefresh = false;
 }
 
 MysqlDataset::MysqlDataset(MysqlDatabase *newDb):Dataset(newDb) {
   haveError = false;
   db = newDb;
-  errmsg = NULL;
+  errmsg = nullptr;
   autorefresh = false;
 }
 
@@ -1374,18 +1374,18 @@ void MysqlDataset::set_autorefresh(bool val) {
 //--------- protected functions implementation -----------------//
 
 MYSQL* MysqlDataset::handle(){
-  if (db != NULL)
+  if (db != nullptr)
   {
     return static_cast<MysqlDatabase*>(db)->getHandle();
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void MysqlDataset::make_query(StringList &_sql) {
   std::string query;
   int result = 0;
-  if (db == NULL) throw DbErrors("No Database Connection");
+  if (db == nullptr) throw DbErrors("No Database Connection");
   try
   {
     if (autocommit) db->start_transaction();
@@ -1562,14 +1562,14 @@ bool MysqlDataset::query(const std::string &query) {
   while ((loc = ci_find(qry, "as integer)")) != std::string::npos)
     qry = qry.insert(loc + 3, "signed ");
 
-  MYSQL_RES *stmt = NULL;
+  MYSQL_RES *stmt = nullptr;
 
   if ( static_cast<MysqlDatabase*>(db)->setErr(static_cast<MysqlDatabase*>(db)->query_with_reconnect(qry.c_str()), qry.c_str()) != MYSQL_OK )
     throw DbErrors(db->getErrorMsg());
 
   MYSQL* conn = handle();
   stmt = mysql_store_result(conn);
-  if (stmt == NULL)
+  if (stmt == nullptr)
     throw DbErrors("Missing result set!");
 
   // column headers
@@ -1597,7 +1597,7 @@ bool MysqlDataset::query(const std::string &query) {
         case MYSQL_TYPE_SHORT:
         case MYSQL_TYPE_INT24:
         case MYSQL_TYPE_LONG:
-          if (row[i] != NULL)
+          if (row[i] != nullptr)
           {
             v.set_asInt(atoi(row[i]));
           }
@@ -1608,7 +1608,7 @@ bool MysqlDataset::query(const std::string &query) {
           break;
         case MYSQL_TYPE_FLOAT:
         case MYSQL_TYPE_DOUBLE:
-          if (row[i] != NULL)
+          if (row[i] != nullptr)
           {
             v.set_asDouble(atof(row[i]));
           }
@@ -1620,13 +1620,13 @@ bool MysqlDataset::query(const std::string &query) {
         case MYSQL_TYPE_STRING:
         case MYSQL_TYPE_VAR_STRING:
         case MYSQL_TYPE_VARCHAR:
-          if (row[i] != NULL) v.set_asString((const char *)row[i] );
+          if (row[i] != nullptr) v.set_asString((const char *)row[i] );
           break;
         case MYSQL_TYPE_TINY_BLOB:
         case MYSQL_TYPE_MEDIUM_BLOB:
         case MYSQL_TYPE_LONG_BLOB:
         case MYSQL_TYPE_BLOB:
-          if (row[i] != NULL) v.set_asString((const char *)row[i]);
+          if (row[i] != nullptr) v.set_asString((const char *)row[i]);
           break;
         case MYSQL_TYPE_NULL:
         default:

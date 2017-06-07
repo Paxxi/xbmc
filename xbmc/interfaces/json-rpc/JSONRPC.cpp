@@ -134,7 +134,7 @@ JSONRPC_STATUS CJSONRPC::Version(const std::string &method, ITransportLayer *tra
   result["version"]["patch"] = 0;
 
   const char* version = CJSONServiceDescription::GetVersion();
-  if (version != NULL)
+  if (version != nullptr)
   {
     std::vector<std::string> parts = StringUtils::Split(version, ".");
     if (!parts.empty())

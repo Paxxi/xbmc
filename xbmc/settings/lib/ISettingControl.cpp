@@ -26,11 +26,11 @@
 
 bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false */)
 {
-  if (node == NULL)
+  if (node == nullptr)
     return false;
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == NULL)
+  if (elem == nullptr)
     return false;
 
   const char *strTmp = elem->Attribute(SETTING_XML_ATTR_FORMAT);
@@ -43,7 +43,7 @@ bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false 
     return false;
   }
 
-  if ((strTmp = elem->Attribute(SETTING_XML_ATTR_DELAYED)) != NULL)
+  if ((strTmp = elem->Attribute(SETTING_XML_ATTR_DELAYED)) != nullptr)
   {
     if (!StringUtils::EqualsNoCase(strTmp, "false") && !StringUtils::EqualsNoCase(strTmp, "true"))
     {

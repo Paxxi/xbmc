@@ -95,7 +95,7 @@ bool CGUIDialogContentSettings::Show(ADDON::ScraperPtr& scraper, CONTENT_TYPE co
 bool CGUIDialogContentSettings::Show(ADDON::ScraperPtr& scraper, VIDEO::SScanSettings& settings, CONTENT_TYPE content /* = CONTENT_NONE */)
 {
   CGUIDialogContentSettings *dialog = g_windowManager.GetWindow<CGUIDialogContentSettings>(WINDOW_DIALOG_CONTENT_SETTINGS);
-  if (dialog == NULL)
+  if (dialog == nullptr)
     return false;
 
   if (scraper != NULL)

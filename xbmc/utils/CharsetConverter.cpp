@@ -382,7 +382,7 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
   //allocate output buffer for iconv()
   size_t      outBufSize = (strSource.length() + 1) * sizeof(typename OUTPUT::value_type) * multiplier;
   char*       outBuf     = (char*)malloc(outBufSize);
-  if (outBuf == NULL)
+  if (outBuf == nullptr)
   {
       CLog::Log(LOGSEVERE, "%s: malloc failed", __FUNCTION__);
       return false;
@@ -560,7 +560,7 @@ static struct SCharsetMapping
   , { "SHIFT_JIS", "Japanese (Shift-JIS)" }
   , { "CP949", "Korean" }
   , { "BIG5-HKSCS", "Hong Kong (Big5-HKSCS)" }
-  , { NULL, NULL }
+  , { nullptr, nullptr }
 };
 
 CCharsetConverter::CCharsetConverter()

@@ -155,7 +155,7 @@ void CVideoLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)
 
 void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
 {
-  if (job == NULL)
+  if (job == nullptr)
     return;
 
   CSingleLock lock(m_critical);
@@ -177,7 +177,7 @@ void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
 
 void CVideoLibraryQueue::CancelJob(CVideoLibraryJob *job)
 {
-  if (job == NULL)
+  if (job == nullptr)
     return;
 
   CSingleLock lock(m_critical);

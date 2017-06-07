@@ -79,7 +79,7 @@ bool CPicture::CreateThumbnailFromSurface(const unsigned char *buffer, int width
 #endif
   }
 
-  unsigned char *thumb = NULL;
+  unsigned char *thumb = nullptr;
   unsigned int thumbsize=0;
   IImage* pImage = ImageFactory::CreateLoader(thumbFile);
   if(pImage == NULL || !pImage->CreateThumbnailFromSurface((BYTE *)buffer, width, height, XB_FMT_A8R8G8B8, stride, thumbFile.c_str(), thumb, thumbsize))
@@ -122,7 +122,7 @@ bool CThumbnailWriter::DoWork()
   }
 
   delete [] m_buffer;
-  m_buffer = NULL;
+  m_buffer = nullptr;
 
   return success;
 }
@@ -342,11 +342,11 @@ bool CPicture::ScaleImage(uint8_t *in_pixels, unsigned int in_width, unsigned in
 {
   struct SwsContext *context = sws_getContext(in_width, in_height, AV_PIX_FMT_BGRA,
                                                          out_width, out_height, AV_PIX_FMT_BGRA,
-                                                         CPictureScalingAlgorithm::ToSwscale(scalingAlgorithm), NULL, NULL, NULL);
+                                                         CPictureScalingAlgorithm::ToSwscale(scalingAlgorithm), nullptr, nullptr, nullptr);
 
-  uint8_t *src[] = { in_pixels, 0, 0, 0 };
+  uint8_t *src[] = { in_pixels, nullptr, nullptr, nullptr };
   int     srcStride[] = { (int)in_pitch, 0, 0, 0 };
-  uint8_t *dst[] = { out_pixels , 0, 0, 0 };
+  uint8_t *dst[] = { out_pixels , nullptr, nullptr, nullptr };
   int     dstStride[] = { (int)out_pitch, 0, 0, 0 };
 
   if (context)

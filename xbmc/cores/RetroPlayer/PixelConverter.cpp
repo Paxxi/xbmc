@@ -55,7 +55,7 @@ bool CPixelConverter::Open(AVPixelFormat pixfmt, AVPixelFormat targetfmt, unsign
 
   m_swsContext = sws_getContext(width, height, pixfmt,
                                 width, height, targetfmt,
-                                SWS_FAST_BILINEAR, NULL, NULL, NULL);
+                                SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
   if (!m_swsContext)
   {
     CLog::Log(LOGERROR, "%s: Failed to create swscale context", __FUNCTION__);
@@ -96,9 +96,9 @@ bool CPixelConverter::Decode(const uint8_t* pData, unsigned int size)
 
   const int stride = size / m_height;
 
-  uint8_t* src[] =       { dataMutable,         0,                   0,                   0 };
+  uint8_t* src[] =       { dataMutable,         nullptr,                   nullptr,                   nullptr };
   int      srcStride[] = { stride,              0,                   0,                   0 };
-  uint8_t* dst[] =       { m_buf->data[0],      m_buf->data[1],      m_buf->data[2],      0 };
+  uint8_t* dst[] =       { m_buf->data[0],      m_buf->data[1],      m_buf->data[2],      nullptr };
   int      dstStride[] = { m_buf->iLineSize[0], m_buf->iLineSize[1], m_buf->iLineSize[2], 0 };
 
   sws_scale(m_swsContext, src, srcStride, 0, m_height, dst, dstStride);

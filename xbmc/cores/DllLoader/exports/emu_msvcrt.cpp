@@ -96,7 +96,7 @@ struct SDirData
   SDirData()
   {
     curr_index = -1;
-    last_entry = NULL;
+    last_entry = nullptr;
   }
 };
 
@@ -236,7 +236,7 @@ extern "C" void __stdcall cleanup_emu_environ()
   for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS; i++)
   {
     free(dll__environ[i]);
-    dll__environ[i] = NULL;
+    dll__environ[i] = nullptr;
   }
 }
 
@@ -361,17 +361,17 @@ extern "C"
     if (!start || !*start || !end || !*end)
     {
       //FIXME("bad table\n");
-      return NULL;
+      return nullptr;
     }
 
     len = (*end - *start);
 
     if (++len <= 0)
-      return NULL;
+      return nullptr;
 
     tmp = (PFV*) realloc (*start, len * sizeof(tmp) );
     if (!tmp)
-      return NULL;
+      return nullptr;
     *start = tmp;
     *end = tmp + len;
     tmp[len - 1] = input;
@@ -390,7 +390,7 @@ extern "C"
 
     // register to dll unload list
     // return func if successfully added to the dll unload list
-    return NULL;
+    return nullptr;
   }
 
   int dllputs(const char* szLine)
@@ -455,7 +455,7 @@ extern "C"
   FILE* dll_popen(const char *command, const char *mode)
   {
     not_implement("msvcrt.dll fake function _popen(...) called\n"); //warning
-    return NULL;
+    return nullptr;
   }
 
   void *dll_dlopen(const char *filename, int flag)
@@ -482,7 +482,7 @@ extern "C"
     if (o)
     {
       if(!o->used)
-        return NULL;
+        return nullptr;
 
       int nmode = convert_fmode(mode);
       if( (o->mode & nmode) != nmode)
@@ -497,7 +497,7 @@ extern "C"
     }
 
     not_implement("msvcrt.dll incomplete function _fdopen(...) called\n");
-    return NULL;
+    return nullptr;
   }
 
   int dll_open(const char* szFileName, int iMode)
@@ -543,7 +543,7 @@ extern "C"
     if (bResult)
     {
       EmuFileObject* object = g_emuFileWrapper.RegisterFileObject(pFile);
-      if (object == NULL)
+      if (object == nullptr)
       {
         pFile->Close();
         delete pFile;
@@ -572,13 +572,13 @@ extern "C"
     // error
     // close stream and return NULL
     dll_fclose(stream);
-    return NULL;
+    return nullptr;
   }
 
   int dll_read(int fd, void* buffer, unsigned int uiSize)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       errno = 0;
       const ssize_t ret = pFile->Read(buffer, uiSize);
@@ -609,7 +609,7 @@ extern "C"
   int dll_write(int fd, const void* buffer, unsigned int uiSize)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       errno = 0;
       const ssize_t ret = pFile->Write(buffer, uiSize);
@@ -641,7 +641,7 @@ extern "C"
   int dll_fstat64(int fd, struct __stat64 *buf)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
       return pFile->Stat(buf);
     else if (IS_STD_DESCRIPTOR(fd))
       return _fstat64(fd, buf);
@@ -652,7 +652,7 @@ extern "C"
   int dll_close(int fd)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       g_emuFileWrapper.UnRegisterFileObjectByDescriptor(fd);
 
@@ -673,7 +673,7 @@ extern "C"
   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       lPos = pFile->Seek(lPos, iWhence);
       return lPos;
@@ -999,7 +999,7 @@ extern "C"
     if (iDirSlot >= MAX_OPEN_DIRS)
     {
       CLog::Log(LOGDEBUG, "Dll: Max open dirs reached");
-      return NULL; // no free slots
+      return nullptr; // no free slots
     }
 
     bVecDirsInited = true;
@@ -1011,13 +1011,13 @@ extern "C"
       return (DIR *)&vecDirsOpen[iDirSlot];
     }
     else
-      return NULL;
+      return nullptr;
   }
 
   struct dirent *dll_readdir(DIR *dirp)
   {
     if (!dirp)
-      return NULL;
+      return nullptr;
 
     bool emulated(false);
     for (auto & i : vecDirsOpen)
@@ -1035,7 +1035,7 @@ extern "C"
     SDirData* dirData = (SDirData*)dirp;
     if (dirData->last_entry)
       free(dirData->last_entry);
-    struct dirent *entry = NULL;
+    struct dirent *entry = nullptr;
     entry = (dirent*) malloc(sizeof(*entry));
     if (dirData->curr_index < dirData->items.Size() + 2)
     { // simulate the '.' and '..' dir entries
@@ -1053,7 +1053,7 @@ extern "C"
       return entry;
     }
     free(entry);
-    return NULL;
+    return nullptr;
   }
 
   int dll_closedir(DIR *dirp)
@@ -1074,7 +1074,7 @@ extern "C"
     dirData->items.Clear();
     if (dirData->last_entry)
     {
-      dirData->last_entry = NULL;
+      dirData->last_entry = nullptr;
     }
     dirData->curr_index = -1;
     return 0;
@@ -1100,7 +1100,7 @@ extern "C"
     SDirData* dirData = (SDirData*)dirp;
     if (dirData->last_entry)
     {
-      dirData->last_entry = NULL;
+      dirData->last_entry = nullptr;
     }
     dirData->curr_index = 0;
   }
@@ -1108,7 +1108,7 @@ extern "C"
   char* dll_fgets(char* pszString, int num ,FILE * stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       if (pFile->GetPosition() < pFile->GetLength())
       {
@@ -1118,7 +1118,7 @@ extern "C"
           return pszString;
         }
       }
-      else return NULL; //eof
+      else return nullptr; //eof
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1127,13 +1127,13 @@ extern "C"
       return fgets(pszString, num, stream);
     }
     CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   int dll_feof(FILE * stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       if (pFile->GetPosition() < pFile->GetLength()) return 0;
       else return 1;
@@ -1217,7 +1217,7 @@ extern "C"
 
   FILE* dll_fopen(const char* filename, const char* mode)
   {
-    FILE* file = NULL;
+    FILE* file = nullptr;
 #if defined(TARGET_LINUX) && !defined(TARGET_ANDROID)
     if (strcmp(filename, _PATH_MOUNTED) == 0
     ||  strcmp(filename, _PATH_MNTTAB) == 0)
@@ -1237,11 +1237,11 @@ extern "C"
 
   int dll_fopen_s(FILE** pFile, const char * filename, const char * mode)
   {
-    if (pFile == NULL || filename == NULL || mode == NULL)
+    if (pFile == nullptr || filename == nullptr || mode == nullptr)
       return EINVAL;
 
     *pFile = dll_fopen(filename, mode);
-    if (*pFile == NULL)
+    if (*pFile == nullptr)
       return errno;
 
     return 0;
@@ -1395,7 +1395,7 @@ extern "C"
   off64_t dll_ftell64(FILE *stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
        return (off64_t)pFile->GetPosition();
     }
@@ -1416,7 +1416,7 @@ extern "C"
   long dll_tell(int fd)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
        return (long)pFile->GetPosition();
     }
@@ -1437,7 +1437,7 @@ extern "C"
   __int64 dll_telli64(int fd)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
        return (__int64)pFile->GetPosition();
     }
@@ -1508,7 +1508,7 @@ extern "C"
   int dll_fflush(FILE* stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       pFile->Flush();
       return 0;
@@ -1527,7 +1527,7 @@ extern "C"
   int dll_ferror(FILE* stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       // unimplemented
       return 0;
@@ -1563,7 +1563,7 @@ extern "C"
     else
     {
       CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-      if (pFile != NULL)
+      if (pFile != nullptr)
       {
         int len = strlen(tmp);
         // replace all '\n' occurences with '\r\n'...
@@ -1638,7 +1638,7 @@ extern "C"
   int dll_fgetpos64(FILE *stream, fpos64_t *pos)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
 #if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
       *pos = pFile->GetPosition();
@@ -1858,7 +1858,7 @@ extern "C"
   int dll_fstat(int fd, struct stat* buffer)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       struct __stat64 tStat;
       if (pFile->Stat(&tStat) == 0)
@@ -1880,7 +1880,7 @@ extern "C"
   int dll_fstati64(int fd, struct _stati64 *buffer)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       CLog::Log(LOGINFO, "Stating open file");
 
@@ -1985,11 +1985,11 @@ extern "C"
   {
     bool added = false;
 
-    if (envstring != NULL)
+    if (envstring != nullptr)
     {
       const char *value_start = strchr(envstring, '=');
 
-      if (value_start != NULL)
+      if (value_start != nullptr)
       {
         char var[64];
         int size = strlen(envstring) + 1;
@@ -2015,17 +2015,17 @@ extern "C"
         {
           CSingleLock lock(dll_cs_environ);
 
-          char** free_position = NULL;
-          for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS && free_position == NULL; i++)
+          char** free_position = nullptr;
+          for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS && free_position == nullptr; i++)
           {
-            if (dll__environ[i] != NULL)
+            if (dll__environ[i] != nullptr)
             {
               // we only support overwriting the old values
               if (strnicmp(dll__environ[i], var, strlen(var)) == 0)
               {
                 // free it first
                 free(dll__environ[i]);
-                dll__environ[i] = NULL;
+                dll__environ[i] = nullptr;
                 free_position = &dll__environ[i];
               }
             }
@@ -2035,7 +2035,7 @@ extern "C"
             }
           }
 
-          if (free_position != NULL)
+          if (free_position != nullptr)
           {
             // free position, copy value
             size = strlen(var) + strlen(value) + 2;
@@ -2061,14 +2061,14 @@ extern "C"
 
   char* dll_getenv(const char* szKey)
   {
-    char* value = NULL;
+    char* value = nullptr;
 
     {
       CSingleLock lock(dll_cs_environ);
 
       update_emu_environ();//apply any changes
 
-      for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS && value == NULL; i++)
+      for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS && value == nullptr; i++)
       {
         if (dll__environ[i])
         {
@@ -2081,12 +2081,12 @@ extern "C"
       }
     }
 
-    if (value != NULL)
+    if (value != nullptr)
     {
       return value;
     }
 
-    return NULL;
+    return nullptr;
   }
 
   int dll_ctype(int i)
@@ -2119,7 +2119,7 @@ extern "C"
   int dll__commit(int fd)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-    if (pFile != NULL)
+    if (pFile != nullptr)
     {
       pFile->Flush();
       return 0;
@@ -2199,14 +2199,14 @@ extern "C"
 
   struct mntent *dll_getmntent(FILE *fp)
   {
-    if (fp == NULL)
-      return NULL;
+    if (fp == nullptr)
+      return nullptr;
 
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(fp);
     if (pFile)
     {
       CLog::Log(LOGERROR, "%s - getmntent is not implemented for our virtual filesystem", __FUNCTION__);
-      return NULL;
+      return nullptr;
     }
 #if defined(TARGET_LINUX)
     return getmntent(fp);
@@ -2219,7 +2219,7 @@ extern "C"
 #if _MSC_VER < 1900
   int dll_filbuf(FILE *fp)
   {
-    if (fp == NULL)
+    if (fp == nullptr)
       return EOF;
 
     if(IS_STD_STREAM(fp))
@@ -2246,7 +2246,7 @@ extern "C"
 
   int dll_flsbuf(int data, FILE *fp)
   {
-    if (fp == NULL)
+    if (fp == nullptr)
       return EOF;
 
     if(IS_STDERR_STREAM(fp) || IS_STDOUT_STREAM(fp))

@@ -55,7 +55,7 @@ namespace UPNP
 +---------------------------------------------------------------------*/
 EClientQuirks GetClientQuirks(const PLT_HttpRequestContext* context)
 {
-  if(context == NULL)
+  if(context == nullptr)
       return ECLIENTQUIRKS_NONE;
 
   unsigned int quirks = 0;
@@ -84,7 +84,7 @@ EClientQuirks GetClientQuirks(const PLT_HttpRequestContext* context)
 +---------------------------------------------------------------------*/
 EMediaControllerQuirks GetMediaControllerQuirks(const PLT_DeviceData *device)
 {
-    if (device == NULL)
+    if (device == nullptr)
         return EMEDIACONTROLLERQUIRKS_NONE;
 
     unsigned int quirks = 0;
@@ -365,7 +365,7 @@ BuildObject(CFileItem&                    item,
             UPnPService                   upnp_service /* = UPnPServiceNone */)
 {
     PLT_MediaItemResource resource;
-    PLT_MediaObject*      object = NULL;
+    PLT_MediaObject*      object = nullptr;
     std::string thumb;
 
     CLog::Log(LOGDEBUG, "UPnP: Building didl for object '%s'", item.GetPath().c_str());
@@ -715,7 +715,7 @@ BuildObject(CFileItem&                    item,
 
 failure:
     delete object;
-    return NULL;
+    return nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -915,7 +915,7 @@ CFileItemPtr BuildObject(PLT_MediaObject* entry,
        , image = false
        , video = false;
     // set a general content type
-    const char* content = NULL;
+    const char* content = nullptr;
     if (ObjectClass.StartsWith("object.item.videoitem")) {
       pItem->SetMimeType("video/octet-stream");
       content = "video";
@@ -933,7 +933,7 @@ CFileItemPtr BuildObject(PLT_MediaObject* entry,
     }
 
     // attempt to find a valid resource (may be multiple)
-    PLT_MediaItemResource resource, *res = NULL;
+    PLT_MediaItemResource resource, *res = nullptr;
     if(NPT_SUCCEEDED(NPT_ContainerFind(entry->m_Resources,
                                        CResourceFinder("http-get", content), resource))) {
 
@@ -1105,7 +1105,7 @@ bool GetResource(const PLT_MediaObject* entry, CFileItem& item)
 CFileItemPtr GetFileItem(const NPT_String& uri, const NPT_String& meta)
 {
     PLT_MediaObjectListReference list;
-    PLT_MediaObject*             object = NULL;
+    PLT_MediaObject*             object = nullptr;
     CFileItemPtr                 item;
 
     if (NPT_SUCCEEDED(PLT_Didl::FromDidl(meta, list))) {

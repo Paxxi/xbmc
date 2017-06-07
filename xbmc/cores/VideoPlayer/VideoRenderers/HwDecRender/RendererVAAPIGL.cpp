@@ -83,7 +83,7 @@ void CRendererVAAPI::ReleaseBuffer(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
     ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
-  buf.hwDec = NULL;
+  buf.hwDec = nullptr;
 }
 
 CRenderInfo CRendererVAAPI::GetRenderInfo()

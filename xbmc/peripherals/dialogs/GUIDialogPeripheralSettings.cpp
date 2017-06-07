@@ -36,7 +36,7 @@ using namespace PERIPHERALS;
 
 CGUIDialogPeripheralSettings::CGUIDialogPeripheralSettings()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_PERIPHERAL_SETTINGS, "DialogSettings.xml"),
-    m_item(NULL),
+    m_item(nullptr),
     m_initialising(false)
 { }
 
@@ -62,10 +62,10 @@ bool CGUIDialogPeripheralSettings::OnMessage(CGUIMessage &message)
 
 void CGUIDialogPeripheralSettings::SetFileItem(const CFileItem *item)
 {
-  if (item == NULL)
+  if (item == nullptr)
     return;
 
-  if (m_item != NULL)
+  if (m_item != nullptr)
     delete m_item;
 
   m_item = new CFileItem(*item);
@@ -89,7 +89,7 @@ void CGUIDialogPeripheralSettings::OnSettingChanged(std::shared_ptr<const CSetti
 
 void CGUIDialogPeripheralSettings::Save()
 {
-  if (m_item == NULL || m_initialising)
+  if (m_item == nullptr || m_initialising)
     return;
 
   PeripheralPtr peripheral = CServiceBroker::GetPeripherals().GetByPath(m_item->GetPath());
@@ -101,7 +101,7 @@ void CGUIDialogPeripheralSettings::Save()
 
 void CGUIDialogPeripheralSettings::OnResetSettings()
 {
-  if (m_item == NULL)
+  if (m_item == nullptr)
     return;
 
   PeripheralPtr peripheral = CServiceBroker::GetPeripherals().GetByPath(m_item->GetPath());
@@ -130,7 +130,7 @@ void CGUIDialogPeripheralSettings::SetupView()
 
 void CGUIDialogPeripheralSettings::InitializeSettings()
 {
-  if (m_item == NULL)
+  if (m_item == nullptr)
   {
     m_initialising = false;
     return;

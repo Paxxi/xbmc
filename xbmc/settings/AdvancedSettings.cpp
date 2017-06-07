@@ -840,7 +840,7 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
     // as altering it will do nothing - we don't write to advancedsettings.xml
     XMLUtils::GetInt(pRootElement, "loglevel", m_logLevelHint, LOG_LEVEL_NONE, LOG_LEVEL_MAX);
     const char* hide = pElement->Attribute("hide");
-    if (hide == NULL || strnicmp("false", hide, 4) != 0)
+    if (hide == nullptr || strnicmp("false", hide, 4) != 0)
     {
       SettingPtr setting = CServiceBroker::GetSettings().GetSetting(CSettings::SETTING_DEBUG_SHOWLOGINFO);
       if (setting != NULL)

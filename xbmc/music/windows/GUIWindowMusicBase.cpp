@@ -90,7 +90,7 @@ using namespace MUSIC_INFO;
 CGUIWindowMusicBase::CGUIWindowMusicBase(int id, const std::string &xmlFile)
     : CGUIMediaWindow(id, xmlFile.c_str())
 {
-  m_dlgProgress = NULL;
+  m_dlgProgress = nullptr;
   m_thumbLoader.SetObserver(this);
 }
 

@@ -93,7 +93,7 @@ private:
 
 CFileCache::CFileCache(const unsigned int flags)
   : CThread("FileCache")
-  , m_pCache(NULL)
+  , m_pCache(nullptr)
   , m_bDeleteCache(true)
   , m_seekPossible(0)
   , m_nSeekResult(0)
@@ -173,7 +173,7 @@ bool CFileCache::Open(const CURL& url)
   m_source.IoControl(IOCTRL_SET_RETRY, &retry); // We already handle retrying ourselves
 
   // check if source can seek
-  m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
+  m_seekPossible = m_source.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
   m_chunkSize = CFile::GetChunkSize(m_source.GetChunkSize(), READ_CACHE_CHUNK_SIZE);
   m_fileSize = m_source.GetLength();
 

@@ -159,7 +159,7 @@ void CRenderer::Render(int idx)
   std::vector<SElement>& list = m_buffers[idx];
   for(std::vector<SElement>::iterator it = list.begin(); it != list.end(); ++it)
   {
-    COverlay* o = NULL;
+    COverlay* o = nullptr;
 
     if(it->overlay_dvd)
       o = Convert(it->overlay_dvd, it->pts);
@@ -368,7 +368,7 @@ COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
     }
   }
 
-  COverlay *overlay = NULL;
+  COverlay *overlay = nullptr;
 #if defined(HAS_GL) || defined(HAS_GLES)
   overlay = new COverlayGlyphGL(images, targetWidth, targetHeight);
 #elif defined(HAS_DX)
@@ -391,7 +391,7 @@ COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
 
 COverlay* CRenderer::Convert(CDVDOverlay* o, double pts)
 {
-  COverlay* r = NULL;
+  COverlay* r = nullptr;
 
   if(o->IsOverlayType(DVDOVERLAY_TYPE_SSA))
     r = Convert((CDVDOverlaySSA*)o, pts);

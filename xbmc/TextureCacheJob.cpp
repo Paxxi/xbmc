@@ -205,11 +205,11 @@ CBaseTexture *CTextureCacheJob::LoadImage(const std::string &image, unsigned int
   file.FillInMimeType();
   if (!(file.IsPicture() && !(file.IsZIP() || file.IsRAR() || file.IsCBR() || file.IsCBZ() ))
       && !StringUtils::StartsWithNoCase(file.GetMimeType(), "image/") && !StringUtils::EqualsNoCase(file.GetMimeType(), "application/octet-stream")) // ignore non-pictures
-    return NULL;
+    return nullptr;
 
   CBaseTexture *texture = CBaseTexture::LoadFromFile(image, width, height, requirePixels, file.GetMimeType());
   if (!texture)
-    return NULL;
+    return nullptr;
 
   // EXIF bits are interpreted as: <flipXY><flipY*flipX><flipX>
   // where to undo the operation we apply them in reverse order <flipX>*<flipY*flipX>*<flipXY>

@@ -423,7 +423,7 @@ bool CPeripheralAddon::ProcessEvents()
   PERIPHERAL_ERROR retVal;
 
   unsigned int      eventCount = 0;
-  PERIPHERAL_EVENT* pEvents = NULL;
+  PERIPHERAL_EVENT* pEvents = nullptr;
 
   LogError(retVal = m_struct.toAddon.GetEvents(&eventCount, &pEvents), "GetEvents()");
   if (retVal == PERIPHERAL_NO_ERROR)
@@ -553,7 +553,7 @@ bool CPeripheralAddon::GetFeatures(const CPeripheral* device,
   joystickInfo.ToStruct(joystickStruct);
 
   unsigned int      featureCount = 0;
-  JOYSTICK_FEATURE* pFeatures = NULL;
+  JOYSTICK_FEATURE* pFeatures = nullptr;
 
   LogError(retVal = m_struct.toAddon.GetFeatures(&joystickStruct, strControllerId.c_str(),
                                                  &featureCount, &pFeatures), "GetFeatures()");

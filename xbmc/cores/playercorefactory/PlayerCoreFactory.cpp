@@ -304,7 +304,7 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
   }
 
   TiXmlElement *pConfig = playerCoreFactoryXML.RootElement();
-  if (pConfig == NULL)
+  if (pConfig == nullptr)
   {
     CLog::Log(LOGERROR, "Error loading %s, Bad structure", file.c_str());
     return false;

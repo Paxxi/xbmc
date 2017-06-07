@@ -85,7 +85,7 @@ bool CDAVFile::Execute(const CURL& url)
 
     TiXmlNode *pChild;
     // Iterate over all responses
-    for (pChild = davResponse.RootElement()->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+    for (pChild = davResponse.RootElement()->FirstChild(); pChild != nullptr; pChild = pChild->NextSibling())
     {
       if (CDAVCommon::ValueWithoutNamespace(pChild, "response"))
       {

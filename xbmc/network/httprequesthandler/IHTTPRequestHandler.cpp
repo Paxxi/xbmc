@@ -126,7 +126,7 @@ bool IHTTPRequestHandler::AddPostData(const char *data, unsigned int size)
 
 bool IHTTPRequestHandler::GetRequestedRanges(uint64_t totalLength)
 {
-  if (!m_ranged || m_request.webserver == NULL || m_request.connection == NULL)
+  if (!m_ranged || m_request.webserver == nullptr || m_request.connection == nullptr)
     return false;
 
   m_request.ranges.Clear();
@@ -138,7 +138,7 @@ bool IHTTPRequestHandler::GetRequestedRanges(uint64_t totalLength)
 
 bool IHTTPRequestHandler::GetHostnameAndPort(std::string& hostname, uint16_t &port)
 {
-  if (m_request.webserver == NULL || m_request.connection == NULL)
+  if (m_request.webserver == nullptr || m_request.connection == nullptr)
     return false;
 
   std::string hostnameAndPort = HTTPRequestHandlerUtils::GetRequestHeaderValue(m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_HOST);

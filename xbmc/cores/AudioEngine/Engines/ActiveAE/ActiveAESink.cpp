@@ -924,7 +924,7 @@ unsigned int CActiveAESink::OutputSamples(CSampleBuffer* samples)
   int retry = 0;
   unsigned int written = 0;
   std::unique_ptr<uint8_t[]> mergebuffer;
-  uint8_t* p_mergebuffer = NULL;
+  uint8_t* p_mergebuffer = nullptr;
   AEDelayStatus status;
 
   if (m_requestedFormat.m_dataFormat == AE_FMT_RAW)

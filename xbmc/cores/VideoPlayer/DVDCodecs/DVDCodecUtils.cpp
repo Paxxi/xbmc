@@ -48,7 +48,7 @@ VideoPicture* CDVDCodecUtils::AllocatePicture(int iWidth, int iHeight)
       pPicture->data[0] = data;
       pPicture->data[1] = pPicture->data[0] + (iWidth * iHeight);
       pPicture->data[2] = pPicture->data[1] + size;
-      pPicture->data[3] = NULL;
+      pPicture->data[3] = nullptr;
       pPicture->iLineSize[0] = iWidth;
       pPicture->iLineSize[1] = w;
       pPicture->iLineSize[2] = w;
@@ -58,7 +58,7 @@ VideoPicture* CDVDCodecUtils::AllocatePicture(int iWidth, int iHeight)
     {
       CLog::Log(LOGFATAL, "CDVDCodecUtils::AllocatePicture, unable to allocate new video picture, out of memory.");
       delete pPicture;
-      pPicture = NULL;
+      pPicture = nullptr;
     }
   }
   return pPicture;
@@ -180,8 +180,8 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
     {
       pPicture->data[0] = data;
       pPicture->data[1] = pPicture->data[0] + (pPicture->iWidth * pPicture->iHeight);
-      pPicture->data[2] = NULL;
-      pPicture->data[3] = NULL;
+      pPicture->data[2] = nullptr;
+      pPicture->data[3] = nullptr;
       pPicture->iLineSize[0] = pPicture->iWidth;
       pPicture->iLineSize[1] = pPicture->iWidth;
       pPicture->iLineSize[2] = 0;
@@ -214,7 +214,7 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
     {
       CLog::Log(LOGFATAL, "CDVDCodecUtils::AllocateNV12Picture, unable to allocate new video picture, out of memory.");
       delete pPicture;
-      pPicture = NULL;
+      pPicture = nullptr;
     }
   }
   return pPicture;
@@ -234,9 +234,9 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
     if (data)
     {
       pPicture->data[0] = data;
-      pPicture->data[1] = NULL;
-      pPicture->data[2] = NULL;
-      pPicture->data[3] = NULL;
+      pPicture->data[1] = nullptr;
+      pPicture->data[2] = nullptr;
+      pPicture->data[3] = nullptr;
       pPicture->iLineSize[0] = pPicture->iWidth * 2;
       pPicture->iLineSize[1] = 0;
       pPicture->iLineSize[2] = 0;
@@ -247,9 +247,9 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
       //the library should not be loaded on every function call
       {
         // Perform the scaling.
-        uint8_t* src[] =       { pSrc->data[0],          pSrc->data[1],      pSrc->data[2],      NULL };
+        uint8_t* src[] =       { pSrc->data[0],          pSrc->data[1],      pSrc->data[2],      nullptr };
         int      srcStride[] = { pSrc->iLineSize[0],     pSrc->iLineSize[1], pSrc->iLineSize[2], 0    };
-        uint8_t* dst[] =       { pPicture->data[0],      NULL,               NULL,               NULL };
+        uint8_t* dst[] =       { pPicture->data[0],      nullptr,               nullptr,               nullptr };
         int      dstStride[] = { pPicture->iLineSize[0], 0,                  0,                  0    };
 
         int dstformat;
@@ -260,7 +260,7 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
 
         struct SwsContext *ctx = sws_getContext(pSrc->iWidth, pSrc->iHeight, AV_PIX_FMT_YUV420P,
                                                            pPicture->iWidth, pPicture->iHeight, (AVPixelFormat)dstformat,
-                                                           SWS_BILINEAR, NULL, NULL, NULL);
+                                                           SWS_BILINEAR, nullptr, nullptr, nullptr);
         sws_scale(ctx, src, srcStride, 0, pSrc->iHeight, dst, dstStride);
         sws_freeContext(ctx);
       }
@@ -269,7 +269,7 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
     {
       CLog::Log(LOGFATAL, "CDVDCodecUtils::ConvertToYUY2Picture, unable to allocate new video picture, out of memory.");
       delete pPicture;
-      pPicture = NULL;
+      pPicture = nullptr;
     }
   }
   return pPicture;

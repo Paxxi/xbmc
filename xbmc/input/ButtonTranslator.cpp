@@ -1111,7 +1111,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
 
   TiXmlNode* pDevice;
 
-  const char* types[] = {"gamepad", "remote", "universalremote", "keyboard", "mouse", "appcommand", "joystick", NULL};
+  const char* types[] = {"gamepad", "remote", "universalremote", "keyboard", "mouse", "appcommand", "joystick", nullptr};
   for (int i = 0; types[i]; ++i)
   {
     std::string type(types[i]);
@@ -1181,7 +1181,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
     }
   }
 
-  if ((pDevice = pWindow->FirstChild("touch")) != NULL)
+  if ((pDevice = pWindow->FirstChild("touch")) != nullptr)
   {
     // map touch actions
     while (pDevice)
@@ -1191,7 +1191,7 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
     }
   }
   
-  if ((pDevice = pWindow->FirstChild("customcontroller")) != NULL)
+  if ((pDevice = pWindow->FirstChild("customcontroller")) != nullptr)
   {
     // map custom controller actions
     while (pDevice)
@@ -1555,7 +1555,7 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
     return ACTION_NONE;
 
   const char *szAction = pButton->FirstChild()->Value();
-  if (szAction == NULL)
+  if (szAction == nullptr)
     return ACTION_NONE;
 
   std::string strTouchCommand = szButton;
@@ -1582,9 +1582,9 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
   }
 
   attrVal = pButton->Attribute("pointers");
-  if (attrVal != NULL)
+  if (attrVal != nullptr)
   {
-    int pointers = (int)strtol(attrVal, NULL, 0);
+    int pointers = (int)strtol(attrVal, nullptr, 0);
     if (pointers >= 1)
       actionId += pointers - 1;
   }
@@ -1598,7 +1598,7 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
 
 void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 {
-  if (pTouch == NULL)
+  if (pTouch == nullptr)
     return;
 
   buttonMap map;
@@ -1614,11 +1614,11 @@ void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 
   uint32_t actionId = 0;
   TiXmlElement *pTouchElem = pTouch->ToElement();
-  if (pTouchElem == NULL)
+  if (pTouchElem == nullptr)
     return;
 
   TiXmlElement *pButton = pTouchElem->FirstChildElement();
-  while (pButton != NULL)
+  while (pButton != nullptr)
   {
     CButtonAction action;
     actionId = TranslateTouchCommand(pButton, action);

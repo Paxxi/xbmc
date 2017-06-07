@@ -702,7 +702,7 @@ bool CDateTime::SetFromDateString(const std::string &date)
   if (SetFromDBDate(date))
     return true;
 
-  const char* months[] = {"january","february","march","april","may","june","july","august","september","october","november","december",NULL};
+  const char* months[] = {"january","february","march","april","may","june","july","august","september","october","november","december",nullptr};
   int j=0;
   size_t iDayPos = date.find("day");
   size_t iPos = date.find(' ');

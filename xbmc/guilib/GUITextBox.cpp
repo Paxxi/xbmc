@@ -45,7 +45,7 @@ CGUITextBox::CGUITextBox(int parentID, int controlID, float posX, float posY, fl
   m_autoScrollTime = 0;
   m_autoScrollDelay = 3000;
   m_autoScrollDelayTime = 0;
-  m_autoScrollRepeatAnim = NULL;
+  m_autoScrollRepeatAnim = nullptr;
   m_minHeight = 0;
   m_renderHeight = height;
 }
@@ -60,7 +60,7 @@ CGUITextBox::CGUITextBox(const CGUITextBox &from)
   m_autoScrollDelay = from.m_autoScrollDelay;
   m_minHeight = from.m_minHeight;
   m_renderHeight = from.m_renderHeight;
-  m_autoScrollRepeatAnim = NULL;
+  m_autoScrollRepeatAnim = nullptr;
   if (from.m_autoScrollRepeatAnim)
     m_autoScrollRepeatAnim = new CAnimation(*from.m_autoScrollRepeatAnim);
   m_label = from.m_label;

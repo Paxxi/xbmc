@@ -310,7 +310,7 @@ bool CPlayListASX::LoadData(std::istream& stream)
 
     // lowercase every element
     TiXmlNode *pNode = pRootElement;
-    TiXmlNode *pChild = NULL;
+    TiXmlNode *pChild = nullptr;
     std::string value;
     value = pNode->Value();
     StringUtils::ToLower(value);

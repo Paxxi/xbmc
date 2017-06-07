@@ -73,7 +73,7 @@ bool CVisualisation::Create(int x, int y, int w, int h, void *device)
 #ifdef HAS_DX
   m_struct.props.device = g_Windowing.Get3D11Context();
 #else
-  m_struct.props.device = NULL;
+  m_struct.props.device = nullptr;
 #endif
   m_struct.props.x = x;
   m_struct.props.y = y;
@@ -84,7 +84,7 @@ bool CVisualisation::Create(int x, int y, int w, int h, void *device)
   m_struct.props.name = strdup(Name().c_str());
   m_struct.props.presets = strdup(CSpecialProtocol::TranslatePath(Path()).c_str());
   m_struct.props.profile = strdup(CSpecialProtocol::TranslatePath(Profile()).c_str());
-  m_struct.props.submodule = NULL;
+  m_struct.props.submodule = nullptr;
 
   m_struct.toKodi.kodiInstance = this;
 
@@ -100,7 +100,7 @@ bool CVisualisation::Create(int x, int y, int w, int h, void *device)
     if (GetSubModules())
       m_struct.props.submodule = strdup(CSpecialProtocol::TranslatePath(m_submodules.front()).c_str());
     else
-      m_struct.props.submodule = NULL;
+      m_struct.props.submodule = nullptr;
 
     CreateBuffers();
 
@@ -320,7 +320,7 @@ bool CVisualisation::GetPresetList(std::vector<std::string> &vecpresets)
 bool CVisualisation::GetPresets()
 {
   m_presets.clear();
-  char **presets = NULL;
+  char **presets = nullptr;
   unsigned int entries = m_struct.toAddon.GetPresets(&presets);
 
   if (presets && entries > 0)
@@ -345,7 +345,7 @@ bool CVisualisation::GetSubModuleList(std::vector<std::string> &vecmodules)
 bool CVisualisation::GetSubModules()
 {
   m_submodules.clear();
-  char **modules = NULL;
+  char **modules = nullptr;
   unsigned int entries = m_struct.toAddon.GetSubModules(&modules);
 
   if (modules && entries > 0)

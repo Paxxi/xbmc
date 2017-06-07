@@ -132,7 +132,7 @@ namespace UPNP
 /*----------------------------------------------------------------------
 |   static
 +---------------------------------------------------------------------*/
-CUPnP* CUPnP::upnp = NULL;
+CUPnP* CUPnP::upnp = nullptr;
 static NPT_List<void*> g_UserData;
 static NPT_Mutex       g_UserDataLock;
 
@@ -418,9 +418,9 @@ private:
 |   CUPnP::CUPnP
 +---------------------------------------------------------------------*/
 CUPnP::CUPnP() :
-    m_MediaBrowser(NULL),
-    m_MediaController(NULL),
-    m_LogHandler(NULL),
+    m_MediaBrowser(nullptr),
+    m_MediaController(nullptr),
+    m_LogHandler(nullptr),
     m_ServerHolder(new CDeviceHostReferenceHolder()),
     m_RendererHolder(new CRendererReferenceHolder()),
     m_CtrlPointHolder(new CCtrlPointReferenceHolder())
@@ -485,7 +485,7 @@ CUPnP::ReleaseInstance(bool bWait)
 {
     if (upnp) {
         CUPnP* _upnp = upnp;
-        upnp = NULL;
+        upnp = nullptr;
 
         if (bWait) {
             delete _upnp;
@@ -505,7 +505,7 @@ CUPnPServer* CUPnP::GetServer()
 {
   if(upnp)
     return (CUPnPServer*)upnp->m_ServerHolder->m_Device.AsPointer();
-  return NULL;
+  return nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -571,7 +571,7 @@ CUPnP::DestroyControlPoint()
 void
 CUPnP::StartClient()
 {
-    if (m_MediaBrowser != NULL)
+    if (m_MediaBrowser != nullptr)
         return;
 
     CreateControlPoint();
@@ -586,11 +586,11 @@ CUPnP::StartClient()
 void
 CUPnP::StopClient()
 {
-    if (m_MediaBrowser == NULL)
+    if (m_MediaBrowser == nullptr)
         return;
 
     delete m_MediaBrowser;
-    m_MediaBrowser = NULL;
+    m_MediaBrowser = nullptr;
 
     if (!IsControllerStarted())
         DestroyControlPoint();
@@ -602,7 +602,7 @@ CUPnP::StopClient()
 void
 CUPnP::StartController()
 {
-    if (m_MediaController != NULL)
+    if (m_MediaController != nullptr)
         return;
 
     CreateControlPoint();
@@ -616,11 +616,11 @@ CUPnP::StartController()
 void
 CUPnP::StopController()
 {
-  if (m_MediaController == NULL)
+  if (m_MediaController == nullptr)
       return;
 
   delete m_MediaController;
-  m_MediaController = NULL;
+  m_MediaController = nullptr;
 
   if (!IsClientStarted())
       DestroyControlPoint();

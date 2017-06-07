@@ -33,14 +33,14 @@ public:
   inline ~Thingy() { destructorCalled = true; }
 };
 
-Thingy* staticThingy = NULL;
+Thingy* staticThingy = nullptrptr;
 CEvent gate;
 ThreadLocal<Thingy> staticThreadLocal;
 
 void cleanup()
 {
   if (destructorCalled)
-    staticThingy = NULL;
+    staticThingy = nullptrptr;
   destructorCalled = false;
 }
 
@@ -87,7 +87,7 @@ TEST(TestThreadLocal, Simple)
 
   gate.Wait();
   EXPECT_TRUE(runnable.waiting);
-  EXPECT_TRUE(staticThingy != NULL);
+  EXPECT_TRUE(staticThingy != nullptrptr);
   EXPECT_TRUE(staticThreadLocal.get() == NULL);
   waiter.Set();
   gate.Wait();
@@ -105,7 +105,7 @@ TEST(TestThreadLocal, Stack)
 
   gate.Wait();
   EXPECT_TRUE(runnable.waiting);
-  EXPECT_TRUE(staticThingy != NULL);
+  EXPECT_TRUE(staticThingy != nullptrptr);
   EXPECT_TRUE(runnable.threadLocal.get() == NULL);
   waiter.Set();
   gate.Wait();

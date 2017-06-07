@@ -69,7 +69,7 @@ auto_buffer& auto_buffer::resize(size_t newSize)
 auto_buffer& auto_buffer::clear()
 {
   free(p);
-  p = 0;
+  p = nullptr;
   s = 0;
   return *this;
 }
@@ -88,7 +88,7 @@ auto_buffer& auto_buffer::attach(void* pointer, size_t size)
 void* auto_buffer::detach()
 {
   void* returnPtr = p;
-  p = 0;
+  p = nullptr;
   s = 0;
   return returnPtr;
 }

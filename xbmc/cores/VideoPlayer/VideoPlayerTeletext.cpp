@@ -418,7 +418,7 @@ void CDVDTeletextData::Process()
               /* pointer to current info struct */
               if (packet_number <= 25)
               {
-                unsigned char *p = NULL;
+                unsigned char *p = nullptr;
                 if (packet_number < 24)
                 {
                   p = pagedata[magazine] + 40*(packet_number-1);

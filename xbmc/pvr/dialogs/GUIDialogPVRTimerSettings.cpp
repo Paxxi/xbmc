@@ -1109,7 +1109,7 @@ bool CGUIDialogPVRTimerSettings::TypeReadOnlyCondition(const std::string &condit
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::TypeReadOnlyCondition - No dialog");
     return false;
@@ -1172,7 +1172,7 @@ bool CGUIDialogPVRTimerSettings::TypeSupportsCondition(const std::string &condit
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::TypeSupportsCondition - No dialog");
     return false;
@@ -1251,7 +1251,7 @@ bool CGUIDialogPVRTimerSettings::StartAnytimeSetCondition(const std::string &con
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::AnytimeSetCondition - No dialog");
     return false;
@@ -1294,7 +1294,7 @@ bool CGUIDialogPVRTimerSettings::EndAnytimeSetCondition(const std::string &condi
     return false;
 
   CGUIDialogPVRTimerSettings *pThis = static_cast<CGUIDialogPVRTimerSettings*>(data);
-  if (pThis == NULL)
+  if (pThis == nullptr)
   {
     CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::AnytimeSetCondition - No dialog");
     return false;

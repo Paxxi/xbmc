@@ -66,18 +66,18 @@ bool CSettingPath::Deserialize(const TiXmlNode *node, bool update /* = false */)
   }
     
   const TiXmlNode *constraints = node->FirstChild(XML_ELM_CONSTRAINTS);
-  if (constraints != NULL)
+  if (constraints != nullptr)
   {
     // get writable
     XMLUtils::GetBoolean(constraints, "writable", m_writable);
 
     // get sources
     const TiXmlNode *sources = constraints->FirstChild("sources");
-    if (sources != NULL)
+    if (sources != nullptr)
     {
       m_sources.clear();
       const TiXmlNode *source = sources->FirstChild("source");
-      while (source != NULL)
+      while (source != nullptr)
       {
         std::string strSource = source->FirstChild()->ValueStr();
         if (!strSource.empty())

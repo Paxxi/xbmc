@@ -81,7 +81,7 @@ bool CGUIFontTTFGL::FirstBegin()
 
     // Set the texture image -- THIS WORKS, so the pixels must be wrong.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, m_texture->GetWidth(), m_texture->GetHeight(), 0,
-        GL_ALPHA, GL_UNSIGNED_BYTE, 0);
+        GL_ALPHA, GL_UNSIGNED_BYTE, nullptr);
 
     VerifyGLState();
     m_textureStatus = TEXTURE_UPDATED;
@@ -306,11 +306,11 @@ CBaseTexture* CGUIFontTTFGL::ReallocTexture(unsigned int& newHeight)
 
   CBaseTexture* newTexture = new CTexture(m_textureWidth, newHeight, XB_FMT_A8);
 
-  if (!newTexture || newTexture->GetPixels() == NULL)
+  if (!newTexture || newTexture->GetPixels() == nullptr)
   {
     CLog::Log(LOGERROR, "GUIFontTTFGL::CacheCharacter: Error creating new cache texture for size %f", m_height);
     delete newTexture;
-    return NULL;
+    return nullptr;
   }
   m_textureHeight = newTexture->GetHeight();
   m_textureScaleY = 1.0f / m_textureHeight;

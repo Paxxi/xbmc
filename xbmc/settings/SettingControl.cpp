@@ -69,16 +69,16 @@ bool CSettingControlFormattedRange::Deserialize(const TiXmlNode *node, bool upda
 
     // get the minimum label from <setting><constraints><minimum label="X" />
     const TiXmlNode *settingNode = node->Parent();
-    if (settingNode != NULL)
+    if (settingNode != nullptr)
     {
       const TiXmlNode *constraintsNode = settingNode->FirstChild(SETTING_XML_ELM_CONSTRAINTS);
-      if (constraintsNode != NULL)
+      if (constraintsNode != nullptr)
       {
         const TiXmlNode *minimumNode = constraintsNode->FirstChild(SETTING_XML_ELM_MINIMUM);
-        if (minimumNode != NULL)
+        if (minimumNode != nullptr)
         {
           const TiXmlElement *minimumElem = minimumNode->ToElement();
-          if (minimumElem != NULL)
+          if (minimumElem != nullptr)
           {
             if (minimumElem->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &m_minimumLabel) != TIXML_SUCCESS)
               m_minimumLabel = -1;
@@ -171,10 +171,10 @@ bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = 
         CLog::Log(LOGWARNING, "CSettingControlButton: invalid <show>");
 
       const TiXmlElement *show = node->FirstChildElement("show");
-      if (show != NULL)
+      if (show != nullptr)
       {
-        const char *strShowDetails = NULL;
-        if ((strShowDetails = show->Attribute(SETTING_XML_ATTR_SHOW_DETAILS)) != NULL)
+        const char *strShowDetails = nullptr;
+        if ((strShowDetails = show->Attribute(SETTING_XML_ATTR_SHOW_DETAILS)) != nullptr)
         {
           if (StringUtils::EqualsNoCase(strShowDetails, "false") || StringUtils::EqualsNoCase(strShowDetails, "true"))
             m_showAddonDetails = StringUtils::EqualsNoCase(strShowDetails, "true");
@@ -184,8 +184,8 @@ bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = 
 
         if (!m_showInstallableAddons)
         {
-          const char *strShowMore = NULL;
-          if ((strShowMore = show->Attribute(SETTING_XML_ATTR_SHOW_MORE)) != NULL)
+          const char *strShowMore = nullptr;
+          if ((strShowMore = show->Attribute(SETTING_XML_ATTR_SHOW_MORE)) != nullptr)
           {
             if (StringUtils::EqualsNoCase(strShowMore, "false") || StringUtils::EqualsNoCase(strShowMore, "true"))
               m_showMoreAddons = StringUtils::EqualsNoCase(strShowMore, "true");
@@ -284,17 +284,17 @@ bool CSettingControlRange::Deserialize(const TiXmlNode *node, bool update /* = f
     return false;
 
   const TiXmlElement *formatLabel = node->FirstChildElement(SETTING_XML_ELM_CONTROL_FORMATLABEL);
-  if (formatLabel != NULL)
+  if (formatLabel != nullptr)
   {
     XMLUtils::GetInt(node, SETTING_XML_ELM_CONTROL_FORMATLABEL, m_formatLabel);
     if (m_formatLabel < 0)
       return false;
 
     const char *formatValue = formatLabel->Attribute(SETTING_XML_ELM_CONTROL_FORMATVALUE);
-    if (formatValue != NULL)
+    if (formatValue != nullptr)
     {
       if (StringUtils::IsInteger(formatValue))
-        m_valueFormatLabel = (int)strtol(formatValue, NULL, 0);
+        m_valueFormatLabel = (int)strtol(formatValue, nullptr, 0);
       else
       {
         m_valueFormat = formatValue;

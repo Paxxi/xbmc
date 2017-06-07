@@ -101,7 +101,7 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
 #else
   time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-  if (time == NULL)
+  if (time == nullptr)
     return;
 
   m_lastModified = *time;
@@ -185,7 +185,7 @@ int CHTTPPythonHandler::HandleRequest()
     }
 
     HTTPPythonRequest* pythonFinalizedRequest = pythonInvoker->GetRequest();
-    if (pythonFinalizedRequest == NULL)
+    if (pythonFinalizedRequest == nullptr)
     {
       m_response.type = HTTPError;
       m_response.status = MHD_HTTP_INTERNAL_SERVER_ERROR;

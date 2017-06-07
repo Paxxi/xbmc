@@ -51,7 +51,7 @@ using namespace KODI::MESSAGING;
 CWinSystemX11::CWinSystemX11() : CWinSystemBase()
 {
   m_eWindowSystem = WINDOW_SYSTEM_X11;
-  m_dpy = NULL;
+  m_dpy = nullptr;
   m_glWindow = 0;
   m_mainWindow = 0;
   m_bWasFullScreenBeforeMinimize = false;
@@ -70,7 +70,7 @@ CWinSystemX11::~CWinSystemX11()
 
 bool CWinSystemX11::InitWindowSystem()
 {
-  if ((m_dpy = XOpenDisplay(NULL)))
+  if ((m_dpy = XOpenDisplay(nullptr)))
   {
     bool ret = CWinSystemBase::InitWindowSystem();
     return ret;
@@ -137,7 +137,7 @@ bool CWinSystemX11::DestroyWindow()
 bool CWinSystemX11::ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop)
 {
   m_userOutput = CServiceBroker::GetSettings().GetString(CSettings::SETTING_VIDEOSCREEN_MONITOR);
-  XOutput *out = NULL;
+  XOutput *out = nullptr;
   if (m_userOutput.compare("Default") != 0)
   {
     out = g_xrandr.GetOutput(m_userOutput);
@@ -146,7 +146,7 @@ bool CWinSystemX11::ResizeWindow(int newWidth, int newHeight, int newLeft, int n
       XMode mode = g_xrandr.GetCurrentMode(m_userOutput);
       if (!mode.isCurrent)
       {
-        out = NULL;
+        out = nullptr;
       }
     }
   }
@@ -281,7 +281,7 @@ void CWinSystemX11::UpdateResolutions()
 
   if(g_xrandr.Query(true, !switchOnOff))
   {
-    XOutput *out = NULL;
+    XOutput *out = nullptr;
     if (m_userOutput.compare("Default") != 0)
     {
       out = g_xrandr.GetOutput(m_userOutput);
@@ -290,7 +290,7 @@ void CWinSystemX11::UpdateResolutions()
         XMode mode = g_xrandr.GetCurrentMode(m_userOutput);
         if (!mode.isCurrent && !switchOnOff)
         {
-          out = NULL;
+          out = nullptr;
         }
       }
     }
@@ -341,7 +341,7 @@ void CWinSystemX11::UpdateResolutions()
   CLog::Log(LOGINFO, "Available videomodes (xrandr):");
 
   XOutput *out = g_xrandr.GetOutput(m_userOutput);
-  if (out != NULL)
+  if (out != nullptr)
   {
     std::vector<XMode>::iterator modeiter;
     CLog::Log(LOGINFO, "Output '%s' has %" PRIdS" modes", out->name.c_str(), out->modes.size());
@@ -838,7 +838,7 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
       class_hints->res_name = (char*)classString.c_str();
 
       XSetWMProperties(m_dpy, m_mainWindow, &windowName, &iconName,
-                            NULL, 0, NULL, wm_hints,
+                            nullptr, 0, nullptr, wm_hints,
                             class_hints);
       XFree(class_hints);
       XFree(wm_hints);
@@ -869,7 +869,7 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
 bool CWinSystemX11::CreateIconPixmap()
 {
   int depth;
-  XImage *img = NULL;
+  XImage *img = nullptr;
   Visual *vis;
   XWindowAttributes wndattribs;
   XVisualInfo visInfo;
@@ -879,7 +879,7 @@ bool CWinSystemX11::CreateIconPixmap()
   int outIndex = 0;
   unsigned int i,j;
   unsigned char *buf;
-  uint32_t *newBuf = 0;
+  uint32_t *newBuf = nullptr;
   size_t numNewBufBytes;
 
   // Get visual Info
@@ -977,7 +977,7 @@ bool CWinSystemX11::CreateIconPixmap()
 
   // create icon pixmap from image
   m_icon = XCreatePixmap(m_dpy, m_glWindow, img->width, img->height, depth);
-  GC gc = XCreateGC(m_dpy, m_glWindow, 0, NULL);
+  GC gc = XCreateGC(m_dpy, m_glWindow, 0, nullptr);
   XPutImage(m_dpy, m_icon, gc, img, 0, 0, 0, 0, img->width, img->height);
   XFreeGC(m_dpy, gc);
   XDestroyImage(img); // this also frees newBuf

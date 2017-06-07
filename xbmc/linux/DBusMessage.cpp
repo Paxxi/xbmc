@@ -23,7 +23,7 @@
 
 CDBusMessage::CDBusMessage(const char *destination, const char *object, const char *interface, const char *method)
 {
-  m_reply = NULL;
+  m_reply = nullptr;
   m_message = dbus_message_new_method_call (destination, object, interface, method);
   m_haveArgs = false;
 
@@ -114,7 +114,7 @@ bool CDBusMessage::SendAsync(DBusBusType type)
 
   bool result;
   if (con && m_message)
-    result = dbus_connection_send(con, m_message, NULL);
+    result = dbus_connection_send(con, m_message, nullptr);
   else
     result = false;
 

@@ -138,7 +138,7 @@ const CWebSocketFrame* CWebSocketV8::Close(WebSocketCloseReason reason /* = WebS
   if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking || m_state == WebSocketStateClosed)
   {
     CLog::Log(LOGINFO, "WebSocket [hybi-10]: Cannot send a closing handshake if no connection has been established");
-    return NULL;
+    return nullptr;
   }
 
   return close(reason, message);

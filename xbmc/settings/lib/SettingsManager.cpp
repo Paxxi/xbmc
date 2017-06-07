@@ -86,7 +86,7 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
 {
   CExclusiveLock lock(m_critical);
   CExclusiveLock settingsLock(m_settingsCritical);
-  if (m_initialized || root == NULL)
+  if (m_initialized || root == nullptr)
     return false;
 
   if (!StringUtils::EqualsNoCase(root->ValueStr(), SETTING_XML_ROOT))
@@ -112,7 +112,7 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
   }
 
   const TiXmlNode *sectionNode = root->FirstChild(SETTING_XML_ELM_SECTION);
-  while (sectionNode != NULL)
+  while (sectionNode != nullptr)
   {
     std::string sectionId;
     if (CSettingSection::DeserializeIdentification(sectionNode, sectionId))
@@ -183,7 +183,7 @@ bool CSettingsManager::Save(TiXmlNode *root) const
 {
   CSharedLock lock(m_critical);
   CSharedLock settingsLock(m_settingsCritical);
-  if (!m_initialized || root == NULL)
+  if (!m_initialized || root == nullptr)
     return false;
 
   if (!OnSettingsSaving())
@@ -258,7 +258,7 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, const std::string &set
 {
   updated = false;
 
-  if (node == NULL)
+  if (node == nullptr)
     return false;
 
   SettingPtr setting = GetSetting(settingId);
@@ -438,7 +438,7 @@ void CSettingsManager::RegisterSettingControl(const std::string &controlType, IS
 
 void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler)
 {
-  if (settingsHandler == NULL)
+  if (settingsHandler == nullptr)
     return;
 
   CExclusiveLock lock(m_critical);
@@ -448,7 +448,7 @@ void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler
 
 void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandler)
 {
-  if (settingsHandler == NULL)
+  if (settingsHandler == nullptr)
     return;
 
   CExclusiveLock lock(m_critical);
@@ -460,7 +460,7 @@ void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandl
 void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
 {
   CExclusiveLock lock(m_critical);
-  if (subSettings == NULL)
+  if (subSettings == nullptr)
     return;
 
   m_subSettings.insert(subSettings);
@@ -469,7 +469,7 @@ void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
 void CSettingsManager::UnregisterSubSettings(ISubSettings *subSettings)
 {
   CExclusiveLock lock(m_critical);
-  if (subSettings == NULL)
+  if (subSettings == nullptr)
     return;
 
   m_subSettings.erase(subSettings);
@@ -501,7 +501,7 @@ void* CSettingsManager::GetSettingOptionsFiller(SettingConstPtr setting)
 {
   CSharedLock lock(m_critical);
   if (setting == NULL)
-    return NULL;
+    return nullptr;
 
   // get the option filler's identifier
   std::string filler;
@@ -511,15 +511,15 @@ void* CSettingsManager::GetSettingOptionsFiller(SettingConstPtr setting)
     filler = std::static_pointer_cast<const CSettingString>(setting)->GetOptionsFillerName();
 
   if (filler.empty())
-    return NULL;
+    return nullptr;
 
   // check if such an option filler is known
   SettingOptionsFillerMap::const_iterator fillerIt = m_optionsFillers.find(filler);
   if (fillerIt == m_optionsFillers.end())
-    return NULL;
+    return nullptr;
 
   if (fillerIt->second.filler == NULL)
-    return NULL;
+    return nullptr;
 
   // make sure the option filler's type matches the setting's type
   switch (fillerIt->second.type)
@@ -754,7 +754,7 @@ void CSettingsManager::AddCondition(const std::string &identifier, SettingCondit
   
 bool CSettingsManager::Serialize(TiXmlNode *parent) const
 {
-  if (parent == NULL)
+  if (parent == nullptr)
     return false;
 
   CSharedLock lock(m_settingsCritical);
@@ -775,12 +775,12 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
     if (!categoryTag.empty())
     {
       categoryNode = parent->FirstChild(categoryTag);
-      if (categoryNode == NULL)
+      if (categoryNode == nullptr)
       {
         TiXmlElement categoryElement(categoryTag);
         categoryNode = parent->InsertEndChild(categoryElement);
 
-        if (categoryNode == NULL)
+        if (categoryNode == nullptr)
         {
           CLog::Log(LOGWARNING, "CSettingsManager: unable to write <%s> tag", categoryTag.c_str());
           continue;
@@ -790,7 +790,7 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
 
     TiXmlElement settingElement(settingTag);
     TiXmlNode *settingNode = categoryNode->InsertEndChild(settingElement);
-    if (settingNode == NULL)
+    if (settingNode == nullptr)
     {
       CLog::Log(LOGWARNING, "CSetting: unable to write <%s> tag in <%s>", settingTag.c_str(), categoryTag.c_str());
       continue;
@@ -798,7 +798,7 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
     if (it->second.setting->IsDefault())
     {
       TiXmlElement *settingElem = settingNode->ToElement();
-      if (settingElem != NULL)
+      if (settingElem != nullptr)
         settingElem->SetAttribute(SETTING_XML_ELM_DEFAULT, "true");
     }
 
@@ -1095,17 +1095,17 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, SettingPtr setting, bo
   if (!categoryTag.empty())
   {
     categoryNode = node->FirstChild(categoryTag);
-    if (categoryNode == NULL)
+    if (categoryNode == nullptr)
       return false;
   }
 
   const TiXmlElement *settingElement = categoryNode->FirstChildElement(settingTag);
-  if (settingElement == NULL)
+  if (settingElement == nullptr)
     return false;
 
   // check if the default="true" attribute is set for the value
   const char *isDefaultAttribute = settingElement->Attribute(SETTING_XML_ELM_DEFAULT);
-  bool isDefault = isDefaultAttribute != NULL && StringUtils::EqualsNoCase(isDefaultAttribute, "true");
+  bool isDefault = isDefaultAttribute != nullptr && StringUtils::EqualsNoCase(isDefaultAttribute, "true");
 
   if (!setting->FromString(settingElement->FirstChild() != NULL ? settingElement->FirstChild()->ValueStr() : StringUtils::Empty))
   {
@@ -1132,8 +1132,8 @@ bool CSettingsManager::UpdateSetting(const TiXmlNode *node, SettingPtr setting, 
     return false;
 
   bool updated = false;
-  const char *oldSetting = NULL;
-  const TiXmlNode *oldSettingNode = NULL;
+  const char *oldSetting = nullptr;
+  const TiXmlNode *oldSettingNode = nullptr;
   if (update.GetType() == SettingUpdateTypeRename)
   {
     if (update.GetValue().empty())
@@ -1148,12 +1148,12 @@ bool CSettingsManager::UpdateSetting(const TiXmlNode *node, SettingPtr setting, 
     if (!categoryTag.empty())
     {
       categoryNode = node->FirstChild(categoryTag);
-      if (categoryNode == NULL)
+      if (categoryNode == nullptr)
         return false;
     }
 
     oldSettingNode = categoryNode->FirstChild(settingTag);
-    if (oldSettingNode == NULL)
+    if (oldSettingNode == nullptr)
       return false;
 
     if (setting->FromString(oldSettingNode->FirstChild() != NULL ? oldSettingNode->FirstChild()->ValueStr() : StringUtils::Empty))

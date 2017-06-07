@@ -63,7 +63,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
     return false;
 
   CGUIDialogProfileSettings *dialog = g_windowManager.GetWindow<CGUIDialogProfileSettings>(WINDOW_DIALOG_PROFILE_SETTINGS);
-  if (dialog == NULL)
+  if (dialog == nullptr)
     return false;
 
   dialog->m_needsSaving = false;
@@ -71,7 +71,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
   dialog->m_showDetails = !firstLogin;
 
   const CProfile *profile = CProfilesManager::GetInstance().GetProfile(iProfile);
-  if (profile == NULL)
+  if (profile == nullptr)
   {
     dialog->m_name.clear();
     dialog->m_dbMode = 2;

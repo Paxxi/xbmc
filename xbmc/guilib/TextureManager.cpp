@@ -435,7 +435,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
     return pMap->GetTexture();
   }
 
-  CBaseTexture *pTexture = NULL;
+  CBaseTexture *pTexture = nullptr;
   int width = 0, height = 0;
   if (bundle >= 0)
   {

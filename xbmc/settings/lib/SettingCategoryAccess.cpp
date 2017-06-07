@@ -27,7 +27,7 @@ bool CSettingCategoryAccessCondition::Check() const
   if (m_value.empty())
     return true;
 
-  if (m_settingsManager == NULL)
+  if (m_settingsManager == nullptr)
     return false;
 
   bool found = m_settingsManager->GetConditions().Check(m_value, "true");

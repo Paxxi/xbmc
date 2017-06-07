@@ -164,7 +164,7 @@ void CScriptInvocationManager::RegisterLanguageInvocationHandler(ILanguageInvoca
 
 void CScriptInvocationManager::UnregisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler)
 {
-  if (invocationHandler == NULL)
+  if (invocationHandler == nullptr)
     return;
 
   CSingleLock lock(m_critSection);

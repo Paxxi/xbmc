@@ -96,7 +96,7 @@ bool CVFSEntry::Create()
 void* CVFSEntry::Open(const CURL& url)
 {
   if (!Initialized())
-    return NULL;
+    return nullptr;
 
   CVFSURLWrapper url2(url);
   return m_struct.toAddon.Open(&url2.url);
@@ -105,7 +105,7 @@ void* CVFSEntry::Open(const CURL& url)
 void* CVFSEntry::OpenForWrite(const CURL& url, bool bOverWrite)
 {
   if (!Initialized())
-    return NULL;
+    return nullptr;
 
   CVFSURLWrapper url2(url);
   return m_struct.toAddon.OpenForWrite(&url2.url, bOverWrite);
@@ -344,7 +344,7 @@ bool CVFSEntry::ContainsFiles(const CURL& url, CFileItemList& items)
 }
 
 CVFSEntryIFileWrapper::CVFSEntryIFileWrapper(VFSEntryPtr ptr) :
-  m_context(NULL), m_addon(ptr)
+  m_context(nullptr), m_addon(ptr)
 {
 }
 
@@ -356,13 +356,13 @@ CVFSEntryIFileWrapper::~CVFSEntryIFileWrapper()
 bool CVFSEntryIFileWrapper::Open(const CURL& url)
 {
   m_context = m_addon->Open(url);
-  return m_context != NULL;
+  return m_context != nullptr;
 }
 
 bool CVFSEntryIFileWrapper::OpenForWrite(const CURL& url, bool bOverWrite)
 {
   m_context = m_addon->OpenForWrite(url, bOverWrite);
-  return m_context != NULL;
+  return m_context != nullptr;
 }
 
 bool CVFSEntryIFileWrapper::Exists(const CURL& url)
@@ -409,7 +409,7 @@ void CVFSEntryIFileWrapper::Close()
   if (m_context)
   {
     m_addon->Close(m_context);
-    m_context = NULL;
+    m_context = nullptr;
   }
 }
 

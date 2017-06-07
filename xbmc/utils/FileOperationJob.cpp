@@ -349,7 +349,7 @@ bool CFileOperationJob::operator==(const CJob* job) const
     return false;
 
   const CFileOperationJob* rjob = dynamic_cast<const CFileOperationJob*>(job);
-  if (rjob == NULL)
+  if (rjob == nullptr)
     return false;
 
   if (GetAction() != rjob->GetAction() ||

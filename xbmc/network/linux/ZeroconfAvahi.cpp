@@ -55,7 +55,7 @@ private:
 struct CZeroconfAvahi::ServiceInfo
 {
   ServiceInfo(const std::string& fcr_type, const std::string& fcr_name,
-              unsigned int f_port, AvahiStringList *txt, AvahiEntryGroup* fp_group = 0):
+              unsigned int f_port, AvahiStringList *txt, AvahiEntryGroup* fp_group = nullptr):
     m_type(fcr_type), m_name(fcr_name), m_port(f_port), mp_txt(txt), mp_group(fp_group)
   {
   }
@@ -67,7 +67,7 @@ struct CZeroconfAvahi::ServiceInfo
   AvahiEntryGroup* mp_group;
 };
 
-CZeroconfAvahi::CZeroconfAvahi(): mp_client(0), mp_poll (0), m_shutdown(false),m_thread_id(0)
+CZeroconfAvahi::CZeroconfAvahi(): mp_client(nullptr), mp_poll (nullptr), m_shutdown(false),m_thread_id(0)
 {
     if (! (mp_poll = avahi_threaded_poll_new()))
     {
@@ -114,7 +114,7 @@ CZeroconfAvahi::~CZeroconfAvahi()
 
     //now wait for the thread to stop
     assert(m_thread_id);
-    pthread_join(m_thread_id, NULL);
+    pthread_join(m_thread_id, nullptr);
     avahi_threaded_poll_get(mp_poll)->timeout_free(lp_timeout);
   }
 
@@ -254,7 +254,7 @@ void CZeroconfAvahi::clientCallback(AvahiClient* fp_client, AvahiClientState f_s
     CLog::Log(LOGINFO, "CZeroconfAvahi::clientCallback: client failure. avahi-daemon stopped? Recreating client...");
     //We were forced to disconnect from server. now free and recreate the client object
     avahi_client_free(fp_client);
-    p_instance->mp_client = 0;
+    p_instance->mp_client = nullptr;
     //freeing the client also frees all groups and browsers, pointers are undefined afterwards, so fix that now
     for(tServiceMap::const_iterator it = p_instance->m_services.begin(); it != p_instance->m_services.end(); ++it)
     {
@@ -368,7 +368,7 @@ bool CZeroconfAvahi::createClient()
       avahi_client_free(mp_client);
     }
     mp_client = avahi_client_new(avahi_threaded_poll_get(mp_poll),
-                                 AVAHI_CLIENT_NO_FAIL, &clientCallback,this,0);
+                                 AVAHI_CLIENT_NO_FAIL, &clientCallback,this,nullptr);
     if (!mp_client)
       return false;
     return true;

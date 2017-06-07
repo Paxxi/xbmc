@@ -22,7 +22,7 @@
 #include "ScriptInvocationManager.h"
 
 CLanguageInvokerThread::CLanguageInvokerThread(LanguageInvokerPtr invoker, CScriptInvocationManager *invocationManager)
-  : ILanguageInvoker(NULL),
+  : ILanguageInvoker(nullptr),
     CThread("LanguageInvoker"),
     m_invoker(invoker),
     m_invocationManager(invocationManager)

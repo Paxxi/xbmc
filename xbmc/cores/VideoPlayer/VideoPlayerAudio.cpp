@@ -64,7 +64,7 @@ CVideoPlayerAudio::CVideoPlayerAudio(CDVDClock* pClock, CDVDMessageQueue& parent
 , m_audioSink(pClock)
 {
   m_pClock = pClock;
-  m_pAudioCodec = NULL;
+  m_pAudioCodec = nullptr;
   m_audioClock = 0;
   m_speed = DVD_PLAYSPEED_NORMAL;
   m_stalled = true;
@@ -200,7 +200,7 @@ void CVideoPlayerAudio::CloseStream(bool bWaitForBuffers)
   {
     m_pAudioCodec->Dispose();
     delete m_pAudioCodec;
-    m_pAudioCodec = NULL;
+    m_pAudioCodec = nullptr;
   }
 }
 

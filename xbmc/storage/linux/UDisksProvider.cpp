@@ -95,7 +95,7 @@ bool CUDiskDevice::Mount()
     if (reply)
     {
       char *mountPoint;
-      if (dbus_message_get_args (reply, NULL, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
       {
         m_MountPath = mountPoint;
         CLog::Log(LOGDEBUG, "UDisks: Successfully mounted %s on %s", m_DeviceKitUDI.c_str(), mountPoint);
@@ -191,7 +191,7 @@ CUDisksProvider::CUDisksProvider()
     CLog::Log(LOGERROR, "UDisks: Failed to attach to signal %s", m_error.message);
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 }
 
@@ -208,7 +208,7 @@ CUDisksProvider::~CUDisksProvider()
   {
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 
   dbus_error_free (&m_error);
@@ -259,7 +259,7 @@ bool CUDisksProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
     if (msg)
     {
       char *object;
-      if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (msg, nullptr, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
       {
         result = true;
         if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceAdded"))
@@ -310,7 +310,7 @@ void CUDisksProvider::DeviceAdded(const char *object, IStorageEventsCallback *ca
     delete m_AvailableDevices[object];
   }
 
-  CUDiskDevice *device = NULL;
+  CUDiskDevice *device = nullptr;
     device = new CUDiskDevice(object);
   m_AvailableDevices[object] = device;
 

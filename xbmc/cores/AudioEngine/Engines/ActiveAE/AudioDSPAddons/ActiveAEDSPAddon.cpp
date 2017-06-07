@@ -575,14 +575,14 @@ ADSPHANDLE CActiveAEDSPAddon::cb_sound_play_get_handle(void *kodiInstance, const
   if (!filename || !addon)
   {
     CLog::Log(LOGERROR, "Audio DSP - %s - invalid sound play data", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   IAESound *sound = CServiceBroker::GetActiveAE().MakeSound(filename);
   if (!sound)
   {
     CLog::Log(LOGERROR, "Audio DSP - %s - failed to make sound play data", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   return sound;

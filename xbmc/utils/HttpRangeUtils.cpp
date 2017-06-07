@@ -84,12 +84,12 @@ bool CHttpRange::IsValid() const
 
 CHttpResponseRange::CHttpResponseRange()
   : CHttpRange(),
-    m_data(NULL)
+    m_data(nullptr)
 { }
 
 CHttpResponseRange::CHttpResponseRange(uint64_t firstPosition, uint64_t lastPosition)
   : CHttpRange(firstPosition, lastPosition),
-    m_data(NULL)
+    m_data(nullptr)
 { }
 
 CHttpResponseRange::CHttpResponseRange(const void* data, uint64_t firstPosition, uint64_t lastPosition)
@@ -138,7 +138,7 @@ bool CHttpResponseRange::IsValid() const
   if (!CHttpRange::IsValid())
     return false;
 
-  return m_data != NULL;
+  return m_data != nullptr;
 }
 
 CHttpRanges::CHttpRanges()

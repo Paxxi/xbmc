@@ -75,7 +75,7 @@ CMusicInfoScanner::CMusicInfoScanner()
 {
   m_bRunning = false;
   m_showDialog = false;
-  m_handle = NULL;
+  m_handle = nullptr;
   m_bCanInterrupt = false;
   m_currentItem=0;
   m_itemCount=0;
@@ -104,7 +104,7 @@ void CMusicInfoScanner::Process()
     if (m_bClean && m_pathsToScan.empty())
     {
       CleanDatabase(false);
-      m_handle = NULL;
+      m_handle = nullptr;
       m_bRunning = false;
 
       return;
@@ -267,7 +267,7 @@ void CMusicInfoScanner::Process()
   
   if (m_handle)
     m_handle->MarkFinished();
-  m_handle = NULL;
+  m_handle = nullptr;
 }
 
 void CMusicInfoScanner::Start(const std::string& strDirectory, int flags)
@@ -602,7 +602,7 @@ void CMusicInfoScanner::FileItemsToAlbums(CFileItemList& items, VECALBUMS& album
     CSong song(*items[i]);
 
     // keep the db-only fields intact on rescan...
-    if (songsMap != NULL)
+    if (songsMap != nullptr)
     {
       MAPSONGS::iterator it = songsMap->find(items[i]->GetPath());
       if (it != songsMap->end())
@@ -923,7 +923,7 @@ void CMusicInfoScanner::FindArtForAlbums(VECALBUMS &albums, const std::string &p
      keep everything as song art.
      */
     bool singleArt = true;
-    CSong *art = NULL;
+    CSong *art = nullptr;
     for (VECSONGS::iterator k = album.songs.begin(); k != album.songs.end(); ++k)
     {
       CSong &song = *k;
@@ -1162,7 +1162,7 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
     }
   }
 
-  CGUIDialogSelect *pDlg = NULL;
+  CGUIDialogSelect *pDlg = nullptr;
   int iSelectedAlbum=0;
   if ((result == CNfoFile::NO_NFO || result == CNfoFile::PARTIAL_NFO)
       && !bMusicBrainz)

@@ -136,7 +136,7 @@ void CFTPParse::setTime(std::string str)
     /* set the day of the month */
     time_struct.tm_mday = atoi(day.c_str());
 
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     struct tm *current_time;
 #ifdef LOCALTIME_R
     struct tm result = {};

@@ -1213,7 +1213,7 @@ DemuxPacket* CPVRClient::DemuxRead()
   {
     return m_struct.toAddon.DemuxRead();
   }
-  return NULL;
+  return nullptr;
 }
 
 bool CPVRClient::HasMenuHooks(PVR_MENUHOOK_CAT cat) const
@@ -1981,7 +1981,7 @@ private:
   CCodecIds()
   {
     // get ids and names
-    AVCodec* codec = NULL;
+    AVCodec* codec = nullptr;
     xbmc_codec_t tmp;
     while ((codec = av_codec_next(codec)))
     {

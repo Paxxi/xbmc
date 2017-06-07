@@ -45,7 +45,7 @@
 
 CLinuxTimezone::CLinuxTimezone() : m_IsDST(0)
 {
-   char* line = NULL;
+   char* line = nullptr;
    size_t linelen = 0;
    int nameonfourthfield = 0;
    std::string s;
@@ -97,7 +97,7 @@ CLinuxTimezone::CLinuxTimezone() : m_IsDST(0)
    if (line)
    {
      free(line);
-     line = NULL;
+     line = nullptr;
      linelen = 0;
    }
 

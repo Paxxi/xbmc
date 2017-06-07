@@ -145,7 +145,7 @@ protected:
 #else
     time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-    if (time == NULL)
+    if (time == nullptrptr)
       return false;
 
     lastModified = *time;

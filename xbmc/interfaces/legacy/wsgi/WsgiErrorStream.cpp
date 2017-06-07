@@ -28,7 +28,7 @@ namespace XBMCAddon
   namespace xbmcwsgi
   {
     WsgiErrorStream::WsgiErrorStream()
-      : m_request(NULL)
+      : m_request(nullptr)
     { }
 
     WsgiErrorStream::~WsgiErrorStream()
@@ -64,7 +64,7 @@ namespace XBMCAddon
 #ifndef SWIG
     void WsgiErrorStream::SetRequest(HTTPPythonRequest* request)
     {
-      if (m_request != NULL)
+      if (m_request != nullptr)
         return;
 
       m_request = request;

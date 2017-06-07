@@ -196,9 +196,9 @@ bool ProfileHasVideosLocked(const std::string &condition, const std::string &val
 
 bool ProfileLockMode(const std::string &condition, const std::string &value, SettingConstPtr setting, void *data)
 {
-  char *tmp = NULL;
+  char *tmp = nullptr;
   LockType lock = (LockType)strtol(value.c_str(), &tmp, 0);
-  if (tmp != NULL && *tmp != '\0')
+  if (tmp != nullptr && *tmp != '\0')
     return false;
 
   return CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() == lock;
@@ -213,7 +213,7 @@ bool GreaterThan(const std::string &condition, const std::string &value, Setting
   if (settingInt == NULL)
     return false;
 
-  char *tmp = NULL;
+  char *tmp = nullptr;
 
   int lhs = settingInt->GetValue();
   int rhs = StringUtils::IsInteger(value) ? (int)strtol(value.c_str(), &tmp, 0) : 0;
@@ -230,7 +230,7 @@ bool GreaterThanOrEqual(const std::string &condition, const std::string &value, 
   if (settingInt == NULL)
     return false;
 
-  char *tmp = NULL;
+  char *tmp = nullptr;
 
   int lhs = settingInt->GetValue();
   int rhs = StringUtils::IsInteger(value) ? (int)strtol(value.c_str(), &tmp, 0) : 0;
@@ -247,7 +247,7 @@ bool LessThan(const std::string &condition, const std::string &value, SettingCon
   if (settingInt == NULL)
     return false;
 
-  char *tmp = NULL;
+  char *tmp = nullptr;
 
   int lhs = settingInt->GetValue();
   int rhs = StringUtils::IsInteger(value) ? (int)strtol(value.c_str(), &tmp, 0) : 0;
@@ -264,7 +264,7 @@ bool LessThanOrEqual(const std::string &condition, const std::string &value, Set
   if (settingInt == NULL)
     return false;
 
-  char *tmp = NULL;
+  char *tmp = nullptr;
 
   int lhs = settingInt->GetValue();
   int rhs = StringUtils::IsInteger(value) ? (int)strtol(value.c_str(), &tmp, 0) : 0;

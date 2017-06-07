@@ -67,7 +67,7 @@ namespace XBMCAddon
       if (_textColor)
         sscanf(_textColor, "%x", &textColor);
 
-      pGUIControl = NULL;
+      pGUIControl = nullptr;
     }
 
     void ControlFadeLabel::addLabel(const String& label)

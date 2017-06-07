@@ -126,15 +126,15 @@ bool CRssManager::Load()
 
   m_mapRssUrls.clear();
   const TiXmlElement* pSet = pRootElement->FirstChildElement("set");
-  while (pSet != NULL)
+  while (pSet != nullptr)
   {
     int iId;
     if (pSet->QueryIntAttribute("id", &iId) == TIXML_SUCCESS)
     {
       RssSet set;
-      set.rtl = pSet->Attribute("rtl") != NULL && strcasecmp(pSet->Attribute("rtl"), "true") == 0;
+      set.rtl = pSet->Attribute("rtl") != nullptr && strcasecmp(pSet->Attribute("rtl"), "true") == 0;
       const TiXmlElement* pFeed = pSet->FirstChildElement("feed");
-      while (pFeed != NULL)
+      while (pFeed != nullptr)
       {
         int iInterval;
         if (pFeed->QueryIntAttribute("updateinterval", &iInterval) != TIXML_SUCCESS)

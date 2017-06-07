@@ -207,7 +207,7 @@ bool CProfilesManager::Save(const std::string &file) const
   CXBMCTinyXML xmlDoc;
   TiXmlElement xmlRootElement(XML_PROFILES);
   TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (pRoot == NULL)
+  if (pRoot == nullptr)
     return false;
 
   XMLUtils::SetInt(pRoot, XML_LAST_LOADED, m_currentProfile);

@@ -1222,7 +1222,7 @@ unsigned int JSONSchemaTypeDefinition::CJsonSchemaPropertiesMap::size() const
 JsonRpcMethod::JsonRpcMethod()
   : missingReference(),
     name(),
-    method(NULL),
+    method(nullptr),
     transportneed(Response),
     permission(ReadData),
     description(),
@@ -1300,9 +1300,9 @@ bool JsonRpcMethod::Parse(const CVariant &value)
 
 JSONRPC_STATUS JsonRpcMethod::Check(const CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, CVariant &outputParameters) const
 {
-  if (transport != NULL && (transport->GetCapabilities() & transportneed) == transportneed)
+  if (transport != nullptr && (transport->GetCapabilities() & transportneed) == transportneed)
   {
-    if (client != NULL && (client->GetPermissionFlags() & permission) == permission && (!notification || (permission & OPERATION_PERMISSION_NOTIFICATION) == permission))
+    if (client != nullptr && (client->GetPermissionFlags() & permission) == permission && (!notification || (permission & OPERATION_PERMISSION_NOTIFICATION) == permission))
     {
       methodCall = method;
 
@@ -1472,7 +1472,7 @@ bool CJSONServiceDescription::addMethod(const std::string &jsonMethod, MethodCal
     return false;
   }
 
-  if (method == NULL)
+  if (method == nullptr)
   {
     unsigned int size = sizeof(m_methodMaps) / sizeof(JsonRpcMethodMap);
     for (unsigned int index = 0; index < size; index++)
@@ -1484,7 +1484,7 @@ bool CJSONServiceDescription::addMethod(const std::string &jsonMethod, MethodCal
       }
     }
 
-    if (method == NULL)
+    if (method == nullptr)
     {
       CLog::Log(LOGERROR, "JSONRPC: Missing implementation for method \"%s\"", methodName.c_str());
       return false;
@@ -1576,7 +1576,7 @@ bool CJSONServiceDescription::AddType(const std::string &jsonType)
 
 bool CJSONServiceDescription::AddMethod(const std::string &jsonMethod, MethodCall method)
 {
-  if (method == NULL)
+  if (method == nullptr)
   {
     CLog::Log(LOGERROR, "JSONRPC: Invalid JSONRPC method implementation");
     return false;
@@ -1587,7 +1587,7 @@ bool CJSONServiceDescription::AddMethod(const std::string &jsonMethod, MethodCal
 
 bool CJSONServiceDescription::AddBuiltinMethod(const std::string &jsonMethod)
 {
-  return addMethod(jsonMethod, NULL);
+  return addMethod(jsonMethod, nullptr);
 }
 
 bool CJSONServiceDescription::AddNotification(const std::string &jsonNotification)

@@ -45,7 +45,7 @@ bool DPMSSupport::CheckValidMode(PowerSavingMode mode)
 
 const char* DPMSSupport::GetModeName(PowerSavingMode mode)
 {
-  if (!CheckValidMode(mode)) return NULL;
+  if (!CheckValidMode(mode)) return nullptr;
   return MODE_NAMES[mode];
 }
 
@@ -130,7 +130,7 @@ static const CARD16 X_DPMS_MODES[] =
 void DPMSSupport::PlatformSpecificInit()
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == NULL) return;
+  if (dpy == nullptr) return;
 
   int event_base, error_base;   // we ignore these
   if (!DPMSQueryExtension(dpy, &event_base, &error_base)) {
@@ -153,7 +153,7 @@ void DPMSSupport::PlatformSpecificInit()
 bool DPMSSupport::PlatformSpecificEnablePowerSaving(PowerSavingMode mode)
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == NULL) return false;
+  if (dpy == nullptr) return false;
 
   // This is not needed on my ATI Radeon, but the docs say that DPMSForceLevel
   // after a DPMSDisable (from SDL) should not normally work.
@@ -168,7 +168,7 @@ bool DPMSSupport::PlatformSpecificEnablePowerSaving(PowerSavingMode mode)
 bool DPMSSupport::PlatformSpecificDisablePowerSaving()
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == NULL) return false;
+  if (dpy == nullptr) return false;
 
   DPMSForceLevel(dpy, DPMSModeOn);
   DPMSDisable(dpy);

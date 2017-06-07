@@ -108,7 +108,7 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
   CFileItem item(strPath, false);
 
   item.SetMimeTypeForInternetFile();
-  CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, item);
+  CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(nullptr, item);
   if (!pInputStream)
   {
     CLog::Log(LOGERROR, "InputStream: Error creating stream for %s", redactPath.c_str());
@@ -123,7 +123,7 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
     return false;
   }
 
-  CDVDDemux *pDemuxer = NULL;
+  CDVDDemux *pDemuxer = nullptr;
 
   try
   {
@@ -265,13 +265,13 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
 
             uint8_t *pOutBuf = (uint8_t*)av_malloc(nWidth * nHeight * 4);
             struct SwsContext *context = sws_getContext(picture.iWidth, picture.iHeight,
-                  AV_PIX_FMT_YUV420P, nWidth, nHeight, AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+                  AV_PIX_FMT_YUV420P, nWidth, nHeight, AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
             if (context)
             {
-              uint8_t *src[] = { picture.data[0], picture.data[1], picture.data[2], 0 };
+              uint8_t *src[] = { picture.data[0], picture.data[1], picture.data[2], nullptr };
               int     srcStride[] = { picture.iLineSize[0], picture.iLineSize[1], picture.iLineSize[2], 0 };
-              uint8_t *dst[] = { pOutBuf, 0, 0, 0 };
+              uint8_t *dst[] = { pOutBuf, nullptr, nullptr, nullptr };
               int     dstStride[] = { (int)nWidth*4, 0, 0, 0 };
               int orientation = DegreeToOrientation(hint.orientation);
               sws_scale(context, src, srcStride, 0, picture.iHeight, dst, dstStride);
@@ -333,7 +333,7 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
 
   CFileItem item(playablePath, false);
   item.SetMimeTypeForInternetFile();
-  CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, item);
+  CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(nullptr, item);
   if (!pInputStream)
     return false;
 

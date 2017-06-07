@@ -54,9 +54,9 @@ CActiveAEDSPProcess::CActiveAEDSPProcess(AE_DSP_STREAM_ID streamId)
   m_NewStreamType           = AE_DSP_ASTREAM_INVALID;
   m_NewMasterMode           = AE_DSP_MASTER_MODE_ID_INVALID;
   m_forceInit               = false;
-  m_resamplerDSPProcessor   = NULL;
-  m_convertInput            = NULL;
-  m_convertOutput           = NULL;
+  m_resamplerDSPProcessor   = nullptr;
+  m_convertInput            = nullptr;
+  m_convertOutput           = nullptr;
   m_iLastProcessTime        = 0;
 
   /*!
@@ -132,8 +132,8 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
                                       CAEUtil::GetAVChannelLayout(m_inputFormat.m_channelLayout),
                                       CAEUtil::GetAVSampleFormat(m_inputFormat.m_dataFormat),
                                       m_inputFormat.m_sampleRate,
-                                      0, NULL);
-  if (m_convertInput == NULL)
+                                      0, nullptr);
+  if (m_convertInput == nullptr)
   {
     //CLog::Log(LOGERROR, "ActiveAE DSP - %s - DSP input convert with data format '%s' not supported!", __FUNCTION__, CAEUtil::DataFormatToStr(inputFormat.m_dataFormat));
     return false;
@@ -152,8 +152,8 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
                                        CAEUtil::GetAVChannelLayout(m_outputFormat.m_channelLayout),
                                        AV_SAMPLE_FMT_FLTP,
                                        m_outputFormat.m_sampleRate,
-                                       0, NULL);
-  if (m_convertOutput == NULL)
+                                       0, nullptr);
+  if (m_convertOutput == nullptr)
   {
     CLog::Log(LOGERROR, "ActiveAE DSP - %s - DSP output convert with data format '%s' not supported!", __FUNCTION__, CAEUtil::DataFormatToStr(outputFormat.m_dataFormat));
     return false;
@@ -314,7 +314,7 @@ void CActiveAEDSPProcess::InitFFMpegDSPProcessor()
   if (m_resamplerDSPProcessor)
   {
     delete m_resamplerDSPProcessor;
-    m_resamplerDSPProcessor = NULL;
+    m_resamplerDSPProcessor = nullptr;
   }
 
   /*!
@@ -335,12 +335,12 @@ void CActiveAEDSPProcess::InitFFMpegDSPProcessor()
                                 AV_SAMPLE_FMT_FLTP, sizeof(float) << 3, 0,
                                 upmix,
                                 true,
-                                NULL,
+                                nullptr,
                                 m_streamQuality,
                                 true))
     {
       delete m_resamplerDSPProcessor;
-      m_resamplerDSPProcessor = NULL;
+      m_resamplerDSPProcessor = nullptr;
 
       CLog::Log(LOGERROR, "ActiveAE DSP - %s - Initialize of channel mixer failed", __FUNCTION__);
     }
@@ -1129,7 +1129,7 @@ bool CActiveAEDSPProcess::ReallocProcessArray(unsigned int requestSize)
   {
     m_processArray[0][i] = (float*)realloc(m_processArray[0][i], m_processArraySize*sizeof(float));
     m_processArray[1][i] = (float*)realloc(m_processArray[1][i], m_processArraySize*sizeof(float));
-    if (m_processArray[0][i] == NULL || m_processArray[1][i] == NULL)
+    if (m_processArray[0][i] == nullptr || m_processArray[1][i] == nullptr)
     {
       CLog::Log(LOGERROR, "ActiveAE DSP - %s - realloc of process data array failed", __FUNCTION__);
       return false;

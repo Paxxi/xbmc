@@ -3139,7 +3139,7 @@ int CMusicDatabase::Cleanup(bool bShowProgress /* = true */)
   if (NULL == m_pDS.get()) return ERROR_DATABASE;
 
   int ret = ERROR_OK;
-  CGUIDialogProgress* pDlgProgress = NULL;
+  CGUIDialogProgress* pDlgProgress = nullptr;
   unsigned int time = XbmcThreads::SystemClockMillis();
   CLog::Log(LOGNOTICE, "%s: Starting musicdatabase cleanup ..", __FUNCTION__);
   ANNOUNCEMENT::CAnnouncementManager::GetInstance().Announce(ANNOUNCEMENT::AudioLibrary, "xbmc", "OnCleanStarted");
@@ -3264,7 +3264,7 @@ bool CMusicDatabase::LookupCDDBInfo(bool bRequery/*=false*/)
 
   // Get information for the inserted disc
   CCdInfo* pCdInfo = g_mediaManager.GetCdInfo();
-  if (pCdInfo == NULL)
+  if (pCdInfo == nullptr)
     return false;
 
   // If the disc has no tracks, we are finished here.
@@ -6052,7 +6052,7 @@ std::string CMusicDatabase::GetItemById(const std::string &itemType, int id)
 void CMusicDatabase::ExportToXML(const std::string &xmlFile, bool singleFile, bool images, bool overwrite)
 {
   int iFailCount = 0;
-  CGUIDialogProgress *progress=NULL;
+  CGUIDialogProgress *progress=nullptr;
   try
   {
     if (NULL == m_pDB.get()) return;
@@ -6091,7 +6091,7 @@ void CMusicDatabase::ExportToXML(const std::string &xmlFile, bool singleFile, bo
     CXBMCTinyXML xmlDoc;
     TiXmlDeclaration decl("1.0", "UTF-8", "yes");
     xmlDoc.InsertEndChild(decl);
-    TiXmlNode *pMain = NULL;
+    TiXmlNode *pMain = nullptr;
     if (!singleFile)
       pMain = &xmlDoc;
     else

@@ -216,7 +216,7 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFram
 {
   // found texture - allocate the necessary buffers
   auto buffer = new unsigned char [(size_t)frame.GetPackedSize()];
-  if (buffer == NULL)
+  if (buffer == nullptr)
   {
     CLog::Log(LOGERROR, "Out of memory loading texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetPackedSize());
     return false;
@@ -234,7 +234,7 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFram
   if (frame.IsPacked())
   { // unpack
     auto unpacked = new unsigned char[(size_t)frame.GetUnpackedSize()];
-    if (unpacked == NULL)
+    if (unpacked == nullptr)
     {
       CLog::Log(LOGERROR, "Out of memory unpacking texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetUnpackedSize());
       delete[] buffer;

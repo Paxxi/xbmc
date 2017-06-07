@@ -1088,7 +1088,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
   while (node)
   {
     const TiXmlNode* pNode = node->FirstChild("name");
-    const char* pValue=NULL;
+    const char* pValue=nullptr;
     if (pNode && pNode->FirstChild())
       pValue = pNode->FirstChild()->Value();
     else if (node->FirstChild())
@@ -1112,7 +1112,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
     const TiXmlNode *nodeStreamDetails = node->FirstChild("streamdetails");
     if (nodeStreamDetails)
     {
-      const TiXmlNode *nodeDetail = NULL;
+      const TiXmlNode *nodeDetail = nullptr;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("audio", nodeDetail)))
       {
         auto p = new CStreamDetailAudio();
@@ -1127,7 +1127,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
         StringUtils::ToLower(p->m_strLanguage);
         m_streamDetails.AddStream(p);
       }
-      nodeDetail = NULL;
+      nodeDetail = nullptr;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("video", nodeDetail)))
       {
         auto p = new CStreamDetailVideo();
@@ -1148,7 +1148,7 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
         StringUtils::ToLower(p->m_strLanguage);
         m_streamDetails.AddStream(p);
       }
-      nodeDetail = NULL;
+      nodeDetail = nullptr;
       while ((nodeDetail = nodeStreamDetails->IterateChildren("subtitle", nodeDetail)))
       {
         auto p = new CStreamDetailSubtitle();

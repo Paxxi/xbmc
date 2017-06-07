@@ -195,7 +195,7 @@ std::string Xcddb::Recv(bool wait4point)
 //-------------------------------------------------------------------------------------------------------------------
 bool Xcddb::queryCDinfo(CCdInfo* pInfo, int inexact_list_select)
 {
-  if ( pInfo == NULL )
+  if ( pInfo == nullptr )
   {
     m_lastError = E_PARAMETER_WRONG;
     return false;
@@ -480,13 +480,13 @@ void Xcddb::parseData(const char *buffer)
   char *line;
   const char trenner[3] = {'\n', '\r', '\0'};
   strtok((char*)buffer, trenner); // skip first line
-  while ((line = strtok(0, trenner)))
+  while ((line = strtok(nullptr, trenner)))
   {
     // Lines that begin with # are comments, should be ignored
     if (line[0] != '#')
     {
       char *s = strstr(line, "=");
-      if (s != NULL)
+      if (s != nullptr)
       {
         std::string strKeyword(line, s - line);
         StringUtils::TrimRight(strKeyword);
@@ -800,7 +800,7 @@ const std::string& Xcddb::getGenre() const
 //-------------------------------------------------------------------------------------------------------------------
 bool Xcddb::queryCDinfo(CCdInfo* pInfo)
 {
-  if ( pInfo == NULL )
+  if ( pInfo == nullptr )
   {
     CLog::Log(LOGERROR, "Xcddb::queryCDinfo pInfo == NULL");
     m_lastError = E_PARAMETER_WRONG;
@@ -1053,7 +1053,7 @@ bool Xcddb::isCDCached( CCdInfo* pInfo )
 {
   if (cCacheDir.empty())
     return false;
-  if ( pInfo == NULL )
+  if ( pInfo == nullptr )
     return false;
 
   return XFILE::CFile::Exists(GetCacheFile(pInfo->GetCddbDiscId()));

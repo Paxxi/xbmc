@@ -28,7 +28,7 @@
 CPosixMountProvider::CPosixMountProvider()
 {
   m_removableLength = 0;
-  PumpDriveChangeEvents(NULL);
+  PumpDriveChangeEvents(nullptr);
 }
 
 void CPosixMountProvider::Initialize()

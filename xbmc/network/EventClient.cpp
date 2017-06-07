@@ -153,7 +153,7 @@ bool CEventClient::AddPacket(CEventPacket *packet)
         iSeqPayloadSize += m_seqPackets[i]->PayloadSize();
       }
       unsigned int offset = 0;
-      void *newPayload = NULL;
+      void *newPayload = nullptr;
       newPayload = malloc(iSeqPayloadSize);
       if (newPayload)
       {
@@ -833,7 +833,7 @@ bool CEventClient::CheckButtonRepeat(unsigned int &next)
 bool CEventClient::Alive() const
 {
   // 60 seconds timeout
-  if ( (time(NULL) - m_lastPing) > 60 )
+  if ( (time(nullptr) - m_lastPing) > 60 )
     return false;
   return true;
 }

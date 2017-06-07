@@ -41,9 +41,9 @@ static void libass_log(int level, const char *fmt, va_list args, void *data)
 CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 {
 
-  m_track = NULL;
-  m_library = NULL;
-  m_renderer = NULL;
+  m_track = nullptr;
+  m_library = nullptr;
+  m_renderer = nullptr;
   m_references = 1;
 
   if(!m_dll.Load())
@@ -158,7 +158,7 @@ ASS_Image* CDVDSubtitlesLibass::RenderImage(int frameWidth, int frameHeight, int
   if(!m_renderer || !m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s - Missing ASS structs(m_track or m_renderer)", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
 
   double storage_aspect = (double)frameWidth / frameHeight;
@@ -178,7 +178,7 @@ ASS_Event* CDVDSubtitlesLibass::GetEvents()
   if(!m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s -  Missing ASS structs(m_track)", __FUNCTION__);
-    return NULL;
+    return nullptr;
   }
   return m_track->events;
 }

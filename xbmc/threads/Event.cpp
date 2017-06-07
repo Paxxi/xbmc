@@ -115,7 +115,7 @@ namespace XbmcThreads
     // signaled and sets 'signaled' to the first one it
     // finds.
     // ==================================================
-    signaled = NULL;
+    signaled = nullptr;
     for (std::vector<CEvent*>::iterator iter = events.begin();
          signaled == NULL && iter != events.end(); ++iter)
     {
@@ -144,12 +144,12 @@ namespace XbmcThreads
         // This acquires and releases the CEvent::mutex. This is fine since the
         //  CEventGroup::mutex is already being held
         signaled->WaitMSec(0); // reset the event if needed
-      signaled = NULL;  // clear the signaled if all the waiters are gone
+      signaled = nullptr;  // clear the signaled if all the waiters are gone
     }
     return ret;
   }
 
-  CEventGroup::CEventGroup(int num, CEvent* v1, ...) : signaled(NULL), condVar(actualCv,signaled), numWaits(0)
+  CEventGroup::CEventGroup(int num, CEvent* v1, ...) : signaled(nullptr), condVar(actualCv,signaled), numWaits(0)
   {
     va_list ap;
 
@@ -172,7 +172,7 @@ namespace XbmcThreads
       (*iter)->addGroup(this);
   }
 
-  CEventGroup::CEventGroup(CEvent* v1, ...) : signaled(NULL), condVar(actualCv,signaled), numWaits(0)
+  CEventGroup::CEventGroup(CEvent* v1, ...) : signaled(nullptr), condVar(actualCv,signaled), numWaits(0)
   {
     va_list ap;
 

@@ -107,7 +107,7 @@ extern "C" size_t write_callback(char *buffer,
                size_t nitems,
                void *userp)
 {
-  if(userp == NULL) return 0;
+  if(userp == nullptr) return 0;
 
   CCurlFile::CReadState *state = (CCurlFile::CReadState *)userp;
   return state->WriteCallback(buffer, size, nitems);
@@ -118,7 +118,7 @@ extern "C" size_t read_callback(char *buffer,
                size_t nitems,
                void *userp)
 {
-  if(userp == NULL) return 0;
+  if(userp == nullptr) return 0;
 
   CCurlFile::CReadState *state = (CCurlFile::CReadState *)userp;
   return state->ReadCallback(buffer, size, nitems);
@@ -150,7 +150,7 @@ static inline void* realloc_simple(void *ptr, size_t size)
   if(ptr && !ptr2 && size > 0)
   {
     free(ptr);
-    return NULL;
+    return nullptr;
   }
   else
     return ptr2;
@@ -251,9 +251,9 @@ size_t CCurlFile::CReadState::WriteCallback(char *buffer, size_t size, size_t ni
 
 CCurlFile::CReadState::CReadState()
 {
-  m_easyHandle = NULL;
-  m_multiHandle = NULL;
-  m_overflowBuffer = NULL;
+  m_easyHandle = nullptr;
+  m_multiHandle = nullptr;
+  m_overflowBuffer = nullptr;
   m_overflowSize = 0;
   m_stillRunning = 0;
   m_filePos = 0;
@@ -263,11 +263,11 @@ CCurlFile::CReadState::CReadState()
   m_bFirstLoop = true;
   m_sendRange = true;
   m_bLastError = false;
-  m_readBuffer = 0;
+  m_readBuffer = nullptr;
   m_isPaused = false;
   m_bRetry = true;
-  m_curlHeaderList = NULL;
-  m_curlAliasList = NULL;
+  m_curlHeaderList = nullptr;
+  m_curlAliasList = nullptr;
 }
 
 CCurlFile::CReadState::~CReadState()
@@ -386,21 +386,21 @@ void CCurlFile::CReadState::Disconnect()
 
   m_buffer.Clear();
   free(m_overflowBuffer);
-  m_overflowBuffer = NULL;
+  m_overflowBuffer = nullptr;
   m_overflowSize = 0;
   m_filePos = 0;
   m_fileSize = 0;
   m_bufferSize = 0;
-  m_readBuffer = 0;
+  m_readBuffer = nullptr;
 
   /* cleanup */
   if( m_curlHeaderList )
     g_curlInterface.slist_free_all(m_curlHeaderList);
-  m_curlHeaderList = NULL;
+  m_curlHeaderList = nullptr;
 
   if( m_curlAliasList )
     g_curlInterface.slist_free_all(m_curlAliasList);
-  m_curlAliasList = NULL;
+  m_curlAliasList = nullptr;
 }
 
 
@@ -416,7 +416,7 @@ CCurlFile::CCurlFile()
  : m_writeOffset(0)
  , m_proxytype(PROXY_HTTP)
  , m_proxyport(3128)
- , m_overflowBuffer(NULL)
+ , m_overflowBuffer(nullptr)
  , m_overflowSize(0)
 {
   g_curlInterface.Load(); // loads the curl dll and resolves exports etc.
@@ -439,7 +439,7 @@ CCurlFile::CCurlFile()
   m_httpauth = "";
   m_cipherlist = "";
   m_state = new CReadState();
-  m_oldState = NULL;
+  m_oldState = nullptr;
   m_skipshout = false;
   m_httpresponse = -1;
   m_acceptCharset = "UTF-8,*;q=0.8"; /* prefer UTF-8 if available */
@@ -459,7 +459,7 @@ void CCurlFile::Close()
 
   m_state->Disconnect();
   delete m_oldState;
-  m_oldState = NULL;
+  m_oldState = nullptr;
 
   m_url.clear();
   m_referer.clear();
@@ -661,7 +661,7 @@ void CCurlFile::SetRequestHeaders(CReadState* state)
   if(state->m_curlHeaderList)
   {
     g_curlInterface.slist_free_all(state->m_curlHeaderList);
-    state->m_curlHeaderList = NULL;
+    state->m_curlHeaderList = nullptr;
   }
 
   MAPHTTPHEADERS::iterator it;
@@ -937,7 +937,7 @@ bool CCurlFile::Download(const std::string& strURL, const std::string& strFileNa
   if (!strData.empty())
     written = file.Write(strData.c_str(), strData.size());
 
-  if (pdwSize != NULL)
+  if (pdwSize != nullptr)
     *pdwSize = written > 0 ? written : 0;
 
   return written == static_cast<ssize_t>(strData.size());
@@ -1129,7 +1129,7 @@ bool CCurlFile::OpenForWrite(const CURL& url, bool bOverWrite)
 
   g_curlInterface.multi_add_handle(m_state->m_multiHandle, m_state->m_easyHandle);
 
-  m_state->SetReadBuffer(NULL, 0);
+  m_state->SetReadBuffer(nullptr, 0);
 
   return true;
 }
@@ -1241,7 +1241,7 @@ bool CCurlFile::Exists(const CURL& url)
   }
 
   CURLcode result = g_curlInterface.easy_perform(m_state->m_easyHandle);
-  g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+  g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
 
   if (result == CURLE_WRITE_ERROR || result == CURLE_OK)
     return true;
@@ -1340,7 +1340,7 @@ int64_t CCurlFile::Seek(int64_t iFilePosition, int iWhence)
       {
         delete m_state;
         m_state     = m_oldState;
-        m_oldState  = NULL;
+        m_oldState  = nullptr;
       }
       // Retry without multisession
       m_multisession = false;
@@ -1441,7 +1441,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 
   if( result != CURLE_ABORTED_BY_CALLBACK && result != CURLE_OK )
   {
-    g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+    g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
     errno = ENOENT;
     CLog::Log(LOGERROR, "CCurlFile::Stat - Failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
     return -1;
@@ -1453,7 +1453,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
   {
     if (url.IsProtocol("ftp"))
     {
-      g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+      g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
       CLog::Log(LOGNOTICE, "CCurlFile::Stat - Content length failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
       errno = ENOENT;
       return -1;
@@ -1471,7 +1471,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
     if (result != CURLE_OK)
     {
       CLog::Log(LOGNOTICE, "CCurlFile::Stat - Content type failed: %s(%d) for %s", g_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
-      g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+      g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
       errno = ENOENT;
       return -1;
     }
@@ -1496,7 +1496,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
         buffer->st_mtime = filetime;
     }
   }
-  g_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
+  g_curlInterface.easy_release(&m_state->m_easyHandle, nullptr);
   return 0;
 }
 
@@ -1798,7 +1798,7 @@ bool CCurlFile::GetHttpHeader(const CURL &url, CHttpHeader &headers)
   try
   {
     CCurlFile file;
-    if(file.Stat(url, NULL) == 0)
+    if(file.Stat(url, nullptr) == 0)
     {
       headers = file.GetHttpHeader();
       return true;

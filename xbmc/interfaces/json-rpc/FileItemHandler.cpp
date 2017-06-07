@@ -222,7 +222,7 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
     end = items.Size();
   }
 
-  CThumbLoader *thumbLoader = NULL;
+  CThumbLoader *thumbLoader = nullptr;
   if (end - start > 0)
   {
     if (items.Get(start)->HasVideoInfoTag())
@@ -230,7 +230,7 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
     else if (items.Get(start)->HasMusicInfoTag())
       thumbLoader = new CMusicThumbLoader();
 
-    if (thumbLoader != NULL)
+    if (thumbLoader != nullptr)
       thumbLoader->OnLoaderStart();
   }
 

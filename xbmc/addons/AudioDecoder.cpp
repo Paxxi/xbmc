@@ -81,7 +81,7 @@ bool CAudioDecoder::Init(const CFileItem& file, unsigned int filecache)
   else
     m_format.m_channelLayout = CAEUtil::GuessChLayout(channels);
 
-  return (m_context != NULL);
+  return (m_context != nullptr);
 }
 
 int CAudioDecoder::ReadPCM(uint8_t* buffer, int size, int* actualsize)

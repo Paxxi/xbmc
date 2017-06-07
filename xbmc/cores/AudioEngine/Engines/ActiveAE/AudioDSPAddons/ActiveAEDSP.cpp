@@ -120,7 +120,7 @@ void CActiveAEDSP::TriggerModeUpdate(bool bAsync /* = true */)
   if (bAsync)
   {
     auto job = new CActiveAEDSPModeUpdateJob();
-    CJobManager::GetInstance().AddJob(job, NULL);
+    CJobManager::GetInstance().AddJob(job, nullptr);
     return;
   }
 

@@ -68,7 +68,7 @@ JSONRPC_STATUS CFileOperations::GetRootDirectory(const std::string &method, ITra
     param["properties"] = CVariant(CVariant::VariantTypeArray);
     param["properties"].append("file");
 
-    HandleFileItemList(NULL, true, "sources", items, param, result);
+    HandleFileItemList(nullptr, true, "sources", items, param, result);
   }
 
   return OK;

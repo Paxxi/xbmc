@@ -36,7 +36,7 @@ CHTTPPythonInvoker::~CHTTPPythonInvoker()
 
 void CHTTPPythonInvoker::onAbort()
 {
-  if (m_request == NULL)
+  if (m_request == nullptr)
     return;
 
   m_internalError = true;
@@ -46,7 +46,7 @@ void CHTTPPythonInvoker::onAbort()
 
 void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */, const std::string& exceptionValue /* = "" */, const std::string& exceptionTraceback /* = "" */)
 {
-  if (m_request == NULL)
+  if (m_request == nullptr)
     return;
 
   m_internalError = true;

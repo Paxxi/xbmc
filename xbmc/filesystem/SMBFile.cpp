@@ -64,7 +64,7 @@ bool CSMB::IsFirstInit = true;
 
 CSMB::CSMB()
 {
-  m_context = NULL;
+  m_context = nullptr;
 #ifdef TARGET_POSIX
   m_OpenConnections = 0;
   m_IdleTimeout = 0;
@@ -83,9 +83,9 @@ void CSMB::Deinit()
   /* samba goes loco if deinited while it has some files opened */
   if (m_context)
   {
-    smbc_set_context(NULL);
+    smbc_set_context(nullptr);
     smbc_free_context(m_context, 1);
-    m_context = NULL;
+    m_context = nullptr;
   }
 }
 
@@ -105,7 +105,7 @@ void CSMB::Init()
     {
       snprintf(smb_conf, sizeof(smb_conf), "%s/.smb/smb.conf", getenv("HOME"));
       FILE* f = fopen(smb_conf, "w");
-      if (f != NULL)
+      if (f != nullptr)
       {
         fprintf(f, "[global]\n");
 
@@ -198,7 +198,7 @@ void CSMB::Init()
     else
     {
       smbc_free_context(m_context, 1);
-      m_context = NULL;
+      m_context = nullptr;
     }
   }
   m_IdleTimeout = 180;
@@ -258,7 +258,7 @@ void CSMB::CheckIfIdle()
   if (m_OpenConnections == 0)
   { /* I've set the the maximum IDLE time to be 1 min and 30 sec. */
     CSingleLock lock(*this);
-    if (m_OpenConnections == 0 /* check again - when locked */ && m_context != NULL)
+    if (m_OpenConnections == 0 /* check again - when locked */ && m_context != nullptr)
     {
       if (m_IdleTimeout > 0)
 	  {

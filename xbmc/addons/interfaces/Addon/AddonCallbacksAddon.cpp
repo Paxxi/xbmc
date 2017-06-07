@@ -97,7 +97,7 @@ CAddonCallbacksAddon::~CAddonCallbacksAddon()
 void CAddonCallbacksAddon::AddOnLog(void *addonData, const addon_log_t addonLogLevel, const char *strMessage)
 {
   CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
-  if (addon == NULL || strMessage == NULL)
+  if (addon == nullptr || strMessage == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
     return;
@@ -138,7 +138,7 @@ void CAddonCallbacksAddon::AddOnLog(void *addonData, const addon_log_t addonLogL
 void CAddonCallbacksAddon::QueueNotification(void *addonData, const queue_msg_t type, const char *strMessage)
 {
   CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
-  if (addon == NULL || strMessage == NULL)
+  if (addon == nullptr || strMessage == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
     return;
@@ -182,7 +182,7 @@ bool CAddonCallbacksAddon::WakeOnLan(const char *mac)
 bool CAddonCallbacksAddon::GetAddonSetting(void *addonData, const char *strSettingName, void *settingValue)
 {
   CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
-  if (addon == NULL || strSettingName == NULL || settingValue == NULL)
+  if (addon == nullptr || strSettingName == nullptr || settingValue == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
     return false;
@@ -257,12 +257,12 @@ char* CAddonCallbacksAddon::TranslateSpecialProtocol(const char *strSource)
     if (strSource)
       return strdup(CSpecialProtocol::TranslatePath(strSource).c_str());
     else
-      return NULL;
+      return nullptr;
   }
   catch (std::exception &e)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - exception '%s' caught", __FUNCTION__, e.what());
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -281,7 +281,7 @@ char* CAddonCallbacksAddon::GetLocalizedString(const void* addonData, long dwCod
 {
   CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
   if (!addon || g_application.m_bStop)
-    return NULL;
+    return nullptr;
 
   CAddonCallbacksAddon* addonHelper = static_cast<CAddonCallbacksAddon*>(addon->AddOnLib_GetHelper());
 
@@ -299,7 +299,7 @@ char* CAddonCallbacksAddon::GetDVDMenuLanguage(const void* addonData)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   std::string string = g_langInfo.GetDVDMenuLanguage();
 
@@ -316,28 +316,28 @@ void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileN
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   auto  file = new CFile;
   if (file->Open(strFileName, flags))
     return ((void*)file);
 
   delete file;
-  return NULL;
+  return nullptr;
 }
 
 void* CAddonCallbacksAddon::OpenFileForWrite(const void* addonData, const char* strFileName, bool bOverwrite)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
   if (!helper)
-    return NULL;
+    return nullptr;
 
   auto  file = new CFile;
   if (file->OpenForWrite(strFileName, bOverwrite))
     return ((void*)file);
 
   delete file;
-  return NULL;
+  return nullptr;
 }
 
 ssize_t CAddonCallbacksAddon::ReadFile(const void* addonData, void* file, void* lpBuf, size_t uiBufSize)

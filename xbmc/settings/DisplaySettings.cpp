@@ -109,7 +109,7 @@ bool CDisplaySettings::Load(const TiXmlNode *settings)
   CSingleLock lock(m_critical);
   m_calibrations.clear();
 
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   const TiXmlElement *pElement = settings->FirstChildElement("resolutions");
@@ -170,13 +170,13 @@ bool CDisplaySettings::Load(const TiXmlNode *settings)
 
 bool CDisplaySettings::Save(TiXmlNode *settings) const
 {
-  if (settings == NULL)
+  if (settings == nullptr)
     return false;
 
   CSingleLock lock(m_critical);
   TiXmlElement xmlRootElement("resolutions");
   TiXmlNode *pRoot = settings->InsertEndChild(xmlRootElement);
-  if (pRoot == NULL)
+  if (pRoot == nullptr)
     return false;
 
   // save calibrations
@@ -185,7 +185,7 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     // Write the resolution tag
     TiXmlElement resElement("resolution");
     TiXmlNode *pNode = pRoot->InsertEndChild(resElement);
-    if (pNode == NULL)
+    if (pNode == nullptr)
       return false;
 
     // Now write each of the pieces of information we need...
@@ -201,7 +201,7 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     // create the overscan child
     TiXmlElement overscanElement("overscan");
     TiXmlNode *pOverscanNode = pNode->InsertEndChild(overscanElement);
-    if (pOverscanNode == NULL)
+    if (pOverscanNode == nullptr)
       return false;
 
     XMLUtils::SetInt(pOverscanNode, "left", it->Overscan.left);

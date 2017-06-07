@@ -191,7 +191,7 @@ static const HTMLMapping mappings[] =
    {L"&Yuml;",    0x0178},
    {L"&zwj;",     0x200D},
    {L"&zwnj;",    0x200C},
-   {NULL,         L'\0'}};
+   {nullptr,         L'\0'}};
 
 void CHTMLUtil::ConvertHTMLToW(const std::wstring& strHTML, std::wstring& strStripped)
 {

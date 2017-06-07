@@ -163,7 +163,7 @@ int NestDetect::m_nest = 0;
 class ProgressDialogHelper
 {
 public:
-  ProgressDialogHelper (const std::string& heading) : m_dialog(0)
+  ProgressDialogHelper (const std::string& heading) : m_dialog(nullptr)
   {
     if (g_application.IsCurrentThread())
       m_dialog = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
@@ -182,7 +182,7 @@ public:
       m_dialog->Close();
   }
 
-  bool HasDialog() const { return m_dialog != 0; }
+  bool HasDialog() const { return m_dialog != nullptr; }
 
   enum wait_result { TimedOut, Canceled, Success };
 

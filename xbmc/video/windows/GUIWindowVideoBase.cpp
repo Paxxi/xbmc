@@ -90,7 +90,7 @@ CGUIWindowVideoBase::CGUIWindowVideoBase(int id, const std::string &xmlFile)
 {
   m_thumbLoader.SetObserver(this);
   m_stackingAvailable = true;
-  m_dlgProgress = NULL;
+  m_dlgProgress = nullptr;
 }
 
 CGUIWindowVideoBase::~CGUIWindowVideoBase()

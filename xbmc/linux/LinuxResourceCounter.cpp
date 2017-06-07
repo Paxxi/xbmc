@@ -35,7 +35,7 @@ CLinuxResourceCounter::~CLinuxResourceCounter()
 double CLinuxResourceCounter::GetCPUUsage()
 {
   struct timeval tmNow;
-  if (gettimeofday(&tmNow, NULL) == -1)
+  if (gettimeofday(&tmNow, nullptr) == -1)
     CLog::Log(LOGERROR, "error %d in gettimeofday", errno);
   else
   {
@@ -67,7 +67,7 @@ double CLinuxResourceCounter::GetCPUUsage()
 
 void CLinuxResourceCounter::Reset()
 {
-  if (gettimeofday(&m_tmLastCheck, NULL) == -1)
+  if (gettimeofday(&m_tmLastCheck, nullptr) == -1)
     CLog::Log(LOGERROR, "error %d in gettimeofday", errno);
 
   if (getrusage(RUSAGE_SELF, &m_usage) == -1)

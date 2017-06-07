@@ -69,7 +69,7 @@ bool CSettingDependencyCondition::Deserialize(const TiXmlNode *node)
     return false;
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == NULL)
+  if (elem == nullptr)
     return false;
 
   m_target = SettingDependencyTargetSetting;
@@ -252,7 +252,7 @@ bool CSettingDependencyCondition::setOperator(const std::string &op)
 
 bool CSettingDependencyConditionCombination::Deserialize(const TiXmlNode *node)
 {
-  if (node == NULL)
+  if (node == nullptr)
     return false;
 
   size_t numOperations = m_operations.size();
@@ -269,7 +269,7 @@ bool CSettingDependencyConditionCombination::Deserialize(const TiXmlNode *node)
         continue;
 
       CSettingDependencyConditionCombination *combination = static_cast<CSettingDependencyConditionCombination*>(m_operations[i].get());
-      if (combination == NULL)
+      if (combination == nullptr)
         continue;
 
       const std::set<std::string>& settings = combination->GetSettings();
@@ -285,7 +285,7 @@ bool CSettingDependencyConditionCombination::Deserialize(const TiXmlNode *node)
         continue;
 
       CSettingDependencyCondition *condition = static_cast<CSettingDependencyCondition*>(m_values[i].get());
-      if (condition == NULL)
+      if (condition == nullptr)
         continue;
 
       std::string settingId = condition->GetSetting();
@@ -340,11 +340,11 @@ CSettingDependency::CSettingDependency(SettingDependencyType type, CSettingsMana
 
 bool CSettingDependency::Deserialize(const TiXmlNode *node)
 {
-  if (node == NULL)
+  if (node == nullptr)
     return false;
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == NULL)
+  if (elem == nullptr)
     return false;
   
   const char *strType = elem->Attribute(SETTING_XML_ATTR_TYPE);

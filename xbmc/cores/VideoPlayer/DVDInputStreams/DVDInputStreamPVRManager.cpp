@@ -172,7 +172,7 @@ bool CDVDInputStreamPVRManager::Open()
     {
       CLog::Log(LOGERROR, "CDVDInputStreamPVRManager::Open - error opening [%s]", CURL::GetRedacted(transFile).c_str());
       delete m_pOtherStream;
-      m_pOtherStream = NULL;
+      m_pOtherStream = nullptr;
       return false;
     }
   }
@@ -236,7 +236,7 @@ void CDVDInputStreamPVRManager::Close()
 
   CDVDInputStream::Close();
 
-  m_pOtherStream    = NULL;
+  m_pOtherStream    = nullptr;
   m_eof             = true;
 
   CLog::Log(LOGDEBUG, "CDVDInputStreamPVRManager::Close - stream closed");

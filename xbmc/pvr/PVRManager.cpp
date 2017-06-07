@@ -623,7 +623,7 @@ void CPVRManager::HideProgressDialog()
   if (m_progressHandle)
   {
     m_progressHandle->MarkFinished();
-    m_progressHandle = NULL;
+    m_progressHandle = nullptr;
   }
 }
 
@@ -1334,7 +1334,7 @@ void CPVRManager::TriggerChannelGroupsUpdate()
 void CPVRManager::TriggerSearchMissingChannelIcons()
 {
   if (IsStarted())
-    CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), NULL);
+    CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), nullptr);
 }
 
 void CPVRManager::ConnectionStateChange(CPVRClient *client, std::string connectString, PVR_CONNECTION_STATE state, std::string message)

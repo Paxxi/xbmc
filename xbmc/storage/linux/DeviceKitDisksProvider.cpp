@@ -120,7 +120,7 @@ bool CDeviceKitDiskDevice::Mount()
     if (reply)
     {
       char *mountPoint;
-      if (dbus_message_get_args (reply, NULL, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_STRING, &mountPoint, DBUS_TYPE_INVALID))
       {
         m_MountPath = mountPoint;
         CLog::Log(LOGDEBUG, "DeviceKit.Disks: Successfully mounted %s on %s", m_DeviceKitUDI.c_str(), mountPoint);
@@ -207,7 +207,7 @@ CDeviceKitDisksProvider::CDeviceKitDisksProvider()
     CLog::Log(LOGERROR, "DeviceKit.Disks: Failed to attach to signal %s", m_error.message);
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 }
 
@@ -224,7 +224,7 @@ CDeviceKitDisksProvider::~CDeviceKitDisksProvider()
   {
     dbus_connection_close(m_connection);
     dbus_connection_unref(m_connection);
-    m_connection = NULL;
+    m_connection = nullptr;
   }
 
   dbus_error_free (&m_error);
@@ -275,7 +275,7 @@ bool CDeviceKitDisksProvider::PumpDriveChangeEvents(IStorageEventsCallback *call
     if (msg)
     {
       char *object;
-      if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
+      if (dbus_message_get_args (msg, nullptr, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
       {
         result = true;
         if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceAdded"))
@@ -325,7 +325,7 @@ void CDeviceKitDisksProvider::DeviceAdded(const char *object, IStorageEventsCall
     delete m_AvailableDevices[object];
   }
 
-  CDeviceKitDiskDevice *device = NULL;
+  CDeviceKitDiskDevice *device = nullptr;
   if (m_DaemonVersion >= 7)
     device = new CDeviceKitDiskDeviceNewAPI(object);
   else

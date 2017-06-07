@@ -54,7 +54,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
   {
     if (m_eglSurface == EGL_NO_SURFACE)
     {
-      m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, glWindow, NULL);
+      m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, glWindow, nullptr);
       if (m_eglSurface == EGL_NO_SURFACE)
       {
         CLog::Log(LOGERROR, "failed to create EGL window surface %d\n", eglGetError());
@@ -79,7 +79,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
       CLog::Log(LOGERROR, "failed to get egl display\n");
       return false;
     }
-    if (!eglInitialize(m_eglDisplay, NULL, NULL))
+    if (!eglInitialize(m_eglDisplay, nullptr, nullptr))
     {
       CLog::Log(LOGERROR, "failed to initialize egl display\n");
       return false;
@@ -88,7 +88,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
   XVisualInfo vMask;
   XVisualInfo *visuals;
-  XVisualInfo *vInfo      = NULL;
+  XVisualInfo *vInfo      = nullptr;
   int availableVisuals    = 0;
   vMask.screen = screen;
   XWindowAttributes winAttr;
@@ -110,7 +110,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
                 (unsigned) vInfo->visualid);
       vMask.depth = vInfo->depth;
       XFree(vInfo);
-      vInfo = NULL;
+      vInfo = nullptr;
     }
   }
   else
@@ -162,7 +162,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
       CLog::Log(LOGERROR, "failed to get egl display");
       return false;
     }
-    if (!eglInitialize(m_eglDisplay, NULL, NULL))
+    if (!eglInitialize(m_eglDisplay, nullptr, nullptr))
     {
       CLog::Log(LOGERROR, "failed to initialize egl\n");
       return false;
@@ -189,7 +189,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
     if (m_eglSurface == EGL_NO_SURFACE)
     {
-      m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, glWindow, NULL);
+      m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, glWindow, nullptr);
       if (m_eglSurface == EGL_NO_SURFACE)
       {
         CLog::Log(LOGERROR, "failed to create EGL window surface %d", eglGetError());
@@ -300,7 +300,7 @@ EGLConfig CGLContextEGL::getEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo)
   };
   EGLint numConfigs;
 
-  if (!eglChooseConfig(eglDisplay, attributes, NULL, 0, &numConfigs))
+  if (!eglChooseConfig(eglDisplay, attributes, nullptr, 0, &numConfigs))
   {
     CLog::Log(LOGERROR, "Failed to query number of egl configs");
     return EGL_NO_CONFIG;
@@ -384,17 +384,17 @@ XVisualInfo* CGLContextEGL::GetVisual()
       if (m_eglDisplay == EGL_NO_DISPLAY)
       {
         CLog::Log(LOGERROR, "failed to get egl display\n");
-	return NULL;
+	return nullptr;
       }
-      if (!eglInitialize(m_eglDisplay, NULL, NULL))
+      if (!eglInitialize(m_eglDisplay, nullptr, nullptr))
       {
 	CLog::Log(LOGERROR, "failed to initialize egl display\n");
-	return NULL;
+	return nullptr;
       }
     }
 
     EGLint numConfigs;
-    EGLConfig eglConfig = 0;
+    EGLConfig eglConfig = nullptr;
     if (!eglChooseConfig(m_eglDisplay, att, &eglConfig, 1, &numConfigs) || numConfigs == 0) {
       CLog::Log(LOGERROR, "Failed to choose a config %d\n", eglGetError());
     }

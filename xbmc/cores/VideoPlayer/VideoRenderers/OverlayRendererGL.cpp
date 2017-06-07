@@ -57,7 +57,7 @@ static void LoadTexture(GLenum target
 {
   int width2  = width;
   int height2 = height;
-  char *pixelVector = NULL;
+  char *pixelVector = nullptr;
   const GLvoid *pixelData = pixels;
 
   GLenum internalFormat = alpha ? GL_ALPHA : GL_RGBA;
@@ -130,7 +130,7 @@ static void LoadTexture(GLenum target
 
   glTexImage2D   (target, 0, internalFormat
                 , width2, height2, 0
-                , externalFormat, GL_UNSIGNED_BYTE, NULL);
+                , externalFormat, GL_UNSIGNED_BYTE, nullptr);
 
   glTexSubImage2D(target, 0
                 , 0, 0, width, height
@@ -291,7 +291,7 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlaySpu* o)
 
 COverlayGlyphGL::COverlayGlyphGL(ASS_Image* images, int width, int height)
 {
-  m_vertex = NULL;
+  m_vertex = nullptr;
   m_width  = 1.0;
   m_height = 1.0;
   m_align  = ALIGN_VIDEO;

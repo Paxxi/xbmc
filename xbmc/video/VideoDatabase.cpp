@@ -1316,7 +1316,7 @@ bool CVideoDatabase::AddPathToTvShow(int idShow, const std::string &path, const 
       struct __stat64 buffer;
       if (XFILE::CFile::Stat(path, &buffer) == 0)
       {
-        time_t now = time(NULL);
+        time_t now = time(nullptr);
         // Make sure we have a valid date (i.e. not in the future)
         if ((time_t)buffer.st_ctime <= now)
         {
@@ -3820,7 +3820,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
 {
   CVideoInfoTag details;
 
-  if (record == NULL)
+  if (record == nullptr)
     return details;
 
   DWORD time = XbmcThreads::SystemClockMillis();
@@ -3908,7 +3908,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
 {
   CVideoInfoTag details;
 
-  if (record == NULL)
+  if (record == nullptr)
     return details;
 
   DWORD time = XbmcThreads::SystemClockMillis();
@@ -3958,7 +3958,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
     details.m_parsedDetails = getDetails;
   }
 
-  if (item != NULL)
+  if (item != nullptr)
   {
     item->m_dateTime = details.GetPremiered();
     item->SetProperty("totalseasons", details.m_iSeason);
@@ -3981,7 +3981,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
 {
   CVideoInfoTag details;
 
-  if (record == NULL)
+  if (record == nullptr)
     return details;
 
   DWORD time = XbmcThreads::SystemClockMillis();
@@ -8805,7 +8805,7 @@ void CVideoDatabase::DumpToDummyFiles(const std::string &path)
 void CVideoDatabase::ExportToXML(const std::string &path, bool singleFile /* = true */, bool images /* = false */, bool actorThumbs /* false */, bool overwrite /*=false*/)
 {
   int iFailCount = 0;
-  CGUIDialogProgress *progress=NULL;
+  CGUIDialogProgress *progress=nullptr;
   try
   {
     if (NULL == m_pDB.get()) return;
@@ -8865,7 +8865,7 @@ void CVideoDatabase::ExportToXML(const std::string &path, bool singleFile /* = t
     CXBMCTinyXML xmlDoc;
     TiXmlDeclaration decl("1.0", "UTF-8", "yes");
     xmlDoc.InsertEndChild(decl);
-    TiXmlNode *pMain = NULL;
+    TiXmlNode *pMain = nullptr;
     if (!singleFile)
       pMain = &xmlDoc;
     else
@@ -9331,7 +9331,7 @@ void CVideoDatabase::ExportActorThumbs(const std::string &strDir, const CVideoIn
 
 void CVideoDatabase::ImportFromXML(const std::string &path)
 {
-  CGUIDialogProgress *progress=NULL;
+  CGUIDialogProgress *progress=nullptr;
   try
   {
     if (NULL == m_pDB.get()) return;
@@ -9423,7 +9423,7 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
         artItem.SetPath(GetSafeFile(moviesDir, filename) + ".avi");
         scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
         item.SetArt(artItem.GetArt());
-        scanner.AddVideo(&item, CONTENT_MOVIES, useFolders, true, NULL, true);
+        scanner.AddVideo(&item, CONTENT_MOVIES, useFolders, true, nullptr, true);
         current++;
       }
       else if (strnicmp(movie->Value(), MediaTypeMusicVideo, 10) == 0)
@@ -9438,7 +9438,7 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
         artItem.SetPath(GetSafeFile(musicvideosDir, filename) + ".avi");
         scanner.GetArtwork(&artItem, CONTENT_MUSICVIDEOS, useFolders, true, actorsDir);
         item.SetArt(artItem.GetArt());
-        scanner.AddVideo(&item, CONTENT_MUSICVIDEOS, useFolders, true, NULL, true);
+        scanner.AddVideo(&item, CONTENT_MUSICVIDEOS, useFolders, true, nullptr, true);
         current++;
       }
       else if (strnicmp(movie->Value(), MediaTypeTvShow, 6) == 0)
@@ -9455,7 +9455,7 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
         artItem.SetPath(artPath);
         scanner.GetArtwork(&artItem, CONTENT_TVSHOWS, useFolders, true, actorsDir);
         showItem.SetArt(artItem.GetArt());
-        int showID = scanner.AddVideo(&showItem, CONTENT_TVSHOWS, useFolders, true, NULL, true);
+        int showID = scanner.AddVideo(&showItem, CONTENT_TVSHOWS, useFolders, true, nullptr, true);
         // season artwork
         std::map<int, std::map<std::string, std::string> > seasonArt;
         artItem.GetVideoInfoTag()->m_strPath = artPath;

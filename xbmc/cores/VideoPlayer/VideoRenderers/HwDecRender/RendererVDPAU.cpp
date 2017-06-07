@@ -78,7 +78,7 @@ void CRendererVDPAU::ReleaseBuffer(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
     ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
-  buf.hwDec = NULL;
+  buf.hwDec = nullptr;
 }
 
 CRenderInfo CRendererVDPAU::GetRenderInfo()
@@ -342,9 +342,9 @@ bool CRendererVDPAU::CreateVDPAUTexture420(int index)
   im.cshift_x = 1;
   im.cshift_y = 1;
 
-  im.plane[0] = NULL;
-  im.plane[1] = NULL;
-  im.plane[2] = NULL;
+  im.plane[0] = nullptr;
+  im.plane[1] = nullptr;
+  im.plane[2] = nullptr;
 
   for(int p=0; p<3; p++)
   {

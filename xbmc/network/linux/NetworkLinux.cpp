@@ -263,7 +263,7 @@ std::string CNetworkInterfaceLinux::GetCurrentDefaultGateway()
      return result;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    char iface[16];
    char dst[128];
    char gateway[128];
@@ -436,7 +436,7 @@ void CNetworkLinux::queryInterfaceList()
      return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    int n;
    char* p;
@@ -908,7 +908,7 @@ void CNetworkInterfaceLinux::GetSettings(NetworkAssignment& assignment, std::str
       return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    std::string s;
    bool foundInterface = false;
@@ -993,7 +993,7 @@ void CNetworkInterfaceLinux::SetSettings(NetworkAssignment& assignment, std::str
       return;
    }
 
-   char* line = NULL;
+   char* line = nullptr;
    size_t linel = 0;
    std::string s;
    bool foundInterface = false;

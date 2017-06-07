@@ -96,7 +96,7 @@ bool CUPnPSettings::Save(const std::string &file) const
   CXBMCTinyXML doc;
   TiXmlElement xmlRootElement(XML_UPNP);
   TiXmlNode *pRoot = doc.InsertEndChild(xmlRootElement);
-  if (pRoot == NULL)
+  if (pRoot == nullptr)
     return false;
 
   XMLUtils::SetString(pRoot, XML_SERVER_UUID, m_serverUUID);

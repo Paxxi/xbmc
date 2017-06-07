@@ -49,7 +49,7 @@ void CDVDDemuxUtils::FreeDemuxPacket(DemuxPacket* pPacket)
 DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
 {
   auto  pPacket = new DemuxPacket;
-  if (!pPacket) return NULL;
+  if (!pPacket) return nullptr;
 
   try
   {
@@ -70,7 +70,7 @@ DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
       if (!pPacket->pData)
       {
         FreeDemuxPacket(pPacket);
-        return NULL;
+        return nullptr;
       }
 
       // reset the last 8 bytes to 0;
@@ -87,7 +87,7 @@ DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
   {
     CLog::Log(LOGERROR, "%s - Exception thrown", __FUNCTION__);
     FreeDemuxPacket(pPacket);
-    pPacket = NULL;
+    pPacket = nullptr;
   }
   return pPacket;
 }

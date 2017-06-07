@@ -230,7 +230,7 @@ std::string CSpecialProtocol::TranslatePathConvertCase(const std::string& path)
       dir = opendir(result.c_str());
       if (dir)
       {
-        while ((de = readdir(dir)) != NULL)
+        while ((de = readdir(dir)) != nullptr)
         {
           // check if there's a file with same name but different case
           if (strcasecmp(de->d_name, tokens[i].c_str()) == 0)

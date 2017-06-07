@@ -60,7 +60,7 @@ CFileDirectoryFactory::~CFileDirectoryFactory()
 IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
 {
   if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
-    return NULL;
+    return nullptr;
 
   std::string strExtension=URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
@@ -79,7 +79,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         if (result->ContainsFiles(url))
           return result;
         delete result;
-        return NULL;
+        return nullptr;
       }
     }
   }
@@ -113,7 +113,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
           pItem->m_bIsFolder = true;
 
         delete wrap;
-        return NULL;
+        return nullptr;
       }
     }
   }
@@ -164,7 +164,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       pItem->SetURL(zipURL);
       return new CZipDirectory;
     }
-    return NULL;
+    return nullptr;
   }
   if (url.IsFileType("xbt"))
   {
@@ -198,7 +198,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         return pDir;
     }
     delete pDir;
-    return NULL;
+    return nullptr;
   }
 
   if (pItem->IsAudioBook())
@@ -209,8 +209,8 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       if (pDir->ContainsFiles(url))
         return pDir.release();
     }
-    return NULL;
+    return nullptr;
   }
-  return NULL;
+  return nullptr;
 }
 

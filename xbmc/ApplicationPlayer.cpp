@@ -430,7 +430,7 @@ TextCacheStruct_t* CApplicationPlayer::GetTeletextCache()
   if (player)
     return player->GetTeletextCache();
   else
-    return NULL;
+    return nullptr;
 }
 
 std::string CApplicationPlayer::GetRadioText(unsigned int line)

@@ -42,16 +42,16 @@
 using namespace ADDON;
 
 CEncoderFFmpeg::CEncoderFFmpeg():
-  m_Format    (NULL),
-  m_CodecCtx  (NULL),
-  m_SwrCtx    (NULL),
-  m_Stream    (NULL),
-  m_Buffer    (NULL),
+  m_Format    (nullptr),
+  m_CodecCtx  (nullptr),
+  m_SwrCtx    (nullptr),
+  m_Stream    (nullptr),
+  m_Buffer    (nullptr),
   m_BufferSize(0),
-  m_BufferFrame(NULL),
-  m_ResampledBuffer(NULL),
+  m_BufferFrame(nullptr),
+  m_ResampledBuffer(nullptr),
   m_ResampledBufferSize(0),
-  m_ResampledFrame(NULL),
+  m_ResampledFrame(nullptr),
   m_NeedConversion(false)
 {
   memset(&m_callbacks, 0, sizeof(m_callbacks));
@@ -80,7 +80,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
     return false;
   }
 
-  m_Format->pb = avio_alloc_context(m_BCBuffer, sizeof(m_BCBuffer), AVIO_FLAG_WRITE, this,  NULL, avio_write_callback, avio_seek_callback);
+  m_Format->pb = avio_alloc_context(m_BCBuffer, sizeof(m_BCBuffer), AVIO_FLAG_WRITE, this,  nullptr, avio_write_callback, avio_seek_callback);
   if (!m_Format->pb)
   {
     av_freep(&m_Format);
@@ -141,7 +141,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
 
   m_NeedConversion = (m_OutFormat != m_InFormat);
 
-  if (m_OutFormat <= AV_SAMPLE_FMT_NONE || avcodec_open2(m_CodecCtx, codec, NULL))
+  if (m_OutFormat <= AV_SAMPLE_FMT_NONE || avcodec_open2(m_CodecCtx, codec, nullptr))
   {
     CLog::Log(LOGERROR, "CEncoderFFmpeg::Init - Failed to open the codec %s", codec->long_name ? codec->long_name : codec->name);
     av_freep(&m_Stream);
@@ -152,7 +152,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
 
   /* calculate how many bytes we need per frame */
   m_NeededFrames = m_CodecCtx->frame_size;
-  m_NeededBytes  = av_samples_get_buffer_size(NULL, m_iInChannels, m_NeededFrames, m_InFormat, 0);
+  m_NeededBytes  = av_samples_get_buffer_size(nullptr, m_iInChannels, m_NeededFrames, m_InFormat, 0);
   m_Buffer       = (uint8_t*)av_malloc(m_NeededBytes);
   m_BufferSize   = 0;
 
@@ -176,10 +176,10 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
 
   if(m_NeedConversion)
   {
-    m_SwrCtx = swr_alloc_set_opts(NULL,
+    m_SwrCtx = swr_alloc_set_opts(nullptr,
                     m_CodecCtx->channel_layout, m_OutFormat, m_CodecCtx->sample_rate,
                     m_CodecCtx->channel_layout, m_InFormat, m_CodecCtx->sample_rate,
-                    0, NULL);
+                    0, nullptr);
     if(!m_SwrCtx || swr_init(m_SwrCtx) < 0)
     {
       CLog::Log(LOGERROR, "CEncoderFFmpeg::Init - Failed to initialize the resampler");
@@ -191,7 +191,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
       return false;
     }
 
-    m_ResampledBufferSize = av_samples_get_buffer_size(NULL, m_iInChannels, m_NeededFrames, m_OutFormat, 0);
+    m_ResampledBufferSize = av_samples_get_buffer_size(nullptr, m_iInChannels, m_NeededFrames, m_OutFormat, 0);
     m_ResampledBuffer = (uint8_t*)av_malloc(m_ResampledBufferSize);
     m_ResampledFrame = av_frame_alloc();
     if(!m_ResampledBuffer || !m_ResampledFrame)
@@ -222,7 +222,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
   SetTag("encoder"     , CSysInfo::GetAppName() + " FFmpeg Encoder");
 
   /* write the header */
-  if (avformat_write_header(m_Format, NULL) != 0)
+  if (avformat_write_header(m_Format, nullptr) != 0)
   {
     CLog::Log(LOGERROR, "CEncoderFFmpeg::Init - Failed to write the header");
     av_frame_free(&m_ResampledFrame);
@@ -292,7 +292,7 @@ bool CEncoderFFmpeg::WriteFrame()
   AVFrame* frame;
 
   av_init_packet(&m_Pkt);
-  m_Pkt.data = NULL;
+  m_Pkt.data = nullptr;
   m_Pkt.size = 0;
 
   if(m_NeedConversion)

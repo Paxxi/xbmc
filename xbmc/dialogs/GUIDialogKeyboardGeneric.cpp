@@ -83,7 +83,7 @@ CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
 , CGUIKeyboard()
 , m_num(0)
 , m_listfont(nullptr)
-, m_pCharCallback(NULL)
+, m_pCharCallback(nullptr)
 {
   m_bIsConfirmed = false;
   m_bShift = false;

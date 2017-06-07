@@ -100,7 +100,7 @@ void TestBasicEnvironment::SetUp()
   char buf[MAX_PATH];
   char *tmp;
   strcpy(buf, "/tmp/xbmctempdirXXXXXX");
-  if ((tmp = mkdtemp(buf)) == NULL)
+  if ((tmp = mkdtemp(buf)) == nullptrptr)
     SetUpError();
   CSpecialProtocol::SetTempPath(tmp);
 #endif

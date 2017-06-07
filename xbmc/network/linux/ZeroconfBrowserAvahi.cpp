@@ -45,7 +45,7 @@ private:
 };
 }
 
-CZeroconfBrowserAvahi::CZeroconfBrowserAvahi() : mp_client ( 0 ), mp_poll ( 0 )
+CZeroconfBrowserAvahi::CZeroconfBrowserAvahi() : mp_client ( nullptr ), mp_poll ( nullptr )
 {
   if ( ! ( mp_poll = avahi_threaded_poll_new() ) )
   {
@@ -203,7 +203,7 @@ void CZeroconfBrowserAvahi::clientCallback ( AvahiClient* fp_client, AvahiClient
       CLog::Log ( LOGINFO, "CZeroconfBrowserAvahi::clientCallback: client failure. avahi-daemon stopped? Recreating client..." );
       //We were forced to disconnect from server. now free and recreate the client object
       avahi_client_free ( fp_client );
-      p_instance->mp_client = 0;
+      p_instance->mp_client = nullptr;
       //freeing the client also frees all groups and browsers, pointers are undefined afterwards, so fix that now
       for ( tBrowserMap::iterator it = p_instance->m_browsers.begin(); it != p_instance->m_browsers.end(); ++it )
         it->second = ( AvahiServiceBrowser* ) 0;
@@ -289,14 +289,14 @@ void CZeroconfBrowserAvahi::browseCallback (
 
 CZeroconfBrowser::ZeroconfService::tTxtRecordMap GetTxtRecords(AvahiStringList *txt)
 {
-  AvahiStringList *i = NULL;
+  AvahiStringList *i = nullptr;
   CZeroconfBrowser::ZeroconfService::tTxtRecordMap recordMap;
   
   for( i = txt; i; i = i->next )
   {
     char *key, *value;
 
-    if( avahi_string_list_get_pair( i, &key, &value, NULL ) < 0 )
+    if( avahi_string_list_get_pair( i, &key, &value, nullptr ) < 0 )
       continue;
 
     recordMap.insert(
@@ -352,10 +352,10 @@ bool CZeroconfBrowserAvahi::createClient()
     avahi_client_free ( mp_client );
   }
   mp_client = avahi_client_new ( avahi_threaded_poll_get ( mp_poll ),
-                                 AVAHI_CLIENT_NO_FAIL, &clientCallback, this, 0 );
+                                 AVAHI_CLIENT_NO_FAIL, &clientCallback, this, nullptr );
   if ( !mp_client )
   {
-    mp_client = 0;
+    mp_client = nullptr;
     return false;
   }
   return true;

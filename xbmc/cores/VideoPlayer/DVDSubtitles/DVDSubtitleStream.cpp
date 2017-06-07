@@ -164,6 +164,6 @@ char* CDVDSubtitleStream::ReadLine(char* buf, int iLen)
   if (m_stringstream.getline(buf, iLen))
     return buf;
   else
-    return NULL;
+    return nullptr;
 }
 

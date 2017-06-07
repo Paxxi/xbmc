@@ -81,7 +81,7 @@ bool CAudioEncoder::Close()
     return false;
 
   m_struct.toAddon.Free(m_context);
-  m_context = NULL;
+  m_context = nullptr;
 
   return true;
 }

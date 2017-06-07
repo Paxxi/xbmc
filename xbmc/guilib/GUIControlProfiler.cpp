@@ -50,7 +50,7 @@ void CGUIControlProfilerItem::Reset(CGUIControlProfiler *pProfiler)
 {
   m_controlID = 0;
   m_ControlType = CGUIControl::GUICONTROL_UNKNOWN;
-  m_pControl = NULL;
+  m_pControl = nullptr;
 
   m_visTime = 0;
   m_renderTime = 0;
@@ -87,7 +87,7 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
   auto xmlControl = new TiXmlElement("control");
   parent->LinkEndChild(xmlControl);
 
-  const char *lpszType = NULL;
+  const char *lpszType = nullptr;
   switch (m_ControlType)
   {
   case CGUIControl::GUICONTROL_BUTTON:
@@ -225,11 +225,11 @@ CGUIControlProfilerItem *CGUIControlProfilerItem::FindOrAddControl(CGUIControl *
   if (pControl->GetParentControl() == m_pControl)
     return AddControl(pControl);
 
-  return NULL;
+  return nullptr;
 }
 
 CGUIControlProfiler::CGUIControlProfiler()
-: m_ItemHead(NULL, NULL, NULL), m_pLastItem(NULL), m_iMaxFrameCount(200), m_iFrameCount(0)
+: m_ItemHead(NULL, NULL, NULL), m_pLastItem(nullptr), m_iMaxFrameCount(200), m_iFrameCount(0)
 // m_bIsRunning(false), no isRunning because it is static
 {
   m_fPerfScale = 100000.0f / CurrentHostFrequency();
@@ -250,7 +250,7 @@ void CGUIControlProfiler::Start()
 {
   m_iFrameCount = 0;
   m_bIsRunning = true;
-  m_pLastItem = NULL;
+  m_pLastItem = nullptr;
   m_ItemHead.Reset(this);
 }
 
