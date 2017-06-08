@@ -140,7 +140,7 @@ bool CGUIWindowPrograms::Update(const std::string &strDirectory, bool updateFilt
   return true;
 }
 
-bool CGUIWindowPrograms::OnPlayMedia(int iItem, const std::string&)
+bool CGUIWindowPrograms::OnPlayMedia(int iItem, const std::string& /*player*/)
 {
   if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return false;
 }

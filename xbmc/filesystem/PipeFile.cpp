@@ -167,7 +167,7 @@ bool CPipeFile::Rename(const CURL& url, const CURL& urlnew)
   return false;
 }
 
-int CPipeFile::IoControl(EIoControl, void* param)
+int CPipeFile::IoControl(EIoControl /*request*/, void* param)
 {
   return -1;
 }

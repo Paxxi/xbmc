@@ -55,12 +55,12 @@ namespace CONTEXTMENU
     return items.Size() == iBefore - 1;
   }
 
-  bool CRenameFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
+  bool CRenameFavourite::DoExecute(CFileItemList& /*items*/, const CFileItemPtr& item) const
   {
     return CGUIDialogFavourites::ChooseAndSetNewName(item);
   }
 
-  bool CChooseThumbnailForFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
+  bool CChooseThumbnailForFavourite::DoExecute(CFileItemList& /*items*/, const CFileItemPtr& item) const
   {
     return CGUIDialogFavourites::ChooseAndSetNewThumbnail(item);
   }

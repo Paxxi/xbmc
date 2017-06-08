@@ -407,7 +407,7 @@ static int SetStereoMode(const std::vector<std::string>& params)
 /*! \brief Toggle visualization of dirty regions.
  *  \param params Ignored.
  */
-static int ToggleDirty(const std::vector<std::string>&)
+static int ToggleDirty(const std::vector<std::string>& /*unused*/)
 {
   g_advancedSettings.ToggleDirtyRegionVisualization();
 

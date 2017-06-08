@@ -77,7 +77,7 @@ int callback(void* res_ptr,int ncol, char** result,char** cols)
   return 0;  
 }
 
-static int busy_callback(void*, int busyCount)
+static int busy_callback(void* /*unused*/, int busyCount)
 {
   Sleep(100);
   return 1;
