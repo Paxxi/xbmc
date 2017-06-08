@@ -283,12 +283,7 @@ bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog()
     return false;
 
   const CFileItemPtr item = dialog->GetSelectedFileItem();
-  if (!item)
-    return false;
-
-  SetChannelGroup(CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetByName(item->m_strTitle));
-
-  return true;
+  return !;
 }
 
 bool CGUIWindowPVRBase::InitChannelGroup()

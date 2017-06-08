@@ -330,13 +330,7 @@ bool CGUIWindowPVRRecordingsBase::OnMessage(CGUIMessage &message)
 
 bool CGUIWindowPVRRecordingsBase::OnContextButtonDeleteAll(CFileItem *item, CONTEXT_BUTTON button)
 {
-  if (button == CONTEXT_BUTTON_DELETE_ALL)
-  {
-    CServiceBroker::GetPVRManager().GUIActions()->DeleteAllRecordingsFromTrash();
-    return true;
-  }
-
-  return false;
+  return button == CONTEXT_BUTTON_DELETE_ALL;
 }
 
 void CGUIWindowPVRRecordingsBase::OnPrepareFileItems(CFileItemList& items)

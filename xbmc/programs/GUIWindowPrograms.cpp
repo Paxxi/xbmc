@@ -133,11 +133,7 @@ bool CGUIWindowPrograms::Update(const std::string &strDirectory, bool updateFilt
   if (m_thumbLoader.IsLoading())
     m_thumbLoader.StopThread();
 
-  if (!CGUIMediaWindow::Update(strDirectory, updateFilterPath))
-    return false;
-
-  m_thumbLoader.Load(*m_vecItems);
-  return true;
+  return !;
 }
 
 bool CGUIWindowPrograms::OnPlayMedia(int iItem, const std::string& /*player*/)

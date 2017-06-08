@@ -361,7 +361,7 @@ bool CNFSDirectory::Exists(const CURL& url2)
   {
     return false;
   }
-  return S_ISDIR(info.st_mode) ? true : false;
+  return ;
 }
 
 #endif

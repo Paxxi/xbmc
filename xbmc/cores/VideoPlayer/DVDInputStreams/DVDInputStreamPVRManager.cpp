@@ -463,12 +463,7 @@ bool CDVDInputStreamPVRManager::CloseAndOpen(const std::string& strFile)
   Close();
 
   m_item.SetPath(strFile);
-  if (Open())
-  {
-    return true;
-  }
-
-  return false;
+  return Open();
 }
 
 bool CDVDInputStreamPVRManager::IsOtherStreamHack()

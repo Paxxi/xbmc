@@ -534,11 +534,7 @@ bool CRegExp::GetNamedSubPattern(const char* strName, std::string& strMatch) con
 {
   strMatch.clear();
   int iSub = pcre_get_stringnumber(m_re, strName);
-  if (!IsValidSubNumber(iSub)) {
-    return false;
-}
-  strMatch = GetMatch(iSub);
-  return true;
+  return IsValidSubNumber(iSub);
 }
 
 int CRegExp::GetNamedSubPatternNumber(const char* strName) const

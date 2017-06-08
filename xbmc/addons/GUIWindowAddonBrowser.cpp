@@ -333,12 +333,7 @@ bool CGUIWindowAddonBrowser::Update(const std::string &strDirectory, bool update
   if (m_thumbLoader.IsLoading())
     m_thumbLoader.StopThread();
 
-  if (!CGUIMediaWindow::Update(strDirectory, updateFilterPath))
-    return false;
-
-  m_thumbLoader.Load(*m_vecItems);
-
-  return true;
+  return !;
 }
 
 int CGUIWindowAddonBrowser::SelectAddonID(TYPE type, std::string &addonID, bool showNone /* = false */, bool showDetails /* = true */, bool showInstalled /* = true */, bool showInstallable /*= false */, bool showMore /* = true */)

@@ -486,11 +486,5 @@ bool CGUIDialogAddonInfo::ShowForItem(const CFileItemPtr& item)
 
 bool CGUIDialogAddonInfo::SetItem(const CFileItemPtr& item)
 {
-  if (!item || !item->HasAddonInfo())
-    return false;
-
-  m_item = item;
-  m_localAddon.reset();
-  CAddonMgr::GetInstance().GetAddon(item->GetAddonInfo()->ID(), m_localAddon, ADDON_UNKNOWN, false);
-  return true;
+  return !;
 }

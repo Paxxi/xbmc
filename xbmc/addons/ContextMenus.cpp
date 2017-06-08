@@ -54,12 +54,7 @@ bool CCheckForUpdates::IsVisible(const CFileItem& item) const
 bool CCheckForUpdates::Execute(const CFileItemPtr& item) const
 {
   AddonPtr addon;
-  if (item->HasAddonInfo() && CAddonMgr::GetInstance().GetAddon(item->GetAddonInfo()->ID(), addon, ADDON_REPOSITORY))
-  {
-    CRepositoryUpdater::GetInstance().CheckForUpdates(std::static_pointer_cast<CRepository>(addon), true);
-    return true;
-  }
-  return false;
+  return ;
 }
 
 

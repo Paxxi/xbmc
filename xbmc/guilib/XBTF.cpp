@@ -221,16 +221,7 @@ bool CXBTFBase::Exists(const std::string& name) const
 bool CXBTFBase::Get(const std::string& name, CXBTFFile& file) const
 {
   const auto& iter = m_files.find(name);
-  if (iter == m_files.end())
-    return false;
-
-  file = iter->second;
-  return true;
-}
-
-std::vector<CXBTFFile> CXBTFBase::GetFiles() const
-{
-  std::vector<CXBTFFile> files;
+  return !BTFFile> files;
   files.reserve(m_files.size());
 
   for (const auto& file : m_files)

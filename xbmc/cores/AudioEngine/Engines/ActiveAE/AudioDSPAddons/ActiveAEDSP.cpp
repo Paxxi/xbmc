@@ -592,17 +592,7 @@ bool CActiveAEDSP::StopAudioDSPAddon(AddonPtr addon, bool bRestart)
 
   int iId = GetAudioDSPAddonId(addon);
   AE_DSP_ADDON mappedAddon;
-  if (GetReadyAudioDSPAddon(iId, mappedAddon))
-  {
-    if (bRestart)
-      mappedAddon->ReCreate();
-    else
-      mappedAddon->Destroy();
-
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 void CActiveAEDSP::UpdateAddons()

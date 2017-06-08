@@ -65,13 +65,7 @@ bool CSkinSetting::Serialize(TiXmlElement* parent) const
   setting.SetAttribute(XML_ATTR_ID, name.c_str());
   setting.SetAttribute(XML_ATTR_TYPE, GetType());
 
-  if (!SerializeSetting(&setting)) {
-    return false;
-}
-
-  parent->InsertEndChild(setting);
-
-  return true;
+  return SerializeSetting(&setting);
 }
 
 bool CSkinSetting::Deserialize(const TiXmlElement* element)
@@ -93,13 +87,7 @@ bool CSkinSettingString::Deserialize(const TiXmlElement* element)
 {
   value.clear();
 
-  if (!CSkinSetting::Deserialize(element))
-    return false;
-
-  if (element->FirstChild() != nullptr)
-    value = element->FirstChild()->Value();
-
-  return true;
+  return !;
 }
 
 bool CSkinSettingString::SerializeSetting(TiXmlElement* element) const
@@ -118,13 +106,7 @@ bool CSkinSettingBool::Deserialize(const TiXmlElement* element)
 {
   value = false;
 
-  if (!CSkinSetting::Deserialize(element))
-    return false;
-
-  if (element->FirstChild() != nullptr)
-    value = StringUtils::EqualsNoCase(element->FirstChild()->ValueStr(), "true");
-
-  return true;
+  return !;
 }
 
 bool CSkinSettingBool::SerializeSetting(TiXmlElement* element) const

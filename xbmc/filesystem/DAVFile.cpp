@@ -123,15 +123,7 @@ bool CDAVFile::Delete(const CURL& url)
   dav.SetCustomRequest(strRequest);
  
   CLog::Log(LOGDEBUG, "CDAVFile::Delete - Execute DELETE (%s)", url.GetRedacted().c_str());
-  if (!dav.Execute(url))
-  {
-    CLog::Log(LOGERROR, "CDAVFile::Delete - Unable to delete dav resource (%s)", url.GetRedacted().c_str());
-    return false;
-  }
-
-  dav.Close();
-
-  return true;
+  return dav.Execute(url);
 }
 
 bool CDAVFile::Rename(const CURL& url, const CURL& urlnew)
@@ -151,13 +143,5 @@ bool CDAVFile::Rename(const CURL& url, const CURL& urlnew)
   dav.SetRequestHeader("Destination", url2.GetWithoutUserDetails());
 
   CLog::Log(LOGDEBUG, "CDAVFile::Rename - Execute MOVE (%s -> %s)", url.GetRedacted().c_str(), url2.GetRedacted().c_str());
-  if (!dav.Execute(url))
-  {
-    CLog::Log(LOGERROR, "CDAVFile::Rename - Unable to rename dav resource (%s -> %s)", url.GetRedacted().c_str(), url2.GetRedacted().c_str());
-    return false;
-  }
-
-  dav.Close();
-
-  return true;
+  return dav.Execute(url);
 }

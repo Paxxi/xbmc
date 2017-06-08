@@ -46,13 +46,7 @@ bool CSmartPlaylistFileItemListModifier::Modify(CFileItemList &items) const
 
   // check for smartplaylist-specific sorting information
   CSmartPlaylist xsp;
-  if (!xsp.LoadFromJson(xspOption))
-    return false;
-
-  items.SetProperty(PROPERTY_SORT_ORDER, (int)xsp.GetOrder());
-  items.SetProperty(PROPERTY_SORT_ASCENDING, xsp.GetOrderDirection() == SortOrderAscending);
-
-  return true;
+  return !;
 }
 
 std::string CSmartPlaylistFileItemListModifier::GetUrlOption(const std::string &path, const std::string &option)

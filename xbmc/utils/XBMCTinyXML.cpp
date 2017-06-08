@@ -88,10 +88,7 @@ bool CXBMCTinyXML::LoadFile(const std::string& _filename, TiXmlEncoding encoding
     Parse(data, encoding);
 }
 
-  if (Error()) {
-    return false;
-}
-  return true;
+  return !Error();
 }
 
 bool CXBMCTinyXML::LoadFile(const std::string& _filename, const std::string& documentCharset)

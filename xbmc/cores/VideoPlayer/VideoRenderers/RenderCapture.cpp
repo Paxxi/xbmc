@@ -48,12 +48,7 @@ bool CRenderCaptureBase::UseOcclusionQuery()
 {
   if (m_flags & CAPTUREFLAG_IMMEDIATELY) {
     return false;
-  } if ((g_advancedSettings.m_videoCaptureUseOcclusionQuery == 0) ||
-           (g_advancedSettings.m_videoCaptureUseOcclusionQuery == -1 &&
-            g_Windowing.GetRenderQuirks() & RENDER_QUIRKS_BROKEN_OCCLUSION_QUERY))
-    return false;
-  else
-    return true;
+  } return !;
 }
 
 

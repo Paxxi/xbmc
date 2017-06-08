@@ -402,7 +402,7 @@ void CActiveAEStream::Drain(bool wait)
                                        &reply,2000,
                                        &stream, sizeof(CActiveAEStream*)))
   {
-    bool success = reply->signal == CActiveAEDataProtocol::ACC ? true : false;
+    bool success = reply->signal == CActiveAEDataProtocol::ACC;
     reply->Release();
     if (!success)
     {
@@ -606,11 +606,7 @@ CActiveAEStreamBuffers::~CActiveAEStreamBuffers()
 
 bool CActiveAEStreamBuffers::HasInputLevel(int level)
 {
-  if ((m_inputSamples.size() + m_resampleBuffers->m_inputSamples.size()) >
-      (m_resampleBuffers->m_allSamples.size() * level / 100))
-    return true;
-  
-    return false;
+  return ;
 }
 
 bool CActiveAEStreamBuffers::Create(unsigned int totaltime, bool remap, bool upmix, bool normalize, bool useDSP)
@@ -717,15 +713,7 @@ void CActiveAEStreamBuffers::SetDrain(bool drain)
 
 bool CActiveAEStreamBuffers::IsDrained()
 {
-  if (m_resampleBuffers->m_inputSamples.empty() &&
-      m_resampleBuffers->m_outputSamples.empty() &&
-      m_atempoBuffers->m_inputSamples.empty() &&
-      m_atempoBuffers->m_outputSamples.empty() &&
-      m_inputSamples.empty() &&
-      m_outputSamples.empty())
-    return true;
-  
-    return false;
+  return ;
 }
 
 void CActiveAEStreamBuffers::SetRR(double rr, double atempoThreshold)

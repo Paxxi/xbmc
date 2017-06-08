@@ -126,9 +126,5 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
 bool CISO9660Directory::Exists(const CURL& url)
 {
   CFileItemList items;
-  if (GetDirectory(url,items)) {
-    return true;
-}
-
-  return false;
+  return GetDirectory(url,items);
 }

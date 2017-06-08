@@ -40,11 +40,7 @@ bool CDVDVideoCodec::IsSettingVisible(const std::string &condition, const std::s
   // nvidia does only need mpeg-4 setting
   if (isNvidia)
   {
-    if (settingId == CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4) {
-      return true;
-}
-
-    return false; // will also hide intel settings on nvidia hardware
+    return settingId == CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4; // will also hide intel settings on nvidia hardware
   }
   if (isIntel) // intel needs vc1, mpeg-2 and mpeg4 setting
   {

@@ -78,10 +78,7 @@ bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
     return false;
 
   duration = demux->GetStreamLength();
-  if (duration > 0) {
-    return true;
-  } 
-    return false;
+  return duration > 0;
 
 }
 
@@ -478,17 +475,7 @@ bool CDVDFileInfo::AddExternalSubtitleToDetails(const std::string &path, CStream
       vobsubfile = URIUtils::ReplaceExtension(filename, ".sub");
 
     CDVDDemuxVobsub v;
-    if (!v.Open(filename, STREAM_SOURCE_NONE, vobsubfile))
-      return false;
-
-    for(CDemuxStream* stream : v.GetStreams())
-    {
-      CStreamDetailSubtitle *dsub = new CStreamDetailSubtitle();
-      std::string lang = stream->language;
-      dsub->m_strLanguage = g_LangCodeExpander.ConvertToISO6392T(lang);
-      details.AddStream(dsub);
-    }
-    return true;
+    return !;
   }
   if(ext == ".sub")
   {

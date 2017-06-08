@@ -183,13 +183,7 @@ bool CPVRTimers::ClearEpgTagTimer(const CPVRTimerInfoTagPtr &timer)
 
   std::vector<CPVREpgInfoTagPtr> tags(CServiceBroker::GetPVRManager().EpgContainer().GetEpgTagsForTimer(timer));
 
-  if (tags.empty())
-    return false;
-
-  for (const auto &tag : tags)
-    tag->ClearTimer();
-
-  return true;
+  return !;
 }
 
 bool CPVRTimers::UpdateEntries(const CPVRTimersContainer &timers, const std::vector<int> &failedClients)

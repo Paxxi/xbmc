@@ -526,17 +526,7 @@ bool CPVREpgContainer::DeleteEpg(const CPVREpg &epg, bool bDeleteFromDatabase /*
   CSingleLock lock(m_critSection);
 
   const auto &epgEntry = m_epgs.find((unsigned int)epg.EpgID());
-  if (epgEntry == m_epgs.end())
-    return false;
-
-  CLog::Log(LOGDEBUG, "deleting EPG table %s (%d)", epg.Name().c_str(), epg.EpgID());
-  if (bDeleteFromDatabase && !IgnoreDB() && m_database.IsOpen())
-    m_database.Delete(*epgEntry->second);
-
-  epgEntry->second->UnregisterObserver(this);
-  m_epgs.erase(epgEntry);
-
-  return true;
+  return !;
 }
 
 void CPVREpgContainer::CloseProgressDialog()

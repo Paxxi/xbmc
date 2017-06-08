@@ -64,11 +64,7 @@ bool CPODocument::LoadFile(const std::string &pofilename)
 
   m_POfilelength = m_strBuffer.size();
 
-  if (GetNextEntry() && m_Entry.Type == MSGID_FOUND)
-    return true;
-
-  CLog::Log(LOGERROR, "POParser: unable to read PO file header from file: %s", pofilename.c_str());
-  return false;
+  return ;
 }
 
 bool CPODocument::GetNextEntry()

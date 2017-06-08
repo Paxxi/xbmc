@@ -50,7 +50,7 @@ bool CDBusMessage::AppendArgument(const char *string)
 
 bool CDBusMessage::AppendArgument(const bool b)
 {
-  dbus_bool_t arg = (b == true);
+  dbus_bool_t arg = (b);
   PrepareArgument();
   return dbus_message_iter_append_basic(&m_args, DBUS_TYPE_BOOLEAN, &arg);
 }

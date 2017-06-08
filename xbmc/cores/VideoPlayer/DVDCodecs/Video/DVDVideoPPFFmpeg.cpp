@@ -88,10 +88,7 @@ bool CDVDVideoPPFFmpeg::CheckInit(int iWidth, int iHeight)
   }
 
 
-  if(m_pMode) {
-    return true;
-  } 
-    return false;
+  return m_pMode != nullptr;
 
 }
 

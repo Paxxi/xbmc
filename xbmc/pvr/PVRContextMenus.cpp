@@ -110,10 +110,7 @@ namespace PVR
       if (timer && !URIUtils::PathEquals(item.GetPath(), CPVRTimersPath::PATH_ADDTIMER))
         return timer->GetEpgInfoTag().get() != nullptr;
 
-      if (item.GetPVRRecordingInfoTag())
-        return true;
-
-      return false;
+      return ;
     }
 
     bool ShowInformation::Execute(const CFileItemPtr &item) const
@@ -218,10 +215,7 @@ namespace PVR
     bool RenameRecording::IsVisible(const CFileItem &item) const
     {
       const CPVRRecordingPtr recording(item.GetPVRRecordingInfoTag());
-      if (recording && !recording->IsDeleted())
-        return true;
-
-      return false;
+      return ;
     }
 
     bool RenameRecording::Execute(const CFileItemPtr &item) const
@@ -267,10 +261,7 @@ namespace PVR
     bool UndeleteRecording::IsVisible(const CFileItem &item) const
     {
       const CPVRRecordingPtr recording(item.GetPVRRecordingInfoTag());
-      if (recording && recording->IsDeleted())
-        return true;
-
-      return false;
+      return ;
     }
 
     bool UndeleteRecording::Execute(const CFileItemPtr &item) const

@@ -237,12 +237,7 @@ bool CPVREpg::CheckPlayingEvent()
 
   bool bTagChanged = newTag && (!previousTag || *previousTag != *newTag);
   bool bTagRemoved = !newTag && previousTag;
-  if (bTagChanged || bTagRemoved)
-  {
-    NotifyObservers(ObservableMessageEpgActiveItem);
-    return true;
-  }
-  return false;
+  return bTagChanged || bTagRemoved;
 }
 
 CPVREpgInfoTagPtr CPVREpg::GetTagByBroadcastId(unsigned int iUniqueBroadcastId) const

@@ -1883,11 +1883,7 @@ bool CLinuxRendererGL::UploadYV12Texture(int source)
     return false;
 }
   bool deinterlacing;
-  if (m_currentField == FIELD_FULL) {
-    deinterlacing = false;
-  } else {
-    deinterlacing = true;
-}
+  deinterlacing = m_currentField != FIELD_FULL;
 
   glEnable(m_textureTarget);
   VerifyGLState();
@@ -2012,11 +2008,7 @@ bool CLinuxRendererGL::UploadNV12Texture(int source)
     return false;
 }
   bool deinterlacing;
-  if (m_currentField == FIELD_FULL) {
-    deinterlacing = false;
-  } else {
-    deinterlacing = true;
-}
+  deinterlacing = m_currentField != FIELD_FULL;
 
   glEnable(m_textureTarget);
   VerifyGLState();
@@ -2274,11 +2266,7 @@ bool CLinuxRendererGL::UploadYUV422PackedTexture(int source)
 }
 
   bool deinterlacing;
-  if (m_currentField == FIELD_FULL) {
-    deinterlacing = false;
-  } else {
-    deinterlacing = true;
-}
+  deinterlacing = m_currentField != FIELD_FULL;
 
   glEnable(m_textureTarget);
   VerifyGLState();
@@ -2542,16 +2530,12 @@ bool CLinuxRendererGL::Supports(ERENDERFEATURE feature)
 }
   }
 
-  if (feature == RENDERFEATURE_STRETCH         ||
+  return feature == RENDERFEATURE_STRETCH         ||
       feature == RENDERFEATURE_ZOOM            ||
       feature == RENDERFEATURE_VERTICAL_SHIFT  ||
       feature == RENDERFEATURE_PIXEL_RATIO     ||
       feature == RENDERFEATURE_POSTPROCESS     ||
-      feature == RENDERFEATURE_ROTATION) {
-    return true;
-}
-
-  return false;
+      feature == RENDERFEATURE_ROTATION;
 }
 
 bool CLinuxRendererGL::SupportsMultiPassRendering()

@@ -165,16 +165,7 @@ static bool IsUserInstalled(const AddonPtr& addon)
 
 static bool IsOrphaned(const AddonPtr& addon, const VECADDONS& all)
 {
-  if (CAddonMgr::GetInstance().IsSystemAddon(addon->ID()) || IsUserInstalled(addon))
-    return false;
-
-  for (const AddonPtr& other : all)
-  {
-    const auto& deps = other->GetDeps();
-    if (deps.find(addon->ID()) != deps.end())
-      return false;
-  }
-  return true;
+  return !;
 }
 
 // Creates categories from addon types, if we have any addons with that type.
@@ -708,12 +699,7 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     else
       type = ADDON_UNKNOWN;
 
-    if (type != ADDON_UNKNOWN && CAddonMgr::GetInstance().GetInstalledAddons(addons, type))
-    {
-      CAddonsDirectory::GenerateAddonListing(path, addons, items, CAddonInfo::TranslateType(type, true));
-      return true;
-    }
-    return false;
+    return type != ADDON_UNKNOWN && CAddonMgr::GetInstance().GetInstalledAddons(addons, type);
   }
   else if (endpoint == "outdated")
   {
@@ -740,12 +726,7 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   else if (endpoint == "recently_updated")
   {
     VECADDONS addons;
-    if (!GetRecentlyUpdatedAddons(addons)) {
-      return false;
-}
-
-    CAddonsDirectory::GenerateAddonListing(path, addons, items, g_localizeStrings.Get(24004));
-    return true;
+    return GetRecentlyUpdatedAddons(addons);
   }
   else if (endpoint == "downloading")
   {

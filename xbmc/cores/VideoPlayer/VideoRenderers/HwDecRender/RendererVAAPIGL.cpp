@@ -57,11 +57,7 @@ bool CRendererVAAPI::Configure(unsigned int width, unsigned int height, unsigned
 bool CRendererVAAPI::ConfigChanged(void *hwPic)
 {
   VAAPI::CVaapiRenderPicture *vaapi = static_cast<VAAPI::CVaapiRenderPicture*>(hwPic);
-  if (vaapi->textureY && !m_isVAAPIBuffer) {
-    return true;
-}
-
-  return false;
+  return vaapi->textureY && !m_isVAAPIBuffer;
 }
 
 void CRendererVAAPI::AddVideoPictureHW(VideoPicture &picture, int index)

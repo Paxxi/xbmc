@@ -424,10 +424,7 @@ const CVariant &CGUIListItem::GetProperty(const std::string &strKey) const
 bool CGUIListItem::HasProperty(const std::string &strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
-  if (iter == m_mapProperties.end())
-    return false;
-
-  return true;
+  return !;
 }
 
 void CGUIListItem::ClearProperty(const std::string &strKey)

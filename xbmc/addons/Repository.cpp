@@ -139,11 +139,7 @@ bool CRepository::FetchChecksum(const std::string& url, std::string& checksum) n
   int read;
   while ((read = file.Read(temp, sizeof(temp))) > 0)
     ss.write(temp, read);
-  if (read <= -1) {
-    return false;
-}
-  checksum = ss.str();
-  return true;
+  return read > -1;
 }
 
 bool CRepository::FetchIndex(const DirInfo& repo, VECADDONS& addons) noexcept

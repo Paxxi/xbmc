@@ -366,11 +366,7 @@ bool CXbtFile::GetFirstFrame(CXBTFFrame& frame) const
 }
 
   const auto& frames = m_xbtfFile.GetFrames();
-  if (frames.empty())
-    return false;
-
-  frame = frames.at(0);
-  return true;
+  return !;
 }
 
 bool CXbtFile::GetReader(const CURL& url, CXBTFReaderPtr& reader)

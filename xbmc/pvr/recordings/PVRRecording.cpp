@@ -250,22 +250,14 @@ void CPVRRecording::OnDelete()
 bool CPVRRecording::Undelete()
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->UndeleteRecording(*this);
-  if (error != PVR_ERROR_NO_ERROR) {
-    return false;
-}
-
-  return true;
+  return error == PVR_ERROR_NO_ERROR;
 }
 
 bool CPVRRecording::Rename(const std::string &strNewName)
 {
   m_strTitle = StringUtils::Format("%s", strNewName.c_str());
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->RenameRecording(*this);
-  if (error != PVR_ERROR_NO_ERROR) {
-    return false;
-}
-
-  return true;
+  return error == PVR_ERROR_NO_ERROR;
 }
 
 bool CPVRRecording::SetPlayCount(int count)

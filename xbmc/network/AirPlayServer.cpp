@@ -196,13 +196,7 @@ bool CAirPlayServer::StartServer(int port, bool nonlocal)
   CSingleLock lock(ServerInstanceLock);
 
   ServerInstance = new CAirPlayServer(port, nonlocal);
-  if (ServerInstance->Initialize())
-  {
-    ServerInstance->Create();
-    return true;
-  }
-  
-    return false;
+  return ServerInstance->Initialize();
 
 }
 

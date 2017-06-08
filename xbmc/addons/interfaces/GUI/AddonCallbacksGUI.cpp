@@ -579,13 +579,7 @@ bool CAddonCallbacksGUI::Window_SetCoordinateResolution(void *addonData, GUIHAND
 
   CGUIAddonWindow *pAddonWindow = reinterpret_cast<CGUIAddonWindow*>(handle);
   CGUIWindow      *pWindow      = g_windowManager.GetWindow(pAddonWindow->m_iWindowId);
-  if (!pWindow) {
-    return false;
-}
-
-  pWindow->SetCoordsRes((RESOLUTION)res);
-
-  return true;
+  return pWindow != nullptr;
 }
 
 void CAddonCallbacksGUI::Window_SetProperty(void *addonData, GUIHANDLE handle, const char *key, const char *value)

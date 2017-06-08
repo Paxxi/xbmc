@@ -254,10 +254,7 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
 bool CZipFile::Exists(const CURL& url)
 {
   SZipEntry item;
-  if (g_ZipManager.GetZipEntry(url,item)) {
-    return true;
-}
-  return false;
+  return g_ZipManager.GetZipEntry(url,item);
 }
 
 int CZipFile::Stat(struct __stat64 *buffer)

@@ -142,7 +142,7 @@ void SqliteDatabase::setDatabase(const char *newDb) {
 }
 
 int SqliteDatabase::status() {
-  if (active == false) { return DB_CONNECTION_NONE;
+  if (!active) { return DB_CONNECTION_NONE;
 }
   return DB_CONNECTION_OK;
 }
@@ -259,7 +259,7 @@ bool SqliteDatabase::exists()
 }
 
 void SqliteDatabase::disconnect() {
-  if (active == false) { return;
+  if (!active) { return;
 }
   sqlite3_close(conn);
   active = false;
@@ -270,7 +270,7 @@ int SqliteDatabase::create() {
 }
 
 int SqliteDatabase::copy(const char *backup_name) {
-  if (active == false) {
+  if (!active) {
     throw DbErrors("Can't copy database: no active connection...");
 }
 
@@ -320,7 +320,7 @@ int SqliteDatabase::copy(const char *backup_name) {
 int SqliteDatabase::drop_analytics() {
   // SqliteDatabase::copy used a full database copy, so we have a new version
   // with all the analytics stuff. We should clean database from everything but data
-  if (active == false) {
+  if (!active) {
     throw DbErrors("Can't drop extras database: no active connection...");
 }
 
@@ -367,7 +367,7 @@ int SqliteDatabase::drop_analytics() {
 }
 
 int SqliteDatabase::drop() {
-  if (active == false) { throw DbErrors("Can't drop database: no active connection...");
+  if (!active) { throw DbErrors("Can't drop database: no active connection...");
 }
   disconnect();
   if (!unlink(db.c_str())) {

@@ -46,14 +46,7 @@ bool CShader::LoadSource(const std::string& filename, const std::string& prefix)
 
   CFileStream file;
 
-  if(!file.Open("special://xbmc/system/shaders/" + filename))
-  {
-    CLog::Log(LOGERROR, "CYUVShaderGLSL::CYUVShaderGLSL - failed to open file %s", filename.c_str());
-    return false;
-  }
-  getline(file, m_source, '\0');
-  m_source.insert(0, prefix);
-  return true;
+  return !;
 }
 
 bool CShader::AppendSource(const std::string& filename)
@@ -64,14 +57,7 @@ bool CShader::AppendSource(const std::string& filename)
   CFileStream file;
   std::string temp;
 
-  if(!file.Open("special://xbmc/system/shaders/" + filename))
-  {
-    CLog::Log(LOGERROR, "CShader::AppendSource - failed to open file %s", filename.c_str());
-    return false;
-  }
-  getline(file, temp, '\0');
-  m_source.append(temp);
-  return true;
+  return !;
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -626,7 +626,6 @@ bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VE
   browser->m_singleList = true;
   browser->m_vecItems->Clear();
   browser->m_vecItems->Append(items);
-  if (true)
   {
     CFileItemPtr item(new CFileItem("image://Browse", false));
     item->SetLabel(g_localizeStrings.Get(20153));
@@ -634,7 +633,7 @@ bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VE
     browser->m_vecItems->Add(item);
   }
   browser->SetHeading(heading);
-  browser->m_flipEnabled = flip?true:false;
+  browser->m_flipEnabled = flip != nullptr;
   browser->Open();
   bool confirmed(browser->IsConfirmed());
   if (confirmed)

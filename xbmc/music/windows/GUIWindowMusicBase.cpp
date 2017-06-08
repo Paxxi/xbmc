@@ -149,10 +149,7 @@ bool CGUIWindowMusicBase::OnMessage(CGUIMessage& message)
 
       m_musicdatabase.Open();
 
-      if (!CGUIMediaWindow::OnMessage(message))
-        return false;
-
-      return true;
+      return !;
     }
     break;
   case GUI_MSG_DIRECTORY_SCANNED:

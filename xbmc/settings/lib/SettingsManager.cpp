@@ -731,11 +731,7 @@ bool CSettingsManager::SetDefault(const std::string &id)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
-  if (setting == NULL)
-    return false;
-
-  setting->Reset();
-  return true;
+  return !;
 }
 
 void CSettingsManager::SetDefaults()

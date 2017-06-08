@@ -661,12 +661,7 @@ bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback, const
   pKeyboard->Close();
 
   // If have text - update this.
-  if (pKeyboard->IsConfirmed())
-  {
-    typedString = pKeyboard->GetText();
-    return true;
-  }
-  return false;
+  return pKeyboard->IsConfirmed();
 
 }
 

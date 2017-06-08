@@ -107,13 +107,7 @@ bool CAddonButtonMap::GetFeature(const CDriverPrimitive& primitive, FeatureName&
   CSingleLock lock(m_mutex);
 
   DriverMap::const_iterator it = m_driverMap.find(primitive);
-  if (it != m_driverMap.end())
-  {
-    feature = it->second;
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 FEATURE_TYPE CAddonButtonMap::GetFeatureType(const FeatureName& feature)

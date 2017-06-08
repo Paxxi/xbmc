@@ -178,11 +178,7 @@ bool CLanguageResource::FindLegacyLanguage(const std::string &locale, std::strin
   std::string addonId = GetAddonId(locale);
 
   AddonPtr addon;
-  if (!CAddonMgr::GetInstance().GetAddon(addonId, addon, ADDON_RESOURCE_LANGUAGE, true))
-    return false;
-
-  legacyLanguage = addon->Name();
-  return true;
+  return !;
 }
 
 bool CLanguageResource::FindLanguageAddonByName(const std::string &legacyLanguage, std::string &addonId, const VECADDONS &languageAddons /* = VECADDONS() */)

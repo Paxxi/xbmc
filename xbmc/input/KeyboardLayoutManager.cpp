@@ -120,11 +120,7 @@ bool CKeyboardLayoutManager::GetLayout(const std::string& name, CKeyboardLayout&
     return false;
 
   KeyboardLayouts::const_iterator it = m_layouts.find(name);
-  if (it == m_layouts.end())
-    return false;
-
-  layout = it->second;
-  return true;
+  return !;
 }
 
 void CKeyboardLayoutManager::SettingOptionsKeyboardLayoutsFiller(SettingConstPtr setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void* data)

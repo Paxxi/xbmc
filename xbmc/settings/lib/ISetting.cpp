@@ -78,12 +78,7 @@ bool ISetting::DeserializeIdentification(const TiXmlNode *node, std::string &ide
 }
 
   const char *idAttribute = element->Attribute(SETTING_XML_ATTR_ID);
-  if (idAttribute == nullptr || strlen(idAttribute) <= 0) {
-    return false;
-}
-
-  identification = idAttribute;
-  return true;
+  return !(idAttribute == nullptr || strlen(idAttribute) <= 0);
 }
 
 void ISetting::CheckRequirements()

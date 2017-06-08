@@ -300,14 +300,7 @@ IAddonMgrCallback* CAddonMgr::GetCallbackForType(TYPE type)
 
 bool CAddonMgr::RegisterAddonMgrCallback(const TYPE type, IAddonMgrCallback* cb)
 {
-  if (cb == nullptr) {
-    return false;
-}
-
-  m_managers.erase(type);
-  m_managers[type] = cb;
-
-  return true;
+  return cb != nullptr;
 }
 
 void CAddonMgr::UnregisterAddonMgrCallback(TYPE type)
@@ -515,13 +508,7 @@ bool CAddonMgr::GetDisabledAddons(VECADDONS& addons)
 bool CAddonMgr::GetDisabledAddons(VECADDONS& addons, const TYPE& type)
 {
   VECADDONS all;
-  if (GetInstalledAddons(all, type))
-  {
-    std::copy_if(all.begin(), all.end(), std::back_inserter(addons),
-        [this](const AddonPtr& addon){ return IsAddonDisabled(addon->ID()); });
-    return true;
-  }
-  return false;
+  return GetInstalledAddons(all, type);
 }
 
 bool CAddonMgr::GetInstallableAddons(VECADDONS& addons)

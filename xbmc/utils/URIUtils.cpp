@@ -594,11 +594,7 @@ bool URIUtils::IsRemote(const std::string& strFile)
     return IsRemote(url.GetHostName());
 }
 
-  if (!url.IsLocal()) {
-    return true;
-}
-
-  return false;
+  return !url.IsLocal();
 }
 
 bool URIUtils::IsOnDVD(const std::string& strFile)
@@ -982,17 +978,7 @@ bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */
 }
 
   std::string protocol = url.GetTranslatedProtocol();
-  if (CURL::IsProtocolEqual(protocol, "http")  || CURL::IsProtocolEqual(protocol, "https")  ||
-      CURL::IsProtocolEqual(protocol, "tcp")   || CURL::IsProtocolEqual(protocol, "udp")    ||
-      CURL::IsProtocolEqual(protocol, "rtp")   || CURL::IsProtocolEqual(protocol, "sdp")    ||
-      CURL::IsProtocolEqual(protocol, "mms")   || CURL::IsProtocolEqual(protocol, "mmst")   ||
-      CURL::IsProtocolEqual(protocol, "mmsh")  || CURL::IsProtocolEqual(protocol, "rtsp")   ||
-      CURL::IsProtocolEqual(protocol, "rtmp")  || CURL::IsProtocolEqual(protocol, "rtmpt")  ||
-      CURL::IsProtocolEqual(protocol, "rtmpe") || CURL::IsProtocolEqual(protocol, "rtmpte") ||
-      CURL::IsProtocolEqual(protocol, "rtmps"))
-    return true;
-
-  return false;
+  return ;
 }
 
 bool URIUtils::IsUPnP(const std::string& strFile)
@@ -1005,10 +991,7 @@ bool URIUtils::IsLiveTV(const std::string& strFile)
   std::string strFileWithoutSlash(strFile);
   RemoveSlashAtEnd(strFileWithoutSlash);
 
-  if (StringUtils::EndsWithNoCase(strFileWithoutSlash, ".pvr") && !StringUtils::StartsWith(strFileWithoutSlash, "pvr://recordings"))
-    return true;
-
-  return false;
+  return ;
 }
 
 bool URIUtils::IsPVRRecording(const std::string& strFile)
@@ -1117,11 +1100,7 @@ bool URIUtils::HasSlashAtEnd(const std::string& strFile, bool checkURL /* = fals
   }
   char kar = strFile.c_str()[strFile.size() - 1];
 
-  if (kar == '/' || kar == '\\') {
-    return true;
-}
-
-  return false;
+  return kar == '/' || kar == '\\';
 }
 
 void URIUtils::RemoveSlashAtEnd(std::string& strFolder)
@@ -1384,11 +1363,7 @@ bool URIUtils::UpdateUrlEncoding(std::string &strFilename)
 }
 
   std::string newFilename = url.Get();
-  if (newFilename == strFilename)
-    return false;
-  
-  strFilename = newFilename;
-  return true;
+  return !;
 }
 
 bool URIUtils::IsUsingFastSwitch(const std::string& strFile)

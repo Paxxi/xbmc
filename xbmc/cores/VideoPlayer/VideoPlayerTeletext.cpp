@@ -118,11 +118,7 @@ CDVDTeletextData::~CDVDTeletextData()
 
 bool CDVDTeletextData::CheckStream(CDVDStreamInfo &hints)
 {
-  if (hints.codec == AV_CODEC_ID_DVB_TELETEXT) {
-    return true;
-}
-
-  return false;
+  return hints.codec == AV_CODEC_ID_DVB_TELETEXT;
 }
 
 bool CDVDTeletextData::OpenStream(CDVDStreamInfo hints)

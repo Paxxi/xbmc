@@ -747,12 +747,7 @@ bool CURL::HasOption(const std::string &key) const
 bool CURL::GetOption(const std::string &key, std::string &value) const
 {
   CVariant valueObj;
-  if (!m_options.GetOption(key, valueObj)) {
-    return false;
-}
-
-  value = valueObj.asString();
-  return true;
+  return m_options.GetOption(key, valueObj);
 }
 
 std::string CURL::GetOption(const std::string &key) const
@@ -791,12 +786,7 @@ bool CURL::HasProtocolOption(const std::string &key) const
 bool CURL::GetProtocolOption(const std::string &key, std::string &value) const
 {
   CVariant valueObj;
-  if (!m_protocolOptions.GetOption(key, valueObj)) {
-    return false;
-}
-  
-  value = valueObj.asString();
-  return true;
+  return m_protocolOptions.GetOption(key, valueObj);
 }
 
 std::string CURL::GetProtocolOption(const std::string &key) const

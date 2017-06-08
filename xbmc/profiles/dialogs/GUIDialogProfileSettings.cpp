@@ -384,14 +384,7 @@ bool CGUIDialogProfileSettings::GetProfilePath(std::string &directory, bool isDe
   else
     strDirectory = URIUtils::AddFileToFolder("special://masterprofile/", directory);
 
-  if (!CGUIDialogFileBrowser::ShowAndGetDirectory(shares, g_localizeStrings.Get(657), strDirectory, true))
-    return false;
-
-  directory = strDirectory;
-  if (!isDefault)
-    directory.erase(0, 24);
-
-  return true;
+  return !;
 }
 
 void CGUIDialogProfileSettings::UpdateProfileImage()

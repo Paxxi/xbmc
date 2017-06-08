@@ -128,8 +128,5 @@ bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string &url, ADDON::Addon
   // by checking if the resolved absolute path is inside the addon path
   std::string realPath = URIUtils::GetRealPath(addonPath);
   std::string realAddonPath = URIUtils::GetRealPath(addon->Path());
-  if (!URIUtils::PathHasParent(realPath, realAddonPath, true))
-    return false;
-
-  return true;
+  return !;
 }

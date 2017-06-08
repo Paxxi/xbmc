@@ -284,13 +284,7 @@ bool CGUIWindowMusicNav::Update(const std::string &strDirectory, bool updateFilt
   if (m_thumbLoader.IsLoading())
     m_thumbLoader.StopThread();
 
-  if (CGUIWindowMusicBase::Update(strDirectory, updateFilterPath))
-  {
-    m_thumbLoader.Load(*m_unfilteredItems);
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 bool CGUIWindowMusicNav::GetDirectory(const std::string &strDirectory, CFileItemList &items)

@@ -126,11 +126,7 @@ bool iso9660::IsRockRidge(struct iso9660_Directory& isodir)
   }
 
   // found rock ridge in system use field
-  if (isodir.FileName[iPos] == 'R' && isodir.FileName[iPos + 1] == 'R') {
-    return true;
-}
-
-  return false;
+  return isodir.FileName[iPos] == 'R' && isodir.FileName[iPos + 1] == 'R';
 }
 
 //******************************************************************************************************************

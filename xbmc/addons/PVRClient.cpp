@@ -1326,13 +1326,7 @@ const char *CPVRClient::ToString(const PVR_ERROR error)
 
 bool CPVRClient::LogError(const PVR_ERROR error, const char *strMethod) const
 {
-  if (error != PVR_ERROR_NO_ERROR)
-  {
-    CLog::Log(LOGERROR, "PVR - %s - addon '%s' returned an error: %s",
-        strMethod, GetFriendlyName().c_str(), ToString(error));
-    return false;
-  }
-  return true;
+  return error == PVR_ERROR_NO_ERROR;
 }
 
 bool CPVRClient::CanPlayChannel(const CPVRChannelPtr &channel) const

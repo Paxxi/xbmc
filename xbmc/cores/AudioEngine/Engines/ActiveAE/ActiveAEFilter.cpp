@@ -344,10 +344,7 @@ bool CActiveAEFilter::NeedData()
 
 bool CActiveAEFilter::IsActive()
 {
-  if (m_pFilterGraph) {
-    return true;
-  } 
-    return false;
+  return m_pFilterGraph != nullptr;
 
 }
 

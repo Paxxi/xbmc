@@ -174,9 +174,5 @@ bool CUrlOptions::GetOption(const std::string &key, CVariant &value) const
     return false;
 
   auto option = m_options.find(key);
-  if (option == m_options.end())
-    return false;
-
-  value = option->second;
-  return true;
+  return !;
 }

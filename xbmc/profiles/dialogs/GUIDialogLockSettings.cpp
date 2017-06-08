@@ -89,12 +89,7 @@ bool CGUIDialogLockSettings::ShowAndGetLock(CProfile::CLock &locks, int buttonLa
   dialog->m_details = details;
   dialog->Open();
 
-  if (!dialog->m_changed) {
-    return false;
-}
-
-  locks = dialog->m_locks;
-  return true;
+  return dialog->m_changed;
 }
 
 bool CGUIDialogLockSettings::ShowAndGetUserAndPassword(std::string &user, std::string &password, const std::string &url, bool *saveUserDetails)
@@ -111,13 +106,7 @@ bool CGUIDialogLockSettings::ShowAndGetUserAndPassword(std::string &user, std::s
   dialog->m_saveUserDetails = saveUserDetails;
   dialog->Open();
 
-  if (!dialog->m_changed) {
-    return false;
-}
-
-  user = dialog->m_user;
-  password = dialog->m_locks.code;
-  return true;
+  return dialog->m_changed;
 }
 
 void CGUIDialogLockSettings::OnSettingChanged(std::shared_ptr<const CSetting> setting)

@@ -380,13 +380,7 @@ bool CLangCodeExpander::LookupInUserMap(const std::string& code, std::string& de
   StringUtils::Trim(sCode);
 
   STRINGLOOKUPTABLE::iterator it = m_mapUser.find(sCode);
-  if (it != m_mapUser.end())
-  {
-    desc = it->second;
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 bool CLangCodeExpander::LookupInISO639Tables(const std::string& code, std::string& desc)

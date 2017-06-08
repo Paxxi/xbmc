@@ -1715,13 +1715,9 @@ bool CActiveAE::NeedReconfigureBuffers()
   AEAudioFormat newFormat = GetInputFormat();
   ApplySettingsToFormat(newFormat, m_settings);
 
-  if (newFormat.m_dataFormat != m_sinkRequestFormat.m_dataFormat ||
+  return newFormat.m_dataFormat != m_sinkRequestFormat.m_dataFormat ||
       newFormat.m_channelLayout != m_sinkRequestFormat.m_channelLayout ||
-      newFormat.m_sampleRate != m_sinkRequestFormat.m_sampleRate) {
-    return true;
-}
-
-  return false;
+      newFormat.m_sampleRate != m_sinkRequestFormat.m_sampleRate;
 }
 
 bool CActiveAE::NeedReconfigureSink()
@@ -1733,12 +1729,7 @@ bool CActiveAE::NeedReconfigureSink()
   std::string driver;
   CAESinkFactory::ParseDevice(device, driver);
 
-  if (!CompareFormat(newFormat, m_sinkFormat) ||
-      m_currDevice.compare(device) != 0 ||
-      m_settings.driver.compare(driver) != 0)
-    return true;
-
-  return false;
+  return ;
 }
 
 bool CActiveAE::InitSink()
@@ -2979,12 +2970,9 @@ void CActiveAE::FreeSoundSample(uint8_t **data)
 
 bool CActiveAE::CompareFormat(AEAudioFormat &lhs, AEAudioFormat &rhs)
 {
-  if (lhs.m_channelLayout != rhs.m_channelLayout ||
+  return !(lhs.m_channelLayout != rhs.m_channelLayout ||
       lhs.m_dataFormat != rhs.m_dataFormat ||
-      lhs.m_sampleRate != rhs.m_sampleRate) {
-    return false;
-  } 
-    return true;
+      lhs.m_sampleRate != rhs.m_sampleRate);
 
 }
 

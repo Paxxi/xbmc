@@ -196,15 +196,7 @@ bool CDAVDirectory::Create(const CURL& url)
 
   dav.SetCustomRequest(strRequest);
  
-  if (!dav.Execute(url))
-  {
-    CLog::Log(LOGERROR, "%s - Unable to create dav directory (%s) - %d", __FUNCTION__, url.GetRedacted().c_str(), dav.GetLastResponseCode());
-    return false;
-  }
-
-  dav.Close();
-
-  return true;
+  return dav.Execute(url);
 }
 
 bool CDAVDirectory::Exists(const CURL& url)
@@ -227,13 +219,5 @@ bool CDAVDirectory::Remove(const CURL& url)
 
   dav.SetCustomRequest(strRequest);
  
-  if (!dav.Execute(url))
-  {
-    CLog::Log(LOGERROR, "%s - Unable to delete dav directory (%s) - %d", __FUNCTION__, url.GetRedacted().c_str(), dav.GetLastResponseCode());
-    return false;
-  }
-
-  dav.Close();
-
-  return true;
+  return dav.Execute(url);
 }

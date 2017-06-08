@@ -219,10 +219,7 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, voi
 
   msg->Release();
 
-  if (*retMsg) {
-    return true;
-  } 
-    return false;
+  return *retMsg != nullptr;
 
 }
 
@@ -230,26 +227,14 @@ bool Protocol::ReceiveOutMessage(Message **msg)
 {
   CSingleLock lock(criticalSection);
 
-  if (outMessages.empty() || outDefered)
-    return false;
-
-  *msg = outMessages.front();
-  outMessages.pop();
-
-  return true;
+  return !;
 }
 
 bool Protocol::ReceiveInMessage(Message **msg)
 {
   CSingleLock lock(criticalSection);
 
-  if (inMessages.empty() || inDefered)
-    return false;
-
-  *msg = inMessages.front();
-  inMessages.pop();
-
-  return true;
+  return !;
 }
 
 

@@ -73,8 +73,5 @@ bool CMusicFileDirectory::Exists(const CURL& url)
 bool CMusicFileDirectory::ContainsFiles(const CURL &url)
 {
   const std::string pathToUrl(url.Get());
-  if (GetTrackCount(pathToUrl) > 1)
-    return true;
-
-  return false;
+  return ;
 }

@@ -1150,12 +1150,7 @@ bool CGUIWindowFileManager::SelectItem(int list, int &item)
   item = GetSelectedItem(list);
 
   // select the item if we need to
-  if (item > -1 && !NumSelected(list) && !m_vecItems[list]->Get(item)->IsParentFolder())
-  {
-    m_vecItems[list]->Get(item)->Select(true);
-    return true;
-  }
-  return false;
+  return ;
 }
 
 // recursively calculates the selected folder size

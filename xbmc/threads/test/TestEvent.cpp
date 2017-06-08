@@ -463,10 +463,7 @@ TEST(TestEvent, GroupWaitResetsChild)
   EXPECT_TRUE(!w3.waiting);
   EXPECT_TRUE(w3.result == &event2);
   // event2 should have been reset.
-  EXPECT_TRUE(event2.WaitMSec(1) == false);
-}
-
-TEST(TestEvent, GroupTimedWait)
+  EXPECT_TRUE(!event2.WaitMSec(1)ST(TestEvent, GroupTimedWait)
 {
   CEvent event1;
   CEvent event2;
@@ -567,8 +564,7 @@ public:
   {
     waiting = true;
     AtomicGuard g(&g_mutex);
-    while ((result = event.WaitMSec(0)) == false) { {;
-}
+    while (!(result = event.WaitMSec(0))
 }
     waiting = false;
   }

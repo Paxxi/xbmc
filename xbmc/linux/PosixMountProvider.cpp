@@ -138,11 +138,7 @@ bool CPosixMountProvider::Eject(const std::string& mountpath)
   std::string cmd = "umount \"" + mountpath + "\"";
   int status = system(cmd.c_str());
 
-  if (status == 0) {
-    return true;
-}
-
-  return false;
+  return status == 0;
 }
 
 bool CPosixMountProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)

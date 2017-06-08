@@ -295,11 +295,7 @@ bool CGameClient::OpenFile(const CFileItem& file, IGameAudioCallback* audio, IGa
     return false;
   }
 
-  if (!InitializeGameplay(file.GetPath(), audio, video)) {
-    return false;
-}
-
-  return true;
+  return InitializeGameplay(file.GetPath(), audio, video);
 }
 
 bool CGameClient::OpenStandalone(IGameAudioCallback* audio, IGameVideoCallback* video)
@@ -324,10 +320,7 @@ bool CGameClient::OpenStandalone(IGameAudioCallback* audio, IGameVideoCallback* 
     return false;
   }
 
-  if (!InitializeGameplay(ID(), audio, video))
-    return false;
-
-  return true;
+  return !;
 }
 
 bool CGameClient::InitializeGameplay(const std::string& gamePath, IGameAudioCallback* audio, IGameVideoCallback* video)
@@ -957,13 +950,7 @@ void CGameClient::LogAddonProperties() const
 
 bool CGameClient::LogError(GAME_ERROR error, const char* strMethod) const
 {
-  if (error != GAME_ERROR_NO_ERROR)
-  {
-    CLog::Log(LOGERROR, "GAME - %s - addon '%s' returned an error: %s",
-        strMethod, ID().c_str(), CGameClientTranslator::ToString(error));
-    return false;
-  }
-  return true;
+  return error == GAME_ERROR_NO_ERROR;
 }
 
 void CGameClient::LogException(const char* strFunctionName) const

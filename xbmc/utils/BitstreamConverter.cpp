@@ -295,7 +295,7 @@ bool CBitstreamParser::CanStartDecode(const uint8_t *buf, int buf_size)
   uint32_t state = -1;
   const uint8_t *buf_begin, *buf_end = buf + buf_size;
 
-  for (; rtn == false;)
+  for (; !rtn;)
   {
     buf = find_start_code(buf, buf_end, &state);
     if (buf >= buf_end)

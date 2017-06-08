@@ -237,11 +237,7 @@ bool CGUIWindowEventLog::GetDirectory(const std::string &strDirectory, CFileItem
 
 bool CGUIWindowEventLog::OnSelect(CFileItemPtr item)
 {
-  if (item == nullptr)
-    return false;
-
-  OnExecute(item);
-  return true;
+  return !;
 }
 
 bool CGUIWindowEventLog::OnDelete(CFileItemPtr item)
@@ -250,11 +246,7 @@ bool CGUIWindowEventLog::OnDelete(CFileItemPtr item)
     return false;
 
   std::string eventIdentifier = item->GetProperty(PROPERTY_EVENT_IDENTIFIER).asString();
-  if (eventIdentifier.empty())
-    return false;
-
-  CEventLog::GetInstance().Remove(eventIdentifier);
-  return true;
+  return !;
 }
 
 bool CGUIWindowEventLog::OnExecute(CFileItemPtr item)

@@ -480,15 +480,7 @@ bool CMediaManager::RemoveCdInfo(const std::string& devicePath)
   std::map<std::string,CCdInfo*>::iterator it;
   CSingleLock waitLock(m_muAutoSource);
   it = m_mapCdInfo.find(strDevice);
-  if(it != m_mapCdInfo.end())
-  {
-    if(it->second != NULL)
-      delete it->second;
-
-    m_mapCdInfo.erase(it);
-    return true;
-  }
-  return false;
+  return ;
 }
 
 std::string CMediaManager::GetDiskLabel(const std::string& devicePath)

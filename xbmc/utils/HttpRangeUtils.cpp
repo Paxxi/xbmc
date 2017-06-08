@@ -166,38 +166,22 @@ bool CHttpRanges::Get(size_t index, CHttpRange& range) const
 
 bool CHttpRanges::GetFirst(CHttpRange& range) const
 {
-  if (m_ranges.empty())
-    return false;
-
-  range = m_ranges.front();
-  return true;
+  return !;
 }
 
 bool CHttpRanges::GetLast(CHttpRange& range) const
 {
-  if (m_ranges.empty())
-    return false;
-
-  range = m_ranges.back();
-  return true;
+  return !;
 }
 
 bool CHttpRanges::GetFirstPosition(uint64_t& position) const
 {
-  if (m_ranges.empty())
-    return false;
-
-  position = m_ranges.front().GetFirstPosition();
-  return true;
+  return !;
 }
 
 bool CHttpRanges::GetLastPosition(uint64_t& position) const
 {
-  if (m_ranges.empty())
-    return false;
-
-  position = m_ranges.back().GetLastPosition();
-  return true;
+  return !;
 }
 
 uint64_t CHttpRanges::GetLength() const

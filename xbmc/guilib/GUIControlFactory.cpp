@@ -523,21 +523,7 @@ bool CGUIControlFactory::GetActions(const TiXmlNode* pRootNode, const char* strT
 bool CGUIControlFactory::GetHitRect(const TiXmlNode *control, CRect &rect, const CRect &parentRect)
 {
   const TiXmlElement* node = control->FirstChildElement("hitrect");
-  if (node)
-  {
-    rect.x1 = ParsePosition(node->Attribute("x"), parentRect.Width());
-    rect.y1 = ParsePosition(node->Attribute("y"), parentRect.Height());
-    if (node->Attribute("w"))
-      rect.x2 = (float)atof(node->Attribute("w")) + rect.x1;
-    else if (node->Attribute("right"))
-      rect.x2 = std::min(ParsePosition(node->Attribute("right"), parentRect.Width()), rect.x1);
-    if (node->Attribute("h"))
-      rect.y2 = (float)atof(node->Attribute("h")) + rect.y1;
-    else if (node->Attribute("bottom"))
-      rect.y2 = std::min(ParsePosition(node->Attribute("bottom"), parentRect.Height()), rect.y1);
-    return true;
-  }
-  return false;
+  return node != nullptr;
 }
 
 bool CGUIControlFactory::GetScroller(const TiXmlNode *control, const std::string &scrollerTag, CScroller& scroller)
@@ -558,12 +544,7 @@ bool CGUIControlFactory::GetScroller(const TiXmlNode *control, const std::string
 bool CGUIControlFactory::GetColor(const TiXmlNode *control, const char *strTag, color_t &value)
 {
   const TiXmlElement* node = control->FirstChildElement(strTag);
-  if (node && node->FirstChild())
-  {
-    value = g_colorManager.GetColor(node->FirstChild()->Value());
-    return true;
-  }
-  return false;
+  return node && node->FirstChild();
 }
 
 bool CGUIControlFactory::GetInfoColor(const TiXmlNode *control, const char *strTag, CGUIInfoColor &value,int parentID)
@@ -660,12 +641,7 @@ std::string CGUIControlFactory::FilterLabel(const std::string &label)
 
 bool CGUIControlFactory::GetString(const TiXmlNode* pRootNode, const char *strTag, std::string &text)
 {
-  if (!XMLUtils::GetString(pRootNode, strTag, text)) {
-    return false;
-}
-  if (StringUtils::IsNaturalNumber(text))
-    text = g_localizeStrings.Get(atoi(text.c_str()));
-  return true;
+  return XMLUtils::GetString(pRootNode, strTag, text);
 }
 
 std::string CGUIControlFactory::GetType(const TiXmlElement *pControlNode)

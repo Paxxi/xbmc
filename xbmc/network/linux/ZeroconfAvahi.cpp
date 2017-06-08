@@ -371,10 +371,7 @@ bool CZeroconfAvahi::createClient()
     }
     mp_client = avahi_client_new(avahi_threaded_poll_get(mp_poll),
                                  AVAHI_CLIENT_NO_FAIL, &clientCallback,this,nullptr);
-    if (!mp_client) {
-      return false;
-}
-    return true;
+    return mp_client != nullptr;
 }
 
 void CZeroconfAvahi::updateServices(AvahiClient* fp_client)

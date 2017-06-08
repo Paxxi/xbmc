@@ -51,15 +51,7 @@ bool CTimer::Start(uint32_t timeout, bool interval /* = false */)
 
 bool CTimer::Stop(bool wait /* = false */)
 {
-  if (!IsRunning()) {
-    return false;
-}
-
-  m_bStop = true;
-  m_eventTimeout.Set();
-  StopThread(wait);
-
-  return true;
+  return IsRunning();
 }
 
 void CTimer::RestartAsync(uint32_t timeout)

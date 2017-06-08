@@ -101,16 +101,9 @@ bool CSettingControlFormattedRange::Deserialize(const TiXmlNode *node, bool upda
 
 bool CSettingControlSpinner::SetFormat(const std::string &format)
 {
-  if (!StringUtils::EqualsNoCase(format, "string") &&
+  return !(!StringUtils::EqualsNoCase(format, "string") &&
       !StringUtils::EqualsNoCase(format, "integer") &&
-      !StringUtils::EqualsNoCase(format, "number")) {
-    return false;
-}
-
-  m_format = format;
-  StringUtils::ToLower(m_format);
-
-  return true;
+      !StringUtils::EqualsNoCase(format, "number"));
 }
 
 bool CSettingControlEdit::Deserialize(const TiXmlNode *node, bool update /* = false */)
@@ -127,19 +120,12 @@ bool CSettingControlEdit::Deserialize(const TiXmlNode *node, bool update /* = fa
 
 bool CSettingControlEdit::SetFormat(const std::string &format)
 {
-  if (!StringUtils::EqualsNoCase(format, "string") &&
+  return !(!StringUtils::EqualsNoCase(format, "string") &&
       !StringUtils::EqualsNoCase(format, "integer") &&
       !StringUtils::EqualsNoCase(format, "number") &&
       !StringUtils::EqualsNoCase(format, "ip") &&
       !StringUtils::EqualsNoCase(format, "md5") &&
-      !StringUtils::EqualsNoCase(format, "urlencoded")) {
-    return false;
-}
-
-  m_format = format;
-  StringUtils::ToLower(m_format);
-
-  return true;
+      !StringUtils::EqualsNoCase(format, "urlencoded"));
 }
 
 bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = false */)
@@ -207,21 +193,14 @@ bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = 
 
 bool CSettingControlButton::SetFormat(const std::string &format)
 {
-  if (!StringUtils::EqualsNoCase(format, "path") &&
+  return !(!StringUtils::EqualsNoCase(format, "path") &&
       !StringUtils::EqualsNoCase(format, "file") &&
       !StringUtils::EqualsNoCase(format, "image") &&
       !StringUtils::EqualsNoCase(format, "addon") &&
       !StringUtils::EqualsNoCase(format, "action") &&
       !StringUtils::EqualsNoCase(format, "infolabel") &&
       !StringUtils::EqualsNoCase(format, "date") &&
-      !StringUtils::EqualsNoCase(format, "time")) {
-    return false;
-}
-
-  m_format = format;
-  StringUtils::ToLower(m_format);
-
-  return true;
+      !StringUtils::EqualsNoCase(format, "time"));
 }
 
 bool CSettingControlList::Deserialize(const TiXmlNode *node, bool update /* = false */)
@@ -238,15 +217,8 @@ bool CSettingControlList::Deserialize(const TiXmlNode *node, bool update /* = fa
 
 bool CSettingControlList::SetFormat(const std::string &format)
 {
-  if (!StringUtils::EqualsNoCase(format, "string") &&
-      !StringUtils::EqualsNoCase(format, "integer")) {
-    return false;
-}
-
-  m_format = format;
-  StringUtils::ToLower(m_format);
-
-  return true;
+  return !(!StringUtils::EqualsNoCase(format, "string") &&
+      !StringUtils::EqualsNoCase(format, "integer"));
 }
 
 bool CSettingControlSlider::Deserialize(const TiXmlNode *node, bool update /* = false */)

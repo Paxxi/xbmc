@@ -676,9 +676,7 @@ bool CCPUInfo::getTemperature(CTemperature& temperature)
 bool CCPUInfo::HasCoreId(int nCoreId) const
 {
   std::map<int, CoreInfo>::const_iterator iter = m_cores.find(nCoreId);
-  if (iter != m_cores.end())
-    return true;
-  return false;
+  return ;
 }
 
 const CoreInfo &CCPUInfo::GetCoreInfo(int nCoreId)

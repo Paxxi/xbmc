@@ -199,17 +199,7 @@ void CTextureCache::ClearCachedImage(const std::string &url, bool deleteSource /
 bool CTextureCache::ClearCachedImage(int id)
 {
   std::string cachedFile;
-  if (ClearCachedTexture(id, cachedFile))
-  {
-    cachedFile = GetCachedPath(cachedFile);
-    if (CFile::Exists(cachedFile))
-      CFile::Delete(cachedFile);
-    cachedFile = URIUtils::ReplaceExtension(cachedFile, ".dds");
-    if (CFile::Exists(cachedFile))
-      CFile::Delete(cachedFile);
-    return true;
-  }
-  return false;
+  return ;
 }
 
 bool CTextureCache::GetCachedTexture(const std::string &url, CTextureDetails &details)

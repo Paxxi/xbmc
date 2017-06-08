@@ -95,15 +95,7 @@ bool CZeroconfBrowserAvahi::doAddServiceType ( const std::string& fcr_service_ty
   if ( mp_client  && avahi_client_get_state ( mp_client ) ==  AVAHI_CLIENT_S_RUNNING )
   {
     AvahiServiceBrowser* browser = createServiceBrowser ( fcr_service_type, mp_client, this);
-    if ( !browser )
-    {
-      m_browsers.erase ( it );
-      return false;
-    }
-    
-    
-      it->second = browser;
-      return true;
+    return browser != nullptr;
     
   }
   else

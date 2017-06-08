@@ -326,10 +326,7 @@ VADisplay CVAAPIContext::GetDisplay()
 bool CVAAPIContext::IsValidDecoder(CDecoder *decoder)
 {
   auto it = find(m_decoders.begin(), m_decoders.end(), decoder);
-  if (it != m_decoders.end())
-    return true;
-
-  return false;
+  return ;
 }
 
 void CVAAPIContext::FFReleaseBuffer(void *opaque, uint8_t *data)
@@ -405,10 +402,7 @@ void CVideoSurfaces::ClearRender(VASurfaceID surf)
 bool CVideoSurfaces::IsValid(VASurfaceID surf)
 {
   CSingleLock lock(m_section);
-  if (m_state.find(surf) != m_state.end())
-    return true;
-  
-    return false;
+  return ;
 }
 
 VASurfaceID CVideoSurfaces::GetFree(VASurfaceID surf)
@@ -736,7 +730,7 @@ long CDecoder::Release()
 
   // check if we should do some pre-cleanup here
   // a second decoder might need resources
-  if (m_vaapiConfigured == true)
+  if (m_vaapiConfigured)
   {
     CSingleLock lock(m_DecoderSection);
     if (g_advancedSettings.CanLogComponent(LOGVIDEO))
@@ -748,7 +742,7 @@ long CDecoder::Release()
                                                    &reply,
                                                    2000))
     {
-      bool success = reply->signal == COutputControlProtocol::ACC ? true : false;
+      bool success = reply->signal == COutputControlProtocol::ACC;
       reply->Release();
       if (!success)
       {
@@ -1042,7 +1036,7 @@ void CDecoder::Reset()
                                                  &reply,
                                                  2000))
   {
-    bool success = reply->signal == COutputControlProtocol::ACC ? true : false;
+    bool success = reply->signal == COutputControlProtocol::ACC;
     reply->Release();
     if (!success)
     {
@@ -1153,7 +1147,7 @@ bool CDecoder::ConfigVAAPI()
                                                      &m_vaapiConfig,
                                                      sizeof(m_vaapiConfig)))
   {
-    bool success = reply->signal == COutputControlProtocol::ACC ? true : false;
+    bool success = reply->signal == COutputControlProtocol::ACC;
     if (!success)
     {
       reply->Release();
@@ -2242,10 +2236,7 @@ bool COutput::HasWork()
     ppWantsPic = m_pp->WantsPic();
 }
 
-  if (!m_bufferPool.decodedPics.empty() && m_bufferPool.processedPics.size() < 4 && ppWantsPic)
-    return true;
-
-  return false;
+  return ;
 }
 
 bool COutput::PreferPP()
@@ -2824,11 +2815,7 @@ void CSkipPostproc::Flush()
 
 bool CSkipPostproc::Compatible(EINTERLACEMETHOD method)
 {
-  if (method == VS_INTERLACEMETHOD_NONE) {
-    return true;
-}
-
-  return false;
+  return method == VS_INTERLACEMETHOD_NONE;
 }
 
 bool CSkipPostproc::DoesSync()
@@ -3304,14 +3291,10 @@ void CVppPostproc::Flush()
 
 bool CVppPostproc::Compatible(EINTERLACEMETHOD method)
 {
-  if (method == VS_INTERLACEMETHOD_VAAPI_BOB ||
+  return method == VS_INTERLACEMETHOD_VAAPI_BOB ||
       method == VS_INTERLACEMETHOD_VAAPI_MADI ||
       method == VS_INTERLACEMETHOD_VAAPI_MACI ||
-      method == VS_INTERLACEMETHOD_NONE) {
-    return true;
-}
-
-  return false;
+      method == VS_INTERLACEMETHOD_NONE;
 }
 
 bool CVppPostproc::DoesSync()
@@ -3322,10 +3305,7 @@ bool CVppPostproc::DoesSync()
 bool CVppPostproc::WantsPic()
 {
   // need at least 2 for deinterlacing
-  if (m_videoSurfaces.NumFree() > 1)
-    return true;
-
-  return false;
+  return ;
 }
 
 bool CVppPostproc::CheckSuccess(VAStatus status)

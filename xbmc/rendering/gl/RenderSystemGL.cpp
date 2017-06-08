@@ -246,20 +246,12 @@ bool CRenderSystemGL::DestroyRenderSystem()
 
 bool CRenderSystemGL::BeginRender()
 {
-  if (!m_bRenderCreated) {
-    return false;
-}
-
-  return true;
+  return m_bRenderCreated;
 }
 
 bool CRenderSystemGL::EndRender()
 {
-  if (!m_bRenderCreated) {
-    return false;
-}
-
-  return true;
+  return m_bRenderCreated;
 }
 
 bool CRenderSystemGL::ClearBuffers(color_t color)
@@ -313,7 +305,7 @@ void CRenderSystemGL::PresentRender(bool rendered, bool videoLayer)
 
 void CRenderSystemGL::SetVSync(bool enable)
 {
-  if (m_bVSync == enable && m_bVsyncInit == true) {
+  if (m_bVSync == enable && m_bVsyncInit) {
     return;
 }
 

@@ -147,19 +147,12 @@ bool CKey::FromKeyboard() const
 
 bool CKey::IsAnalogButton() const
 {
-  if ((GetButtonCode() > 261 && GetButtonCode() < 270) || (GetButtonCode() > 279 && GetButtonCode() < 284)) {
-    return true;
-}
-
-  return false;
+  return (GetButtonCode() > 261 && GetButtonCode() < 270) || (GetButtonCode() > 279 && GetButtonCode() < 284);
 }
 
 bool CKey::IsIRRemote() const
 {
-  if (GetButtonCode() < 256) {
-    return true;
-}
-  return false;
+  return GetButtonCode() < 256;
 }
 
 float CKey::GetRepeat() const

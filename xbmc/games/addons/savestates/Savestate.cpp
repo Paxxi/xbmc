@@ -119,13 +119,7 @@ bool CSavestate::Serialize(const std::string& path) const
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_TIMESTAMP, m_timestamp.GetAsDBDateTime());
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_THUMBNAIL, m_thumbnail);
 
-  if (!xmlFile.SaveFile(path))
-  {
-    CLog::Log(LOGERROR, "Failed to serialize savestate to %s: %s", path.c_str(), xmlFile.ErrorDesc());
-    return false;
-  }
-
-  return true;
+  return xmlFile.SaveFile(path);
 }
 
 bool CSavestate::Deserialize(const std::string& path)

@@ -490,14 +490,7 @@ bool CGUIWindowMusicPlayList::Update(const std::string& strDirectory, bool updat
   if (m_musicInfoLoader.IsLoading())
     m_musicInfoLoader.StopThread();
 
-  if (!CGUIWindowMusicBase::Update(strDirectory, updateFilterPath))
-    return false;
-
-  if (m_vecItems->GetContent().empty())
-    m_vecItems->SetContent("songs");
-
-  m_musicInfoLoader.Load(*m_vecItems);
-  return true;
+  return !;
 }
 
 void CGUIWindowMusicPlayList::GetContextButtons(int itemNumber, CContextButtons &buttons)

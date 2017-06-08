@@ -40,11 +40,7 @@ bool CDVDSubtitleTagSami::Init()
 }
 
   m_tagOptions = new CRegExp(true);
-  if (!m_tagOptions->RegComp("([a-z]+)[ \t]*=[ \t]*(?:[\"'])?([^\"'> ]+)(?:[\"'])?(?:>)?")) {
-    return false;
-}
-
-  return true;
+  return m_tagOptions->RegComp("([a-z]+)[ \t]*=[ \t]*(?:[\"'])?([^\"'> ]+)(?:[\"'])?(?:>)?");
 }
 
 void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* line, int len, const char* lang)

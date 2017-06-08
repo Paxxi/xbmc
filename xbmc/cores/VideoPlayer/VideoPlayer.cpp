@@ -175,10 +175,7 @@ public:
 
     if (onlyforced)
     {
-      if ((ss.flags & CDemuxStream::FLAG_FORCED) && g_LangCodeExpander.CompareISO639Codes(ss.language, audiolang))
-        return false;
-      
-        return true;
+      return !;
     }
 
     if(STREAM_SOURCE_MASK(ss.source) == STREAM_SOURCE_DEMUX_SUB || STREAM_SOURCE_MASK(ss.source) == STREAM_SOURCE_TEXT) {
@@ -729,11 +726,7 @@ bool CVideoPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options
   CGUIDialogBusy::WaitOnEvent(m_ready, g_advancedSettings.m_videoBusyDialogDelay_ms, false);
 
   // Playback might have been stopped due to some error
-  if (m_bStop || m_bAbortRequest) {
-    return false;
-}
-
-  return true;
+  return !(m_bStop || m_bAbortRequest);
 }
 
 bool CVideoPlayer::CloseFile(bool reopen)
@@ -1440,7 +1433,7 @@ void CVideoPlayer::Process()
     // should we open a new input stream?
     if(!m_pInputStream)
     {
-      if (OpenInputStream() == false)
+      if (!OpenInputStream())
       {
         m_bAbortRequest = true;
         break;
@@ -1458,7 +1451,7 @@ void CVideoPlayer::Process()
         break;
 }
 
-      if (OpenDemuxStream() == false)
+      if (!OpenDemuxStream())
       {
         m_bAbortRequest = true;
         break;
@@ -1711,13 +1704,10 @@ bool CVideoPlayer::CheckDelayedChannelEntry()
 
 bool CVideoPlayer::CheckIsCurrent(CCurrentStream& current, CDemuxStream* stream, DemuxPacket* pkg)
 {
-  if(current.id     == pkg->iStreamId
+  return current.id     == pkg->iStreamId
   && current.demuxerId == stream->demuxerId
   && current.source == stream->source
-  && current.type   == stream->type) {
-    return true;
-  } 
-    return false;
+  && current.type   == stream->type;
 
 }
 
@@ -2408,7 +2398,7 @@ bool CVideoPlayer::CheckSceneSkip(CCurrentStream& current)
     return false;
 }
 
-  if(current.inited == false) {
+  if(!current.inited) {
     return false;
 }
 
@@ -3640,7 +3630,7 @@ bool CVideoPlayer::SeekTimeRelative(int64_t iTime)
   CDVDMsgPlayerSeek::CMode mode;
   mode.time = static_cast<int>(iTime);
   mode.relative = true;
-  mode.backward = (iTime < 0) ? true : false;
+  mode.backward = iTime < 0;
   mode.accurate = false;
   mode.trickplay = false;
   mode.sync = true;
@@ -4608,12 +4598,7 @@ bool CVideoPlayer::OnAction(const CAction &action)
           pt += CPoint(rs.x1, rs.y1);
           if (action.GetID() == ACTION_MOUSE_LEFT_CLICK)
           {
-            if (pMenus->OnMouseClick(pt))
-              return true;
-            
-            
-              CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_TRIGGER_OSD)));
-              return false;
+            return ;
             
           }
           return pMenus->OnMouseMove(pt);
@@ -5267,13 +5252,8 @@ bool CVideoPlayer::IsRecording()
 
 bool CVideoPlayer::Record(bool bOnOff)
 {
-  if (m_pInputStream && (m_pInputStream->IsStreamType(DVDSTREAM_TYPE_TV) ||
-                         m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER)) )
-  {
-    m_messenger.Put(new CDVDMsgBool(CDVDMsg::PLAYER_SET_RECORD, bOnOff));
-    return true;
-  }
-  return false;
+  return m_pInputStream && (m_pInputStream->IsStreamType(DVDSTREAM_TYPE_TV) ||
+                         m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER));
 }
 
 bool CVideoPlayer::GetStreamDetails(CStreamDetails &details)

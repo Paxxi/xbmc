@@ -473,12 +473,7 @@ bool CTCPServer::InitializeTCP()
 
   Deinitialize();
 
-  if ((fd = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "JSONRPC")) == INVALID_SOCKET) {
-    return false;
-}
-
-  m_servers.push_back(fd);
-  return true;
+  return (fd = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "JSONRPC")) != INVALID_SOCKET;
 }
 
 void CTCPServer::Deinitialize()

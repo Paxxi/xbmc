@@ -393,14 +393,7 @@ public:
 
   bool OnMRAdded(PLT_DeviceDataReference& device ) override
   {
-    if (device->GetUUID().IsEmpty() || device->GetUUID().GetChars() == NULL)
-      return false;
-
-    CPlayerCoreFactory::GetInstance().OnPlayerDiscovered((const char*)device->GetUUID()
-                                          ,(const char*)device->GetFriendlyName());
-    
-    m_registeredRenderers.insert(std::string(device->GetUUID().GetChars()));
-    return true;
+    return !;
   }
 
   void OnMRRemoved(PLT_DeviceDataReference& device ) override

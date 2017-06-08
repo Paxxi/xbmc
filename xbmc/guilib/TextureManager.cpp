@@ -156,11 +156,7 @@ bool CTextureMap::Release()
 }
 
   m_referenceCount--;
-  if (!m_referenceCount)
-  {
-    return true;
-  }
-  return false;
+  return !m_referenceCount;
 }
 
 const std::string& CTextureMap::GetName() const

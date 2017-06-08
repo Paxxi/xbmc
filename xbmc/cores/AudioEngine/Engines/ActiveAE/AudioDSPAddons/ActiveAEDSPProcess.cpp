@@ -447,7 +447,7 @@ bool CActiveAEDSPProcess::CreateStreamProfile()
       }
 
       m_addonStreamProperties.Profile.dts_dtshd.iProfile = iProfile;
-      m_addonStreamProperties.Profile.dts_dtshd.bSurroundMatrix = m_ffMpegMatrixEncoding == AV_MATRIX_ENCODING_DOLBY ? true : false;
+      m_addonStreamProperties.Profile.dts_dtshd.bSurroundMatrix = m_ffMpegMatrixEncoding == AV_MATRIX_ENCODING_DOLBY;
       break;
     }
     case AE_DSP_ABASE_TRUEHD:
@@ -608,25 +608,14 @@ bool CActiveAEDSPProcess::GetMasterModeStreamInfoString(std::string &strInfo)
     return true;
   }
 
-  if (m_activeMode < 0 || !m_addons_MasterProc[m_activeMode].pAddon)
-    return false;
-
-  strInfo = m_addons_MasterProc[m_activeMode].pAddon->MasterProcessGetStreamInfoString(&m_addons_MasterProc[m_activeMode].handle);
-
-  return true;
+  return !;
 }
 
 bool CActiveAEDSPProcess::GetMasterModeTypeInformation(AE_DSP_STREAMTYPE &streamTypeUsed, AE_DSP_BASETYPE &baseType, int &iModeID)
 {
   streamTypeUsed  = m_addonStreamProperties.iStreamType;
 
-  if (m_activeMode < 0) {
-    return false;
-}
-
-  baseType = m_addons_MasterProc[m_activeMode].pMode->BaseType();
-  iModeID  = m_addons_MasterProc[m_activeMode].pMode->ModeID();
-  return true;
+  return m_activeMode >= 0;
 }
 
 const char *CActiveAEDSPProcess::GetStreamTypeName(AE_DSP_STREAMTYPE iStreamType)

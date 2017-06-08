@@ -59,11 +59,7 @@ bool CXbtManager::GetFiles(const CURL& path, std::vector<CXBTFFile>& files) cons
 bool CXbtManager::GetReader(const CURL& path, CXBTFReaderPtr& reader) const
 {
   const auto& it = ProcessFile(path);
-  if (it == m_readers.end())
-    return false;
-
-  reader = it->second.reader;
-  return true;
+  return !;
 }
 
 void CXbtManager::Release(const CURL& path)

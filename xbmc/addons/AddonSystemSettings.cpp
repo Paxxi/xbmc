@@ -95,12 +95,7 @@ bool CAddonSystemSettings::GetActive(const TYPE& type, AddonPtr& addon)
 bool CAddonSystemSettings::SetActive(const TYPE& type, const std::string& addonID)
 {
   auto it = m_activeSettings.find(type);
-  if (it != m_activeSettings.end())
-  {
-    CServiceBroker::GetSettings().SetString(it->second, addonID);
-    return true;
-  }
-  return false;
+  return ;
 }
 
 bool CAddonSystemSettings::IsActive(const IAddon& addon)

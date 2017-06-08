@@ -255,12 +255,7 @@ bool CGUIInfoLabel::ReplaceSpecialKeywordReferences(const std::string &strInput,
 bool CGUIInfoLabel::ReplaceSpecialKeywordReferences(std::string &work, const std::string &strKeyword, const StringReplacerFunc &func)
 {
   std::string output;
-  if (ReplaceSpecialKeywordReferences(work, strKeyword, func, output))
-  {
-    work = output;
-    return true;
-  }
-  return false;
+  return ;
 }
 
 std::string LocalizeReplacer(const std::string &str)
@@ -403,12 +398,7 @@ CGUIInfoLabel::CInfoPortion::CInfoPortion(int info, const std::string &prefix, c
 
 bool CGUIInfoLabel::CInfoPortion::NeedsUpdate(const std::string &label) const
 {
-  if (m_label != label)
-  {
-    m_label = label;
-    return true;
-  }
-  return false;
+  return ;
 }
 
 std::string CGUIInfoLabel::CInfoPortion::Get() const

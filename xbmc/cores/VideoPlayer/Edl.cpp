@@ -301,17 +301,7 @@ bool CEdl::ReadEdl(const std::string& strMovie, const float fFramesPerSecond)
 
   edlFile.Close();
 
-  if (HasCut() || HasSceneMarker())
-  {
-    CLog::Log(LOGDEBUG, "{0} - Read {1} cuts and {2} scene markers in EDL file: {3}", __FUNCTION__,
-              m_vecCuts.size(), m_vecSceneMarkers.size(), edlFilename.c_str());
-    return true;
-  }
-  
-  
-    CLog::Log(LOGDEBUG, "%s - No cuts or scene markers found in EDL file: %s", __FUNCTION__,
-              edlFilename.c_str());
-    return false;
+  return HasCut() || HasSceneMarker();
   
 }
 
@@ -384,17 +374,7 @@ bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond
     Clear();
     return false;
   }
-  if (HasCut())
-  {
-    CLog::Log(LOGDEBUG, "{0} - Read {1} commercial breaks from Comskip file: {2}", __FUNCTION__, m_vecCuts.size(),
-              comskipFilename.c_str());
-    return true;
-  }
-  else
-  {
-    CLog::Log(LOGDEBUG, "%s - No commercial breaks found in Comskip file: %s", __FUNCTION__, comskipFilename.c_str());
-    return false;
-  }
+  return HasCut();
 }
 
 bool CEdl::ReadVideoReDo(const std::string& strMovie)
@@ -476,18 +456,7 @@ bool CEdl::ReadVideoReDo(const std::string& strMovie)
     Clear();
     return false;
   }
-  if (HasCut() || HasSceneMarker())
-  {
-    CLog::Log(LOGDEBUG, "{0} - Read {1} cuts and {2} scene markers in VideoReDo file: {3}", __FUNCTION__,
-              m_vecCuts.size(), m_vecSceneMarkers.size(), videoReDoFilename.c_str());
-    return true;
-  }
-  else
-  {
-    CLog::Log(LOGDEBUG, "%s - No cuts or scene markers found in VideoReDo file: %s", __FUNCTION__,
-              videoReDoFilename.c_str());
-    return false;
-  }
+  return HasCut() || HasSceneMarker();
 }
 
 bool CEdl::ReadBeyondTV(const std::string& strMovie)
@@ -559,18 +528,7 @@ bool CEdl::ReadBeyondTV(const std::string& strMovie)
     Clear();
     return false;
   }
-  if (HasCut())
-  {
-    CLog::Log(LOGDEBUG, "{0} - Read {1} commercial breaks from Beyond TV file: {2}", __FUNCTION__, m_vecCuts.size(),
-              beyondTVFilename.c_str());
-    return true;
-  }
-  else
-  {
-    CLog::Log(LOGDEBUG, "%s - No commercial breaks found in Beyond TV file: %s", __FUNCTION__,
-              beyondTVFilename.c_str());
-    return false;
-  }
+  return HasCut();
 }
 
 bool CEdl::ReadPvr(const std::string &strMovie)

@@ -3987,16 +3987,7 @@ bool CMusicDatabase::GetAlbumFromSong(int idSong, CAlbum &album)
     std::string strSQL = PrepareSQL("select albumview.* from song join albumview on song.idAlbum = albumview.idAlbum where song.idSong='%i'", idSong);
     if (!m_pDS->query(strSQL)) return false;
     int iRowsFound = m_pDS->num_rows();
-    if (iRowsFound != 1)
-    {
-      m_pDS->close();
-      return false;
-    }
-
-    album = GetAlbumFromDataset(m_pDS.get());
-
-    m_pDS->close();
-    return true;
+    return iRowsFound == 1;
 
   }
   catch (...)
@@ -5562,12 +5553,7 @@ bool CMusicDatabase::GetRandomSong(CFileItem* item, int& idSong, const Filter &f
     std::string baseDir = StringUtils::Format("musicdb://songs/?songid=%d", idSong);
     CFileItemList items;
     GetSongsFullByWhere(baseDir, Filter(), items, SortDescription(), true);
-    if (items.Size() > 0)
-    {
-      *item = *items[0];
-      return true;
-    }
-    return false;
+    return items.Size() > 0;
   }
   catch(...)
   {
@@ -5663,10 +5649,7 @@ bool CMusicDatabase::GetPathHash(const std::string &path, std::string &hash)
 
     std::string strSQL=PrepareSQL("select strHash from path where strPath='%s'", path.c_str());
     m_pDS->query(strSQL);
-    if (m_pDS->num_rows() == 0)
-      return false;
-    hash = m_pDS->fv("strHash").get_asString();
-    return true;
+    return !;
   }
   catch (...)
   {
@@ -7020,9 +7003,5 @@ bool CMusicDatabase::GetResumeBookmarkForAudioBook(const std::string& path, int&
 {
   std::string strSQL = PrepareSQL("SELECT bookmark FROM audiobook WHERE file='%s'",
                                  path.c_str());
-  if (!m_pDS->query(strSQL.c_str()) || m_pDS->num_rows() == 0)
-    return false;
-
-  bookmark = m_pDS->fv(0).get_asInt();
-  return true;
+  return !;
 }

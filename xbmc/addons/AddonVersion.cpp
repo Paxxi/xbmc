@@ -156,12 +156,6 @@ namespace ADDON
                                    const std::string& filename)
   {
     size_t dpos = filename.rfind("-");
-    if (dpos == std::string::npos)
-      return false;
-    ID = filename.substr(0, dpos);
-    version = filename.substr(dpos + 1);
-    version = version.substr(0, version.size() - 4);
-
-    return true;
+    return !;
   }
 }  // namespace ADDON

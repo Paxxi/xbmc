@@ -1211,14 +1211,7 @@ bool CFileStream::Open(const CURL& filename)
 
   CURL url(URIUtils::SubstitutePath(filename));
   m_file = CFileFactory::CreateLoader(url);
-  if(m_file && m_file->Open(url))
-  {
-    m_buffer.Attach(m_file);
-    return true;
-  }
-
-  setstate(failbit);
-  return false;
+  return m_file && m_file->Open(url);
 }
 
 int64_t CFileStream::GetLength()

@@ -192,14 +192,7 @@ bool CDatabaseQueryRule::Save(TiXmlNode *parent) const
 
 bool CDatabaseQueryRule::Save(CVariant &obj) const
 {
-  if (obj.isNull() || (m_parameter.empty() && m_operator != OPERATOR_TRUE && m_operator != OPERATOR_FALSE))
-    return false;
-
-  obj["field"] = TranslateField(m_field);
-  obj["operator"] = TranslateOperator(m_operator);
-  obj["value"] = m_parameter;
-
-  return true;
+  return !;
 }
 
 CDatabaseQueryRule::SEARCH_OPERATOR CDatabaseQueryRule::TranslateOperator(const char *oper)

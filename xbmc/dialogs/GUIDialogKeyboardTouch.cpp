@@ -52,13 +52,7 @@ bool CGUIDialogKeyboardTouch::ShowAndGetInput(char_callback_t pCallback, const s
 
   m_keyboard.reset();
 
-  if (m_confirmed)
-  {
-    typedString = m_typedString;
-    return true;
-  }
-
-  return false;
+  return m_confirmed;
 }
 
 bool CGUIDialogKeyboardTouch::SetTextToKeyboard(const std::string &text, bool closeKeyboard)

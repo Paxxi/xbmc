@@ -358,36 +358,17 @@ int CSettingsOperations::ParseSettingLevel(const std::string &strLevel)
 
 bool CSettingsOperations::SerializeISetting(std::shared_ptr<const ISetting> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["id"] = setting->GetId();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingSection(std::shared_ptr<const CSettingSection> setting, CVariant &obj)
 {
-  if (!SerializeISetting(setting, obj))
-    return false;
-
-  obj["label"] = g_localizeStrings.Get(setting->GetLabel());
-  if (setting->GetHelp() >= 0)
-    obj["help"] = g_localizeStrings.Get(setting->GetHelp());
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingCategory(std::shared_ptr<const CSettingCategory> setting, CVariant &obj)
 {
-  if (!SerializeISetting(setting, obj))
-    return false;
-
-  obj["label"] = g_localizeStrings.Get(setting->GetLabel());
-  if (setting->GetHelp() >= 0)
-    obj["help"] = g_localizeStrings.Get(setting->GetHelp());
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingGroup(std::shared_ptr<const CSettingGroup> setting, CVariant &obj)
@@ -480,91 +461,17 @@ bool CSettingsOperations::SerializeSetting(std::shared_ptr<const CSetting> setti
 
 bool CSettingsOperations::SerializeSettingBool(std::shared_ptr<const CSettingBool> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["value"] = setting->GetValue();
-  obj["default"] = setting->GetDefault();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingInt(std::shared_ptr<const CSettingInt> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["value"] = setting->GetValue();
-  obj["default"] = setting->GetDefault();
-
-  switch (setting->GetOptionsType())
-  {
-    case SettingOptionsTypeStaticTranslatable:
-    {
-      obj["options"] = CVariant(CVariant::VariantTypeArray);
-      const TranslatableIntegerSettingOptions& options = setting->GetTranslatableOptions();
-      for (TranslatableIntegerSettingOptions::const_iterator itOption = options.begin(); itOption != options.end(); ++itOption)
-      {
-        CVariant varOption(CVariant::VariantTypeObject);
-        varOption["label"] = g_localizeStrings.Get(itOption->first);
-        varOption["value"] = itOption->second;
-        obj["options"].push_back(varOption);
-      }
-      break;
-    }
-
-    case SettingOptionsTypeStatic:
-    {
-      obj["options"] = CVariant(CVariant::VariantTypeArray);
-      const IntegerSettingOptions& options = setting->GetOptions();
-      for (IntegerSettingOptions::const_iterator itOption = options.begin(); itOption != options.end(); ++itOption)
-      {
-        CVariant varOption(CVariant::VariantTypeObject);
-        varOption["label"] = itOption->first;
-        varOption["value"] = itOption->second;
-        obj["options"].push_back(varOption);
-      }
-      break;
-    }
-
-    case SettingOptionsTypeDynamic:
-    {
-      obj["options"] = CVariant(CVariant::VariantTypeArray);
-      IntegerSettingOptions options = std::const_pointer_cast<CSettingInt>(setting)->UpdateDynamicOptions();
-      for (IntegerSettingOptions::const_iterator itOption = options.begin(); itOption != options.end(); ++itOption)
-      {
-        CVariant varOption(CVariant::VariantTypeObject);
-        varOption["label"] = itOption->first;
-        varOption["value"] = itOption->second;
-        obj["options"].push_back(varOption);
-      }
-      break;
-    }
-
-    case SettingOptionsTypeNone:
-    default:
-      obj["minimum"] = setting->GetMinimum();
-      obj["step"] = setting->GetStep();
-      obj["maximum"] = setting->GetMaximum();
-      break;
-  }
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingNumber(std::shared_ptr<const CSettingNumber> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["value"] = setting->GetValue();
-  obj["default"] = setting->GetDefault();
-
-  obj["minimum"] = setting->GetMinimum();
-  obj["step"] = setting->GetStep();
-  obj["maximum"] = setting->GetMaximum();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingString(std::shared_ptr<const CSettingString> setting, CVariant &obj)
@@ -653,72 +560,32 @@ bool CSettingsOperations::SerializeSettingString(std::shared_ptr<const CSettingS
 
 bool CSettingsOperations::SerializeSettingAction(std::shared_ptr<const CSettingAction> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["data"] = setting->GetData();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingList(std::shared_ptr<const CSettingList> setting, CVariant &obj)
 {
-  if (setting == NULL ||
-      !SerializeSetting(setting->GetDefinition(), obj["definition"]))
-    return false;
-
-  SerializeSettingListValues(CSettingUtils::GetList(setting), obj["value"]);
-  SerializeSettingListValues(CSettingUtils::ListToValues(setting, setting->GetDefault()), obj["default"]);
-
-  obj["elementtype"] = obj["definition"]["type"];
-  obj["delimiter"] = setting->GetDelimiter();
-  obj["minimumItems"] = setting->GetMinimumItems();
-  obj["maximumItems"] = setting->GetMaximumItems();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingPath(std::shared_ptr<const CSettingPath> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["type"] = "path";
-  obj["writable"] = setting->Writable();
-  obj["sources"] = setting->GetSources();
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingAddon(std::shared_ptr<const CSettingAddon> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["type"] = "addon";
-  obj["addontype"] = ADDON::CAddonInfo::TranslateType(setting->GetAddonType());
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingDate(std::shared_ptr<const CSettingDate> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["type"] = "date";
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingTime(std::shared_ptr<const CSettingTime> setting, CVariant &obj)
 {
-  if (setting == NULL)
-    return false;
-
-  obj["type"] = "time";
-
-  return true;
+  return !;
 }
 
 bool CSettingsOperations::SerializeSettingControl(std::shared_ptr<const ISettingControl> control, CVariant &obj)

@@ -205,11 +205,7 @@ bool CDVDDemuxFFmpeg::Aborted()
 }
 
   CDVDInputStreamFFmpeg * input = dynamic_cast<CDVDInputStreamFFmpeg*>(m_pInput);
-  if(input && input->Aborted()) {
-    return true;
-}
-
-  return false;
+  return input && input->Aborted();
 }
 
 bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput, bool streaminfo, bool fileinfo)
@@ -1187,10 +1183,7 @@ bool CDVDDemuxFFmpeg::SeekTime(double time, bool backwards, double *startpts)
 
   if (ret >= 0)
   {
-    if (!hitEnd) {
-      return true;
-    } 
-      return false;
+    return !hitEnd;
 
   }
   else {

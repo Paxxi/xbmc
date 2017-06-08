@@ -71,10 +71,7 @@ DWORD BytesPerPixelFromFormat(XB_D3DFORMAT format)
 
 bool IsPalettedFormat(XB_D3DFORMAT format)
 {
-  if (format == XB_D3DFMT_P8) {
-    return true;
-}
-  return false;
+  return format == XB_D3DFMT_P8;
 }
 
 void ParseTextureHeader(D3DTexture *tex, XB_D3DFORMAT &fmt, DWORD &width, DWORD &height, DWORD &pitch, DWORD &offset)

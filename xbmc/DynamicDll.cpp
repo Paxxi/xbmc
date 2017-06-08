@@ -87,11 +87,6 @@ bool DllDynamic::EnableDelayedUnload(bool bOnOff)
 
 bool DllDynamic::SetFile(const std::string& strDllName)
 {
-  if (m_dll) {
-    return false;
-}
-
-  m_strDllName=strDllName;
-  return true;
+  return m_dll == nullptr;
 }
 

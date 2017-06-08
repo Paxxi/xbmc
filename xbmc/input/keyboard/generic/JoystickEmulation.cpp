@@ -96,13 +96,7 @@ bool CJoystickEmulation::GetEvent(unsigned int buttonIndex, KeyEvent& event) con
       return buttonIndex == event.buttonIndex;
     });
 
-  if (it != m_pressedKeys.end())
-  {
-    event = *it;
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 unsigned int CJoystickEmulation::GetButtonIndex(const CKey& key)

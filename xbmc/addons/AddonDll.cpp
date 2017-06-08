@@ -229,7 +229,7 @@ ADDON_STATUS CAddonDll::Create(ADDON_TYPE type, void* funcTable, void* info)
   }
   else if ((status == ADDON_STATUS_NEED_SETTINGS) || (status == ADDON_STATUS_NEED_SAVEDSETTINGS))
   {
-    m_needsavedsettings = (status == ADDON_STATUS_NEED_SAVEDSETTINGS) ? true : false;
+    m_needsavedsettings = status == ADDON_STATUS_NEED_SAVEDSETTINGS;
     status = TransferSettings();
     if (status == ADDON_STATUS_OK) {
       m_initialized = true;

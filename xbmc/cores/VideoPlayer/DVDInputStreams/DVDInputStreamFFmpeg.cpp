@@ -48,10 +48,7 @@ CDVDInputStreamFFmpeg::~CDVDInputStreamFFmpeg()
 
 bool CDVDInputStreamFFmpeg::IsEOF()
 {
-  if(m_aborted) {
-    return true;
-  } 
-    return false;
+  return m_aborted;
 
 }
 

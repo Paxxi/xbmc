@@ -1104,11 +1104,5 @@ bool CSettings::Reset()
   Unload();
 
   // try to save the default settings
-  if (!Save())
-  {
-    CLog::Log(LOGWARNING, "Failed to save the default settings to %s", settingsFile.c_str());
-    return false;
-  }
-
-  return true;
+  return Save();
 }

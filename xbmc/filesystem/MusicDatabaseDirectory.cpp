@@ -126,10 +126,7 @@ void CMusicDatabaseDirectory::ClearDirectoryCache(const std::string& strDirector
 
 bool CMusicDatabaseDirectory::IsAllItem(const std::string& strDirectory)
 {
-  if (StringUtils::EndsWith(strDirectory, "/-1/")) {
-    return true;
-}
-  return false;
+  return StringUtils::EndsWith(strDirectory, "/-1/");
 }
 
 bool CMusicDatabaseDirectory::GetLabel(const std::string& strDirectory, std::string& strLabel)

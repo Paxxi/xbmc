@@ -418,7 +418,7 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
 }
 
   float famount = 0;
-  bool active = (flags & PTB_DOWN) ? true : false;
+  bool active = static_cast<bool>((flags & PTB_DOWN));
 
   if(flags & PTB_USE_AMOUNT)
   {
@@ -441,9 +441,9 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
                              map,
                              button,
                              famount,
-                             (flags & (PTB_AXIS|PTB_AXISSINGLE)) ? true  : false,
-                             (flags & PTB_NO_REPEAT)             ? false : true,
-                             (flags & PTB_USE_AMOUNT)            ? true : false );
+                             static_cast<bool>((flags & (PTB_AXIS|PTB_AXISSINGLE))),
+                             !static_cast<bool>((flags & PTB_NO_REPEAT)),
+                             static_cast<bool>((flags & PTB_USE_AMOUNT)) );
 
     /* correct non active events so they work with rest of code */
     if(!active)
@@ -506,8 +506,8 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
       m_currentButton.m_mapName    = map;
       m_currentButton.m_buttonName = button;
       m_currentButton.m_fAmount    = famount;
-      m_currentButton.m_bRepeat    = (flags & PTB_NO_REPEAT)  ? false : true;
-      m_currentButton.m_bAxis      = (flags & PTB_AXIS)       ? true : false;
+      m_currentButton.m_bRepeat    = !static_cast<bool>((flags & PTB_NO_REPEAT));
+      m_currentButton.m_bAxis      = static_cast<bool>((flags & PTB_AXIS));
       m_currentButton.m_iNextRepeat = 0;
       m_currentButton.SetActive();
       m_currentButton.Load();
@@ -865,10 +865,7 @@ bool CEventClient::CheckButtonRepeat(unsigned int &next)
 bool CEventClient::Alive() const
 {
   // 60 seconds timeout
-  if ( (time(nullptr) - m_lastPing) > 60 ) {
-    return false;
-}
-  return true;
+  return (time(nullptr) - m_lastPing) <= 60;
 }
 
 #endif // HAS_EVENT_SERVER

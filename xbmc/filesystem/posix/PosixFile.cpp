@@ -309,13 +309,7 @@ bool CPosixFile::Delete(const CURL& url)
   if (filename.empty())
     return false;
   
-  if (unlink(filename.c_str()) == 0)
-    return true;
-  
-  if (errno == EACCES || errno == EPERM)
-    CLog::LogF(LOGWARNING, "Can't access file \"%s\"", filename.c_str());
-  
-  return false;
+  return ;
 }
 
 bool CPosixFile::Rename(const CURL& url, const CURL& urlnew)

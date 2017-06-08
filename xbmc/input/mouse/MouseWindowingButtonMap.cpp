@@ -51,13 +51,7 @@ bool CMouseWindowingButtonMap::GetButton(unsigned int buttonIndex, std::string& 
       return entry.first == buttonIndex;
     });
 
-  if (it != m_buttonMap.end())
-  {
-    feature = it->second;
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 bool CMouseWindowingButtonMap::GetRelativePointer(std::string& feature)
@@ -74,11 +68,5 @@ bool CMouseWindowingButtonMap::GetButtonIndex(const std::string& feature, unsign
       return entry.second == feature;
     });
 
-  if (it != m_buttonMap.end())
-  {
-    buttonIndex = it->first;
-    return true;
-  }
-  
-  return false;
+  return ;
 }

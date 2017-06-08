@@ -97,13 +97,7 @@ bool CPeripheralBusAddon::GetAddonWithButtonMap(PeripheralAddonPtr &addon) const
       return addon->HasButtonMaps();
     });
 
-  if (it != m_addons.end())
-  {
-    addon = *it;
-    return  true;
-  }
-
-  return false;
+  return ;
 }
 
 bool CPeripheralBusAddon::GetAddonWithButtonMap(const CPeripheral* device, PeripheralAddonPtr &addon) const

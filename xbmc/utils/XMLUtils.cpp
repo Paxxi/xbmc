@@ -245,39 +245,19 @@ bool XMLUtils::GetPath(const TiXmlNode* pRootNode, const char* strTag, std::stri
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
-  if (pNode != nullptr)
-  {
-    strStringValue = pNode->Value();
-    if (encoded && strcasecmp(encoded,"yes") == 0)
-      strStringValue = CURL::Decode(strStringValue);
-    return true;
-  }
-  strStringValue.clear();
-  return false;
+  return pNode != nullptr;
 }
 
 bool XMLUtils::GetDate(const TiXmlNode* pRootNode, const char* strTag, CDateTime& date)
 {
   std::string strDate;
-  if (GetString(pRootNode, strTag, strDate) && !strDate.empty())
-  {
-    date.SetFromDBDate(strDate);
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 bool XMLUtils::GetDateTime(const TiXmlNode* pRootNode, const char* strTag, CDateTime& dateTime)
 {
   std::string strDateTime;
-  if (GetString(pRootNode, strTag, strDateTime) && !strDateTime.empty())
-  {
-    dateTime.SetFromDBDateTime(strDateTime);
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 std::string XMLUtils::GetAttribute(const TiXmlElement *element, const char *tag)

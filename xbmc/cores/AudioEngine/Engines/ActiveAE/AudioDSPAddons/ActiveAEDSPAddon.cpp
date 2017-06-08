@@ -482,13 +482,7 @@ const char *CActiveAEDSPAddon::ToString(const AE_DSP_ERROR error)
 
 bool CActiveAEDSPAddon::LogError(const AE_DSP_ERROR error, const char *strMethod) const
 {
-  if (error != AE_DSP_ERROR_NO_ERROR && error != AE_DSP_ERROR_IGNORE_ME)
-  {
-    CLog::Log(LOGERROR, "ActiveAE DSP - %s - addon '%s' returned an error: %s",
-        strMethod, GetFriendlyName().c_str(), ToString(error));
-    return false;
-  }
-  return true;
+  return !(error != AE_DSP_ERROR_NO_ERROR && error != AE_DSP_ERROR_IGNORE_ME);
 }
 
 void CActiveAEDSPAddon::cb_add_menu_hook(void *kodiInstance, AE_DSP_MENUHOOK *hook)

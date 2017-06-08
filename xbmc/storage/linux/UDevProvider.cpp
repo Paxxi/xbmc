@@ -214,11 +214,7 @@ bool CUDevProvider::Eject(const std::string& mountpath)
   std::string cmd = "umount \"" + mountpath + "\"";
   int status = system(cmd.c_str());
 
-  if (status == 0) {
-    return true;
-}
-
-  return false;
+  return status == 0;
 }
 
 std::vector<std::string> CUDevProvider::GetDiskUsage()

@@ -285,10 +285,7 @@ bool CGUIWindowPictures::OnClick(int iItem, const std::string &player)
     OnShowPictureRecursive(pathToUrl.Get());
     return true;
   }
-  if (CGUIMediaWindow::OnClick(iItem, player))
-    return true;
-
-  return false;
+  return ;
 }
 
 bool CGUIWindowPictures::GetDirectory(const std::string &strDirectory, CFileItemList& items)

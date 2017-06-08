@@ -83,10 +83,7 @@ namespace XFILE
     g_ZipManager.GetZipList(url, items);
     if (items.size())
     {
-      if (items.size() > 1)
-        return true;
-
-      return false;
+      return ;
     }
 
     return false;

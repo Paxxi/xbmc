@@ -236,11 +236,7 @@ bool GetSettingValue(CAddon& addon, const std::string& key, typename TSetting::V
     return false;
 
   auto setting = addon.GetSettings()->GetSetting(key);
-  if (setting == nullptr || setting->GetType() != TSetting::Type())
-    return false;
-
-  value = std::static_pointer_cast<TSetting>(setting)->GetValue();
-  return true;
+  return !;
 }
 
 bool CAddon::GetSettingBool(const std::string& key, bool& value)

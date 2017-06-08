@@ -119,11 +119,5 @@ bool CGUIDialogIgnoreInput::AddPrimitive(const JOYSTICK::CDriverPrimitive& primi
     bValid = std::find_if(m_capturedPrimitives.begin(), m_capturedPrimitives.end(), PrimitiveMatch) == m_capturedPrimitives.end();
   }
 
-  if (bValid)
-  {
-    m_capturedPrimitives.emplace_back(primitive);
-    return true;
-  }
-
-  return false;
+  return bValid;
 }

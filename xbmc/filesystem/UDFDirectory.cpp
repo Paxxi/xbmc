@@ -100,9 +100,5 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
 bool CUDFDirectory::Exists(const CURL& url)
 {
   CFileItemList items;
-  if (GetDirectory(url, items)) {
-    return true;
-}
-
-  return false;
+  return GetDirectory(url, items);
 }

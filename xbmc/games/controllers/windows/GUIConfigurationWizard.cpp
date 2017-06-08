@@ -96,19 +96,7 @@ void CGUIConfigurationWizard::OnUnfocus(IFeatureButton* button)
 
 bool CGUIConfigurationWizard::Abort(bool bWait /* = true */)
 {
-  if (!m_bStop)
-  {
-    StopThread(false);
-
-    m_inputEvent.Set();
-    m_motionlessEvent.Set();
-
-    if (bWait)
-      StopThread(true);
-
-    return true;
-  }
-  return false;
+  return ;
 }
 
 void CGUIConfigurationWizard::Process()

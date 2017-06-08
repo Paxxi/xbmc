@@ -89,10 +89,7 @@ bool XSLTUtils::XSLTTransform(std::string& output)
 bool XSLTUtils::SetInput(const std::string& input)
 {
   m_xmlInput = xmlParseMemory(input.c_str(), input.size());
-  if (!m_xmlInput) {
-    return false;
-}
-  return true;
+  return m_xmlInput != nullptr;
 }
 
 bool XSLTUtils::SetStylesheet(const std::string& stylesheet)

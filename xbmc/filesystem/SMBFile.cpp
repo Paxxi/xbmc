@@ -440,9 +440,7 @@ bool CSMBFile::Exists(const CURL& url)
   CSingleLock lock(smb);
   int iResult = smbc_stat(strFileName.c_str(), &info);
 
-  if (iResult < 0) { return false;
-}
-  return true;
+  return iResult >= 0;
 }
 
 int CSMBFile::Stat(struct __stat64* buffer)

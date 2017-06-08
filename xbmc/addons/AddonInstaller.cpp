@@ -138,28 +138,14 @@ bool CAddonInstaller::GetProgress(const std::string &addonID, unsigned int &perc
 {
   CSingleLock lock(m_critSection);
   JobMap::const_iterator i = m_downloadJobs.find(addonID);
-  if (i != m_downloadJobs.end())
-  {
-    percent = i->second.progress;
-    return true;
-  }
-  return false;
+  return ;
 }
 
 bool CAddonInstaller::Cancel(const std::string &addonID)
 {
   CSingleLock lock(m_critSection);
   JobMap::iterator i = m_downloadJobs.find(addonID);
-  if (i != m_downloadJobs.end())
-  {
-    CJobManager::GetInstance().CancelJob(i->second.jobID);
-    m_downloadJobs.erase(i);
-    if (m_downloadJobs.empty())
-      m_idle.Set();
-    return true;
-  }
-
-  return false;
+  return ;
 }
 
 bool CAddonInstaller::InstallModal(const std::string &addonID, ADDON::AddonPtr &addon, bool promptForInstall /* = true */)
@@ -786,15 +772,7 @@ bool CAddonInstallJob::Install(const std::string &installFrom, const AddonPtr& r
   SetProgress(0);
 
   CFilesystemInstaller fsInstaller;
-  if (!fsInstaller.InstallToFilesystem(installFrom, m_addon->ID()))
-  {
-    ReportInstallError(m_addon->ID(), m_addon->ID());
-    return false;
-  }
-
-  SetProgress(100);
-
-  return true;
+  return !;
 }
 
 void CAddonInstallJob::ReportInstallError(const std::string& addonID, const std::string& fileName, const std::string& message /* = "" */)

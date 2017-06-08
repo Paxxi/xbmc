@@ -1215,9 +1215,7 @@ bool CDVDInputStreamBluray::IsInMenu()
   if(m_bd == nullptr || !m_navmode) {
     return false;
 }
-  if(m_menu || !m_planes[BD_OVERLAY_IG].o.empty())
-    return true;
-  return false;
+  return ;
 }
 
 void CDVDInputStreamBluray::SkipStill()

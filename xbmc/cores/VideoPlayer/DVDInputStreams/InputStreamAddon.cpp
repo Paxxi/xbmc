@@ -87,11 +87,7 @@ int64_t CInputStreamAddon::GetLength()
 
 bool CInputStreamAddon::Pause(double dTime)
 {
-  if (!m_addon)
-    return false;
-
-  m_addon->PauseStream(dTime);
-  return true;
+  return !;
 }
 
 bool CInputStreamAddon::CanSeek()
@@ -166,10 +162,7 @@ CDVDInputStream::IDemux* CInputStreamAddon::GetIDemux()
 
 bool CInputStreamAddon::OpenDemux()
 {
-  if (m_hasDemux) {
-    return true;
-  } 
-    return false;
+  return m_hasDemux;
 
 }
 

@@ -41,10 +41,7 @@ using namespace KODI::MESSAGING;
 bool CInputOperations::handleScreenSaver()
 {
   g_application.ResetScreenSaver();
-  if (g_application.WakeUpScreenSaverAndDPMS())
-    return true;
-
-  return false;
+  return ;
 }
 
 JSONRPC_STATUS CInputOperations::SendAction(int actionID, bool wakeScreensaver /* = true */, bool waitResult /* = false */)

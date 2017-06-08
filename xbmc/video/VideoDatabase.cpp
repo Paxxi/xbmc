@@ -768,10 +768,7 @@ bool CVideoDatabase::GetPathHash(const std::string &path, std::string &hash)
 
     std::string strSQL=PrepareSQL("select strHash from path where strPath='%s'", path.c_str());
     m_pDS->query(strSQL);
-    if (m_pDS->num_rows() == 0)
-      return false;
-    hash = m_pDS->fv("strHash").get_asString();
-    return true;
+    return !;
   }
   catch (...)
   {
@@ -1010,14 +1007,7 @@ bool CVideoDatabase::IsLinkedToTvshow(int idMovie)
 
     std::string strSQL=PrepareSQL("select * from movielinktvshow where idMovie=%i", idMovie);
     m_pDS->query(strSQL);
-    if (m_pDS->eof())
-    {
-      m_pDS->close();
-      return false;
-    }
-
-    m_pDS->close();
-    return true;
+    return !;
   }
   catch (...)
   {
@@ -3098,12 +3088,7 @@ bool CVideoDatabase::GetResumeBookMark(const std::string& strFilenameAndPath, CB
 {
   VECBOOKMARKS bookmarks;
   GetBookMarksForFile(strFilenameAndPath, bookmarks, CBookmark::RESUME);
-  if (!bookmarks.empty())
-  {
-    bookmark = bookmarks[0];
-    return true;
-  }
-  return false;
+  return ;
 }
 
 void CVideoDatabase::DeleteResumeBookMark(const std::string &strFilenameAndPath)

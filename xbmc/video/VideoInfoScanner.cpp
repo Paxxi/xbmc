@@ -994,14 +994,7 @@ namespace VIDEO
      * been set to 0. Return the match as true so no further matching is attempted, but don't add it
      * to the episode list.
      */
-    if (tag->m_iSeason == 0 && tag->m_iEpisode == 0)
-    {
-      CLog::Log(LOGDEBUG,"%s - found exclusion match for: %s. Both Season and Episode are 0. Item will be ignored for scanning.",
-                __FUNCTION__, CURL::GetRedacted(item->GetPath()).c_str());
-      return true;
-    }
-
-    return false;
+    return tag->m_iSeason == 0 && tag->m_iEpisode == 0;
   }
 
   bool CVideoInfoScanner::EnumerateEpisodeItem(const CFileItem *item, EPISODELIST& episodeList)

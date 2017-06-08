@@ -166,10 +166,7 @@ bool CGUIFont::UpdateScrollInfo(const vecText &text, CScrollInfo &scrollInfo)
     ++scrollInfo.m_loopCount;
 }
 
-  if (scrollInfo.pixelPos != old.pixelPos) {
-    return true;
-  } 
-    return false;
+  return scrollInfo.pixelPos != old.pixelPos;
 
 }
 

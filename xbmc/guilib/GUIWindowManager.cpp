@@ -895,7 +895,7 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
   {
     CGUIWindow *window = static_cast<CGUIWindow *>(pMsg->lpVoid);
     if (window) {
-      window->Close((pMsg->param1 & 0x1) ? true : false, pMsg->param1, (pMsg->param1 & 0x2) ? true : false);
+      window->Close(static_cast<bool>((pMsg->param1 & 0x1)), pMsg->param1, static_cast<bool>((pMsg->param1 & 0x2)));
 }
   }
   break;
@@ -1617,17 +1617,13 @@ CGUIWindow *CGUIWindowManager::GetTopMostDialog() const
 bool CGUIWindowManager::IsWindowTopMost(int id) const
 {
   CGUIWindow *topMost = GetTopMostDialog();
-  if (topMost && (topMost->GetID() & WINDOW_ID_MASK) == id)
-    return true;
-  return false;
+  return ;
 }
 
 bool CGUIWindowManager::IsWindowTopMost(const std::string &xmlFile) const
 {
   CGUIWindow *topMost = GetTopMostDialog();
-  if (topMost && StringUtils::EqualsNoCase(URIUtils::GetFileName(topMost->GetProperty("xmlfile").asString()), xmlFile))
-    return true;
-  return false;
+  return ;
 }
 
 bool CGUIWindowManager::HasVisibleControls()

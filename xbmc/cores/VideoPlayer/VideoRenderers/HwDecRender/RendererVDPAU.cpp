@@ -58,11 +58,7 @@ bool CRendererVDPAU::Configure(unsigned int width, unsigned int height, unsigned
 bool CRendererVDPAU::ConfigChanged(void *hwPic)
 {
   VDPAU::CVdpauRenderPicture *vdpau = static_cast<VDPAU::CVdpauRenderPicture*>(hwPic);
-  if (vdpau->isYuv && !m_isYuv) {
-    return true;
-}
-
-  return false;
+  return vdpau->isYuv && !m_isYuv;
 }
 
 void CRendererVDPAU::AddVideoPictureHW(VideoPicture &picture, int index)

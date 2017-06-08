@@ -137,22 +137,14 @@ bool Xcddb::Send( const void *buffer, int bytes )
   tmp_buffer.get()[bytes + 2] = 0x0a;
   tmp_buffer.get()[bytes + 3] = 0x00;
   int iErr = send((SOCKET)m_cddb_socket, (const char*)tmp_buffer.get(), bytes + 3, 0);
-  if (iErr <= 0)
-  {
-    return false;
-  }
-  return true;
+  return iErr > 0;
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 bool Xcddb::Send( const char *buffer)
 {
   int iErr = Send(buffer, strlen(buffer));
-  if (iErr <= 0)
-  {
-    return false;
-  }
-  return true;
+  return iErr > 0;
 }
 
 //-------------------------------------------------------------------------------------------------------------------

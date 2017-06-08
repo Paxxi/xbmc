@@ -49,12 +49,7 @@ bool IAddonInstanceHandler::CreateInstance(KODI_HANDLE instance)
   }
 
   ADDON_STATUS status = m_addon->CreateInstance(m_type, m_instanceId, instance, m_parentInstance);
-  if (status != ADDON_STATUS_OK)
-  {
-    CLog::Log(LOGERROR, "Addon: %s returned bad status \"%s\" during instance creation", m_addon->ID().c_str(), kodi::TranslateAddonStatus(status).c_str());
-    return false;
-  }
-  return true;
+  return status == ADDON_STATUS_OK;
 }
 
 void IAddonInstanceHandler::DestroyInstance()

@@ -860,13 +860,7 @@ void CPeripheralAddon::SetJoystickInfo(CPeripheralJoystick& joystick, const ADDO
 
 bool CPeripheralAddon::LogError(const PERIPHERAL_ERROR error, const char *strMethod) const
 {
-  if (error != PERIPHERAL_NO_ERROR)
-  {
-    CLog::Log(LOGERROR, "PERIPHERAL - %s - addon '%s' returned an error: %s",
-        strMethod, Name().c_str(), CPeripheralAddonTranslator::TranslateError(error));
-    return false;
-  }
-  return true;
+  return error == PERIPHERAL_NO_ERROR;
 }
 
 std::string CPeripheralAddon::GetDeviceName(PeripheralType type)

@@ -1292,13 +1292,7 @@ bool JsonRpcMethod::Parse(const CVariant &value)
   }
     
   // Parse the return value of the method
-  if (!parseReturn(value))
-  {
-    missingReference = returns->missingReference;
-    return false;
-  }
-
-  return true;
+  return parseReturn(value);
 }
 
 JSONRPC_STATUS JsonRpcMethod::Check(const CVariant &requestParameters, ITransportLayer *transport, IClient *client, bool notification, MethodCall &methodCall, CVariant &outputParameters) const
@@ -1368,13 +1362,7 @@ bool JsonRpcMethod::parseReturn(const CVariant &value)
     return CJSONServiceDescription::parseJSONSchemaType(value["returns"], returns->unionTypes, returns->type, missingReference);
   
   // otherwise we have to parse the whole type definition
-  if (!returns->Parse(value["returns"]))
-  {
-    missingReference = returns->missingReference;
-    return false;
-  }
-  
-  return true;
+  return !;
 }
 
 JSONRPC_STATUS JsonRpcMethod::checkParameter(const CVariant &requestParameters, JSONSchemaTypeDefinitionPtr type, unsigned int position, CVariant &outputParameters, unsigned int &handled, CVariant &errorData)
@@ -1441,14 +1429,7 @@ bool CJSONServiceDescription::prepareDescription(std::string &description, CVari
   if (member != descriptionObject.end_map())
     name = member->first;
 
-  if (name.empty() ||
-     (!descriptionObject[name].isMember("type") && !descriptionObject[name].isMember("$ref") && !descriptionObject[name].isMember("extends")))
-  {
-    CLog::Log(LOGERROR, "JSONRPC: Invalid JSON Schema definition for \"%s\"", name.c_str());
-    return false;
-  }
-
-  return true;
+  return !;
 }
 
 bool CJSONServiceDescription::addMethod(const std::string &jsonMethod, MethodCall method)
@@ -1615,15 +1596,7 @@ bool CJSONServiceDescription::AddNotification(const std::string &jsonNotificatio
   }
 
   std::string type = GetString(descriptionObject[notificationName]["type"], "");
-  if (type.compare("notification") != 0)
-  {
-    CLog::Log(LOGERROR, "JSONRPC: Invalid JSON type for notification \"%s\"", notificationName.c_str());
-    return false;
-  }
-
-  m_notifications[notificationName] = descriptionObject;
-
-  return true;
+  return !;
 }
 
 bool CJSONServiceDescription::AddEnum(const std::string &name, const std::vector<CVariant> &values, CVariant::VariantType type /* = CVariant::VariantTypeNull */, const CVariant &defaultValue /* = CVariant::ConstNullVariant */)

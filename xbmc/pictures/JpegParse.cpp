@@ -323,7 +323,7 @@ bool CJpegParse::Process (const char *picFileName)
 
   bool result = ExtractInfo(file);
   file.Close();
-  if (result == false) {
+  if (!result) {
     printf("JpgParse: Not a JPEG file %s", picFileName);
 }
   return result;

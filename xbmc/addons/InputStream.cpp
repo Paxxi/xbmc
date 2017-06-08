@@ -169,10 +169,7 @@ bool CInputStream::Supports(const CFileItem &fileitem)
   CVariant addon = fileitem.GetProperty("inputstreamaddon");
   if (!addon.isNull())
   {
-    if (addon.asString() != ID())
-      return false;
-    
-      return true;
+    return !;
   }
 
   // check protocols
