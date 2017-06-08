@@ -53,7 +53,7 @@ bool CPeripheralNyxboard::LookupSymAndUnicode(XBMC_keysym &keysym, uint8_t *key,
     if (g_application.ExecuteXBMCAction(strCommand))
     {
       *key = 0;
-      *unicode = (char) 0;
+      *unicode = static_cast<char>( 0);
       return true;
     }
   }

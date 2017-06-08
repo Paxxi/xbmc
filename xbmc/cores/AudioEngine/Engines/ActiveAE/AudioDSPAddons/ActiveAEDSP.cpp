@@ -687,7 +687,7 @@ AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings()
     m_databaseDSP.GetActiveDSPSettings(currentFile, loadedAudioSettings);
 
     CMediaSettings::GetInstance().GetCurrentAudioSettings() = loadedAudioSettings;
-    type = (AE_DSP_STREAMTYPE) loadedAudioSettings.m_MasterStreamTypeSel;
+    type = static_cast<AE_DSP_STREAMTYPE>( loadedAudioSettings.m_MasterStreamTypeSel);
 
     /* settings can be saved on next audio stream change */
     m_isValidAudioDSPSettings = true;

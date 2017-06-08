@@ -170,7 +170,7 @@ void COverlayText::PrepareRender(const std::string &font, int color, int height,
     return;
   }
   RESOLUTION_INFO res = g_graphicsContext.GetResInfo();
-  float width_max = (float)res.Overscan.right - res.Overscan.left;
+  float width_max = static_cast<float>(res.Overscan.right) - res.Overscan.left;
   m_layout->Update(m_text, width_max * 0.9f, false, true); // true to force LTR reading order (most Hebrew subs are this format)
   m_layout->GetTextExtent(m_width, m_height);
 }
@@ -201,7 +201,7 @@ void COverlayText::Render(OVERLAY::SRenderState &state)
 
   g_graphicsContext.SetTransform(mat, 1.0f, 1.0f);
 
-  float width_max = (float) res.Overscan.right - res.Overscan.left;
+  float width_max = static_cast<float>( res.Overscan.right) - res.Overscan.left;
 
   if (m_subalign == SUBTITLE_ALIGN_MANUAL
   ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE

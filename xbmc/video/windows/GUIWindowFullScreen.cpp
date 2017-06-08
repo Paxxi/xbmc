@@ -353,8 +353,8 @@ void CGUIWindowFullScreen::FrameMove()
     g_application.m_pPlayer->GetVideoStreamInfo(CURRENT_STREAM,info);
     {
       // Splitres scaling factor
-      float xscale = (float)res.iScreenWidth  / (float)res.iWidth;
-      float yscale = (float)res.iScreenHeight / (float)res.iHeight;
+      float xscale = static_cast<float>(res.iScreenWidth)  / static_cast<float>(res.iWidth);
+      float yscale = static_cast<float>(res.iScreenHeight) / static_cast<float>(res.iHeight);
 
       std::string strSizing = StringUtils::Format(g_localizeStrings.Get(245).c_str(),
                                                  (int)info.SrcRect.Width(),

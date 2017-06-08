@@ -456,7 +456,7 @@ bool CPythonInvoker::stop(bool abort)
   if (m_threadState != nullptr)
   {
     PyEval_AcquireLock();
-    PyThreadState* old = PyThreadState_Swap((PyThreadState*)m_threadState);
+    PyThreadState* old = PyThreadState_Swap(reinterpret_cast<PyThreadState*>(m_threadState));
 
     //tell xbmc.Monitor to call onAbortRequested()
     if (m_addon != NULL)
@@ -504,8 +504,8 @@ bool CPythonInvoker::stop(bool abort)
     // so we need to recheck for m_threadState == NULL
     if (m_threadState != nullptr)
     {
-      old = PyThreadState_Swap((PyThreadState*)m_threadState);
-      for (PyThreadState* state = ((PyThreadState*)m_threadState)->interp->tstate_head; state; state = state->next)
+      old = PyThreadState_Swap(reinterpret_cast<PyThreadState*>(m_threadState));
+      for (PyThreadState* state = (reinterpret_cast<PyThreadState*>(m_threadState))->interp->tstate_head; state; state = state->next)
       {
         // Raise a SystemExit exception in python threads
         Py_XDECREF(state->async_exc);
@@ -571,7 +571,7 @@ void CPythonInvoker::onPythonModuleInitialization(void* moduleDict)
   if (m_addon.get() == NULL || moduleDict == NULL)
     return;
 
-  PyObject *moduleDictionary = (PyObject *)moduleDict;
+  PyObject *moduleDictionary = reinterpret_cast<PyObject *>(moduleDict);
 
   PyObject *pyaddonid = PyString_FromString(m_addon->ID().c_str());
   PyDict_SetItemString(moduleDictionary, "__xbmcaddonid__", pyaddonid);

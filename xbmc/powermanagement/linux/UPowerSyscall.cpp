@@ -170,10 +170,10 @@ int CUPowerSyscall::BatteryLevel()
   }
 
   if(nBatteryCount) {
-    batteryLevel = subCapacity / (double)nBatteryCount;
+    batteryLevel = subCapacity / static_cast<double>(nBatteryCount);
 }
 
-  return (int) batteryLevel;
+  return static_cast<int>( batteryLevel);
 }
 
 void CUPowerSyscall::EnumeratePowerSources()

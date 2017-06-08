@@ -266,7 +266,7 @@ double CExifParse::ConvertAnyFormat(const void* const ValuePtr, int Format)
     case FMT_BYTE:      Value = *(unsigned char*)ValuePtr;          break;
 
     case FMT_USHORT:    Value = Get16(ValuePtr, m_MotorolaOrder);   break;
-    case FMT_ULONG:     Value = (unsigned)Get32(ValuePtr, m_MotorolaOrder);   break;
+    case FMT_ULONG:     Value = static_cast<unsigned>(Get32(ValuePtr, m_MotorolaOrder));   break;
 
     case FMT_URATIONAL:
     case FMT_SRATIONAL:
@@ -276,16 +276,16 @@ double CExifParse::ConvertAnyFormat(const void* const ValuePtr, int Format)
       Den = Get32(4+(char *)ValuePtr, m_MotorolaOrder);
 
       if (Den == 0) {    Value = 0;
-      } else {             Value = (double)Num/Den;
+      } else {             Value = static_cast<double>(Num)/Den;
 }
     }
     break;
 
-    case FMT_SSHORT:    Value = (signed short)Get16(ValuePtr, m_MotorolaOrder);    break;
+    case FMT_SSHORT:    Value = static_cast<signed short>(Get16(ValuePtr, m_MotorolaOrder));    break;
     case FMT_SLONG:     Value = Get32(ValuePtr, m_MotorolaOrder);                  break;
 
     // Not sure if this is correct (never seen float used in Exif format)
-    case FMT_SINGLE:    Value = (double)*(float*)ValuePtr;          break;
+    case FMT_SINGLE:    Value = static_cast<double>(*(float*)ValuePtr);          break;
     case FMT_DOUBLE:    Value = *(double*)ValuePtr;                 break;
 
     default:
@@ -381,7 +381,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
       continue;
     }
 
-    if ((unsigned)Components > 0x10000)
+    if (static_cast<unsigned>(Components) > 0x10000)
     {
       ErrNonfatal("Illegal number of components %d for tag %04x", Components, Tag);
       continue;
@@ -392,7 +392,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
     if (ByteCount > 4)
     {
       unsigned OffsetVal;
-      OffsetVal = (unsigned)Get32(DirEntry+8, m_MotorolaOrder);
+      OffsetVal = static_cast<unsigned>(Get32(DirEntry+8, m_MotorolaOrder));
       // If its bigger than 4 bytes, the dir entry contains an offset.
       if (OffsetVal+ByteCount > ExifLength)
       {
@@ -400,7 +400,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         ErrNonfatal("Illegal value pointer for tag %04x", Tag,0);
         continue;
       }
-      ValuePtr = (unsigned char*)(OffsetBase+OffsetVal);
+      ValuePtr = const_cast<unsigned char*>(OffsetBase+OffsetVal);
 
       if (OffsetVal > m_LargestExifOffset)
       {
@@ -410,7 +410,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
     }
     else {
       // 4 bytes or less and value is in the dir entry itself
-      ValuePtr = (unsigned char*)(DirEntry+8);
+      ValuePtr = const_cast<unsigned char*>(DirEntry+8);
     }
 
 
@@ -421,7 +421,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
       {
         int length = max(ByteCount, 0);
         length = min(length, MAX_COMMENT);
-        strncpy(m_ExifInfo->Description, (char *)ValuePtr, length);
+        strncpy(m_ExifInfo->Description, reinterpret_cast<char *>(ValuePtr), length);
         m_ExifInfo->Description[length] = '\0';
         break;
       }
@@ -430,7 +430,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         int space = sizeof(m_ExifInfo->CameraMake);
         if (space > 0)
         {
-          strncpy(m_ExifInfo->CameraMake, (char *)ValuePtr, space - 1);
+          strncpy(m_ExifInfo->CameraMake, reinterpret_cast<char *>(ValuePtr), space - 1);
           m_ExifInfo->CameraMake[space - 1] = '\0';
         }
         break;
@@ -440,15 +440,15 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         int space = sizeof(m_ExifInfo->CameraModel);
         if (space > 0)
         {
-          strncpy(m_ExifInfo->CameraModel, (char *)ValuePtr, space - 1);
+          strncpy(m_ExifInfo->CameraModel, reinterpret_cast<char *>(ValuePtr), space - 1);
           m_ExifInfo->CameraModel[space - 1] = '\0';
         }
         break;
       }
 //      case TAG_SOFTWARE:          strncpy(m_ExifInfo->Software, ValuePtr, 5);    break;
       case TAG_FOCALPLANEXRES:    m_FocalPlaneXRes  = ConvertAnyFormat(ValuePtr, Format);               break;
-      case TAG_THUMBNAIL_OFFSET:  m_ExifInfo->ThumbnailOffset = (unsigned)ConvertAnyFormat(ValuePtr, Format);     break;
-      case TAG_THUMBNAIL_LENGTH:  m_ExifInfo->ThumbnailSize   = (unsigned)ConvertAnyFormat(ValuePtr, Format);     break;
+      case TAG_THUMBNAIL_OFFSET:  m_ExifInfo->ThumbnailOffset = static_cast<unsigned>(ConvertAnyFormat(ValuePtr, Format));     break;
+      case TAG_THUMBNAIL_LENGTH:  m_ExifInfo->ThumbnailSize   = static_cast<unsigned>(ConvertAnyFormat(ValuePtr, Format));     break;
 
       case TAG_MAKER_NOTE:
         continue;
@@ -460,7 +460,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         int space = sizeof(m_ExifInfo->DateTime);
         if (space > 0)
         {
-          strncpy(m_ExifInfo->DateTime, (char *)ValuePtr, space - 1);
+          strncpy(m_ExifInfo->DateTime, reinterpret_cast<char *>(ValuePtr), space - 1);
           m_ExifInfo->DateTime[space - 1] = '\0';
           // If we get a DATETIME_ORIGINAL, we use that one.
           m_DateFound = true;
@@ -477,7 +477,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
           int space = sizeof(m_ExifInfo->DateTime);
           if (space > 0)
           {
-            strncpy(m_ExifInfo->DateTime, (char *)ValuePtr, space - 1);
+            strncpy(m_ExifInfo->DateTime, reinterpret_cast<char *>(ValuePtr), space - 1);
             m_ExifInfo->DateTime[space - 1] = '\0';
           }
         }
@@ -529,7 +529,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
       case TAG_FNUMBER:
         // Simplest way of expressing aperture, so I trust it the most.
         // (overwrite previously computd value if there is one)
-        m_ExifInfo->ApertureFNumber = (float)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->ApertureFNumber = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_APERTURE:
@@ -538,21 +538,21 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // have appropriate aperture information yet.
         if (m_ExifInfo->ApertureFNumber == 0)
         {
-          m_ExifInfo->ApertureFNumber = (float)exp(ConvertAnyFormat(ValuePtr, Format)*log(2.0)*0.5);
+          m_ExifInfo->ApertureFNumber = static_cast<float>(exp(ConvertAnyFormat(ValuePtr, Format)*log(2.0)*0.5));
         }
       break;
 
       case TAG_FOCALLENGTH:
         // Nice digital cameras actually save the focal length as a function
         // of how far they are zoomed in.
-        m_ExifInfo->FocalLength = (float)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->FocalLength = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_SUBJECT_DISTANCE:
         // Inidcates the distacne the autofocus camera is focused to.
         // Tends to be less accurate as distance increases.
         {
-          float distance = (float)ConvertAnyFormat(ValuePtr, Format);
+          float distance = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
           m_ExifInfo->Distance = distance;
         }
       break;
@@ -561,7 +561,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         {
         // Simplest way of expressing exposure time, so I trust it most.
         // (overwrite previously computd value if there is one)
-        float expTime = (float)ConvertAnyFormat(ValuePtr, Format);
+        float expTime = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
         if (expTime) {
           m_ExifInfo->ExposureTime = expTime;
 }
@@ -573,16 +573,16 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // this value if we don't already have it from somewhere else.
         if (m_ExifInfo->ExposureTime == 0)
         {
-          m_ExifInfo->ExposureTime = (float)(1/exp(ConvertAnyFormat(ValuePtr, Format)*log(2.0)));
+          m_ExifInfo->ExposureTime = static_cast<float>(1/exp(ConvertAnyFormat(ValuePtr, Format)*log(2.0)));
         }
       break;
 
       case TAG_FLASH:
-        m_ExifInfo->FlashUsed = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->FlashUsed = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_ORIENTATION:
-        m_ExifInfo->Orientation = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->Orientation = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
         if (m_ExifInfo->Orientation < 0 || m_ExifInfo->Orientation > 8)
         {
           ErrNonfatal("Undefined rotation value %d", m_ExifInfo->Orientation, 0);
@@ -595,13 +595,13 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // Use largest of height and width to deal with images that have been
         // rotated to portrait format.
         {
-          int a = (int)ConvertAnyFormat(ValuePtr, Format);
+          int a = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
           if (m_ExifImageWidth < a) m_ExifImageWidth = a;
         }
       break;
 
       case TAG_FOCALPLANEUNITS:
-        switch((int)ConvertAnyFormat(ValuePtr, Format))
+        switch(static_cast<int>(ConvertAnyFormat(ValuePtr, Format)))
         {
           // According to the information I was using, 2 means meters.
           // But looking at the Cannon powershot's files, inches is the only
@@ -615,24 +615,24 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
       break;
 
       case TAG_EXPOSURE_BIAS:
-        m_ExifInfo->ExposureBias = (float)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->ExposureBias = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_WHITEBALANCE:
-        m_ExifInfo->Whitebalance = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->Whitebalance = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_LIGHT_SOURCE:
         //Quercus: 17-1-2004 Added LightSource, some cams return this, whitebalance or both
-        m_ExifInfo->LightSource = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->LightSource = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_METERING_MODE:
-        m_ExifInfo->MeteringMode = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->MeteringMode = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_EXPOSURE_PROGRAM:
-        m_ExifInfo->ExposureProgram = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->ExposureProgram = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_EXPOSURE_INDEX:
@@ -641,29 +641,29 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
           // Exposure index and ISO equivalent are often used interchangeably,
           // so we will do the same.
           // http://photography.about.com/library/glossary/bldef_ei.htm
-          m_ExifInfo->ISOequivalent = (int)ConvertAnyFormat(ValuePtr, Format);
+          m_ExifInfo->ISOequivalent = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
         }
       break;
 
       case TAG_ISO_EQUIVALENT:
-        m_ExifInfo->ISOequivalent = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->ISOequivalent = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
         if (m_ExifInfo->ISOequivalent < 50) {
           m_ExifInfo->ISOequivalent *= 200;          // Fixes strange encoding on some older digicams.
 }
       break;
 
       case TAG_EXPOSURE_MODE:
-        m_ExifInfo->ExposureMode = (int)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->ExposureMode = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_DIGITALZOOMRATIO:
-        m_ExifInfo->DigitalZoomRatio = (float)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->DigitalZoomRatio = static_cast<float>(ConvertAnyFormat(ValuePtr, Format));
       break;
 
       case TAG_EXIF_OFFSET:
       case TAG_INTEROP_OFFSET:
       {
-        const unsigned char* const SubdirStart = OffsetBase + (unsigned)Get32(ValuePtr, m_MotorolaOrder);
+        const unsigned char* const SubdirStart = OffsetBase + static_cast<unsigned>(Get32(ValuePtr, m_MotorolaOrder));
         if (SubdirStart < OffsetBase || SubdirStart > OffsetBase+ExifLength)
         {
           ErrNonfatal("Illegal exif or interop ofset directory link",0,0);
@@ -678,7 +678,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
 
       case TAG_GPSINFO:
       {
-        const unsigned char* const SubdirStart = OffsetBase + (unsigned)Get32(ValuePtr, m_MotorolaOrder);
+        const unsigned char* const SubdirStart = OffsetBase + static_cast<unsigned>(Get32(ValuePtr, m_MotorolaOrder));
         if (SubdirStart < OffsetBase || SubdirStart > OffsetBase+ExifLength)
         {
           ErrNonfatal("Illegal GPS directory link",0,0);
@@ -695,7 +695,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // The focal length equivalent 35 mm is a 2.2 tag (defined as of April 2002)
         // if its present, use it to compute equivalent focal length instead of
         // computing it from sensor geometry and actual focal length.
-        m_ExifInfo->FocalLength35mmEquiv = (unsigned)ConvertAnyFormat(ValuePtr, Format);
+        m_ExifInfo->FocalLength35mmEquiv = static_cast<unsigned>(ConvertAnyFormat(ValuePtr, Format));
       break;
     }
   }
@@ -708,7 +708,7 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
 
   if (DIR_ENTRY_ADDR(DirStart, NumDirEntries) + 4 <= OffsetBase+ExifLength)
   {
-    Offset = (unsigned)Get32(DirStart+2+12*NumDirEntries, m_MotorolaOrder);
+    Offset = static_cast<unsigned>(Get32(DirStart+2+12*NumDirEntries, m_MotorolaOrder));
     if (Offset)
     {
       const unsigned char* const SubdirStart = OffsetBase + Offset;
@@ -807,7 +807,7 @@ bool CExifParse::Process (const unsigned char* const ExifSection, const unsigned
   }
   pos += sizeof(short);
 
-  unsigned long FirstOffset = (unsigned)Get32((void*)pos, m_MotorolaOrder);
+  unsigned long FirstOffset = static_cast<unsigned>(Get32((void*)pos, m_MotorolaOrder));
   if (FirstOffset < 8 || FirstOffset > 16)
   {
     // Usually set to 8, but other values valid too.
@@ -828,7 +828,7 @@ bool CExifParse::Process (const unsigned char* const ExifSection, const unsigned
     // they don't adjust the indicated focal plane resolution units when using less
     // than maximum resolution, so the CCDWidth value comes out too small.  Nothing
     // that Jhead can do about it - its a camera problem.
-    m_ExifInfo->CCDWidth = (float)(m_ExifImageWidth * m_FocalPlaneUnits / m_FocalPlaneXRes);
+    m_ExifInfo->CCDWidth = static_cast<float>(m_ExifImageWidth * m_FocalPlaneUnits / m_FocalPlaneXRes);
   }
 
   if (m_ExifInfo->FocalLength)
@@ -839,7 +839,7 @@ bool CExifParse::Process (const unsigned char* const ExifSection, const unsigned
       // already got it explicitly from a tag.
       if (m_ExifInfo->CCDWidth != 0.0)
       {
-        m_ExifInfo->FocalLength35mmEquiv = (int)(m_ExifInfo->FocalLength/m_ExifInfo->CCDWidth*36 + 0.5);
+        m_ExifInfo->FocalLength35mmEquiv = static_cast<int>(m_ExifInfo->FocalLength/m_ExifInfo->CCDWidth*36 + 0.5);
       }
     }
   }
@@ -900,7 +900,7 @@ void CExifParse::ProcessGpsInfo(
 
     unsigned Tag        = Get16(DirEntry, m_MotorolaOrder);
     unsigned Format     = Get16(DirEntry+2, m_MotorolaOrder);
-    unsigned Components = (unsigned)Get32(DirEntry+4, m_MotorolaOrder);
+    unsigned Components = static_cast<unsigned>(Get32(DirEntry+4, m_MotorolaOrder));
     if (Format == 0 || Format > NUM_FORMATS)
     {
       ErrNonfatal("Illegal number format %d for tag %04x", Format, Tag);
@@ -914,7 +914,7 @@ void CExifParse::ProcessGpsInfo(
 
     if (ByteCount > 4)
     {
-      unsigned OffsetVal = (unsigned)Get32(DirEntry+8, m_MotorolaOrder);
+      unsigned OffsetVal = static_cast<unsigned>(Get32(DirEntry+8, m_MotorolaOrder));
       // If its bigger than 4 bytes, the dir entry contains an offset.
       if (OffsetVal+ByteCount > ExifLength)
       {

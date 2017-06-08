@@ -104,7 +104,7 @@ double CPerformanceSample::GetEstimatedError()
   }
 
   tmEnd = CurrentHostCounter();
-  double elapsed = (double)(tmEnd - tmStart) / (double)m_tmFreq;
+  double elapsed = static_cast<double>(tmEnd - tmStart) / static_cast<double>(m_tmFreq);
 
   return (elapsed / 100000.0) * 2.0; // one measure at start time and another when done.
 }

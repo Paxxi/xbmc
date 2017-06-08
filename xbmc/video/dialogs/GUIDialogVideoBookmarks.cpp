@@ -427,7 +427,7 @@ bool CGUIDialogVideoBookmarks::AddBookmark(CVideoInfoTag* tag)
   }
 
 
-  uint8_t *pixels = (uint8_t*)malloc(height * width * 4);
+  uint8_t *pixels = reinterpret_cast<uint8_t*>(malloc(height * width * 4));
   unsigned int captureId = g_application.m_pPlayer->RenderCaptureAlloc();
 
   g_application.m_pPlayer->RenderCapture(captureId, width, height, CAPTUREFLAG_IMMEDIATELY);

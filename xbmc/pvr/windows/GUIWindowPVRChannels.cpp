@@ -227,7 +227,7 @@ bool CGUIWindowPVRChannelsBase::OnContextButtonManage(const CFileItemPtr &item, 
     int button = CGUIDialogContextMenu::ShowAndGetChoice(buttons);
     if (button >= 0)
     {
-      switch ((CONTEXT_BUTTON)button)
+      switch (static_cast<CONTEXT_BUTTON>(button))
       {
         case CONTEXT_BUTTON_GROUP_MANAGER:
           ShowGroupManager();

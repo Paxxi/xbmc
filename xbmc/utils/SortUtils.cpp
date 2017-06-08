@@ -317,7 +317,7 @@ std::string BySeason(SortAttribute attributes, const SortItem &values)
   int season = (int)values.at(FieldSeason).asInteger();
   const CVariant &specialSeason = values.at(FieldSeasonSpecialSort);
   if (!specialSeason.isNull()) {
-    season = (int)specialSeason.asInteger();
+    season = static_cast<int>(specialSeason.asInteger());
 }
 
   return StringUtils::Format("%i %s", season, ByLabel(attributes, values).c_str());
@@ -903,7 +903,7 @@ const sort_map table[] = {
   { SortByUserRating,               SORT_METHOD_SONG_USER_RATING,             SortAttributeIgnoreFolders, 38018 },
   { SortByUserRating,               SORT_METHOD_VIDEO_USER_RATING,            SortAttributeIgnoreFolders, 38018 },
   { SortBySortTitle,                SORT_METHOD_VIDEO_SORT_TITLE,             SortAttributeIgnoreFolders, 171 },
-  { SortBySortTitle,                SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE,  (SortAttribute)(SortAttributeIgnoreFolders | SortAttributeIgnoreArticle), 171 },
+  { SortBySortTitle,                SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE,  static_cast<SortAttribute>(SortAttributeIgnoreFolders | SortAttributeIgnoreArticle), 171 },
   { SortByYear,                     SORT_METHOD_YEAR,                         SortAttributeIgnoreFolders, 562 },
   { SortByProductionCode,           SORT_METHOD_PRODUCTIONCODE,               SortAttributeNone,          20368 },
   { SortByProgramCount,             SORT_METHOD_PROGRAM_COUNT,                SortAttributeNone,          567 }, // label is "play count"

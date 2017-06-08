@@ -369,10 +369,10 @@ namespace XBMCAddon
       pControl->pGUIControl = pGUIControl;
       pControl->iControlId = pGUIControl->GetID();
       pControl->iParentId = iWindowId;
-      pControl->dwHeight = (int)pGUIControl->GetHeight();
-      pControl->dwWidth = (int)pGUIControl->GetWidth();
-      pControl->dwPosX = (int)pGUIControl->GetXPosition();
-      pControl->dwPosY = (int)pGUIControl->GetYPosition();
+      pControl->dwHeight = static_cast<int>(pGUIControl->GetHeight());
+      pControl->dwWidth = static_cast<int>(pGUIControl->GetWidth());
+      pControl->dwPosX = static_cast<int>(pGUIControl->GetXPosition());
+      pControl->dwPosY = static_cast<int>(pGUIControl->GetYPosition());
       pControl->iControlUp = pGUIControl->GetAction(ACTION_MOVE_UP).GetNavigation();
       pControl->iControlDown = pGUIControl->GetAction(ACTION_MOVE_DOWN).GetNavigation();
       pControl->iControlLeft = pGUIControl->GetAction(ACTION_MOVE_LEFT).GetNavigation();
@@ -545,7 +545,7 @@ namespace XBMCAddon
       if(iControlId == -1) {
         throw WindowException("No control in this window has focus");
 }
-      return (long)iControlId;
+      return static_cast<long>(iControlId);
     }
 
     void Window::removeControl(Control* pControl)

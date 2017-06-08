@@ -375,7 +375,7 @@ long CCurlFile::CReadState::Connect(unsigned int size)
     if (length < 0) {
       length = 0.0;
 }
-    m_fileSize = m_filePos + (int64_t)length;
+    m_fileSize = m_filePos + static_cast<int64_t>(length);
   }
 
   long response;
@@ -1190,7 +1190,7 @@ ssize_t CCurlFile::Write(const void* lpBuf, size_t uiBufSize)
 
 bool CCurlFile::CReadState::ReadString(char *szLine, int iLineLength)
 {
-  unsigned int want = (unsigned int)iLineLength;
+  unsigned int want = static_cast<unsigned int>(iLineLength);
 
   if((m_fileSize == 0 || m_filePos < m_fileSize) && FillBuffer(want) != FILLBUFFER_OK) {
     return false;
@@ -1216,10 +1216,10 @@ bool CCurlFile::CReadState::ReadString(char *szLine, int iLineLength)
       break;
 
     pLine++;
-  } while (((pLine - 1)[0] != '\n') && ((unsigned int)(pLine - szLine) < want));
+  } while (((pLine - 1)[0] != '\n') && (static_cast<unsigned int>(pLine - szLine) < want));
   pLine[0] = 0;
   m_filePos += (pLine - szLine);
-  return (bool)((pLine - szLine) > 0);
+  return ((pLine - szLine) > 0);
 }
 
 bool CCurlFile::ReOpen(const CURL& url)
@@ -1509,7 +1509,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
     else
     {
       memset(buffer, 0, sizeof(struct __stat64));
-      buffer->st_size = (int64_t)length;
+      buffer->st_size = static_cast<int64_t>(length);
       if(content && strstr(content, "text/html")) { //consider html files directories
         buffer->st_mode = _S_IFDIR;
       } else {
@@ -1960,7 +1960,7 @@ int CCurlFile::IoControl(EIoControl request, void* param)
 
   if (request == IOCTRL_SET_RETRY)
   {
-    m_allowRetry = *(bool*) param;
+    m_allowRetry = *reinterpret_cast<bool*>( param);
     return 0;
   }
 

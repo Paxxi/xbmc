@@ -756,7 +756,7 @@ void CGUIControl::QueueAnimation(ANIMATION_TYPE animType)
 
   MarkDirtyRegion();
 
-  CAnimation *reverseAnim = GetAnimation((ANIMATION_TYPE)-animType, false);
+  CAnimation *reverseAnim = GetAnimation(static_cast<ANIMATION_TYPE>(-animType), false);
   CAnimation *forwardAnim = GetAnimation(animType);
   // we first check whether the reverse animation is in progress (and reverse it)
   // then we check for the normal animation, and queue it

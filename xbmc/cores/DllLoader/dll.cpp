@@ -102,7 +102,7 @@ extern "C" HMODULE __stdcall dllLoadLibraryExtended(LPCSTR lib_file, LPCSTR sour
 }dll = DllLoaderContainer::LoadModule(libname, libpath);
 
   if (dll) {
-    return (HMODULE)dll->GetHModule();
+    return dll->GetHModule();
 }
 
   CLog::Log(LOGERROR, "LoadLibrary('%s') failed", libname);
@@ -254,7 +254,7 @@ extern "C" HMODULE WINAPI dllGetModuleHandleA(LPCSTR lpModuleName)
   if (p)
   {
     //CLog::Log(LOGDEBUG, "GetModuleHandleA('%s') => 0x%x", lpModuleName, h);
-    return (HMODULE)p->GetHModule();
+    return p->GetHModule();
   }
 
   CLog::Log(LOGDEBUG, "GetModuleHandleA('%s') failed", lpModuleName);

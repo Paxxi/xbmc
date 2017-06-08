@@ -531,7 +531,7 @@ void CGUIWindowVideoBase::AddItemToPlayList(const CFileItemPtr &pItem, CFileItem
         }
 
         CPlayList playlist = *pPlayList;
-        for (int i = 0; i < (int)playlist.size(); ++i)
+        for (int i = 0; i < playlist.size(); ++i)
         {
           AddItemToPlayList(playlist[i], queuedItems);
         }
@@ -591,7 +591,7 @@ void CGUIWindowVideoBase::GetResumeItemOffset(const CFileItem *item, int& starto
       }
       if (db.GetResumeBookMark(strPath, bookmark))
       {
-        startoffset = (int)(bookmark.timeInSeconds*75);
+        startoffset = static_cast<int>(bookmark.timeInSeconds*75);
         partNumber = bookmark.partNumber;
       }
       db.Close();
@@ -1084,7 +1084,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
 bool CGUIWindowVideoBase::OnPlayMedia(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) {
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) {
     return false;
 }
 
@@ -1532,7 +1532,7 @@ void CGUIWindowVideoBase::OnSearch()
     pDlgSelect->Reset();
     pDlgSelect->SetHeading(CVariant{283});
 
-    for (int i = 0; i < (int)items.Size(); i++)
+    for (int i = 0; i < items.Size(); i++)
     {
       CFileItemPtr pItem = items[i];
       pDlgSelect->Add(pItem->GetLabel());
@@ -1597,7 +1597,7 @@ void CGUIWindowVideoBase::OnSearchItemFound(const CFileItem* pSelItem)
     else
       SetHistoryForPath(strPath);
 
-    for (int i = 0; i < (int)m_vecItems->Size(); i++)
+    for (int i = 0; i < m_vecItems->Size(); i++)
     {
       CFileItemPtr pItem = m_vecItems->Get(i);
       CURL url(pItem->GetPath());

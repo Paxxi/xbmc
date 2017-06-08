@@ -35,7 +35,7 @@ namespace ADDON
 
 void Interface_AudioEngine::Init(AddonGlobalInterface* addonInterface)
 {
-  addonInterface->toKodi->kodi_audioengine = (AddonToKodiFuncTable_kodi_audioengine*)malloc(sizeof(AddonToKodiFuncTable_kodi_audioengine));
+  addonInterface->toKodi->kodi_audioengine = reinterpret_cast<AddonToKodiFuncTable_kodi_audioengine*>(malloc(sizeof(AddonToKodiFuncTable_kodi_audioengine)));
 
   // write KODI audio DSP specific add-on function addresses to callback table
   addonInterface->toKodi->kodi_audioengine->MakeStream = AudioEngine_MakeStream;

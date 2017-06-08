@@ -90,11 +90,11 @@ bool CMediaSettings::Load(const TiXmlNode *settings)
     int interlaceMethod;
     XMLUtils::GetInt(pElement, "interlacemethod", interlaceMethod, VS_INTERLACEMETHOD_NONE, VS_INTERLACEMETHOD_MAX);
 
-    m_defaultVideoSettings.m_InterlaceMethod = (EINTERLACEMETHOD)interlaceMethod;
+    m_defaultVideoSettings.m_InterlaceMethod = static_cast<EINTERLACEMETHOD>(interlaceMethod);
     int scalingMethod;
     if (!XMLUtils::GetInt(pElement, "scalingmethod", scalingMethod, VS_SCALINGMETHOD_NEAREST, VS_SCALINGMETHOD_MAX))
-      scalingMethod = (int)VS_SCALINGMETHOD_LINEAR;
-    m_defaultVideoSettings.m_ScalingMethod = (ESCALINGMETHOD)scalingMethod;
+      scalingMethod = static_cast<int>(VS_SCALINGMETHOD_LINEAR);
+    m_defaultVideoSettings.m_ScalingMethod = static_cast<ESCALINGMETHOD>(scalingMethod);
 
     XMLUtils::GetInt(pElement, "viewmode", m_defaultVideoSettings.m_ViewMode, ViewModeNormal, ViewModeZoom110Width);
     if (!XMLUtils::GetFloat(pElement, "zoomamount", m_defaultVideoSettings.m_CustomZoomAmount, 0.5f, 2.0f))

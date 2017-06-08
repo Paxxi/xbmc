@@ -106,31 +106,31 @@ CoffLoader::~CoffLoader()
 // already loaded into memory
 int CoffLoader::ParseHeaders(void* hModule)
 {
-  if (strncmp((char*)hModule, "MZ", 2) != 0) {
+  if (strncmp(reinterpret_cast<char*>(hModule), "MZ", 2) != 0) {
     return 0;
 }
 
-  int* Offset = (int*)((char*)hModule+0x3c);
+  int* Offset = reinterpret_cast<int*>(reinterpret_cast<char*>(hModule)+0x3c);
   if (*Offset <= 0) {
     return 0;
 }
 
-  if (strncmp((char*)hModule+*Offset, "PE\0\0", 4) != 0) {
+  if (strncmp(reinterpret_cast<char*>(hModule)+*Offset, "PE\0\0", 4) != 0) {
     return 0;
 }
 
   FileHeaderOffset = *Offset + 4;
 
-  CoffFileHeader = (COFF_FileHeader_t *) ( (char*)hModule + FileHeaderOffset );
+  CoffFileHeader = reinterpret_cast<COFF_FileHeader_t *> ( reinterpret_cast<char*>(hModule) + FileHeaderOffset );
   NumOfSections = CoffFileHeader->NumberOfSections;
 
-  OptionHeader = (OptionHeader_t *) ( (char*)CoffFileHeader + sizeof(COFF_FileHeader_t) );
-  WindowsHeader = (WindowsHeader_t *) ( (char*)OptionHeader + OPTHDR_SIZE );
+  OptionHeader = reinterpret_cast<OptionHeader_t *> ( reinterpret_cast<char*>(CoffFileHeader) + sizeof(COFF_FileHeader_t) );
+  WindowsHeader = reinterpret_cast<WindowsHeader_t *> ( reinterpret_cast<char*>(OptionHeader) + OPTHDR_SIZE );
   EntryAddress = OptionHeader->Entry;
   NumOfDirectories = WindowsHeader->NumDirectories;
 
-  Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
-  SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
+  Directory = reinterpret_cast<Image_Data_Directory_t *> ( reinterpret_cast<char*>(WindowsHeader) + WINHDR_SIZE);
+  SectionHeader = reinterpret_cast<SectionHeader_t *> ( reinterpret_cast<char*>(Directory) + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
   if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386) {
     return 0;
@@ -236,16 +236,16 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   if (readcount != tempWindowsHeader.SizeOfHeaders)   //file size error
     return 0;
 
-  CoffFileHeader = (COFF_FileHeader_t *) ( (char*)hModule + FileHeaderOffset );
+  CoffFileHeader = reinterpret_cast<COFF_FileHeader_t *> ( reinterpret_cast<char*>(hModule) + FileHeaderOffset );
   NumOfSections = CoffFileHeader->NumberOfSections;
 
-  OptionHeader = (OptionHeader_t *) ( (char*)CoffFileHeader + sizeof(COFF_FileHeader_t) );
-  WindowsHeader = (WindowsHeader_t *) ( (char*)OptionHeader + OPTHDR_SIZE );
+  OptionHeader = reinterpret_cast<OptionHeader_t *> ( reinterpret_cast<char*>(CoffFileHeader) + sizeof(COFF_FileHeader_t) );
+  WindowsHeader = reinterpret_cast<WindowsHeader_t *> ( reinterpret_cast<char*>(OptionHeader) + OPTHDR_SIZE );
   EntryAddress = OptionHeader->Entry;
   NumOfDirectories = WindowsHeader->NumDirectories;
 
-  Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
-  SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
+  Directory = reinterpret_cast<Image_Data_Directory_t *> ( reinterpret_cast<char*>(WindowsHeader) + WINHDR_SIZE);
+  SectionHeader = reinterpret_cast<SectionHeader_t *> ( reinterpret_cast<char*>(Directory) + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
   if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386) {
     return 0;
@@ -398,8 +398,8 @@ int CoffLoader::LoadSections(FILE *fp)
 
   for (int SctnCnt = 0; SctnCnt < NumOfSections; SctnCnt++)
   {
-    SectionHeader_t *ScnHdr = (SectionHeader_t *)(SectionHeader + SctnCnt);
-    SectionData[SctnCnt] = ((char*)hModule + ScnHdr->VirtualAddress);
+    SectionHeader_t *ScnHdr = (SectionHeader + SctnCnt);
+    SectionData[SctnCnt] = (reinterpret_cast<char*>(hModule) + ScnHdr->VirtualAddress);
 
     if (fseek(fp, ScnHdr->PtrToRawData, SEEK_SET) != 0) {
       return 0;
@@ -518,8 +518,8 @@ char *CoffLoader::GetStringTblOff(int Offset)
 char *CoffLoader::GetSymbolName(SymbolTable_t *sym)
 {
   __int64 index = sym->Name.Offset;
-  int low = (int)(index & 0xFFFFFFFF);
-  int high = (int)((index >> 32) & 0xFFFFFFFF);
+  int low = static_cast<int>(index & 0xFFFFFFFF);
+  int high = static_cast<int>((index >> 32) & 0xFFFFFFFF);
 
   if (low == 0)
   {
@@ -529,7 +529,7 @@ char *CoffLoader::GetSymbolName(SymbolTable_t *sym)
   {
     static char shortname[9];
     memset(shortname, 0, 9);
-    strncpy(shortname, (char *)sym->Name.ShortName, 8);
+    strncpy(shortname, reinterpret_cast<char *>(sym->Name.ShortName), 8);
     return shortname;
   }
 }
@@ -810,7 +810,7 @@ void CoffLoader::PrintSection(SectionHeader_t *ScnHdr, char* data)
 {
   char SectionName[9];
 
-  strncpy(SectionName, (char *)ScnHdr->Name, 8);
+  strncpy(SectionName, reinterpret_cast<char *>(ScnHdr->Name), 8);
   SectionName[8] = 0;
   printf("Section: %s\n", SectionName);
   printf("------------------------------------------\n\n");
@@ -1083,27 +1083,27 @@ void CoffLoader::PerformFixups()
 }
 
   FixupDataSize = Directory[BASE_RELOCATION_TABLE].Size;
-  FixupData = (char*)RVA2Data(Directory[BASE_RELOCATION_TABLE].RVA);
+  FixupData = reinterpret_cast<char*>(RVA2Data(Directory[BASE_RELOCATION_TABLE].RVA));
   EndData = FixupData + FixupDataSize;
 
   while (FixupData < EndData)
   {
     // Starting a new Fixup Block
-    unsigned long PageRVA = *((unsigned long*)FixupData);
+    unsigned long PageRVA = *(reinterpret_cast<unsigned long*>(FixupData));
     FixupData += 4;
-    unsigned long BlockSize = *((unsigned long*)FixupData);
+    unsigned long BlockSize = *(reinterpret_cast<unsigned long*>(FixupData));
     FixupData += 4;
 
     BlockSize -= 8;
     for (unsigned int i = 0; i < BlockSize / 2; i++)
     {
-      unsigned short Fixup = *((unsigned short*)FixupData);
+      unsigned short Fixup = *(reinterpret_cast<unsigned short*>(FixupData));
       FixupData += 2;
       int Type = (Fixup >> 12) & 0x0f;
       Fixup &= 0xfff;
       if (Type == IMAGE_REL_BASED_HIGHLOW)
       {
-        unsigned long *Off = (unsigned long*)RVA2Data(Fixup + PageRVA);
+        unsigned long *Off = reinterpret_cast<unsigned long*>(RVA2Data(Fixup + PageRVA));
         *Off = (unsigned long)RVA2Data(*Off - WindowsHeader->ImageBase);
       }
       else if (Type == IMAGE_REL_BASED_ABSOLUTE)

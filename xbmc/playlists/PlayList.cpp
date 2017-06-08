@@ -150,7 +150,7 @@ void CPlayList::Insert(CPlayList& playlist, int iPosition /* = -1 */)
     Add(playlist);
     return;
   }
-  for (int i = 0; i < (int)playlist.size(); i++)
+  for (int i = 0; i < playlist.size(); i++)
   {
     int iPos = iPosition + i;
     Add(playlist[i], iPos, iPos);
@@ -166,7 +166,7 @@ void CPlayList::Insert(CFileItemList& items, int iPosition /* = -1 */)
     Add(items);
     return;
   }
-  for (int i = 0; i < (int)items.Size(); i++)
+  for (int i = 0; i < items.Size(); i++)
   {
     Add(items[i], iPosition + i, iPosition + i);
   }

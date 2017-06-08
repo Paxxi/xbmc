@@ -628,17 +628,17 @@ bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, std::strin
 
   memset(&areq, 0x0, sizeof(areq));
 
-  sin = (struct sockaddr_in *) &areq.arp_pa;
+  sin = reinterpret_cast<struct sockaddr_in *>( &areq.arp_pa);
   sin->sin_family = AF_INET;
   sin->sin_addr.s_addr = host_ip;
 
-  sin = (struct sockaddr_in *) &areq.arp_ha;
+  sin = reinterpret_cast<struct sockaddr_in *>( &areq.arp_ha);
   sin->sin_family = ARPHRD_ETHER;
 
   strncpy(areq.arp_dev, m_interfaceName.c_str(), sizeof(areq.arp_dev));
   areq.arp_dev[sizeof(areq.arp_dev)-1] = '\0';
 
-  int result = ioctl (m_network->GetSocket(), SIOCGARP, (caddr_t) &areq);
+  int result = ioctl (m_network->GetSocket(), SIOCGARP, reinterpret_cast<caddr_t>( &areq));
 
   if (result != 0)
   {

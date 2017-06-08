@@ -166,12 +166,12 @@ bool CGUIWindowSettingsScreenCalibration::OnMessage(CGUIMessage& message)
       else
       {
         SET_CONTROL_HIDDEN(CONTROL_VIDEO);
-        m_iCurRes = (unsigned int)-1;
+        m_iCurRes = static_cast<unsigned int>(-1);
         g_graphicsContext.GetAllowedResolutions(m_Res);
         // find our starting resolution
         m_iCurRes = FindCurrentResolution();
       }
-      if (m_iCurRes==(unsigned int)-1)
+      if (m_iCurRes==static_cast<unsigned int>(-1))
       {
         CLog::Log(LOGERROR, "CALIBRATION: Reported current resolution: %d", (int)g_graphicsContext.GetVideoResolution());
         CLog::Log(LOGERROR, "CALIBRATION: Could not determine current resolution, falling back to default");
@@ -272,8 +272,8 @@ void CGUIWindowSettingsScreenCalibration::ResetControls()
                          -info.iHeight / 4,
                          info.iWidth / 4,
                          info.iHeight / 4);
-    pControl->SetPosition((float)info.Overscan.left,
-                          (float)info.Overscan.top);
+    pControl->SetPosition(static_cast<float>(info.Overscan.left),
+                          static_cast<float>(info.Overscan.top));
     pControl->SetLocation(info.Overscan.left,
                           info.Overscan.top, false);
   }
@@ -324,8 +324,8 @@ void CGUIWindowSettingsScreenCalibration::UpdateFromControl(int iControl)
     CGUIControl *pControl = GetControl(CONTROL_PIXEL_RATIO);
     if (pControl)
     {
-      float fWidth = (float)pControl->GetWidth();
-      float fHeight = (float)pControl->GetHeight();
+      float fWidth = pControl->GetWidth();
+      float fHeight = pControl->GetHeight();
       info.fPixelRatio = fHeight / fWidth;
       // recenter our control...
       pControl->SetPosition((info.iWidth - pControl->GetWidth()) / 2,

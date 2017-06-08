@@ -69,7 +69,7 @@ void CWinSystemBase::UpdateDesktopResolution(RESOLUTION_INFO& newRes, int screen
   newRes.Overscan.bottom = height;
   newRes.iScreen = screen;
   newRes.bFullScreen = true;
-  newRes.iSubtitles = (int)(0.965 * height);
+  newRes.iSubtitles = static_cast<int>(0.965 * height);
   newRes.dwFlags = dwFlags;
   newRes.fRefreshRate = refreshRate;
   newRes.fPixelRatio = 1.0f;
@@ -110,7 +110,7 @@ void CWinSystemBase::UpdateResolutions()
   window.iScreenWidth  = window.iWidth;
   window.iScreenHeight = window.iHeight;
   if (window.iSubtitles == 0) {
-    window.iSubtitles = (int)(0.965 * window.iHeight);
+    window.iSubtitles = static_cast<int>(0.965 * window.iHeight);
 }
   window.fPixelRatio = 1.0f;
   window.strMode = "Windowed";
@@ -123,7 +123,7 @@ void CWinSystemBase::SetWindowResolution(int width, int height)
   window.iHeight = height;
   window.iScreenWidth = width;
   window.iScreenHeight = height;
-  window.iSubtitles = (int)(0.965 * window.iHeight);
+  window.iSubtitles = static_cast<int>(0.965 * window.iHeight);
   g_graphicsContext.ResetOverscan(window);
 }
 
@@ -162,7 +162,7 @@ static void AddResolution(std::vector<RESOLUTION_WHR> &resolutions, unsigned int
     }
 }
 
-  RESOLUTION_WHR res = {width, height, flags, (int)addindex};
+  RESOLUTION_WHR res = {width, height, flags, static_cast<int>(addindex)};
   resolutions.push_back(res);
 }
 
@@ -202,7 +202,7 @@ static void AddRefreshRate(std::vector<REFRESHRATE> &refreshrates, unsigned int 
       return; // already taken care of.
 }
 
-  REFRESHRATE rr = {RefreshRate, (int)addindex};
+  REFRESHRATE rr = {RefreshRate, static_cast<int>(addindex)};
   refreshrates.push_back(rr);
 }
 

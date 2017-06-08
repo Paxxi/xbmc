@@ -186,7 +186,7 @@ void CGUIWindowSettingsCategory::OnWindowLoaded()
 
 int CGUIWindowSettingsCategory::GetSettingLevel() const
 {
-  return (int)CViewStateSettings::GetInstance().GetSettingLevel();
+  return static_cast<int>(CViewStateSettings::GetInstance().GetSettingLevel());
 }
 
 SettingSectionPtr CGUIWindowSettingsCategory::GetSection()

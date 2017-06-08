@@ -201,8 +201,8 @@ void CAEBitstreamPacker::PackDTSHD(CAEStreamInfo &info, uint8_t* data, int size)
     memcpy(m_dtsHD, dtshd_start_code, sizeof(dtshd_start_code));
   }
 
-  m_dtsHD[sizeof(dtshd_start_code) + 0] = ((uint16_t)size & 0xFF00) >> 8;
-  m_dtsHD[sizeof(dtshd_start_code) + 1] = ((uint16_t)size & 0x00FF);
+  m_dtsHD[sizeof(dtshd_start_code) + 0] = (static_cast<uint16_t>(size) & 0xFF00) >> 8;
+  m_dtsHD[sizeof(dtshd_start_code) + 1] = (static_cast<uint16_t>(size) & 0x00FF);
   memcpy(m_dtsHD + sizeof(dtshd_start_code) + 2, data, size);
 
   m_dataSize = CAEPackIEC61937::PackDTSHD(m_dtsHD, dataSize, m_packedBuffer, info.m_dtsPeriod);

@@ -148,11 +148,11 @@ MD5Update(struct MD5Context *ctx, md5byte const *buf, unsigned len)
 
 	t = 64 - (t & 0x3f);	/* Space available in ctx->in (at least 1) */
 	if (t > len) {
-		memcpy((md5byte *)ctx->in + 64 - t, buf, len);
+		memcpy(reinterpret_cast<md5byte *>(ctx->in) + 64 - t, buf, len);
 		return;
 	}
 	/* First chunk is an odd size */
-	memcpy((md5byte *)ctx->in + 64 - t, buf, t);
+	memcpy(reinterpret_cast<md5byte *>(ctx->in) + 64 - t, buf, t);
 	byteSwap(ctx->in, 16);
 	MD5Transform(ctx->buf, ctx->in);
 	buf += t;
@@ -179,7 +179,7 @@ static void
 MD5Final(md5byte digest[16], struct MD5Context *ctx)
 {
 	int count = ctx->bytes[0] & 0x3f;	/* Number of bytes in ctx->in */
-	md5byte *p = (md5byte *)ctx->in + count;
+	md5byte *p = reinterpret_cast<md5byte *>(ctx->in) + count;
 
 	/* Set the first char of padding to 0x80.  There is always room. */
 	*p++ = 0x80;
@@ -191,7 +191,7 @@ MD5Final(md5byte digest[16], struct MD5Context *ctx)
 		memset(p, 0, count + 8);
 		byteSwap(ctx->in, 16);
 		MD5Transform(ctx->buf, ctx->in);
-		p = (md5byte *)ctx->in;
+		p = reinterpret_cast<md5byte *>(ctx->in);
 		count = 56;
 	}
 	memset(p, 0, count);

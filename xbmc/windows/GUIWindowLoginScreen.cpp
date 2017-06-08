@@ -115,7 +115,7 @@ bool CGUIWindowLoginScreen::OnMessage(CGUIMessage& message)
           if (bOkay)
           {
             if (iItem >= 0) {
-              LoadProfile((unsigned int)iItem);
+              LoadProfile(static_cast<unsigned int>(iItem));
 }
           }
           else
@@ -178,7 +178,7 @@ void CGUIWindowLoginScreen::FrameMove()
 
 void CGUIWindowLoginScreen::OnInitWindow()
 {
-  m_iSelectedItem = (int)CProfilesManager::GetInstance().GetLastUsedProfileIndex();
+  m_iSelectedItem = static_cast<int>(CProfilesManager::GetInstance().GetLastUsedProfileIndex());
   // Update list/thumb control
   m_viewControl.SetCurrentView(DEFAULT_VIEW_LIST);
   Update();

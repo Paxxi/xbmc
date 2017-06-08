@@ -43,7 +43,7 @@ static drmVBlankSeqType CrtcSel()
   {
     ret = (crtc << DRM_VBLANK_HIGH_CRTC_SHIFT) & DRM_VBLANK_HIGH_CRTC_MASK;
   }
-  return (drmVBlankSeqType)ret;
+  return static_cast<drmVBlankSeqType>(ret);
 }
   
 bool CVideoSyncDRM::Setup(PUPDATECLOCK func)
@@ -61,7 +61,7 @@ bool CVideoSyncDRM::Setup(PUPDATECLOCK func)
 
   drmVBlank vbl;
   int ret;
-  vbl.request.type = (drmVBlankSeqType)(DRM_VBLANK_RELATIVE | CrtcSel());
+  vbl.request.type = static_cast<drmVBlankSeqType>(DRM_VBLANK_RELATIVE | CrtcSel());
   vbl.request.sequence = 0;
   ret = drmWaitVBlank(m_fd, &vbl);
   if (ret != 0)
@@ -83,7 +83,7 @@ void CVideoSyncDRM::Run(std::atomic<bool>& stop)
   int ret;
   drmVBlankSeqType crtcSel = CrtcSel();
 
-  vbl.request.type = (drmVBlankSeqType)(DRM_VBLANK_RELATIVE | crtcSel);
+  vbl.request.type = static_cast<drmVBlankSeqType>(DRM_VBLANK_RELATIVE | crtcSel);
   vbl.request.sequence = 0;
   ret = drmWaitVBlank(m_fd, &vbl);
   if (ret != 0)
@@ -95,7 +95,7 @@ void CVideoSyncDRM::Run(std::atomic<bool>& stop)
   info.start = CurrentHostCounter();
   info.videoSync = this;
 
-  vbl.request.type = (drmVBlankSeqType)(DRM_VBLANK_RELATIVE | DRM_VBLANK_EVENT | crtcSel);
+  vbl.request.type = static_cast<drmVBlankSeqType>(DRM_VBLANK_RELATIVE | DRM_VBLANK_EVENT | crtcSel);
   vbl.request.sequence = 1;
   vbl.request.signal = (unsigned long)&info;
   ret = drmWaitVBlank(m_fd, &vbl);
@@ -146,17 +146,17 @@ void CVideoSyncDRM::EventHandler(int fd, unsigned int frame, unsigned int sec,
                                  unsigned int usec, void *data)
 {
   drmVBlank vbl;
-  VblInfo *info = (VblInfo*)data;
+  VblInfo *info = reinterpret_cast<VblInfo*>(data);
   drmVBlankSeqType crtcSel = CrtcSel();
 
-  vbl.request.type = (drmVBlankSeqType)(DRM_VBLANK_RELATIVE | DRM_VBLANK_EVENT | crtcSel);
+  vbl.request.type = static_cast<drmVBlankSeqType>(DRM_VBLANK_RELATIVE | DRM_VBLANK_EVENT | crtcSel);
   vbl.request.sequence = 1;
   vbl.request.signal = (unsigned long)data;
 
   drmWaitVBlank(info->videoSync->m_fd, &vbl);
 
   uint64_t now = CurrentHostCounter();
-  float diff = (float)(now - info->start)/CurrentHostFrequency();
+  float diff = static_cast<float>(now - info->start)/CurrentHostFrequency();
   int vblanks = MathUtils::round_int(diff * info->videoSync->m_fps);
   info->start = now;
 

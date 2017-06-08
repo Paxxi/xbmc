@@ -712,7 +712,7 @@ std::string CDVDRadioRDSData::GetRadioText(unsigned int line)
     if (line > MAX_RADIOTEXT_LISTSIZE)
       return "";
 
-    if ((int)line+1 > m_RT_MaxSize)
+    if (static_cast<int>(line)+1 > m_RT_MaxSize)
     {
       m_RT_MaxSize = line+1;
       return "";
@@ -1307,7 +1307,7 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
             {
               memcpy(m_RTPlus_Title, m_RTPlus_Temptext, RT_MEL);
               if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1) {
-                m_RTPlus_iDiffs = (int) m_RTPlus_iTime.GetElapsedSeconds();
+                m_RTPlus_iDiffs = static_cast<int>( m_RTPlus_iTime.GetElapsedSeconds());
 }
               if (!m_RT_NewItem)
               {
@@ -1336,7 +1336,7 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
             {
               memcpy(m_RTPlus_Artist, m_RTPlus_Temptext, RT_MEL);
               if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1) {
-                m_RTPlus_iDiffs = (int) m_RTPlus_iTime.GetElapsedSeconds();
+                m_RTPlus_iDiffs = static_cast<int>( m_RTPlus_iTime.GetElapsedSeconds());
 }
               if (!m_RT_NewItem)
               {
@@ -1496,7 +1496,7 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
     {
       m_RTPlus_Show = false;
       m_RTPlus_TToggle = true;
-      m_RTPlus_iDiffs = (int) m_RTPlus_iTime.GetElapsedSeconds();
+      m_RTPlus_iDiffs = static_cast<int>( m_RTPlus_iTime.GetElapsedSeconds());
       m_RTPlus_Starttime = time(nullptr);
     }
     m_RT_NewItem = false;

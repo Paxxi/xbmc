@@ -184,14 +184,14 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
     if (len > 0 && len < FF_MAX_EXTRADATA_SIZE)
     {
       if (st->ExtraData) {
-        delete[] (uint8_t*)st->ExtraData;
+        delete[] st->ExtraData;
 }
       st->changes++;
       st->disabled = false;
       st->ExtraSize = len;
       st->ExtraData = new uint8_t[len+FF_INPUT_BUFFER_PADDING_SIZE];
       memcpy(st->ExtraData, pkt->pData, len);
-      memset((uint8_t*)st->ExtraData + len, 0 , FF_INPUT_BUFFER_PADDING_SIZE);
+      memset(st->ExtraData + len, 0 , FF_INPUT_BUFFER_PADDING_SIZE);
       stream->m_parser_split = false;
       change = true;
       CLog::Log(LOGDEBUG, "CDVDDemuxClient::ParsePacket - split extradata");
@@ -204,8 +204,8 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
   int len = av_parser_parse2(stream->m_parser,
                              stream->m_context, &outbuf, &outbuf_size,
                              pkt->pData, pkt->iSize,
-                             (int64_t)(pkt->pts * DVD_TIME_BASE),
-                             (int64_t)(pkt->dts * DVD_TIME_BASE),
+                             static_cast<int64_t>(pkt->pts * DVD_TIME_BASE),
+                             static_cast<int64_t>(pkt->dts * DVD_TIME_BASE),
                              0);
   // our parse is setup to parse complete frames, so we don't care about outbufs
   if (len >= 0)

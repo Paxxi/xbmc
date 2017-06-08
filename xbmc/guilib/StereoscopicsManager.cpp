@@ -156,7 +156,7 @@ RENDER_STEREO_MODE CStereoscopicsManager::GetNextSupportedStereoMode(const RENDE
 {
   RENDER_STEREO_MODE mode = currentMode;
   do {
-    mode = (RENDER_STEREO_MODE) ((mode + step) % RENDER_STEREO_MODE_COUNT);
+    mode = static_cast<RENDER_STEREO_MODE> ((mode + step) % RENDER_STEREO_MODE_COUNT);
     if(g_Windowing.SupportsStereo(mode))
       break;
    } while (mode != currentMode);
@@ -221,11 +221,11 @@ RENDER_STEREO_MODE CStereoscopicsManager::GetStereoModeByUserChoice(const std::s
   std::vector<RENDER_STEREO_MODE> selectableModes;
   for (int i = RENDER_STEREO_MODE_OFF; i < RENDER_STEREO_MODE_COUNT; i++)
   {
-    RENDER_STEREO_MODE selectableMode = (RENDER_STEREO_MODE) i;
+    RENDER_STEREO_MODE selectableMode = static_cast<RENDER_STEREO_MODE>( i);
     if (g_Windowing.SupportsStereo(selectableMode))
     {
       selectableModes.push_back(selectableMode);
-      std::string label = GetLabelForStereoMode((RENDER_STEREO_MODE) i);
+      std::string label = GetLabelForStereoMode(static_cast<RENDER_STEREO_MODE>( i));
       pDlgSelect->Add( label );
       if (mode == selectableMode)
         pDlgSelect->SetSelected( label );
@@ -258,7 +258,7 @@ RENDER_STEREO_MODE CStereoscopicsManager::GetStereoModeOfPlayingVideo()
   {
     int convertedMode = ConvertVideoToGuiStereoMode(playerMode);
     if (convertedMode > -1) {
-      mode = (RENDER_STEREO_MODE) convertedMode;
+      mode = static_cast<RENDER_STEREO_MODE>( convertedMode);
 }
   }
 
@@ -487,7 +487,7 @@ bool CStereoscopicsManager::OnAction(const CAction &action)
   {
     int stereoMode = ConvertStringToGuiStereoMode(action.GetName());
     if (stereoMode > -1) {
-      SetStereoModeByUser( (RENDER_STEREO_MODE) stereoMode );
+      SetStereoModeByUser( static_cast<RENDER_STEREO_MODE>( stereoMode) );
 }
     return true;
   }

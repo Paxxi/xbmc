@@ -87,7 +87,7 @@ extern "C" void tracker_library_free_all(DllTrackInfo* pInfo)
 
       if (!pDll->IsSystemDll())
       {
-        dllFreeLibrary((HMODULE)pDll->GetHModule());
+        dllFreeLibrary(pDll->GetHModule());
       }
     }
   }

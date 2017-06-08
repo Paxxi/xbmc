@@ -1462,10 +1462,10 @@ uint32_t CButtonTranslator::TranslateKeyboardButton(TiXmlElement *pButton)
       const char *str = strID.c_str();
       char *endptr;
       long int id = strtol(str, &endptr, 0);
-      if (endptr - str != (int)strlen(str) || id <= 0 || id > 0x00FFFFFF) {
+      if (endptr - str != strlen(str) || id <= 0 || id > 0x00FFFFFF) {
         CLog::Log(LOGDEBUG, "%s - invalid key id %s", __FUNCTION__, strID.c_str());
       } else {
-        button_id = (uint32_t) id;
+        button_id = static_cast<uint32_t>( id);
 }
     }
     else
@@ -1608,7 +1608,7 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
   attrVal = pButton->Attribute("pointers");
   if (attrVal != nullptr)
   {
-    int pointers = (int)strtol(attrVal, nullptr, 0);
+    int pointers = static_cast<int>(strtol(attrVal, nullptr, 0));
     if (pointers >= 1) {
       actionId += pointers - 1;
 }

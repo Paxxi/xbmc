@@ -50,7 +50,7 @@ void _aligned_free(void *p) {
     return;
 }
 
-  char *pFull = *(char **)(((char *)p) - sizeof(char *));
+  char *pFull = *reinterpret_cast<char **>((reinterpret_cast<char *>(p)) - sizeof(char *));
   free(pFull);
 }
 

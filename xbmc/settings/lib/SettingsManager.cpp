@@ -491,7 +491,7 @@ void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifie
   if (identifier.empty() || optionsFiller == NULL)
     return;
 
-  RegisterSettingOptionsFiller(identifier, (void*)optionsFiller, SettingOptionsFillerTypeInteger);
+  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller), SettingOptionsFillerTypeInteger);
 }
 
 void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifier, StringSettingOptionsFiller optionsFiller)
@@ -499,7 +499,7 @@ void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifie
   if (identifier.empty() || optionsFiller == NULL)
     return;
 
-  RegisterSettingOptionsFiller(identifier, (void*)optionsFiller, SettingOptionsFillerTypeString);
+  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller), SettingOptionsFillerTypeString);
 }
 
 void CSettingsManager::UnregisterSettingOptionsFiller(const std::string &identifier)

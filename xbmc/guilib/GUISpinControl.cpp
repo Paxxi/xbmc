@@ -304,7 +304,7 @@ bool CGUISpinControl::OnMessage(CGUIMessage& message)
 
     case GUI_MSG_MOVE_OFFSET:
       {
-        int count = (int)message.GetParam1();
+        int count = message.GetParam1();
         while (count < 0)
         {
           MoveUp();

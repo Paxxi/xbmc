@@ -139,7 +139,7 @@ int CALSAHControlMonitor::HCTLCallback(snd_hctl_elem_t *elem, unsigned int mask)
 void CALSAHControlMonitor::FDEventCallback(int id, int fd, short revents, void *data)
 {
   /* Run ALSA event handling when the FD has events */
-  snd_hctl_t *hctl = (snd_hctl_t *)data;
+  snd_hctl_t *hctl = reinterpret_cast<snd_hctl_t *>(data);
   snd_hctl_handle_events(hctl);
 }
 

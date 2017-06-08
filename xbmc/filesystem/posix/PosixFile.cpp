@@ -260,7 +260,7 @@ int CPosixFile::IoControl(EIoControl request, void* param)
     if(!param) {
       return -1;
 }
-    return ioctl(m_fd, ((SNativeIoControl*)param)->request, ((SNativeIoControl*)param)->param);
+    return ioctl(m_fd, (reinterpret_cast<SNativeIoControl*>(param))->request, (reinterpret_cast<SNativeIoControl*>(param))->param);
   }
   else if (request == IOCTRL_SEEK_POSSIBLE)
   {

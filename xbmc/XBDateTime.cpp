@@ -174,10 +174,10 @@ void CDateTimeSpan::SetDateTimeSpan(int day, int hour, int minute, int second)
   ULARGE_INTEGER time;
   ToULargeInt(time);
 
-  time.QuadPart=(LONGLONG)day*SECONDS_PER_DAY*SECONDS_TO_FILETIME;
-  time.QuadPart+=(LONGLONG)hour*SECONDS_PER_HOUR*SECONDS_TO_FILETIME;
-  time.QuadPart+=(LONGLONG)minute*SECONDS_PER_MINUTE*SECONDS_TO_FILETIME;
-  time.QuadPart+=(LONGLONG)second*SECONDS_TO_FILETIME;
+  time.QuadPart=static_cast<LONGLONG>(day)*SECONDS_PER_DAY*SECONDS_TO_FILETIME;
+  time.QuadPart+=static_cast<LONGLONG>(hour)*SECONDS_PER_HOUR*SECONDS_TO_FILETIME;
+  time.QuadPart+=static_cast<LONGLONG>(minute)*SECONDS_PER_MINUTE*SECONDS_TO_FILETIME;
+  time.QuadPart+=static_cast<LONGLONG>(second)*SECONDS_TO_FILETIME;
 
   FromULargeInt(time);
 }
@@ -197,7 +197,7 @@ int CDateTimeSpan::GetDays() const
   ULARGE_INTEGER time;
   ToULargeInt(time);
 
-  return (int)(time.QuadPart/SECONDS_TO_FILETIME)/SECONDS_PER_DAY;
+  return static_cast<int>(time.QuadPart/SECONDS_TO_FILETIME)/SECONDS_PER_DAY;
 }
 
 int CDateTimeSpan::GetHours() const
@@ -205,7 +205,7 @@ int CDateTimeSpan::GetHours() const
   ULARGE_INTEGER time;
   ToULargeInt(time);
 
-  return (int)((time.QuadPart/SECONDS_TO_FILETIME)%SECONDS_PER_DAY)/SECONDS_PER_HOUR;
+  return static_cast<int>((time.QuadPart/SECONDS_TO_FILETIME)%SECONDS_PER_DAY)/SECONDS_PER_HOUR;
 }
 
 int CDateTimeSpan::GetMinutes() const
@@ -213,7 +213,7 @@ int CDateTimeSpan::GetMinutes() const
   ULARGE_INTEGER time;
   ToULargeInt(time);
 
-  return (int)((time.QuadPart/SECONDS_TO_FILETIME%SECONDS_PER_DAY)%SECONDS_PER_HOUR)/SECONDS_PER_MINUTE;
+  return static_cast<int>((time.QuadPart/SECONDS_TO_FILETIME%SECONDS_PER_DAY)%SECONDS_PER_HOUR)/SECONDS_PER_MINUTE;
 }
 
 int CDateTimeSpan::GetSeconds() const
@@ -221,7 +221,7 @@ int CDateTimeSpan::GetSeconds() const
   ULARGE_INTEGER time;
   ToULargeInt(time);
 
-  return (int)(((time.QuadPart/SECONDS_TO_FILETIME%SECONDS_PER_DAY)%SECONDS_PER_HOUR)%SECONDS_PER_MINUTE)%SECONDS_PER_MINUTE;
+  return static_cast<int>(((time.QuadPart/SECONDS_TO_FILETIME%SECONDS_PER_DAY)%SECONDS_PER_HOUR)%SECONDS_PER_MINUTE)%SECONDS_PER_MINUTE;
 }
 
 int CDateTimeSpan::GetSecondsTotal() const
@@ -229,7 +229,7 @@ int CDateTimeSpan::GetSecondsTotal() const
   ULARGE_INTEGER time;
   ToULargeInt(time);
   
-  return (int)(time.QuadPart/SECONDS_TO_FILETIME);
+  return static_cast<int>(time.QuadPart/SECONDS_TO_FILETIME);
 }
 
 void CDateTimeSpan::SetFromPeriod(const std::string &period)
@@ -620,7 +620,7 @@ void CDateTime::Archive(CArchive& ar)
   {
     Reset();
     int state;
-    ar >> (int &)state;
+    ar >> const_cast<int &>(state);
     m_state = CDateTime::STATE(state);
     if (m_state==valid)
     {
@@ -657,8 +657,8 @@ bool CDateTime::ToFileTime(const time_t& time, FILETIME& fileTime) const
 {
   LONGLONG ll = Int32x32To64(time, 10000000)+0x19DB1DED53E8000LL;
 
-  fileTime.dwLowDateTime  = (DWORD)(ll & 0xFFFFFFFF);
-  fileTime.dwHighDateTime = (DWORD)(ll >> 32);
+  fileTime.dwLowDateTime  = static_cast<DWORD>(ll & 0xFFFFFFFF);
+  fileTime.dwHighDateTime = static_cast<DWORD>(ll >> 32);
 
   return true;
 }
@@ -831,8 +831,8 @@ void CDateTime::GetAsSystemTime(SYSTEMTIME& time) const
 void CDateTime::GetAsTime(time_t& time) const
 {
   LONGLONG ll;
-  ll = ((LONGLONG)m_time.dwHighDateTime << 32) + m_time.dwLowDateTime;
-  time=(time_t)((ll - UNIX_BASE_TIME) / 10000000);
+  ll = (static_cast<LONGLONG>(m_time.dwHighDateTime) << 32) + m_time.dwLowDateTime;
+  time=static_cast<time_t>((ll - UNIX_BASE_TIME) / 10000000);
 }
 
 void CDateTime::GetAsTm(tm& time) const

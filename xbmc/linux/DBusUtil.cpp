@@ -129,12 +129,12 @@ CVariant CDBusUtil::ParseType(DBusMessageIter *itr)
     break;
   case DBUS_TYPE_UINT32:
     dbus_message_iter_get_basic(itr, &uint32);
-    value = (uint64_t)uint32;
+    value = static_cast<uint64_t>(uint32);
     break;
   case DBUS_TYPE_BYTE:
   case DBUS_TYPE_INT32:
     dbus_message_iter_get_basic(itr, &int32);
-    value = (int64_t)int32;
+    value = static_cast<int64_t>(int32);
     break;
   case DBUS_TYPE_UINT64:
     dbus_message_iter_get_basic(itr, &uint64);
@@ -146,11 +146,11 @@ CVariant CDBusUtil::ParseType(DBusMessageIter *itr)
     break;
   case DBUS_TYPE_BOOLEAN:
     dbus_message_iter_get_basic(itr, &boolean);
-    value = (bool)boolean;
+    value = static_cast<bool>(boolean);
     break;
   case DBUS_TYPE_DOUBLE:
     dbus_message_iter_get_basic(itr, &doublev);
-    value = (double)doublev;
+    value = doublev;
     break;
   case DBUS_TYPE_ARRAY:
     DBusMessageIter array;

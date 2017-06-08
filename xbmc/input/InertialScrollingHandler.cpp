@@ -88,7 +88,7 @@ bool CInertialScrollingHandler::CheckForInertialScrolling(const CAction* action)
     if (action->GetID() == ACTION_GESTURE_END && ( fabs(action->GetAmount(0)) > MINIMUM_SPEED_FOR_INERTIA || fabs(action->GetAmount(1)) > MINIMUM_SPEED_FOR_INERTIA ) )
     {
       bool inertialRequested = false;
-      CGUIMessage message(GUI_MSG_GESTURE_NOTIFY, 0, 0, (int)action->GetAmount(2), (int)action->GetAmount(3));
+      CGUIMessage message(GUI_MSG_GESTURE_NOTIFY, 0, 0, static_cast<int>(action->GetAmount(2)), static_cast<int>(action->GetAmount(3)));
 
       //ask if the control wants inertial scrolling
       if(g_windowManager.SendMessage(message))
@@ -141,7 +141,7 @@ bool CInertialScrollingHandler::ProcessInertialScroll(float frameTime)
 
     //decrease based on negative acceleration
     //calc the overall inertial scrolling time in secs
-    float absoluteInertialTime = (CTimeUtils::GetFrameTime() - m_inertialStartTime)/(float)1000;
+    float absoluteInertialTime = (CTimeUtils::GetFrameTime() - m_inertialStartTime)/static_cast<float>(1000);
 
     //as long as we aren't over the overall inertial scroll time - do the deacceleration
     if ( absoluteInertialTime < TIME_TO_ZERO_SPEED + TIME_FOR_DEACELLERATION_DECREASE )

@@ -826,7 +826,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
   case TMSG_PLAYLISTPLAYER_PLAY_SONG_ID:
     if (pMsg->param1 != -1)
     {
-      bool *result = (bool*)pMsg->lpVoid;
+      bool *result = reinterpret_cast<bool*>(pMsg->lpVoid);
       *result = PlaySongId(pMsg->param1);
     }
     else {
@@ -845,7 +845,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
   case TMSG_PLAYLISTPLAYER_ADD:
     if (pMsg->lpVoid)
     {
-      CFileItemList *list = (CFileItemList *)pMsg->lpVoid;
+      CFileItemList *list = reinterpret_cast<CFileItemList *>(pMsg->lpVoid);
 
       Add(pMsg->param1, (*list));
       delete list;
@@ -855,7 +855,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
   case TMSG_PLAYLISTPLAYER_INSERT:
     if (pMsg->lpVoid)
     {
-      CFileItemList *list = (CFileItemList *)pMsg->lpVoid;
+      CFileItemList *list = reinterpret_cast<CFileItemList *>(pMsg->lpVoid);
       Insert(pMsg->param1, (*list), pMsg->param2);
       delete list;
     }
@@ -876,7 +876,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
     break;
 
   case TMSG_PLAYLISTPLAYER_REPEAT:
-    SetRepeat(pMsg->param1, (PLAYLIST::REPEAT_STATE)pMsg->param2);
+    SetRepeat(pMsg->param1, static_cast<PLAYLIST::REPEAT_STATE>(pMsg->param2));
     break;
 
   case TMSG_PLAYLISTPLAYER_GET_ITEMS:
@@ -905,7 +905,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
     // first check if we were called from the PlayFile() function
     if (pMsg->lpVoid && pMsg->param2 == 0)
     {
-      CFileItem *item = (CFileItem *)pMsg->lpVoid;
+      CFileItem *item = reinterpret_cast<CFileItem *>(pMsg->lpVoid);
       g_application.PlayFile(*item, "", pMsg->param1 != 0);
       delete item;
       return;
@@ -923,7 +923,7 @@ void PLAYLIST::CPlayListPlayer::OnApplicationMessage(KODI::MESSAGING::ThreadMess
     // play file
     if (pMsg->lpVoid)
     {
-      CFileItemList *list = (CFileItemList *)pMsg->lpVoid;
+      CFileItemList *list = reinterpret_cast<CFileItemList *>(pMsg->lpVoid);
 
       if (list->Size() > 0)
       {

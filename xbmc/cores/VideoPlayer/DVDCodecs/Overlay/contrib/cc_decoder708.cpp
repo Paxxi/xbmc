@@ -712,7 +712,7 @@ void handle_708_DFx_DefineWindow (cc708_service_decoder *decoder, int window, un
     {
       for (int i=0;i<=I708_MAX_ROWS;i++)
       {
-        decoder->windows[window].rows[i]=(unsigned char *) malloc (I708_MAX_COLUMNS+1);
+        decoder->windows[window].rows[i]=reinterpret_cast<unsigned char *>( malloc (I708_MAX_COLUMNS+1));
         if (decoder->windows[window].rows[i]==nullptr) // Great
         {
           decoder->windows[window].is_defined=0;
@@ -1134,7 +1134,7 @@ void decode_708 (const unsigned char *data, int datalength, cc708_service_decode
     case 0:
       // only use 608 as fallback
       if (!decoders[0].parent->m_seen708) {
-        decode_cc(decoders[0].parent->m_cc608decoder, (uint8_t*)data+i, 3);
+        decode_cc(decoders[0].parent->m_cc608decoder, const_cast<uint8_t*>(data)+i, 3);
 }
       break;
     case 2:

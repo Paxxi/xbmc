@@ -819,7 +819,7 @@ PVR_ERROR CPVRClient::GetChannels(CPVRChannelGroup &channels, bool radio)
 
   ADDON_HANDLE_STRUCT handle;
   handle.callerAddress = this;
-  handle.dataAddress = (CPVRChannelGroup*) &channels;
+  handle.dataAddress = &channels;
   PVR_ERROR retVal = m_struct.toAddon.GetChannels(&handle, radio);
 
   LogError(retVal, __FUNCTION__);
@@ -847,7 +847,7 @@ PVR_ERROR CPVRClient::GetRecordings(CPVRRecordings *results, bool deleted)
 
   ADDON_HANDLE_STRUCT handle;
   handle.callerAddress = this;
-  handle.dataAddress = (CPVRRecordings*) results;
+  handle.dataAddress = results;
   PVR_ERROR retVal = m_struct.toAddon.GetRecordings(&handle, deleted);
 
   LogError(retVal, __FUNCTION__);
@@ -1132,11 +1132,11 @@ int CPVRClient::ReadStream(void* lpBuf, int64_t uiBufSize)
 {
   if (IsPlayingLiveStream())
   {
-    return m_struct.toAddon.ReadLiveStream((unsigned char *)lpBuf, (int)uiBufSize);
+    return m_struct.toAddon.ReadLiveStream(reinterpret_cast<unsigned char *>(lpBuf), static_cast<int>(uiBufSize));
   }
   else if (IsPlayingRecording())
   {
-    return m_struct.toAddon.ReadRecordedStream((unsigned char *)lpBuf, (int)uiBufSize);
+    return m_struct.toAddon.ReadRecordedStream(reinterpret_cast<unsigned char *>(lpBuf), static_cast<int>(uiBufSize));
   }
   return -EINVAL;
 }
@@ -2053,7 +2053,7 @@ private:
     {
       if (av_codec_is_decoder(codec))
       {
-        tmp.codec_type = (xbmc_codec_type_t)codec->type;
+        tmp.codec_type = static_cast<xbmc_codec_type_t>(codec->type);
         tmp.codec_id   = codec->id;
 
         std::string strUpperCodecName = codec->name;

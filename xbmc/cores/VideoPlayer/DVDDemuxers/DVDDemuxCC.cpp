@@ -79,7 +79,7 @@ class CCaptionBlock
 public:
   CCaptionBlock(int size)
   {
-    m_data = (uint8_t*)malloc(size);
+    m_data = reinterpret_cast<uint8_t*>(malloc(size));
     m_size = size;
     m_pts = 0.0; //silence coverity uninitialized warning, is set elsewhere
   }
@@ -300,7 +300,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
 
 void CDVDDemuxCC::Handler(int service, void *userdata)
 {
-  CDVDDemuxCC *ctx = (CDVDDemuxCC*)userdata;
+  CDVDDemuxCC *ctx = reinterpret_cast<CDVDDemuxCC*>(userdata);
 
   unsigned int idx;
 

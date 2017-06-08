@@ -80,7 +80,7 @@ EClientQuirks GetClientQuirks(const PLT_HttpRequestContext* context)
 }
   }
 
-  return (EClientQuirks)quirks;
+  return static_cast<EClientQuirks>(quirks);
 }
 
 /*----------------------------------------------------------------------
@@ -98,7 +98,7 @@ EMediaControllerQuirks GetMediaControllerQuirks(const PLT_DeviceData *device)
         quirks |= EMEDIACONTROLLERQUIRKS_X_MKV;
 }
 
-    return (EMediaControllerQuirks)quirks;
+    return static_cast<EMediaControllerQuirks>(quirks);
 }
 
 /*----------------------------------------------------------------------
@@ -350,7 +350,7 @@ PopulateObjectFromTag(CVideoInfoTag&         tag,
     object.m_Description.description = tag.m_strTagLine.c_str();
     object.m_Description.long_description = tag.m_strPlot.c_str();
     object.m_Description.rating = tag.m_strMPAARating.c_str();
-    object.m_MiscInfo.last_position = (NPT_UInt32)tag.GetResumePoint().timeInSeconds;
+    object.m_MiscInfo.last_position = static_cast<NPT_UInt32>(tag.GetResumePoint().timeInSeconds);
     object.m_XbmcInfo.last_playerstate = tag.GetResumePoint().playerState.c_str();
     object.m_MiscInfo.last_time = tag.m_lastPlayed.GetAsW3CDateTime().c_str();
     object.m_MiscInfo.play_count = tag.GetPlayCount();
@@ -420,7 +420,7 @@ BuildObject(CFileItem&                    item,
                 object->m_Affiliation.album = "[Unknown Series]";
 
             if (item.HasVideoInfoTag()) {
-                CVideoInfoTag *tag = (CVideoInfoTag*)item.GetVideoInfoTag();
+                CVideoInfoTag *tag = item.GetVideoInfoTag();
                 PopulateObjectFromTag(*tag, *object, &file_path, &resource, quirks, upnp_service);
             }
         } else if (item.IsPicture()) {
@@ -435,7 +435,7 @@ BuildObject(CFileItem&                    item,
         // Set the resource file size
         resource.m_Size = item.m_dwSize;
         if(resource.m_Size == 0) {
-          resource.m_Size = (NPT_LargeSize)-1;
+          resource.m_Size = static_cast<NPT_LargeSize>(-1);
 }
 
         // set date
@@ -528,7 +528,7 @@ BuildObject(CFileItem&                    item,
             }
         } else if (item.IsVideoDb()) {
             VIDEODATABASEDIRECTORY::NODE_TYPE node = CVideoDatabaseDirectory::GetDirectoryType(item.GetPath());
-            CVideoInfoTag &tag = *(CVideoInfoTag*)item.GetVideoInfoTag();
+            CVideoInfoTag &tag = *item.GetVideoInfoTag();
             switch(node) {
                 case VIDEODATABASEDIRECTORY::NODE_TYPE_GENRE:
                   container->m_ObjectClass.type += ".genre.movieGenre";
@@ -580,7 +580,7 @@ BuildObject(CFileItem&                    item,
             if (object->m_ObjectID.StartsWith("virtualpath://")) {
                 NPT_LargeSize count = 0;
                 NPT_CHECK_LABEL(NPT_File::GetSize(file_path, count), failure);
-                container->m_ChildrenCount = (NPT_Int32)count;
+                container->m_ChildrenCount = static_cast<NPT_Int32>(count);
             } else {
                 /* this should be a standard path */
                 //! @todo - get file count of this directory
@@ -955,7 +955,7 @@ CFileItemPtr BuildObject(PLT_MediaObject* entry,
                                        CResourceFinder("http-get", content), resource))) {
 
       // set metadata
-      if (resource.m_Size != (NPT_LargeSize)-1) {
+      if (resource.m_Size != static_cast<NPT_LargeSize>(-1)) {
         pItem->m_dwSize  = resource.m_Size;
       }
       res = &resource;

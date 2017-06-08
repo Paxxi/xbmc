@@ -93,7 +93,7 @@ bool CGUIKeyboardFactory::ShowAndGetInput(std::string& aTextString, CVariant hea
   if (heading.isString()) {
     headingStr = heading.asString();
   } else if (heading.isInteger() && heading.asInteger()) {
-    headingStr = g_localizeStrings.Get((uint32_t)heading.asInteger());
+    headingStr = g_localizeStrings.Get(static_cast<uint32_t>(heading.asInteger()));
 }
 
 #if defined(TARGET_DARWIN_IOS)

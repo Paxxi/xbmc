@@ -75,7 +75,7 @@ void CGUIViewControl::SetCurrentView(int viewMode, bool bRefresh /* = false */)
   UpdateViewVisibility();
 
   // viewMode is of the form TYPE << 16 | ID
-  VIEW_TYPE type = (VIEW_TYPE)(viewMode >> 16);
+  VIEW_TYPE type = static_cast<VIEW_TYPE>(viewMode >> 16);
   int id = viewMode & 0xffff;
 
   // first find a view that matches this view, if possible...

@@ -504,7 +504,7 @@ void CUPnPPlayer::SeekPercentage(float percent)
 {
   int64_t tot = GetTotalTime();
   if (tot) {
-    SeekTime((int64_t)(tot * percent / 100));
+    SeekTime(static_cast<int64_t>(tot * percent / 100));
 }
 }
 

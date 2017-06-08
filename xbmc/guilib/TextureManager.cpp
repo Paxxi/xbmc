@@ -376,8 +376,8 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
       maxHeight = std::max(maxHeight, pTextures[iImage]->GetHeight());
     }
 
-    pMap->SetWidth((int)maxWidth);
-    pMap->SetHeight((int)maxHeight);
+    pMap->SetWidth(static_cast<int>(maxWidth));
+    pMap->SetHeight(static_cast<int>(maxHeight));
 
     delete[] pTextures;
     delete[] Delay;
@@ -434,8 +434,8 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
       }
     }
 
-    pMap->SetWidth((int)maxWidth);
-    pMap->SetHeight((int)maxHeight);
+    pMap->SetWidth(static_cast<int>(maxWidth));
+    pMap->SetHeight(static_cast<int>(maxHeight));
 
     file.Close();
 

@@ -259,7 +259,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     return false;
 }
 
-  m_pCodecContext->opaque = (ICallbackHWAccel*)this;
+  m_pCodecContext->opaque = reinterpret_cast<ICallbackHWAccel*>(this);
   m_pCodecContext->debug_mv = 0;
   m_pCodecContext->debug = 0;
   m_pCodecContext->workaround_bugs = FF_BUG_AUTODETECT;
@@ -306,7 +306,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   if( hints.extradata && hints.extrasize > 0 )
   {
     m_pCodecContext->extradata_size = hints.extrasize;
-    m_pCodecContext->extradata = (uint8_t*)av_mallocz(hints.extrasize + FF_INPUT_BUFFER_PADDING_SIZE);
+    m_pCodecContext->extradata = reinterpret_cast<uint8_t*>(av_mallocz(hints.extrasize + FF_INPUT_BUFFER_PADDING_SIZE));
     memcpy(m_pCodecContext->extradata, hints.extradata, hints.extrasize);
   }
 
@@ -794,7 +794,7 @@ bool CDVDVideoCodecFFmpeg::SetPictureParams(VideoPicture* pVideoPicture)
   pVideoPicture->hwPic = nullptr;
 
   AVPixelFormat pix_fmt;
-  pix_fmt = (AVPixelFormat)m_pFrame->format;
+  pix_fmt = static_cast<AVPixelFormat>(m_pFrame->format);
 
   pVideoPicture->format = CDVDCodecUtils::EFormatFromPixfmt(pix_fmt);
 
@@ -848,13 +848,13 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
   pVideoPicture->iHeight = m_pFrame->height;
 
   /* crop of 10 pixels if demuxer asked it */
-  if(m_pCodecContext->coded_width  && m_pCodecContext->coded_width  < (int)pVideoPicture->iWidth
-                                   && m_pCodecContext->coded_width  > (int)pVideoPicture->iWidth  - 10) {
+  if(m_pCodecContext->coded_width  && m_pCodecContext->coded_width  < static_cast<int>(pVideoPicture->iWidth)
+                                   && m_pCodecContext->coded_width  > static_cast<int>(pVideoPicture->iWidth)  - 10) {
     pVideoPicture->iWidth = m_pCodecContext->coded_width;
 }
 
-  if(m_pCodecContext->coded_height && m_pCodecContext->coded_height < (int)pVideoPicture->iHeight
-                                   && m_pCodecContext->coded_height > (int)pVideoPicture->iHeight - 10) {
+  if(m_pCodecContext->coded_height && m_pCodecContext->coded_height < static_cast<int>(pVideoPicture->iHeight)
+                                   && m_pCodecContext->coded_height > static_cast<int>(pVideoPicture->iHeight) - 10) {
     pVideoPicture->iHeight = m_pCodecContext->coded_height;
 }
 
@@ -870,7 +870,7 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
 }
 
   if (aspect_ratio <= 0.0) {
-    aspect_ratio = (float)pVideoPicture->iWidth / (float)pVideoPicture->iHeight;
+    aspect_ratio = static_cast<float>(pVideoPicture->iWidth) / static_cast<float>(pVideoPicture->iHeight);
 }
 
   if (m_DAR != aspect_ratio)
@@ -881,11 +881,11 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
 
   /* XXX: we suppose the screen has a 1.0 pixel ratio */ // CDVDVideo will compensate it.
   pVideoPicture->iDisplayHeight = pVideoPicture->iHeight;
-  pVideoPicture->iDisplayWidth  = ((int)RINT(pVideoPicture->iHeight * aspect_ratio)) & -3;
+  pVideoPicture->iDisplayWidth  = (static_cast<int>(RINT(pVideoPicture->iHeight * aspect_ratio))) & -3;
   if (pVideoPicture->iDisplayWidth > pVideoPicture->iWidth)
   {
     pVideoPicture->iDisplayWidth  = pVideoPicture->iWidth;
-    pVideoPicture->iDisplayHeight = ((int)RINT(pVideoPicture->iWidth / aspect_ratio)) & -3;
+    pVideoPicture->iDisplayHeight = (static_cast<int>(RINT(pVideoPicture->iWidth / aspect_ratio))) & -3;
   }
 
 
@@ -947,7 +947,7 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
   int64_t bpts = av_frame_get_best_effort_timestamp(m_pFrame);
   if (bpts != AV_NOPTS_VALUE)
   {
-    pVideoPicture->pts = (double)bpts * DVD_TIME_BASE / AV_TIME_BASE;
+    pVideoPicture->pts = static_cast<double>(bpts) * DVD_TIME_BASE / AV_TIME_BASE;
     if (pVideoPicture->pts == m_decoderPts)
     {
       pVideoPicture->iRepeatPicture = -0.5;

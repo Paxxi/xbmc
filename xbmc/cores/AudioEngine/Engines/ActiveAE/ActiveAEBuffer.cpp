@@ -434,7 +434,7 @@ float CActiveAEBufferPoolResample::GetDelay()
   std::deque<CSampleBuffer*>::iterator itBuf;
 
   if (m_procSample) {
-    delay += (float)m_procSample->pkt->nb_samples / m_procSample->pkt->config.sample_rate;
+    delay += static_cast<float>(m_procSample->pkt->nb_samples) / m_procSample->pkt->config.sample_rate;
 }
 
   for(itBuf=m_inputSamples.begin(); itBuf!=m_inputSamples.end(); ++itBuf)
@@ -450,7 +450,7 @@ float CActiveAEBufferPoolResample::GetDelay()
   if (m_resampler)
   {
     int samples = m_resampler->GetBufferedSamples();
-    delay += (float)samples / m_format.m_sampleRate;
+    delay += static_cast<float>(samples) / m_format.m_sampleRate;
   }
 
   return delay;
@@ -708,7 +708,7 @@ float CActiveAEBufferPoolAtempo::GetDelay()
   float delay = 0;
 
   if (m_procSample) {
-    delay += (float)m_procSample->pkt->nb_samples / m_procSample->pkt->config.sample_rate;
+    delay += static_cast<float>(m_procSample->pkt->nb_samples) / m_procSample->pkt->config.sample_rate;
 }
 
   for (auto &buf : m_inputSamples)
@@ -724,7 +724,7 @@ float CActiveAEBufferPoolAtempo::GetDelay()
   if (m_pTempoFilter->IsActive())
   {
     int samples = m_pTempoFilter->GetBufferedSamples();
-    delay += (float)samples / m_format.m_sampleRate;
+    delay += static_cast<float>(samples) / m_format.m_sampleRate;
   }
 
   return delay;

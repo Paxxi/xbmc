@@ -391,9 +391,9 @@ void CGUIPanelContainer::Scroll(int amount)
 {
   // increase or decrease the offset
   int offset = GetOffset() + amount;
-  if (offset > ((int)GetRows() - m_itemsPerPage) * m_itemsPerRow)
+  if (offset > (static_cast<int>(GetRows()) - m_itemsPerPage) * m_itemsPerRow)
   {
-    offset = ((int)GetRows() - m_itemsPerPage) * m_itemsPerRow;
+    offset = (static_cast<int>(GetRows()) - m_itemsPerPage) * m_itemsPerRow;
   }
   if (offset < 0) offset = 0;
   ScrollToOffset(offset);
@@ -434,13 +434,13 @@ void CGUIPanelContainer::CalculateLayout()
   // calculate the number of items to display
   if (m_orientation == HORIZONTAL)
   {
-    m_itemsPerRow = (int)(m_height / m_layout->Size(VERTICAL));
-    m_itemsPerPage = (int)(m_width / m_layout->Size(HORIZONTAL));
+    m_itemsPerRow = static_cast<int>(m_height / m_layout->Size(VERTICAL));
+    m_itemsPerPage = static_cast<int>(m_width / m_layout->Size(HORIZONTAL));
   }
   else
   {
-    m_itemsPerRow = (int)(m_width / m_layout->Size(HORIZONTAL));
-    m_itemsPerPage = (int)(m_height / m_layout->Size(VERTICAL));
+    m_itemsPerRow = static_cast<int>(m_width / m_layout->Size(HORIZONTAL));
+    m_itemsPerPage = static_cast<int>(m_height / m_layout->Size(VERTICAL));
   }
   if (m_itemsPerRow < 1) m_itemsPerRow = 1;
   if (m_itemsPerPage < 1) m_itemsPerPage = 1;

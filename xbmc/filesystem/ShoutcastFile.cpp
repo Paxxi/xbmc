@@ -190,7 +190,7 @@ void CShoutcastFile::ReadTruncated(char* buf2, int size)
 int CShoutcastFile::IoControl(EIoControl control, void* payload)
 {
   if (control == IOCTRL_SET_CACHE) {
-    m_cacheReader = (CFileCache*)payload;
+    m_cacheReader = reinterpret_cast<CFileCache*>(payload);
 }
 
   return IFile::IoControl(control, payload);

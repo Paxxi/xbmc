@@ -1086,7 +1086,7 @@ int CWebServer::ContentReaderCallback(void *cls, size_t pos, char *buf, int max)
 
 void CWebServer::ContentReaderFreeCallback(void *cls)
 {
-  HttpFileDownloadContext *context = (HttpFileDownloadContext *)cls;
+  HttpFileDownloadContext *context = reinterpret_cast<HttpFileDownloadContext *>(cls);
   delete context;
 
   if (g_advancedSettings.CanLogComponent(LOGWEBSERVER))

@@ -85,7 +85,7 @@ bool CAudioSinkAE::Create(const DVDAudioFrame &audioframe, AVCodecID codec, bool
     m_pAudioStream->SetFFmpegInfo(audioframe.profile, audioframe.matrix_encoding, audioframe.audio_service_type);
 }
 
-  SetDynamicRangeCompression((long)(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification * 100));
+  SetDynamicRangeCompression(static_cast<long>(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification * 100));
 
   return true;
 }
@@ -188,7 +188,7 @@ void CAudioSinkAE::SetDynamicRangeCompression(long drc)
 {
   CSingleLock lock (m_critSection);
   if (m_pAudioStream) {
-    m_pAudioStream->SetAmplification(powf(10.0f, (float)drc / 2000.0f));
+    m_pAudioStream->SetAmplification(powf(10.0f, static_cast<float>(drc) / 2000.0f));
 }
 }
 

@@ -773,9 +773,9 @@ void CUtil::StatToStatI64(struct _stati64 *result, struct stat *stat)
   result->st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
   result->st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
 #else
-  result->_st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->_st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->_st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
+  result->_st_atime = (stat->st_atime & 0xFFFFFFFF);
+  result->_st_mtime = (stat->st_mtime & 0xFFFFFFFF);
+  result->_st_ctime = (stat->st_ctime & 0xFFFFFFFF);
 #endif
 }
 
@@ -794,9 +794,9 @@ void CUtil::Stat64ToStatI64(struct _stati64 *result, struct __stat64 *stat)
   result->st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
   result->st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
 #else
-  result->_st_atime = (long)(stat->st_atime & 0xFFFFFFFF);
-  result->_st_mtime = (long)(stat->st_mtime & 0xFFFFFFFF);
-  result->_st_ctime = (long)(stat->st_ctime & 0xFFFFFFFF);
+  result->_st_atime = (stat->st_atime & 0xFFFFFFFF);
+  result->_st_mtime = (stat->st_mtime & 0xFFFFFFFF);
+  result->_st_ctime = (stat->st_ctime & 0xFFFFFFFF);
 #endif
 }
 
@@ -1574,7 +1574,7 @@ void CUtil::InitRandomSeed()
   // Init random seed
   int64_t now;
   now = CurrentHostCounter();
-  unsigned int seed = (unsigned int)now;
+  unsigned int seed = static_cast<unsigned int>(now);
 //  CLog::Log(LOGDEBUG, "%s - Initializing random seed with %u", __FUNCTION__, seed);
   srand(seed);
 }

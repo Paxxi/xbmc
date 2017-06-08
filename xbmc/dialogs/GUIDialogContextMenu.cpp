@@ -224,7 +224,7 @@ bool CGUIDialogContextMenu::SourcesMenu(const std::string &strType, const CFileI
 
   int button = ShowAndGetChoice(buttons);
   if (button >= 0) {
-    return OnContextButton(strType, item, (CONTEXT_BUTTON)button);
+    return OnContextButton(strType, item, static_cast<CONTEXT_BUTTON>(button));
 }
   return false;
 }

@@ -789,7 +789,7 @@ bool CPVRChannelGroup::AddToGroup(const CPVRChannelPtr &channel, int iChannelNum
     if (realChannel.channel)
     {
       PVRChannelGroupMember newMember(realChannel);
-      newMember.iChannelNumber = (unsigned int)iChannelNumber;
+      newMember.iChannelNumber = static_cast<unsigned int>(iChannelNumber);
       m_sortedMembers.push_back(newMember);
       m_members.insert(std::make_pair(realChannel.channel->StorageId(), newMember));
       m_bChanged = true;

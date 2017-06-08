@@ -236,10 +236,10 @@ DWORD  SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
 
   if (lpDistanceToMoveHigh)
   {
-    *lpDistanceToMoveHigh = (int32_t)(currOff >> 32);
+    *lpDistanceToMoveHigh = static_cast<int32_t>(currOff >> 32);
   }
 
-  return (DWORD)currOff;
+  return static_cast<DWORD>(currOff);
 }
 
 // uses statfs
@@ -263,15 +263,15 @@ BOOL GetDiskFreeSpaceEx(
 #endif
 
   if (lpFreeBytesAvailable) {
-    lpFreeBytesAvailable->QuadPart =  (ULONGLONG)fsInfo.f_bavail * (ULONGLONG)fsInfo.f_bsize;
+    lpFreeBytesAvailable->QuadPart =  static_cast<ULONGLONG>(fsInfo.f_bavail) * static_cast<ULONGLONG>(fsInfo.f_bsize);
 }
 
   if (lpTotalNumberOfBytes) {
-    lpTotalNumberOfBytes->QuadPart = (ULONGLONG)fsInfo.f_blocks * (ULONGLONG)fsInfo.f_bsize;
+    lpTotalNumberOfBytes->QuadPart = static_cast<ULONGLONG>(fsInfo.f_blocks) * static_cast<ULONGLONG>(fsInfo.f_bsize);
 }
 
   if (lpTotalNumberOfFreeBytes) {
-    lpTotalNumberOfFreeBytes->QuadPart = (ULONGLONG)fsInfo.f_bfree * (ULONGLONG)fsInfo.f_bsize;
+    lpTotalNumberOfFreeBytes->QuadPart = static_cast<ULONGLONG>(fsInfo.f_bfree) * static_cast<ULONGLONG>(fsInfo.f_bsize);
 }
 
   return true;

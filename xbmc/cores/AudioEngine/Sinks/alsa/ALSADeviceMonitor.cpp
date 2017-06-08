@@ -105,7 +105,7 @@ void CALSADeviceMonitor::Stop()
 
 void CALSADeviceMonitor::FDEventCallback(int id, int fd, short revents, void *data)
 {
-  struct udev_monitor *udevMonitor = (struct udev_monitor *)data;
+  struct udev_monitor *udevMonitor = reinterpret_cast<struct udev_monitor *>(data);
   bool audioDevicesChanged = false;
   struct udev_device *device;
 

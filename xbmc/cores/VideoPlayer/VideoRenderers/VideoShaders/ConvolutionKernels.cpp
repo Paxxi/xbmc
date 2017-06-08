@@ -67,11 +67,11 @@ void CConvolutionKernel::Lanczos2()
 {
   for (int i = 0; i < m_size; i++)
   {
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
     for (int j = 0; j < 4; j++) {
-      m_floatpixels[i * 4 + j] = (float)LanczosWeight(x + (double)(j - 2), 2.0);
+      m_floatpixels[i * 4 + j] = static_cast<float>(LanczosWeight(x + static_cast<double>(j - 2), 2.0));
 }
 
     //any collection of 4 taps added together needs to be exactly 1.0
@@ -98,13 +98,13 @@ void CConvolutionKernel::Lanczos3Fast()
   for (int i = 0; i < m_size; i++)
   {
     double a = 3.0;
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
-    m_floatpixels[i * 4 + 0] = (float)(LanczosWeight(x - 2.0, a) + LanczosWeight(x - 3.0, a));
-    m_floatpixels[i * 4 + 1] = (float) LanczosWeight(x - 1.0, a);
-    m_floatpixels[i * 4 + 2] = (float) LanczosWeight(x      , a);
-    m_floatpixels[i * 4 + 3] = (float)(LanczosWeight(x + 1.0, a) + LanczosWeight(x + 2.0, a));
+    m_floatpixels[i * 4 + 0] = static_cast<float>(LanczosWeight(x - 2.0, a) + LanczosWeight(x - 3.0, a));
+    m_floatpixels[i * 4 + 1] = static_cast<float>( LanczosWeight(x - 1.0, a));
+    m_floatpixels[i * 4 + 2] = static_cast<float>( LanczosWeight(x      , a));
+    m_floatpixels[i * 4 + 3] = static_cast<float>(LanczosWeight(x + 1.0, a) + LanczosWeight(x + 2.0, a));
 
     //any collection of 4 taps added together needs to be exactly 1.0
     //for lanczos this is not always the case, so we take each collection of 4 taps
@@ -126,11 +126,11 @@ void CConvolutionKernel::Lanczos3()
 {
   for (int i = 0; i < m_size; i++)
   {
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
     for (int j = 0; j < 3; j++) {
-      m_floatpixels[i * 4 + j] = (float)LanczosWeight(x * 2.0 + (double)(j * 2 - 3), 3.0);
+      m_floatpixels[i * 4 + j] = static_cast<float>(LanczosWeight(x * 2.0 + static_cast<double>(j * 2 - 3), 3.0));
 }
 
     m_floatpixels[i * 4 + 3] = 0.0;
@@ -159,13 +159,13 @@ void CConvolutionKernel::Spline36Fast()
 {
   for (int i = 0; i < m_size; i++)
   {
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
-    m_floatpixels[i * 4 + 0] = (float)(Spline36Weight(x - 2.0) + Spline36Weight(x - 3.0));
-    m_floatpixels[i * 4 + 1] = (float) Spline36Weight(x - 1.0);
-    m_floatpixels[i * 4 + 2] = (float) Spline36Weight(x      );
-    m_floatpixels[i * 4 + 3] = (float)(Spline36Weight(x + 1.0) + Spline36Weight(x + 2.0));
+    m_floatpixels[i * 4 + 0] = static_cast<float>(Spline36Weight(x - 2.0) + Spline36Weight(x - 3.0));
+    m_floatpixels[i * 4 + 1] = static_cast<float>( Spline36Weight(x - 1.0));
+    m_floatpixels[i * 4 + 2] = static_cast<float>( Spline36Weight(x      ));
+    m_floatpixels[i * 4 + 3] = static_cast<float>(Spline36Weight(x + 1.0) + Spline36Weight(x + 2.0));
 
     float weight = 0.0;
     for (int j = 0; j < 4; j++) {
@@ -182,11 +182,11 @@ void CConvolutionKernel::Spline36()
 {
   for (int i = 0; i < m_size; i++)
   {
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
     for (int j = 0; j < 3; j++) {
-      m_floatpixels[i * 4 + j] = (float)Spline36Weight(x * 2.0 + (double)(j * 2 - 3));
+      m_floatpixels[i * 4 + j] = static_cast<float>(Spline36Weight(x * 2.0 + static_cast<double>(j * 2 - 3)));
 }
 
     m_floatpixels[i * 4 + 3] = 0.0;
@@ -214,11 +214,11 @@ void CConvolutionKernel::Bicubic(double B, double C)
 {
   for (int i = 0; i < m_size; i++)
   {
-    double x = (double)i / (double)m_size;
+    double x = static_cast<double>(i) / static_cast<double>(m_size);
 
     //generate taps
     for (int j = 0; j < 4; j++) {
-      m_floatpixels[i * 4 + j] = (float)BicubicWeight(x + (double)(j - 2), B, C);
+      m_floatpixels[i * 4 + j] = static_cast<float>(BicubicWeight(x + static_cast<double>(j - 2), B, C));
 }
   }
 }
@@ -292,8 +292,8 @@ void CConvolutionKernel::ToIntFract()
     int integer = value / 256;
     int fract   = value % 256;
 
-    m_intfractpixels[i] = (uint8_t)integer;
-    m_intfractpixels[i + m_size * 4] = (uint8_t)fract;
+    m_intfractpixels[i] = static_cast<uint8_t>(integer);
+    m_intfractpixels[i + m_size * 4] = static_cast<uint8_t>(fract);
   }
 }
 
@@ -311,7 +311,7 @@ void CConvolutionKernel::ToUint8()
       value = 255;
 }
 
-    m_uint8pixels[i] = (uint8_t)value;
+    m_uint8pixels[i] = static_cast<uint8_t>(value);
   }
 }
 

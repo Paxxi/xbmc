@@ -168,7 +168,7 @@ void CEventServer::Run()
     CLog::Log(LOGERROR, "ES: Could not create socket, aborting!");
     return;
   }
-  m_pPacketBuffer = (unsigned char *)malloc(PACKET_SIZE);
+  m_pPacketBuffer = reinterpret_cast<unsigned char *>(malloc(PACKET_SIZE));
 
   if (!m_pPacketBuffer)
   {

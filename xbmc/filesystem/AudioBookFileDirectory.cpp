@@ -152,7 +152,7 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
     return false;
 }
 
-  uint8_t* buffer = (uint8_t*)av_malloc(32768);
+  uint8_t* buffer = reinterpret_cast<uint8_t*>(av_malloc(32768));
   m_ioctx = avio_alloc_context(buffer, 32768, 0, &file, cfile_file_read,
                                nullptr, cfile_file_seek);
 

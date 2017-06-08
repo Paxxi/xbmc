@@ -156,18 +156,18 @@ bool CGUIControlFactory::GetFloatRange(const TiXmlNode* pRootNode, const char* s
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
   if (!pNode || !pNode->FirstChild()) return false;
-  fMinValue = (float)atof(pNode->FirstChild()->Value());
+  fMinValue = static_cast<float>(atof(pNode->FirstChild()->Value()));
   const char* maxValue = strchr(pNode->FirstChild()->Value(), ',');
   if (maxValue)
   {
     maxValue++;
-    fMaxValue = (float)atof(maxValue);
+    fMaxValue = static_cast<float>(atof(maxValue));
 
     const char* intervalValue = strchr(maxValue, ',');
     if (intervalValue)
     {
       intervalValue++;
-      fIntervalValue = (float)atof(intervalValue);
+      fIntervalValue = static_cast<float>(atof(intervalValue));
     }
   }
 
@@ -177,7 +177,7 @@ bool CGUIControlFactory::GetFloatRange(const TiXmlNode* pRootNode, const char* s
 float CGUIControlFactory::ParsePosition(const char* pos, const float parentSize)
 {
   char* end = nullptr;
-  float value = pos ? (float)strtod(pos, &end) : 0;
+  float value = pos ? static_cast<float>(strtod(pos, &end)) : 0;
   if (end)
   {
     if (*end == 'r') {
@@ -785,8 +785,8 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   // Read control properties from XML
   //
 
-  if (!pControlNode->Attribute("id", (int*) &id)) {
-    XMLUtils::GetInt(pControlNode, "id", (int&) id);       // backward compatibility - not desired
+  if (!pControlNode->Attribute("id", &id)) {
+    XMLUtils::GetInt(pControlNode, "id", const_cast<int&>( id));       // backward compatibility - not desired
 }
   //! @todo Perhaps we should check here whether id is valid for focusable controls
   //! such as buttons etc.  For labels/fadelabels/images it does not matter
@@ -855,7 +855,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   XMLUtils::GetFloat(pControlNode, "textoffsetx", labelInfo.offsetX);
   XMLUtils::GetFloat(pControlNode, "textoffsety", labelInfo.offsetY);
   int angle = 0;  // use the negative angle to compensate for our vertically flipped cartesian plane
-  if (XMLUtils::GetInt(pControlNode, "angle", angle)) labelInfo.angle = (float)-angle;
+  if (XMLUtils::GetInt(pControlNode, "angle", angle)) labelInfo.angle = static_cast<float>(-angle);
   std::string strFont;
   if (XMLUtils::GetString(pControlNode, "font", strFont))
     labelInfo.font = g_fontManager.GetFont(strFont);

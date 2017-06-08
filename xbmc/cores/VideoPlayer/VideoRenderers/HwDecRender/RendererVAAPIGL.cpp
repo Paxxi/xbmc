@@ -70,7 +70,7 @@ void CRendererVAAPI::AddVideoPictureHW(VideoPicture &picture, int index)
   YUVBUFFER &buf = m_buffers[index];
   VAAPI::CVaapiRenderPicture *pic = vaapi->Acquire();
   if (buf.hwDec) {
-    ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
+    (reinterpret_cast<VAAPI::CVaapiRenderPicture*>(buf.hwDec))->Release();
 }
   buf.hwDec = pic;
 
@@ -85,7 +85,7 @@ void CRendererVAAPI::ReleaseBuffer(int idx)
 {
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec) {
-    ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
+    (reinterpret_cast<VAAPI::CVaapiRenderPicture*>(buf.hwDec))->Release();
 }
   buf.hwDec = nullptr;
 }
@@ -245,7 +245,7 @@ void CRendererVAAPI::AfterRenderHook(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
   {
-    ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Sync();
+    (reinterpret_cast<VAAPI::CVaapiRenderPicture*>(buf.hwDec))->Sync();
   }
 }
 

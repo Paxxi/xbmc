@@ -100,7 +100,7 @@ NPT_XbmcFileStream::Tell(NPT_Position& offset)
 {
     int64_t result = m_FileReference->GetPosition();
     if (result >= 0) {
-        offset = (NPT_Position)result;
+        offset = static_cast<NPT_Position>(result);
         return NPT_SUCCESS;
     } else {
         return NPT_FAILURE;
@@ -191,7 +191,7 @@ NPT_XbmcFileInputStream::GetAvailable(NPT_LargeSize& available)
     int64_t offset = m_FileReference->GetPosition();
     NPT_LargeSize size = 0;
 
-    if (NPT_SUCCEEDED(GetSize(size)) && offset >= 0 && (NPT_LargeSize)offset <= size) {
+    if (NPT_SUCCEEDED(GetSize(size)) && offset >= 0 && static_cast<NPT_LargeSize>(offset) <= size) {
         available = size - offset;
         return NPT_SUCCESS;
     } else {
@@ -238,7 +238,7 @@ NPT_XbmcFileOutputStream::Write(const void* buffer,
     nb_written = m_FileReference->Write(buffer, bytes_to_write);    
 
     if (nb_written > 0) {
-        if (bytes_written) *bytes_written = (NPT_Size)nb_written;
+        if (bytes_written) *bytes_written = static_cast<NPT_Size>(nb_written);
         return NPT_SUCCESS;
     } else {
         if (bytes_written) *bytes_written = 0;

@@ -218,7 +218,7 @@ bool Dataset::seek(int pos) {
   frecno = (pos<num_rows()-1)? pos: num_rows()-1;
   frecno = (frecno<0)? 0: frecno;
   fbof = feof = (num_rows()==0)? true: false;
-  return ((bool)frecno);
+  return (static_cast<bool>(frecno));
 }
 
 

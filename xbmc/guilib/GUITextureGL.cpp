@@ -208,7 +208,7 @@ void CGUITextureGL::DrawQuad(const CRect &rect, color_t color, CBaseTexture *tex
 
   glBegin(GL_QUADS);
 
-  glColor4ub((GLubyte)GET_R(color), (GLubyte)GET_G(color), (GLubyte)GET_B(color), (GLubyte)GET_A(color));
+  glColor4ub(static_cast<GLubyte>GET_R(color), static_cast<GLubyte>GET_G(color), static_cast<GLubyte>GET_B(color), static_cast<GLubyte>GET_A(color));
 
   CRect coords = texCoords ? *texCoords : CRect(0.0f, 0.0f, 1.0f, 1.0f);
   glTexCoord2f(coords.x1, coords.y1);

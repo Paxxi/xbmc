@@ -126,7 +126,7 @@ bool CGUIProgressControl::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_ITEM_SELECT)
   {
-    SetPercentage((float)message.GetParam1());
+    SetPercentage(static_cast<float>(message.GetParam1()));
     return true;
   }
   return CGUIControl::OnMessage(message);
@@ -326,7 +326,7 @@ void CGUIProgressControl::UpdateInfo(const CGUIListItem *item)
     {
       int value;
       if (g_infoManager.GetInt(value, m_iInfoCode, m_parentID, item)) {
-        m_fPercent = (float)value;
+        m_fPercent = static_cast<float>(value);
 }
 
       if (m_fPercent < 0.0f) m_fPercent = 0.0f;

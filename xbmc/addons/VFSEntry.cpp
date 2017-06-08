@@ -492,7 +492,7 @@ bool CVFSEntryIDirectoryWrapper::DoGetKeyboardInput(void* ctx,
                                                     const char* heading,
                                                     char** input)
 {
-  return ((CVFSEntryIDirectoryWrapper*)ctx)->GetKeyboardInput2(heading, input);
+  return (reinterpret_cast<CVFSEntryIDirectoryWrapper*>(ctx))->GetKeyboardInput2(heading, input);
 }
 
 bool CVFSEntryIDirectoryWrapper::GetKeyboardInput2(const char* heading,
@@ -511,7 +511,7 @@ void CVFSEntryIDirectoryWrapper::DoSetErrorDialog(void* ctx, const char* heading
                                                   const char* line2,
                                                   const char* line3)
 {
-  ((CVFSEntryIDirectoryWrapper*)ctx)->SetErrorDialog2(heading, line1,
+  (reinterpret_cast<CVFSEntryIDirectoryWrapper*>(ctx))->SetErrorDialog2(heading, line1,
                                                       line2, line3);
 }
 

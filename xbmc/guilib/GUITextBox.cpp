@@ -109,7 +109,7 @@ void CGUITextBox::UpdateInfo(const CGUIListItem *item)
   float textHeight = m_font ? m_font->GetTextHeight(m_lines.size()) : m_itemHeight * m_lines.size();
   float maxHeight = m_height ? m_height : textHeight;
   m_renderHeight = m_minHeight ? CLAMP(textHeight, m_minHeight, maxHeight) : m_height;
-  m_itemsPerPage = (unsigned int)(m_renderHeight / m_itemHeight);
+  m_itemsPerPage = static_cast<unsigned int>(m_renderHeight / m_itemHeight);
 
   UpdatePageControl();
 }
@@ -139,7 +139,7 @@ void CGUITextBox::Process(unsigned int currentTime, CDirtyRegionList &dirtyregio
       if (m_lastRenderTime) {
         m_autoScrollDelayTime += currentTime - m_lastRenderTime;
 }
-      if (m_autoScrollDelayTime > (unsigned int)m_autoScrollDelay && m_scrollSpeed == 0)
+      if (m_autoScrollDelayTime > static_cast<unsigned int>(m_autoScrollDelay) && m_scrollSpeed == 0)
       { // delay is finished - start scrolling
         MarkDirtyRegion();
         if (m_offset < (int)m_lines.size() - m_itemsPerPage)
@@ -212,7 +212,7 @@ void CGUITextBox::Render()
   {
     // we offset our draw position to take into account scrolling and whether or not our focused
     // item is offscreen "above" the list.
-    int offset = (int)(m_scrollOffset / m_itemHeight);
+    int offset = static_cast<int>(m_scrollOffset / m_itemHeight);
     float posX = m_posX;
     float posY = m_posY + offset * m_itemHeight - m_scrollOffset;
 

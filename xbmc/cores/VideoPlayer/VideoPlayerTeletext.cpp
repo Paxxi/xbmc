@@ -441,7 +441,7 @@ void CDVDTeletextData::Process()
                 else
                 {
                   if (!(pageinfo_thread->p24)) {
-                    pageinfo_thread->p24 = (unsigned char*) calloc(2, 40);
+                    pageinfo_thread->p24 = reinterpret_cast<unsigned char*>( calloc(2, 40));
 }
                   if (pageinfo_thread->p24) {
                     p = pageinfo_thread->p24 + (packet_number - 24) * 40;
@@ -539,13 +539,13 @@ void CDVDTeletextData::Process()
                   Textp27_t *p;
 
                   if (!pageinfo_thread->ext) {
-                    pageinfo_thread->ext = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
+                    pageinfo_thread->ext = reinterpret_cast<TextExtData_t*>( calloc(1, sizeof(TextExtData_t)));
 }
                   if (!pageinfo_thread->ext) {
                     continue;
 }
                   if (!(pageinfo_thread->ext->p27)) {
-                    pageinfo_thread->ext->p27 = (Textp27_t*) calloc(4, sizeof(Textp27_t));
+                    pageinfo_thread->ext->p27 = reinterpret_cast<Textp27_t*>( calloc(4, sizeof(Textp27_t)));
 }
                   if (!(pageinfo_thread->ext->p27)) {
                     continue;
@@ -601,13 +601,13 @@ void CDVDTeletextData::Process()
 }
 
                 if (!pageinfo_thread->ext) {
-                  pageinfo_thread->ext = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
+                  pageinfo_thread->ext = reinterpret_cast<TextExtData_t*>( calloc(1, sizeof(TextExtData_t)));
 }
                 if (!pageinfo_thread->ext) {
                   continue;
 }
                 if (!(pageinfo_thread->ext->p26[descode])) {
-                  pageinfo_thread->ext->p26[descode] = (unsigned char*) malloc(13 * 3);
+                  pageinfo_thread->ext->p26[descode] = reinterpret_cast<unsigned char*>( malloc(13 * 3));
 }
                 if (pageinfo_thread->ext->p26[descode]) {
                   memcpy(pageinfo_thread->ext->p26[descode], &vtxt_row[3], 13 * 3);
@@ -711,7 +711,7 @@ void CDVDTeletextData::Decode_p2829(unsigned char *vtxt_row, TextExtData_t **ptE
 }
 
   if (!(*ptExtData)) {
-    (*ptExtData) = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
+    (*ptExtData) = reinterpret_cast<TextExtData_t*>( calloc(1, sizeof(TextExtData_t)));
 }
   if (!(*ptExtData)) {
     return;

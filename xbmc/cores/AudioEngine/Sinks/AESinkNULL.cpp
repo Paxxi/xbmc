@@ -52,7 +52,7 @@ bool CAESinkNULL::Initialize(AEAudioFormat &format, std::string &device)
   // setup a pretend 500ms internal buffer
   m_sink_frameSize = format.m_channelLayout.Count() * CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3;
   m_sinkbuffer_size = m_sink_frameSize * format.m_sampleRate / 2;
-  m_sinkbuffer_sec_per_byte = 1.0 / (double)(m_sink_frameSize * format.m_sampleRate);
+  m_sinkbuffer_sec_per_byte = 1.0 / static_cast<double>(m_sink_frameSize * format.m_sampleRate);
 
   m_draining = false;
   m_wake.Reset();
@@ -76,13 +76,13 @@ void CAESinkNULL::Deinitialize()
 
 void CAESinkNULL::GetDelay(AEDelayStatus& status)
 {
-  double sinkbuffer_seconds_to_empty = m_sinkbuffer_sec_per_byte * (double)m_sinkbuffer_level;
+  double sinkbuffer_seconds_to_empty = m_sinkbuffer_sec_per_byte * static_cast<double>(m_sinkbuffer_level);
   status.SetDelay(sinkbuffer_seconds_to_empty);
 }
 
 double CAESinkNULL::GetCacheTotal()
 {
-  return m_sinkbuffer_sec_per_byte * (double)m_sinkbuffer_size;
+  return m_sinkbuffer_sec_per_byte * static_cast<double>(m_sinkbuffer_size);
 }
 
 unsigned int CAESinkNULL::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)

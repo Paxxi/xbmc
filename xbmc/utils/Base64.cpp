@@ -38,9 +38,9 @@ void Base64::Encode(const char* input, unsigned int length, std::string &output)
 
   for (unsigned int i = 0; i < length; i += 3)
   {
-    l  = ((((unsigned long) input[i]) << 16) & 0xFFFFFF) |
-         ((((i + 1) < length) ? (((unsigned long) input[i + 1]) << 8) : 0) & 0xFFFF) |
-         ((((i + 2) < length) ? (((unsigned long) input[i + 2]) << 0) : 0) & 0x00FF);
+    l  = (((static_cast<unsigned long>( input[i])) << 16) & 0xFFFFFF) |
+         ((((i + 1) < length) ? ((static_cast<unsigned long>( input[i + 1])) << 8) : 0) & 0xFFFF) |
+         ((((i + 2) < length) ? ((static_cast<unsigned long>( input[i + 2])) << 0) : 0) & 0x00FF);
 
     output.push_back(m_characters[(l >> 18) & 0x3F]);
     output.push_back(m_characters[(l >> 12) & 0x3F]);

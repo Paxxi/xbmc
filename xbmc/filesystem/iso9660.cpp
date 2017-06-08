@@ -162,7 +162,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
   OutputDebugString( strTmp.c_str() );
 #endif
 
-  pDir = (struct iso_dirtree *)malloc(sizeof(struct iso_dirtree));
+  pDir = reinterpret_cast<struct iso_dirtree *>(malloc(sizeof(struct iso_dirtree)));
   if (!pDir) {
     return nullptr;
 }
@@ -178,7 +178,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
   ::SetFilePointer( m_info.ISO_HANDLE, wSectorSize * sector, nullptr, FILE_BEGIN );
   DWORD lpNumberOfBytesRead = 0;
 
-  pCurr_dir_cache = (char*)malloc( 16*wSectorSize );
+  pCurr_dir_cache = reinterpret_cast<char*>(malloc( 16*wSectorSize ));
   if (!pCurr_dir_cache ) {
     return nullptr;
 }
@@ -197,7 +197,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
   if ( curr_dirSize > wSectorSize )
   {
     free( pCurr_dir_cache );
-    pCurr_dir_cache = (char*)malloc( 16 * from_733(isodir.size) );
+    pCurr_dir_cache = reinterpret_cast<char*>(malloc( 16 * from_733(isodir.size) ));
     if (!pCurr_dir_cache ) {
       return nullptr;
 }
@@ -218,7 +218,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
     m_lastpath = m_paths;
     if ( !m_lastpath )
     {
-      m_paths = (struct iso_directories *)malloc(sizeof(struct iso_directories));
+      m_paths = reinterpret_cast<struct iso_directories *>(malloc(sizeof(struct iso_directories)));
       if (!m_paths )
       {
         free(pCurr_dir_cache);
@@ -237,7 +237,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
 }
     }
   }
-  m_lastpath->next = ( struct iso_directories *)malloc( sizeof( struct iso_directories ) );
+  m_lastpath->next = reinterpret_cast< struct iso_directories *>(malloc( sizeof( struct iso_directories ) ));
   if (!m_lastpath->next )
   {
     free(pCurr_dir_cache);
@@ -247,7 +247,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
   m_lastpath = m_lastpath->next;
   m_lastpath->next = nullptr;
   m_lastpath->dir = pDir;
-  m_lastpath->path = (char *)malloc(strlen(path) + 1);
+  m_lastpath->path = reinterpret_cast<char *>(malloc(strlen(path) + 1));
   if (!m_lastpath->path )
   {
     free(pCurr_dir_cache);
@@ -300,7 +300,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
             temp_text.erase(semipos, temp_text.length() - semipos);
 
 
-          pFile_Pointer->next = (struct iso_dirtree *)malloc(sizeof(struct iso_dirtree));
+          pFile_Pointer->next = reinterpret_cast<struct iso_dirtree *>(malloc(sizeof(struct iso_dirtree)));
           if (!pFile_Pointer->next) {
             break;
 }
@@ -309,7 +309,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
           pFile_Pointer = pFile_Pointer->next;
           pFile_Pointer->next = nullptr;
           pFile_Pointer->dirpointer = nullptr;
-          pFile_Pointer->path = (char *)malloc(strlen(path) + 1);
+          pFile_Pointer->path = reinterpret_cast<char *>(malloc(strlen(path) + 1));
           if (!pFile_Pointer->path)
           {
             free(pCurr_dir_cache);
@@ -390,7 +390,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
           //     if (semipos >= 0)
           //       temp_text.erase(semipos,temp_text.length()-semipos);
 
-          pFile_Pointer->next = (struct iso_dirtree *)malloc(sizeof(struct iso_dirtree));
+          pFile_Pointer->next = reinterpret_cast<struct iso_dirtree *>(malloc(sizeof(struct iso_dirtree)));
           if (!pFile_Pointer->next)
           {
             free(pCurr_dir_cache);
@@ -401,7 +401,7 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
           pFile_Pointer = pFile_Pointer->next;
           pFile_Pointer->next = nullptr;
           pFile_Pointer->dirpointer = nullptr;
-          pFile_Pointer->path = (char *)malloc(strlen(path) + 1);
+          pFile_Pointer->path = reinterpret_cast<char *>(malloc(strlen(path) + 1));
 
           if (!pFile_Pointer->path)
           {
@@ -471,7 +471,7 @@ void iso9660::Scan()
   memset(&m_info, 0, sizeof(m_info));
   m_info.ISO_HANDLE = m_hCDROM ;
   m_info.Curr_dir_cache = nullptr;
-  m_info.Curr_dir = (char*)malloc( 4096 );
+  m_info.Curr_dir = reinterpret_cast<char*>(malloc( 4096 ));
   strcpy( m_info.Curr_dir, "\\" );
 
   CSingleLock lock(m_critSection);
@@ -505,7 +505,7 @@ void iso9660::Scan()
     ::SetFilePointer( m_info.ISO_HANDLE, wSectorSize * from_733(dirPointer->extent), nullptr, FILE_BEGIN );
 
     DWORD lpNumberOfBytesRead;
-    char* pCurr_dir_cache = (char*)malloc( 16*wSectorSize );
+    char* pCurr_dir_cache = reinterpret_cast<char*>(malloc( 16*wSectorSize ));
     iso9660_Directory isodir;
     BOOL bResult = ::ReadFile( m_info.ISO_HANDLE, pCurr_dir_cache, wSectorSize, &lpNumberOfBytesRead, nullptr );
     memcpy( &isodir, pCurr_dir_cache, sizeof(isodir));
@@ -606,7 +606,7 @@ struct iso_dirtree *iso9660::FindFolder( char *Folder )
 {
   char *work;
 
-  work = (char *)malloc(from_723(m_info.iso.logical_block_size));
+  work = reinterpret_cast<char *>(malloc(from_723(m_info.iso.logical_block_size)));
 
   char *temp;
   struct iso_directories *lastpath = nullptr;
@@ -756,7 +756,7 @@ HANDLE iso9660::OpenFile(const char *filename)
   pContext->m_bUseMode2 = false;
   m_info.curr_filepos = 0;
 
-  pointer = (char*)filename;
+  pointer = const_cast<char*>(filename);
   while ( strpbrk( pointer, "\\/" ) ) {
     pointer = strpbrk( pointer, "\\/" ) + 1;
 }
@@ -806,10 +806,10 @@ HANDLE iso9660::OpenFile(const char *filename)
   bool bError;
 
   CSingleLock lock(m_critSection);
-  bError = (CIoSupport::ReadSector(m_info.ISO_HANDLE, pContext->m_dwStartBlock, (char*) & (pContext->m_pBuffer[0])) < 0);
+  bError = (CIoSupport::ReadSector(m_info.ISO_HANDLE, pContext->m_dwStartBlock, reinterpret_cast<char*>( & (pContext->m_pBuffer[0]))) < 0);
   if ( bError )
   {
-    bError = (CIoSupport::ReadSectorMode2(m_info.ISO_HANDLE, pContext->m_dwStartBlock, (char*) & (pContext->m_pBuffer[0])) < 0);
+    bError = (CIoSupport::ReadSectorMode2(m_info.ISO_HANDLE, pContext->m_dwStartBlock, reinterpret_cast<char*>( & (pContext->m_pBuffer[0]))) < 0);
     if ( !bError ) {
       pContext->m_bUseMode2 = true;
 }
@@ -895,11 +895,11 @@ bool iso9660::ReadSectorFromCache(iso9660::isofile* pContext, DWORD sector, uint
       CSingleLock lock(m_critSection);
       if ( pContext->m_bUseMode2 )
       {
-        bError = (CIoSupport::ReadSectorMode2(m_info.ISO_HANDLE, sector, (char*) & (pContext->m_pBuffer[pContext->m_dwCircBuffEnd])) < 0);
+        bError = (CIoSupport::ReadSectorMode2(m_info.ISO_HANDLE, sector, reinterpret_cast<char*>( & (pContext->m_pBuffer[pContext->m_dwCircBuffEnd]))) < 0);
       }
       else
       {
-        bError = (CIoSupport::ReadSector(m_info.ISO_HANDLE, sector, (char*) & (pContext->m_pBuffer[pContext->m_dwCircBuffEnd])) < 0);
+        bError = (CIoSupport::ReadSector(m_info.ISO_HANDLE, sector, reinterpret_cast<char*>( & (pContext->m_pBuffer[pContext->m_dwCircBuffEnd]))) < 0);
       }
     }
     if ( bError ) {
@@ -958,7 +958,7 @@ long iso9660::ReadFile(HANDLE hFile, uint8_t *pBuffer, long lSize)
 
   while (lSize > 0 && pContext->m_dwFilePos < pContext->m_dwFileSize)
   {
-    pContext->m_dwCurrentBlock = (DWORD) (pContext->m_dwFilePos / sectorSize);
+    pContext->m_dwCurrentBlock = static_cast<DWORD> (pContext->m_dwFilePos / sectorSize);
     int64_t iOffsetInBuffer = pContext->m_dwFilePos - (sectorSize * pContext->m_dwCurrentBlock);
     pContext->m_dwCurrentBlock += pContext->m_dwStartBlock;
 
@@ -970,7 +970,7 @@ long iso9660::ReadFile(HANDLE hFile, uint8_t *pBuffer, long lSize)
     {
       DWORD iBytes2Copy = lSize;
       if (iBytes2Copy > (sectorSize - iOffsetInBuffer) ) {
-        iBytes2Copy = (DWORD) (sectorSize - iOffsetInBuffer);
+        iBytes2Copy = static_cast<DWORD> (sectorSize - iOffsetInBuffer);
 }
 
 

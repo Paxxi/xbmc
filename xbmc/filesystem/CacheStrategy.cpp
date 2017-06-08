@@ -222,7 +222,7 @@ int64_t CSimpleFileCache::Seek(int64_t iFilePosition)
   }
 
   int64_t nDiff = iTarget - m_nWritePosition;
-  if (nDiff > 500000 || (nDiff > 0 && WaitForData((unsigned int)(iTarget - m_nReadPosition), 5000) == CACHE_RC_TIMEOUT))
+  if (nDiff > 500000 || (nDiff > 0 && WaitForData(static_cast<unsigned int>(iTarget - m_nReadPosition), 5000) == CACHE_RC_TIMEOUT))
   {
     CLog::Log(LOGDEBUG,"CSimpleFileCache::Seek - Attempt to seek past read data");
     return CACHE_RC_ERROR;

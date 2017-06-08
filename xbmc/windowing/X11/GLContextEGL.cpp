@@ -103,11 +103,11 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
     vMask.visualid = XVisualIDFromVisual(winAttr.visual);
     vInfo = XGetVisualInfo(m_dpy, VisualScreenMask | VisualIDMask, &vMask, &availableVisuals);
     if (!vInfo) {
-      CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", (unsigned) vMask.visualid);
+      CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", static_cast<unsigned>( vMask.visualid));
     } else if(!IsSuitableVisual(vInfo))
     {
       CLog::Log(LOGWARNING, "Visual 0x%x of the window is not suitable, looking for another one...",
-                (unsigned) vInfo->visualid);
+                static_cast<unsigned>( vInfo->visualid));
       vMask.depth = vInfo->depth;
       XFree(vInfo);
       vInfo = nullptr;
@@ -138,7 +138,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
   if (vInfo)
   {
-    CLog::Log(LOGNOTICE, "Using visual 0x%x", (unsigned) vInfo->visualid);
+    CLog::Log(LOGNOTICE, "Using visual 0x%x", static_cast<unsigned>( vInfo->visualid));
 
     if (m_eglContext)
     {
@@ -318,7 +318,7 @@ EGLConfig CGLContextEGL::getEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo)
   }
 
   EGLConfig *eglConfigs;
-  eglConfigs = (EGLConfig*)malloc(numConfigs * sizeof(EGLConfig));
+  eglConfigs = reinterpret_cast<EGLConfig*>(malloc(numConfigs * sizeof(EGLConfig)));
   if (!eglConfigs)
   {
     CLog::Log(LOGERROR, "eglConfigs malloc failed");
@@ -338,7 +338,7 @@ EGLConfig CGLContextEGL::getEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo)
       CLog::Log(LOGERROR, "Failed to query EGL_NATIVE_VISUAL_ID for egl config.");
       break;
     }
-    if (value == (EGLint)vInfo->visualid) {
+    if (value == static_cast<EGLint>(vInfo->visualid)) {
       eglConfig = eglConfigs[i];
       break;
     }
@@ -408,7 +408,7 @@ XVisualInfo* CGLContextEGL::GetVisual()
     m_eglConfig=eglConfig;
 
     XVisualInfo x11_visual_info_template;
-    if (!eglGetConfigAttrib(m_eglDisplay, m_eglConfig, EGL_NATIVE_VISUAL_ID, (EGLint*)&x11_visual_info_template.visualid)) {
+    if (!eglGetConfigAttrib(m_eglDisplay, m_eglConfig, EGL_NATIVE_VISUAL_ID, reinterpret_cast<EGLint*>(&x11_visual_info_template.visualid))) {
       CLog::Log(LOGERROR, "Failed to query native visual id\n");
     }
     int num_visuals;

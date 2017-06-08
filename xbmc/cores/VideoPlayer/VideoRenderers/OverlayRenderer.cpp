@@ -379,10 +379,10 @@ COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
   // scale to video dimensions
   if (overlay)
   {
-    overlay->m_width = (float)targetWidth / videoWidth;
-    overlay->m_height = (float)targetHeight / videoHeight;
-    overlay->m_x = ((float)videoWidth - targetWidth) / 2 / videoWidth;
-    overlay->m_y = ((float)videoHeight - targetHeight) / 2 / videoHeight;
+    overlay->m_width = static_cast<float>(targetWidth) / videoWidth;
+    overlay->m_height = static_cast<float>(targetHeight) / videoHeight;
+    overlay->m_x = (static_cast<float>(videoWidth) - targetWidth) / 2 / videoWidth;
+    overlay->m_y = (static_cast<float>(videoHeight) - targetHeight) / 2 / videoHeight;
   }
   m_textureCache[m_textureid] = overlay;
   o->m_textureid = m_textureid;

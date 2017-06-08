@@ -177,7 +177,7 @@ bool CPartyModeManager::Enable(PartyModeContext context /*= PARTYMODECONTEXT_MUS
   if (m_iMatchingSongs < 50) {
     m_songsInHistory = 0;
   } else {
-    m_songsInHistory = (int)(m_iMatchingSongs/2);
+    m_songsInHistory = (m_iMatchingSongs/2);
 }
   if (m_songsInHistory > 200) {
     m_songsInHistory = 200;
@@ -347,8 +347,8 @@ bool CPartyModeManager::AddRandomSongs(int iSongs /* = 0 */)
     }
     if (iSongs > 1) // grab 70 % songs, 30 % mvids
     {
-      iSongsToAdd = (int).7f*iSongs;
-      iVidsToAdd = (int).3f*iSongs;
+      iSongsToAdd = static_cast<int>(.7f)*iSongs;
+      iVidsToAdd = static_cast<int>(.3f)*iSongs;
       while (iSongsToAdd+iVidsToAdd < iSongs) { // correct any rounding by adding songs
         iSongsToAdd++;
 }

@@ -535,7 +535,7 @@ int64_t CSMBFile::Seek(int64_t iFilePosition, int iWhence)
     return -1;
   }
 
-  return (int64_t)pos;
+  return pos;
 }
 
 void CSMBFile::Close()
@@ -648,7 +648,7 @@ int CSMBFile::IoControl(EIoControl request, void* param)
 
   if (request == IOCTRL_SET_RETRY)
   {
-    m_allowRetry = *(bool*) param;
+    m_allowRetry = *reinterpret_cast<bool*>( param);
     return 0;
   }
 

@@ -91,7 +91,7 @@ bool CGenericTouchSwipeDetector::OnTouchUp(unsigned int index, const Pointer &po
   pointer.velocity(velocityX, velocityY, false);
 
   // call the OnSwipe() callback
-  OnSwipe((TouchMoveDirection)m_directions, pointer.down.x, pointer.down.y, pointer.current.x, pointer.current.y, velocityX, velocityY, m_size + 1);
+  OnSwipe(static_cast<TouchMoveDirection>(m_directions), pointer.down.x, pointer.down.y, pointer.current.x, pointer.current.y, velocityX, velocityY, m_size + 1);
   return true;
 }
 

@@ -53,7 +53,7 @@ float CScrollInfo::GetPixelsPerFrame()
     return 0; // not scrolling
 }
   unsigned int currentTime = CTimeUtils::GetFrameTime();
-  float delta = m_lastFrameTime ? (float)(currentTime - m_lastFrameTime) : m_averageFrameTime;
+  float delta = m_lastFrameTime ? static_cast<float>(currentTime - m_lastFrameTime) : m_averageFrameTime;
   if (delta > 100) {
     delta = 100; // assume a minimum of 10 fps
 }

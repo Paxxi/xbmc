@@ -347,7 +347,7 @@ static void GenerateMainCategoryListing(const CURL& path, const VECADDONS& addon
   std::set<TYPE> uncategorized;
   for (unsigned int i = ADDON_UNKNOWN + 1; i < ADDON_MAX - 1; ++i)
   {
-    const TYPE type = (TYPE)i;
+    const TYPE type = static_cast<TYPE>(i);
     if (!IsInfoProviderType(type) && !IsLookAndFeelType(type) && !IsDependencyType(type) && !IsGameType(type))
       uncategorized.insert(static_cast<TYPE>(i));
   }

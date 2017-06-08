@@ -545,8 +545,8 @@ float CExternalPlayer::GetPercentage()
 
   if (iTotalTime != 0)
   {
-    CLog::Log(LOGDEBUG, "Percentage is %f", (iTime * 100 / (float)iTotalTime));
-    return iTime * 100 / (float)iTotalTime;
+    CLog::Log(LOGDEBUG, "Percentage is %f", (iTime * 100 / static_cast<float>(iTotalTime)));
+    return iTime * 100 / static_cast<float>(iTotalTime);
   }
 
   return 0.0f;
@@ -586,7 +586,7 @@ int64_t CExternalPlayer::GetTime() // in millis
 
 int64_t CExternalPlayer::GetTotalTime() // in milliseconds
 {
-  return (int64_t)m_totalTime * 1000;
+  return static_cast<int64_t>(m_totalTime) * 1000;
 }
 
 void CExternalPlayer::SetSpeed(float iSpeed)

@@ -335,7 +335,7 @@ CAEChannelInfo CAESinkALSA::ALSAchmapToAEChannelMap(snd_pcm_chmap_t* alsaMap)
 snd_pcm_chmap_t* CAESinkALSA::AEChannelMapToALSAchmap(const CAEChannelInfo& info)
 {
   int AECount = info.Count();
-  snd_pcm_chmap_t* alsaMap = (snd_pcm_chmap_t*)malloc(sizeof(snd_pcm_chmap_t) + AECount * sizeof(int));
+  snd_pcm_chmap_t* alsaMap = reinterpret_cast<snd_pcm_chmap_t*>(malloc(sizeof(snd_pcm_chmap_t) + AECount * sizeof(int)));
 
   alsaMap->channels = AECount;
 
@@ -348,7 +348,7 @@ snd_pcm_chmap_t* CAESinkALSA::AEChannelMapToALSAchmap(const CAEChannelInfo& info
 
 snd_pcm_chmap_t* CAESinkALSA::CopyALSAchmap(snd_pcm_chmap_t* alsaMap)
 {
-  snd_pcm_chmap_t* copyMap = (snd_pcm_chmap_t*)malloc(sizeof(snd_pcm_chmap_t) + alsaMap->channels * sizeof(int));
+  snd_pcm_chmap_t* copyMap = reinterpret_cast<snd_pcm_chmap_t*>(malloc(sizeof(snd_pcm_chmap_t) + alsaMap->channels * sizeof(int)));
 
   copyMap->channels = alsaMap->channels;
   memcpy(copyMap->pos, alsaMap->pos, alsaMap->channels * sizeof(int));
@@ -638,7 +638,7 @@ bool CAESinkALSA::Initialize(AEAudioFormat &format, std::string &device)
   format.m_dataFormat = outconfig.format;
 
   m_format              = format;
-  m_formatSampleRateMul = 1.0 / (double)m_format.m_sampleRate;
+  m_formatSampleRateMul = 1.0 / static_cast<double>(m_format.m_sampleRate);
 
   return true;
 }
@@ -714,7 +714,7 @@ bool CAESinkALSA::InitializeHW(const ALSAConfig &inconfig, ALSAConfig &outconfig
   {
     /* if the chosen format is not supported, try each one in descending order */
     CLog::Log(LOGINFO, "CAESinkALSA::InitializeHW - Your hardware does not support %s, trying other formats", CAEUtil::DataFormatToStr(outconfig.format));
-    for (enum AEDataFormat i = AE_FMT_MAX; i > AE_FMT_INVALID; i = (enum AEDataFormat)((int)i - 1))
+    for (enum AEDataFormat i = AE_FMT_MAX; i > AE_FMT_INVALID; i = static_cast<enum AEDataFormat>(static_cast<int>(i) - 1))
     {
       if (i == AE_FMT_RAW || i == AE_FMT_MAX) {
         continue;
@@ -848,8 +848,8 @@ bool CAESinkALSA::InitializeHW(const ALSAConfig &inconfig, ALSAConfig &outconfig
   unsigned int fragments = 1;
   if (periodSize < AE_MIN_PERIODSIZE)
   {
-    fragments = std::ceil((double) AE_MIN_PERIODSIZE / periodSize);
-    CLog::Log(LOGDEBUG, "Audio Driver reports too low periodSize %d - will use %d fragments", (int) periodSize, (int) fragments);
+    fragments = std::ceil(static_cast<double>( AE_MIN_PERIODSIZE) / periodSize);
+    CLog::Log(LOGDEBUG, "Audio Driver reports too low periodSize %d - will use %d fragments", static_cast<int>( periodSize), static_cast<int>( fragments));
     m_fragmented = true;
   }
 
@@ -857,8 +857,8 @@ bool CAESinkALSA::InitializeHW(const ALSAConfig &inconfig, ALSAConfig &outconfig
   outconfig.periodSize   = fragments * periodSize;
   outconfig.frameSize    = snd_pcm_frames_to_bytes(m_pcm, 1);
 
-  m_bufferSize = (unsigned int)bufferSize;
-  m_timeout    = std::ceil((double)(bufferSize * 1000) / (double)sampleRate);
+  m_bufferSize = static_cast<unsigned int>(bufferSize);
+  m_timeout    = std::ceil(static_cast<double>(bufferSize * 1000) / static_cast<double>(sampleRate));
 
   CLog::Log(LOGDEBUG, "CAESinkALSA::InitializeHW - Setting timeout to %d ms", m_timeout);
 
@@ -925,12 +925,12 @@ void CAESinkALSA::GetDelay(AEDelayStatus& status)
     frames = 0;
   }
 
-  status.SetDelay((double)frames * m_formatSampleRateMul);
+  status.SetDelay(static_cast<double>(frames) * m_formatSampleRateMul);
 }
 
 double CAESinkALSA::GetCacheTotal()
 {
-  return (double)m_bufferSize * m_formatSampleRateMul;
+  return static_cast<double>(m_bufferSize) * m_formatSampleRateMul;
 }
 
 unsigned int CAESinkALSA::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
@@ -943,7 +943,7 @@ unsigned int CAESinkALSA::AddPackets(uint8_t **data, unsigned int frames, unsign
 
   void *buffer = data[0]+offset*m_format.m_frameSize;
   unsigned int amount = 0;
-  int64_t data_left = (int64_t) frames;
+  int64_t data_left = static_cast<int64_t>( frames);
   int frames_written = 0;
 
   while (data_left > 0)
@@ -951,7 +951,7 @@ unsigned int CAESinkALSA::AddPackets(uint8_t **data, unsigned int frames, unsign
     if (m_fragmented) {
       amount = std::min((unsigned int) data_left, m_originalPeriodSize);
     } else { // take care as we can come here a second time if the sink does not eat all data
-      amount = (unsigned int) data_left;
+      amount = static_cast<unsigned int>( data_left);
 }
 
     int ret = snd_pcm_writei(m_pcm, buffer, amount);
@@ -1571,7 +1571,7 @@ void CAESinkALSA::EnumerateDevice(AEDeviceInfoList &list, const std::string &dev
   info.m_channels.ResolveChannels(alsaChannels);
 
   /* detect the PCM sample formats that are available */
-  for (enum AEDataFormat i = AE_FMT_MAX; i > AE_FMT_INVALID; i = (enum AEDataFormat)((int)i - 1))
+  for (enum AEDataFormat i = AE_FMT_MAX; i > AE_FMT_INVALID; i = static_cast<enum AEDataFormat>(static_cast<int>(i) - 1))
   {
     if (i == AE_FMT_RAW || i == AE_FMT_MAX) {
       continue;

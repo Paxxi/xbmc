@@ -614,7 +614,7 @@ void CActiveAEDSPAddon::cb_sound_play_play(void *kodiInstance, ADSPHANDLE handle
     CLog::Log(LOGERROR, "Audio DSP - %s - invalid sound play data", __FUNCTION__);
     return;
   }
-  ((IAESound*)handle)->Play();
+  (reinterpret_cast<IAESound*>(handle))->Play();
 }
 
 void CActiveAEDSPAddon::cb_sound_play_stop(void *kodiInstance, ADSPHANDLE handle)
@@ -625,7 +625,7 @@ void CActiveAEDSPAddon::cb_sound_play_stop(void *kodiInstance, ADSPHANDLE handle
     CLog::Log(LOGERROR, "Audio DSP - %s - invalid sound play data", __FUNCTION__);
     return;
   }
-  ((IAESound*)handle)->Stop();
+  (reinterpret_cast<IAESound*>(handle))->Stop();
 }
 
 bool CActiveAEDSPAddon::cb_sound_play_is_playing(void *kodiInstance, ADSPHANDLE handle)
@@ -636,7 +636,7 @@ bool CActiveAEDSPAddon::cb_sound_play_is_playing(void *kodiInstance, ADSPHANDLE 
     CLog::Log(LOGERROR, "Audio DSP - %s - invalid sound play data", __FUNCTION__);
     return false;
   }
-  return ((IAESound*)handle)->IsPlaying();
+  return (reinterpret_cast<IAESound*>(handle))->IsPlaying();
 }
 
 void CActiveAEDSPAddon::cb_sound_play_set_channel(void *kodiInstance, ADSPHANDLE handle, AE_DSP_CHANNEL channel)
@@ -648,7 +648,7 @@ void CActiveAEDSPAddon::cb_sound_play_set_channel(void *kodiInstance, ADSPHANDLE
     return;
   }
 
-  ((IAESound*)handle)->SetChannel(CActiveAEDSP::GetKODIChannel(channel));
+  (reinterpret_cast<IAESound*>(handle))->SetChannel(CActiveAEDSP::GetKODIChannel(channel));
 }
 
 AE_DSP_CHANNEL CActiveAEDSPAddon::cb_sound_play_get_channel(void *kodiInstance, ADSPHANDLE handle)
@@ -660,7 +660,7 @@ AE_DSP_CHANNEL CActiveAEDSPAddon::cb_sound_play_get_channel(void *kodiInstance, 
     return AE_DSP_CH_INVALID;
   }
 
-  return CActiveAEDSP::GetDSPChannel(((IAESound*)handle)->GetChannel());
+  return CActiveAEDSP::GetDSPChannel((reinterpret_cast<IAESound*>(handle))->GetChannel());
 }
 
 void CActiveAEDSPAddon::cb_sound_play_set_volume(void *kodiInstance, ADSPHANDLE handle, float volume)
@@ -672,7 +672,7 @@ void CActiveAEDSPAddon::cb_sound_play_set_volume(void *kodiInstance, ADSPHANDLE 
     return;
   }
 
-  ((IAESound*)handle)->SetVolume(volume);
+  (reinterpret_cast<IAESound*>(handle))->SetVolume(volume);
 }
 
 float CActiveAEDSPAddon::cb_sound_play_get_volume(void *kodiInstance, ADSPHANDLE handle)
@@ -684,5 +684,5 @@ float CActiveAEDSPAddon::cb_sound_play_get_volume(void *kodiInstance, ADSPHANDLE
     return 0.0f;
   }
 
-  return ((IAESound*)handle)->GetVolume();
+  return (reinterpret_cast<IAESound*>(handle))->GetVolume();
 }

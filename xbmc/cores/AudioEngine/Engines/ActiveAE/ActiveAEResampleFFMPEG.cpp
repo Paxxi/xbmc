@@ -117,7 +117,7 @@ bool CActiveAEResampleFFMPEG::Init(uint64_t dst_chan_layout, int dst_channels, i
     m_dst_chan_layout = 0;
     for (unsigned int out=0; out<remapLayout->Count(); out++)
     {
-      m_dst_chan_layout += ((uint64_t)1) << out;
+      m_dst_chan_layout += (static_cast<uint64_t>(1)) << out;
       int idx = CAEUtil::GetAVChannelIndex((*remapLayout)[out], m_src_chan_layout);
       if (idx >= 0)
       {
@@ -128,7 +128,7 @@ bool CActiveAEResampleFFMPEG::Init(uint64_t dst_chan_layout, int dst_channels, i
     av_opt_set_int(m_pContext, "out_channel_count", m_dst_channels, 0);
     av_opt_set_int(m_pContext, "out_channel_layout", m_dst_chan_layout, 0);
 
-    if (swr_set_matrix(m_pContext, (const double*)m_rematrix, AE_CH_MAX) < 0)
+    if (swr_set_matrix(m_pContext, reinterpret_cast<const double*>(m_rematrix), AE_CH_MAX) < 0)
     {
       CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - setting channel matrix failed");
       return false;
@@ -166,7 +166,7 @@ bool CActiveAEResampleFFMPEG::Init(uint64_t dst_chan_layout, int dst_channels, i
       }
     }
 
-    if (swr_set_matrix(m_pContext, (const double*)m_rematrix, AE_CH_MAX) < 0)
+    if (swr_set_matrix(m_pContext, reinterpret_cast<const double*>(m_rematrix), AE_CH_MAX) < 0)
     {
       CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - setting channel matrix failed");
       return false;
@@ -249,7 +249,7 @@ int CActiveAEResampleFFMPEG::Resample(uint8_t **dst_buffer, int dst_samples, uin
       int samples = ret * m_dst_channels / planes;
       for (int i=0; i<planes; i++)
       {
-        uint32_t* buf = (uint32_t*)dst_buffer[i];
+        uint32_t* buf = reinterpret_cast<uint32_t*>(dst_buffer[i]);
         for (int j=0; j<samples; j++)
         {
           *buf = *buf >> (32 - m_dst_bits - m_dst_dither_bits);

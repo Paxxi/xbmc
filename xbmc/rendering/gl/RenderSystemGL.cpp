@@ -111,7 +111,7 @@ bool CRenderSystemGL::InitRenderSystem()
   m_renderCaps = 0;
 
   m_RenderExtensions  = " ";
-  m_RenderExtensions += (const char*) glGetString(GL_EXTENSIONS);
+  m_RenderExtensions += reinterpret_cast<const char*>( glGetString(GL_EXTENSIONS));
   m_RenderExtensions += " ";
 
   LogGraphicsInfo();
@@ -120,7 +120,7 @@ bool CRenderSystemGL::InitRenderSystem()
   m_RenderVersionMajor = 0;
   m_RenderVersionMinor = 0;
 
-  const char* ver = (const char*)glGetString(GL_VERSION);
+  const char* ver = reinterpret_cast<const char*>(glGetString(GL_VERSION));
   if (ver != nullptr)
   {
     sscanf(ver, "%d.%d", &m_RenderVersionMajor, &m_RenderVersionMinor);
@@ -129,7 +129,7 @@ bool CRenderSystemGL::InitRenderSystem()
 
   if (IsExtSupported("GL_ARB_shading_language_100"))
   {
-    ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+    ver = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
     if (ver)
     {
       sscanf(ver, "%d.%d", &m_glslMajor, &m_glslMinor);
@@ -142,12 +142,12 @@ bool CRenderSystemGL::InitRenderSystem()
   }
 
   // Get our driver vendor and renderer
-  const char* tmpVendor = (const char*) glGetString(GL_VENDOR);
+  const char* tmpVendor = reinterpret_cast<const char*>( glGetString(GL_VENDOR));
   m_RenderVendor.clear();
   if (tmpVendor != NULL)
     m_RenderVendor = tmpVendor;
 
-  const char* tmpRenderer = (const char*) glGetString(GL_RENDERER);
+  const char* tmpRenderer = reinterpret_cast<const char*>( glGetString(GL_RENDERER));
   m_RenderRenderer.clear();
   if (tmpRenderer != NULL)
     m_RenderRenderer = tmpRenderer;
@@ -212,7 +212,7 @@ bool CRenderSystemGL::ResetRenderSystem(int width, int height, bool fullScreen, 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
-      CLog::Log(LOGERROR, "ResetRenderSystem() GL_MAX_TEXTURE_IMAGE_UNITS_ARB returned error %i", (int)error);
+      CLog::Log(LOGERROR, "ResetRenderSystem() GL_MAX_TEXTURE_IMAGE_UNITS_ARB returned error %i", static_cast<int>(error));
       maxtex = 3;
     }
     else if (maxtex < 1 || maxtex > 32)
@@ -378,8 +378,8 @@ void CRenderSystemGL::SetCameraPosition(const CPoint &camera, int screenWidth, i
   CPoint offset = camera - CPoint(screenWidth*0.5f, screenHeight*0.5f);
 
 
-  float w = (float)m_viewPort[2]*0.5f;
-  float h = (float)m_viewPort[3]*0.5f;
+  float w = static_cast<float>(m_viewPort[2])*0.5f;
+  float h = static_cast<float>(m_viewPort[3])*0.5f;
 
   glMatrixModview->LoadIdentity();
   glMatrixModview->Translatef(-(w + offset.x - stereoFactor), +(h + offset.y), 0);
@@ -397,7 +397,7 @@ void CRenderSystemGL::Project(float &x, float &y, float &z)
   if (CMatrixGL::Project(x, y, z, glMatrixModview.Get(), glMatrixProject.Get(), m_viewPort, &coordX, &coordY, &coordZ))
   {
     x = coordX;
-    y = (float)(m_viewPort[1] + m_viewPort[3] - coordY);
+    y = (m_viewPort[1] + m_viewPort[3] - coordY);
     z = 0;
   }
 }

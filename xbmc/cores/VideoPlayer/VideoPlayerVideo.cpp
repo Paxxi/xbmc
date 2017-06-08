@@ -183,7 +183,7 @@ void CVideoPlayerVideo::OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec)
   //reported fps is usually not completely correct
   if (hint.fpsrate && hint.fpsscale)
   {
-    m_fFrameRate = DVD_TIME_BASE / CDVDCodecUtils::NormalizeFrameduration((double)DVD_TIME_BASE * hint.fpsscale / hint.fpsrate);
+    m_fFrameRate = DVD_TIME_BASE / CDVDCodecUtils::NormalizeFrameduration(static_cast<double>(DVD_TIME_BASE) * hint.fpsscale / hint.fpsrate);
     m_bFpsInvalid = false;
     m_processInfo.SetVideoFps(static_cast<float>(m_fFrameRate));
   }
@@ -202,7 +202,7 @@ void CVideoPlayerVideo::OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec)
 
   if( m_fFrameRate > 120 || m_fFrameRate < 5 )
   {
-    CLog::Log(LOGERROR, "CVideoPlayerVideo::OpenStream - Invalid framerate %d, using forced 25fps and just trust timestamps", (int)m_fFrameRate);
+    CLog::Log(LOGERROR, "CVideoPlayerVideo::OpenStream - Invalid framerate %d, using forced 25fps and just trust timestamps", static_cast<int>(m_fFrameRate));
     m_fFrameRate = 25;
   }
 
@@ -291,7 +291,7 @@ void CVideoPlayerVideo::Process()
   memset(&m_picture, 0, sizeof(VideoPicture));
 
   double pts = 0;
-  double frametime = (double)DVD_TIME_BASE / m_fFrameRate;
+  double frametime = static_cast<double>(DVD_TIME_BASE) / m_fFrameRate;
 
   bool bRequestDrop = false;
   int iDropDirective;
@@ -619,7 +619,7 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(double &frametime, double &pts)
 
     // use forced aspect if any
     if( m_fForcedAspectRatio != 0.0f ) {
-      m_picture.iDisplayWidth = (int) (m_picture.iDisplayHeight * m_fForcedAspectRatio);
+      m_picture.iDisplayWidth = static_cast<int> (m_picture.iDisplayHeight * m_fForcedAspectRatio);
 }
 
     // if frame has a pts (usually originiating from demux packet), use that
@@ -637,7 +637,7 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(double &frametime, double &pts)
 
     int iResult = OutputPicture(&m_picture, pts + extraDelay);
 
-    frametime = (double)DVD_TIME_BASE / m_fFrameRate;
+    frametime = static_cast<double>(DVD_TIME_BASE) / m_fFrameRate;
 
     if (m_syncState == IDVDStreamPlayer::SYNC_STARTING &&
         !(iResult & EOS_DROPPED) &&
@@ -949,7 +949,7 @@ std::string CVideoPlayerVideo::GetPlayerInfo()
 
 int CVideoPlayerVideo::GetVideoBitrate()
 {
-  return (int)m_videoStats.GetBitrate();
+  return static_cast<int>(m_videoStats.GetBitrate());
 }
 
 void CVideoPlayerVideo::ResetFrameRateCalc()

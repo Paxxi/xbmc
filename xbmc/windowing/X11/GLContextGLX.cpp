@@ -66,11 +66,11 @@ bool CGLContextGLX::Refresh(bool force, int screen, Window glWindow, bool &newCo
     vMask.visualid = XVisualIDFromVisual(winAttr.visual);
     vInfo = XGetVisualInfo(m_dpy, VisualScreenMask | VisualIDMask, &vMask, &availableVisuals);
     if (!vInfo) {
-      CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", (unsigned) vMask.visualid);
+      CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", static_cast<unsigned>( vMask.visualid));
     } else if(!IsSuitableVisual(vInfo))
     {
       CLog::Log(LOGWARNING, "Visual 0x%x of the window is not suitable, looking for another one...",
-                (unsigned) vInfo->visualid);
+                static_cast<unsigned>( vInfo->visualid));
       vMask.depth = vInfo->depth;
       XFree(vInfo);
       vInfo = nullptr;
@@ -101,7 +101,7 @@ bool CGLContextGLX::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
   if (vInfo)
   {
-    CLog::Log(LOGNOTICE, "Using visual 0x%x", (unsigned) vInfo->visualid);
+    CLog::Log(LOGNOTICE, "Using visual 0x%x", static_cast<unsigned>( vInfo->visualid));
     if (m_glxContext)
     {
       glXMakeCurrent(m_dpy, None, nullptr);
@@ -290,31 +290,31 @@ void CGLContextGLX::SwapBuffers()
 void CGLContextGLX::QueryExtensions()
 {
   m_extensions  = " ";
-  m_extensions += (const char*)glXQueryExtensionsString(m_dpy, m_nScreen);
+  m_extensions += glXQueryExtensionsString(m_dpy, m_nScreen);
   m_extensions += " ";
 
   CLog::Log(LOGDEBUG, "GLX_EXTENSIONS:%s", m_extensions.c_str());
 
   if (IsExtSupported("GLX_SGI_video_sync")) {
-    m_glXWaitVideoSyncSGI = (int (*)(int, int, unsigned int*))glXGetProcAddress((const GLubyte*)"glXWaitVideoSyncSGI");
+    m_glXWaitVideoSyncSGI = reinterpret_cast<int (*)(int, int, unsigned int*)>(glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXWaitVideoSyncSGI")));
   } else {
     m_glXWaitVideoSyncSGI = nullptr;
 }
 
   if (IsExtSupported("GLX_SGI_video_sync")) {
-    m_glXGetVideoSyncSGI = (int (*)(unsigned int*))glXGetProcAddress((const GLubyte*)"glXGetVideoSyncSGI");
+    m_glXGetVideoSyncSGI = reinterpret_cast<int (*)(unsigned int*)>(glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXGetVideoSyncSGI")));
   } else {
     m_glXGetVideoSyncSGI = nullptr;
 }
 
   if (IsExtSupported("GLX_MESA_swap_control")) {
-    m_glXSwapIntervalMESA = (int (*)(int))glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
+    m_glXSwapIntervalMESA = reinterpret_cast<int (*)(int)>(glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXSwapIntervalMESA")));
   } else {
     m_glXSwapIntervalMESA = nullptr;
 }
 
   if (IsExtSupported("GLX_EXT_swap_control")) {
-    m_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+    m_glXSwapIntervalEXT = reinterpret_cast<PFNGLXSWAPINTERVALEXTPROC>(glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXSwapIntervalEXT")));
   } else {
     m_glXSwapIntervalEXT = nullptr;
 }

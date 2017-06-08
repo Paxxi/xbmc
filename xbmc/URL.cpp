@@ -682,7 +682,7 @@ std::string CURL::Decode(const std::string& strURLData)
           strResult += kar;
         } else
         {
-          strResult += (char)dec_num;
+          strResult += static_cast<char>(dec_num);
           i += 2;
         }
       }

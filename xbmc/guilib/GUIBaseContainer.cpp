@@ -302,7 +302,7 @@ bool CGUIBaseContainer::OnAction(const CAction &action)
 {
   if (action.GetID() >= KEY_ASCII)
   {
-    OnJumpLetter((char)(action.GetID() & 0xff));
+    OnJumpLetter(static_cast<char>(action.GetID() & 0xff));
     return true;
   }
   // stop the timer on any other action
@@ -422,7 +422,7 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
       if (message.GetMessage() == GUI_MSG_LABEL_BIND && message.GetPointer())
       { // bind our items
         Reset();
-        CFileItemList *items = (CFileItemList *)message.GetPointer();
+        CFileItemList *items = reinterpret_cast<CFileItemList *>(message.GetPointer());
         for (int i = 0; i < items->Size(); i++)
           m_items.push_back(items->Get(i));
         UpdateLayout(true); // true to refresh all items
@@ -463,7 +463,7 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
     {
       if (message.GetSenderId() == m_pageControl && IsVisible())
       { // update our page if we're visible - not much point otherwise
-        if ((int)message.GetParam1() != GetOffset()) {
+        if (message.GetParam1() != GetOffset()) {
           m_pageChangeTimer.StartZero();
 }
         ScrollToOffset(message.GetParam1());
@@ -477,7 +477,7 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
     }
     else if (message.GetMessage() == GUI_MSG_MOVE_OFFSET)
     {
-      int count = (int)message.GetParam1();
+      int count = message.GetParam1();
       while (count < 0)
       {
         MoveUp(true);
@@ -763,7 +763,7 @@ EVENT_RESULT CGUIBaseContainer::OnMouseEvent(const CPoint &point, const CMouseEv
     // and compute the nearest offset from this and scroll there
     float size = (m_layout) ? m_layout->Size(m_orientation) : 10.0f;
     float offset = m_scroller.GetValue() / size;
-    int toOffset = (int)MathUtils::round_int(offset);
+    int toOffset = MathUtils::round_int(offset);
     if (toOffset < offset) {
       SetOffset(toOffset+1);
     } else {
@@ -1264,7 +1264,7 @@ bool CGUIBaseContainer::GetCondition(int condition, int data) const
   case CONTAINER_SUBITEM:
     {
       CGUIListItemLayout *layout = GetFocusedLayout();
-      return layout ? (layout->GetFocusedItem() == (unsigned int)data) : false;
+      return layout ? (layout->GetFocusedItem() == static_cast<unsigned int>(data)) : false;
     }
   case CONTAINER_SCROLLING:
     return ((m_scrollTimer.IsRunning() && m_scrollTimer.GetElapsedMilliseconds() > std::max(m_scroller.GetDuration(), SCROLLING_THRESHOLD)) || m_pageChangeTimer.IsRunning());
@@ -1363,7 +1363,7 @@ std::string CGUIBaseContainer::GetLabel(int info) const
 
 int CGUIBaseContainer::GetCurrentPage() const
 {
-  if (GetOffset() + m_itemsPerPage >= (int)GetRows()) {  // last page
+  if (GetOffset() + m_itemsPerPage >= static_cast<int>(GetRows())) {  // last page
     return (GetRows() + m_itemsPerPage - 1) / m_itemsPerPage;
 }
   return GetOffset() / m_itemsPerPage + 1;

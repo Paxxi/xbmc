@@ -133,7 +133,7 @@ CLinuxRendererGL::CLinuxRendererGL()
   m_pYUVShader = nullptr;
   m_pVideoFilterShader = nullptr;
   m_scalingMethod = VS_SCALINGMETHOD_LINEAR;
-  m_scalingMethodGui = (ESCALINGMETHOD)-1;
+  m_scalingMethodGui = static_cast<ESCALINGMETHOD>(-1);
   m_useDithering = CServiceBroker::GetSettings().GetBool("videoscreen.dither");
   m_ditherDepth = CServiceBroker::GetSettings().GetInt("videoscreen.ditherdepth");
   m_fullRange = !g_Windowing.UseLimitedColor();
@@ -248,7 +248,7 @@ bool CLinuxRendererGL::ValidateRenderTarget()
 }
 
     // trigger update of video filters
-    m_scalingMethodGui = (ESCALINGMETHOD)-1;
+    m_scalingMethodGui = static_cast<ESCALINGMETHOD>(-1);
 
      // create the yuv textures
     UpdateVideoFilter();
@@ -291,7 +291,7 @@ bool CLinuxRendererGL::Configure(unsigned int width, unsigned int height, unsign
 
   m_bConfigured = true;
   m_bImageReady = false;
-  m_scalingMethodGui = (ESCALINGMETHOD)-1;
+  m_scalingMethodGui = static_cast<ESCALINGMETHOD>(-1);
 
   // Ensure that textures are recreated and rendering starts only after the 1st
   // frame is loaded after every call to Configure().
@@ -540,14 +540,14 @@ void CLinuxRendererGL::LoadPlane( YUVPLANE& plane, int type, unsigned flipindex
     glTexSubImage2D( m_textureTarget, 0
                    , 0, height, width, 1
                    , type, datatype
-                   , (unsigned char*)data + stride * (height-1));
+                   , reinterpret_cast<unsigned char*>(data) + stride * (height-1));
 }
 
   if(width  < plane.texwidth) {
     glTexSubImage2D( m_textureTarget, 0
                    , width, 0, 1, height
                    , type, datatype
-                   , (unsigned char*)data + bps * (width-1));
+                   , reinterpret_cast<unsigned char*>(data) + bps * (width-1));
 }
 
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
@@ -592,7 +592,7 @@ void CLinuxRendererGL::Update()
     return;
 }
   ManageRenderArea();
-  m_scalingMethodGui = (ESCALINGMETHOD)-1;
+  m_scalingMethodGui = static_cast<ESCALINGMETHOD>(-1);
 
   ValidateRenderTarget();
 }
@@ -829,7 +829,7 @@ void CLinuxRendererGL::UpdateVideoFilter()
 
   if(!Supports(m_scalingMethod))
   {
-    CLog::Log(LOGWARNING, "CLinuxRendererGL::UpdateVideoFilter - chosen scaling method %d, is not supported by renderer", (int)m_scalingMethod);
+    CLog::Log(LOGWARNING, "CLinuxRendererGL::UpdateVideoFilter - chosen scaling method %d, is not supported by renderer", static_cast<int>(m_scalingMethod));
     m_scalingMethod = VS_SCALINGMETHOD_LINEAR;
   }
 
@@ -1769,7 +1769,7 @@ bool CLinuxRendererGL::CreateYV12Texture(int index)
       void* pboPtr = glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
       if (pboPtr)
       {
-        im.plane[i] = (BYTE*) pboPtr + PBO_OFFSET;
+        im.plane[i] = reinterpret_cast<BYTE*>( pboPtr) + PBO_OFFSET;
         memset(im.plane[i], 0, im.planesize[i]);
       }
       else
@@ -2110,7 +2110,7 @@ bool CLinuxRendererGL::CreateNV12Texture(int index)
       void* pboPtr = glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
       if (pboPtr)
       {
-        im.plane[i] = (BYTE*)pboPtr + PBO_OFFSET;
+        im.plane[i] = reinterpret_cast<BYTE*>(pboPtr) + PBO_OFFSET;
         memset(im.plane[i], 0, im.planesize[i]);
       }
       else
@@ -2397,7 +2397,7 @@ bool CLinuxRendererGL::CreateYUV422PackedTexture(int index)
     void* pboPtr = glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
     if (pboPtr)
     {
-      im.plane[0] = (BYTE*)pboPtr + PBO_OFFSET;
+      im.plane[0] = reinterpret_cast<BYTE*>(pboPtr) + PBO_OFFSET;
       memset(im.plane[0], 0, im.planesize[0]);
     }
     else
@@ -2631,7 +2631,7 @@ void CLinuxRendererGL::UnBindPbo(YUVBUFFER& buff)
 
     glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, buff.pbo[plane]);
     glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, buff.image.planesize[plane] + PBO_OFFSET, nullptr, GL_STREAM_DRAW_ARB);
-    buff.image.plane[plane] = (BYTE*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB) + PBO_OFFSET;
+    buff.image.plane[plane] = reinterpret_cast<BYTE*>(glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB)) + PBO_OFFSET;
   }
   if(pbo) {
     glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);

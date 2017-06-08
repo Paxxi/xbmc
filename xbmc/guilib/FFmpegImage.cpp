@@ -53,7 +53,7 @@ Frame::Frame(const Frame& src) :
 {
   if (src.m_pImage)
   {
-    m_pImage = (unsigned char*) av_malloc(m_imageSize);
+    m_pImage = reinterpret_cast<unsigned char*>( av_malloc(m_imageSize));
     memcpy(m_pImage, src.m_pImage, m_imageSize);
   }
 }
@@ -179,7 +179,7 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
 
 bool CFFmpegImage::Initialize(unsigned char* buffer, unsigned int bufSize)
 {
-  uint8_t* fbuffer = (uint8_t*)av_malloc(FFMPEG_FILE_BUFFER_SIZE + FF_INPUT_BUFFER_PADDING_SIZE);
+  uint8_t* fbuffer = reinterpret_cast<uint8_t*>(av_malloc(FFMPEG_FILE_BUFFER_SIZE + FF_INPUT_BUFFER_PADDING_SIZE));
   if (!fbuffer)
   {
     CLog::LogFunction(LOGERROR, __FUNCTION__, "Could not allocate FFMPEG_FILE_BUFFER_SIZE");
@@ -335,7 +335,7 @@ AVFrame* CFFmpegImage::ExtractFrame()
       // only values between including 0 and including 8
       // http://sylvana.net/jpegcrop/exif_orientation.html
       if (orientation >= 0 && orientation <= 8) {
-        m_orientation = (unsigned int)orientation;
+        m_orientation = static_cast<unsigned int>(orientation);
 }
     }
   }
@@ -473,7 +473,7 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
     CLog::Log(LOGDEBUG, "Alignment of external buffer is not suitable for ffmpeg intrinsics - please fix your malloc");
 }
 
-  if (aligned && size == pixelsSize && (int)pitch == pictureRGB->linesize[0])
+  if (aligned && size == pixelsSize && static_cast<int>(pitch) == pictureRGB->linesize[0])
   {
     // We can use the pixels buffer directly
     pictureRGB->data[0] = pixels;
@@ -500,18 +500,18 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
   AVPixelFormat pixFormat = ConvertFormats(frame);
 
   // assumption quadratic maximums e.g. 2048x2048
-  float ratio = m_width / (float)m_height;
+  float ratio = m_width / static_cast<float>(m_height);
   unsigned int nHeight = m_originalHeight;
   unsigned int nWidth = m_originalWidth;
   if (nHeight > height)
   {
     nHeight = height;
-    nWidth = (unsigned int)(nHeight * ratio + 0.5f);
+    nWidth = static_cast<unsigned int>(nHeight * ratio + 0.5f);
   }
   if (nWidth > width)
   {
     nWidth = width;
-    nHeight = (unsigned int)(nWidth / ratio + 0.5f);
+    nHeight = static_cast<unsigned int>(nWidth / ratio + 0.5f);
   }
 
   struct SwsContext* context = sws_getContext(m_originalWidth, m_originalHeight, pixFormat,
@@ -625,9 +625,9 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
     CleanupLocalOutputBuffer();
     return false;
   }
-  internalBufOutSize = (unsigned int) size;
+  internalBufOutSize = static_cast<unsigned int>( size);
 
-  tdm.intermediateBuffer = (uint8_t*) av_malloc(internalBufOutSize);
+  tdm.intermediateBuffer = reinterpret_cast<uint8_t*>( av_malloc(internalBufOutSize));
   if (!tdm.intermediateBuffer)
   {
     CLog::Log(LOGERROR, "Could not allocate memory for thumbnail: %s", destFile.c_str());
@@ -667,7 +667,7 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
   }
 
   uint8_t* src[] = { bufferin, nullptr, nullptr, nullptr };
-  int srcStride[] = { (int) pitch, 0, 0, 0};
+  int srcStride[] = { static_cast<int>( pitch), 0, 0, 0};
 
   //input size == output size which means only pix_fmt conversion
   tdm.sws = sws_getContext(width, height, AV_PIX_FMT_RGB32, width, height, jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, 0, nullptr, nullptr, nullptr);
@@ -709,9 +709,9 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
   }
   tdm.frame_input->pts = 1;
   tdm.frame_input->quality = tdm.avOutctx->global_quality;
-  tdm.frame_input->data[0] = (uint8_t*) tdm.frame_temporary->data[0];
-  tdm.frame_input->data[1] = (uint8_t*) tdm.frame_temporary->data[1];
-  tdm.frame_input->data[2] = (uint8_t*) tdm.frame_temporary->data[2];
+  tdm.frame_input->data[0] = tdm.frame_temporary->data[0];
+  tdm.frame_input->data[1] = tdm.frame_temporary->data[1];
+  tdm.frame_input->data[2] = tdm.frame_temporary->data[2];
   tdm.frame_input->height = height;
   tdm.frame_input->width = width;
   tdm.frame_input->linesize[0] = tdm.frame_temporary->linesize[0];
@@ -737,7 +737,7 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
   }
 
   bufferoutSize = avpkt.size;
-  m_outputBuffer = (uint8_t*) av_malloc(bufferoutSize);
+  m_outputBuffer = reinterpret_cast<uint8_t*>( av_malloc(bufferoutSize));
   if (!m_outputBuffer)
   {
     CLog::Log(LOGERROR, "Could not generate allocate memory for thumbnail: %s", destFile.c_str());

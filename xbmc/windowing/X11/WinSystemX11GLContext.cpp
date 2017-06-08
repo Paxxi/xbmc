@@ -207,7 +207,7 @@ bool CWinSystemX11GLContext::RefreshGLContext(bool force)
   std::string gpuvendor;
   if (ret)
   {
-    const char* vend = (const char*) glGetString(GL_VENDOR);
+    const char* vend = reinterpret_cast<const char*>( glGetString(GL_VENDOR));
     if (vend)
       gpuvendor = vend;
   }

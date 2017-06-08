@@ -248,12 +248,12 @@ bool CPicture::CacheTexture(uint8_t *pixels, uint32_t width, uint32_t height, ui
     if (buffer)
     {
       if (ScaleImage(pixels, width, height, pitch,
-                     (uint8_t *)buffer, dest_width, dest_height, dest_width * 4,
+                     reinterpret_cast<uint8_t *>(buffer), dest_width, dest_height, dest_width * 4,
                      scalingAlgorithm))
       {
         if (!orientation || OrientateImage(buffer, dest_width, dest_height, orientation))
         {
-          success = CreateThumbnailFromSurface((unsigned char*)buffer, dest_width, dest_height, dest_width * 4, dest);
+          success = CreateThumbnailFromSurface(reinterpret_cast<unsigned char*>(buffer), dest_width, dest_height, dest_width * 4, dest);
         }
       }
       delete[] buffer;
@@ -331,11 +331,11 @@ bool CPicture::CreateTiledThumb(const std::vector<std::string> &files, const std
 
 void CPicture::GetScale(unsigned int width, unsigned int height, unsigned int &out_width, unsigned int &out_height)
 {
-  float aspect = (float)width / height;
-  if ((unsigned int)(out_width / aspect + 0.5f) > out_height) {
-    out_width = (unsigned int)(out_height * aspect + 0.5f);
+  float aspect = static_cast<float>(width) / height;
+  if (static_cast<unsigned int>(out_width / aspect + 0.5f) > out_height) {
+    out_width = static_cast<unsigned int>(out_height * aspect + 0.5f);
   } else {
-    out_height = (unsigned int)(out_width / aspect + 0.5f);
+    out_height = static_cast<unsigned int>(out_width / aspect + 0.5f);
 }
 }
 
@@ -348,9 +348,9 @@ bool CPicture::ScaleImage(uint8_t *in_pixels, unsigned int in_width, unsigned in
                                                          CPictureScalingAlgorithm::ToSwscale(scalingAlgorithm), nullptr, nullptr, nullptr);
 
   uint8_t *src[] = { in_pixels, nullptr, nullptr, nullptr };
-  int     srcStride[] = { (int)in_pitch, 0, 0, 0 };
+  int     srcStride[] = { static_cast<int>(in_pitch), 0, 0, 0 };
   uint8_t *dst[] = { out_pixels , nullptr, nullptr, nullptr };
-  int     dstStride[] = { (int)out_pitch, 0, 0, 0 };
+  int     dstStride[] = { static_cast<int>(out_pitch), 0, 0, 0 };
 
   if (context)
   {

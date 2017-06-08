@@ -94,10 +94,10 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
   // get the <level>
   int level = -1;
   if (XMLUtils::GetInt(node, SETTING_XML_ELM_LEVEL, level)) {
-    m_level = (SettingLevel)level;
+    m_level = static_cast<SettingLevel>(level);
 }
     
-  if (m_level < (int)SettingLevelBasic || m_level > (int)SettingLevelInternal) {
+  if (m_level < static_cast<int>(SettingLevelBasic) || m_level > static_cast<int>(SettingLevelInternal)) {
     m_level = SettingLevelStandard;
 }
 

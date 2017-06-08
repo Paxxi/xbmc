@@ -30,7 +30,7 @@ namespace PythonBindings
   TypeInfo::TypeInfo(const std::type_info& ti) : swigType(nullptr), parentType(nullptr), typeIndex(ti)
   {
     static PyTypeObject py_type_object_header = { PyObject_HEAD_INIT(nullptr) 0};
-    static int size = (long*)&(py_type_object_header.tp_name) - (long*)&py_type_object_header;
+    static int size = reinterpret_cast<long*>(&(py_type_object_header.tp_name)) - reinterpret_cast<long*>(&py_type_object_header);
     memcpy(&(this->pythonType), &py_type_object_header, size);
   }
 
@@ -275,7 +275,7 @@ namespace PythonBindings
                                  methodNameForErrorString,expectedType,typeInfo->swigType);
 }
     }
-    return ((PyHolder*)pythonObj)->pSelf;
+    return (const_cast<PyHolder*>(pythonObj))->pSelf;
   }
 
   /**
@@ -368,9 +368,9 @@ namespace PythonBindings
 
     // retrieve the TypeInfo from the api class
     const TypeInfo* typeInfo = getTypeInfoForInstance(api);
-    PyTypeObject* typeObj = pytype == nullptr ? (PyTypeObject*)(&(typeInfo->pythonType)) : pytype;
+    PyTypeObject* typeObj = pytype == nullptr ? const_cast<PyTypeObject*>(&(typeInfo->pythonType)) : pytype;
 
-    PyHolder* self = (PyHolder*)typeObj->tp_alloc(typeObj,0);
+    PyHolder* self = reinterpret_cast<PyHolder*>(typeObj->tp_alloc(typeObj,0));
     if (!self) return nullptr;
     self->magicNumber = XBMC_PYTHON_TYPE_MAGIC_NUMBER;
     self->typeInfo = typeInfo;
@@ -378,7 +378,7 @@ namespace PythonBindings
     if (incrementRefCount) {
       Py_INCREF((PyObject*)self);
 }
-    return (PyObject*)self;
+    return reinterpret_cast<PyObject*>(self);
   }
 
   std::map<std::type_index, const TypeInfo*> typeInfoLookup;

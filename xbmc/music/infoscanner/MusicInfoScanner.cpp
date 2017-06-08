@@ -514,7 +514,7 @@ bool CMusicInfoScanner::DoScan(const std::string& strDirectory)
     if (m_handle)
     {
       if (m_itemCount>0) {
-        m_handle->SetPercentage(m_currentItem/(float)m_itemCount*100);
+        m_handle->SetPercentage(m_currentItem/static_cast<float>(m_itemCount)*100);
 }
       OnDirectoryScanned(strDirectory);
     }
@@ -569,7 +569,7 @@ INFO_RET CMusicInfoScanner::ScanTags(const CFileItemList& items, CFileItemList& 
     }
 
     if (m_handle && m_itemCount>0) {
-      m_handle->SetPercentage(m_currentItem / (float)m_itemCount * 100);
+      m_handle->SetPercentage(m_currentItem / static_cast<float>(m_itemCount) * 100);
 }
 
     if (!tag.Loaded() && !pItem->HasCueDocument())

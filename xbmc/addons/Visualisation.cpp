@@ -176,7 +176,7 @@ bool CVisualisation::OnAction(VIS_ACTION action, void *param)
     // tags from CMusicInfoTag to VisTag
     if ( action == VIS_ACTION_UPDATE_TRACK && param )
     {
-      const CMusicInfoTag* tag = (const CMusicInfoTag*)param;
+      const CMusicInfoTag* tag = reinterpret_cast<const CMusicInfoTag*>(param);
       std::string artist(tag->GetArtistString());
       std::string albumArtist(tag->GetAlbumArtistString());
       std::string genre(StringUtils::Join(tag->GetGenre(), g_advancedSettings.m_musicItemSeparator));
@@ -197,7 +197,7 @@ bool CVisualisation::OnAction(VIS_ACTION action, void *param)
 
       return m_struct.toAddon.OnAction(action, &track);
     }
-    return m_struct.toAddon.OnAction((int)action, param);
+    return m_struct.toAddon.OnAction(static_cast<int>(action), param);
   }
   return false;
 }

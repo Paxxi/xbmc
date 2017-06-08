@@ -253,7 +253,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   m_bitRate = m_pAudioCodec->GetBitRate();
   if (!m_bitRate && m_TotalTime)
   {
-    m_bitRate = (int)(((m_pInputStream->GetLength()*1000) / m_TotalTime) * 8);
+    m_bitRate = static_cast<int>(((m_pInputStream->GetLength()*1000) / m_TotalTime) * 8);
   }
   m_CodecName = m_pDemuxer->GetStreamCodecName(demuxerId, m_nAudioStream);
 
@@ -334,7 +334,7 @@ bool VideoPlayerCodec::Seek(int64_t iSeekTime)
   // skip mpeg audio frames at playback start
   bool seekback = true;
 
-  bool ret = m_pDemuxer->SeekTime((int)iSeekTime, seekback);
+  bool ret = m_pDemuxer->SeekTime(static_cast<int>(iSeekTime), seekback);
   m_pAudioCodec->Reset();
 
   m_nDecodedLen = 0;

@@ -199,9 +199,9 @@ CDVDInputStreamBluray::CDVDInputStreamBluray(IVideoPlayer* player, const CFileIt
   CDVDInputStream(DVDSTREAM_TYPE_BLURAY, fileitem)
 {
   m_title = nullptr;
-  m_clip  = (uint32_t)-1;
+  m_clip  = static_cast<uint32_t>(-1);
   m_angle = 0;
-  m_playlist = (uint32_t)-1;
+  m_playlist = static_cast<uint32_t>(-1);
   m_menu  = false;
   m_bd    = nullptr;
   m_dll = new DllLibbluray;
@@ -579,7 +579,7 @@ void CDVDInputStreamBluray::ProcessEvent() {
     pid = -1;
     if (m_title && m_title->clip_count > m_clip
         && m_title->clips[m_clip].audio_stream_count
-            > (uint8_t) (m_event.param - 1)) {
+            > static_cast<uint8_t> (m_event.param - 1)) {
       pid = m_title->clips[m_clip].audio_streams[m_event.param - 1].pid;
 }
     CLog::Log(LOGDEBUG, "CDVDInputStreamBluray - BD_EVENT_AUDIO_STREAM %d %d",
@@ -598,7 +598,7 @@ void CDVDInputStreamBluray::ProcessEvent() {
     pid = -1;
     if (m_title && m_title->clip_count > m_clip
         && m_title->clips[m_clip].pg_stream_count
-            > (uint8_t) (m_event.param - 1)) {
+            > static_cast<uint8_t> (m_event.param - 1)) {
       pid = m_title->clips[m_clip].pg_streams[m_event.param - 1].pid;
 }
     CLog::Log(LOGDEBUG,
@@ -662,7 +662,7 @@ void CDVDInputStreamBluray::ProcessEvent() {
 int CDVDInputStreamBluray::Read(uint8_t* buf, int buf_size)
 {
   int result = 0;
-  m_dispTimeBeforeRead = (int)(m_dll->bd_tell_time(m_bd) / 90);
+  m_dispTimeBeforeRead = static_cast<int>(m_dll->bd_tell_time(m_bd) / 90);
   if(m_navmode)
   {
     do {
@@ -731,7 +731,7 @@ int CDVDInputStreamBluray::Read(uint8_t* buf, int buf_size)
 
 static uint8_t  clamp(double v)
 {
-  return (v) > 255.0 ? 255 : ((v) < 0.0 ? 0 : (uint8_t)(v+0.5f));
+  return (v) > 255.0 ? 255 : ((v) < 0.0 ? 0 : static_cast<uint8_t>(v+0.5f));
 }
 
 static uint32_t build_rgba(const BD_PG_PALETTE_ENTRY &e)
@@ -739,10 +739,10 @@ static uint32_t build_rgba(const BD_PG_PALETTE_ENTRY &e)
   double r = 1.164 * (e.Y - 16)                        + 1.596 * (e.Cr - 128);
   double g = 1.164 * (e.Y - 16) - 0.391 * (e.Cb - 128) - 0.813 * (e.Cr - 128);
   double b = 1.164 * (e.Y - 16) + 2.018 * (e.Cb - 128);
-  return (uint32_t)e.T      << PIXEL_ASHIFT
-       | (uint32_t)clamp(r) << PIXEL_RSHIFT
-       | (uint32_t)clamp(g) << PIXEL_GSHIFT
-       | (uint32_t)clamp(b) << PIXEL_BSHIFT;
+  return static_cast<uint32_t>(e.T)      << PIXEL_ASHIFT
+       | static_cast<uint32_t>(clamp(r)) << PIXEL_RSHIFT
+       | static_cast<uint32_t>(clamp(g)) << PIXEL_GSHIFT
+       | static_cast<uint32_t>(clamp(b)) << PIXEL_BSHIFT;
 }
 
 void CDVDInputStreamBluray::OverlayClose()
@@ -814,7 +814,7 @@ void CDVDInputStreamBluray::OverlayFlush(int64_t pts)
 #if(BD_OVERLAY_INTERFACE_VERSION >= 2)
   auto  group   = new CDVDOverlayGroup();
   group->bForced       = true;
-  group->iPTSStartTime = (double) pts;
+  group->iPTSStartTime = static_cast<double>( pts);
   group->iPTSStopTime  = 0;
 
   for(unsigned i = 0; i < 2; ++i)
@@ -963,7 +963,7 @@ void CDVDInputStreamBluray::OverlayCallbackARGB(const struct bd_argb_overlay_s *
 int CDVDInputStreamBluray::GetTotalTime()
 {
   if(m_title) {
-    return (int)(m_title->duration / 90);
+    return static_cast<int>(m_title->duration / 90);
   } else {
     return 0;
 }

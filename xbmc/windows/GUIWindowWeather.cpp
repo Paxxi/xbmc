@@ -229,7 +229,7 @@ void CGUIWindowWeather::FrameMove()
  */
 void CGUIWindowWeather::SetLocation(int loc)
 {
-  if (loc < 1 || loc > (int)m_maxLocation) {
+  if (loc < 1 || loc > static_cast<int>(m_maxLocation)) {
     return;
 }
   // Avoid a settings write if old location == new location

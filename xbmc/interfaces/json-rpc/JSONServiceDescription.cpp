@@ -945,7 +945,7 @@ JSONRPC_STATUS JSONSchemaTypeDefinition::Check(const CVariant &value, CVariant &
     if (value.isDouble()) {
       numberValue = value.asDouble();
     } else {
-      numberValue = (double)value.asInteger();
+      numberValue = static_cast<double>(value.asInteger());
 }
     // Check minimum
     if ((exclusiveMinimum && numberValue <= minimum) || (!exclusiveMinimum && numberValue < minimum) ||
@@ -963,7 +963,7 @@ JSONRPC_STATUS JSONSchemaTypeDefinition::Check(const CVariant &value, CVariant &
       return InvalidParams;
     }
     // Check divisibleBy
-    if ((HasType(type, IntegerValue) && divisibleBy > 0 && ((int)numberValue % divisibleBy) != 0))
+    if ((HasType(type, IntegerValue) && divisibleBy > 0 && (static_cast<int>(numberValue) % divisibleBy) != 0))
     {
       CLog::Log(LOGDEBUG, "JSONRPC: Value does not meet divisibleBy requirements in type %s", name.c_str());
       errorMessage = StringUtils::Format("Value should be divisible by %d but %d received", divisibleBy, (int)numberValue);
@@ -1242,7 +1242,7 @@ bool JsonRpcMethod::Parse(const CVariant &value)
     for (unsigned int index = 0; index < value["transport"].size(); index++)
       transport |= StringToTransportLayer(value["transport"][index].asString());
 
-    transportneed = (TransportLayerCapability)transport;
+    transportneed = static_cast<TransportLayerCapability>(transport);
   }
   else
     transportneed = StringToTransportLayer(value.isMember("transport") ? value["transport"].asString() : "");
@@ -1253,7 +1253,7 @@ bool JsonRpcMethod::Parse(const CVariant &value)
     for (unsigned int index = 0; index < value["permission"].size(); index++)
       permissions |= StringToPermission(value["permission"][index].asString());
 
-    permission = (OperationPermission)permissions;
+    permission = static_cast<OperationPermission>(permissions);
   }
   else
     permission = StringToPermission(value.isMember("permission") ? value["permission"].asString() : "");
@@ -1860,7 +1860,7 @@ JSONRPC_STATUS CJSONServiceDescription::Print(CVariant &result, ITransportLayer 
       for (int i = ReadData; i <= OPERATION_PERMISSION_ALL; i *= 2)
       {
         if ((methodIterator->second.permission & i) == i)
-          permissions.push_back(PermissionToString((OperationPermission)i));
+          permissions.push_back(PermissionToString(static_cast<OperationPermission>(i)));
       }
 
       if (permissions.size() == 1)

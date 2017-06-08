@@ -76,16 +76,16 @@ static float** PickYUVConversionMatrix(unsigned flags)
    switch(CONF_FLAGS_YUVCOEF_MASK(flags))
    {
      case CONF_FLAGS_YUVCOEF_240M:
-       return (float**)yuv_coef_smtp240m; break;
+       return reinterpret_cast<float**>(yuv_coef_smtp240m); break;
      case CONF_FLAGS_YUVCOEF_BT709:
-       return (float**)yuv_coef_bt709; break;
+       return reinterpret_cast<float**>(yuv_coef_bt709); break;
      case CONF_FLAGS_YUVCOEF_BT601:    
-       return (float**)yuv_coef_bt601; break;
+       return reinterpret_cast<float**>(yuv_coef_bt601); break;
      case CONF_FLAGS_YUVCOEF_EBU:
-       return (float**)yuv_coef_ebu; break;
+       return reinterpret_cast<float**>(yuv_coef_ebu); break;
    }
    
-   return (float**)yuv_coef_bt601;
+   return reinterpret_cast<float**>(yuv_coef_bt601);
 }
 
 void CalculateYUVMatrix(TransformMatrix &matrix
@@ -100,7 +100,7 @@ void CalculateYUVMatrix(TransformMatrix &matrix
   matrix *= TransformMatrix::CreateScaler(contrast, contrast, contrast);
   matrix *= TransformMatrix::CreateTranslation(black, black, black);
 
-  float (*conv)[4] = (float (*)[4])PickYUVConversionMatrix(flags);
+  float (*conv)[4] = reinterpret_cast<float (*)[4]>(PickYUVConversionMatrix(flags));
   for(int row = 0; row < 3; row++) {
     for(int col = 0; col < 4; col++) {
       coef.m[row][col] = conv[col][row];
@@ -299,7 +299,7 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
   // keep video levels
   CalculateYUVMatrixGL(matrix, m_flags, m_format, m_black, m_contrast, !m_convertFullRange);
 
-  glUniformMatrix4fv(m_hMatrix, 1, GL_FALSE, (GLfloat*)matrix);
+  glUniformMatrix4fv(m_hMatrix, 1, GL_FALSE, reinterpret_cast<GLfloat*>(matrix));
 #if HAS_GLES == 2
   glUniformMatrix4fv(m_hProj,  1, GL_FALSE, m_proj);
   glUniformMatrix4fv(m_hModel, 1, GL_FALSE, m_model);
@@ -389,8 +389,8 @@ bool YUV2RGBBobShader::OnEnabled()
 }
 
   glUniform1i(m_hField, m_field);
-  glUniform1f(m_hStepX, 1.0f / (float)m_width);
-  glUniform1f(m_hStepY, 1.0f / (float)m_height);
+  glUniform1f(m_hStepX, 1.0f / static_cast<float>(m_width));
+  glUniform1f(m_hStepY, 1.0f / static_cast<float>(m_height));
   VerifyGLState();
   return true;
 }

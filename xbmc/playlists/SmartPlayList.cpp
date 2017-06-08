@@ -238,7 +238,7 @@ bool CSmartPlaylistRule::Validate(const std::string &input, void *data)
     return true;
 }
 
-  CSmartPlaylistRule *rule = (CSmartPlaylistRule*)data;
+  CSmartPlaylistRule *rule = reinterpret_cast<CSmartPlaylistRule*>(data);
 
   // check if there's a validator for this rule
   StringValidation::Validator validator = nullptr;
@@ -958,7 +958,7 @@ std::string CSmartPlaylistRule::FormatWhereClause(const std::string &negate, con
 std::string CSmartPlaylistRule::GetField(int field, const std::string &type) const
 {
   if (field >= FieldUnknown && field < FieldMax) {
-    return DatabaseUtils::GetField((Field)field, CMediaTypes::FromString(type), DatabaseQueryPartWhere);
+    return DatabaseUtils::GetField(static_cast<Field>(field), CMediaTypes::FromString(type), DatabaseQueryPartWhere);
 }
   return "";
 }

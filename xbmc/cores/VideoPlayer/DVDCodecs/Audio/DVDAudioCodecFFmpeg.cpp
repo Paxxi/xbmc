@@ -104,7 +104,7 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
   if( hints.extradata && hints.extrasize > 0 )
   {
-    m_pCodecContext->extradata = (uint8_t*)av_mallocz(hints.extrasize + FF_INPUT_BUFFER_PADDING_SIZE);
+    m_pCodecContext->extradata = reinterpret_cast<uint8_t*>(av_mallocz(hints.extrasize + FF_INPUT_BUFFER_PADDING_SIZE));
     if(m_pCodecContext->extradata)
     {
       m_pCodecContext->extradata_size = hints.extrasize;
@@ -204,14 +204,14 @@ void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
   frame.profile = GetProfile();
   // compute duration.
   if (frame.format.m_sampleRate) {
-    frame.duration = ((double)frame.nb_frames * DVD_TIME_BASE) / frame.format.m_sampleRate;
+    frame.duration = (static_cast<double>(frame.nb_frames) * DVD_TIME_BASE) / frame.format.m_sampleRate;
   } else {
     frame.duration = 0.0;
 }
 
   int64_t bpts = av_frame_get_best_effort_timestamp(m_pFrame);
   if(bpts != AV_NOPTS_VALUE) {
-    frame.pts = (double)bpts * DVD_TIME_BASE / AV_TIME_BASE;
+    frame.pts = static_cast<double>(bpts) * DVD_TIME_BASE / AV_TIME_BASE;
   } else {
     frame.pts = DVD_NOPTS_VALUE;
 }
@@ -231,7 +231,7 @@ int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
         {
           if (sd->type == AV_FRAME_DATA_MATRIXENCODING)
           {
-            m_matrixEncoding = *(enum AVMatrixEncoding*)sd->data;
+            m_matrixEncoding = *reinterpret_cast<enum AVMatrixEncoding*>(sd->data);
           }
         }
       }

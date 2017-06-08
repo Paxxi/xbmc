@@ -45,7 +45,7 @@ CRingBuffer::~CRingBuffer()
 bool CRingBuffer::Create(unsigned int size)
 {
   CSingleLock lock(m_critSection);
-  m_buffer = (char*)malloc(size);
+  m_buffer = reinterpret_cast<char*>(malloc(size));
   if (m_buffer != nullptr)
   {
     m_size = size;

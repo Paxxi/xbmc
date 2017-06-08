@@ -237,7 +237,7 @@ JSONRPC_STATUS CPlaylistOperations::Swap(const std::string &method, ITransportLa
 
 int CPlaylistOperations::GetPlaylist(const CVariant &playlist)
 {
-  int playlistid = (int)playlist.asInteger();
+  int playlistid = static_cast<int>(playlist.asInteger());
   if (playlistid > PLAYLIST_NONE && playlistid <= PLAYLIST_PICTURE) {
     return playlistid;
 }

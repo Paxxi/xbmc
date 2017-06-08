@@ -71,7 +71,7 @@ void CRendererVDPAU::AddVideoPictureHW(VideoPicture &picture, int index)
   YUVBUFFER &buf = m_buffers[index];
   VDPAU::CVdpauRenderPicture *pic = vdpau->Acquire();
   if (buf.hwDec) {
-    ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
+    (reinterpret_cast<VDPAU::CVdpauRenderPicture*>(buf.hwDec))->Release();
 }
   buf.hwDec = pic;
 }
@@ -80,7 +80,7 @@ void CRendererVDPAU::ReleaseBuffer(int idx)
 {
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec) {
-    ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
+    (reinterpret_cast<VDPAU::CVdpauRenderPicture*>(buf.hwDec))->Release();
 }
   buf.hwDec = nullptr;
 }
@@ -229,7 +229,7 @@ bool CRendererVDPAU::RenderHook(int idx)
   YUVBUFFER &buf = m_buffers[idx];
   if (buf.hwDec)
   {
-    ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Sync();
+    (reinterpret_cast<VDPAU::CVdpauRenderPicture*>(buf.hwDec))->Sync();
   }
   return true;
 }

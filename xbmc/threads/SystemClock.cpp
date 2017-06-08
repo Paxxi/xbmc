@@ -55,7 +55,7 @@ namespace XbmcThreads
       start_time = now_time;
       start_time_set = true;
     }
-    return (unsigned int)(now_time - start_time);
+    return static_cast<unsigned int>(now_time - start_time);
   }
   const unsigned int EndTime::InfiniteValue = std::numeric_limits<unsigned int>::max();
 }

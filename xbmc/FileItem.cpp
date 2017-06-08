@@ -257,7 +257,7 @@ CFileItem::CFileItem(const CGUIListItem& item)
   Initialize();
   // not particularly pretty, but it gets around the issue of Initialize() defaulting
   // parameters in the CGUIListItem base class.
-  *((CGUIListItem *)this) = item;
+  *(reinterpret_cast<CGUIListItem *>(this)) = item;
 
   FillInMimeType(false);
 }
@@ -604,7 +604,7 @@ void CFileItem::Archive(CArchive& ar)
     ar >> m_lEndOffset;
     int temp;
     ar >> temp;
-    m_iLockMode = (LockType)temp;
+    m_iLockMode = static_cast<LockType>(temp);
     ar >> m_strLockCode;
     ar >> m_iBadPwdCount;
 
@@ -612,7 +612,7 @@ void CFileItem::Archive(CArchive& ar)
     ar >> m_mimetype;
     ar >> m_extrainfo;
     ar >> temp;
-    m_specialSort = (SortSpecial)temp;
+    m_specialSort = static_cast<SortSpecial>(temp);
     ar >> m_doContentLookup;
 
     int iType;
@@ -2060,7 +2060,7 @@ void CFileItemList::Remove(int iItem)
 {
   CSingleLock lock(m_lock);
 
-  if (iItem >= 0 && iItem < (int)Size())
+  if (iItem >= 0 && iItem < Size())
   {
     CFileItemPtr pItem = *(m_items.begin() + iItem);
     if (m_fastLookup)
@@ -2099,7 +2099,7 @@ void CFileItemList::Assign(const CFileItemList& itemlist, bool append)
 bool CFileItemList::Copy(const CFileItemList& items, bool copyItems /* = true */)
 {
   // assign all CFileItem parts
-  *(CFileItem*)this = *(CFileItem*)&items;
+  *reinterpret_cast<CFileItem*>(this) = *(CFileItem*)&items;
 
   // assign the rest of the CFileItemList properties
   m_replaceListing  = items.m_replaceListing;
@@ -2246,7 +2246,7 @@ void CFileItemList::Sort(SortDescription sortDescription)
       sortDescription.sortBy == SortByPlaylistOrder ||
       sortDescription.sortBy == SortByLastPlayed ||
       sortDescription.sortBy == SortByPlaycount) {
-    sortDescription.sortAttributes = (SortAttribute)((int)sortDescription.sortAttributes | SortAttributeIgnoreFolders);
+    sortDescription.sortAttributes = static_cast<SortAttribute>(static_cast<int>(sortDescription.sortAttributes) | SortAttributeIgnoreFolders);
 }
 
   if (sortDescription.sortBy == SortByNone ||
@@ -2256,7 +2256,7 @@ void CFileItemList::Sort(SortDescription sortDescription)
 }
 
   if (m_sortIgnoreFolders) {
-    sortDescription.sortAttributes = (SortAttribute)((int)sortDescription.sortAttributes | SortAttributeIgnoreFolders);
+    sortDescription.sortAttributes = static_cast<SortAttribute>(static_cast<int>(sortDescription.sortAttributes) | SortAttributeIgnoreFolders);
 }
 
   const Fields fields = SortUtils::GetFieldsForSorting(sortDescription.sortBy);
@@ -2375,14 +2375,14 @@ void CFileItemList::Archive(CArchive& ar)
     ar >> fastLookup;
 
     int tempint;
-    ar >> (int&)tempint;
-    m_sortDescription.sortBy = (SortBy)tempint;
-    ar >> (int&)tempint;
-    m_sortDescription.sortOrder = (SortOrder)tempint;
-    ar >> (int&)tempint;
-    m_sortDescription.sortAttributes = (SortAttribute)tempint;
+    ar >> const_cast<int&>(tempint);
+    m_sortDescription.sortBy = static_cast<SortBy>(tempint);
+    ar >> const_cast<int&>(tempint);
+    m_sortDescription.sortOrder = static_cast<SortOrder>(tempint);
+    ar >> const_cast<int&>(tempint);
+    m_sortDescription.sortAttributes = static_cast<SortAttribute>(tempint);
     ar >> m_sortIgnoreFolders;
-    ar >> (int&)tempint;
+    ar >> const_cast<int&>(tempint);
     m_cacheToDisc = CACHE_TYPE(tempint);
 
     unsigned int detailSize = 0;
@@ -2390,11 +2390,11 @@ void CFileItemList::Archive(CArchive& ar)
     for (unsigned int j = 0; j < detailSize; ++j)
     {
       GUIViewSortDetails details;
-      ar >> (int&)tempint;
+      ar >> const_cast<int&>(tempint);
       details.m_sortDescription.sortBy = (SortBy)tempint;
-      ar >> (int&)tempint;
+      ar >> const_cast<int&>(tempint);
       details.m_sortDescription.sortOrder = (SortOrder)tempint;
-      ar >> (int&)tempint;
+      ar >> const_cast<int&>(tempint);
       details.m_sortDescription.sortAttributes = (SortAttribute)tempint;
       ar >> details.m_buttonLabel;
       ar >> details.m_labelMasks.m_strLabelFile;

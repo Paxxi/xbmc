@@ -111,7 +111,7 @@ bool CTCPServer::IsRunning()
     return false;
 }
 
-  return ((CThread*)ServerInstance)->IsRunning();
+  return (reinterpret_cast<CThread*>(ServerInstance))->IsRunning();
 }
 
 CTCPServer::CTCPServer(int port, bool nonlocal) : CThread("TCPServer")
@@ -367,7 +367,7 @@ bool CTCPServer::InitializeBlue()
   sa.rc_bdaddr  = bt_bdaddr_any;
   sa.rc_channel = 0;
 
-  if (bind(fd, (struct sockaddr*)&sa, sizeof(sa)) < 0)
+  if (bind(fd, reinterpret_cast<struct sockaddr*>(&sa), sizeof(sa)) < 0)
   {
     CLog::Log(LOGINFO, "JSONRPC Server: Unable to bind to bluetooth socket");
     closesocket(fd);
@@ -375,7 +375,7 @@ bool CTCPServer::InitializeBlue()
   }
 
   socklen_t len = sizeof(sa);
-  if (getsockname(fd, (struct sockaddr*)&sa, &len) < 0) {
+  if (getsockname(fd, reinterpret_cast<struct sockaddr*>(&sa), &len) < 0) {
     CLog::Log(LOGERROR, "JSONRPC Server: Failed to get bluetooth port");
 }
 
@@ -498,7 +498,7 @@ void CTCPServer::Deinitialize()
 
 #ifdef HAVE_LIBBLUETOOTH
   if (m_sdpd) {
-    sdp_close((sdp_session_t*)m_sdpd);
+    sdp_close(reinterpret_cast<sdp_session_t*>(m_sdpd));
 }
   m_sdpd = nullptr;
 #endif
@@ -701,7 +701,7 @@ void CTCPServer::CWebSocketClient::Disconnect()
     {
       const CWebSocketFrame *closeFrame = m_websocket->Close();
       if (closeFrame) {
-        Send(closeFrame->GetFrameData(), (unsigned int)closeFrame->GetFrameLength());
+        Send(closeFrame->GetFrameData(), static_cast<unsigned int>(closeFrame->GetFrameLength()));
 }
     }
 

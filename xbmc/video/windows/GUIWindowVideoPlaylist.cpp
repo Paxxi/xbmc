@@ -329,7 +329,7 @@ void CGUIWindowVideoPlaylist::UpdateButtons()
 
 bool CGUIWindowVideoPlaylist::OnPlayMedia(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) return false;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return false;
   if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Play(iItem);
   } else

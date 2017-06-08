@@ -96,7 +96,7 @@ CAddonCallbacksAddon::~CAddonCallbacksAddon()
 
 void CAddonCallbacksAddon::AddOnLog(void *addonData, const addon_log_t addonLogLevel, const char *strMessage)
 {
-  CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
+  CAddonInterfaces* addon = reinterpret_cast<CAddonInterfaces*>( addonData);
   if (addon == nullptr || strMessage == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
@@ -137,7 +137,7 @@ void CAddonCallbacksAddon::AddOnLog(void *addonData, const addon_log_t addonLogL
 
 void CAddonCallbacksAddon::QueueNotification(void *addonData, const queue_msg_t type, const char *strMessage)
 {
-  CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
+  CAddonInterfaces* addon = reinterpret_cast<CAddonInterfaces*>( addonData);
   if (addon == nullptr || strMessage == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
@@ -181,7 +181,7 @@ bool CAddonCallbacksAddon::WakeOnLan(const char *mac)
 
 bool CAddonCallbacksAddon::GetAddonSetting(void *addonData, const char *strSettingName, void *settingValue)
 {
-  CAddonInterfaces* addon = (CAddonInterfaces*) addonData;
+  CAddonInterfaces* addon = reinterpret_cast<CAddonInterfaces*>( addonData);
   if (addon == nullptr || strSettingName == nullptr || settingValue == nullptr)
   {
     CLog::Log(LOGERROR, "CAddonCallbacksAddon - %s - called with a null pointer", __FUNCTION__);
@@ -364,7 +364,7 @@ bool CAddonCallbacksAddon::ReadFileString(const void* addonData, void* file, cha
     return false;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return false;
 }
@@ -392,7 +392,7 @@ void CAddonCallbacksAddon::FlushFile(const void* addonData, void* file)
     return;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return;
 }
@@ -407,7 +407,7 @@ int64_t CAddonCallbacksAddon::SeekFile(const void* addonData, void* file, int64_
     return 0;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0;
 }
@@ -422,7 +422,7 @@ int CAddonCallbacksAddon::TruncateFile(const void* addonData, void* file, int64_
     return 0;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0;
 }
@@ -437,7 +437,7 @@ int64_t CAddonCallbacksAddon::GetFilePosition(const void* addonData, void* file)
     return 0;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0;
 }
@@ -452,7 +452,7 @@ int64_t CAddonCallbacksAddon::GetFileLength(const void* addonData, void* file)
     return 0;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0;
 }
@@ -467,7 +467,7 @@ double CAddonCallbacksAddon::GetFileDownloadSpeed(const void* addonData, void* f
     return 0.0f;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0.0f;
 }
@@ -482,7 +482,7 @@ void CAddonCallbacksAddon::CloseFile(const void* addonData, void* file)
     return;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (cfile)
   {
     cfile->Close();
@@ -497,7 +497,7 @@ int CAddonCallbacksAddon::GetFileChunkSize(const void* addonData, void* file)
     return 0;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return 0;
 }
@@ -665,7 +665,7 @@ bool CAddonCallbacksAddon::CURLAddOption(const void* addonData, void* file, XFIL
     return false;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return false;
 }
@@ -680,7 +680,7 @@ bool CAddonCallbacksAddon::CURLOpen(const void* addonData, void* file, unsigned 
     return false;
 }
 
-  CFile* cfile = (CFile*)file;
+  CFile* cfile = reinterpret_cast<CFile*>(file);
   if (!cfile) {
     return false;
 }

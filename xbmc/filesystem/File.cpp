@@ -157,7 +157,7 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
       } else if (iRead < 0)
       {
         CLog::Log(LOGERROR, "%s - Failed read from file %s", __FUNCTION__, url.GetRedacted().c_str());
-        llFileSize = (uint64_t)-1;
+        llFileSize = static_cast<uint64_t>(-1);
         break;
       }
 
@@ -175,7 +175,7 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
       if (iWrite != iRead)
       {
         CLog::Log(LOGERROR, "%s - Failed write to file %s", __FUNCTION__, dest.GetRedacted().c_str());
-        llFileSize = (uint64_t)-1;
+        llFileSize = static_cast<uint64_t>(-1);
         break;
       }
 
@@ -197,7 +197,7 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
         if(!pCallback->OnFileCallback(pContext, ipercent, averageSpeed))
         {
           CLog::Log(LOGERROR, "%s - User aborted copy", __FUNCTION__);
-          llFileSize = (uint64_t)-1;
+          llFileSize = static_cast<uint64_t>(-1);
           break;
         }
       }

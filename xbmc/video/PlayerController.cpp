@@ -310,7 +310,7 @@ bool CPlayerController::OnAction(const CAction &action)
             res_info.iSubtitles = res_info.iHeight - 1;
 }
 
-          ShowSlider(action.GetID(), 274, (float) res_info.iHeight - res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
+          ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iHeight) - res_info.iSubtitles, 0.0f, 1.0f, static_cast<float>( res_info.iHeight));
         }
         else
         {
@@ -320,9 +320,9 @@ bool CPlayerController::OnAction(const CAction &action)
 }
 
           if (subalign == SUBTITLE_ALIGN_MANUAL) {
-            ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
+            ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iSubtitles), 0.0f, 1.0f, static_cast<float>( res_info.iHeight));
           } else {
-            ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles - res_info.iHeight, (float) -res_info.iHeight, -1.0f, 0.0f);
+            ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iSubtitles) - res_info.iHeight, static_cast<float>( -res_info.iHeight), -1.0f, 0.0f);
 }
         }
         g_graphicsContext.SetResInfo(g_graphicsContext.GetVideoResolution(), res_info);
@@ -340,7 +340,7 @@ bool CPlayerController::OnAction(const CAction &action)
             res_info.iSubtitles = 0;
 }
 
-          ShowSlider(action.GetID(), 274, (float) res_info.iHeight - res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
+          ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iHeight) - res_info.iSubtitles, 0.0f, 1.0f, static_cast<float>( res_info.iHeight));
         }
         else
         {
@@ -350,9 +350,9 @@ bool CPlayerController::OnAction(const CAction &action)
 }
 
           if (subalign == SUBTITLE_ALIGN_MANUAL) {
-            ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
+            ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iSubtitles), 0.0f, 1.0f, static_cast<float>( res_info.iHeight));
           } else {
-            ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles - res_info.iHeight, (float) -res_info.iHeight, -1.0f, 0.0f);
+            ShowSlider(action.GetID(), 274, static_cast<float>( res_info.iSubtitles) - res_info.iHeight, static_cast<float>( -res_info.iHeight), -1.0f, 0.0f);
 }
         }
         g_graphicsContext.SetResInfo(g_graphicsContext.GetVideoResolution(), res_info);

@@ -72,7 +72,7 @@ static struct SInterlaceMapping
 , {VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL     , VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL_SPATIAL}
 , {VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL_HALF, VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL_SPATIAL}
 , {VS_INTERLACEMETHOD_VDPAU_INVERSE_TELECINE     , VDP_VIDEO_MIXER_FEATURE_INVERSE_TELECINE}
-, {VS_INTERLACEMETHOD_NONE                       , (VdpVideoMixerFeature)-1}
+, {VS_INTERLACEMETHOD_NONE                       , static_cast<VdpVideoMixerFeature>(-1)}
 };
 
 static float studioCSCKCoeffs601[3] = {0.299, 0.587, 0.114}; //BT601 {Kr, Kg, Kb}
@@ -175,7 +175,7 @@ bool CVDPAUContext::LoadSymbols()
 
   char* error;
   (void)dlerror();
-  dl_vdp_device_create_x11 = (VdpStatus (*)(Display*, int, VdpDevice*, VdpStatus (**)(VdpDevice, VdpFuncId, void**)))dlsym(m_dlHandle, (const char*)"vdp_device_create_x11");
+  dl_vdp_device_create_x11 = reinterpret_cast<VdpStatus (*)(Display*, int, VdpDevice*, VdpStatus (**)(VdpDevice, VdpFuncId, void**))>(dlsym(m_dlHandle, (const char*)"vdp_device_create_x11"));
   error = dlerror();
   if (error)
   {
@@ -550,7 +550,7 @@ bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum A
         return false;
       }
 
-      if (max_width < (uint32_t) avctx->coded_width || max_height < (uint32_t) avctx->coded_height)
+      if (max_width < static_cast<uint32_t>( avctx->coded_width) || max_height < static_cast<uint32_t>( avctx->coded_height))
       {
         CLog::Log(LOGWARNING,"VDPAU::Open: requested picture dimensions (%i, %i) exceed hardware capabilities ( %i, %i).",
 	                      avctx->coded_width, avctx->coded_height, max_width, max_height);
@@ -952,7 +952,7 @@ int CDecoder::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags)
     return -1;
   }
 
-  VdpVideoSurface surf = (VdpVideoSurface)(uintptr_t)pic->data[3];
+  VdpVideoSurface surf = static_cast<VdpVideoSurface>((uintptr_t)pic->data[3]);
   surf = vdp->m_videoSurfaces.GetFree(surf != 0 ? surf : VDP_INVALID_HANDLE);
 
   VdpStatus vdp_st = VDP_STATUS_ERROR;
@@ -977,8 +977,8 @@ int CDecoder::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags)
   }
 
   pic->data[1] = pic->data[2] = nullptr;
-  pic->data[0] = (uint8_t*)(uintptr_t)surf;
-  pic->data[3] = (uint8_t*)(uintptr_t)surf;
+  pic->data[0] = (uint8_t*)static_cast<uintptr_t>(surf);
+  pic->data[3] = (uint8_t*)static_cast<uintptr_t>(surf);
   pic->linesize[0] = pic->linesize[1] =  pic->linesize[2] = 0;
   AVBufferRef *buffer = av_buffer_create(pic->data[3], 0, FFReleaseBuffer, vdp, 0);
   if (!buffer)
@@ -994,13 +994,13 @@ int CDecoder::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags)
 
 void CDecoder::FFReleaseBuffer(void *opaque, uint8_t *data)
 {
-  CDecoder *vdp = (CDecoder*)opaque;
+  CDecoder *vdp = reinterpret_cast<CDecoder*>(opaque);
 
   VdpVideoSurface surf;
 
   CSingleLock lock(vdp->m_DecoderSection);
 
-  surf = (VdpVideoSurface)(uintptr_t)data;
+  surf = static_cast<VdpVideoSurface>((uintptr_t)data);
 
   vdp->m_videoSurfaces.ClearReference(surf);
 }
@@ -1009,7 +1009,7 @@ int CDecoder::Render(struct AVCodecContext *s, struct AVFrame *src,
                      const VdpPictureInfo *info, uint32_t buffers_used,
                      const VdpBitstreamBuffer *buffers)
 {
-  ICallbackHWAccel* ctx = (ICallbackHWAccel*)s->opaque;
+  ICallbackHWAccel* ctx = reinterpret_cast<ICallbackHWAccel*>(s->opaque);
   CDecoder* vdp = (CDecoder*)ctx->GetHWAccel();
 
   // while we are waiting to recover we can't do anything
@@ -1026,7 +1026,7 @@ int CDecoder::Render(struct AVCodecContext *s, struct AVFrame *src,
   }
 
   VdpStatus vdp_st;
-  VdpVideoSurface surf = (VdpVideoSurface)(uintptr_t)src->data[3];
+  VdpVideoSurface surf = static_cast<VdpVideoSurface>((uintptr_t)src->data[3]);
 
   // ffmpeg vc-1 decoder does not flush, make sure the data buffer is still valid
   if (!vdp->m_videoSurfaces.IsValid(surf))
@@ -1062,7 +1062,7 @@ int CDecoder::Render(struct AVCodecContext *s, struct AVFrame *src,
   if (diff*1000/CurrentHostFrequency() > 30)
   {
     if (g_advancedSettings.CanLogComponent(LOGVIDEO))
-      CLog::Log(LOGDEBUG, "CVDPAU::DrawSlice - VdpDecoderRender long decoding: %d ms, dec: %d, proc: %d, rend: %d", (int)((diff*1000)/CurrentHostFrequency()), decoded, processed, rend);
+      CLog::Log(LOGDEBUG, "CVDPAU::DrawSlice - VdpDecoderRender long decoding: %d ms, dec: %d, proc: %d, rend: %d", static_cast<int>((diff*1000)/CurrentHostFrequency()), decoded, processed, rend);
   }
 
   return 0;
@@ -1093,7 +1093,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame
   if(pFrame)
   { // we have a new frame from decoder
 
-    VdpVideoSurface surf = (VdpVideoSurface)(uintptr_t)pFrame->data[3];
+    VdpVideoSurface surf = static_cast<VdpVideoSurface>((uintptr_t)pFrame->data[3]);
     // ffmpeg vc-1 decoder does not flush, make sure the data buffer is still valid
     if (!m_videoSurfaces.IsValid(surf))
     {
@@ -1105,7 +1105,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame
     // send frame to output for processing
     CVdpauDecodedPicture pic;
     memset(&pic.DVDPic, 0, sizeof(pic.DVDPic));
-    ((ICallbackHWAccel*)avctx->opaque)->GetPictureCommon(&pic.DVDPic);
+    (reinterpret_cast<ICallbackHWAccel*>(avctx->opaque))->GetPictureCommon(&pic.DVDPic);
     pic.videoSurface = surf;
     pic.DVDPic.color_matrix = avctx->colorspace;
     m_bufferStats.IncDecoded();
@@ -1155,7 +1155,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame
           m_presentPicture = nullptr;
         }
 
-        m_presentPicture = *(CVdpauRenderPicture**)msg->data;
+        m_presentPicture = *reinterpret_cast<CVdpauRenderPicture**>(msg->data);
         m_presentPicture->vdpau = this;
         m_bufferStats.DecRender();
         msg->Release();
@@ -1438,7 +1438,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case CMixerControlProtocol::INIT:
           CVdpauConfig *data;
-          data = (CVdpauConfig*)msg->data;
+          data = reinterpret_cast<CVdpauConfig*>(msg->data);
           if (data)
           {
             m_config = *data;
@@ -1480,7 +1480,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case CMixerDataProtocol::FRAME:
           CVdpauDecodedPicture *frame;
-          frame = (CVdpauDecodedPicture*)msg->data;
+          frame = reinterpret_cast<CVdpauDecodedPicture*>(msg->data);
           if (frame)
           {
             m_decodedPics.push(*frame);
@@ -1489,7 +1489,7 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
           return;
         case CMixerDataProtocol::BUFFER:
           VdpOutputSurface *surf;
-          surf = (VdpOutputSurface*)msg->data;
+          surf = reinterpret_cast<VdpOutputSurface*>(msg->data);
           if (surf)
           {
             m_outputSurfaces.push(*surf);
@@ -1888,16 +1888,16 @@ bool CMixer::GenerateStudioCSCMatrix(VdpColorStandard colorStandard, VdpCSCMatri
    studioCSCMatrix[B][Y] = 1.0;
 
    studioCSCMatrix[R][Cb] = 0.0;
-   studioCSCMatrix[G][Cb] = (double)-2 * Kb * (1 - Kb) / Kg;
-   studioCSCMatrix[B][Cb] = (double)(1 - Kb) / 0.5;
+   studioCSCMatrix[G][Cb] = static_cast<double>(-2) * Kb * (1 - Kb) / Kg;
+   studioCSCMatrix[B][Cb] = (1 - Kb) / 0.5;
 
-   studioCSCMatrix[R][Cr] = (double)(1 - Kr) / 0.5;
-   studioCSCMatrix[G][Cr] = (double)-2 * Kr * (1 - Kr) / Kg;
+   studioCSCMatrix[R][Cr] = (1 - Kr) / 0.5;
+   studioCSCMatrix[G][Cr] = static_cast<double>(-2) * Kr * (1 - Kr) / Kg;
    studioCSCMatrix[B][Cr] = 0.0;
 
-   studioCSCMatrix[R][C] = (double)-1 * studioCSCMatrix[R][Cr] * CDZ/EXC;
-   studioCSCMatrix[G][C] = (double)-1 * (studioCSCMatrix[G][Cb] + studioCSCMatrix[G][Cr]) * CDZ/EXC;
-   studioCSCMatrix[B][C] = (double)-1 * studioCSCMatrix[B][Cb] * CDZ/EXC;
+   studioCSCMatrix[R][C] = static_cast<double>(-1) * studioCSCMatrix[R][Cr] * CDZ/EXC;
+   studioCSCMatrix[G][C] = static_cast<double>(-1) * (studioCSCMatrix[G][Cb] + studioCSCMatrix[G][Cr]) * CDZ/EXC;
+   studioCSCMatrix[B][C] = static_cast<double>(-1) * studioCSCMatrix[B][Cb] * CDZ/EXC;
 
    return true;
 }
@@ -1907,10 +1907,10 @@ void CMixer::SetColor()
   VdpStatus vdp_st;
 
   if (m_Brightness != CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Brightness) {
-    m_Procamp.brightness = (float)((CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Brightness)-50) / 100;
+    m_Procamp.brightness = ((CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Brightness)-50) / 100;
 }
   if (m_Contrast != CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Contrast) {
-    m_Procamp.contrast = (float)((CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Contrast)+50) / 100;
+    m_Procamp.contrast = ((CMediaSettings::GetInstance().GetCurrentVideoSettings().m_Contrast)+50) / 100;
 }
 
   VdpColorStandard colorStandard;
@@ -2726,7 +2726,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case COutputDataProtocol::RETURNPIC:
           CVdpauRenderPicture *pic;
-          pic = *((CVdpauRenderPicture**)msg->data);
+          pic = *(reinterpret_cast<CVdpauRenderPicture**>(msg->data));
           QueueReturnPicture(pic);
           return;
         default:
@@ -2749,7 +2749,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case COutputControlProtocol::INIT:
           CVdpauConfig *data;
-          data = (CVdpauConfig*)msg->data;
+          data = reinterpret_cast<CVdpauConfig*>(msg->data);
           if (data)
           {
             m_config = *data;
@@ -2809,7 +2809,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case COutputDataProtocol::NEWFRAME:
           CVdpauDecodedPicture *frame;
-          frame = (CVdpauDecodedPicture*)msg->data;
+          frame = reinterpret_cast<CVdpauDecodedPicture*>(msg->data);
           if (frame)
           {
             m_mixer.m_dataPort.SendOutMessage(CMixerDataProtocol::FRAME,
@@ -2818,7 +2818,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
           return;
         case COutputDataProtocol::RETURNPIC:
           CVdpauRenderPicture *pic;
-          pic = *((CVdpauRenderPicture**)msg->data);
+          pic = *(reinterpret_cast<CVdpauRenderPicture**>(msg->data));
           QueueReturnPicture(pic);
           m_controlPort.SendInMessage(COutputControlProtocol::STATS);
           m_state = O_TOP_CONFIGURED_WORK;
@@ -2834,7 +2834,7 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
         {
         case CMixerDataProtocol::PICTURE:
           CVdpauProcessedPicture *pic;
-          pic = (CVdpauProcessedPicture*)msg->data;
+          pic = reinterpret_cast<CVdpauProcessedPicture*>(msg->data);
           m_bufferPool.processedPics.push(*pic);
           m_state = O_TOP_CONFIGURED_WORK;
           m_extTimeout = 0;
@@ -3451,34 +3451,34 @@ bool COutput::GLInit()
 
 #ifdef GL_NV_vdpau_interop
     if (!glVDPAUInitNV) {
-      glVDPAUInitNV    = (PFNGLVDPAUINITNVPROC)glXGetProcAddress((GLubyte *) "glVDPAUInitNV");
+      glVDPAUInitNV    = reinterpret_cast<PFNGLVDPAUINITNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUInitNV")));
 }
     if (!glVDPAUFiniNV) {
-      glVDPAUFiniNV = (PFNGLVDPAUFININVPROC)glXGetProcAddress((GLubyte *) "glVDPAUFiniNV");
+      glVDPAUFiniNV = (PFNGLVDPAUFININVPROC)glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUFiniNV"));
 }
     if (!glVDPAURegisterOutputSurfaceNV) {
-      glVDPAURegisterOutputSurfaceNV    = (PFNGLVDPAUREGISTEROUTPUTSURFACENVPROC)glXGetProcAddress((GLubyte *) "glVDPAURegisterOutputSurfaceNV");
+      glVDPAURegisterOutputSurfaceNV    = reinterpret_cast<PFNGLVDPAUREGISTEROUTPUTSURFACENVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAURegisterOutputSurfaceNV")));
 }
     if (!glVDPAURegisterVideoSurfaceNV) {
-      glVDPAURegisterVideoSurfaceNV    = (PFNGLVDPAUREGISTERVIDEOSURFACENVPROC)glXGetProcAddress((GLubyte *) "glVDPAURegisterVideoSurfaceNV");
+      glVDPAURegisterVideoSurfaceNV    = reinterpret_cast<PFNGLVDPAUREGISTERVIDEOSURFACENVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAURegisterVideoSurfaceNV")));
 }
     if (!glVDPAUIsSurfaceNV) {
-      glVDPAUIsSurfaceNV    = (PFNGLVDPAUISSURFACENVPROC)glXGetProcAddress((GLubyte *) "glVDPAUIsSurfaceNV");
+      glVDPAUIsSurfaceNV    = reinterpret_cast<PFNGLVDPAUISSURFACENVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUIsSurfaceNV")));
 }
     if (!glVDPAUUnregisterSurfaceNV) {
-      glVDPAUUnregisterSurfaceNV = (PFNGLVDPAUUNREGISTERSURFACENVPROC)glXGetProcAddress((GLubyte *) "glVDPAUUnregisterSurfaceNV");
+      glVDPAUUnregisterSurfaceNV = reinterpret_cast<PFNGLVDPAUUNREGISTERSURFACENVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUUnregisterSurfaceNV")));
 }
     if (!glVDPAUSurfaceAccessNV) {
-      glVDPAUSurfaceAccessNV    = (PFNGLVDPAUSURFACEACCESSNVPROC)glXGetProcAddress((GLubyte *) "glVDPAUSurfaceAccessNV");
+      glVDPAUSurfaceAccessNV    = reinterpret_cast<PFNGLVDPAUSURFACEACCESSNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUSurfaceAccessNV")));
 }
     if (!glVDPAUMapSurfacesNV) {
-      glVDPAUMapSurfacesNV = (PFNGLVDPAUMAPSURFACESNVPROC)glXGetProcAddress((GLubyte *) "glVDPAUMapSurfacesNV");
+      glVDPAUMapSurfacesNV = reinterpret_cast<PFNGLVDPAUMAPSURFACESNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUMapSurfacesNV")));
 }
     if (!glVDPAUUnmapSurfacesNV) {
-      glVDPAUUnmapSurfacesNV = (PFNGLVDPAUUNMAPSURFACESNVPROC)glXGetProcAddress((GLubyte *) "glVDPAUUnmapSurfacesNV");
+      glVDPAUUnmapSurfacesNV = reinterpret_cast<PFNGLVDPAUUNMAPSURFACESNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUUnmapSurfacesNV")));
 }
     if (!glVDPAUGetSurfaceivNV) {
-      glVDPAUGetSurfaceivNV = (PFNGLVDPAUGETSURFACEIVNVPROC)glXGetProcAddress((GLubyte *) "glVDPAUGetSurfaceivNV");
+      glVDPAUGetSurfaceivNV = reinterpret_cast<PFNGLVDPAUGETSURFACEIVNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUGetSurfaceivNV")));
 }
 
   while (glGetError() != GL_NO_ERROR);

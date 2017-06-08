@@ -88,7 +88,7 @@ bool in_ether (const char *bufp, unsigned char *addr)
       bufp++;
 }
 
-    *ptr++ = (unsigned char) (val & 0377);
+    *ptr++ = static_cast<unsigned char> (val & 0377);
     i++;
 
     if (*bufp == ':' || *bufp == '-') {
@@ -134,7 +134,7 @@ int NetworkAccessPoint::FreqToChannel(float frequency)
                            52,   56,   58,   60,   64,
                           149,  152,  153,  157,  160,  161,  165};
   // Round frequency to the nearest MHz
-  int mod_chan = (int)(frequency / 1000000 + 0.5f);
+  int mod_chan = static_cast<int>(frequency / 1000000 + 0.5f);
   for (unsigned int i = 0; i < sizeof(IEEE80211Freq) / sizeof(int); ++i)
   {
     if (IEEE80211Freq[i] == mod_chan) {
@@ -165,7 +165,7 @@ int CNetwork::ParseHex(char *str, unsigned char *addr)
       if (str[1] == 0) {
          return -1;
 }
-      if (sscanf(str, "%02x", (unsigned int *)&tmp) != 1) {
+      if (sscanf(str, "%02x", reinterpret_cast<unsigned int *>(&tmp)) != 1) {
          return -1;
 }
       addr[len] = tmp;
@@ -332,7 +332,7 @@ bool CNetwork::WakeOnLan(const char* mac)
   saddr.sin_port = htons(9);
 
   unsigned int value = 1;
-  if (setsockopt (packet, SOL_SOCKET, SO_BROADCAST, (char*) &value, sizeof( unsigned int ) ) == SOCKET_ERROR)
+  if (setsockopt (packet, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<char*>( &value), sizeof( unsigned int ) ) == SOCKET_ERROR)
   {
     CLog::Log(LOGERROR, "%s - Unable to set socket options (%s)", __FUNCTION__, strerror (errno));
     closesocket(packet);
@@ -352,7 +352,7 @@ bool CNetwork::WakeOnLan(const char* mac)
 }
  
   // Send the magic packet
-  if (sendto (packet, (char *)buf, 102, 0, (struct sockaddr *)&saddr, sizeof (saddr)) < 0)
+  if (sendto (packet, reinterpret_cast<char *>(buf), 102, 0, reinterpret_cast<struct sockaddr *>(&saddr), sizeof (saddr)) < 0)
   {
     CLog::Log(LOGERROR, "%s - Unable to send magic packet (%s)", __FUNCTION__, strerror (errno));
     closesocket(packet);
@@ -411,7 +411,7 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
       int err_code = -1;
       socklen_t code_len = sizeof (err_code);
 
-      result = getsockopt(soc, SOL_SOCKET, SO_ERROR, (char*) &err_code, &code_len);
+      result = getsockopt(soc, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>( &err_code), &code_len);
 
       if (result != 0) {
         return "getsockopt fail";
@@ -510,7 +510,7 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
   if ((sock = socket(PF_INET6, SOCK_STREAM, IPPROTO_TCP)) >= 0)
   {
     // in case we're on ipv6, make sure the socket is dual stacked
-    if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, (const char*)&no, sizeof(no)) < 0)
+    if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<const char*>(&no), sizeof(no)) < 0)
     {
 #ifdef _MSC_VER
       std::string sock_err = CWIN32Util::WUSysMsg(WSAGetLastError());
@@ -520,12 +520,12 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
       CLog::Log(LOGWARNING, "%s Server: Only IPv6 supported (%s)", callerName, sock_err.c_str());
     }
 
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&yes, sizeof(yes));
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char*>(&yes), sizeof(yes));
 
     struct sockaddr_in6 *s6;
     memset(&addr, 0, sizeof(addr));
     addr.ss_family = AF_INET6;
-    s6 = (struct sockaddr_in6 *) &addr;
+    s6 = reinterpret_cast<struct sockaddr_in6 *>( &addr);
     s6->sin6_port = htons(port);
     if (bindLocal) {
       s6->sin6_addr = in6addr_loopback;
@@ -533,7 +533,7 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
       s6->sin6_addr = in6addr_any;
 }
 
-    if (bind( sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) < 0)
+    if (bind( sock, reinterpret_cast<struct sockaddr *>( &addr), sizeof(struct sockaddr_in6)) < 0)
     {
       closesocket(sock);
       sock = -1;
@@ -544,12 +544,12 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
   // ipv4 fallback
   if (sock < 0 && (sock = socket(PF_INET, SOCK_STREAM, 0)) >= 0)
   {
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&yes, sizeof(yes));
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char*>(&yes), sizeof(yes));
 
     struct sockaddr_in  *s4;
     memset(&addr, 0, sizeof(addr));
     addr.ss_family = AF_INET;
-    s4 = (struct sockaddr_in *) &addr;
+    s4 = reinterpret_cast<struct sockaddr_in *>( &addr);
     s4->sin_port = htons(port);
     if (bindLocal) {
       s4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -557,7 +557,7 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
       s4->sin_addr.s_addr = htonl(INADDR_ANY);
 }
 
-    if (bind( sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) < 0)
+    if (bind( sock, reinterpret_cast<struct sockaddr *>( &addr), sizeof(struct sockaddr_in)) < 0)
     {
       closesocket(sock);
       CLog::Log(LOGERROR, "%s Server: Failed to bind ipv4 serversocket", callerName);

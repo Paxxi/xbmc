@@ -736,10 +736,10 @@ void CWakeOnAccess::LoadFromXML()
     else
     {
       if (XMLUtils::GetInt(pWakeUp, "pingport", tmp, 0, USHRT_MAX))
-        entry.ping_port = (unsigned short) tmp;
+        entry.ping_port = static_cast<unsigned short>( tmp);
 
       if (XMLUtils::GetInt(pWakeUp, "pingmode", tmp, 0, USHRT_MAX))
-        entry.ping_mode = (unsigned short) tmp;
+        entry.ping_mode = static_cast<unsigned short>( tmp);
 
       if (XMLUtils::GetInt(pWakeUp, "timeout", tmp, 10, 12 * 60 * 60)) {
         entry.timeout.SetDateTimeSpan (0, 0, 0, tmp);

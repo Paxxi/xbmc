@@ -32,7 +32,7 @@ extern "C" {
 }
 
 /* declare the rng seed and initialize it */
-unsigned int CAEUtil::m_seed = (unsigned int)(CurrentHostCounter() / 1000.0f);
+unsigned int CAEUtil::m_seed = static_cast<unsigned int>(CurrentHostCounter() / 1000.0f);
 #if defined(HAVE_SSE2) && defined(__SSE2__)
   /* declare the SSE seed and initialize it */
   MEMALIGN(16, __m128i CAEUtil::m_sseSeed) = _mm_set_epi32(CAEUtil::m_seed, CAEUtil::m_seed+1, CAEUtil::m_seed, CAEUtil::m_seed+1);
@@ -49,7 +49,7 @@ double AEDelayStatus::GetDelay()
 {
   double d = 0;
   if (tick) {
-    d = (double)(CurrentHostCounter() - tick) / CurrentHostFrequency();
+    d = static_cast<double>(CurrentHostCounter() - tick) / CurrentHostFrequency();
 }
   if (d > maxcorrection) {
     d = maxcorrection;

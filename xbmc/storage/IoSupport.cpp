@@ -140,11 +140,11 @@ INT CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
     int fd = hDevice->fd;
 
     // seek to requested sector
-    off_t offset = (off_t)dwSector * (off_t)MODE1_DATA_SIZE;
+    off_t offset = static_cast<off_t>(dwSector) * static_cast<off_t>(MODE1_DATA_SIZE);
 
     if (lseek(fd, offset, SEEK_SET) < 0)
     {
-      CLog::Log(LOGERROR, "CD: ReadSector Request to read sector %d\n", (int)dwSector);
+      CLog::Log(LOGERROR, "CD: ReadSector Request to read sector %d\n", static_cast<int>(dwSector));
       CLog::Log(LOGERROR, "CD: ReadSector error: %s\n", strerror(errno));
       OutputDebugString("CD Read error\n");
       return (-1);
@@ -159,7 +159,7 @@ INT CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
 }
 
       // error reading sector
-      CLog::Log(LOGERROR, "CD: ReadSector Request to read sector %d\n", (int)dwSector);
+      CLog::Log(LOGERROR, "CD: ReadSector Request to read sector %d\n", static_cast<int>(dwSector));
       CLog::Log(LOGERROR, "CD: ReadSector error: %s\n", strerror(errno));
       OutputDebugString("CD Read error\n");
       return (-1);
@@ -169,11 +169,11 @@ INT CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
   }
 #endif
   LARGE_INTEGER Displacement;
-  Displacement.QuadPart = ((INT64)dwSector) * dwSectorSize;
+  Displacement.QuadPart = (static_cast<INT64>(dwSector)) * dwSectorSize;
 
   for (int i = 0; i < 5; i++)
   {
-    if (SetFilePointer(hDevice, Displacement.u.LowPart, &Displacement.u.HighPart, FILE_BEGIN) != (DWORD)-1)
+    if (SetFilePointer(hDevice, Displacement.u.LowPart, &Displacement.u.HighPart, FILE_BEGIN) != static_cast<DWORD>(-1))
     {
       if (ReadFile(hDevice, m_rawXferBuffer, dwSectorSize, &dwRead, nullptr))
       {
@@ -240,7 +240,7 @@ INT CIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer
       memcpy(lpczBuffer, arg.buffer, MODE2_DATA_SIZE); // don't think offset is needed here
       return MODE2_DATA_SIZE;
     }
-    CLog::Log(LOGERROR, "CD: ReadSectorMode2 Request to read sector %d\n", (int)dwSector);
+    CLog::Log(LOGERROR, "CD: ReadSectorMode2 Request to read sector %d\n", static_cast<int>(dwSector));
     CLog::Log(LOGERROR, "CD: ReadSectorMode2 error: %s\n", strerror(errno));
     CLog::Log(LOGERROR, "CD: ReadSectorMode2 minute %d, second %d, frame %d\n", m, s, f);
     OutputDebugString("CD Read error\n");

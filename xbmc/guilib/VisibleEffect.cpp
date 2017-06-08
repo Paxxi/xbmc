@@ -80,7 +80,7 @@ void CAnimEffect::Calculate(unsigned int time, const CPoint &center)
   // calculate offset and tweening
   float offset = 0.0f;  // delayed forward, or finished reverse
   if (time >= m_delay && time < m_delay + m_length) {
-    offset = (float)(time - m_delay) / m_length;
+    offset = static_cast<float>(time - m_delay) / m_length;
   } else if (time >= m_delay + m_length) {
     offset = 1.0f;
 }
@@ -804,7 +804,7 @@ bool CScroller::Update(unsigned int time)
       m_startPosition = 0;
     }
     else {
-      m_scrollValue = m_startPosition + Tween((float)(time - m_startTime) / m_duration) * m_delta;
+      m_scrollValue = m_startPosition + Tween(static_cast<float>(time - m_startTime) / m_duration) * m_delta;
 }
     return true;
   }

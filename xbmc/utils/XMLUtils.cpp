@@ -29,7 +29,7 @@ bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& 
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
   if (!pNode || !pNode->FirstChild()) return false;
-  return sscanf(pNode->FirstChild()->Value(), "%x", (uint32_t*)&hexValue) == 1;
+  return sscanf(pNode->FirstChild()->Value(), "%x", &hexValue) == 1;
 }
 
 
@@ -91,7 +91,7 @@ bool XMLUtils::GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& v
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
   if (!pNode || !pNode->FirstChild()) return false;
-  value = (float)atof(pNode->FirstChild()->Value());
+  value = static_cast<float>(atof(pNode->FirstChild()->Value()));
   return true;
 }
 

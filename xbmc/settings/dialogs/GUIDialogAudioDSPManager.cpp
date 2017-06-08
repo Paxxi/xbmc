@@ -234,7 +234,7 @@ bool CGUIDialogAudioDSPManager::OnClickListAvailable(CGUIMessage &message)
   int iItem = m_availableViewControl.GetSelectedItem();
 
   /* Check file item is in list range and get his pointer */
-  if (iItem < 0 || iItem >= (int)m_availableItems[m_iCurrentType]->Size()) return true;
+  if (iItem < 0 || iItem >= m_availableItems[m_iCurrentType]->Size()) return true;
 
   /* Process actions */
   if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_MOUSE_RIGHT_CLICK)
@@ -256,7 +256,7 @@ bool CGUIDialogAudioDSPManager::OnClickListActive(CGUIMessage &message)
     int iItem = m_activeViewControl.GetSelectedItem();
 
     /* Check file item is in list range and get his pointer */
-    if (iItem < 0 || iItem >= (int)m_activeItems[m_iCurrentType]->Size()) return true;
+    if (iItem < 0 || iItem >= m_activeItems[m_iCurrentType]->Size()) return true;
 
     /* Process actions */
     if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_MOUSE_RIGHT_CLICK)
@@ -533,7 +533,7 @@ bool CGUIDialogAudioDSPManager::OnPopupMenu(int iItem, int listType)
     return false;
   }
 
-  return OnContextButton(iItem, (CONTEXT_BUTTON)choice, listType);
+  return OnContextButton(iItem, static_cast<CONTEXT_BUTTON>(choice), listType);
 }
 
 bool CGUIDialogAudioDSPManager::OnContextButton(int itemNumber, CONTEXT_BUTTON button, int listType)
@@ -812,7 +812,7 @@ bool CGUIDialogAudioDSPManager::UpdateDatabase(CGUIDialogBusy* pDlgBusy)
       processedItems++;
       if (pDlgBusy)
       {
-        pDlgBusy->SetProgress((float)(processedItems * 100 / maxItems));
+        pDlgBusy->SetProgress(static_cast<float>(processedItems * 100 / maxItems));
 
         if (pDlgBusy->IsCanceled())
         {
@@ -845,7 +845,7 @@ bool CGUIDialogAudioDSPManager::UpdateDatabase(CGUIDialogBusy* pDlgBusy)
       processedItems++;
       if (pDlgBusy)
       {
-        pDlgBusy->SetProgress((float)(processedItems * 100 / maxItems));
+        pDlgBusy->SetProgress(static_cast<float>(processedItems * 100 / maxItems));
 
         if (pDlgBusy->IsCanceled())
         {

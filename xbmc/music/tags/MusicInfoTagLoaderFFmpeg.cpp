@@ -60,7 +60,7 @@ bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoT
     return false;
 }
 
-  uint8_t* buffer = (uint8_t*)av_malloc(FFMPEG_FILE_BUFFER_SIZE);
+  uint8_t* buffer = reinterpret_cast<uint8_t*>(av_malloc(FFMPEG_FILE_BUFFER_SIZE));
   AVIOContext* ioctx = avio_alloc_context(buffer, FFMPEG_FILE_BUFFER_SIZE, 0,
                                           &file, vfs_file_read, nullptr,
                                           vfs_file_seek);

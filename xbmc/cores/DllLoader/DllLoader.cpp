@@ -69,7 +69,7 @@ typedef BOOL (APIENTRY *EntryFunc)(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID l
  */
 static void __attribute__((noinline)) extend_stack_for_dll_alloca()
 {
-    volatile int* mem =(volatile int*)alloca(0x20000);
+    volatile int* mem =reinterpret_cast<volatile int*>(alloca(0x20000));
     *mem=0x1234;
 }
 #endif
@@ -193,7 +193,7 @@ int DllLoader::Parse()
 
 void DllLoader::PrintImportLookupTable(unsigned long ImportLookupTable_RVA)
 {
-  unsigned long *Table = (unsigned long*)RVA2Data(ImportLookupTable_RVA);
+  unsigned long *Table = reinterpret_cast<unsigned long*>(RVA2Data(ImportLookupTable_RVA));
 
   while (*Table)
   {
@@ -225,7 +225,7 @@ void DllLoader::PrintImportTable(ImportDirTable_t *ImportDirTable)
     char *Name;
     HavePrinted = 1;
 
-    Name = (char*)RVA2Data(Imp->Name_RVA);
+    Name = reinterpret_cast<char*>(RVA2Data(Imp->Name_RVA));
 
     CLog::Log(LOGDEBUG, "    %s:\n", Name);
     CLog::Log(LOGDEBUG, "        ImportAddressTable:     %04lX\n", Imp->ImportAddressTable_RVA);
@@ -242,11 +242,11 @@ void DllLoader::PrintImportTable(ImportDirTable_t *ImportDirTable)
 
 void DllLoader::PrintExportTable(ExportDirTable_t *ExportDirTable)
 {
-  char *Name = (char*)RVA2Data(ExportDirTable->Name_RVA);
+  char *Name = reinterpret_cast<char*>(RVA2Data(ExportDirTable->Name_RVA));
 
-  unsigned long *ExportAddressTable = (unsigned long*)RVA2Data(ExportDirTable->ExportAddressTable_RVA);
-  unsigned long *NamePointerTable = (unsigned long*)RVA2Data(ExportDirTable->NamePointerTable_RVA);
-  unsigned short *OrdinalTable = (unsigned short*)RVA2Data(ExportDirTable->OrdinalTable_RVA);
+  unsigned long *ExportAddressTable = reinterpret_cast<unsigned long*>(RVA2Data(ExportDirTable->ExportAddressTable_RVA));
+  unsigned long *NamePointerTable = reinterpret_cast<unsigned long*>(RVA2Data(ExportDirTable->NamePointerTable_RVA));
+  unsigned short *OrdinalTable = reinterpret_cast<unsigned short*>(RVA2Data(ExportDirTable->OrdinalTable_RVA));
 
 
   CLog::Log(LOGDEBUG, "Export Table for %s:\n", Name);
@@ -267,7 +267,7 @@ void DllLoader::PrintExportTable(ExportDirTable_t *ExportDirTable)
   CLog::Log(LOGDEBUG, "    ordinal hint RVA      name\n");
   for (unsigned int i = 0; i < ExportDirTable->NumNamePtrs; i++)
   {
-    char *Name = (char*)RVA2Data(NamePointerTable[i]);
+    char *Name = reinterpret_cast<char*>(RVA2Data(NamePointerTable[i]));
 
     CLog::Log(LOGDEBUG, "          %lu", OrdinalTable[i] + ExportDirTable->OrdinalBase);
     CLog::Log(LOGDEBUG, "    %d", OrdinalTable[i]);
@@ -281,7 +281,7 @@ int DllLoader::ResolveImports()
   int bResult = 1;
   if ( NumOfDirectories >= 2 && Directory[IMPORT_TABLE].Size > 0 )
   {
-    ImportDirTable = (ImportDirTable_t*)RVA2Data(Directory[IMPORT_TABLE].RVA);
+    ImportDirTable = reinterpret_cast<ImportDirTable_t*>(RVA2Data(Directory[IMPORT_TABLE].RVA));
 
 #ifdef DUMPING_DATA
     PrintImportTable(ImportDirTable);
@@ -295,15 +295,15 @@ int DllLoader::ResolveImports()
             Imp->Name_RVA != 0 ||
             Imp->ImportAddressTable_RVA != 0)
     {
-      const char *Name = (const char*)RVA2Data(Imp->Name_RVA);
+      const char *Name = reinterpret_cast<const char*>(RVA2Data(Imp->Name_RVA));
 
       const char* FileName=ResolveReferencedDll(Name);
       //  If possible use the dll name WITH path to resolve exports. We could have loaded
       //  a dll with the same name as another dll but from a different directory
       if (FileName) Name=FileName;
 
-      unsigned long *Table = (unsigned long*)RVA2Data(Imp->ImportLookupTable_RVA);
-      unsigned long *Addr = (unsigned long*)RVA2Data(Imp->ImportAddressTable_RVA);
+      unsigned long *Table = reinterpret_cast<unsigned long*>(RVA2Data(Imp->ImportLookupTable_RVA));
+      unsigned long *Addr = reinterpret_cast<unsigned long*>(RVA2Data(Imp->ImportAddressTable_RVA));
 
       while (*Table)
       {
@@ -327,7 +327,7 @@ int DllLoader::ResolveImports()
         else
         {
           // We don't handle Hint/Name tables yet!!!
-          char *ImpName = (char*)RVA2Data(*Table + 2);
+          char *ImpName = reinterpret_cast<char*>(RVA2Data(*Table + 2));
 
           void *Fixup;
           if ( !ResolveName(Name, ImpName, &Fixup) )
@@ -379,7 +379,7 @@ int DllLoader::LoadExports()
 {
   if ( NumOfDirectories > EXPORT_TABLE && Directory[EXPORT_TABLE].Size > 0 )
   {
-    ExportDirTable = (ExportDirTable_t*)RVA2Data(Directory[EXPORT_TABLE].RVA);
+    ExportDirTable = reinterpret_cast<ExportDirTable_t*>(RVA2Data(Directory[EXPORT_TABLE].RVA));
 
 #ifdef DUMPING_DATA
     PrintExportTable(ExportDirTable);
@@ -388,14 +388,14 @@ int DllLoader::LoadExports()
     //! @todo Validate all pointers are valid. Is a zero RVA valid or not? I'd guess not as it would
     //! point to the coff file header, thus not right.
 
-    unsigned long *ExportAddressTable = (unsigned long*)RVA2Data(ExportDirTable->ExportAddressTable_RVA);
-    unsigned long *NamePointerTable = (unsigned long*)RVA2Data(ExportDirTable->NamePointerTable_RVA);
-    unsigned short *OrdinalTable = (unsigned short*)RVA2Data(ExportDirTable->OrdinalTable_RVA);
+    unsigned long *ExportAddressTable = reinterpret_cast<unsigned long*>(RVA2Data(ExportDirTable->ExportAddressTable_RVA));
+    unsigned long *NamePointerTable = reinterpret_cast<unsigned long*>(RVA2Data(ExportDirTable->NamePointerTable_RVA));
+    unsigned short *OrdinalTable = reinterpret_cast<unsigned short*>(RVA2Data(ExportDirTable->OrdinalTable_RVA));
 
     for (unsigned int i = 0; i < ExportDirTable->NumNamePtrs; i++)
     {
-      char *Name = (char*)RVA2Data(NamePointerTable[i]);
-      void* Addr = (void*)RVA2Data(ExportAddressTable[OrdinalTable[i]]);
+      char *Name = reinterpret_cast<char*>(RVA2Data(NamePointerTable[i]));
+      void* Addr = RVA2Data(ExportAddressTable[OrdinalTable[i]]);
       AddExport(Name, OrdinalTable[i]+ExportDirTable->OrdinalBase, Addr);
     }
   }
@@ -409,9 +409,9 @@ int DllLoader::ResolveExport(const char *sName, void **pAddr, bool logging)
   if (pExport)
   {
     if (m_bTrack && pExport->track_function) {
-      *pAddr=(void*)pExport->track_function;
+      *pAddr=pExport->track_function;
     } else {
-      *pAddr=(void*)pExport->function;
+      *pAddr=pExport->function;
 }
 
     return 1;
@@ -435,9 +435,9 @@ int DllLoader::ResolveOrdinal(unsigned long ordinal, void **pAddr)
   if (pExport)
   {
     if (m_bTrack && pExport->track_function) {
-      *pAddr=(void*)pExport->track_function;
+      *pAddr=pExport->track_function;
     } else {
-      *pAddr=(void*)pExport->function;
+      *pAddr=pExport->function;
 }
 
     return 1;
@@ -518,9 +518,9 @@ int DllLoader::ResolveOrdinal(const char *sName, unsigned long ordinal, void **f
     if(pExp)
     {
       if (m_bTrack && pExp->track_function) {
-        *fixup = (void*)(pExp->track_function);
+        *fixup = (pExp->track_function);
       } else {
-        *fixup = (void*)(pExp->function);
+        *fixup = (pExp->function);
 }
 
       return 1;
@@ -540,9 +540,9 @@ int DllLoader::ResolveName(const char *sName, char* sFunction, void **fixup)
     if(pExp)
     {
       if (m_bTrack && pExp->track_function) {
-        *fixup = (void*)(pExp->track_function);
+        *fixup = (pExp->track_function);
       } else {
-        *fixup = (void*)(pExp->function);
+        *fixup = (pExp->function);
 }
       return 1;
     }
@@ -553,7 +553,7 @@ int DllLoader::ResolveName(const char *sName, char* sFunction, void **fixup)
 
 void DllLoader::AddExport(unsigned long ordinal, void* function, void* track_function)
 {
-  ExportEntry* entry = (ExportEntry*)malloc(sizeof(ExportEntry));
+  ExportEntry* entry = reinterpret_cast<ExportEntry*>(malloc(sizeof(ExportEntry)));
   if (!entry) {
     return;
 }
@@ -570,15 +570,15 @@ void DllLoader::AddExport(char* sFunctionName, unsigned long ordinal, void* func
 {
   int len = sizeof(ExportEntry);
 
-  ExportEntry* entry = (ExportEntry*)malloc(len + strlen(sFunctionName) + 1);
+  ExportEntry* entry = reinterpret_cast<ExportEntry*>(malloc(len + strlen(sFunctionName) + 1));
   if (!entry) {
     return;
 }
   entry->exp.function = function;
   entry->exp.ordinal = ordinal;
   entry->exp.track_function = track_function;
-  entry->exp.name = ((char*)(entry)) + len;
-  strcpy((char*)entry->exp.name, sFunctionName);
+  entry->exp.name = (reinterpret_cast<char*>(entry)) + len;
+  strcpy(const_cast<char*>(entry->exp.name), sFunctionName);
 
   entry->next = m_pExportHead;
   m_pExportHead = entry;
@@ -588,15 +588,15 @@ void DllLoader::AddExport(char* sFunctionName, void* function, void* track_funct
 {
   int len = sizeof(ExportEntry);
 
-  ExportEntry* entry = (ExportEntry*)malloc(len + strlen(sFunctionName) + 1);
+  ExportEntry* entry = reinterpret_cast<ExportEntry*>(malloc(len + strlen(sFunctionName) + 1));
   if (!entry) {
     return;
 }
-  entry->exp.function = (void*)function;
+  entry->exp.function = function;
   entry->exp.ordinal = -1;
   entry->exp.track_function = track_function;
-  entry->exp.name = ((char*)(entry)) + len;
-  strcpy((char*)entry->exp.name, sFunctionName);
+  entry->exp.name = (reinterpret_cast<char*>(entry)) + len;
+  strcpy(const_cast<char*>(entry->exp.name), sFunctionName);
 
   entry->next = m_pExportHead;
   m_pExportHead = entry;
@@ -615,7 +615,7 @@ bool DllLoader::Load()
 
   // only execute DllMain if no EntryPoint is found
   if (!EntryAddress) {
-    ResolveExport("DllMain", (void**)&EntryAddress);
+    ResolveExport("DllMain", reinterpret_cast<void**>(&EntryAddress));
 }
 
   // patch some unwanted calls in memory
@@ -626,7 +626,7 @@ bool DllLoader::Load()
     uintptr_t imagebase_addr;
     uintptr_t dispatch_rva;
 
-    ResolveExport("theQuickTimeDispatcher", (void **)&dispatch_addr);
+    ResolveExport("theQuickTimeDispatcher", reinterpret_cast<void **>(&dispatch_addr));
     imagebase_addr = (uintptr_t)hModule;
     CLog::Log(LOGDEBUG,
               "Virtual Address of theQuickTimeDispatcher = %p",

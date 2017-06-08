@@ -126,7 +126,7 @@ void CActiveAEStream::InitRemapper()
       for(unsigned int j=0; j<m_format.m_channelLayout.Count(); j++)
       {
         idx = CAEUtil::GetAVChannelIndex(m_format.m_channelLayout[j], avLayout);
-        if (idx == (int)i)
+        if (idx == static_cast<int>(i))
         {
           ffmpegLayout += m_format.m_channelLayout[j];
           break;
@@ -142,7 +142,7 @@ void CActiveAEStream::InitRemapper()
       for(unsigned int j=0; j<m_format.m_channelLayout.Count(); j++)
       {
         idx = CAEUtil::GetAVChannelIndex(m_format.m_channelLayout[j], avLayout);
-        if (idx == (int)i)
+        if (idx == static_cast<int>(i))
         {
           remapLayout += ffmpegLayout[j];
           break;
@@ -303,7 +303,7 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
         if (m_format.m_dataFormat != AE_FMT_RAW)
         {
           m_currentBuffer->pkt->nb_samples += minFrames;
-          m_bufferedTime += (double)minFrames / m_currentBuffer->pkt->config.sample_rate;
+          m_bufferedTime += static_cast<double>(minFrames) / m_currentBuffer->pkt->config.sample_rate;
         }
         else
         {
@@ -328,7 +328,7 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
     {
       if (msg->signal == CActiveAEDataProtocol::STREAMBUFFER)
       {
-        m_currentBuffer = *((CSampleBuffer**)msg->data);
+        m_currentBuffer = *(reinterpret_cast<CSampleBuffer**>(msg->data));
         m_currentBuffer->timestamp = 0;
         m_currentBuffer->pkt->nb_samples = 0;
         m_currentBuffer->pkt->pause_burst_ms = 0;
@@ -429,7 +429,7 @@ void CActiveAEStream::Drain(bool wait)
       {
         MsgStreamSample msgData;
         msgData.stream = this;
-        msgData.buffer = *((CSampleBuffer**)msg->data);
+        msgData.buffer = *(reinterpret_cast<CSampleBuffer**>(msg->data));
         msg->Reply(CActiveAEDataProtocol::STREAMSAMPLE, &msgData, sizeof(MsgStreamSample));
         DecFreeBuffers();
         continue;

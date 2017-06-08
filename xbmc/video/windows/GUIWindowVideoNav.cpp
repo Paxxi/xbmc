@@ -266,7 +266,7 @@ SelectFirstUnwatchedItem CGUIWindowVideoNav::GetSettingSelectFirstUnwatchedItem(
     {
       int iValue = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOLIBRARY_TVSHOWSSELECTFIRSTUNWATCHEDITEM);
       if (iValue >= SelectFirstUnwatchedItem::NEVER && iValue <= SelectFirstUnwatchedItem::ALWAYS) {
-        return (SelectFirstUnwatchedItem)iValue;
+        return static_cast<SelectFirstUnwatchedItem>(iValue);
 }
     }
   }
@@ -278,7 +278,7 @@ IncludeAllSeasonsAndSpecials CGUIWindowVideoNav::GetSettingIncludeAllSeasonsAndS
 {
   int iValue = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOLIBRARY_TVSHOWSINCLUDEALLSEASONSANDSPECIALS);
   if (iValue >= IncludeAllSeasonsAndSpecials::NEITHER && iValue <= IncludeAllSeasonsAndSpecials::SPECIALS) {
-    return (IncludeAllSeasonsAndSpecials)iValue;
+    return static_cast<IncludeAllSeasonsAndSpecials>(iValue);
 }
 
   return IncludeAllSeasonsAndSpecials::NEITHER;

@@ -75,7 +75,7 @@ namespace XFILE
     sorting.sortOrder = playlist.GetOrderAscending() ? SortOrderAscending : SortOrderDescending;
     sorting.sortAttributes = playlist.GetOrderAttributes();
     if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING))
-      sorting.sortAttributes = (SortAttribute)(sorting.sortAttributes | SortAttributeIgnoreArticle);
+      sorting.sortAttributes = static_cast<SortAttribute>(sorting.sortAttributes | SortAttributeIgnoreArticle);
     items.SetSortIgnoreFolders((sorting.sortAttributes & SortAttributeIgnoreFolders) == SortAttributeIgnoreFolders);
 
     std::string option = !filter ? "xsp" : "filter";

@@ -151,7 +151,7 @@ bool CInputManager::ProcessMouse(int windowId)
     return true;
 
   // Retrieve the corresponding action
-  CKey key(mousekey, (unsigned int)0);
+  CKey key(mousekey, static_cast<unsigned int>(0));
   CAction mouseaction = CButtonTranslator::GetInstance().GetAction(windowId, key);
 
   // Deactivate mouse if non-mouse action
@@ -265,14 +265,14 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
       CKey key;
       if (wKeyID & ES_FLAG_UNICODE)
       {
-        key = CKey((uint8_t)0, wKeyID & ~ES_FLAG_UNICODE, 0, 0, 0);
+        key = CKey(static_cast<uint8_t>(0), wKeyID & ~ES_FLAG_UNICODE, 0, 0, 0);
         return OnKey(key);
       }
 
       if (wKeyID == KEY_BUTTON_LEFT_ANALOG_TRIGGER) {
-        key = CKey(wKeyID, (BYTE)(255 * fAmount), 0, 0.0, 0.0, 0.0, 0.0, frameTime);
+        key = CKey(wKeyID, static_cast<BYTE>(255 * fAmount), 0, 0.0, 0.0, 0.0, 0.0, frameTime);
       } else if (wKeyID == KEY_BUTTON_RIGHT_ANALOG_TRIGGER) {
-        key = CKey(wKeyID, 0, (BYTE)(255 * fAmount), 0.0, 0.0, 0.0, 0.0, frameTime);
+        key = CKey(wKeyID, 0, static_cast<BYTE>(255 * fAmount), 0.0, 0.0, 0.0, 0.0, frameTime);
       } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_LEFT) {
         key = CKey(wKeyID, 0, 0, -fAmount, 0.0, 0.0, 0.0, frameTime);
       } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_RIGHT) {

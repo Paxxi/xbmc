@@ -87,7 +87,7 @@ bool CGUIEditControl::OnMessage(CGUIMessage &message)
 {
   if (message.GetMessage() == GUI_MSG_SET_TYPE)
   {
-    SetInputType((INPUT_TYPE)message.GetParam1(), (int)message.GetParam2());
+    SetInputType(static_cast<INPUT_TYPE>(message.GetParam1()), message.GetParam2());
     return true;
   }
   else if (message.GetMessage() == GUI_MSG_ITEM_SELECTED)

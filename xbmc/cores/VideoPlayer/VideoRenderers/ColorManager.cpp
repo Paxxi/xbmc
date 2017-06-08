@@ -87,7 +87,7 @@ CMS_PRIMARIES videoFlagsToPrimaries(int flags)
 bool CColorManager::GetVideo3dLut(int videoFlags, int *cmsToken, int *clutSize, uint16_t **clutData)
 {
   CMS_PRIMARIES videoPrimaries = videoFlagsToPrimaries(videoFlags);
-  CLog::Log(LOGDEBUG, "video primaries: %d\n", (int)videoPrimaries);
+  CLog::Log(LOGDEBUG, "video primaries: %d\n", static_cast<int>(videoPrimaries));
   switch (CServiceBroker::GetSettings().GetInt("videoscreen.cmsmode"))
   {
   case CMS_MODE_3DLUT:
@@ -307,7 +307,7 @@ bool CColorManager::Load3dLut(const std::string filename, uint16_t **CLUT, int *
 
   int lutsamples = rSize * gSize * bSize * 3;
   *CLUTsize = rSize; // TODO: assumes cube
-  *CLUT = (uint16_t*)malloc(lutsamples * sizeof(uint16_t));
+  *CLUT = reinterpret_cast<uint16_t*>(malloc(lutsamples * sizeof(uint16_t)));
 
   lutFile.Seek(header.lutFileOffset, SEEK_SET);
 

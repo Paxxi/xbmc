@@ -405,7 +405,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
     case DVDNAV_SPU_STREAM_CHANGE:
       // Player applications should inform their SPU decoder to switch channels
       {
-        dvdnav_spu_stream_change_event_t* event = (dvdnav_spu_stream_change_event_t*)buf;
+        dvdnav_spu_stream_change_event_t* event = reinterpret_cast<dvdnav_spu_stream_change_event_t*>(buf);
 
         //libdvdnav never sets logical, why.. don't know..
         event->logical = GetActiveSubtitleStream();
@@ -437,7 +437,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
         //taking a audiostream as given on dvd, it gives the physical stream that
         //refers to in the mpeg file
 
-        dvdnav_audio_stream_change_event_t* event = (dvdnav_audio_stream_change_event_t*)buf;
+        dvdnav_audio_stream_change_event_t* event = reinterpret_cast<dvdnav_audio_stream_change_event_t*>(buf);
 
         //wrong... stupid docs..
         //event->logical = dvdnav_get_audio_logical_stream(m_dvdnav, event->physical);
@@ -528,13 +528,13 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
           }
         }
         CLog::Log(LOGDEBUG, "%s - Cell change: Title %d, Chapter %d\n", __FUNCTION__, m_iTitle, m_iPart);
-        CLog::Log(LOGDEBUG, "%s - At position %.0f%% inside the feature\n", __FUNCTION__, 100 * (double)pos / (double)len);
+        CLog::Log(LOGDEBUG, "%s - At position %.0f%% inside the feature\n", __FUNCTION__, 100 * static_cast<double>(pos) / static_cast<double>(len));
         //Get total segment time
 
-        dvdnav_cell_change_event_t* cell_change_event = (dvdnav_cell_change_event_t*)buf;
+        dvdnav_cell_change_event_t* cell_change_event = reinterpret_cast<dvdnav_cell_change_event_t*>(buf);
         m_iCellStart = cell_change_event->cell_start; // store cell time as we need that for time later
-        m_iTime      = (int) (m_iCellStart / 90);
-        m_iTotalTime = (int) (cell_change_event->pgc_length / 90);
+        m_iTime      = static_cast<int> (m_iCellStart / 90);
+        m_iTotalTime = static_cast<int> (cell_change_event->pgc_length / 90);
 
         iNavresult = m_pVideoPlayer->OnDiscNavResult(buf, DVDNAV_CELL_CHANGE);
       }
@@ -575,7 +575,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
         }
 
         /* check for any gap in the stream, this is likely a discontinuity */
-        int64_t gap = (int64_t)pci->pci_gi.vobu_s_ptm - m_iVobUnitStop;
+        int64_t gap = static_cast<int64_t>(pci->pci_gi.vobu_s_ptm) - m_iVobUnitStop;
         if(gap)
         {
           /* make sure demuxer is flushed before we change any correction */
@@ -588,7 +588,7 @@ int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
           }
           m_iVobUnitCorrection += gap;
 
-          CLog::Log(LOGDEBUG, "DVDNAV_NAV_PACKET - DISCONTINUITY FROM:%" PRId64" TO:%" PRId64" DIFF:%" PRId64, (m_iVobUnitStop * 1000)/90, ((int64_t)pci->pci_gi.vobu_s_ptm*1000)/90, (gap*1000)/90);
+          CLog::Log(LOGDEBUG, "DVDNAV_NAV_PACKET - DISCONTINUITY FROM:%" PRId64" TO:%" PRId64" DIFF:%" PRId64, (m_iVobUnitStop * 1000)/90, (static_cast<int64_t>(pci->pci_gi.vobu_s_ptm)*1000)/90, (gap*1000)/90);
         }
 
         m_iVobUnitStart = pci->pci_gi.vobu_s_ptm;

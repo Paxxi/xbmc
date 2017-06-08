@@ -117,10 +117,10 @@ bool CJpegParse::GetSection (CFile& infile, const unsigned short sectionLength)
     return false;
   }
   // Store first two pre-read bytes.
-  m_SectionBuffer[0] = (unsigned char)(sectionLength >> 8);
-  m_SectionBuffer[1] = (unsigned char)(sectionLength & 0x00FF);
+  m_SectionBuffer[0] = static_cast<unsigned char>(sectionLength >> 8);
+  m_SectionBuffer[1] = static_cast<unsigned char>(sectionLength & 0x00FF);
 
-  unsigned int len = (unsigned int)sectionLength;
+  unsigned int len = static_cast<unsigned int>(sectionLength);
 
   size_t bytesRead = infile.Read(m_SectionBuffer+sizeof(sectionLength), len-sizeof(sectionLength));
   if (bytesRead != sectionLength-sizeof(sectionLength))
@@ -205,7 +205,7 @@ bool CJpegParse::ExtractInfo (CFile& infile)
         {
        //   CExifParse::FixComment(comment);          // Ensure comment is printable
           unsigned short length = min(itemlen - 2, MAX_COMMENT);
-          strncpy(m_ExifInfo.FileComment, (char *)&m_SectionBuffer[2], length);
+          strncpy(m_ExifInfo.FileComment, reinterpret_cast<char *>(&m_SectionBuffer[2]), length);
           m_ExifInfo.FileComment[length] = '\0';
 		    }
         ReleaseSection();

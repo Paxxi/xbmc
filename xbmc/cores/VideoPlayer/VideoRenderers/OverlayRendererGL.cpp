@@ -157,8 +157,8 @@ static void LoadTexture(GLenum target
 
   free(pixelVector);
   
-  *u = (GLfloat)width  / width2;
-  *v = (GLfloat)height / height2;
+  *u = static_cast<GLfloat>(width)  / width2;
+  *v = static_cast<GLfloat>(height) / height2;
 }
 
 COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
@@ -176,7 +176,7 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
   else
   {
     m_pma  = false;
-    rgba   = (uint32_t*)o->data;
+    rgba   = reinterpret_cast<uint32_t*>(o->data);
     stride = o->linesize;
   }
 
@@ -202,7 +202,7 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
             , &m_u, &m_v
             , false
             , rgba);
-  if((BYTE*)rgba != o->data) {
+  if(reinterpret_cast<BYTE*>(rgba) != o->data) {
     free(rgba);
 }
 
@@ -211,11 +211,11 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
 
   if(o->source_width && o->source_height)
   {
-    float center_x = (float)(0.5f * o->width  + o->x) / o->source_width;
-    float center_y = (float)(0.5f * o->height + o->y) / o->source_height;
+    float center_x = (0.5f * o->width  + o->x) / o->source_width;
+    float center_y = (0.5f * o->height + o->y) / o->source_height;
 
-    m_width  = (float)o->width  / o->source_width;
-    m_height = (float)o->height / o->source_height;
+    m_width  = static_cast<float>(o->width)  / o->source_width;
+    m_height = static_cast<float>(o->height) / o->source_height;
     m_pos    = POSITION_RELATIVE;
 
 #if 0
@@ -240,10 +240,10 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
   {
     m_align  = ALIGN_VIDEO;
     m_pos    = POSITION_ABSOLUTE;
-    m_x      = (float)o->x;
-    m_y      = (float)o->y;
-    m_width  = (float)o->width;
-    m_height = (float)o->height;
+    m_x      = static_cast<float>(o->x);
+    m_y      = static_cast<float>(o->y);
+    m_width  = static_cast<float>(o->width);
+    m_height = static_cast<float>(o->height);
   }
 }
 
@@ -285,10 +285,10 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlaySpu* o)
 
   m_align  = ALIGN_VIDEO;
   m_pos    = POSITION_ABSOLUTE;
-  m_x      = (float)(min_x + o->x);
-  m_y      = (float)(min_y + o->y);
-  m_width  = (float)(max_x - min_x);
-  m_height = (float)(max_y - min_y);
+  m_x      = static_cast<float>(min_x + o->x);
+  m_y      = static_cast<float>(min_y + o->y);
+  m_width  = static_cast<float>(max_x - min_x);
+  m_height = static_cast<float>(max_y - min_y);
   m_pma    = !!USE_PREMULTIPLIED_ALPHA;
 }
 
@@ -328,7 +328,7 @@ COverlayGlyphGL::COverlayGlyphGL(ASS_Image* images, int width, int height)
   float scale_y = 1.0f / height;
 
   m_count  = quads.count;
-  m_vertex = (VERTEX*)calloc(m_count * 4, sizeof(VERTEX));
+  m_vertex = reinterpret_cast<VERTEX*>(calloc(m_count * 4, sizeof(VERTEX)));
 
   VERTEX* vt = m_vertex;
   SQuad*  vs = quads.quad;

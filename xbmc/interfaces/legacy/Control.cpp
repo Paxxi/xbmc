@@ -165,7 +165,7 @@ namespace XBMCAddon
 
     void ControlTextBox::scroll(long position)
     {
-      static_cast<CGUITextBox*>(pGUIControl)->Scroll((int)position);
+      static_cast<CGUITextBox*>(pGUIControl)->Scroll(static_cast<int>(position));
     }
 
     void ControlTextBox::autoScroll(int delay, int time, int repeat)
@@ -286,9 +286,9 @@ namespace XBMCAddon
       label.shadowColor = shadowColor;
       label.focusedColor = focusedColor;
       label.align = align;
-      label.offsetX = (float)textOffsetX;
-      label.offsetY = (float)textOffsetY;
-      label.angle = (float)-iAngle;
+      label.offsetX = static_cast<float>(textOffsetX);
+      label.offsetY = static_cast<float>(textOffsetY);
+      label.angle = static_cast<float>(-iAngle);
       pGUIControl = new CGUIButtonControl(
         iParentId,
         iControlId,
@@ -357,7 +357,7 @@ namespace XBMCAddon
             CTextureInfo(strFileName));
 
       if (pGUIControl && aspectRatio <= CAspectRatio::AR_KEEP) {
-        ((CGUIImage *)pGUIControl)->SetAspectRatio((CAspectRatio::ASPECT_RATIO)aspectRatio);
+        ((CGUIImage *)pGUIControl)->SetAspectRatio(static_cast<CAspectRatio::ASPECT_RATIO>(aspectRatio));
 }
 
       if (pGUIControl && colorDiffuse)
@@ -635,7 +635,7 @@ namespace XBMCAddon
       if (pGUIControl)
       {
         LOCKGUI;
-        ((CGUIRadioButtonControl*)pGUIControl)->SetRadioDimensions((float)dwPosX, (float)dwPosY, (float)dwWidth, (float)dwHeight);
+        ((CGUIRadioButtonControl*)pGUIControl)->SetRadioDimensions(static_cast<float>(dwPosX), static_cast<float>(dwPosY), static_cast<float>(dwWidth), static_cast<float>(dwHeight));
       }
     }
 
@@ -648,9 +648,9 @@ namespace XBMCAddon
       label.shadowColor = shadowColor;
       label.focusedColor = focusedColor;
       label.align = align;
-      label.offsetX = (float)textOffsetX;
-      label.offsetY = (float)textOffsetY;
-      label.angle = (float)-iAngle;
+      label.offsetX = static_cast<float>(textOffsetX);
+      label.offsetY = static_cast<float>(textOffsetY);
+      label.angle = static_cast<float>(-iAngle);
       pGUIControl = new CGUIRadioButtonControl(
         iParentId,
         iControlId,
@@ -780,7 +780,7 @@ namespace XBMCAddon
       dwPosX = x;
       dwPosY = y;
       if (pGUIControl) {
-        pGUIControl->SetPosition((float)dwPosX, (float)dwPosY);
+        pGUIControl->SetPosition(static_cast<float>(dwPosX), static_cast<float>(dwPosY));
 }
     }
 
@@ -790,7 +790,7 @@ namespace XBMCAddon
       LOCKGUI;
       dwWidth = width;
       if (pGUIControl) {
-        pGUIControl->SetWidth((float)dwWidth);
+        pGUIControl->SetWidth(static_cast<float>(dwWidth));
 }
     }
 
@@ -800,7 +800,7 @@ namespace XBMCAddon
       LOCKGUI;
       dwHeight = height;
       if (pGUIControl) {
-        pGUIControl->SetHeight((float)dwHeight);
+        pGUIControl->SetHeight(static_cast<float>(dwHeight));
 }
     }
 
@@ -965,7 +965,7 @@ namespace XBMCAddon
       label.textColor = label.focusedColor = textColor;
       label.disabledColor = disabledColor;
       label.align = align;
-      label.angle = (float)-iAngle;
+      label.angle = static_cast<float>(-iAngle);
       pGUIControl = new CGUILabelControl(
         iParentId,
         iControlId,
@@ -1140,8 +1140,8 @@ namespace XBMCAddon
       label.textColor = label.focusedColor = textColor;
       //label.shadowColor = shadowColor;
       label.selectedColor = selectedColor;
-      label.offsetX = (float)itemTextOffsetX;
-      label.offsetY = (float)itemTextOffsetY;
+      label.offsetX = static_cast<float>(itemTextOffsetX);
+      label.offsetY = static_cast<float>(itemTextOffsetY);
       // Second label should have the same font, alignment, and colours as the first, but
       // the offsets should be 0.
       CLabelInfo label2 = label;
@@ -1348,12 +1348,12 @@ namespace XBMCAddon
 
     long ControlList::getItemHeight()
     {
-      return (long)itemHeight;
+      return static_cast<long>(itemHeight);
     }
 
     long ControlList::getSpace()
     {
-      return (long)space;
+      return static_cast<long>(space);
     }
 
     XBMCAddon::xbmcgui::ListItem* ControlList::getListItem(int index)

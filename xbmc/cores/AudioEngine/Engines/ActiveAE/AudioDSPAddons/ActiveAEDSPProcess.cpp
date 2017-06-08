@@ -68,8 +68,8 @@ CActiveAEDSPProcess::CActiveAEDSPProcess(AE_DSP_STREAM_ID streamId)
   m_processArraySize = MIN_DSP_ARRAY_SIZE;
   for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
-    m_processArray[0][i] = (float*)calloc(m_processArraySize, sizeof(float));
-    m_processArray[1][i] = (float*)calloc(m_processArraySize, sizeof(float));
+    m_processArray[0][i] = reinterpret_cast<float*>(calloc(m_processArraySize, sizeof(float)));
+    m_processArray[1][i] = reinterpret_cast<float*>(calloc(m_processArraySize, sizeof(float)));
   }
 }
 
@@ -246,7 +246,7 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
    */
   for (int ii = 0; ii < AE_DSP_CH_MAX; ii++)
   {
-    if (m_inputFormat.m_channelLayout.HasChannel((AEChannel)(ii + 1)))
+    if (m_inputFormat.m_channelLayout.HasChannel(static_cast<AEChannel>(ii + 1)))
     {
       m_addonSettings.lInChannelPresentFlags |= 1 << ii;
     }
@@ -254,7 +254,7 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
 
   for (int ii = 0; ii < AE_DSP_CH_MAX; ii++)
   {
-    if (m_outputFormat.m_channelLayout.HasChannel((AEChannel)(ii + 1)))
+    if (m_outputFormat.m_channelLayout.HasChannel(static_cast<AEChannel>(ii + 1)))
     {
       m_addonSettings.lOutChannelPresentFlags |= 1 << ii;
     }
@@ -618,7 +618,7 @@ bool CActiveAEDSPProcess::GetMasterModeStreamInfoString(std::string &strInfo)
 
 bool CActiveAEDSPProcess::GetMasterModeTypeInformation(AE_DSP_STREAMTYPE &streamTypeUsed, AE_DSP_BASETYPE &baseType, int &iModeID)
 {
-  streamTypeUsed  = (AE_DSP_STREAMTYPE)m_addonStreamProperties.iStreamType;
+  streamTypeUsed  = m_addonStreamProperties.iStreamType;
 
   if (m_activeMode < 0) {
     return false;
@@ -712,7 +712,7 @@ bool CActiveAEDSPProcess::MasterModeChange(int iModeID, AE_DSP_STREAMTYPE iStrea
                                     GetStreamTypeName((AE_DSP_STREAMTYPE)m_addonStreamProperties.iStreamType),
                                     m_addons_MasterProc[ptr].pAddon->GetAudioDSPName().c_str());
 
-            m_activeMode            = (int)ptr;
+            m_activeMode            = static_cast<int>(ptr);
             m_activeModeOutChannels = m_addons_MasterProc[m_activeMode].pAddon->MasterProcessGetOutChannels(&m_addons_MasterProc[ptr].handle, m_activeModeOutChannelsPresent);
             bReturn                 = true;
           }
@@ -723,7 +723,7 @@ bool CActiveAEDSPProcess::MasterModeChange(int iModeID, AE_DSP_STREAMTYPE iStrea
                                   mode->AddonModeName().c_str(),
                                   GetStreamTypeName((AE_DSP_STREAMTYPE)m_addonStreamProperties.iStreamType));
 
-          m_activeMode            = (int)ptr;
+          m_activeMode            = static_cast<int>(ptr);
           m_activeModeOutChannels = -1;
           bReturn                 = true;
         }
@@ -898,7 +898,7 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
   /**
    * Convert to required planar float format inside dsp system
    */
-  if (swr_convert(m_convertInput, (uint8_t **)m_ffMpegConvertArray[FFMPEG_PROC_ARRAY_IN], m_processArraySize, (const uint8_t **)in->pkt->data, in->pkt->nb_samples) < 0)
+  if (swr_convert(m_convertInput, reinterpret_cast<uint8_t **>(m_ffMpegConvertArray[FFMPEG_PROC_ARRAY_IN]), m_processArraySize, (const uint8_t **)in->pkt->data, in->pkt->nb_samples) < 0)
   {
     CLog::Log(LOGERROR, "ActiveAE DSP - %s - input audio convert failed", __FUNCTION__);
     return false;
@@ -997,7 +997,7 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
       SetFFMpegDSPProcessorArray(m_ffMpegProcessArray[FFMPEG_PROC_ARRAY_OUT], m_processArray[togglePtr], m_idx_out, m_addonSettings.lOutChannelPresentFlags);
     }
 
-    frames = m_resamplerDSPProcessor->Resample((uint8_t**)m_ffMpegProcessArray[FFMPEG_PROC_ARRAY_OUT], frames, (uint8_t**)m_ffMpegProcessArray[FFMPEG_PROC_ARRAY_IN], frames, 1.0);
+    frames = m_resamplerDSPProcessor->Resample(reinterpret_cast<uint8_t**>(m_ffMpegProcessArray[FFMPEG_PROC_ARRAY_OUT]), frames, reinterpret_cast<uint8_t**>(m_ffMpegProcessArray[FFMPEG_PROC_ARRAY_IN]), frames, 1.0);
     if (frames <= 0)
     {
       CLog::Log(LOGERROR, "CActiveAEResample::Resample - resample failed");
@@ -1061,7 +1061,7 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
   /**
    * Convert back to required output format
    */
-  if (swr_convert(m_convertOutput, (uint8_t **)out->pkt->data, out->pkt->max_nb_samples, (const uint8_t **)m_ffMpegConvertArray[FFMPEG_PROC_ARRAY_OUT], frames) < 0)
+  if (swr_convert(m_convertOutput, out->pkt->data, out->pkt->max_nb_samples, reinterpret_cast<const uint8_t **>(m_ffMpegConvertArray[FFMPEG_PROC_ARRAY_OUT]), frames) < 0)
   {
     CLog::Log(LOGERROR, "ActiveAE DSP - %s - output audio convert failed", __FUNCTION__);
     return false;
@@ -1145,8 +1145,8 @@ bool CActiveAEDSPProcess::ReallocProcessArray(unsigned int requestSize)
   m_processArraySize = requestSize + MIN_DSP_ARRAY_SIZE / 10;
   for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
-    m_processArray[0][i] = (float*)realloc(m_processArray[0][i], m_processArraySize*sizeof(float));
-    m_processArray[1][i] = (float*)realloc(m_processArray[1][i], m_processArraySize*sizeof(float));
+    m_processArray[0][i] = reinterpret_cast<float*>(realloc(m_processArray[0][i], m_processArraySize*sizeof(float)));
+    m_processArray[1][i] = reinterpret_cast<float*>(realloc(m_processArray[1][i], m_processArraySize*sizeof(float)));
     if (m_processArray[0][i] == nullptr || m_processArray[1][i] == nullptr)
     {
       CLog::Log(LOGERROR, "ActiveAE DSP - %s - realloc of process data array failed", __FUNCTION__);
@@ -1166,10 +1166,10 @@ void CActiveAEDSPProcess::CalculateCPUUsage(uint64_t iTime)
     // calculate usage only if we don't divide by zero
     if (m_iLastProcessUsage > 0 && m_iLastProcessTime > 0)
     {
-      m_fLastProcessUsage = (float)(iUsage - m_iLastProcessUsage) / (float)(iTime - m_iLastProcessTime) * 100.0f;
+      m_fLastProcessUsage = static_cast<float>(iUsage - m_iLastProcessUsage) / static_cast<float>(iTime - m_iLastProcessTime) * 100.0f;
     }
 
-    float dTFactor = 100.0f / (float)(iTime - m_iLastProcessTime);
+    float dTFactor = 100.0f / static_cast<float>(iTime - m_iLastProcessTime);
 
     if(m_addon_InputResample.pMode)
     {

@@ -115,7 +115,7 @@ bool CDVDCodecUtils::CopyPicture(YV12Image* pImage, VideoPicture *pSrc)
   uint8_t *d = pImage->plane[0];
   int w = pImage->width * pImage->bpp;
   int h = pImage->height;
-  if ((w == pSrc->iLineSize[0]) && ((unsigned int) pSrc->iLineSize[0] == pImage->stride[0]))
+  if ((w == pSrc->iLineSize[0]) && (static_cast<unsigned int>( pSrc->iLineSize[0]) == pImage->stride[0]))
   {
     memcpy(d, s, w*h);
   }
@@ -132,7 +132,7 @@ bool CDVDCodecUtils::CopyPicture(YV12Image* pImage, VideoPicture *pSrc)
   d = pImage->plane[1];
   w =(pImage->width  >> pImage->cshift_x) * pImage->bpp;
   h =(pImage->height >> pImage->cshift_y);
-  if ((w==pSrc->iLineSize[1]) && ((unsigned int) pSrc->iLineSize[1]==pImage->stride[1]))
+  if ((w==pSrc->iLineSize[1]) && (static_cast<unsigned int>( pSrc->iLineSize[1])==pImage->stride[1]))
   {
     memcpy(d, s, w*h);
   }
@@ -147,7 +147,7 @@ bool CDVDCodecUtils::CopyPicture(YV12Image* pImage, VideoPicture *pSrc)
   }
   s = pSrc->data[2];
   d = pImage->plane[2];
-  if ((w==pSrc->iLineSize[2]) && ((unsigned int) pSrc->iLineSize[2]==pImage->stride[2]))
+  if ((w==pSrc->iLineSize[2]) && (static_cast<unsigned int>( pSrc->iLineSize[2])==pImage->stride[2]))
   {
     memcpy(d, s, w*h);
   }
@@ -175,7 +175,7 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
     int h = pPicture->iHeight / 2;
     int size = w * h;
     int totalsize = (pPicture->iWidth * pPicture->iHeight) + size * 2;
-    uint8_t* data = (uint8_t*) av_malloc(totalsize);
+    uint8_t* data = reinterpret_cast<uint8_t*>( av_malloc(totalsize));
     if (data)
     {
       pPicture->data[0] = data;
@@ -191,7 +191,7 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
       // copy luma
       uint8_t *s = pSrc->data[0];
       uint8_t *d = pPicture->data[0];
-      for (int y = 0; y < (int)pSrc->iHeight; y++)
+      for (int y = 0; y < static_cast<int>(pSrc->iHeight); y++)
       {
         memcpy(d, s, pSrc->iWidth);
         s += pSrc->iLineSize[0];
@@ -199,11 +199,11 @@ VideoPicture* CDVDCodecUtils::ConvertToNV12Picture(VideoPicture *pSrc)
       }
 
       //copy chroma
-      for (int y = 0; y < (int)pSrc->iHeight/2; y++) {
+      for (int y = 0; y < static_cast<int>(pSrc->iHeight)/2; y++) {
         uint8_t *s_u = pSrc->data[1] + (y * pSrc->iLineSize[1]);
         uint8_t *s_v = pSrc->data[2] + (y * pSrc->iLineSize[2]);
         uint8_t *d_uv = pPicture->data[1] + (y * pPicture->iLineSize[1]);
-        for (int x = 0; x < (int)pSrc->iWidth/2; x++) {
+        for (int x = 0; x < static_cast<int>(pSrc->iWidth)/2; x++) {
           *d_uv++ = *s_u++;
           *d_uv++ = *s_v++;
         }
@@ -229,7 +229,7 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
     *pPicture = *pSrc;
 
     int totalsize = pPicture->iWidth * pPicture->iHeight * 2;
-    uint8_t* data = (uint8_t*) av_malloc(totalsize);
+    uint8_t* data = reinterpret_cast<uint8_t*>( av_malloc(totalsize));
 
     if (data)
     {
@@ -260,7 +260,7 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
 }
 
         struct SwsContext *ctx = sws_getContext(pSrc->iWidth, pSrc->iHeight, AV_PIX_FMT_YUV420P,
-                                                           pPicture->iWidth, pPicture->iHeight, (AVPixelFormat)dstformat,
+                                                           pPicture->iWidth, pPicture->iHeight, static_cast<AVPixelFormat>(dstformat),
                                                            SWS_BILINEAR, nullptr, nullptr, nullptr);
         sws_scale(ctx, src, srcStride, 0, pSrc->iHeight, dst, dstStride);
         sws_freeContext(ctx);
@@ -283,7 +283,7 @@ bool CDVDCodecUtils::CopyNV12Picture(YV12Image* pImage, VideoPicture *pSrc)
   int w = pSrc->iWidth;
   int h = pSrc->iHeight;
   // Copy Y
-  if ((w == pSrc->iLineSize[0]) && ((unsigned int) pSrc->iLineSize[0] == pImage->stride[0]))
+  if ((w == pSrc->iLineSize[0]) && (static_cast<unsigned int>( pSrc->iLineSize[0]) == pImage->stride[0]))
   {
     memcpy(d, s, w*h);
   }
@@ -302,7 +302,7 @@ bool CDVDCodecUtils::CopyNV12Picture(YV12Image* pImage, VideoPicture *pSrc)
   w = pSrc->iWidth;
   h = pSrc->iHeight >> 1;
   // Copy packed UV (width is same as for Y as it's both U and V components)
-  if ((w==pSrc->iLineSize[1]) && ((unsigned int) pSrc->iLineSize[1]==pImage->stride[1]))
+  if ((w==pSrc->iLineSize[1]) && (static_cast<unsigned int>( pSrc->iLineSize[1])==pImage->stride[1]))
   {
     memcpy(d, s, w*h);
   }
@@ -327,7 +327,7 @@ bool CDVDCodecUtils::CopyYUV422PackedPicture(YV12Image* pImage, VideoPicture *pS
   int h = pSrc->iHeight;
 
   // Copy YUYV
-  if ((w * 2 == pSrc->iLineSize[0]) && ((unsigned int) pSrc->iLineSize[0] == pImage->stride[0]))
+  if ((w * 2 == pSrc->iLineSize[0]) && (static_cast<unsigned int>( pSrc->iLineSize[0]) == pImage->stride[0]))
   {
     memcpy(d, s, w*h*2);
   }

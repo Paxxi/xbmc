@@ -58,7 +58,7 @@ void CFFmpegLog::ClearLogLevel()
 /* callback for the ffmpeg lock manager */
 int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
 {
-  CCriticalSection **lock = (CCriticalSection **)mutex;
+  CCriticalSection **lock = reinterpret_cast<CCriticalSection **>(mutex);
 
   switch (operation)
   {
@@ -115,7 +115,7 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
   uintptr_t threadId = (uintptr_t)CThread::GetCurrentThreadId();
   std::string &buffer = g_logbuffer[threadId];
 
-  AVClass* avc= ptr ? *(AVClass**)ptr : nullptr;
+  AVClass* avc= ptr ? *reinterpret_cast<AVClass**>(ptr) : nullptr;
 
   int maxLevel = AV_LOG_WARNING;
   if (CFFmpegLog::GetLogLevel() > 0) {

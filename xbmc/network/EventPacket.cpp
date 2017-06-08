@@ -54,9 +54,9 @@ bool CEventPacket::Parse(int datasize, const void *data)
 }
 
   // get packet type
-  m_eType = (PacketType)ntohs(*((uint16_t*)buf));
+  m_eType = static_cast<PacketType>ntohs(*((uint16_t*)buf));
 
-  if (m_eType < (unsigned short)PT_HELO || m_eType >= (unsigned short)PT_LAST) {
+  if (m_eType < static_cast<unsigned short>(PT_HELO) || m_eType >= static_cast<unsigned short>(PT_LAST)) {
     return false;
 }
 
@@ -72,7 +72,7 @@ bool CEventPacket::Parse(int datasize, const void *data)
   buf += 4;
   m_iPayloadSize = ntohs(*((uint16_t*)buf));
 
-  if ((m_iPayloadSize + HEADER_SIZE) != (unsigned int)datasize) {
+  if ((m_iPayloadSize + HEADER_SIZE) != static_cast<unsigned int>(datasize)) {
     return false;
 }
 

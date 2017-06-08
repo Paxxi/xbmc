@@ -275,7 +275,7 @@ HANDLE CCdIoSupport::OpenCDROM()
   char* source_name = m_cdio->GetDeviceFileName();
   CdIo* cdio = ::cdio_open(source_name, DRIVER_UNKNOWN);
 
-  return (HANDLE) cdio;
+  return reinterpret_cast<HANDLE>( cdio);
 }
 
 HANDLE CCdIoSupport::OpenIMAGE( std::string& strFilename )
@@ -284,14 +284,14 @@ HANDLE CCdIoSupport::OpenIMAGE( std::string& strFilename )
 
   CdIo* cdio = ::cdio_open(strFilename.c_str(), DRIVER_UNKNOWN);
 
-  return (HANDLE) cdio;
+  return reinterpret_cast<HANDLE>( cdio);
 }
 
 INT CCdIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
 {
   CSingleLock lock(*m_cdio);
 
-  CdIo* cdio = (CdIo*) hDevice;
+  CdIo* cdio = reinterpret_cast<CdIo*>( hDevice);
   if ( cdio == nullptr ) {
     return -1;
 }
@@ -307,7 +307,7 @@ INT CCdIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuff
 {
   CSingleLock lock(*m_cdio);
 
-  CdIo* cdio = (CdIo*) hDevice;
+  CdIo* cdio = reinterpret_cast<CdIo*>( hDevice);
   if ( cdio == nullptr ) {
     return -1;
 }
@@ -323,7 +323,7 @@ INT CCdIoSupport::ReadSectorCDDA(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffe
 {
   CSingleLock lock(*m_cdio);
 
-  CdIo* cdio = (CdIo*) hDevice;
+  CdIo* cdio = reinterpret_cast<CdIo*>( hDevice);
   if ( cdio == nullptr ) {
     return -1;
 }
@@ -339,7 +339,7 @@ VOID CCdIoSupport::CloseCDROM(HANDLE hDevice)
 {
   CSingleLock lock(*m_cdio);
 
-  CdIo* cdio = (CdIo*) hDevice;
+  CdIo* cdio = reinterpret_cast<CdIo*>( hDevice);
 
   if ( cdio == nullptr ) {
     return ;
@@ -478,7 +478,7 @@ int CCdIoSupport::ReadBlock(int superblock, uint32_t offset, uint8_t bufnum, tra
   unsigned int track_sec_count = ::cdio_get_track_sec_count(cdio, track_num);
   memset(buffer[bufnum], 0, CDIO_CD_FRAMESIZE);
 
-  if ( track_sec_count < (UINT)superblock)
+  if ( track_sec_count < static_cast<UINT>(superblock))
   {
     ::cdio_debug("reading block %u skipped track %d has only %u sectors\n",
                superblock, track_num, track_sec_count);
@@ -486,7 +486,7 @@ int CCdIoSupport::ReadBlock(int superblock, uint32_t offset, uint8_t bufnum, tra
   }
 
   ::cdio_debug("about to read sector %lu\n",
-             (long unsigned int) offset + superblock);
+             static_cast<long unsigned int>( offset) + superblock);
 
   if (::cdio_get_track_green(cdio, track_num))
   {
@@ -535,7 +535,7 @@ int CCdIoSupport::IsJoliet()
 
 int CCdIoSupport::IsUDF()
 {
-  return 2 == ((uint16_t)buffer[5][0] | ((uint16_t)buffer[5][1] << 8));
+  return 2 == (static_cast<uint16_t>(buffer[5][0]) | (static_cast<uint16_t>(buffer[5][1]) << 8));
 }
 
 /* ISO 9660 volume space in M2F1_SECTOR_SIZE byte units */
@@ -654,7 +654,7 @@ void CCdIoSupport::GetCdTextInfo(xbmc_cdtext_t &xcdt, int trackNum)
 #if defined (LIBCDIO_VERSION_NUM) && (LIBCDIO_VERSION_NUM > 83)
   cdtext_t *pcdtext = static_cast<cdtext_t*>( cdio_get_cdtext(cdio) );
 #else
-  cdtext_t *pcdtext = (cdtext_t *)::cdio_get_cdtext(cdio, trackNum);
+  cdtext_t *pcdtext = ::cdio_get_cdtext(cdio, trackNum);
 #endif 
   
   if (pcdtext == nullptr) {

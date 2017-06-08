@@ -185,9 +185,9 @@ bool CGraphicContext::SetViewPort(float fx, float fy, float fwidth, float fheigh
   x[1] = x[2] = fx + fwidth;
   y[0] = y[1] = fy;
   y[2] = y[3] = fy + fheight;
-  float minX = (float)m_iScreenWidth;
+  float minX = static_cast<float>(m_iScreenWidth);
   float maxX = 0;
-  float minY = (float)m_iScreenHeight;
+  float minY = static_cast<float>(m_iScreenHeight);
   float maxY = 0;
   for (int i = 0; i < 4; i++)
   {
@@ -199,10 +199,10 @@ bool CGraphicContext::SetViewPort(float fx, float fy, float fwidth, float fheigh
     if (y[i] > maxY) maxY = y[i];
   }
 
-  int newLeft = (int)(minX + 0.5f);
-  int newTop = (int)(minY + 0.5f);
-  int newRight = (int)(maxX + 0.5f);
-  int newBottom = (int)(maxY + 0.5f);
+  int newLeft = static_cast<int>(minX + 0.5f);
+  int newTop = static_cast<int>(minY + 0.5f);
+  int newRight = static_cast<int>(maxX + 0.5f);
+  int newBottom = static_cast<int>(maxY + 0.5f);
   if (intersectPrevious)
   {
     CRect oldviewport = m_viewStack.top();
@@ -525,7 +525,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
   switch (res)
   {
   case RES_HDTV_1080i:
-    info.iSubtitles = (int)(0.965 * 1080);
+    info.iSubtitles = static_cast<int>(0.965 * 1080);
     info.iWidth = 1920;
     info.iHeight = 1080;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED | D3DPRESENTFLAG_WIDESCREEN;
@@ -533,7 +533,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode ="1080i 16:9";
     break;
   case RES_HDTV_720pSBS:
-    info.iSubtitles = (int)(0.965 * 720);
+    info.iSubtitles = static_cast<int>(0.965 * 720);
     info.iWidth = 640;
     info.iHeight = 720;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN | D3DPRESENTFLAG_MODE3DSBS;
@@ -541,7 +541,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "720pSBS 16:9";
     break;
   case RES_HDTV_720pTB:
-    info.iSubtitles = (int)(0.965 * 720);
+    info.iSubtitles = static_cast<int>(0.965 * 720);
     info.iWidth = 1280;
     info.iHeight = 720;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN | D3DPRESENTFLAG_MODE3DTB;
@@ -549,7 +549,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "720pTB 16:9";
     break;
   case RES_HDTV_1080pSBS:
-    info.iSubtitles = (int)(0.965 * 1080);
+    info.iSubtitles = static_cast<int>(0.965 * 1080);
     info.iWidth = 1920;
     info.iHeight = 1080;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN | D3DPRESENTFLAG_MODE3DSBS;
@@ -557,7 +557,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "1080pSBS 16:9";
     break;
   case RES_HDTV_1080pTB:
-    info.iSubtitles = (int)(0.965 * 1080);
+    info.iSubtitles = static_cast<int>(0.965 * 1080);
     info.iWidth = 1920;
     info.iHeight = 1080;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN | D3DPRESENTFLAG_MODE3DTB;
@@ -565,7 +565,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "1080pTB 16:9";
     break;
   case RES_HDTV_720p:
-    info.iSubtitles = (int)(0.965 * 720);
+    info.iSubtitles = static_cast<int>(0.965 * 720);
     info.iWidth = 1280;
     info.iHeight = 720;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN;
@@ -573,7 +573,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "720p 16:9";
     break;
   case RES_HDTV_480p_4x3:
-    info.iSubtitles = (int)(0.9 * 480);
+    info.iSubtitles = static_cast<int>(0.9 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE;
@@ -581,7 +581,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "480p 4:3";
     break;
   case RES_HDTV_480p_16x9:
-    info.iSubtitles = (int)(0.965 * 480);
+    info.iSubtitles = static_cast<int>(0.965 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_PROGRESSIVE | D3DPRESENTFLAG_WIDESCREEN;
@@ -589,7 +589,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "480p 16:9";
     break;
   case RES_NTSC_4x3:
-    info.iSubtitles = (int)(0.9 * 480);
+    info.iSubtitles = static_cast<int>(0.9 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED;
@@ -597,7 +597,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "NTSC 4:3";
     break;
   case RES_NTSC_16x9:
-    info.iSubtitles = (int)(0.965 * 480);
+    info.iSubtitles = static_cast<int>(0.965 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED | D3DPRESENTFLAG_WIDESCREEN;
@@ -605,7 +605,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "NTSC 16:9";
     break;
   case RES_PAL_4x3:
-    info.iSubtitles = (int)(0.9 * 576);
+    info.iSubtitles = static_cast<int>(0.9 * 576);
     info.iWidth = 720;
     info.iHeight = 576;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED;
@@ -613,7 +613,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "PAL 4:3";
     break;
   case RES_PAL_16x9:
-    info.iSubtitles = (int)(0.965 * 576);
+    info.iSubtitles = static_cast<int>(0.965 * 576);
     info.iWidth = 720;
     info.iHeight = 576;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED | D3DPRESENTFLAG_WIDESCREEN;
@@ -621,7 +621,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "PAL 16:9";
     break;
   case RES_PAL60_4x3:
-    info.iSubtitles = (int)(0.9 * 480);
+    info.iSubtitles = static_cast<int>(0.9 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED;
@@ -629,7 +629,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "PAL60 4:3";
     break;
   case RES_PAL60_16x9:
-    info.iSubtitles = (int)(0.965 * 480);
+    info.iSubtitles = static_cast<int>(0.965 * 480);
     info.iWidth = 720;
     info.iHeight = 480;
     info.dwFlags = D3DPRESENTFLAG_INTERLACED | D3DPRESENTFLAG_WIDESCREEN;
@@ -637,7 +637,7 @@ void CGraphicContext::ResetScreenParameters(RESOLUTION res)
     info.strMode = "PAL60 16:9";
     break;
   case RES_WINDOW:
-    info.iSubtitles = (int)(0.965 * info.iHeight);
+    info.iSubtitles = static_cast<int>(0.965 * info.iHeight);
     info.fPixelRatio = 1.0;
     break;
   default:
@@ -733,12 +733,12 @@ void CGraphicContext::GetGUIScaling(const RESOLUTION_INFO &res, float &scaleX, f
   {
     // calculate necessary scalings
     RESOLUTION_INFO info = GetResInfo();
-    float fFromWidth  = (float)res.iWidth;
-    float fFromHeight = (float)res.iHeight;
-    float fToPosX     = (float)info.Overscan.left;
-    float fToPosY     = (float)info.Overscan.top;
-    float fToWidth    = (float)info.Overscan.right  - fToPosX;
-    float fToHeight   = (float)info.Overscan.bottom - fToPosY;
+    float fFromWidth  = static_cast<float>(res.iWidth);
+    float fFromHeight = static_cast<float>(res.iHeight);
+    float fToPosX     = static_cast<float>(info.Overscan.left);
+    float fToPosY     = static_cast<float>(info.Overscan.top);
+    float fToWidth    = static_cast<float>(info.Overscan.right)  - fToPosX;
+    float fToHeight   = static_cast<float>(info.Overscan.bottom) - fToPosY;
 
     if(!g_guiSkinzoom) // lookup gui setting if we didn't have it already
       g_guiSkinzoom = std::static_pointer_cast<CSettingInt>(CServiceBroker::GetSettings().GetSetting(CSettings::SETTING_LOOKANDFEEL_SKINZOOM));

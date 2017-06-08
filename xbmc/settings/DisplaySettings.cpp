@@ -654,7 +654,7 @@ RESOLUTION CDisplaySettings::GetResolutionForScreen()
   for (int idx=0; idx < g_Windowing.GetNumScreens(); idx++)
   {
     if (CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP + idx).iScreen == mode)
-      return (RESOLUTION)(RES_DESKTOP + idx);
+      return static_cast<RESOLUTION>(RES_DESKTOP + idx);
   }
 
   return RES_DESKTOP;

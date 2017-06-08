@@ -49,7 +49,7 @@ JSONRPC_STATUS CAudioLibrary::GetProperties(const std::string &method, ITranspor
     std::string propertyName = it->asString();
     CVariant property;
     if (propertyName == "missingartistid")
-      property = (int)BLANKARTIST_ID;
+      property = static_cast<int>(BLANKARTIST_ID);
 
     properties[propertyName] = property;
   }

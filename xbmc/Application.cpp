@@ -1960,7 +1960,7 @@ bool CApplication::OnAppCommand(const CAction &action)
   // The action ID is the APPCOMMAND code. We need to retrieve the action
   // associated with this appcommand from the mapping table.
   uint32_t appcmd = action.GetID();
-  CKey key(appcmd | KEY_APPCOMMAND, (unsigned int) 0);
+  CKey key(appcmd | KEY_APPCOMMAND, static_cast<unsigned int>( 0));
   int iWin = g_windowManager.GetActiveWindow() & WINDOW_ID_MASK;
   CAction appcmdaction = CButtonTranslator::GetInstance().GetAction(iWin, key);
 
@@ -2254,7 +2254,7 @@ bool CApplication::OnAction(const CAction &action)
       else if ((action.GetAmount() || m_pPlayer->GetPlaySpeed() != 1) && (action.GetID() == ACTION_ANALOG_REWIND || action.GetID() == ACTION_ANALOG_FORWARD))
       {
         // calculate the speed based on the amount the button is held down
-        int iPower = (int)(action.GetAmount() * MAX_FFWD_SPEED + 0.5f);
+        int iPower = static_cast<int>(action.GetAmount() * MAX_FFWD_SPEED + 0.5f);
         // amount can be negative, for example rewind and forward share the same axis
         iPower = std::abs(iPower);
         // returns 0 -> MAX_FFWD_SPEED
@@ -2302,7 +2302,7 @@ bool CApplication::OnAction(const CAction &action)
       std::string player = CPlayerCoreFactory::GetInstance().SelectPlayerDialog(players);
       if (!player.empty())
       {
-        item.m_lStartOffset = (int)(GetTime() * 75);
+        item.m_lStartOffset = static_cast<int>(GetTime() * 75);
         PlayFile(std::move(item), player, true);
       }
     }
@@ -2368,9 +2368,9 @@ bool CApplication::OnAction(const CAction &action)
 }
 #endif
       if (action.GetID() == ACTION_VOLUME_UP) {
-        volume += (float)(action.GetAmount() * action.GetAmount() * step);
+        volume += (action.GetAmount() * action.GetAmount() * step);
       } else if (action.GetID() == ACTION_VOLUME_DOWN) {
-        volume -= (float)(action.GetAmount() * action.GetAmount() * step);
+        volume -= (action.GetAmount() * action.GetAmount() * step);
       } else {
         volume = action.GetAmount() * step;
 }
@@ -2489,7 +2489,7 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
   break;
 
   case TMSG_NETWORKMESSAGE:
-    getNetwork().NetworkMessage((CNetwork::EMESSAGE)pMsg->param1, pMsg->param2);
+    getNetwork().NetworkMessage(static_cast<CNetwork::EMESSAGE>(pMsg->param1), pMsg->param2);
     break;
 
   case TMSG_SETLANGUAGE:
@@ -2884,7 +2884,7 @@ void CApplication::Stop(int exitCode)
       g_Windowing.EnableSystemScreenSaver(true);
 
     CLog::Log(LOGNOTICE, "Storing total System Uptime");
-    g_sysinfo.SetTotalUptime(g_sysinfo.GetTotalUptime() + (int)(CTimeUtils::GetFrameTime() / 60000));
+    g_sysinfo.SetTotalUptime(g_sysinfo.GetTotalUptime() + static_cast<int>(CTimeUtils::GetFrameTime() / 60000));
 
     // Update the settings information (volume, uptime etc. need saving)
     if (CFile::Exists(CProfilesManager::GetInstance().GetSettingsFile()))
@@ -3107,7 +3107,7 @@ PlayBackRet CApplication::PlayStack(const CFileItem& item, bool bRestart)
           path = item.GetProperty("original_listitem_url").asString();
         if( dbs.GetResumeBookMark(path, bookmark) )
         {
-          startoffset = (int)(bookmark.timeInSeconds*75);
+          startoffset = static_cast<int>(bookmark.timeInSeconds*75);
           selectedFile = bookmark.partNumber;
         }
         dbs.Close();
@@ -3216,7 +3216,7 @@ PlayBackRet CApplication::PlayStack(const CFileItem& item, bool bRestart)
         {
           CFileItem item(*(*m_currentStack)[i]);
           long start = (i > 0) ? (*m_currentStack)[i-1]->m_lEndOffset : 0;
-          item.m_lStartOffset = (long)(seconds - start) * 75;
+          item.m_lStartOffset = static_cast<long>(seconds - start) * 75;
           m_currentStackPosition = i;
           return PlayFile(item, "", true);
         }
@@ -4679,7 +4679,7 @@ int CApplication::GlobalIdleTime()
   if(!m_idleTimer.IsRunning()) {
     m_idleTimer.StartZero();
 }
-  return (int)m_idleTimer.GetElapsedSeconds();
+  return static_cast<int>(m_idleTimer.GetElapsedSeconds());
 }
 
 float CApplication::NavigationIdleTime()
@@ -4988,7 +4988,7 @@ float CApplication::GetPercentage() const
     {
       const CMusicInfoTag& tag = *m_itemCurrentFile->GetMusicInfoTag();
       if (tag.GetDuration() > 0) {
-        return (float)(GetTime() / tag.GetDuration() * 100);
+        return static_cast<float>(GetTime() / tag.GetDuration() * 100);
 }
     }
 
@@ -4996,7 +4996,7 @@ float CApplication::GetPercentage() const
     {
       double totalTime = GetTotalTime();
       if (totalTime > 0.0f) {
-        return (float)(GetTime() / totalTime * 100);
+        return static_cast<float>(GetTime() / totalTime * 100);
 }
     }
     else
@@ -5012,7 +5012,7 @@ float CApplication::GetCachePercentage() const
     // Note that the player returns a relative cache percentage and we want an absolute percentage
     if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
     {
-      float stackedTotalTime = (float) GetTotalTime();
+      float stackedTotalTime = static_cast<float>( GetTotalTime());
       // We need to take into account the stack's total time vs. currently playing file's total time
       if (stackedTotalTime > 0.0f)
         return std::min( 100.0f, GetPercentage() + (m_pPlayer->GetCachePercentage() * m_pPlayer->GetTotalTime() * 0.001f / stackedTotalTime ) );

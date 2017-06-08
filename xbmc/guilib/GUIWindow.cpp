@@ -728,7 +728,7 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
     {
       if (message.GetPointer())
       {
-        CGUIControl *control = (CGUIControl *)message.GetPointer();
+        CGUIControl *control = reinterpret_cast<CGUIControl *>(message.GetPointer());
         control->AllocResources();
         AddControl(control);
       }
@@ -738,7 +738,7 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
     {
       if (message.GetPointer())
       {
-        CGUIControl *control = (CGUIControl *)message.GetPointer();
+        CGUIControl *control = reinterpret_cast<CGUIControl *>(message.GetPointer());
         RemoveControl(control);
         control->FreeResources(true);
         delete control;

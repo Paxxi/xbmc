@@ -154,7 +154,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
   /* calculate how many bytes we need per frame */
   m_NeededFrames = m_CodecCtx->frame_size;
   m_NeededBytes  = av_samples_get_buffer_size(nullptr, m_iInChannels, m_NeededFrames, m_InFormat, 0);
-  m_Buffer       = (uint8_t*)av_malloc(m_NeededBytes);
+  m_Buffer       = reinterpret_cast<uint8_t*>(av_malloc(m_NeededBytes));
   m_BufferSize   = 0;
 
   m_BufferFrame = av_frame_alloc();
@@ -193,7 +193,7 @@ bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
     }
 
     m_ResampledBufferSize = av_samples_get_buffer_size(nullptr, m_iInChannels, m_NeededFrames, m_OutFormat, 0);
-    m_ResampledBuffer = (uint8_t*)av_malloc(m_ResampledBufferSize);
+    m_ResampledBuffer = reinterpret_cast<uint8_t*>(av_malloc(m_ResampledBufferSize));
     m_ResampledFrame = av_frame_alloc();
     if(!m_ResampledBuffer || !m_ResampledFrame)
     {
@@ -249,7 +249,7 @@ void CEncoderFFmpeg::SetTag(const std::string &tag, const std::string &value)
 
 int CEncoderFFmpeg::avio_write_callback(void *opaque, uint8_t *buf, int buf_size)
 {
-  CEncoderFFmpeg *enc = (CEncoderFFmpeg*)opaque;
+  CEncoderFFmpeg *enc = reinterpret_cast<CEncoderFFmpeg*>(opaque);
   if(enc->m_callbacks.write(enc->m_callbacks.opaque, buf, buf_size) != buf_size)
   {
     CLog::Log(LOGERROR, "Error writing FFmpeg buffer to file");
@@ -260,7 +260,7 @@ int CEncoderFFmpeg::avio_write_callback(void *opaque, uint8_t *buf, int buf_size
 
 int64_t CEncoderFFmpeg::avio_seek_callback(void *opaque, int64_t offset, int whence)
 {
-  CEncoderFFmpeg *enc = (CEncoderFFmpeg*)opaque;
+  CEncoderFFmpeg *enc = reinterpret_cast<CEncoderFFmpeg*>(opaque);
   return enc->m_callbacks.seek(enc->m_callbacks.opaque, offset, whence);
 }
 
@@ -269,7 +269,7 @@ int CEncoderFFmpeg::Encode(int nNumBytesRead, uint8_t* pbtStream)
   while(nNumBytesRead > 0)
   {
     unsigned int space = m_NeededBytes - m_BufferSize;
-    unsigned int copy  = (unsigned int)nNumBytesRead > space ? space : nNumBytesRead;
+    unsigned int copy  = static_cast<unsigned int>(nNumBytesRead) > space ? space : nNumBytesRead;
 
     memcpy(&m_Buffer[m_BufferSize], pbtStream, copy);
     m_BufferSize  += copy;

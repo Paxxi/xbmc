@@ -111,13 +111,13 @@ public:
 #endif // ! TARGET_WINDOWS
 
     unsigned int ydpi = 72; // 72 points to the inch is the freetype default
-    unsigned int xdpi = (unsigned int)MathUtils::round_int(ydpi * aspect);
+    unsigned int xdpi = static_cast<unsigned int>(MathUtils::round_int(ydpi * aspect));
 
     // we set our screen res currently to 96dpi in both directions (windows default)
     // we cache our characters (for rendering speed) so it's probably
     // not a good idea to allow free scaling of fonts - rather, just
     // scaling to pixel ratio on screen perhaps?
-    if (FT_Set_Char_Size( face, 0, (int)(size*64 + 0.5f), xdpi, ydpi ))
+    if (FT_Set_Char_Size( face, 0, static_cast<int>(size*64 + 0.5f), xdpi, ydpi ))
     {
       FT_Done_Face(face);
       return nullptr;
@@ -217,7 +217,7 @@ void CGUIFontTTFBase::ClearCharacterCache()
   m_maxChars = CHAR_CHUNK;
   // set the posX and posY so that our texture will be created on first character write.
   m_posX = m_textureWidth;
-  m_posY = -(int)GetTextureLineHeight();
+  m_posY = -static_cast<int>(GetTextureLineHeight());
   m_textureHeight = 0;
 }
 
@@ -330,7 +330,7 @@ bool CGUIFontTTFBase::Load(const std::string& strFilename, float height, float a
 
   // set the posX and posY so that our texture will be created on first character write.
   m_posX = m_textureWidth;
-  m_posY = -(int)GetTextureLineHeight();
+  m_posY = -static_cast<int>(GetTextureLineHeight());
 
   // cache the ellipses width
   Character *ellipse = GetCharacter(L'.');
@@ -604,7 +604,7 @@ float CGUIFontTTFBase::GetCharWidthInternal(character_t ch)
 
 float CGUIFontTTFBase::GetTextHeight(float lineSpacing, int numLines) const
 {
-  return (float)(numLines - 1) * GetLineHeight(lineSpacing) + m_cellHeight;
+  return static_cast<float>(numLines - 1) * GetLineHeight(lineSpacing) + m_cellHeight;
 }
 
 float CGUIFontTTFBase::GetLineHeight(float lineSpacing) const
@@ -624,7 +624,7 @@ unsigned int CGUIFontTTFBase::GetTextureLineHeight() const
 
 CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
 {
-  wchar_t letter = (wchar_t)(chr & 0xffff);
+  wchar_t letter = static_cast<wchar_t>(chr & 0xffff);
   character_t style = (chr & 0x7000000) >> 24;
 
   // ignore linebreaks
@@ -748,7 +748,7 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
     CLog::Log(LOGDEBUG, "%s Failed to render glyph %x to a bitmap", __FUNCTION__, letter);
     return false;
   }
-  FT_BitmapGlyph bitGlyph = (FT_BitmapGlyph)glyph;
+  FT_BitmapGlyph bitGlyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
   FT_Bitmap bitmap = bitGlyph->bitmap;
   bool isEmptyGlyph = (bitmap.width == 0 || bitmap.rows == 0);
 
@@ -801,13 +801,13 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
   }
   // set the character in our table
   ch->letterAndStyle = (style << 16) | letter;
-  ch->offsetX = (short)bitGlyph->left;
-  ch->offsetY = (short)m_cellBaseLine - bitGlyph->top;
-  ch->left = isEmptyGlyph ? 0 : ((float)m_posX + ch->offsetX);
-  ch->top = isEmptyGlyph ? 0 : ((float)m_posY + ch->offsetY);
+  ch->offsetX = static_cast<short>(bitGlyph->left);
+  ch->offsetY = static_cast<short>(m_cellBaseLine) - bitGlyph->top;
+  ch->left = isEmptyGlyph ? 0 : (static_cast<float>(m_posX) + ch->offsetX);
+  ch->top = isEmptyGlyph ? 0 : (static_cast<float>(m_posY) + ch->offsetY);
   ch->right = ch->left + bitmap.width;
   ch->bottom = ch->top + bitmap.rows;
-  ch->advance = (float)MathUtils::round_int( (float)m_face->glyph->advance.x / 64 );
+  ch->advance = static_cast<float>(MathUtils::round_int( static_cast<float>(m_face->glyph->advance.x) / 64 ));
 
   // we need only render if we actually have some pixels
   if (!isEmptyGlyph)

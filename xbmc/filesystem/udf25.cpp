@@ -287,8 +287,8 @@ uint32_t UDFFilePos(struct FileAD *File, uint64_t pos, uint64_t *res)
     return 0;
 }
 
-  *res = (uint64_t)(File->Partition_Start + File->AD_chain[i].Location) * DVD_VIDEO_LB_LEN + pos;
-  return File->AD_chain[i].Length - (uint32_t)pos;
+  *res = static_cast<uint64_t>(File->Partition_Start + File->AD_chain[i].Location) * DVD_VIDEO_LB_LEN + pos;
+  return File->AD_chain[i].Length - static_cast<uint32_t>(pos);
 }
 
 uint32_t UDFFileBlockPos(struct FileAD *File, uint32_t lb)
@@ -297,7 +297,7 @@ uint32_t UDFFileBlockPos(struct FileAD *File, uint32_t lb)
   uint32_t rem;
   rem = UDFFilePos(File, lb * DVD_VIDEO_LB_LEN, &res);
   if(rem > 0) {
-    return (uint32_t)(res / DVD_VIDEO_LB_LEN);
+    return static_cast<uint32_t>(res / DVD_VIDEO_LB_LEN);
   } else {
     return 0;
 }
@@ -330,7 +330,7 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
 {
   char filename[ MAX_UDF_FILE_NAME_LEN ];
   uint8_t directory_base[ 2 * DVD_VIDEO_LB_LEN + 2048];
-  uint8_t *directory = (uint8_t *)(((uintptr_t)directory_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *directory = (uint8_t *)(((uintptr_t)directory_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum;
   uint16_t TagID;
   uint8_t filechar;
@@ -385,10 +385,10 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
       dirp->dir_current = lbnum;
 
       if (!*filename) {  // No filename, simulate "." dirname
-        strcpy((char *)dirp->entry.d_name, ".");
+        strcpy(reinterpret_cast<char *>(dirp->entry.d_name), ".");
       } else {
         // Bah, MSVC don't have strlcpy()
-        strncpy((char *)dirp->entry.d_name, filename,
+        strncpy(reinterpret_cast<char *>(dirp->entry.d_name), filename,
                 sizeof(dirp->entry.d_name)-1);
         dirp->entry.d_name[ sizeof(dirp->entry.d_name) - 1 ] = 0;
       }
@@ -427,10 +427,10 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
     return 0;
 }
 
-  c = (struct udf_cache *)GetUDFCacheHandle();
+  c = reinterpret_cast<struct udf_cache *>(GetUDFCacheHandle());
 
   if(c == nullptr) {
-    c = (struct udf_cache *)calloc(1, sizeof(struct udf_cache));
+    c = reinterpret_cast<struct udf_cache *>(calloc(1, sizeof(struct udf_cache)));
     /* fprintf(stderr, "calloc: %d\n", sizeof(struct udf_cache)); */
     if(c == nullptr) {
       return 0;
@@ -441,27 +441,27 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
 
   switch(type) {
   case AVDPCache:
-    c->avdp = *(struct avdp_t *)data;
+    c->avdp = *reinterpret_cast<struct avdp_t *>(data);
     c->avdp_valid = 1;
     break;
   case PVDCache:
-    c->pvd = *(struct pvd_t *)data;
+    c->pvd = *reinterpret_cast<struct pvd_t *>(data);
     c->pvd_valid = 1;
     break;
   case PartitionCache:
-    c->partition = *(struct Partition *)data;
+    c->partition = *reinterpret_cast<struct Partition *>(data);
     c->partition_valid = 1;
     break;
   case RootICBCache:
-    c->rooticb = *(struct AD *)data;
+    c->rooticb = *reinterpret_cast<struct AD *>(data);
     c->rooticb_valid = 1;
     break;
   case LBUDFCache:
     for(n = 0; n < c->lb_num; n++) {
       if(c->lbs[n].lb == nr) {
         /* replace with new data */
-        c->lbs[n].data_base = ((uint8_t **)data)[0];
-        c->lbs[n].data = ((uint8_t **)data)[1];
+        c->lbs[n].data_base = (reinterpret_cast<uint8_t **>(data))[0];
+        c->lbs[n].data = (reinterpret_cast<uint8_t **>(data))[1];
         c->lbs[n].lb = nr;
         return 1;
       }
@@ -478,16 +478,16 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
       c->lb_num = 0;
       return 0;
     }
-    c->lbs = (struct lbudf *)tmp;
-    c->lbs[n].data_base = ((uint8_t **)data)[0];
-    c->lbs[n].data = ((uint8_t **)data)[1];
+    c->lbs = reinterpret_cast<struct lbudf *>(tmp);
+    c->lbs[n].data_base = (reinterpret_cast<uint8_t **>(data))[0];
+    c->lbs[n].data = (reinterpret_cast<uint8_t **>(data))[1];
     c->lbs[n].lb = nr;
     break;
   case MapCache:
     for(n = 0; n < c->map_num; n++) {
       if(c->maps[n].lbn == nr) {
         /* replace with new data */
-        c->maps[n] = *(struct icbmap *)data;
+        c->maps[n] = *reinterpret_cast<struct icbmap *>(data);
         c->maps[n].lbn = nr;
         return 1;
       }
@@ -504,8 +504,8 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
       c->map_num = 0;
       return 0;
     }
-    c->maps = (struct icbmap *)tmp;
-    c->maps[n] = *(struct icbmap *)data;
+    c->maps = reinterpret_cast<struct icbmap *>(tmp);
+    c->maps[n] = *reinterpret_cast<struct icbmap *>(data);
     c->maps[n].lbn = nr;
     break;
   default:
@@ -547,7 +547,7 @@ int udf25::GetUDFCache(UDFCacheType type, uint32_t nr, void *data)
     return 0;
 }
 
-  c = (struct udf_cache *)GetUDFCacheHandle();
+  c = reinterpret_cast<struct udf_cache *>(GetUDFCacheHandle());
 
   if(c == nullptr) {
     return 0;
@@ -556,32 +556,32 @@ int udf25::GetUDFCache(UDFCacheType type, uint32_t nr, void *data)
   switch(type) {
   case AVDPCache:
     if(c->avdp_valid) {
-      *(struct avdp_t *)data = c->avdp;
+      *reinterpret_cast<struct avdp_t *>(data) = c->avdp;
       return 1;
     }
     break;
   case PVDCache:
     if(c->pvd_valid) {
-      *(struct pvd_t *)data = c->pvd;
+      *reinterpret_cast<struct pvd_t *>(data) = c->pvd;
       return 1;
     }
     break;
   case PartitionCache:
     if(c->partition_valid) {
-      *(struct Partition *)data = c->partition;
+      *reinterpret_cast<struct Partition *>(data) = c->partition;
       return 1;
     }
     break;
   case RootICBCache:
     if(c->rooticb_valid) {
-      *(struct AD *)data = c->rooticb;
+      *reinterpret_cast<struct AD *>(data) = c->rooticb;
       return 1;
     }
     break;
   case LBUDFCache:
     for(n = 0; n < c->lb_num; n++) {
       if(c->lbs[n].lb == nr) {
-        *(uint8_t **)data = c->lbs[n].data;
+        *reinterpret_cast<uint8_t **>(data) = c->lbs[n].data;
         return 1;
       }
     }
@@ -589,7 +589,7 @@ int udf25::GetUDFCache(UDFCacheType type, uint32_t nr, void *data)
   case MapCache:
     for(n = 0; n < c->map_num; n++) {
       if(c->maps[n].lbn == nr) {
-        *(struct icbmap *)data = c->maps[n];
+        *reinterpret_cast<struct icbmap *>(data) = c->maps[n];
         return 1;
       }
     }
@@ -637,7 +637,7 @@ int udf25::DVDReadLBUDF( uint32_t lb_number, size_t block_count, unsigned char *
 int udf25::UDFGetAVDP( struct avdp_t *avdp)
 {
   uint8_t Anchor_base[ DVD_VIDEO_LB_LEN + 2048 ];
-  uint8_t *Anchor = (uint8_t *)(((uintptr_t)Anchor_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *Anchor = (uint8_t *)(((uintptr_t)Anchor_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum, MVDS_location, MVDS_length;
   uint16_t TagID;
   uint32_t lastsector;
@@ -702,7 +702,7 @@ int udf25::UDFGetAVDP( struct avdp_t *avdp)
 int udf25::UDFFindPartition( int partnum, struct Partition *part )
 {
   uint8_t LogBlock_base[ DVD_VIDEO_LB_LEN + 2048 ];
-  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum, MVDS_location, MVDS_length;
   uint16_t TagID;
   int i, volvalid;
@@ -797,7 +797,7 @@ int udf25::UDFFindPartition( int partnum, struct Partition *part )
 int udf25::UDFMapICB( struct AD ICB, struct Partition *partition, struct FileAD *File )
 {
   uint8_t LogBlock_base[DVD_VIDEO_LB_LEN + 2048];
-  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum;
   uint16_t TagID;
   struct icbmap tmpmap;
@@ -871,7 +871,7 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
 {
   char filename[ MAX_UDF_FILE_NAME_LEN ];
   uint8_t directory_base[ 2 * DVD_VIDEO_LB_LEN + 2048];
-  uint8_t *directory = (uint8_t *)(((uintptr_t)directory_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *directory = (uint8_t *)(((uintptr_t)directory_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum;
   uint16_t TagID;
   uint8_t filechar;
@@ -890,10 +890,10 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
 
     if(!GetUDFCache(LBUDFCache, lbnum, &cached_dir)) {
       dir_lba = (Dir.AD_chain[0].Length + DVD_VIDEO_LB_LEN) / DVD_VIDEO_LB_LEN;
-      if((cached_dir_base = (uint8_t *)malloc(dir_lba * DVD_VIDEO_LB_LEN + 2048)) == nullptr) {
+      if((cached_dir_base = reinterpret_cast<uint8_t *>(malloc(dir_lba * DVD_VIDEO_LB_LEN + 2048))) == nullptr) {
         return 0;
 }
-      cached_dir = (uint8_t *)(((uintptr_t)cached_dir_base & ~((uintptr_t)2047)) + 2048);
+      cached_dir = (uint8_t *)(((uintptr_t)cached_dir_base & ~(static_cast<uintptr_t>(2047))) + 2048);
       if( DVDReadLBUDF( lbnum, dir_lba, cached_dir, 0) <= 0 ) {
         free(cached_dir_base);
         cached_dir_base = nullptr;
@@ -994,7 +994,7 @@ udf25::~udf25( )
 {
   delete m_fp;
 
-  struct udf_cache * cache = (struct udf_cache *) m_udfcache;
+  struct udf_cache * cache = reinterpret_cast<struct udf_cache *>( m_udfcache);
 
   if (!cache) {
     return;
@@ -1016,7 +1016,7 @@ udf25::~udf25( )
 UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
 {
   uint8_t LogBlock_base[ DVD_VIDEO_LB_LEN + 2048 ];
-  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~((uintptr_t)2047)) + 2048);
+  uint8_t *LogBlock = (uint8_t *)(((uintptr_t)LogBlock_base & ~(static_cast<uintptr_t>(2047))) + 2048);
   uint32_t lbnum;
   uint16_t TagID;
   struct Partition partition;
@@ -1102,7 +1102,7 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
 }
 
   /* Allocate a new UDF_FILE and return it. */
-  result = (struct FileAD *) malloc(sizeof(*result));
+  result = reinterpret_cast<struct FileAD *>( malloc(sizeof(*result)));
   if (!result) return nullptr;
 
   memcpy(result, &File, sizeof(*result));
@@ -1138,17 +1138,17 @@ HANDLE udf25::OpenFile( const char* filename )
     return INVALID_HANDLE_VALUE;
 }
 
-  bdfile = (BD_FILE)calloc(1, sizeof(*bdfile));
+  bdfile = reinterpret_cast<BD_FILE>(calloc(1, sizeof(*bdfile)));
 
   bdfile->file     = file;
   bdfile->filesize = filesize;
-  return (HANDLE)bdfile;
+  return reinterpret_cast<HANDLE>(bdfile);
 }
 
 
 long udf25::ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize)
 {
-  BD_FILE bdfile = (BD_FILE)hFile;
+  BD_FILE bdfile = reinterpret_cast<BD_FILE>(hFile);
   long    len_origin;
   uint64_t pos;
   uint32_t len;
@@ -1170,7 +1170,7 @@ long udf25::ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize)
     // correct for partition indirection if applicable
     pos -= bdfile->file->Partition_Start_Correction * DVD_VIDEO_LB_LEN;
 
-    if((uint32_t)lSize < len) {
+    if(static_cast<uint32_t>(lSize) < len) {
       len = lSize;
 }
 
@@ -1199,7 +1199,7 @@ void udf25::CloseFile(HANDLE hFile)
     return;
 }
 
-  BD_FILE bdfile = (BD_FILE)hFile;
+  BD_FILE bdfile = reinterpret_cast<BD_FILE>(hFile);
   if(bdfile)
   {
     free(bdfile->file);
@@ -1209,7 +1209,7 @@ void udf25::CloseFile(HANDLE hFile)
 
 int64_t udf25::Seek(HANDLE hFile, int64_t lOffset, int whence)
 {
-  BD_FILE bdfile = (BD_FILE)hFile;
+  BD_FILE bdfile = reinterpret_cast<BD_FILE>(hFile);
 
   if(bdfile == nullptr) {
     return -1;
@@ -1244,7 +1244,7 @@ int64_t udf25::Seek(HANDLE hFile, int64_t lOffset, int whence)
 
 int64_t udf25::GetFileSize(HANDLE hFile)
 {
-  BD_FILE bdfile = (BD_FILE)hFile;
+  BD_FILE bdfile = reinterpret_cast<BD_FILE>(hFile);
 
   if(bdfile == nullptr) {
     return -1;
@@ -1255,7 +1255,7 @@ int64_t udf25::GetFileSize(HANDLE hFile)
 
 int64_t udf25::GetFilePosition(HANDLE hFile)
 {
-  BD_FILE bdfile = (BD_FILE)hFile;
+  BD_FILE bdfile = reinterpret_cast<BD_FILE>(hFile);
 
   if(bdfile == nullptr) {
     return -1;
@@ -1269,22 +1269,22 @@ udf_dir_t *udf25::OpenDir( const char *subdir )
   udf_dir_t *result;
   BD_FILE bd_file;
 
-  bd_file = (BD_FILE)OpenFile(subdir);
+  bd_file = reinterpret_cast<BD_FILE>(OpenFile(subdir));
 
-  if (bd_file == (BD_FILE)INVALID_HANDLE_VALUE) {
+  if (bd_file == reinterpret_cast<BD_FILE>INVALID_HANDLE_VALUE) {
     return nullptr;
 }
 
-  result = (udf_dir_t *)calloc(1, sizeof(udf_dir_t));
+  result = reinterpret_cast<udf_dir_t *>(calloc(1, sizeof(udf_dir_t)));
   if (!result) {
-    CloseFile((HANDLE)bd_file);
+    CloseFile(reinterpret_cast<HANDLE>(bd_file));
     return nullptr;
   }
 
   result->dir_location = UDFFileBlockPos(bd_file->file, 0);
   result->dir_current  = UDFFileBlockPos(bd_file->file, 0);
-  result->dir_length   = (uint32_t) bd_file->filesize;
-  CloseFile((HANDLE)bd_file);
+  result->dir_length   = static_cast<uint32_t>( bd_file->filesize);
+  CloseFile(reinterpret_cast<HANDLE>(bd_file));
 
   return result;
 }

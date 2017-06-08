@@ -6507,7 +6507,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       MEMORYSTATUSEX stat;
       stat.dwLength = sizeof(MEMORYSTATUSEX);
       GlobalMemoryStatusEx(&stat);
-      int iMemPercentFree = 100 - ((int)( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f ));
+      int iMemPercentFree = 100 - (static_cast<int>( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f ));
       int iMemPercentUsed = 100 - iMemPercentFree;
 
       if (info == SYSTEM_FREE_MEMORY)
@@ -6681,7 +6681,7 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
       if (msg.GetPointer())
       {
         CVisualisation* viz = nullptr;
-        viz = (CVisualisation*)msg.GetPointer();
+        viz = reinterpret_cast<CVisualisation*>(msg.GetPointer());
         if (viz)
         {
           strLabel = viz->GetPresetName();
@@ -6815,7 +6815,7 @@ bool CGUIInfoManager::GetInt(int &value, int info, int contextWindow, const CGUI
         MEMORYSTATUSEX stat;
         stat.dwLength = sizeof(MEMORYSTATUSEX);
         GlobalMemoryStatusEx(&stat);
-        int memPercentUsed = (int)( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f );
+        int memPercentUsed = static_cast<int>( 100.0f* (stat.ullTotalPhys - stat.ullAvailPhys)/stat.ullTotalPhys + 0.5f );
         if (info == SYSTEM_FREE_MEMORY) {
           value = 100 - memPercentUsed;
         } else {
@@ -7339,7 +7339,7 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
         g_windowManager.SendMessage(msg);
         if (msg.GetPointer())
         {
-          CVisualisation *pVis = (CVisualisation *)msg.GetPointer();
+          CVisualisation *pVis = reinterpret_cast<CVisualisation *>(msg.GetPointer());
           bReturn = pVis->IsLocked();
         }
       }
@@ -7371,7 +7371,7 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
       if (msg.GetPointer())
       {
         CVisualisation* viz = nullptr;
-        viz = (CVisualisation*)msg.GetPointer();
+        viz = reinterpret_cast<CVisualisation*>(msg.GetPointer());
         bReturn = (viz && viz->HasPresets());
       }
     }
@@ -7604,7 +7604,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
         break;
       case WINDOW_NEXT:
         if (info.GetData1()) {
-          bReturn = ((int)info.GetData1() == m_nextWindowID);
+          bReturn = (static_cast<int>(info.GetData1()) == m_nextWindowID);
         } else
         {
           CGUIWindow *window = g_windowManager.GetWindow(m_nextWindowID);
@@ -7614,7 +7614,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
         break;
       case WINDOW_PREVIOUS:
         if (info.GetData1()) {
-          bReturn = ((int)info.GetData1() == m_prevWindowID);
+          bReturn = (static_cast<int>(info.GetData1()) == m_prevWindowID);
         } else
         {
           CGUIWindow *window = g_windowManager.GetWindow(m_prevWindowID);
@@ -7784,7 +7784,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
         {
           const CGUIViewState *viewState = ((CGUIMediaWindow*)window)->GetViewState();
           if (viewState) {
-            bReturn = ((unsigned int)viewState->GetSortMethod().sortBy == info.GetData1());
+            bReturn = (static_cast<unsigned int>(viewState->GetSortMethod().sortBy) == info.GetData1());
 }
         }
         break;
@@ -7796,7 +7796,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
         {
           const CGUIViewState *viewState = ((CGUIMediaWindow*)window)->GetViewState();
           if (viewState) {
-            bReturn = ((unsigned int)viewState->GetSortOrder() == info.GetData1());
+            bReturn = (static_cast<unsigned int>(viewState->GetSortOrder()) == info.GetData1());
 }
         }
         break;
@@ -8036,7 +8036,7 @@ std::string CGUIInfoManager::GetMultiInfoLabel(const GUIInfo &info, int contextW
     if (!CSeekHandler::GetInstance().HasTimeCode())
       return "";
     int seekTimeCode = CSeekHandler::GetInstance().GetTimeCodeSeconds();
-    TIME_FORMAT format = (TIME_FORMAT)info.GetData1();
+    TIME_FORMAT format = static_cast<TIME_FORMAT>(info.GetData1());
     if (format == TIME_FORMAT_GUESS && seekTimeCode >= 3600) {
       format = TIME_FORMAT_HH_MM_SS;
 }
@@ -9468,7 +9468,7 @@ void CGUIInfoManager::UpdateFPS()
   m_frameCounter++;
   unsigned int curTime = CTimeUtils::GetFrameTime();
 
-  float fTimeSpan = (float)(curTime - m_lastFPSTime);
+  float fTimeSpan = static_cast<float>(curTime - m_lastFPSTime);
   if (fTimeSpan >= 1000.0f)
   {
     fTimeSpan /= 1000.0f;
@@ -9520,7 +9520,7 @@ int CGUIInfoManager::AddMultiInfo(const GUIInfo &info)
   // check to see if we have this info already
   for (unsigned int i = 0; i < m_multiInfo.size(); i++) {
     if (m_multiInfo[i] == info)
-      return (int)i + MULTI_INFO_START;
+      return static_cast<int>(i) + MULTI_INFO_START;
 }
   // return the new offset
   m_multiInfo.push_back(info);
@@ -9544,7 +9544,7 @@ int CGUIInfoManager::ConditionalStringParameter(const std::string &parameter, bo
   {
     for (unsigned int i = 0; i < m_stringParameters.size(); i++) {
       if (StringUtils::EqualsNoCase(parameter, m_stringParameters[i]))
-        return (int)i;
+        return static_cast<int>(i);
 }
   }
 
@@ -9594,7 +9594,7 @@ bool CGUIInfoManager::GetItemInt(int &value, const CGUIListItem *item, int info)
     break;
   case LISTITEM_PERCENT_PLAYED:
     if (item->IsFileItem() && ((const CFileItem *)item)->HasVideoInfoTag() && ((const CFileItem *)item)->GetVideoInfoTag()->GetResumePoint().IsPartWay()) {
-      value = (int)(100 * ((const CFileItem *)item)->GetVideoInfoTag()->GetResumePoint().timeInSeconds / ((const CFileItem *)item)->GetVideoInfoTag()->GetResumePoint().totalTimeInSeconds);
+      value = static_cast<int>(100 * ((const CFileItem *)item)->GetVideoInfoTag()->GetResumePoint().timeInSeconds / ((const CFileItem *)item)->GetVideoInfoTag()->GetResumePoint().totalTimeInSeconds);
     } else {
       value = 0;
 }

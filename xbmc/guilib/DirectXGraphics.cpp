@@ -79,7 +79,7 @@ bool IsPalettedFormat(XB_D3DFORMAT format)
 
 void ParseTextureHeader(D3DTexture *tex, XB_D3DFORMAT &fmt, DWORD &width, DWORD &height, DWORD &pitch, DWORD &offset)
 {
-  fmt = (XB_D3DFORMAT)((tex->Format & 0xff00) >> 8);
+  fmt = static_cast<XB_D3DFORMAT>((tex->Format & 0xff00) >> 8);
   offset = tex->Data;
   if (tex->Size)
   {
@@ -141,7 +141,7 @@ void Unswizzle(const void *src, unsigned int depth, unsigned int width, unsigned
       sy <<= 1; // y counts twice
       sy += (y / width) * width * width;
     }
-    BYTE *d = (BYTE *)dest + y * width * depth;
+    BYTE *d = reinterpret_cast<BYTE *>(dest) + y * width * depth;
     for (UINT x = 0; x < width; x++)
     {
       UINT sx = 0;
@@ -169,7 +169,7 @@ void Unswizzle(const void *src, unsigned int depth, unsigned int width, unsigned
 
 void DXT1toARGB(const void *src, void *dest, unsigned int destWidth)
 {
-  const BYTE *b = (const BYTE *)src;
+  const BYTE *b = reinterpret_cast<const BYTE *>(src);
   // colour is in R5G6B5 format, convert to R8G8B8
   DWORD colour[4];
   BYTE red[4];
@@ -207,7 +207,7 @@ void DXT1toARGB(const void *src, void *dest, unsigned int destWidth)
   // ok, now grab the bits
   for (int y = 0; y < 4; y++)
   {
-    DWORD *d = (DWORD *)dest + destWidth * y;
+    DWORD *d = reinterpret_cast<DWORD *>(dest) + destWidth * y;
     *d++ = colour[(b[4 + y] & 0x03)];
     *d++ = colour[(b[4 + y] & 0x0c) >> 2];
     *d++ = colour[(b[4 + y] & 0x30) >> 4];
@@ -217,7 +217,7 @@ void DXT1toARGB(const void *src, void *dest, unsigned int destWidth)
 
 void DXT4toARGB(const void *src, void *dest, unsigned int destWidth)
 {
-  const BYTE *b = (const BYTE *)src;
+  const BYTE *b = reinterpret_cast<const BYTE *>(src);
   BYTE alpha[8];
   alpha[0] = b[0];
   alpha[1] = b[1];
@@ -282,7 +282,7 @@ void DXT4toARGB(const void *src, void *dest, unsigned int destWidth)
   // and assign them to our texture
   for (int y = 0; y < 4; y++)
   {
-    DWORD *d = (DWORD *)dest + destWidth * y;
+    DWORD *d = reinterpret_cast<DWORD *>(dest) + destWidth * y;
     *d++ = colour[(b[4 + y] & 0x03)] | (a[y][0] << 24);
     *d++ = colour[(b[4 + y] & 0x0e) >> 2] | (a[y][1] << 24);
     *d++ = colour[(b[4 + y] & 0x30) >> 4] | (a[y][2] << 24);
@@ -297,8 +297,8 @@ void ConvertDXT1(const void *src, unsigned int width, unsigned int height, void 
   {
     for (unsigned int x = 0; x < width; x += 4)
     {
-      const BYTE *s = (const BYTE *)src + y * width / 2 + x * 2;
-      DWORD *d = (DWORD *)dest + y * width + x;
+      const BYTE *s = reinterpret_cast<const BYTE *>(src) + y * width / 2 + x * 2;
+      DWORD *d = reinterpret_cast<DWORD *>(dest) + y * width + x;
       DXT1toARGB(s, d, width);
     }
   }
@@ -314,8 +314,8 @@ void ConvertDXT4(const void *src, unsigned int width, unsigned int height, void 
   {
     for (unsigned int x = 0; x < width; x += 4)
     {
-      const BYTE *s = (const BYTE *)src + y * width + x * 4;
-      DWORD *d = (DWORD *)dest + y * width + x;
+      const BYTE *s = reinterpret_cast<const BYTE *>(src) + y * width + x * 4;
+      DWORD *d = reinterpret_cast<DWORD *>(dest) + y * width + x;
       DXT4toARGB(s, d, width);
     }
   }
@@ -331,8 +331,8 @@ void GetTextureFromData(D3DTexture *pTex, void *texData, CBaseTexture **ppTextur
 
   if (*ppTexture)
   {
-    BYTE *texDataStart = (BYTE *)texData;
-    COLOR *color = (COLOR *)texData;
+    BYTE *texDataStart = reinterpret_cast<BYTE *>(texData);
+    COLOR *color = reinterpret_cast<COLOR *>(texData);
     texDataStart += offset;
 /* DXMERGE - We should really support DXT1,DXT2 and DXT4 in both renderers
              Perhaps we should extend CTexture::Update() to support a bunch of different texture types

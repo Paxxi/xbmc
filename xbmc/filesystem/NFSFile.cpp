@@ -332,7 +332,7 @@ bool CNfsConnection::Connect(const CURL& url, std::string &relativePath)
 
     if(contextRet == CONTEXT_NEW)
     {
-      CLog::Log(LOGDEBUG,"NFS: chunks: r/w %i/%i\n", (int)m_readChunkSize,(int)m_writeChunkSize);          
+      CLog::Log(LOGDEBUG,"NFS: chunks: r/w %i/%i\n", static_cast<int>(m_readChunkSize),static_cast<int>(m_writeChunkSize));          
     }
   }
   return ret; 
@@ -525,7 +525,7 @@ int64_t CNFSFile::GetPosition()
   
   if (gNfsConnection.GetNfsContext() == nullptr || m_pFileHandle == nullptr) return 0;
   
-  ret = (int)gNfsConnection.GetImpl()->nfs_lseek(gNfsConnection.GetNfsContext(), m_pFileHandle, 0, SEEK_CUR, &offset);
+  ret = gNfsConnection.GetImpl()->nfs_lseek(gNfsConnection.GetNfsContext(), m_pFileHandle, 0, SEEK_CUR, &offset);
   
   if (ret < 0) 
   {
@@ -681,13 +681,13 @@ int64_t CNFSFile::Seek(int64_t iFilePosition, int iWhence)
   if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) return -1;
   
  
-  ret = (int)gNfsConnection.GetImpl()->nfs_lseek(m_pNfsContext, m_pFileHandle, iFilePosition, iWhence, &offset);
+  ret = gNfsConnection.GetImpl()->nfs_lseek(m_pNfsContext, m_pFileHandle, iFilePosition, iWhence, &offset);
   if (ret < 0) 
   {
     CLog::Log(LOGERROR, "%s - Error( seekpos: %" PRId64", whence: %i, fsize: %" PRId64", %s)", __FUNCTION__, iFilePosition, iWhence, m_fileSize, gNfsConnection.GetImpl()->nfs_get_error(m_pNfsContext));
     return -1;
   }
-  return (int64_t)offset;
+  return static_cast<int64_t>(offset);
 }
 
 int CNFSFile::Truncate(int64_t iSize)
@@ -698,7 +698,7 @@ int CNFSFile::Truncate(int64_t iSize)
   if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) return -1;
   
   
-  ret = (int)gNfsConnection.GetImpl()->nfs_ftruncate(m_pNfsContext, m_pFileHandle, iSize);
+  ret = gNfsConnection.GetImpl()->nfs_ftruncate(m_pNfsContext, m_pFileHandle, iSize);
   if (ret < 0) 
   {
     CLog::Log(LOGERROR, "%s - Error( ftruncate: %" PRId64", fsize: %" PRId64", %s)", __FUNCTION__, iSize, m_fileSize, gNfsConnection.GetImpl()->nfs_get_error(m_pNfsContext));

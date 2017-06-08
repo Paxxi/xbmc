@@ -165,7 +165,7 @@ static unsigned int defaultSampleRates[] = {
 
 static void ContextStateCallback(pa_context *c, void *userdata)
 {
-  pa_threaded_mainloop *m = (pa_threaded_mainloop *)userdata;
+  pa_threaded_mainloop *m = reinterpret_cast<pa_threaded_mainloop *>(userdata);
   switch (pa_context_get_state(c))
   {
     case PA_CONTEXT_READY:
@@ -182,7 +182,7 @@ static void ContextStateCallback(pa_context *c, void *userdata)
 
 static void StreamStateCallback(pa_stream *s, void *userdata)
 {
-  pa_threaded_mainloop *m = (pa_threaded_mainloop *)userdata;
+  pa_threaded_mainloop *m = reinterpret_cast<pa_threaded_mainloop *>(userdata);
   switch (pa_stream_get_state(s))
   {
     case PA_STREAM_UNCONNECTED:
@@ -197,20 +197,20 @@ static void StreamStateCallback(pa_stream *s, void *userdata)
 
 static void StreamRequestCallback(pa_stream *s, size_t length, void *userdata)
 {
-  pa_threaded_mainloop *m = (pa_threaded_mainloop *)userdata;
+  pa_threaded_mainloop *m = reinterpret_cast<pa_threaded_mainloop *>(userdata);
   pa_threaded_mainloop_signal(m, 0);
 }
 
 static void StreamLatencyUpdateCallback(pa_stream *s, void *userdata)
 {
-  pa_threaded_mainloop *m = (pa_threaded_mainloop *)userdata;
+  pa_threaded_mainloop *m = reinterpret_cast<pa_threaded_mainloop *>(userdata);
   pa_threaded_mainloop_signal(m, 0);
 }
 
 
 static void SinkInputInfoCallback(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
 {
-  CAESinkPULSE *p = (CAESinkPULSE*) userdata;
+  CAESinkPULSE *p = reinterpret_cast<CAESinkPULSE*>( userdata);
   if (!p || !p->IsInitialized()) {
     return;
 }
@@ -222,7 +222,7 @@ static void SinkInputInfoCallback(pa_context *c, const pa_sink_input_info *i, in
 
 static void SinkInputInfoChangedCallback(pa_context *c, pa_subscription_event_type_t t, uint32_t idx, void *userdata)
 {
-  CAESinkPULSE* p = (CAESinkPULSE*) userdata;
+  CAESinkPULSE* p = reinterpret_cast<CAESinkPULSE*>( userdata);
   if (!p || !p->IsInitialized()) {
     return;
 }
@@ -241,7 +241,7 @@ static void SinkInputInfoChangedCallback(pa_context *c, pa_subscription_event_ty
 
 static void SinkChangedCallback(pa_context *c, pa_subscription_event_type_t t, uint32_t idx, void *userdata)
 {
-  CAESinkPULSE* p = (CAESinkPULSE*) userdata;
+  CAESinkPULSE* p = reinterpret_cast<CAESinkPULSE*>( userdata);
   if(!p) {
     return;
 }
@@ -287,7 +287,7 @@ struct SinkInfoStruct
 
 static void SinkInfoCallback(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 {
-  SinkInfoStruct *sinkStruct = (SinkInfoStruct *)userdata;
+  SinkInfoStruct *sinkStruct = reinterpret_cast<SinkInfoStruct *>(userdata);
   if (!sinkStruct) {
     return;
 }
@@ -396,7 +396,7 @@ static CAEChannelInfo PAChannelToAEChannelMap(const pa_channel_map& channels)
 static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 {
 
-  SinkInfoStruct *sinkStruct = (SinkInfoStruct *)userdata;
+  SinkInfoStruct *sinkStruct = reinterpret_cast<SinkInfoStruct *>(userdata);
   if (!sinkStruct) {
     return;
 }
@@ -699,9 +699,9 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
 
   pa_buffer_attr buffer_attr;
   buffer_attr.fragsize = latency;
-  buffer_attr.maxlength = (uint32_t) -1;
+  buffer_attr.maxlength = static_cast<uint32_t>( -1);
   buffer_attr.minreq = process_time;
-  buffer_attr.prebuf = (uint32_t) -1;
+  buffer_attr.prebuf = static_cast<uint32_t>( -1);
   buffer_attr.tlength = latency;
   int flags = (PA_STREAM_INTERPOLATE_TIMING | PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_ADJUST_LATENCY);
 
@@ -859,7 +859,7 @@ void CAESinkPULSE::GetDelay(AEDelayStatus& status)
 
 double CAESinkPULSE::GetCacheTotal()
 {
-  return (float)m_BufferSize / (float)m_BytesPerSecond;
+  return static_cast<float>(m_BufferSize) / static_cast<float>(m_BytesPerSecond);
 }
 
 unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
@@ -893,7 +893,7 @@ unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsig
     CLog::Log(LOGERROR, "CPulseAudioDirectSound::AddPackets - pa_stream_write failed\n");
     return 0;
   }
-  unsigned int res = (unsigned int)(length / m_format.m_frameSize);
+  unsigned int res = (length / m_format.m_frameSize);
 
   return res;
 }
@@ -945,7 +945,7 @@ void CAESinkPULSE::SetVolume(float volume)
        m_volume_needs_update = false;
        pa_volume_t n_vol = pa_cvolume_avg(&m_Volume);
        n_vol = std::min(n_vol, PA_VOLUME_NORM);
-       per_cent_volume = (float) n_vol / PA_VOLUME_NORM;
+       per_cent_volume = static_cast<float>( n_vol) / PA_VOLUME_NORM;
        // only update internal volume
        pa_threaded_mainloop_unlock(m_MainLoop);
        g_application.SetVolume(per_cent_volume, false);
@@ -1066,7 +1066,7 @@ bool CAESinkPULSE::SetupContext(const char *host, pa_context **context, pa_threa
 
   pa_context_set_state_callback(*context, ContextStateCallback, *mainloop);
 
-  if (pa_context_connect(*context, host, (pa_context_flags_t)0, nullptr) < 0)
+  if (pa_context_connect(*context, host, static_cast<pa_context_flags_t>(0), nullptr) < 0)
   {
     CLog::Log(LOGERROR, "PulseAudio: Failed to connect context");
     return false;

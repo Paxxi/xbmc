@@ -69,7 +69,7 @@ void CGUIControlProfilerItem::BeginVisibility()
 
 void CGUIControlProfilerItem::EndVisibility()
 {
-  m_visTime += (unsigned int)(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64VisStart));
+  m_visTime += static_cast<unsigned int>(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64VisStart));
 }
 
 void CGUIControlProfilerItem::BeginRender()
@@ -79,7 +79,7 @@ void CGUIControlProfilerItem::BeginRender()
 
 void CGUIControlProfilerItem::EndRender()
 {
-  m_renderTime += (unsigned int)(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64RenderStart));
+  m_renderTime += static_cast<unsigned int>(m_pProfiler->m_fPerfScale * (CurrentHostCounter() - m_i64RenderStart));
 }
 
 void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
@@ -161,7 +161,7 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
     xmlControl->SetAttribute("id", str.c_str());
   }
 
-  float pct = (float)GetTotalTime() / (float)m_pProfiler->GetTotalTime();
+  float pct = static_cast<float>(GetTotalTime()) / static_cast<float>(m_pProfiler->GetTotalTime());
   if (pct > 0.01f)
   {
     std::string str = StringUtils::Format("%.0f", pct * 100.0f);

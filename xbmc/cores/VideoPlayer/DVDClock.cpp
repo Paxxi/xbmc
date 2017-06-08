@@ -153,7 +153,7 @@ void CDVDClock::SetSpeed(int iSpeed)
     m_pauseClock = 0;
   }
 
-  m_startClock = current - (int64_t)((double)(current - m_startClock) * newfreq / m_systemUsed);
+  m_startClock = current - static_cast<int64_t>(static_cast<double>(current - m_startClock) * newfreq / m_systemUsed);
   m_systemUsed = newfreq;
 }
 
@@ -252,7 +252,7 @@ int CDVDClock::UpdateFramerate(double fps, double* interval /*= NULL*/)
 
   CSingleLock lock(m_speedsection);
 
-  double weight = MathUtils::round_int(rate) / (double)MathUtils::round_int(fps);
+  double weight = MathUtils::round_int(rate) / static_cast<double>(MathUtils::round_int(fps));
 
   //set the speed of the videoreferenceclock based on fps, refreshrate and maximum speed adjust set by user
   if (m_maxspeedadjust > 0.05)
@@ -277,12 +277,12 @@ bool CDVDClock::GetClockInfo(int& MissedVblanks, double& ClockSpeed, double& Ref
 
 double CDVDClock::SystemToAbsolute(int64_t system)
 {
-  return DVD_TIME_BASE * (double)(system - m_systemOffset) / m_systemFrequency;
+  return DVD_TIME_BASE * static_cast<double>(system - m_systemOffset) / m_systemFrequency;
 }
 
 int64_t CDVDClock::AbsoluteToSystem(double absolute)
 {
-  return (int64_t)(absolute / DVD_TIME_BASE * m_systemFrequency) + m_systemOffset;
+  return static_cast<int64_t>(absolute / DVD_TIME_BASE * m_systemFrequency) + m_systemOffset;
 }
 
 double CDVDClock::SystemToPlaying(int64_t system)
@@ -309,13 +309,13 @@ double CDVDClock::SystemToPlaying(int64_t system)
     current = system;
 }
 
-  return DVD_TIME_BASE * (double)(current - m_startClock + m_systemAdjust) / m_systemUsed + m_iDisc;
+  return DVD_TIME_BASE * static_cast<double>(current - m_startClock + m_systemAdjust) / m_systemUsed + m_iDisc;
 }
 
 double CDVDClock::GetClockSpeed()
 {
   CSingleLock lock(m_critSection);
 
-  double speed = (double)m_systemFrequency / m_systemUsed;
+  double speed = static_cast<double>(m_systemFrequency) / m_systemUsed;
   return m_videoRefClock->GetSpeed() * speed + m_speedAdjust;
 }

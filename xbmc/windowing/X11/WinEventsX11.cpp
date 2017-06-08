@@ -220,13 +220,13 @@ bool CWinEventsX11Imp::Init(Display *dpy, Window win)
   p = setlocale(LC_ALL, nullptr);
   if (p)
   {
-    old_locale = (char*)malloc(strlen(p) +1);
+    old_locale = reinterpret_cast<char*>(malloc(strlen(p) +1));
     strcpy(old_locale, p);
   }
   p = XSetLocaleModifiers(nullptr);
   if (p)
   {
-    old_modifiers = (char*)malloc(strlen(p) +1);
+    old_modifiers = reinterpret_cast<char*>(malloc(strlen(p) +1));
     strcpy(old_modifiers, p);
   }
 
@@ -413,7 +413,7 @@ bool CWinEventsX11Imp::MessagePump()
 
       case ClientMessage:
       {
-        if ((unsigned int)xevent.xclient.data.l[0] == WinEvents->m_wmDeleteMessage) {
+        if (static_cast<unsigned int>(xevent.xclient.data.l[0]) == WinEvents->m_wmDeleteMessage) {
           if (!g_application.m_bStop) CApplicationMessenger::GetInstance().PostMsg(TMSG_QUIT);
 }
         break;
@@ -557,10 +557,10 @@ bool CWinEventsX11Imp::MessagePump()
         XBMC_Event newEvent;
         memset(&newEvent, 0, sizeof(newEvent));
         newEvent.type = XBMC_MOUSEMOTION;
-        newEvent.motion.xrel = (int16_t)xevent.xmotion.x_root;
-        newEvent.motion.yrel = (int16_t)xevent.xmotion.y_root;
-        newEvent.motion.x = (int16_t)xevent.xmotion.x;
-        newEvent.motion.y = (int16_t)xevent.xmotion.y;
+        newEvent.motion.xrel = static_cast<int16_t>(xevent.xmotion.x_root);
+        newEvent.motion.yrel = static_cast<int16_t>(xevent.xmotion.y_root);
+        newEvent.motion.x = static_cast<int16_t>(xevent.xmotion.x);
+        newEvent.motion.y = static_cast<int16_t>(xevent.xmotion.y);
         ret |= g_application.OnEvent(newEvent);
         break;
       }
@@ -570,10 +570,10 @@ bool CWinEventsX11Imp::MessagePump()
         XBMC_Event newEvent;
         memset(&newEvent, 0, sizeof(newEvent));
         newEvent.type = XBMC_MOUSEBUTTONDOWN;
-        newEvent.button.button = (unsigned char)xevent.xbutton.button;
+        newEvent.button.button = static_cast<unsigned char>(xevent.xbutton.button);
         newEvent.button.state = XBMC_PRESSED;
-        newEvent.button.x = (int16_t)xevent.xbutton.x;
-        newEvent.button.y = (int16_t)xevent.xbutton.y;
+        newEvent.button.x = static_cast<int16_t>(xevent.xbutton.x);
+        newEvent.button.y = static_cast<int16_t>(xevent.xbutton.y);
         ret |= g_application.OnEvent(newEvent);
         break;
       }
@@ -583,10 +583,10 @@ bool CWinEventsX11Imp::MessagePump()
         XBMC_Event newEvent;
         memset(&newEvent, 0, sizeof(newEvent));
         newEvent.type = XBMC_MOUSEBUTTONUP;
-        newEvent.button.button = (unsigned char)xevent.xbutton.button;
+        newEvent.button.button = static_cast<unsigned char>(xevent.xbutton.button);
         newEvent.button.state = XBMC_RELEASED;
-        newEvent.button.x = (int16_t)xevent.xbutton.x;
-        newEvent.button.y = (int16_t)xevent.xbutton.y;
+        newEvent.button.x = static_cast<int16_t>(xevent.xbutton.x);
+        newEvent.button.y = static_cast<int16_t>(xevent.xbutton.y);
         ret |= g_application.OnEvent(newEvent);
         break;
       }
@@ -655,7 +655,7 @@ bool CWinEventsX11Imp::ProcessKey(XBMC_Event &event)
       default:
         break;
     }
-    event.key.keysym.mod = (XBMCMod)WinEvents->m_keymodState;
+    event.key.keysym.mod = static_cast<XBMCMod>(WinEvents->m_keymodState);
   }
   else if (event.type == XBMC_KEYUP)
   {
@@ -691,7 +691,7 @@ bool CWinEventsX11Imp::ProcessKey(XBMC_Event &event)
       default:
         break;
     }
-    event.key.keysym.mod = (XBMCMod)WinEvents->m_keymodState;
+    event.key.keysym.mod = static_cast<XBMCMod>(WinEvents->m_keymodState);
   }
 
   return g_application.OnEvent(event);
@@ -709,9 +709,9 @@ XBMCKey CWinEventsX11Imp::LookupXbmcKeySym(KeySym keysym)
 
   // try ascii mappings
   if (keysym>>8 == 0x00) {
-    return (XBMCKey)tolower(keysym & 0xFF);
+    return static_cast<XBMCKey>(tolower(keysym & 0xFF));
 }
 
-  return (XBMCKey)keysym;
+  return static_cast<XBMCKey>(keysym);
 }
 #endif

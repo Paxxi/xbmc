@@ -946,7 +946,7 @@ void CGUIMediaWindow::OnCacheFileItems(CFileItemList &items)
  */
 bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) return true;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return true;
   CFileItemPtr pItem = m_vecItems->Get(iItem);
 
   if (pItem->IsParentFolder())

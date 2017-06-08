@@ -109,7 +109,7 @@ bool CZipFile::InitDecompress()
       return false;
     }
   }
-  m_ZStream.next_in = (Bytef*)m_szBuffer;
+  m_ZStream.next_in = reinterpret_cast<Bytef*>(m_szBuffer);
   m_ZStream.avail_in = 0;
   m_ZStream.total_out = 0;
 
@@ -198,12 +198,12 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
         inflateEnd(&m_ZStream);
         inflateInit2(&m_ZStream,-MAX_WBITS); // simply restart zlib
         mFile.Seek(mZipItem.offset,SEEK_SET);
-        m_ZStream.next_in = (Bytef*)m_szBuffer;
+        m_ZStream.next_in = reinterpret_cast<Bytef*>(m_szBuffer);
         m_ZStream.avail_in = 0;
         m_ZStream.total_out = 0;
         while (m_iFilePos < iFilePosition)
         {
-          unsigned int iToRead = (iFilePosition - m_iFilePos)>blockSize ? blockSize : (int)(iFilePosition - m_iFilePos);
+          unsigned int iToRead = (iFilePosition - m_iFilePos)>blockSize ? blockSize : static_cast<int>(iFilePosition - m_iFilePos);
           if (Read(buf.get(),iToRead) != iToRead)
             return -1;
         }
@@ -225,7 +225,7 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
       iFilePosition += m_iFilePos;
       while (m_iFilePos < iFilePosition)
       {
-        unsigned int iToRead = (iFilePosition - m_iFilePos)>blockSize ? blockSize : (int)(iFilePosition - m_iFilePos);
+        unsigned int iToRead = (iFilePosition - m_iFilePos)>blockSize ? blockSize : static_cast<int>(iFilePosition - m_iFilePos);
         if (Read(buf.get(), iToRead) != iToRead)
           return -1;
       }
@@ -236,9 +236,9 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
       // now this is a nasty bastard, possibly takes lotsoftime
       // uncompress, minding m_ZStream.total_out
 
-      while( (int)m_ZStream.total_out < mZipItem.usize+iFilePosition)
+      while( static_cast<int>(m_ZStream.total_out) < mZipItem.usize+iFilePosition)
       {
-        unsigned int iToRead = (mZipItem.usize + iFilePosition - m_ZStream.total_out > blockSize) ? blockSize : (int)(mZipItem.usize + iFilePosition - m_ZStream.total_out);
+        unsigned int iToRead = (mZipItem.usize + iFilePosition - m_ZStream.total_out > blockSize) ? blockSize : static_cast<int>(mZipItem.usize + iFilePosition - m_ZStream.total_out);
         if (Read(buf.get(), iToRead) != iToRead)
           return -1;
       }
@@ -470,7 +470,7 @@ bool CZipFile::FillBuffer()
   if (mFile.Read(m_szBuffer,sToRead) != sToRead)
     return false;
   m_ZStream.avail_in = sToRead;
-  m_ZStream.next_in = (Bytef*)m_szBuffer;
+  m_ZStream.next_in = reinterpret_cast<Bytef*>(m_szBuffer);
   m_iZipFilePos += sToRead;
   return true;
 }
@@ -483,7 +483,7 @@ void CZipFile::DestroyBuffer(void* lpBuffer, int iBufSize)
   int iMessage = Z_OK;
   while ((iMessage == Z_OK) && (m_ZStream.avail_out == 0))
   {
-    m_ZStream.next_out = (Bytef*)lpBuffer;
+    m_ZStream.next_out = reinterpret_cast<Bytef*>(lpBuffer);
     m_ZStream.avail_out = iBufSize;
     iMessage = inflate(&m_ZStream,Z_SYNC_FLUSH);
   }

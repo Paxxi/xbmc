@@ -128,7 +128,7 @@ DemuxPacket* CDVDDemuxCDDA::Read()
     if (n > 0)
     {
       m_bytes += pPacket->iSize;
-      pPacket->dts = (double)m_bytes * DVD_TIME_BASE / n;
+      pPacket->dts = static_cast<double>(m_bytes) * DVD_TIME_BASE / n;
       pPacket->pts = pPacket->dts;
     }
     else
@@ -148,13 +148,13 @@ bool CDVDDemuxCDDA::SeekTime(double time, bool backwards, double* startpts)
   int clamp_bytes = (m_stream->iBitsPerSample>>3) * m_stream->iChannels;
 
   // time is in milliseconds
-  int64_t seekPos = m_pInput->Seek((((int64_t)time * bytes_per_second / 1000) / clamp_bytes ) * clamp_bytes, SEEK_SET) > 0;
+  int64_t seekPos = m_pInput->Seek(((static_cast<int64_t>(time) * bytes_per_second / 1000) / clamp_bytes ) * clamp_bytes, SEEK_SET) > 0;
   if (seekPos > 0) {
     m_bytes = seekPos;
 }
 
   if (startpts) {
-    *startpts = (double)m_bytes * DVD_TIME_BASE / bytes_per_second;
+    *startpts = static_cast<double>(m_bytes) * DVD_TIME_BASE / bytes_per_second;
 }
 
   return seekPos > 0;
@@ -165,7 +165,7 @@ int CDVDDemuxCDDA::GetStreamLength()
   int64_t num_track_bytes = m_pInput->GetLength();
   int bytes_per_second = (m_stream->iBitRate>>3);
   int64_t track_mseconds = num_track_bytes*1000 / bytes_per_second;
-  return (int)track_mseconds;
+  return static_cast<int>(track_mseconds);
 }
 
 CDemuxStream* CDVDDemuxCDDA::GetStream(int iStreamId) const

@@ -244,25 +244,25 @@ bool field_value::get_asBool() const {
 }
     }
     case ft_Short: {
-      return (bool)short_value;
+      return static_cast<bool>(short_value);
     }
     case ft_UShort: {
-      return (bool)ushort_value;
+      return static_cast<bool>(ushort_value);
     }
     case ft_Int: {
-      return (bool)int_value;
+      return static_cast<bool>(int_value);
     }
     case ft_UInt: {
-      return (bool)uint_value;
+      return static_cast<bool>(uint_value);
     }
     case ft_Float: {
-      return (bool)float_value;
+      return static_cast<bool>(float_value);
     }
     case ft_Double: {
-      return (bool)double_value;
+      return static_cast<bool>(double_value);
     }
     case ft_Int64: {
-      return (bool)int64_value;
+      return static_cast<bool>(int64_value);
     }
     default:
       return false;
@@ -332,31 +332,31 @@ short field_value::get_asShort() const {
       return (short)atoi(str_value.c_str());
     }
     case ft_Boolean:{
-      return (short)bool_value;
+      return static_cast<short>(bool_value);
     }
     case ft_Char: {
-      return (short)char_value;
+      return static_cast<short>(char_value);
     }
     case ft_Short: {
        return short_value;
     }
     case ft_UShort: {
-       return (short)ushort_value;
+       return static_cast<short>(ushort_value);
     }
     case ft_Int: {
-      return (short)int_value;
+      return static_cast<short>(int_value);
     }
     case ft_UInt: {
-      return (short)uint_value;
+      return static_cast<short>(uint_value);
     }
     case ft_Float: {
-      return (short)float_value;
+      return static_cast<short>(float_value);
     }
     case ft_Double: {
-      return (short)double_value;
+      return static_cast<short>(double_value);
     }
     case ft_Int64: {
-      return (short)int64_value;
+      return static_cast<short>(int64_value);
     }
     default:
       return 0;
@@ -370,31 +370,31 @@ unsigned short field_value::get_asUShort() const {
       return (unsigned short)atoi(str_value.c_str());
     }
     case ft_Boolean:{
-      return (unsigned short)bool_value;
+      return static_cast<unsigned short>(bool_value);
     }
     case ft_Char: {
-      return (unsigned short)char_value;
+      return static_cast<unsigned short>(char_value);
     }
     case ft_Short: {
-       return (unsigned short)short_value;
+       return static_cast<unsigned short>(short_value);
     }
     case ft_UShort: {
        return ushort_value;
     }
     case ft_Int: {
-      return (unsigned short)int_value;
+      return static_cast<unsigned short>(int_value);
     }
     case ft_UInt: {
-      return (unsigned short)uint_value;
+      return static_cast<unsigned short>(uint_value);
     }
     case ft_Float: {
-      return (unsigned short)float_value;
+      return static_cast<unsigned short>(float_value);
     }
     case ft_Double: {
-      return (unsigned short)double_value;
+      return static_cast<unsigned short>(double_value);
     }
     case ft_Int64: {
-      return (unsigned short)int64_value;
+      return static_cast<unsigned short>(int64_value);
     }
     default:
       return 0;
@@ -407,31 +407,31 @@ int field_value::get_asInt() const {
       return (int)atoi(str_value.c_str());
     }
     case ft_Boolean:{
-      return (int)bool_value;
+      return static_cast<int>(bool_value);
     }
     case ft_Char: {
-      return (int)char_value;
+      return static_cast<int>(char_value);
     }
     case ft_Short: {
-       return (int)short_value;
+       return static_cast<int>(short_value);
     }
     case ft_UShort: {
-       return (int)ushort_value;
+       return static_cast<int>(ushort_value);
     }
     case ft_Int: {
       return int_value;
     }
     case ft_UInt: {
-      return (int)uint_value;
+      return static_cast<int>(uint_value);
     }
     case ft_Float: {
-      return (int)float_value;
+      return static_cast<int>(float_value);
     }
     case ft_Double: {
-      return (int)double_value;
+      return static_cast<int>(double_value);
     }
     case ft_Int64: {
-      return (int)int64_value;
+      return static_cast<int>(int64_value);
     }
     default:
       return 0;
@@ -444,31 +444,31 @@ unsigned int field_value::get_asUInt() const {
       return (unsigned int)atoi(str_value.c_str());
     }
     case ft_Boolean:{
-      return (unsigned int)bool_value;
+      return static_cast<unsigned int>(bool_value);
     }
     case ft_Char: {
-      return (unsigned int)char_value;
+      return static_cast<unsigned int>(char_value);
     }
     case ft_Short: {
-       return (unsigned int)short_value;
+       return static_cast<unsigned int>(short_value);
     }
     case ft_UShort: {
-       return (unsigned int)ushort_value;
+       return static_cast<unsigned int>(ushort_value);
     }
     case ft_Int: {
-      return (unsigned int)int_value;
+      return static_cast<unsigned int>(int_value);
     }
     case ft_UInt: {
       return uint_value;
     }
     case ft_Float: {
-      return (unsigned int)float_value;
+      return static_cast<unsigned int>(float_value);
     }
     case ft_Double: {
-      return (unsigned int)double_value;
+      return static_cast<unsigned int>(double_value);
     }
     case ft_Int64: {
-      return (unsigned int)int64_value;
+      return static_cast<unsigned int>(int64_value);
     }
     default:
       return 0;
@@ -481,31 +481,31 @@ float field_value::get_asFloat() const {
       return (float)atof(str_value.c_str());
     }
     case ft_Boolean:{
-      return (float)bool_value;
+      return static_cast<float>(bool_value);
     }
     case ft_Char: {
-      return (float)char_value;
+      return static_cast<float>(char_value);
     }
     case ft_Short: {
-       return (float)short_value;
+       return static_cast<float>(short_value);
     }
     case ft_UShort: {
-       return (float)ushort_value;
+       return static_cast<float>(ushort_value);
     }
     case ft_Int: {
-      return (float)int_value;
+      return static_cast<float>(int_value);
     }
     case ft_UInt: {
-      return (float)uint_value;
+      return static_cast<float>(uint_value);
     }
     case ft_Float: {
       return float_value;
     }
     case ft_Double: {
-      return (float)double_value;
+      return static_cast<float>(double_value);
     }
     case ft_Int64: {
-      return (float)int64_value;
+      return static_cast<float>(int64_value);
     }
     default:
       return 0.0;
@@ -518,31 +518,31 @@ double field_value::get_asDouble() const {
       return atof(str_value.c_str());
     }
     case ft_Boolean:{
-      return (double)bool_value;
+      return static_cast<double>(bool_value);
     }
     case ft_Char: {
-      return (double)char_value;
+      return static_cast<double>(char_value);
     }
     case ft_Short: {
-       return (double)short_value;
+       return static_cast<double>(short_value);
     }
     case ft_UShort: {
-       return (double)ushort_value;
+       return static_cast<double>(ushort_value);
     }
     case ft_Int: {
-      return (double)int_value;
+      return static_cast<double>(int_value);
     }
     case ft_UInt: {
-      return (double)uint_value;
+      return static_cast<double>(uint_value);
     }
     case ft_Float: {
-      return (double)float_value;
+      return static_cast<double>(float_value);
     }
     case ft_Double: {
-      return (double)double_value;
+      return static_cast<double>(double_value);
     }
     case ft_Int64: {
-      return (double)int64_value;
+      return static_cast<double>(int64_value);
     }
     default:
       return 0.0;
@@ -555,28 +555,28 @@ int64_t field_value::get_asInt64() const {
       return _atoi64(str_value.c_str());
     }
     case ft_Boolean:{
-      return (int64_t)bool_value;
+      return static_cast<int64_t>(bool_value);
     }
     case ft_Char: {
-      return (int64_t)char_value;
+      return static_cast<int64_t>(char_value);
     }
     case ft_Short: {
-       return (int64_t)short_value;
+       return static_cast<int64_t>(short_value);
     }
     case ft_UShort: {
-       return (int64_t)ushort_value;
+       return static_cast<int64_t>(ushort_value);
     }
     case ft_Int: {
-      return (int64_t)int_value;
+      return static_cast<int64_t>(int_value);
     }
     case ft_UInt: {
-      return (int64_t)uint_value;
+      return static_cast<int64_t>(uint_value);
     }
     case ft_Float: {
-      return (int64_t)float_value;
+      return static_cast<int64_t>(float_value);
     }
     case ft_Double: {
-      return (int64_t)double_value;
+      return static_cast<int64_t>(double_value);
     }
     case ft_Int64: {
       return int64_value;

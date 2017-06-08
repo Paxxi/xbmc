@@ -707,7 +707,7 @@ extern "C"
   {
     if (g_emuFileWrapper.DescriptorIsEmulatedFile(fd))
     {
-      return (__off_t)dll_lseeki64(fd, (__off_t)lPos, iWhence);
+      return (__off_t)dll_lseeki64(fd, lPos, iWhence);
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
@@ -2179,7 +2179,7 @@ extern "C"
 
   char*** dll___p__environ()
   {
-    static char*** t = (char***)&dll__environ;
+    static char*** t = &dll__environ;
     return (char***)&t;
   }
 

@@ -172,7 +172,7 @@ int64_t CFileCDDA::Seek(int64_t iFilePosition, int iWhence /*=SEEK_SET*/)
     return -1;
 }
 
-  lsn_t lsnPosition = (int)iFilePosition / CDIO_CD_FRAMESIZE_RAW;
+  lsn_t lsnPosition = static_cast<int>(iFilePosition) / CDIO_CD_FRAMESIZE_RAW;
 
   switch (iWhence)
   {
@@ -192,7 +192,7 @@ int64_t CFileCDDA::Seek(int64_t iFilePosition, int iWhence /*=SEEK_SET*/)
     return -1;
   }
 
-  return ((int64_t)(m_lsnCurrent -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
+  return (static_cast<int64_t>(m_lsnCurrent -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
 }
 
 void CFileCDDA::Close()
@@ -210,7 +210,7 @@ int64_t CFileCDDA::GetPosition()
     return 0;
 }
 
-  return ((int64_t)(m_lsnCurrent -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
+  return (static_cast<int64_t>(m_lsnCurrent -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
 }
 
 int64_t CFileCDDA::GetLength()
@@ -219,7 +219,7 @@ int64_t CFileCDDA::GetLength()
     return 0;
 }
 
-  return ((int64_t)(m_lsnEnd -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
+  return (static_cast<int64_t>(m_lsnEnd -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
 }
 
 bool CFileCDDA::IsValidFile(const CURL& url)

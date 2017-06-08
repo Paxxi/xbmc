@@ -230,7 +230,7 @@ MsgQueueReturnCode CDVDMessageQueue::Get(CDVDMsg** pMsg, unsigned int iTimeoutIn
     return MSGQ_ABORT;
 }
 
-  return (MsgQueueReturnCode)ret;
+  return static_cast<MsgQueueReturnCode>(ret);
 }
 
 void CDVDMessageQueue::UpdateTimeFront()
@@ -358,7 +358,7 @@ int CDVDMessageQueue::GetTimeSize() const
   if (IsDataBased()) {
     return 0;
   } else {
-    return (int)((m_TimeFront - m_TimeBack) / DVD_TIME_BASE);
+    return static_cast<int>((m_TimeFront - m_TimeBack) / DVD_TIME_BASE);
 }
 }
 

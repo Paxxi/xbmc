@@ -426,7 +426,7 @@ namespace VIDEO
 
     bool FoundSomeInfo = false;
     std::vector<int> seenPaths;
-    for (int i = 0; i < (int)items.Size(); ++i)
+    for (int i = 0; i < items.Size(); ++i)
     {
       m_nfoReader.Close();
       CFileItemPtr pItem = items[i];
@@ -1493,7 +1493,7 @@ namespace VIDEO
       if (pDlgProgress)
       {
         pDlgProgress->SetLine(2, CVariant{20361});
-        pDlgProgress->SetPercentage((int)((float)(iCurr++)/iMax*100));
+        pDlgProgress->SetPercentage(static_cast<int>(static_cast<float>(iCurr++)/iMax*100));
         pDlgProgress->Progress();
       }
       if (m_handle) {

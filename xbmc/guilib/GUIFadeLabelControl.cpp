@@ -88,9 +88,9 @@ void CGUIFadeLabelControl::Process(unsigned int currentTime, CDirtyRegionList &d
     float width, height;
     m_textLayout.GetTextExtent(width, height);
     float spaceWidth = m_label.font->GetCharWidth(L' ');
-    unsigned int numSpaces = (unsigned int)(m_width / spaceWidth) + 1;
+    unsigned int numSpaces = static_cast<unsigned int>(m_width / spaceWidth) + 1;
     if (width < m_width) { // append spaces for scrolling
-      numSpaces += (unsigned int)((m_width - width) / spaceWidth) + 1;
+      numSpaces += static_cast<unsigned int>((m_width - width) / spaceWidth) + 1;
 }
     m_shortText = (width + m_label.offsetX) < m_width;
     m_scrollInfo.suffix.assign(numSpaces, ' ');

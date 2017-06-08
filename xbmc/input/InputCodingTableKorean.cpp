@@ -43,7 +43,7 @@ void CInputCodingTableKorean::SetTextPrev(const std::string& strTextPrev)
 
 int CInputCodingTableKorean::MergeCode(int choseong, int jungseong, int jongseong)
 {
-  return (unsigned short) 0xAC00 + choseong * 21 * 28 + jungseong * 28 + jongseong + 1;
+  return static_cast<unsigned short>( 0xAC00) + choseong * 21 * 28 + jungseong * 28 + jongseong + 1;
 }
 
 // Reference

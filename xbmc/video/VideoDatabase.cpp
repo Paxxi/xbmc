@@ -6613,7 +6613,7 @@ bool CVideoDatabase::GetSortedVideos(const MediaType &mediaType, const std::stri
       sortDescription.sortBy == SortByYear ||
       sortDescription.sortBy == SortByLastPlayed ||
       sortDescription.sortBy == SortByPlaycount) {
-    sorting.sortAttributes = (SortAttribute)(sortDescription.sortAttributes | SortAttributeIgnoreFolders);
+    sorting.sortAttributes = static_cast<SortAttribute>(sortDescription.sortAttributes | SortAttributeIgnoreFolders);
 }
 
   bool success = false;

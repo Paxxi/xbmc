@@ -63,8 +63,8 @@ CBaseRenderer::~CBaseRenderer()
 
 float CBaseRenderer::GetAspectRatio() const
 {
-  float width = (float)m_sourceWidth;
-  float height = (float)m_sourceHeight;
+  float width = static_cast<float>(m_sourceWidth);
+  float height = static_cast<float>(m_sourceHeight);
   return m_sourceFrameRatio * width / height * m_sourceHeight / m_sourceWidth;
 }
 
@@ -320,18 +320,18 @@ void CBaseRenderer::CalcNormalRenderRect(float offsetX, float offsetY, float wid
 //***************************************************************************************
 void CBaseRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height)
 {
-  m_sourceFrameRatio = (float)desired_width / desired_height;
+  m_sourceFrameRatio = static_cast<float>(desired_width) / desired_height;
 
   // Check whether mplayer has decided that the size of the video file should be changed
   // This indicates either a scaling has taken place (which we didn't ask for) or it has
   // found an aspect ratio parameter from the file, and is changing the frame size based
   // on that.
-  if (m_sourceWidth == (unsigned int) desired_width && m_sourceHeight == (unsigned int) desired_height) {
+  if (m_sourceWidth == desired_width && m_sourceHeight == desired_height) {
     return ;
 }
 
   // mplayer is scaling in one or both directions.  We must alter our Source Pixel Ratio
-  float imageFrameRatio = (float)m_sourceWidth / m_sourceHeight;
+  float imageFrameRatio = static_cast<float>(m_sourceWidth) / m_sourceHeight;
 
   // OK, most sources will be correct now, except those that are intended
   // to be displayed on non-square pixel based output devices (ie PAL or NTSC TVs)
@@ -472,8 +472,8 @@ void CBaseRenderer::SetViewMode(int viewMode)
   // get our calibrated full screen resolution
   RESOLUTION res = g_graphicsContext.GetVideoResolution();
   RESOLUTION_INFO info = g_graphicsContext.GetResInfo();
-  float screenWidth  = (float)(info.Overscan.right  - info.Overscan.left);
-  float screenHeight = (float)(info.Overscan.bottom - info.Overscan.top);
+  float screenWidth  = static_cast<float>(info.Overscan.right  - info.Overscan.left);
+  float screenHeight = static_cast<float>(info.Overscan.bottom - info.Overscan.top);
 
   // and the source frame ratio
   float sourceFrameRatio = GetAspectRatio();
@@ -482,8 +482,8 @@ void CBaseRenderer::SetViewMode(int viewMode)
               CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode == ViewModeNormal);
 
   // Splitres scaling factor
-  float xscale = (float)info.iScreenWidth  / (float)info.iWidth;
-  float yscale = (float)info.iScreenHeight / (float)info.iHeight;
+  float xscale = static_cast<float>(info.iScreenWidth)  / static_cast<float>(info.iWidth);
+  float yscale = static_cast<float>(info.iScreenHeight) / static_cast<float>(info.iHeight);
 
   screenWidth   *= xscale;
   screenHeight  *= yscale;

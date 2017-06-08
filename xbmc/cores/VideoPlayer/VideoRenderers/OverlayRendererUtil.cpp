@@ -58,7 +58,7 @@ static uint32_t build_rgba(int yuv[3], int alpha, bool mergealpha)
 
 uint32_t* convert_rgba(CDVDOverlayImage* o, bool mergealpha)
 {
-  uint32_t* rgba = (uint32_t*)malloc(o->width * o->height * sizeof(uint32_t));
+  uint32_t* rgba = reinterpret_cast<uint32_t*>(malloc(o->width * o->height * sizeof(uint32_t)));
 
   if(!rgba) {
     return nullptr;
@@ -87,7 +87,7 @@ uint32_t* convert_rgba(CDVDOverlaySpu* o, bool mergealpha
                               , int& min_x, int& max_x
                               , int& min_y, int& max_y)
 {
-  uint32_t* rgba = (uint32_t*)malloc(o->width * o->height * sizeof(uint32_t));
+  uint32_t* rgba = reinterpret_cast<uint32_t*>(malloc(o->width * o->height * sizeof(uint32_t)));
 
   if(!rgba) {
     return nullptr;
@@ -125,7 +125,7 @@ uint32_t* convert_rgba(CDVDOverlaySpu* o, bool mergealpha
   max_y = 0;
 
   trg = rgba;
-  src = (uint16_t*)o->result;
+  src = reinterpret_cast<uint16_t*>(o->result);
 
   for (int y = 0; y < o->height; y++)
   {
@@ -253,8 +253,8 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 
   // allocate space for the glyph positions and texturedata
 
-  quads.quad = (SQuad*)  calloc(quads.count, sizeof(SQuad));
-  quads.data = (uint8_t*)calloc(quads.size_x * quads.size_y, 1);
+  quads.quad = reinterpret_cast<SQuad*>(  calloc(quads.count, sizeof(SQuad)));
+  quads.data = reinterpret_cast<uint8_t*>(calloc(quads.size_x * quads.size_y, 1));
 
   SQuad*   v    = quads.quad;
   uint8_t* data = quads.data;

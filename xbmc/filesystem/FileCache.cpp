@@ -81,7 +81,7 @@ public:
       return 0;
 }
 
-    return (unsigned)(1000 * (m_size / (m_time + time_bias)));
+    return static_cast<unsigned>(1000 * (m_size / (m_time + time_bias)));
   }
 
 private:
@@ -527,7 +527,7 @@ int64_t CFileCache::Seek(int64_t iFilePosition, int iWhence)
     if(m_seekPos < iTarget)
     {
       CLog::Log(LOGDEBUG,"%s - waiting for position %" PRId64".", __FUNCTION__, iTarget);
-      if(m_pCache->WaitForData((unsigned)(iTarget - m_seekPos), 10000) < iTarget - m_seekPos)
+      if(m_pCache->WaitForData(static_cast<unsigned>(iTarget - m_seekPos), 10000) < iTarget - m_seekPos)
       {
         CLog::Log(LOGWARNING,"%s - failed to get remaining data", __FUNCTION__);
         return -1;
@@ -595,9 +595,9 @@ int CFileCache::IoControl(EIoControl request, void* param)
 {
   if (request == IOCTRL_CACHE_STATUS)
   {
-    SCacheStatus* status = (SCacheStatus*)param;
+    SCacheStatus* status = reinterpret_cast<SCacheStatus*>(param);
     status->forward = m_pCache->WaitForData(0, 0);
-    status->level   = (m_forwardCacheSize == 0) ? 0.0 : (float) status->forward / m_forwardCacheSize;
+    status->level   = (m_forwardCacheSize == 0) ? 0.0 : static_cast<float>( status->forward) / m_forwardCacheSize;
     status->maxrate = m_writeRate;
     status->currate = m_writeRateActual;
     return 0;
@@ -605,7 +605,7 @@ int CFileCache::IoControl(EIoControl request, void* param)
 
   if (request == IOCTRL_CACHE_SETRATE)
   {
-    m_writeRate = *(unsigned*)param;
+    m_writeRate = *reinterpret_cast<unsigned*>(param);
     return 0;
   }
 

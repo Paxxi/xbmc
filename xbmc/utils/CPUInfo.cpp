@@ -843,7 +843,7 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       coreIdle -= iter->second.m_idle;
       coreIO -= iter->second.m_io;
 
-      double total = (double)(coreUser + coreNice + coreSystem + coreIdle + coreIO);
+      double total = static_cast<double>(coreUser + coreNice + coreSystem + coreIdle + coreIO);
       if(total == 0.0f)
         iter->second.m_fPct = 0.0f;
       else

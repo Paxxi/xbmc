@@ -459,7 +459,7 @@ void XBPython::Finalize()
     // set the m_bInitialized flag before releasing the lock. This will prevent
     // Other methods that rely on this flag from an incorrect interpretation.
     m_bInitialized    = false;
-    PyThreadState* curTs = (PyThreadState*)m_mainThreadState;
+    PyThreadState* curTs = reinterpret_cast<PyThreadState*>(m_mainThreadState);
     m_mainThreadState = nullptr; // clear the main thread state before releasing the lock
     {
       CSingleExit exit(m_critSection);

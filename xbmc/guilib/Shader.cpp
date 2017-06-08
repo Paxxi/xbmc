@@ -245,7 +245,7 @@ bool CARBPixelShader::Compile()
   glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err);
   if (err>0)
   {
-    const char* errStr = (const char*)glGetString(GL_PROGRAM_ERROR_STRING_ARB);
+    const char* errStr = reinterpret_cast<const char*>(glGetString(GL_PROGRAM_ERROR_STRING_ARB));
     if (!errStr) {
       errStr = "NULL";
     

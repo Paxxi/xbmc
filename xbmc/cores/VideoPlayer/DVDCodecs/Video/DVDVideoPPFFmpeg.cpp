@@ -192,9 +192,9 @@ bool CDVDVideoPPFFmpeg::CheckFrameBuffer(const VideoPicture* pSource)
     m_FrameBuffer.iWidth = pSource->iWidth;
     m_FrameBuffer.iHeight = pSource->iHeight;
 
-    m_FrameBuffer.data[0] = (uint8_t*)av_malloc(m_FrameBuffer.iLineSize[0] * m_FrameBuffer.iHeight);
-    m_FrameBuffer.data[1] = (uint8_t*)av_malloc(m_FrameBuffer.iLineSize[1] * m_FrameBuffer.iHeight/2);
-    m_FrameBuffer.data[2] = (uint8_t*)av_malloc(m_FrameBuffer.iLineSize[2] * m_FrameBuffer.iHeight/2);
+    m_FrameBuffer.data[0] = reinterpret_cast<uint8_t*>(av_malloc(m_FrameBuffer.iLineSize[0] * m_FrameBuffer.iHeight));
+    m_FrameBuffer.data[1] = reinterpret_cast<uint8_t*>(av_malloc(m_FrameBuffer.iLineSize[1] * m_FrameBuffer.iHeight/2));
+    m_FrameBuffer.data[2] = reinterpret_cast<uint8_t*>(av_malloc(m_FrameBuffer.iLineSize[2] * m_FrameBuffer.iHeight/2));
 
     if( !m_FrameBuffer.data[0] || !m_FrameBuffer.data[1] || !m_FrameBuffer.data[2])
     {

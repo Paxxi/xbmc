@@ -265,7 +265,7 @@ void CGUIDialogNetworkSetup::OnProtocolChange()
     if (!OnMessage(msg)) {
       return;
 }
-    m_protocol = (NET_PROTOCOL)msg.GetParam1();
+    m_protocol = static_cast<NET_PROTOCOL>(msg.GetParam1());
     // set defaults for the port
     if (m_protocol == NET_PROTOCOL_FTP)
       m_port = "21";

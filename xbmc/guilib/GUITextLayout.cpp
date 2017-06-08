@@ -509,7 +509,7 @@ void CGUITextLayout::WrapText(const vecText &text, float maxWidth)
     return;
 }
 
-  int nMaxLines = (m_maxHeight > 0 && m_font->GetLineHeight() > 0)?(int)ceilf(m_maxHeight / m_font->GetLineHeight()):-1;
+  int nMaxLines = (m_maxHeight > 0 && m_font->GetLineHeight() > 0)?static_cast<int>(ceilf(m_maxHeight / m_font->GetLineHeight())):-1;
 
   m_lines.clear();
 

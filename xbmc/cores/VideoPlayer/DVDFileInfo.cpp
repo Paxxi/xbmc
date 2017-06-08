@@ -263,13 +263,13 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
         {
           {
             unsigned int nWidth = g_advancedSettings.m_imageRes;
-            double aspect = (double)picture.iDisplayWidth / (double)picture.iDisplayHeight;
+            double aspect = static_cast<double>(picture.iDisplayWidth) / static_cast<double>(picture.iDisplayHeight);
             if(hint.forced_aspect && hint.aspect != 0) {
               aspect = hint.aspect;
 }
             unsigned int nHeight = (unsigned int)((double)g_advancedSettings.m_imageRes / aspect);
 
-            uint8_t *pOutBuf = (uint8_t*)av_malloc(nWidth * nHeight * 4);
+            uint8_t *pOutBuf = reinterpret_cast<uint8_t*>(av_malloc(nWidth * nHeight * 4));
             struct SwsContext *context = sws_getContext(picture.iWidth, picture.iHeight,
                   AV_PIX_FMT_YUV420P, nWidth, nHeight, AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
@@ -278,7 +278,7 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
               uint8_t *src[] = { picture.data[0], picture.data[1], picture.data[2], nullptr };
               int     srcStride[] = { picture.iLineSize[0], picture.iLineSize[1], picture.iLineSize[2], 0 };
               uint8_t *dst[] = { pOutBuf, nullptr, nullptr, nullptr };
-              int     dstStride[] = { (int)nWidth*4, 0, 0, 0 };
+              int     dstStride[] = { static_cast<int>(nWidth)*4, 0, 0, 0 };
               int orientation = DegreeToOrientation(hint.orientation);
               sws_scale(context, src, srcStride, 0, picture.iHeight, dst, dstStride);
               sws_freeContext(context);

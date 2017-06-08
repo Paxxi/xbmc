@@ -95,24 +95,24 @@ void CGUIWindowTestPatternGL::DrawBouncingRectangle(int top, int left, int botto
 
 void CGUIWindowTestPatternGL::DrawContrastBrightnessPattern(int top, int left, int bottom, int right)
 {
-  int x5p = (int) (left + (0.05f * (right - left)));
-  int y5p = (int) (top + (0.05f * (bottom - top)));
-  int x12p = (int) (left + (0.125f * (right - left)));
-  int y12p = (int) (top + (0.125f * (bottom - top)));
-  int x25p = (int) (left + (0.25f * (right - left)));
-  int y25p = (int) (top + (0.25f * (bottom - top)));
-  int x37p = (int) (left + (0.375f * (right - left)));
-  int y37p = (int) (top + (0.375f * (bottom - top)));
+  int x5p = static_cast<int> (left + (0.05f * (right - left)));
+  int y5p = static_cast<int> (top + (0.05f * (bottom - top)));
+  int x12p = static_cast<int> (left + (0.125f * (right - left)));
+  int y12p = static_cast<int> (top + (0.125f * (bottom - top)));
+  int x25p = static_cast<int> (left + (0.25f * (right - left)));
+  int y25p = static_cast<int> (top + (0.25f * (bottom - top)));
+  int x37p = static_cast<int> (left + (0.375f * (right - left)));
+  int y37p = static_cast<int> (top + (0.375f * (bottom - top)));
   int x50p = left + (right - left) / 2;
   int y50p = top + (bottom - top) / 2;
-  int x62p = (int) (left + (0.625f * (right - left)));
-  int y62p = (int) (top + (0.625f * (bottom - top)));
-  int x75p = (int) (left + (0.75f * (right - left)));
-  int y75p = (int) (top + (0.75f * (bottom - top)));
-  int x87p = (int) (left + (0.875f * (right - left)));
-  int y87p = (int) (top + (0.875f * (bottom - top)));
-  int x95p = (int) (left + (0.95f * (right - left)));
-  int y95p = (int) (top + (0.95f * (bottom - top)));
+  int x62p = static_cast<int> (left + (0.625f * (right - left)));
+  int y62p = static_cast<int> (top + (0.625f * (bottom - top)));
+  int x75p = static_cast<int> (left + (0.75f * (right - left)));
+  int y75p = static_cast<int> (top + (0.75f * (bottom - top)));
+  int x87p = static_cast<int> (left + (0.875f * (right - left)));
+  int y87p = static_cast<int> (top + (0.875f * (bottom - top)));
+  int x95p = static_cast<int> (left + (0.95f * (right - left)));
+  int y95p = static_cast<int> (top + (0.95f * (bottom - top)));
 
   m_blinkFrame = (m_blinkFrame + 1) % TEST_PATTERNS_BLINK_CYCLE;
 
@@ -182,9 +182,9 @@ void CGUIWindowTestPatternGL::DrawCircle(int originX, int originY, int radius)
   glBegin(GL_TRIANGLES);
   for (int i = 0; i <= 360; i++)
   {
-    angle = (float)(((double)i)/57.29577957795135);
-    vectorX = (int) (originX + (radius*(float)sin((double)angle)));
-    vectorY = (int) (originY + (radius*(float)cos((double)angle)));
+    angle = static_cast<float>((static_cast<double>(i))/57.29577957795135);
+    vectorX = static_cast<int> (originX + (radius*static_cast<float>(sin(static_cast<double>(angle)))));
+    vectorY = static_cast<int> (originY + (radius*static_cast<float>(cos(static_cast<double>(angle)))));
     glVertex2d(originX, originY);
     glVertex2d(vectorX1, vectorY1);
     glVertex2d(vectorX, vectorY);

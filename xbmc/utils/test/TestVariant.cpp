@@ -24,7 +24,7 @@
 
 TEST(TestVariant, VariantTypeInteger)
 {
-  CVariant a((int)0), b((int64_t)1);
+  CVariant a((static_cast<int64_t>(st<int64_t>(1)));
 
   EXPECT_TRUE(a.isInteger());
   EXPECT_EQ(CVariant::VariantTypeInteger, a.type());
@@ -36,7 +36,7 @@ TEST(TestVariant, VariantTypeInteger)
 
 TEST(TestVariant, VariantTypeUnsignedInteger)
 {
-  CVariant a((unsigned int)0), b((uint64_t)1);
+  CVariant a(static_cast<unsigned int>(signed int>(0))), b(static_cast<uint64_t>(t<uint64_t>(1)));
 
   EXPECT_TRUE(a.isUnsignedInteger());
   EXPECT_EQ(CVariant::VariantTypeUnsignedInteger, a.type());
@@ -96,7 +96,7 @@ TEST(TestVariant, VariantTypeWideString)
 
 TEST(TestVariant, VariantTypeDouble)
 {
-  CVariant a((float)0.0f), b((double)0.1f);
+  CVariant a(b(static_cast<double>(ast<double>(0.1f)));
 
   EXPECT_TRUE(a.isDouble());
   EXPECT_EQ(CVariant::VariantTypeDouble, a.type());
@@ -226,7 +226,7 @@ TEST(TestVariant, c_str)
 
 TEST(TestVariant, swap)
 {
-  CVariant a((int)0), b("variant");
+  CVariant a(("variant");
 
   EXPECT_TRUE(a.isInteger());
   EXPECT_TRUE(b.isString());

@@ -71,7 +71,7 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
         for (m_iPort = port; m_iPort <= port + range; ++m_iPort)
         {
           m_addr.saddr.saddr6.sin6_port = htons(m_iPort);
-          if (bind(testSocket, (struct sockaddr*)&m_addr.saddr, m_addr.size) >= 0)
+          if (bind(testSocket, reinterpret_cast<struct sockaddr*>(&m_addr.saddr), m_addr.size) >= 0)
           {
             closesocket(testSocket);
             m_ipv6Socket = true;
@@ -151,7 +151,7 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
       m_addr.saddr.saddr4.sin_port = htons(m_iPort);
 }
 
-    if (bind(m_iSock, (struct sockaddr*)&m_addr.saddr, m_addr.size) != 0)
+    if (bind(m_iSock, reinterpret_cast<struct sockaddr*>(&m_addr.saddr), m_addr.size) != 0)
     {
       CLog::Log(LOGWARNING, "UDP: Error binding socket on port %d (ipv6 : %s)", m_iPort, m_ipv6Socket ? "true" : "false" );
       CLog::Log(LOGWARNING, "UDP: %s", strerror(errno));

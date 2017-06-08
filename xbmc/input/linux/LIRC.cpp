@@ -187,8 +187,8 @@ bool CRemoteControl::CheckDevice() {
   int bufsize = sizeof(struct inotify_event) + PATH_MAX;
   char buf[bufsize];
   int ret = read(m_inotify_fd, buf, bufsize);
-  for (int i = 0; i + (int)sizeof(struct inotify_event) <= ret;) {
-    struct inotify_event* e = (struct inotify_event*)(buf+i);
+  for (int i = 0; i + static_cast<int>(sizeof(struct inotify_event)) <= ret;) {
+    struct inotify_event* e = reinterpret_cast<struct inotify_event*>(buf+i);
     if (e->mask & IN_DELETE_SELF) {
       CLog::Log(LOGDEBUG, "LIRC device removed, disconnecting...");
       Disconnect();
@@ -343,7 +343,7 @@ bool CRemoteControl::Connect(struct sockaddr_un addr, bool logMessages)
   if ((m_fd = socket(AF_UNIX, SOCK_STREAM, 0)) != -1)
   {
     // Connect to the socket
-    if (connect(m_fd, (struct sockaddr *)&addr, sizeof(addr)) != -1)
+    if (connect(m_fd, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) != -1)
     {
       int opts;
       if ((opts = fcntl(m_fd, F_GETFL)) != -1)

@@ -30,7 +30,7 @@
 
 MediaType DatabaseUtils::MediaTypeFromVideoContentType(int videoContentType)
 {
-  VIDEODB_CONTENT_TYPE type = (VIDEODB_CONTENT_TYPE)videoContentType;
+  VIDEODB_CONTENT_TYPE type = static_cast<VIDEODB_CONTENT_TYPE>(videoContentType);
   switch (type)
   {
     case VIDEODB_CONTENT_MOVIES:

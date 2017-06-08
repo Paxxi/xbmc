@@ -178,7 +178,7 @@ bool CGUISliderControl::OnMessage(CGUIMessage& message)
     switch (message.GetMessage())
     {
     case GUI_MSG_ITEM_SELECT:
-      SetPercentage( (float)message.GetParam1() );
+      SetPercentage( static_cast<float>(message.GetParam1()) );
       return true;
       break;
 
@@ -387,7 +387,7 @@ float CGUISliderControl::GetPercentage(RangeSelector selector /* = RangeSelector
 void CGUISliderControl::SetIntValue(int iValue, RangeSelector selector /* = RangeSelectorLower */, bool updateCurrent /* = false */)
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
-    SetFloatValue((float)iValue, selector, updateCurrent);
+    SetFloatValue(static_cast<float>(iValue), selector, updateCurrent);
   } else if (m_iType == SLIDER_CONTROL_TYPE_INT)
   {
     if (iValue > m_iEnd) { iValue = m_iEnd;
@@ -415,14 +415,14 @@ void CGUISliderControl::SetIntValue(int iValue, RangeSelector selector /* = Rang
     }
   }
   else {
-    SetPercentage((float)iValue, selector, updateCurrent);
+    SetPercentage(static_cast<float>(iValue), selector, updateCurrent);
 }
 }
 
 int CGUISliderControl::GetIntValue(RangeSelector selector /* = RangeSelectorLower */) const
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
-    return (int)m_floatValues[selector];
+    return static_cast<int>(m_floatValues[selector]);
   } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
     return m_intValues[selector];
   } else {
@@ -459,7 +459,7 @@ void CGUISliderControl::SetFloatValue(float fValue, RangeSelector selector /* = 
     }
   }
   else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
-    SetIntValue((int)fValue, selector, updateCurrent);
+    SetIntValue(static_cast<int>(fValue), selector, updateCurrent);
   } else {
     SetPercentage(fValue, selector, updateCurrent);
 }
@@ -470,7 +470,7 @@ float CGUISliderControl::GetFloatValue(RangeSelector selector /* = RangeSelector
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     return m_floatValues[selector];
   } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
-    return (float)m_intValues[selector];
+    return static_cast<float>(m_intValues[selector]);
   } else {
     return m_percentValues[selector];
 }
@@ -479,7 +479,7 @@ float CGUISliderControl::GetFloatValue(RangeSelector selector /* = RangeSelector
 void CGUISliderControl::SetIntInterval(int iInterval)
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
-    m_fInterval = (float)iInterval;
+    m_fInterval = static_cast<float>(iInterval);
   } else {
     m_iInterval = iInterval;
 }
@@ -490,14 +490,14 @@ void CGUISliderControl::SetFloatInterval(float fInterval)
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     m_fInterval = fInterval;
   } else {
-    m_iInterval = (int)fInterval;
+    m_iInterval = static_cast<int>(fInterval);
 }
 }
 
 void CGUISliderControl::SetRange(int iStart, int iEnd)
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
-    SetFloatRange((float)iStart,(float)iEnd);
+    SetFloatRange(static_cast<float>(iStart),static_cast<float>(iEnd));
   } else
   {
     m_intValues[0] = m_iStart = iStart;
@@ -508,7 +508,7 @@ void CGUISliderControl::SetRange(int iStart, int iEnd)
 void CGUISliderControl::SetFloatRange(float fStart, float fEnd)
 {
   if (m_iType == SLIDER_CONTROL_TYPE_INT) {
-    SetRange((int)fStart, (int)fEnd);
+    SetRange(static_cast<int>(fStart), static_cast<int>(fEnd));
   } else
   {
     m_floatValues[0] = m_fStart = fStart;
@@ -597,7 +597,7 @@ void CGUISliderControl::SetFromPosition(const CPoint &point, bool guessSelector 
 
   case SLIDER_CONTROL_TYPE_INT:
     {
-      int iValue = (int)(m_iStart + (float)(m_iEnd - m_iStart) * fPercent + 0.49f);
+      int iValue = static_cast<int>(m_iStart + static_cast<float>(m_iEnd - m_iStart) * fPercent + 0.49f);
       SetIntValue(iValue, m_currentSelector, true);
       break;
     }
@@ -730,7 +730,7 @@ float CGUISliderControl::GetProportion(RangeSelector selector /* = RangeSelector
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     return m_fStart != m_fEnd ? (GetFloatValue(selector) - m_fStart) / (m_fEnd - m_fStart) : 0.0f;
   } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
-    return m_iStart != m_iEnd ? (float)(GetIntValue(selector) - m_iStart) / (float)(m_iEnd - m_iStart) : 0.0f;
+    return m_iStart != m_iEnd ? static_cast<float>(GetIntValue(selector) - m_iStart) / static_cast<float>(m_iEnd - m_iStart) : 0.0f;
 }
   return 0.01f * GetPercentage(selector);
 }

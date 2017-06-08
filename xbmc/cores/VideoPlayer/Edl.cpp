@@ -366,8 +366,8 @@ bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond
     if (sscanf(szBuffer, "%lf %lf", &dStartFrame, &dEndFrame) == 2)
     {
       Cut cut;
-      cut.start = (int64_t)(dStartFrame / fFrameRate * 1000);
-      cut.end = (int64_t)(dEndFrame / fFrameRate * 1000);
+      cut.start = static_cast<int64_t>(dStartFrame / fFrameRate * 1000);
+      cut.end = static_cast<int64_t>(dEndFrame / fFrameRate * 1000);
       cut.action = COMM_BREAK;
       bValid = AddCut(cut);
     }
@@ -444,8 +444,8 @@ bool CEdl::ReadVideoReDo(const std::string& strMovie)
          *  Times need adjusting by 1/10,000 to get ms.
          */
         Cut cut;
-        cut.start = (int64_t)(dStart / 10000);
-        cut.end = (int64_t)(dEnd / 10000);
+        cut.start = static_cast<int64_t>(dStart / 10000);
+        cut.end = static_cast<int64_t>(dEnd / 10000);
         cut.action = CUT;
         bValid = AddCut(cut);
       }
@@ -458,7 +458,7 @@ bool CEdl::ReadVideoReDo(const std::string& strMovie)
       int iScene;
       double dSceneMarker;
       if (sscanf(szBuffer + strlen(VIDEOREDO_TAG_SCENE), " %i>%lf", &iScene, &dSceneMarker) == 2) {
-        bValid = AddSceneMarker((int64_t)(dSceneMarker / 10000)); // Times need adjusting by 1/10,000 to get ms.
+        bValid = AddSceneMarker(static_cast<int64_t>(dSceneMarker / 10000)); // Times need adjusting by 1/10,000 to get ms.
       } else {
         bValid = false;
 }

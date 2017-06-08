@@ -522,11 +522,11 @@ int CPVRGUIInfo::TranslateIntInfo(DWORD dwInfo) const
   CSingleLock lock(m_critSection);
 
   if (dwInfo == PVR_PLAYING_PROGRESS) {
-    iReturn = (int) ((float) GetStartTime() / m_iDuration * 100);
+    iReturn = static_cast<int> (static_cast<float>( GetStartTime()) / m_iDuration * 100);
   } else if (dwInfo == PVR_ACTUAL_STREAM_SIG_PROGR) {
-    iReturn = (int) ((float) m_qualityInfo.iSignal / 0xFFFF * 100);
+    iReturn = static_cast<int> (static_cast<float>( m_qualityInfo.iSignal) / 0xFFFF * 100);
   } else if (dwInfo == PVR_ACTUAL_STREAM_SNR_PROGR) {
-    iReturn = (int) ((float) m_qualityInfo.iSNR / 0xFFFF * 100);
+    iReturn = static_cast<int> (static_cast<float>( m_qualityInfo.iSNR) / 0xFFFF * 100);
   } else if (dwInfo == PVR_BACKEND_DISKSPACE_PROGR)
   {
     if (m_iBackendDiskTotal > 0) {

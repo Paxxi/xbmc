@@ -254,7 +254,7 @@ namespace XBMCAddon
       MEMORYSTATUSEX stat;
       stat.dwLength = sizeof(MEMORYSTATUSEX);
       GlobalMemoryStatusEx(&stat);
-      return (long)(stat.ullAvailPhys  / ( 1024 * 1024 ));
+      return static_cast<long>(stat.ullAvailPhys  / ( 1024 * 1024 ));
     }
 
     // getCpuTemp() method
