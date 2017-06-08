@@ -136,6 +136,6 @@ namespace XBMCAddon
     {
       return infoTag->GetLyrics();
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

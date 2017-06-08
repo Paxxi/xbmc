@@ -244,4 +244,4 @@ AddonPtr CAddonBuilder::FromProps(CAddonInfo addonInfo)
   }
   return AddonPtr();
 }
-}
+}  // namespace ADDON

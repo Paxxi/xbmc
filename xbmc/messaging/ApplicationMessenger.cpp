@@ -284,5 +284,5 @@ void CApplicationMessenger::RegisterReceiver(IMessageTarget* target)
   m_mapTargets.insert(std::make_pair(target->GetMessageMask(), target));
 }
 
-}
-}
+}  // namespace MESSAGING
+}  // namespace KODI

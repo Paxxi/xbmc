@@ -65,6 +65,6 @@ space_info space(const std::string& path, std::error_code& ec)
 
   return sp;
 }
-}
-}
-}
+}  // namespace FILESYSTEM
+}  // namespace PLATFORM
+}  // namespace KODI

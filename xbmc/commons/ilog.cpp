@@ -35,4 +35,4 @@ namespace XbmcCommons
 
     log(loglevel, strData.c_str());
   }
-}
+}  // namespace XbmcCommons

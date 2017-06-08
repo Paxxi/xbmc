@@ -130,4 +130,4 @@ namespace XBMCAddonUtils
 #endif
 
 
-}
+}  // namespace XBMCAddonUtils

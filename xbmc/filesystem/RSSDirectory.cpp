@@ -66,7 +66,7 @@ namespace {
 
   typedef std::vector<SResource> SResources;
 
-}
+}  // namespace
 
 std::map<std::string,CDateTime> CRSSDirectory::m_cache;
 CCriticalSection CRSSDirectory::m_section;

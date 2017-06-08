@@ -77,5 +77,5 @@ namespace XFILE
   {
     return XFILE::CFile::Delete(url);
   }
-}
+}  // namespace XFILE
 

@@ -1388,5 +1388,5 @@ namespace XBMCAddon
 
     // ============================================================
 
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

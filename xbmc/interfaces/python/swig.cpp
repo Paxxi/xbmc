@@ -394,5 +394,5 @@ namespace PythonBindings
     return typeInfoLookup[ti];
   }
 
-}
+}  // namespace PythonBindings
 

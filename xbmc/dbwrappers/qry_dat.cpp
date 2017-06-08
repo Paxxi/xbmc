@@ -744,4 +744,4 @@ std::string field_value::gft() {
   return tmp;
   }
 
-} //namespace 
+}  // namespace dbiplus

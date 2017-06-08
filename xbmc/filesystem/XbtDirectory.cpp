@@ -77,4 +77,4 @@ bool CXbtDirectory::ContainsFiles(const CURL& url)
   return CXbtManager::GetInstance().HasFiles(url);
 }
 
-}
+}  // namespace XFILE

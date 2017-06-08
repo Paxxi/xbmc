@@ -513,6 +513,6 @@ namespace XBMCAddon
       if (iStream < streamCount)
         g_application.m_pPlayer->SetVideoStream(iStream);
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

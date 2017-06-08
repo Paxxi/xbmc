@@ -331,4 +331,4 @@ int GetStereoscopicDepth()
   return depth;
 }
 
-}
+}  // namespace OVERLAY

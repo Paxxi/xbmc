@@ -41,4 +41,4 @@ bool CMusicInfo::Execute(const CFileItemPtr& item) const
   return true;
 }
 
-}
+}  // namespace CONTEXTMENU

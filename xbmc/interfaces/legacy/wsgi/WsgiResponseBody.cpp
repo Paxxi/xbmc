@@ -38,5 +38,5 @@ namespace XBMCAddon
 
       m_data.append(data);
     }
-  }
-}
+  }  // namespace xbmcwsgi
+}  // namespace XBMCAddon

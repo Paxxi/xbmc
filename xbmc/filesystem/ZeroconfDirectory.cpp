@@ -73,7 +73,7 @@ namespace
       return false;
     return true;
   }
-}
+}  // namespace
 
 bool GetDirectoryFromTxtRecords(const CZeroconfBrowser::ZeroconfService& zeroconf_service, CURL& url, CFileItemList &items)
 {

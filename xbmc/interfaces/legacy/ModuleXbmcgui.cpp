@@ -49,5 +49,5 @@ namespace XBMCAddon
     const char* getNOTIFICATION_WARNING() { return NOTIFICATION_WARNING; }
     const char* getNOTIFICATION_ERROR()   { return NOTIFICATION_ERROR; }
 
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

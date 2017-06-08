@@ -78,8 +78,8 @@ namespace XBMCAddon
 
       return false;
     }
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon
 
 
 

@@ -815,4 +815,4 @@ long SqliteDataset::nextid(const char *seq_name) {
 void SqliteDataset::interrupt() {
   sqlite3_interrupt(handle());
 }
-}//namespace
+}  // namespace dbiplus

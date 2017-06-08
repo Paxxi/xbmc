@@ -374,4 +374,4 @@ cleanup:
 failure:
     return false;
 }
-}
+}  // namespace XFILE

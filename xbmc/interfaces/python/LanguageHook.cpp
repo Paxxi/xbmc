@@ -207,5 +207,5 @@ namespace XBMCAddon
       CSingleLock l(*this);
       return currentObjects.find(obj) != currentObjects.end();
     }
-  }
-}
+  }  // namespace Python
+}  // namespace XBMCAddon

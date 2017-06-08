@@ -50,4 +50,4 @@ namespace XBMCAddon
     if (lh)
       lh->Release();
   }
-}
+}  // namespace XBMCAddon

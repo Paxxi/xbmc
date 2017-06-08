@@ -798,5 +798,5 @@ namespace XBMCAddon
       strAction = action.GetName();
     }
 
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

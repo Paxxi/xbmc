@@ -46,4 +46,4 @@ void CUISoundsResource::OnPostInstall(bool update, bool modal)
 }
 }
 
-}
+}  // namespace ADDON

@@ -49,7 +49,7 @@ constexpr bool isValidFilePtr(FILE* f)
   return (f != nullptr);
 }
 #endif
-}
+}  // namespace
 CEmuFileWrapper::CEmuFileWrapper()
 {
   // since we always use dlls we might just initialize it directly

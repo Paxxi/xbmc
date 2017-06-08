@@ -84,6 +84,6 @@ DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant l
   return DialogResponse::CANCELLED;
 }
 
-}
-}
-}
+}  // namespace HELPERS
+}  // namespace MESSAGING
+}  // namespace KODI

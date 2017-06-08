@@ -82,6 +82,6 @@ namespace XBMCAddon
         languageHook->UnregisterMonitorCallback(this);
       }
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

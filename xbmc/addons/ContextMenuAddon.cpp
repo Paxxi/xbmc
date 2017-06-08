@@ -122,4 +122,4 @@ CContextMenuAddon::CContextMenuAddon(CAddonInfo addonInfo, std::vector<CContextM
 {
 }
 
-}
+}  // namespace ADDON

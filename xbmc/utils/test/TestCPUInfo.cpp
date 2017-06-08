@@ -73,7 +73,7 @@ private:
   std::string &m_Setting;
   std::string m_OldValue;
 };
-}
+}  // namespace  // namespace
 
 //Disabled for windows because there is no implementation to get the CPU temp and there will probably never be one
 #ifndef TARGET_WINDOWS

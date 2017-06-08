@@ -563,5 +563,5 @@ namespace XBMCAddon
     int getENGLISH_NAME() { return CLangCodeExpander::ENGLISH_NAME; }
 
     const int lLOGDEBUG = LOGDEBUG;
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon

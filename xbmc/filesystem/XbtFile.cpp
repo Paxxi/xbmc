@@ -403,4 +403,4 @@ bool CXbtFile::GetFile(const CURL& url, CXBTFFile& file)
   return GetReaderAndFile(url, reader, file);
 }
 
-}
+}  // namespace XFILE

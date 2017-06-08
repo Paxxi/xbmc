@@ -70,5 +70,5 @@ namespace XBMCAddon
       return true;
     }
 
-  }
-}
+  }  // namespace xbmcvfs
+}  // namespace XBMCAddon

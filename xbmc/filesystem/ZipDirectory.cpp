@@ -91,5 +91,5 @@ namespace XFILE
 
     return false;
   }
-}
+}  // namespace XFILE
 

@@ -82,7 +82,7 @@ void XBMC_POSIX_HandleSignal(int sig)
 
 }
 
-}
+}  // namespace
 
 
 int main(int argc, char* argv[])

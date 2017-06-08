@@ -241,5 +241,5 @@ namespace XBMCAddon
         throw AddonException("'%s' is an invalid Id", id);
 }
     }
-  }
-}
+  }  // namespace xbmcaddon
+}  // namespace XBMCAddon

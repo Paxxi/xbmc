@@ -130,4 +130,4 @@ void CBinaryAddonCache::Update()
   }
 }
 
-}
+}  // namespace ADDON

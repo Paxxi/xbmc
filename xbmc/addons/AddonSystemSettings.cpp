@@ -172,4 +172,4 @@ std::vector<std::string> CAddonSystemSettings::MigrateAddons(std::function<void(
 
   return changed;
 }
-}
+}  // namespace ADDON

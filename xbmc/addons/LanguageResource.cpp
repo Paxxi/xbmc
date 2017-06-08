@@ -215,4 +215,4 @@ bool CLanguageResource::FindLanguageAddonByName(const std::string &legacyLanguag
   return false;
 }
 
-}
+}  // namespace ADDON

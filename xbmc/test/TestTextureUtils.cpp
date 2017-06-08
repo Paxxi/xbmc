@@ -61,4 +61,4 @@ TEST_P(TestTextureUtils, GetWrappedImageURL)
 
 INSTANTIATE_TEST_CASE_P(SampleFiles, TestTextureUtils,
                         ValuesIn(test_files));
-}
+}  // namespace  // namespace

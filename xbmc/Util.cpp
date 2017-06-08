@@ -301,7 +301,7 @@ std::string GetHomePath(const std::string& strTarget, std::string strPath)
   return strPath;
 }
 #endif
-}
+}  // namespace
 CUtil::CUtil()
 = default;
 

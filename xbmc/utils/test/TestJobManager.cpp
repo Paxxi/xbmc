@@ -154,7 +154,7 @@ WaitForJobToStartProcessing(CJob::PRIORITY priority, JobControlPackage &package)
 
   return job;
 }
-}
+}  // namespace  // namespace
   
 TEST_F(TestJobManager, PauseLowPriorityJob)
 {

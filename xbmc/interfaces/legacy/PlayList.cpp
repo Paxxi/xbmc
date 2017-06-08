@@ -156,6 +156,6 @@ namespace XBMCAddon
 
       return new XBMCAddon::xbmcgui::ListItem(ptr);
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

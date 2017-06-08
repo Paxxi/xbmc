@@ -73,6 +73,6 @@ namespace XBMCAddon
     {
       return bConfirmed;
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

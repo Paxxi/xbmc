@@ -1770,6 +1770,6 @@ void MysqlDataset::interrupt() {
   // Impossible
 }
 
-}//namespace
+}  // namespace dbiplus
 #endif //HAS_MYSQL
 

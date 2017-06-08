@@ -73,5 +73,5 @@ namespace XBMCAddon
       //   this is a belt-and-suspenders cleanup mechanism
       return ! XBMCAddon::Python::PythonLanguageHook::IsAddonClassInstanceRegistered(obj);
     }
-  }
-}
+  }  // namespace Python
+}  // namespace XBMCAddon

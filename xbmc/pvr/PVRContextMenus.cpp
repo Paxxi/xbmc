@@ -489,7 +489,7 @@ namespace PVR
       return CServiceBroker::GetPVRManager().GUIActions()->ProcessMenuHooks(item);
     }
 
-  } // namespace CONEXTMENUITEM
+  }  // namespace CONTEXTMENUITEM
 
   CPVRContextMenuManager& CPVRContextMenuManager::GetInstance()
   {

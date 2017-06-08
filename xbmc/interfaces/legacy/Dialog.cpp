@@ -649,5 +649,5 @@ namespace XBMCAddon
       return handle->IsFinished();
     }
 
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

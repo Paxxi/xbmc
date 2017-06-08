@@ -1462,4 +1462,4 @@ bool CScraper::GetArtwork(XFILE::CCurlFile &fcurl, CVideoInfoTag &details)
   return fRet;
 }
 
-}
+}  // namespace ADDON

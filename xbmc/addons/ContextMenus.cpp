@@ -86,4 +86,4 @@ bool CDisableAddon::Execute(const CFileItemPtr& item) const
 {
   return CAddonMgr::GetInstance().DisableAddon(item->GetAddonInfo()->ID());
 }
-}
+}  // namespace CONTEXTMENU

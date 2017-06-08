@@ -176,5 +176,5 @@ namespace XBMCAddon
     {
       return infoTag->m_strTrailer;
     }
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon

@@ -206,4 +206,4 @@ namespace XbmcThreads
          iter != events.end(); ++iter)
       (*iter)->removeGroup(this);
   }
-}
+}  // namespace XbmcThreads

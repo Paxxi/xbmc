@@ -81,7 +81,7 @@ namespace
     // Trim trailing underscores
     StringUtils::TrimRight(path, "_");
   }
-}
+}  // namespace
 
 std::string CSavestateUtils::MakePath(const CSavestate& save)
 {

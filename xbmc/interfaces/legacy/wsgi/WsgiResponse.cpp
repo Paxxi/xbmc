@@ -103,5 +103,5 @@ namespace XBMCAddon
       return true;
     }
 #endif
-  }
-}
+  }  // namespace xbmcwsgi
+}  // namespace XBMCAddon

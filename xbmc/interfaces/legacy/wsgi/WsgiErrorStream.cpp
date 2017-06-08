@@ -71,5 +71,5 @@ namespace XBMCAddon
       m_request = request;
     }
 #endif
-  }
-}
+  }  // namespace xbmcwsgi
+}  // namespace XBMCAddon

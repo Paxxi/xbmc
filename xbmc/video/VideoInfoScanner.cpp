@@ -2144,4 +2144,4 @@ namespace VIDEO
     }
     return 0;    // didn't find anything
   }
-}
+}  // namespace VIDEO

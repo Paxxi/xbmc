@@ -43,7 +43,7 @@ struct ScopedEventLoopBlock
 private:
   AvahiThreadedPoll* mp_poll;
 };
-}
+}  // namespace
 
 CZeroconfBrowserAvahi::CZeroconfBrowserAvahi() : mp_client ( nullptr ), mp_poll ( nullptr )
 {

@@ -243,6 +243,6 @@ namespace XBMCAddon
       return "";
     }
 
-  }
-}
+  }  // namespace xbmc
+}  // namespace XBMCAddon
 

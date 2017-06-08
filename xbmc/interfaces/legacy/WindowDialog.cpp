@@ -79,5 +79,5 @@ namespace XBMCAddon
       Window::OnDeinitWindow(nextWindowID);
     }
 
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

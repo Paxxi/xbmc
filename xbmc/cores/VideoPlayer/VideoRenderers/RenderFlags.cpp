@@ -133,4 +133,4 @@ namespace RenderManager {
     else
       return res;
   }
-}
+}  // namespace RenderManager

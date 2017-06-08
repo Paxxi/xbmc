@@ -37,5 +37,5 @@ namespace XBMCAddon
 }
     }
   }
-}
+}  // namespace XBMCAddon
 

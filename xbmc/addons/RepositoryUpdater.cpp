@@ -212,4 +212,4 @@ void CRepositoryUpdater::ScheduleUpdate()
   if (!m_timer.Start(delta))
     CLog::Log(LOGERROR,"CRepositoryUpdater: failed to start timer");
 }
-}
+}  // namespace ADDON

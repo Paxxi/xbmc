@@ -118,5 +118,5 @@ namespace XBMCAddon
 
       return ret;
     }
-  }
-}
+  }  // namespace xbmcvfs
+}  // namespace XBMCAddon

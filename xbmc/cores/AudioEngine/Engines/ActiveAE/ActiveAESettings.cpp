@@ -113,4 +113,4 @@ void CActiveAESettings::SettingOptionsAudioDevicesFillerGeneral(SettingConstPtr 
   if (!foundValue)
     current = firstDevice;
 }
-}
+}  // namespace ActiveAE

@@ -875,5 +875,5 @@ namespace XBMCAddon
     {
       return item->GetVideoInfoTag();
     }
-  }
-}
+  }  // namespace xbmcgui
+}  // namespace XBMCAddon

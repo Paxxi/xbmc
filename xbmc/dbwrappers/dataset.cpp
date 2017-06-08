@@ -596,4 +596,4 @@ const char * DbErrors::getMsg() {
 	
 }
 
-}// namespace
+}  // namespace dbiplus

@@ -32,4 +32,4 @@ namespace INFO
   {
     StringUtils::ToLower(m_expression);
   }
-}
+}  // namespace INFO

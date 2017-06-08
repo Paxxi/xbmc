@@ -41,8 +41,8 @@ namespace XFILE
                                 { NODE_TYPE_ALBUM_COMPILATIONS,    "compilations",         521 },
                                 { NODE_TYPE_ROLE,                  "roles",              38033 },
                               };
-  };
-};
+  }  // namespace MUSICDATABASEDIRECTORY;
+}  // namespace XFILE;
 
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 

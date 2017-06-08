@@ -126,5 +126,5 @@ namespace XBMCAddon
 }
       }
     }
-  }
-}
+  }  // namespace Python
+}  // namespace XBMCAddon

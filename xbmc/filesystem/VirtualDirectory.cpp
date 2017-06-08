@@ -204,5 +204,5 @@ void CVirtualDirectory::GetSources(VECSOURCES &shares) const
   }
 #endif
 }
-}
+}  // namespace XFILE
 

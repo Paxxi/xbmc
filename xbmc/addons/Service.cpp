@@ -105,4 +105,4 @@ void CService::BuildServiceType()
   }
 }
 
-}
+}  // namespace ADDON

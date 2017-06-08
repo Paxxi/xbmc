@@ -96,6 +96,6 @@ namespace XBMCAddon
 #endif
   }
 #endif
-}
+}  // namespace XBMCAddon
 
               

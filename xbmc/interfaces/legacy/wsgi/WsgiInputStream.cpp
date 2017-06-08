@@ -180,5 +180,5 @@ namespace XBMCAddon
       m_remaining = m_data.size();
     }
 #endif
-  }
-}
+  }  // namespace xbmcwsgi
+}  // namespace XBMCAddon

@@ -38,4 +38,4 @@ IAEResample *CAEResampleFactory::Create(uint32_t flags /* = 0 */)
   return new CActiveAEResampleFFMPEG();
 }
 
-}
+}  // namespace ActiveAE

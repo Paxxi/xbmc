@@ -138,4 +138,4 @@ std::string CXbtManager::NormalizePath(const CURL& path)
   return path.Get();
 }
 
-}
+}  // namespace XFILE

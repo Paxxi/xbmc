@@ -185,4 +185,4 @@ bool CPlay::Execute(const CFileItemPtr& itemIn) const
   return true;
 };
 
-}
+}  // namespace CONTEXTMENU

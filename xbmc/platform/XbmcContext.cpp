@@ -56,5 +56,5 @@ namespace XBMC
 
     delete impl;
   }
-}
+}  // namespace XBMC
 

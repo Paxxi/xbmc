@@ -153,5 +153,5 @@ namespace XBMCAddon
         ++iter;
     }
   }
-}
+}  // namespace XBMCAddon
 

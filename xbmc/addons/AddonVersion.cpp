@@ -160,4 +160,4 @@ namespace ADDON
 
     return true;
   }
-}
+}  // namespace ADDON

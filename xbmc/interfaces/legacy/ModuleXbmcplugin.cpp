@@ -123,5 +123,5 @@ namespace XBMCAddon
       XFILE::CPluginDirectory::SetProperty(handle, key, value);
     }
     
-  }
-}
+  }  // namespace xbmcplugin
+}  // namespace XBMCAddon
