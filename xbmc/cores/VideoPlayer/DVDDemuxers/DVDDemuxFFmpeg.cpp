@@ -166,9 +166,9 @@ static int64_t dvd_file_seek(void *h, int64_t pos, int whence)
   CDVDInputStream* pInputStream = static_cast<CDVDDemuxFFmpeg*>(h)->m_pInput;
   if(whence == AVSEEK_SIZE) {
     return pInputStream->GetLength();
-  } else {
+  } 
     return pInputStream->Seek(pos, whence & ~AVSEEK_FORCE);
-}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -396,14 +396,14 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput, bool streaminfo, bool filein
         CLog::Log(LOGERROR, "%s - error probing input format, %s", __FUNCTION__, CURL::GetRedacted(strFile).c_str());
         return false;
       }
-      else
-      {
+      
+      
         if (iformat->name) {
           CLog::Log(LOGDEBUG, "%s - probing detected format [%s]", __FUNCTION__, iformat->name);
         } else {
           CLog::Log(LOGDEBUG, "%s - probing detected unnamed format", __FUNCTION__);
 }
-      }
+      
     }
 
 
@@ -1189,9 +1189,9 @@ bool CDVDDemuxFFmpeg::SeekTime(double time, bool backwards, double *startpts)
   {
     if (!hitEnd) {
       return true;
-    } else {
+    } 
       return false;
-}
+
   }
   else {
     return false;
@@ -1642,9 +1642,9 @@ CDemuxStream* CDVDDemuxFFmpeg::AddStream(int streamIdx)
     AddStream(stream->uniqueId, stream);
     return stream;
   }
-  else {
+  
     return nullptr;
-}
+
 }
 
 /**

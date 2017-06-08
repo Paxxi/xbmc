@@ -37,12 +37,12 @@ static uint32_t build_rgba(int a, int r, int g, int b, bool mergealpha)
          | (r * a / 255) << PIXEL_RSHIFT
          | (g * a / 255) << PIXEL_GSHIFT
          | (b * a / 255) << PIXEL_BSHIFT;
-  } else {
+  } 
     return a << PIXEL_ASHIFT
          | r << PIXEL_RSHIFT
          | g << PIXEL_GSHIFT
          | b << PIXEL_BSHIFT;
-}
+
 }
 
 #define clamp(x) (x) > 255.0 ? 255 : ((x) < 0.0 ? 0 : (int)(x+0.5f))

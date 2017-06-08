@@ -324,7 +324,7 @@ std::string CWeather::BusyInfo(int info) const
 std::string CWeather::TranslateInfo(int info) const
 {
   if (info == WEATHER_LABEL_CURRENT_COND) { return m_info.currentConditions;
-  } else if (info == WEATHER_IMAGE_CURRENT_ICON) { return m_info.currentIcon;
+  } if (info == WEATHER_IMAGE_CURRENT_ICON) { return m_info.currentIcon;
   } else if (info == WEATHER_LABEL_CURRENT_TEMP) { return m_info.currentTemperature;
   } else if (info == WEATHER_LABEL_CURRENT_FEEL) { return m_info.currentFeelsLike;
   } else if (info == WEATHER_LABEL_CURRENT_UVID) { return m_info.currentUVIndex;

@@ -159,7 +159,7 @@ JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string &method, IT
 
   if (CServiceBroker::GetFavouritesService().AddOrRemove(item, contextWindow)) {
     return ACK;
-  } else {
+  } 
     return FailedToExecute;
-}
+
 }

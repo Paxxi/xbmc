@@ -61,9 +61,9 @@ bool CMarkWatched::IsVisible(const CFileItem& item) const
   {
     if (item.HasVideoInfoTag()) {
       return item.IsVideoDb();
-    } else {
+    } 
       return CUtil::IsTVRecording(item.GetPath());
-}
+
   }
   else if (!item.HasVideoInfoTag()) {
     return false;
@@ -88,9 +88,9 @@ bool CMarkUnWatched::IsVisible(const CFileItem& item) const
   {
     if (item.HasVideoInfoTag()) {
       return item.IsVideoDb();
-    } else {
+    } 
       return CUtil::IsTVRecording(item.GetPath());
-}
+
   }
   else if (!item.HasVideoInfoTag()) {
     return false;

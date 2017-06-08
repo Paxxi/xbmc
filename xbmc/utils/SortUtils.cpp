@@ -475,7 +475,7 @@ bool preliminarySort(const SortItem &left, const SortItem &right, bool handleFol
     return true;
   }
   // both have either sort on top or sort on bottom -> leave as-is
-  else if (leftSortSpecial != SortSpecialNone && leftSortSpecial == rightSortSpecial)
+  if (leftSortSpecial != SortSpecialNone && leftSortSpecial == rightSortSpecial)
   {
     result = false;
     return true;

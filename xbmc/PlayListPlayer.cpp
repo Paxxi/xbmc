@@ -73,7 +73,7 @@ bool CPlayListPlayer::OnAction(const CAction &action)
     PlayPrevious();
     return true;
   }
-  else if (action.GetID() == ACTION_NEXT_ITEM && !IsSingleItemNonRepeatPlaylist())
+  if (action.GetID() == ACTION_NEXT_ITEM && !IsSingleItemNonRepeatPlaylist())
   {
     PlayNext();
     return true;
@@ -371,15 +371,15 @@ bool CPlayListPlayer::Play(int iSong, std::string player, bool bAutoPlay /* = fa
       return bPlayPrevious ? PlayPrevious() : PlayNext();
     }
     // none? then abort playback
-    else
-    {
+    
+    
       CLog::Log(LOGDEBUG,"Playlist Player: no more playable items... aborting playback");
       CGUIMessage msg(GUI_MSG_PLAYLISTPLAYER_STOPPED, 0, 0, m_iCurrentPlayList, m_iCurrentSong);
       g_windowManager.SendThreadMessage(msg);
       Reset();
       m_iCurrentPlayList = PLAYLIST_NONE;
       return false;
-    }
+    
   }
 
   // reset the start offset of this item

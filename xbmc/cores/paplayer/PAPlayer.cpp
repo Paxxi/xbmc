@@ -351,10 +351,10 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn/* = true */, b
     *m_FileItem = file;
     return true;
   }
-  else
-  {
+  
+  
     m_continueStream = false;
-  }
+  
 
   auto si = new StreamInfo();
   if (!si->m_decoder.Create(file, (static_cast<int64_t>(file.m_lStartOffset) * 1000) / 75))

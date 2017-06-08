@@ -281,7 +281,7 @@ int CDVDInputStreamNavigator::Read(uint8_t* buf, int buf_size)
 
     if (navresult == NAVRESULT_HOLD) {
       return 0; // return 0 bytes read;
-    } else if (navresult == NAVRESULT_ERROR) {
+    } if (navresult == NAVRESULT_ERROR) {
       return -1;
     } else if (navresult == NAVRESULT_DATA) {
       return iBytesRead;
@@ -306,9 +306,9 @@ int64_t CDVDInputStreamNavigator::Seek(int64_t offset, int whence)
 {
   if(whence == SEEK_POSSIBLE) {
     return 0;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 int CDVDInputStreamNavigator::ProcessBlock(uint8_t* dest_buffer, int* read)
@@ -663,7 +663,7 @@ bool CDVDInputStreamNavigator::SetActiveAudioStream(int iId)
   /* make sure stream is valid, if not don't allow it */
   if (streamId < 0 || streamId >= 8) {
     return false;
-  } else if ( !(vm->state.pgc->audio_control[streamId] & (1<<15)) ) {
+  } if ( !(vm->state.pgc->audio_control[streamId] & (1<<15)) ) {
     return false;
 }
 
@@ -695,7 +695,7 @@ bool CDVDInputStreamNavigator::SetActiveSubtitleStream(int iId)
   /* make sure stream is valid, if not don't allow it */
   if (streamId < 0 || streamId >= 32) {
     return false;
-  } else if ( !(vm->state.pgc->subp_control[streamId] & (1<<31)) ) {
+  } if ( !(vm->state.pgc->subp_control[streamId] & (1<<31)) ) {
     return false;
 }
 
@@ -885,7 +885,7 @@ CDVDInputStream::ENextStream CDVDInputStreamNavigator::NextStream()
 
   if(m_bEOF) {
     return NEXTSTREAM_NONE;
-  } else if(m_lastevent == DVDNAV_VTS_CHANGE) {
+  } if(m_lastevent == DVDNAV_VTS_CHANGE) {
     return NEXTSTREAM_OPEN;
   } else {
     return NEXTSTREAM_RETRY;
@@ -1002,11 +1002,11 @@ int CDVDInputStreamNavigator::GetSubTitleStreamCount()
     }
     return streamN;
   }
-  else
-  {
+  
+  
     /* just for good measure say that non vts domain always has one */
     return 1;
-  }
+  
 }
 
 int CDVDInputStreamNavigator::GetActiveAudioStream()
@@ -1161,11 +1161,11 @@ int CDVDInputStreamNavigator::GetAudioStreamCount()
     }
     return streamN;
   }
-  else
-  {
+  
+  
     /* just for good measure say that non vts domain always has one */
     return 1;
-  }
+  
 }
 
 
@@ -1181,9 +1181,9 @@ int CDVDInputStreamNavigator::GetAngleCount()
 
   if (status == DVDNAV_STATUS_OK) {
     return number_of_angles;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 int CDVDInputStreamNavigator::GetActiveAngle()
@@ -1198,9 +1198,9 @@ int CDVDInputStreamNavigator::GetActiveAngle()
 
   if (status == DVDNAV_STATUS_OK) {
     return current_angle;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 bool CDVDInputStreamNavigator::SetAngle(int angle)
@@ -1376,9 +1376,9 @@ bool CDVDInputStreamNavigator::IsSubtitleStreamEnabled()
 
   if(vm->state.SPST_REG & 0x40) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 bool CDVDInputStreamNavigator::GetState(std::string &xmlstate)
@@ -1501,11 +1501,11 @@ int CDVDInputStreamNavigator::ConvertAudioStreamId_ExternalToXBMC(int id)
       }
       return stream;
     }
-    else
-    {
+    
+    
       CLog::Log(LOGWARNING, "%s - non existing id %d", __FUNCTION__, id);
       return -1;
-    }
+    
   }
   else
   {
@@ -1584,11 +1584,11 @@ int CDVDInputStreamNavigator::ConvertSubtitleStreamId_ExternalToXBMC(int id)
       }
       return stream;
     }
-    else
-    {
+    
+    
       CLog::Log(LOGWARNING, "%s - non existing id %d", __FUNCTION__, id);
       return -1;
-    }
+    
   }
   else
   {
@@ -1678,9 +1678,9 @@ int dvd_inputstreamnavigator_cb_seek(void * p_stream, uint64_t i_pos)
   CDVDInputStreamFile *lpstream = reinterpret_cast<CDVDInputStreamFile*>(p_stream);
   if (lpstream->Seek(i_pos, 0) >= 0) {
     return 0;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 int dvd_inputstreamnavigator_cb_read(void * p_stream, void * buffer, int i_read)
@@ -1712,9 +1712,9 @@ int dvd_inputstreamnavigator_cb_readv(void * p_stream, void * p_iovec, int i_blo
     i_bytes = lpstream->Read(p_base, i_len);
     if (i_bytes < 0) {
       return -1;
-    } else {
+    } 
       i_total += i_bytes;
-}
+
 
     if (i_bytes != i_len)
     {

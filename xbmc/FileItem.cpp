@@ -788,9 +788,9 @@ bool CFileItem::Exists(bool bUseCache /* = true */) const
 
   if (m_bIsFolder) {
     return CDirectory::Exists(strPath, bUseCache);
-  } else {
+  } 
     return CFile::Exists(strPath, bUseCache);
-}
+
 
   return false;
 }

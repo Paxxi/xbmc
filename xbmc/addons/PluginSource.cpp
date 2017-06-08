@@ -71,7 +71,7 @@ CPluginSource::Content CPluginSource::Translate(const std::string &content)
 {
   if (content == "audio")
     return CPluginSource::AUDIO;
-  else if (content == "image")
+  if (content == "image")
     return CPluginSource::IMAGE;
   else if (content == "executable")
     return CPluginSource::EXECUTABLE;

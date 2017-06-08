@@ -686,7 +686,7 @@ EVENT_RESULT CGUIWindowSlideShow::OnMouseEvent(const CPoint &point, const CMouse
 
     return static_cast<EVENT_RESULT>(result);
   }  
-  else if (event.m_id == ACTION_GESTURE_BEGIN)
+  if (event.m_id == ACTION_GESTURE_BEGIN)
   {
     m_firstGesturePoint = point;
     m_fInitialZoom = m_fZoom;

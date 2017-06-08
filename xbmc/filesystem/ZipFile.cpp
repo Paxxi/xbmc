@@ -209,9 +209,9 @@ int64_t CZipFile::Seek(int64_t iFilePosition, int iWhence)
         }
         return m_iFilePos;
       }
-      else { // seek forward
+      // seek forward
         return Seek(iFilePosition-m_iFilePos,SEEK_CUR);
-}
+
       break;
 
     case SEEK_CUR:
@@ -289,7 +289,7 @@ int CZipFile::Stat(const CURL& url, struct __stat64* buffer)
       buffer->st_mode = _S_IFDIR;
       return 0;
     }
-    else
+    
       return -1;
   }
 

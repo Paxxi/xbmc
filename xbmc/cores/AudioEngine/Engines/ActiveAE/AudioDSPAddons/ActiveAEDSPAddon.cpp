@@ -294,7 +294,7 @@ bool CActiveAEDSPAddon::StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_
   AE_DSP_ERROR retVal = m_struct.toAddon.StreamIsModeSupported(handle, type, addon_mode_id, unique_db_mode_id);
   if (retVal == AE_DSP_ERROR_NO_ERROR) {
     return true;
-  } else if (retVal != AE_DSP_ERROR_IGNORE_ME) {
+  } if (retVal != AE_DSP_ERROR_IGNORE_ME) {
     LogError(retVal, __FUNCTION__);
 }
 

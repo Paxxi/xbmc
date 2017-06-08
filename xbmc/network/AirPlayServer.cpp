@@ -201,9 +201,9 @@ bool CAirPlayServer::StartServer(int port, bool nonlocal)
     ServerInstance->Create();
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 bool CAirPlayServer::SetCredentials(bool usePassword, const std::string& password)

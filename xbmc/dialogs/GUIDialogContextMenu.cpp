@@ -199,9 +199,9 @@ float CGUIDialogContextMenu::GetHeight() const
   const CGUIControl *backMain = GetControl(BACKGROUND_IMAGE);
   if (backMain) {
     return backMain->GetHeight();
-  } else {
+  } 
     return 
-}CGUIDialog::GetHeight();
+CGUIDialog::GetHeight();
 }
 
 float CGUIDialogContextMenu::GetWidth() const
@@ -209,9 +209,9 @@ float CGUIDialogContextMenu::GetWidth() const
   const CGUIControl *pControl = GetControl(BACKGROUND_IMAGE);
   if (pControl) {
     return pControl->GetWidth();
-  } else {
+  } 
     return 
-}CGUIDialog::GetWidth();
+CGUIDialog::GetWidth();
 }
 
 bool CGUIDialogContextMenu::SourcesMenu(const std::string &strType, const CFileItemPtr& item, float posX, float posY)
@@ -363,7 +363,7 @@ bool CGUIDialogContextMenu::OnContextButton(const std::string &type, const CFile
     {
       if (CProfilesManager::GetInstance().GetCurrentProfile().canWriteSources() && !g_passwordManager.IsProfileLockUnlocked()) {
         return false;
-      } else if (!g_passwordManager.IsMasterLockUnlocked(true)) {
+      } if (!g_passwordManager.IsMasterLockUnlocked(true)) {
         return false;
 }
 

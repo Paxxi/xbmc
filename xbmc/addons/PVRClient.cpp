@@ -1134,7 +1134,7 @@ int CPVRClient::ReadStream(void* lpBuf, int64_t uiBufSize)
   {
     return m_struct.toAddon.ReadLiveStream(reinterpret_cast<unsigned char *>(lpBuf), static_cast<int>(uiBufSize));
   }
-  else if (IsPlayingRecording())
+  if (IsPlayingRecording())
   {
     return m_struct.toAddon.ReadRecordedStream(reinterpret_cast<unsigned char *>(lpBuf), static_cast<int>(uiBufSize));
   }
@@ -1147,7 +1147,7 @@ int64_t CPVRClient::SeekStream(int64_t iFilePosition, int iWhence/* = SEEK_SET*/
   {
     return m_struct.toAddon.SeekLiveStream(iFilePosition, iWhence);
   }
-  else if (IsPlayingRecording())
+  if (IsPlayingRecording())
   {
     return m_struct.toAddon.SeekRecordedStream(iFilePosition, iWhence);
   }
@@ -1169,7 +1169,7 @@ int64_t CPVRClient::GetStreamPosition()
   {
     return m_struct.toAddon.PositionLiveStream();
   }
-  else if (IsPlayingRecording())
+  if (IsPlayingRecording())
   {
     return m_struct.toAddon.PositionRecordedStream();
   }
@@ -1182,7 +1182,7 @@ int64_t CPVRClient::GetStreamLength()
   {
     return m_struct.toAddon.LengthLiveStream();
   }
-  else if (IsPlayingRecording())
+  if (IsPlayingRecording())
   {
     return m_struct.toAddon.LengthRecordedStream();
   }

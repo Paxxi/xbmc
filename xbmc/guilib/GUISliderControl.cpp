@@ -429,7 +429,7 @@ int CGUISliderControl::GetIntValue(RangeSelector selector /* = RangeSelectorLowe
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     return static_cast<int>(m_floatValues[selector]);
-  } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
+  } if (m_iType == SLIDER_CONTROL_TYPE_INT) {
     return m_intValues[selector];
   } else {
     return MathUtils::round_int(m_percentValues[selector]);
@@ -475,7 +475,7 @@ float CGUISliderControl::GetFloatValue(RangeSelector selector /* = RangeSelector
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     return m_floatValues[selector];
-  } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
+  } if (m_iType == SLIDER_CONTROL_TYPE_INT) {
     return static_cast<float>(m_intValues[selector]);
   } else {
     return m_percentValues[selector];
@@ -642,7 +642,7 @@ EVENT_RESULT CGUISliderControl::OnMouseEvent(const CPoint &point, const CMouseEv
     SetFromPosition(point, guessSelector);
     return EVENT_RESULT_HANDLED;
   }
-  else if (event.m_id == ACTION_MOUSE_LEFT_CLICK && m_guiBackground.HitTest(point))
+  if (event.m_id == ACTION_MOUSE_LEFT_CLICK && m_guiBackground.HitTest(point))
   {
     SetFromPosition(point, true);
     return EVENT_RESULT_HANDLED;
@@ -737,7 +737,7 @@ float CGUISliderControl::GetProportion(RangeSelector selector /* = RangeSelector
 {
   if (m_iType == SLIDER_CONTROL_TYPE_FLOAT) {
     return m_fStart != m_fEnd ? (GetFloatValue(selector) - m_fStart) / (m_fEnd - m_fStart) : 0.0f;
-  } else if (m_iType == SLIDER_CONTROL_TYPE_INT) {
+  } if (m_iType == SLIDER_CONTROL_TYPE_INT) {
     return m_iStart != m_iEnd ? static_cast<float>(GetIntValue(selector) - m_iStart) / static_cast<float>(m_iEnd - m_iStart) : 0.0f;
 }
   return 0.01f * GetPercentage(selector);

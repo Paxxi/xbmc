@@ -272,10 +272,10 @@ bool CFile::Open(const CURL& file, const unsigned int flags)
       CLog::Log(LOGERROR, "File::Open - already open: %s", file.GetRedacted().c_str());
       return false;      
     }
-    else
-    {
+    
+    
       return m_pFile->ReOpen(URIUtils::SubstitutePath(file));
-    }
+    
   }
 
   m_flags = flags;
@@ -955,9 +955,9 @@ int CFile::IoControl(EIoControl request, void* param)
   {
     if(m_pFile->GetLength() >= 0 && m_pFile->Seek(0, SEEK_CUR) >= 0) {
       return 1;
-    } else {
+    } 
       return 0;
-}
+
   }
 
   return result;

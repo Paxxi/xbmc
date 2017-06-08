@@ -243,7 +243,7 @@ bool CActiveAEDSPMode::SetModePosition(int iModePosition)
 bool CActiveAEDSPMode::SupportStreamType(AE_DSP_STREAMTYPE streamType, unsigned int flags)
 {
        if (streamType == AE_DSP_ASTREAM_BASIC   && (flags & AE_DSP_PRSNT_ASTREAM_BASIC)) {   return true;
-  } else if (streamType == AE_DSP_ASTREAM_MUSIC   && (flags & AE_DSP_PRSNT_ASTREAM_MUSIC)) {   return true;
+  } if (streamType == AE_DSP_ASTREAM_MUSIC   && (flags & AE_DSP_PRSNT_ASTREAM_MUSIC)) {   return true;
   } else if (streamType == AE_DSP_ASTREAM_MOVIE   && (flags & AE_DSP_PRSNT_ASTREAM_MOVIE)) {   return true;
   } else if (streamType == AE_DSP_ASTREAM_GAME    && (flags & AE_DSP_PRSNT_ASTREAM_GAME)) {    return true;
   } else if (streamType == AE_DSP_ASTREAM_APP     && (flags & AE_DSP_PRSNT_ASTREAM_APP)) {     return true;

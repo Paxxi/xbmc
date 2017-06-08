@@ -85,7 +85,7 @@ void CLog::LogString(int logLevel, const std::string& logString)
       s_globals.m_repeatCount++;
       return;
     }
-    else if (s_globals.m_repeatCount)
+    if (s_globals.m_repeatCount)
     {
       std::string strData2 = StringUtils::Format("Previous line repeats %d times.",
                                                 s_globals.m_repeatCount);

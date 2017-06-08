@@ -130,7 +130,7 @@ InfoExpression::operator_t InfoExpression::GetOperator(char ch)
 {
   if (ch == '[') {
     return OPERATOR_LB;
-  } else if (ch == ']') {
+  } if (ch == ']') {
     return OPERATOR_RB;
   } else if (ch == '!') {
     return OPERATOR_NOT;

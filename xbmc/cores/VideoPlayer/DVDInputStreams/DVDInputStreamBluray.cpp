@@ -74,9 +74,9 @@ int DllLibbluray::file_eof(BD_FILE_H *file)
 {
   if(static_cast<CFile*>(file->internal)->GetPosition() == static_cast<CFile*>(file->internal)->GetLength()) {
     return 1;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int64_t DllLibbluray::file_read(BD_FILE_H *file, uint8_t *buf, int64_t size)
@@ -106,7 +106,7 @@ BD_FILE_H * DllLibbluray::file_open(const char* filename, const char *mode)
       file->internal = (void*)fp;
       return file;
     }
-    else if (fp->Open(filename))
+    if (fp->Open(filename))
     {
       file->internal = (void*)fp;
       return file;
@@ -964,9 +964,9 @@ int CDVDInputStreamBluray::GetTotalTime()
 {
   if(m_title) {
     return static_cast<int>(m_title->duration / 90);
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int CDVDInputStreamBluray::GetTime()
@@ -991,18 +991,18 @@ int CDVDInputStreamBluray::GetChapterCount()
 {
   if(m_title) {
     return m_title->chapter_count;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int CDVDInputStreamBluray::GetChapter()
 {
   if(m_title) {
     return m_dll->bd_get_current_chapter(m_bd) + 1;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 bool CDVDInputStreamBluray::SeekChapter(int ch)
@@ -1026,9 +1026,9 @@ int64_t CDVDInputStreamBluray::GetChapterPos(int ch)
 
   if (m_title && m_title->chapters) {
     return m_title->chapters[ch - 1].start / 90000;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int64_t CDVDInputStreamBluray::Seek(int64_t offset, int whence)

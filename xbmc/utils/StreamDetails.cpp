@@ -388,9 +388,9 @@ float CStreamDetails::GetVideoAspect(int idx) const
   CStreamDetailVideo *item = (CStreamDetailVideo *)GetNthStream(CStreamDetail::VIDEO, idx);
   if (item) {
     return item->m_fAspect;
-  } else {
+  } 
     return 0.0;
-}
+
 }
 
 int CStreamDetails::GetVideoWidth(int idx) const
@@ -398,9 +398,9 @@ int CStreamDetails::GetVideoWidth(int idx) const
   CStreamDetailVideo *item = (CStreamDetailVideo *)GetNthStream(CStreamDetail::VIDEO, idx);
   if (item) {
     return item->m_iWidth;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int CStreamDetails::GetVideoHeight(int idx) const
@@ -408,9 +408,9 @@ int CStreamDetails::GetVideoHeight(int idx) const
   CStreamDetailVideo *item = (CStreamDetailVideo *)GetNthStream(CStreamDetail::VIDEO, idx);
   if (item) {
     return item->m_iHeight;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 int CStreamDetails::GetVideoDuration(int idx) const
@@ -418,9 +418,9 @@ int CStreamDetails::GetVideoDuration(int idx) const
   CStreamDetailVideo *item = (CStreamDetailVideo *)GetNthStream(CStreamDetail::VIDEO, idx);
   if (item) {
     return item->m_iDuration;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 void CStreamDetails::SetVideoDuration(int idx, const int duration)
@@ -463,9 +463,9 @@ int CStreamDetails::GetAudioChannels(int idx) const
   CStreamDetailAudio *item = (CStreamDetailAudio *)GetNthStream(CStreamDetail::AUDIO, idx);
   if (item) {
     return item->m_iChannels;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 std::string CStreamDetails::GetSubtitleLanguage(int idx) const

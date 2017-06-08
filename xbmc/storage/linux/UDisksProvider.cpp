@@ -107,9 +107,9 @@ bool CUDiskDevice::Mount()
 
     return m_isMounted;
   }
-  else {
+  
     CLog
-}::Log(LOGDEBUG, "UDisks: Is not able to mount %s", toString().c_str());
+::Log(LOGDEBUG, "UDisks: Is not able to mount %s", toString().c_str());
 
   return false;
 }
@@ -130,9 +130,9 @@ bool CUDiskDevice::UnMount()
 
     return !m_isMounted;
   }
-  else {
+  
     CLog
-}::Log(LOGDEBUG, "UDisks: Is not able to unmount %s", toString().c_str());
+::Log(LOGDEBUG, "UDisks: Is not able to unmount %s", toString().c_str());
 
   return false;
 }

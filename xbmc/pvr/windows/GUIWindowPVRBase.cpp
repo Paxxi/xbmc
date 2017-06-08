@@ -142,7 +142,7 @@ bool CGUIWindowPVRBase::OnBack(int actionID)
       g_windowManager.ActivateWindow(WINDOW_HOME);
       return true;
     }
-    else
+    
       return CGUIWindow::OnBack(actionID);
   }
   return CGUIMediaWindow::OnBack(actionID);

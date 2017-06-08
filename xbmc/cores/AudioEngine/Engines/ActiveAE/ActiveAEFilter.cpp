@@ -272,7 +272,7 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
       m_needData = true;
       return 0;
     }
-    else if (result == AVERROR_EOF)
+    if (result == AVERROR_EOF)
     {
       result = av_buffersink_get_frame(m_pFilterCtxOut, outFrame);
       m_filterEof = true;
@@ -346,9 +346,9 @@ bool CActiveAEFilter::IsActive()
 {
   if (m_pFilterGraph) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 int CActiveAEFilter::GetBufferedSamples()

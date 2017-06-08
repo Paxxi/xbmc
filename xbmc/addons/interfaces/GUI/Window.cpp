@@ -894,7 +894,7 @@ CGUIControl* CGUIAddonWindow::GetAddonControl(int controlId, CGUIControl::GUICON
                 controlId, typeName.c_str());
     return nullptr;
   }
-  else if (pGUIControl->GetControlType() != type)
+  if (pGUIControl->GetControlType() != type)
   {
     CLog::Log(LOGERROR, "CGUIAddonGUI_Window::%s: %s - Requested GUI control Id '%i' not the type '%s'!",
                 __FUNCTION__,

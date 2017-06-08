@@ -294,7 +294,7 @@ IAddonMgrCallback* CAddonMgr::GetCallbackForType(TYPE type)
 {
   if (m_managers.find(type) == m_managers.end())
     return nullptr;
-  else
+  
     return m_managers[type];
 }
 

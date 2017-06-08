@@ -245,9 +245,9 @@ int CSlideShowPic::GetOriginalWidth()
   int iAngle = static_cast<int>(m_fAngle / 90.0f + 0.4f);
   if (iAngle % 2) {
     return m_iOriginalHeight;
-  } else {
+  } 
     return m_iOriginalWidth;
-}
+
 }
 
 int CSlideShowPic::GetOriginalHeight()
@@ -255,9 +255,9 @@ int CSlideShowPic::GetOriginalHeight()
   int iAngle = static_cast<int>(m_fAngle / 90.0f + 0.4f);
   if (iAngle % 2) {
     return m_iOriginalWidth;
-  } else {
+  } 
     return m_iOriginalHeight;
-}
+
 }
 
 void CSlideShowPic::UpdateTexture(CBaseTexture* pTexture)
@@ -716,9 +716,9 @@ int CSlideShowPic::GetTransitionTime(int iType) const
 {
   if (iType == 0) { // start transition
     return m_transitionStart.length;
-  } else { // iType == 1 // end transition
+  } // iType == 1 // end transition
     return m_transitionEnd.length;
-}
+
 }
 
 void CSlideShowPic::SetTransitionTime(int iType, int iTime)

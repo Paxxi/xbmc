@@ -220,7 +220,7 @@ bool CGUIImage::OnMessage(CGUIMessage& message)
       FreeTextures(true); // true as we want to free the texture immediately
     return true;
   }
-  else if (message.GetMessage() == GUI_MSG_SET_FILENAME)
+  if (message.GetMessage() == GUI_MSG_SET_FILENAME)
   {
     SetFileName(message.GetLabel());
     return true;

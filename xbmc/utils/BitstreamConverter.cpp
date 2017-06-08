@@ -378,9 +378,9 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
           m_convert_bitstream = BitstreamConvertInitAVC(m_extradata, m_extrasize);
           return true;
         }
-        else {
+        
           CLog::Log(LOGINFO, "CBitstreamConverter::Open Invalid avcC");
-}
+
       }
       else
       {
@@ -412,11 +412,11 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
             av_free(in_extradata);
             return true;
           }
-          else
-          {
+          
+          
             CLog::Log(LOGNOTICE, "CBitstreamConverter::Open invalid avcC atom data");
             return false;
-          }
+          
         }
         else
         {
@@ -467,9 +467,9 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
           m_convert_bitstream = BitstreamConvertInitHEVC(m_extradata, m_extrasize);
           return true;
         }
-        else {
+        
           CLog::Log(LOGINFO, "CBitstreamConverter::Open Invalid hvcC");
-}
+
       }
       else
       {
@@ -483,11 +483,11 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
             //! @todo convert annexb to bitstream format
             return false;
           }
-          else
-          {
+          
+          
             CLog::Log(LOGNOTICE, "CBitstreamConverter::Open invalid hvcC atom data");
             return false;
-          }
+          
         }
         else
         {
@@ -573,13 +573,13 @@ bool CBitstreamConverter::Convert(uint8_t *pData, int iSize)
             m_convertBuffer = bytestream_buff;
             return true;
           }
-          else
-          {
+          
+          
             m_convertSize = 0;
             m_convertBuffer = nullptr;
             CLog::Log(LOGERROR, "CBitstreamConverter::Convert: error converting.");
             return false;
-          }
+          
         }
         else
         {
@@ -654,35 +654,35 @@ uint8_t *CBitstreamConverter::GetConvertBuffer() const
 {
   if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr) {
     return m_convertBuffer;
-  } else {
+  } 
     return m_inputBuffer;
-}
+
 }
 
 int CBitstreamConverter::GetConvertSize() const
 {
   if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr) {
     return m_convertSize;
-  } else {
+  } 
     return m_inputSize;
-}
+
 }
 
 uint8_t *CBitstreamConverter::GetExtraData() const
 {
   if(m_convert_bitstream) {
     return m_sps_pps_context.sps_pps_data;
-  } else {
+  } 
     return m_extradata;
-}
+
 }
 int CBitstreamConverter::GetExtraSize() const
 {
   if(m_convert_bitstream) {
     return m_sps_pps_context.size;
-  } else {
+  } 
     return m_extrasize;
-}
+
 }
 
 void CBitstreamConverter::ResetStartDecode()

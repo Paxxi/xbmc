@@ -394,13 +394,13 @@ long SqliteDatabase::nextid(const char* sname) {
 }
     return id;
   }
-  else {
+  
     id = res.records[0]->at(0).get_asInt()+1;
     sprintf(sqlcmd,"update %s set nextid=%d where seq_name = '%s'",sequence_table.c_str(),id,sname);
     if ((last_err = sqlite3_exec(conn,sqlcmd,nullptr,nullptr,nullptr)) != SQLITE_OK) { return DB_UNEXPECTED_RESULT;
 }
     return id;
-  }
+  
   return DB_UNEXPECTED_RESULT;
 }
 
@@ -495,8 +495,8 @@ sqlite3* SqliteDataset::handle(){
   if (db != nullptr){
     return static_cast<SqliteDatabase*>(db)->getHandle();
       }
-  else { return nullptr;
-}
+  return nullptr;
+
 }
 
 void SqliteDataset::make_query(StringList &_sql) {
@@ -644,10 +644,10 @@ int SqliteDataset::exec(const std::string &sql) {
 
   if((res = db->setErr(sqlite3_exec(handle(),qry.c_str(),&callback,&exec_res,&errmsg),qry.c_str())) == SQLITE_OK)
     return res;
-  else
-    {
+  
+    
       throw DbErrors(db->getErrorMsg());
-    }
+    
 }
 
 int SqliteDataset::exec() {
@@ -719,10 +719,10 @@ bool SqliteDataset::query(const std::string &query) {
     this->first();
     return true;
   }
-  else
-  {
+  
+  
     throw DbErrors(db->getErrorMsg());
-  }  
+   
 }
 
 void SqliteDataset::open(const std::string &sql) {
@@ -829,8 +829,8 @@ int64_t SqliteDataset::lastinsertid()
 
 long SqliteDataset::nextid(const char *seq_name) {
   if (handle()) { return db->nextid(seq_name);
-  } else { return DB_UNEXPECTED_RESULT;
-}
+  } return DB_UNEXPECTED_RESULT;
+
 }
 
 void SqliteDataset::interrupt() {

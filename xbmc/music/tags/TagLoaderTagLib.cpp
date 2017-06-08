@@ -269,8 +269,8 @@ int CTagLoaderTagLib::POPMtoXBMC(int popm)
   if (popm < 224) { return 8;
 }
   if (popm < 255) { return 9;
-  } else { return 10;
-}
+  } return 10;
+
 }
 
 template<>

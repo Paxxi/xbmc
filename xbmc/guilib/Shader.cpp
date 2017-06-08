@@ -381,11 +381,11 @@ bool CGLSLShaderProgram::Enable()
       VerifyGLState();
       return true;
     }
-    else
-    {
+    
+    
       glUseProgram(0);
       return false;
-    }
+    
     return true;
   }
   return false;
@@ -464,12 +464,12 @@ bool CARBShaderProgram::Enable()
       VerifyGLState();
       return true;
     }
-    else
-    {
+    
+    
       glDisable(GL_FRAGMENT_PROGRAM_ARB);
       glDisable(GL_VERTEX_PROGRAM_ARB);
       return false;
-    }
+    
   }
   return false;
 }

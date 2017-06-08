@@ -200,10 +200,10 @@ int64_t CVideoReferenceClock::GetTime(bool interpolated /* = true*/)
 
       return m_LastIntTime;
     }
-    else
-    {
+    
+    
       return m_CurrTime;
-    }
+    
   }
   else
   {
@@ -232,9 +232,9 @@ double CVideoReferenceClock::GetSpeed()
   //VideoPlayer needs to know the speed for the resampler
   if (m_UseVblank) {
     return m_ClockSpeed;
-  } else {
+  } 
     return 1.0;
-}
+
 }
 
 void CVideoReferenceClock::UpdateRefreshrate()
@@ -259,9 +259,9 @@ double CVideoReferenceClock::GetRefreshRate(double* interval /*= NULL*/)
 
     return m_RefreshRate;
   }
-  else {
+  
     return -1;
-}
+
 }
 
 #define MAXVBLANKDELAY 13LL

@@ -41,7 +41,7 @@ NODE_TYPE CDirectoryNodeGrouped::GetChildType() const
   {
     if (GetType() == NODE_TYPE_ACTOR)
       return NODE_TYPE_MUSICVIDEOS_ALBUM;
-    else
+    
       return NODE_TYPE_TITLE_MUSICVIDEOS;
   }
 

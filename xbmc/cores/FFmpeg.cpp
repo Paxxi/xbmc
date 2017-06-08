@@ -125,7 +125,7 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
   if (level > maxLevel &&
      !g_advancedSettings.CanLogComponent(LOGFFMPEG))
     return;
-  else if (g_advancedSettings.m_logLevel <= LOG_LEVEL_NORMAL)
+  if (g_advancedSettings.m_logLevel <= LOG_LEVEL_NORMAL)
     return;
 
   int type;

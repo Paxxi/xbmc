@@ -142,9 +142,9 @@ extern "C" int transfer_abort_callback(void *clientp,
 {
   if(dlnow > 0) {
     return 1;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 /* fix for silly behavior of realloc */
@@ -156,7 +156,7 @@ static inline void* realloc_simple(void *ptr, size_t size)
     free(ptr);
     return nullptr;
   }
-  else
+  
     return ptr2;
 }
 
@@ -366,9 +366,9 @@ long CCurlFile::CReadState::Connect(unsigned int size)
     long response;
     if (CURLE_OK == g_curlInterface.easy_getinfo(m_easyHandle, CURLINFO_RESPONSE_CODE, &response)) {
       return response;
-    } else { 
+    } 
       return -1;
-}
+
   }
 
   double length;
@@ -1377,11 +1377,11 @@ int64_t CCurlFile::Seek(int64_t iFilePosition, int iWhence)
       m_multisession = false;
       return Seek(iFilePosition, iWhence);
     }
-    else
-    {
+    
+    
       m_seekable = false;
       return -1;
-    } 
+    
   }
 
   SetCorrectHeaders(m_state);
@@ -1493,9 +1493,9 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
       errno = ENOENT;
       return -1;
     }
-    else {
+    
       length = 0.0;
-}
+
   }
 
   SetCorrectHeaders(m_state);
@@ -1511,8 +1511,8 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
       errno = ENOENT;
       return -1;
     }
-    else
-    {
+    
+    
       memset(buffer, 0, sizeof(struct __stat64));
       buffer->st_size = static_cast<int64_t>(length);
       if(content && strstr(content, "text/html")) { //consider html files directories
@@ -1520,7 +1520,7 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
       } else {
         buffer->st_mode = _S_IFREG;
 }
-    }
+    
     long filetime;
     result = g_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_FILETIME, &filetime);
     if (result != CURLE_OK)

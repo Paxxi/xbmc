@@ -124,9 +124,9 @@ sftp_file CSFTPSession::CreateFileHandle(const std::string &file)
       sftp_file_set_blocking(handle);
       return handle;
     }
-    else {
+    
       CLog
-}::Log(LOGERROR, "SFTPSession: Was connected but couldn't create filehandle for '%s'", file.c_str());
+::Log(LOGERROR, "SFTPSession: Was connected but couldn't create filehandle for '%s'", file.c_str());
   }
   else {
     CLog
@@ -284,11 +284,11 @@ int CSFTPSession::Stat(const char *path, struct __stat64* buffer)
       sftp_attributes_free(attributes);
       return 0;
     }
-    else
-    {
+    
+    
       CLog::Log(LOGERROR, "SFTPSession::Stat - Failed to get attributes for '%s'", path);
       return -1;
-    }
+    
   }
   else
   {
@@ -616,11 +616,11 @@ bool CSFTPFile::Open(const CURL& url)
 
     return (m_sftp_handle != nullptr);
   }
-  else
-  {
+  
+  
     CLog::Log(LOGERROR, "SFTPFile: Failed to allocate session");
     return false;
-  }
+  
 }
 
 void CSFTPFile::Close()
@@ -648,7 +648,7 @@ int64_t CSFTPFile::Seek(int64_t iFilePosition, int iWhence)
 
     if (m_session->Seek(m_sftp_handle, position) == 0)
       return GetPosition();
-    else
+    
       return -1;
   }
   else
@@ -716,11 +716,11 @@ int64_t CSFTPFile::GetLength()
   struct __stat64 buffer;
   if (Stat(&buffer) != 0) {
     return 0;
-  } else
-  {
+  } 
+  
     int64_t length = buffer.st_size;
     return length;
-  }
+  
 }
 
 int64_t CSFTPFile::GetPosition()

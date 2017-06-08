@@ -40,7 +40,7 @@ std::string CDefaultRemote::GetControllerID() const
 unsigned int CDefaultRemote::GetKeyID(const FeatureName& feature, ANALOG_STICK_DIRECTION dir /* = ANALOG_STICK_DIRECTION::UNKNOWN */) const
 {
   if      (feature == "ok")            return KEY_REMOTE_BUTTON_OK;
-  else if (feature == "back")          return KEY_REMOTE_BUTTON_BACK;
+  if (feature == "back")          return KEY_REMOTE_BUTTON_BACK;
   else if (feature == "up")            return KEY_REMOTE_BUTTON_UP;
   else if (feature == "down")          return KEY_REMOTE_BUTTON_DOWN;
   else if (feature == "right")         return KEY_REMOTE_BUTTON_RIGHT;

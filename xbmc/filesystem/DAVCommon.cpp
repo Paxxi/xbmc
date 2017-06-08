@@ -51,7 +51,7 @@ bool CDAVCommon::ValueWithoutNamespace(const TiXmlNode *pNode, const std::string
   {
     return true;
   }
-  else if (tag.size() == 2 && tag[1] == value)
+  if (tag.size() == 2 && tag[1] == value)
   {
     return true;
   }

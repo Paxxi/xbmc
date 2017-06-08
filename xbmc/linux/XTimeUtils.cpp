@@ -150,7 +150,7 @@ LONG   CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2)
 
   if (t1.QuadPart == t2.QuadPart) {
      return 0;
-  } else if (t1.QuadPart < t2.QuadPart) {
+  } if (t1.QuadPart < t2.QuadPart) {
      return -1;
   } else {
      return 1;

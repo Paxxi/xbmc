@@ -369,7 +369,7 @@ const char* DllLoader::ResolveReferencedDll(const char* dll)
     CLog::Log(LOGDEBUG, "Unable to load referenced dll %s - Dll: %s", dll, GetFileName());
     return nullptr;
   }
-  else if (!pDll->IsSystemDll())
+  if (!pDll->IsSystemDll())
   {
     auto  entry=new LoadedList;
     entry->pDll=pDll;

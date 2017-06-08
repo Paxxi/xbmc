@@ -154,7 +154,7 @@ bool CGUIDialogVideoInfo::OnMessage(CGUIMessage& message)
         Close();
         return true;
       }
-      else if (iControl == CONTROL_BTN_TRACKS)
+      if (iControl == CONTROL_BTN_TRACKS)
       {
         m_bViewReview = !m_bViewReview;
         Update();
@@ -278,7 +278,7 @@ bool CGUIDialogVideoInfo::OnAction(const CAction &action)
     SetUserrating(userrating + 1);
     return true;
   }
-  else if (action.GetID() == ACTION_DECREASE_RATING)
+  if (action.GetID() == ACTION_DECREASE_RATING)
   {
     SetUserrating(userrating - 1);
     return true;
@@ -1474,7 +1474,7 @@ bool CGUIDialogVideoInfo::GetMoviesForSet(const CFileItem *setItem, CFileItemLis
       selectedMovies.Add(listItems.Get(i));
     return (selectedMovies.Size() > 0);
   }
-  else
+  
     return false;
 }
 
@@ -1557,7 +1557,7 @@ bool CGUIDialogVideoInfo::GetSetForMovie(const CFileItem *movieItem, CFileItemPt
     selectedSet = newSet;
     return true;
   }
-  else if (dialog->IsConfirmed())
+  if (dialog->IsConfirmed())
   {
     selectedSet = dialog->GetSelectedFileItem();
     return (selectedSet != nullptr);

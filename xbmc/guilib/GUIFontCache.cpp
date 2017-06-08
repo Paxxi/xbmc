@@ -183,8 +183,8 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
 }
     return m_list.Insert(hashgen(key), entry)->second->m_value;
   }
-  else
-  {
+  
+  
     // Cache hit
     // Update the translation arguments so that they hold the offset to apply
     // to the cached values (but only in the dynamic case)
@@ -195,7 +195,7 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
 
     dirtyCache = false;
     return i->second->m_value;
-  }
+  
 }
 
 template<class Position, class Value>

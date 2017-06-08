@@ -106,7 +106,7 @@ bool CGUIWindowLoginScreen::OnMessage(CGUIMessage& message)
 
           return bResult;
         }
-        else if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)
+        if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)
         {
           int iItem = m_viewControl.GetSelectedItem();
           bool bCanceled;

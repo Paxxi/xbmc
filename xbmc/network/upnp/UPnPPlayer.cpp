@@ -495,9 +495,9 @@ float CUPnPPlayer::GetPercentage()
   int64_t tot = GetTotalTime();
   if(tot) {
     return 100.0f * GetTime() / tot;
-  } else {
+  } 
     return 0.0f;
-}
+
 }
 
 void CUPnPPlayer::SeekPercentage(float percent)
@@ -624,9 +624,9 @@ float CUPnPPlayer::GetSpeed()
 {
   if (IsPaused()) {
     return 0;
-  } else {
+  } 
     return 1;
-}
+
 }
 
 } /* namespace UPNP */

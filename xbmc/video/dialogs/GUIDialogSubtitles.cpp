@@ -132,7 +132,7 @@ bool CGUIDialogSubtitles::OnMessage(CGUIMessage& message)
         Download(*m_subtitles->Get(item));
       return true;
     }
-    else if (selectAction && iControl == CONTROL_SERVICELIST)
+    if (selectAction && iControl == CONTROL_SERVICELIST)
     {
       CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), CONTROL_SERVICELIST);
       OnMessage(msg);

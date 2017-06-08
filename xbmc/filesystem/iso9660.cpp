@@ -491,8 +491,8 @@ void iso9660::Scan()
     m_info.iso9660 = 0;
     return ;
   }
-  else
-  {
+  
+  
     m_info.iso9660 = 1;
     m_info.joliet = 0;
 
@@ -543,7 +543,7 @@ void iso9660::Scan()
     ::SetFilePointer( m_info.ISO_HANDLE, m_info.HeaderPos, nullptr, FILE_BEGIN );
     ::ReadFile( m_info.ISO_HANDLE, &m_info.iso, sizeof(m_info.iso), &lpNumberOfBytesRead, nullptr );
     memcpy( &m_info.isodir, m_info.iso.szRootDir, sizeof(m_info.isodir));
-  }
+  
 
   memcpy( &m_info.isodir, &m_info.iso.szRootDir, sizeof(m_info.isodir) );
   ReadRecursiveDirFromSector( from_733(m_info.isodir.extent), "\\" );

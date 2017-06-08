@@ -399,7 +399,7 @@ bool CVideoSurfaces::IsValid(VdpVideoSurface surf)
   CSingleLock lock(m_section);
   if (m_state.find(surf) != m_state.end())
     return true;
-  else
+  
     return false;
 }
 
@@ -761,9 +761,9 @@ CDVDVideoCodec::VCReturn CDecoder::Check(AVCodecContext* avctx)
 
     if (state == VDPAU_RESET) {
       return CDVDVideoCodec::VC_FLUSHED;
-    } else {
+    } 
       return CDVDVideoCodec::VC_ERROR;
-}
+
   }
   return CDVDVideoCodec::VC_NONE;
 }
@@ -772,9 +772,9 @@ bool CDecoder::IsVDPAUFormat(AVPixelFormat format)
 {
   if (format == AV_PIX_FMT_VDPAU) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 bool CDecoder::Supports(VdpVideoMixerFeature feature)
@@ -1147,7 +1147,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame
     {
       return CDVDVideoCodec::VC_BUFFER;
     }
-    else if (m_vdpauOutput.m_dataPort.ReceiveInMessage(&msg))
+    if (m_vdpauOutput.m_dataPort.ReceiveInMessage(&msg))
     {
       if (msg->signal == COutputDataProtocol::PICTURE)
       {

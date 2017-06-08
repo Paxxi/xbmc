@@ -156,7 +156,7 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
     return LoadDll(sName, bLoadSymbols);
   }
 #ifdef TARGET_POSIX
-  else if (strcmp(sName, "xbmc.so") == 0) {
+  if (strcmp(sName, "xbmc.so") == 0) {
     return LoadDll(sName, bLoadSymbols);
 #endif
   } else if (sCurrentDir)

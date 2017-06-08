@@ -169,9 +169,9 @@ bool CDVDInputStreamFile::GetCacheStatus(XFILE::SCacheStatus *status)
 {
   if(m_pFile && m_pFile->IoControl(IOCTRL_CACHE_STATUS, status) >= 0) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 BitstreamStats CDVDInputStreamFile::GetBitstreamStats() const
@@ -182,18 +182,18 @@ BitstreamStats CDVDInputStreamFile::GetBitstreamStats() const
 
   if(m_pFile->GetBitstreamStats()) {
     return *m_pFile->GetBitstreamStats();
-  } else {
+  } 
     return m_stats;
-}
+
 }
 
 int CDVDInputStreamFile::GetBlockSize()
 {
   if(m_pFile) {
     return m_pFile->GetChunkSize();
-  } else {
+  } 
     return 0;
-}
+
 }
 
 void CDVDInputStreamFile::SetReadRate(unsigned rate)

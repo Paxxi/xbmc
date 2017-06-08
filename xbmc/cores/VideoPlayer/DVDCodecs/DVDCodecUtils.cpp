@@ -387,13 +387,13 @@ double CDVDCodecUtils::NormalizeFrameduration(double frameduration, bool *match)
 }
     return durations[selected];
   }
-  else
-  {
+  
+  
     if (match) {
       *match = false;
 }
     return frameduration;
-  }
+  
 }
 
 struct EFormatMap {

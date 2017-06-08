@@ -210,7 +210,7 @@ const std::string CMusicInfoTag::GetArtistString() const
 {
   if (!m_strArtistDesc.empty())
     return m_strArtistDesc;
-  else if (!m_artist.empty())
+  if (!m_artist.empty())
     return StringUtils::Join(m_artist, g_advancedSettings.m_musicItemSeparator);
   else
     return StringUtils::Empty;

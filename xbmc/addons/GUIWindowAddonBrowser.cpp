@@ -97,7 +97,7 @@ bool CGUIWindowAddonBrowser::OnMessage(CGUIMessage& message)
         Refresh();
         return true;
       }
-      else if (iControl == CONTROL_BROKENFILTER)
+      if (iControl == CONTROL_BROKENFILTER)
       {
         CServiceBroker::GetSettings().ToggleBool(CSettings::SETTING_GENERAL_ADDONBROKENFILTER);
         CServiceBroker::GetSettings().Save();

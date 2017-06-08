@@ -135,8 +135,8 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
     m_dwWriteBufferPointer += iBytes;
     return iBytes;
   }
-  else
-  {
+  
+  
     // buffer is not big enough to fit data
     if (m_dwWriteBufferPointer == 0)
     {
@@ -159,14 +159,14 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
 }
       return iBytes;
     }
-    else
-    {
+    
+    
       // copy remaining bytes to our currently empty writebuffer
       memcpy(m_btWriteBuffer, pbtRemaining, dwBytesRemaining);
       m_dwWriteBufferPointer = dwBytesRemaining;
       return iBytes;
-    }
-  }
+    
+  
 }
 
 // flush the contents of our writebuffer

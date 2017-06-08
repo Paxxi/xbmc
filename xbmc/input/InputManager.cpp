@@ -234,8 +234,8 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
       {
         return false;
       }
-      else // it is a customcontroller
-      {
+      // it is a customcontroller
+      
         int actionID;
         std::string actionName;
         
@@ -254,11 +254,11 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
           
           return ExecuteInputAction(CAction(actionID, fAmount, 0.0f, actionName));
         }
-        else
-        {
+        
+        
           CLog::Log(LOGDEBUG, "ERROR mapping customcontroller action. CustomController: %s %i", strMapName.c_str(), wKeyID);
-        }
-      }
+        
+      
     }
     else
     {

@@ -600,7 +600,7 @@ static bool Repos(const CURL& path, CFileItemList &items)
   CAddonMgr::GetInstance().GetAddons(addons, ADDON_REPOSITORY);
   if (addons.empty())
     return true;
-  else if (addons.size() == 1)
+  if (addons.size() == 1)
     return Browse(CURL("addons://" + addons[0]->ID()), items);
   CFileItemPtr item(new CFileItem("addons://all/", true));
   item->SetLabel(g_localizeStrings.Get(24087));
@@ -683,7 +683,7 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     RootDirectory(items);
     return true;
   }
-  else if (endpoint == "user")
+  if (endpoint == "user")
   {
     UserInstalledAddons(path, items);
     return true;

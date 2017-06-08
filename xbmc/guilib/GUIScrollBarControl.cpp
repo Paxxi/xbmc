@@ -325,7 +325,7 @@ EVENT_RESULT GUIScrollBarControl::OnMouseEvent(const CPoint &point, const CMouse
     SetFromPosition(point);
     return EVENT_RESULT_HANDLED;
   }
-  else if (event.m_id == ACTION_MOUSE_LEFT_CLICK && m_guiBackground.HitTest(point))
+  if (event.m_id == ACTION_MOUSE_LEFT_CLICK && m_guiBackground.HitTest(point))
   {
     SetFromPosition(point);
     return EVENT_RESULT_HANDLED;

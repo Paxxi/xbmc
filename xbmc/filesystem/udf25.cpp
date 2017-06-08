@@ -300,9 +300,9 @@ uint32_t UDFFileBlockPos(struct FileAD *File, uint32_t lb)
   rem = UDFFilePos(File, lb * DVD_VIDEO_LB_LEN, &res);
   if(rem > 0) {
     return static_cast<uint32_t>(res / DVD_VIDEO_LB_LEN);
-  } else {
+  } 
     return 0;
-}
+
 }
 
 static int UDFFileIdentifier( uint8_t *data, uint8_t *FileCharacteristics,
@@ -410,10 +410,10 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
 
       return 1;
 
-    } else {
+    } 
       // Not TagID 257
       return 0;
-    }
+    
   }
   // End of DIR
   return 0;

@@ -58,9 +58,9 @@ JSONRPC_STATUS CSystemOperations::Shutdown(const std::string &method, ITransport
     CApplicationMessenger::GetInstance().PostMsg(TMSG_POWERDOWN);
     return ACK;
   }
-  else {
+  
     return FailedToExecute;
-}
+
 }
 
 JSONRPC_STATUS CSystemOperations::Suspend(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
@@ -70,9 +70,9 @@ JSONRPC_STATUS CSystemOperations::Suspend(const std::string &method, ITransportL
     CApplicationMessenger::GetInstance().PostMsg(TMSG_SUSPEND);
     return ACK;
   }
-  else {
+  
     return FailedToExecute;
-}
+
 }
 
 JSONRPC_STATUS CSystemOperations::Hibernate(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
@@ -82,9 +82,9 @@ JSONRPC_STATUS CSystemOperations::Hibernate(const std::string &method, ITranspor
     CApplicationMessenger::GetInstance().PostMsg(TMSG_HIBERNATE);
     return ACK;
   }
-  else {
+  
     return FailedToExecute;
-}
+
 }
 
 JSONRPC_STATUS CSystemOperations::Reboot(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
@@ -94,9 +94,9 @@ JSONRPC_STATUS CSystemOperations::Reboot(const std::string &method, ITransportLa
     CApplicationMessenger::GetInstance().PostMsg(TMSG_RESTART);
     return ACK;
   }
-  else {
+  
     return FailedToExecute;
-}
+
 }
 
 JSONRPC_STATUS CSystemOperations::GetPropertyValue(int permissions, const std::string &property, CVariant &result)

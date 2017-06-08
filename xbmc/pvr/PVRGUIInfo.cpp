@@ -828,10 +828,10 @@ int CPVRGUIInfo::GetStartTime() const
          + time.GetMinutes() * 60
          + time.GetSeconds()) * 1000;
   }
-  else
-  {
+  
+  
     return 0;
-  }
+  
 }
 
 void CPVRGUIInfo::ResetPlayingTag()

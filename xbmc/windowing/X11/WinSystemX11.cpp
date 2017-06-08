@@ -75,9 +75,9 @@ bool CWinSystemX11::InitWindowSystem()
     bool ret = CWinSystemBase::InitWindowSystem();
     return ret;
   }
-  else {
+  
     CLog::Log(LOGERROR, "X11 Error: No Display found");
-}
+
 
   return false;
 }

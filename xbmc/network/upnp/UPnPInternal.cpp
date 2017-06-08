@@ -1055,9 +1055,9 @@ struct ResourcePrioritySort
   {
     if(GetPriority(lh) < GetPriority(rh)) {
         return 1;
-    } else {
+    } 
         return 0;
-}
+
   }
 
   NPT_String m_content;

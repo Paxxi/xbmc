@@ -75,7 +75,7 @@ bool CGUIDialogPVRChannelsOSD::OnMessage(CGUIMessage& message)
           GotoChannel(iItem);
           return true;
         }
-        else if (iAction == ACTION_SHOW_INFO || iAction == ACTION_MOUSE_RIGHT_CLICK)
+        if (iAction == ACTION_SHOW_INFO || iAction == ACTION_MOUSE_RIGHT_CLICK)
         {
           /* Show information Dialog */
           ShowInfo(iItem);

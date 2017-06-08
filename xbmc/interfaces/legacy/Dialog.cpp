@@ -97,7 +97,7 @@ namespace XBMCAddon
         CGUIDialogVideoInfo::ShowFor(*listitem->item);
         return true;
       }
-      else if (listitem->item->HasMusicInfoTag())
+      if (listitem->item->HasMusicInfoTag())
       {
         CGUIDialogMusicInfo::ShowFor(*listitem->item);
         return true;

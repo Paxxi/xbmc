@@ -363,7 +363,7 @@ bool CMediaManager::IsDiscInDrive(const std::string& devicePath)
 #else
   if(URIUtils::IsDVD(devicePath) || devicePath.empty())
     return MEDIA_DETECT::CDetectDVDMedia::IsDiscInDrive();   //! @todo switch all ports to use auto sources
-  else
+  
     return true; // Assume other paths to be mounted already
 #endif
 #else

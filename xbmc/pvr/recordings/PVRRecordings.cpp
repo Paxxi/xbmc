@@ -575,7 +575,7 @@ bool CPVRRecordings::MarkWatched(const CFileItemPtr &item, bool bWatched)
 {
   if (bWatched) {
     return IncrementRecordingsPlayCount(item);
-  } else {
+  } 
     return SetRecordingsPlayCount(item, 0);
-}
+
 }

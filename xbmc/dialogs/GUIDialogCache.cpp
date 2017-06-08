@@ -122,9 +122,9 @@ bool CGUIDialogCache::OnFileCallback(void* pContext, int ipercent, float avgSpee
 
   if( IsCanceled() ) { 
     return false;
-  } else {
+  } 
     return true;
-}
+
 }
 
 void CGUIDialogCache::Process()
@@ -186,6 +186,6 @@ bool CGUIDialogCache::IsCanceled() const
 {
   if (m_pDlg && m_pDlg->IsDialogRunning())
     return m_pDlg->IsCanceled();
-  else
+  
     return false;
 }

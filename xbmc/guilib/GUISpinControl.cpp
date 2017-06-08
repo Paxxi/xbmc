@@ -523,7 +523,7 @@ CGUILabel::COLOR CGUISpinControl::GetTextColor() const
 {
   if (IsDisabled())
     return CGUILabel::COLOR_DISABLED;
-  else if (HasFocus())
+  if (HasFocus())
     return CGUILabel::COLOR_FOCUSED;
   return CGUILabel::COLOR_TEXT;
 }

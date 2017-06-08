@@ -54,7 +54,7 @@ INPUT_TYPE CKeymapHandler::GetInputType(unsigned int keyId, int windowId, bool b
   {
     if (action.IsAnalog())
       return INPUT_TYPE::ANALOG;
-    else
+    
       return INPUT_TYPE::DIGITAL;
   }
 

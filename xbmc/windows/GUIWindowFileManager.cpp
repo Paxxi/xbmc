@@ -230,7 +230,7 @@ bool CGUIWindowFileManager::OnMessage(CGUIMessage& message)
         }
         return true;
       }
-      else if (message.GetParam1()==GUI_MSG_UPDATE_SOURCES)
+      if (message.GetParam1()==GUI_MSG_UPDATE_SOURCES)
       { // State of the sources changed, so update our view
         for (int i = 0; i < 2; i++)
         {

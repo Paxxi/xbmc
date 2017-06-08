@@ -270,10 +270,10 @@ namespace PythonBindings
       if (typeInfo->parentType) {
         return doretrieveApiInstance(pythonObj, typeInfo->parentType,expectedType, 
                                      methodNamespacePrefix, methodNameForErrorString);
-      } else {
+      } 
         throw XBMCAddon::WrongTypeException("Incorrect type passed to \"%s\", was expecting a \"%s\" but received a \"%s\"",
                                  methodNameForErrorString,expectedType,typeInfo->swigType);
-}
+
     }
     return (const_cast<PyHolder*>(pythonObj))->pSelf;
   }
@@ -304,13 +304,13 @@ namespace PythonBindings
         lh->UnregisterAddonClassInstance(c);
         return true;
       }
-      else
-      {
+      
+      
         PyThreadState* state = PyThreadState_Get();
         lh = XBMCAddon::Python::PythonLanguageHook::GetIfExists(state->interp);
         if (lh.isNotNull()) lh->UnregisterAddonClassInstance(c);
         return true;
-      }
+      
     }
     return false;
   }

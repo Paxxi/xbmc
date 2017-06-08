@@ -88,7 +88,7 @@ bool CPVRDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     }
     return true;
   }
-  else if (StringUtils::StartsWith(fileName, "recordings"))
+  if (StringUtils::StartsWith(fileName, "recordings"))
   {
     if (CServiceBroker::GetPVRManager().IsStarted())
     {

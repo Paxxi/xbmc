@@ -229,7 +229,7 @@ JSONRPC_STATUS CPVROperations::Record(const std::string &method, ITransportLayer
 
   if (pChannel == NULL)
     return InvalidParams;
-  else if (!pChannel->CanRecord())
+  if (!pChannel->CanRecord())
     return FailedToExecute;
 
   CVariant record = parameterObject["record"];

@@ -389,7 +389,7 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
     m_vecTextures.push_back(pMap);
     return pMap->GetTexture();
   }
-  else if (StringUtils::EndsWithNoCase(strPath, ".gif") ||
+  if (StringUtils::EndsWithNoCase(strPath, ".gif") ||
            StringUtils::EndsWithNoCase(strPath, ".apng"))
   {
     std::string mimeType;

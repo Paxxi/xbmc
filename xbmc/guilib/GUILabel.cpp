@@ -183,7 +183,7 @@ bool CGUILabel::SetText(const std::string &label)
     m_invalid = false;
     return true;
   }
-  else
+  
     return false;
 }
 
@@ -196,7 +196,7 @@ bool CGUILabel::SetTextW(const std::wstring &label)
     m_invalid = false;
     return true;
   }
-  else
+  
     return false;
 }
 

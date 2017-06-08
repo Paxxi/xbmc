@@ -327,7 +327,7 @@ int CAudioDecoder::ReadSamples(int numsamples)
         }
         return RET_SUCCESS;
       }
-      else if (result == READ_ERROR)
+      if (result == READ_ERROR)
       {
         // error decoding, lets finish up and get out
         CLog::Log(LOGERROR, "CAudioDecoder: Error while decoding %i", result);

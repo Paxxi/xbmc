@@ -90,9 +90,9 @@ bool CDVDVideoPPFFmpeg::CheckInit(int iWidth, int iHeight)
 
   if(m_pMode) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CDVDVideoPPFFmpeg::SetType(const std::string& mType, bool deinterlace)

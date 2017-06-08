@@ -276,7 +276,7 @@ void CAESinkFactory::EnumerateEx(AESinkInfoList &list, bool force)
       list.push_back(info);
       return;
     }
-    else
+    
       CLog::Log(LOGNOTICE, "User specified Sink %s could not be enumerated", envSink.c_str());
   }
 

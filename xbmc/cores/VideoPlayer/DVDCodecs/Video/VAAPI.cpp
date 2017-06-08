@@ -407,7 +407,7 @@ bool CVideoSurfaces::IsValid(VASurfaceID surf)
   CSingleLock lock(m_section);
   if (m_state.find(surf) != m_state.end())
     return true;
-  else
+  
     return false;
 }
 
@@ -908,7 +908,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext* avctx, AVFrame* pFrame
     {
       return CDVDVideoCodec::VC_BUFFER;
     }
-    else if (m_vaapiOutput.m_dataPort.ReceiveInMessage(&msg))
+    if (m_vaapiOutput.m_dataPort.ReceiveInMessage(&msg))
     {
       if (msg->signal == COutputDataProtocol::PICTURE)
       {
@@ -998,9 +998,9 @@ CDVDVideoCodec::VCReturn CDecoder::Check(AVCodecContext* avctx)
 
     if (state == VAAPI_RESET) {
       return CDVDVideoCodec::VC_FLUSHED;
-    } else {
+    } 
       return CDVDVideoCodec::VC_ERROR;
-}
+
   }
 
   if (m_getBufferError > 0 && m_getBufferError < 5)
@@ -3603,7 +3603,7 @@ bool CFFmpegPostproc::Filter(CVaapiProcessedPicture &outPic)
 
     if(result  == AVERROR(EAGAIN) || result == AVERROR_EOF) {
       return false;
-    } else if(result < 0)
+    } if(result < 0)
     {
       CLog::Log(LOGERROR, "CFFmpegPostproc::Filter - av_buffersink_get_frame");
       return false;
@@ -3677,7 +3677,7 @@ bool CFFmpegPostproc::Compatible(EINTERLACEMETHOD method)
 {
   if (method == VS_INTERLACEMETHOD_DEINTERLACE) {
     return true;
-  } else if (method == VS_INTERLACEMETHOD_RENDER_BOB) {
+  } if (method == VS_INTERLACEMETHOD_RENDER_BOB) {
     return true;
   } else if (method == VS_INTERLACEMETHOD_NONE &&
            !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_VIDEOPLAYER_PREFERVAAPIRENDER))

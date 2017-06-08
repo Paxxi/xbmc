@@ -184,7 +184,7 @@ bool CGUIDialogNumeric::OnMessage(CGUIMessage& message)
         OnNumber(iControl - 10);
         return true;
       }
-      else if (iControl == CONTROL_PREVIOUS)
+      if (iControl == CONTROL_PREVIOUS)
       {
         OnPrevious();
         return true;

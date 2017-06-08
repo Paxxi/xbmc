@@ -384,7 +384,7 @@ int CApplicationPlayer::GetAudioStream()
     m_audioStreamUpdate.Set(1000);
     return m_iAudioStream;
   }
-  else
+  
     return 0;
 }
 
@@ -401,7 +401,7 @@ int CApplicationPlayer::GetSubtitle()
     m_subtitleStreamUpdate.Set(1000);
     return m_iSubtitleStream;
   }
-  else
+  
     return 0;
 }
 
@@ -570,7 +570,7 @@ int CApplicationPlayer::GetVideoStream()
     m_videoStreamUpdate.Set(1000);
     return m_iVideoStream;
   }
-  else
+  
     return 0;
 }
 
@@ -742,7 +742,7 @@ float CApplicationPlayer::GetPlaySpeed()
     m_speedUpdate.Set(1000);
     return m_fPlaySpeed;
   }
-  else
+  
     return 0;
 }
 

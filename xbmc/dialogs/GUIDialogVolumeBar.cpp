@@ -42,11 +42,11 @@ bool CGUIDialogVolumeBar::OnAction(const CAction &action)
       CancelAutoClose();
       return true;
     }
-    else
-    { // reset the timer, as we've changed the volume level
+    
+    // reset the timer, as we've changed the volume level
       SetAutoClose(VOLUME_BAR_DISPLAY_TIME);
       return true;
-    }
+    
   }
   return CGUIDialog::OnAction(action);
 }

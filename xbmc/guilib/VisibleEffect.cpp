@@ -815,7 +815,7 @@ bool CScroller::Update(unsigned int time)
 }
     return true;
   }
-  else {
+  
     return false;
-}
+
 }

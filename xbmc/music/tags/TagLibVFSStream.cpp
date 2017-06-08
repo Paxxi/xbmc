@@ -110,7 +110,7 @@ void TagLibVFSStream::insert(const ByteVector &data, TagLib::ulong start, TagLib
     writeBlock(data);
     return;
   }
-  else if (data.size() < replace)
+  if (data.size() < replace)
   {
     seek(start);
     writeBlock(data);
@@ -319,7 +319,7 @@ long TagLibVFSStream::tell() const
   int64_t pos = m_file.GetPosition();
   if(pos > LONG_MAX)
     return -1;
-  else
+  
     return (long)pos;
 }
 

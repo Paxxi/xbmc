@@ -115,7 +115,7 @@ bool CGUIWindowMusicPlaylistEditor::OnMessage(CGUIMessage& message)
 }
         return true;
       }
-      else if (control == CONTROL_LOAD_PLAYLIST)
+      if (control == CONTROL_LOAD_PLAYLIST)
       { // load a playlist
         OnLoadPlaylist();
         return true;

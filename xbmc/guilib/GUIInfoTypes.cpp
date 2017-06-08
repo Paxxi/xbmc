@@ -89,9 +89,9 @@ bool CGUIInfoColor::Update()
     m_color = color;
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 void CGUIInfoColor::Parse(const std::string &label, int context)

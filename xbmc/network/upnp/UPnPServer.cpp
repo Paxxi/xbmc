@@ -898,7 +898,7 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
 }}
         }
         return OnBrowseDirectChildren(action, id, filter, starting_index, requested_count, sort_criteria, context);
-    } else if (NPT_String(search_criteria).Find("object.item.audioItem") >= 0) {
+    } if (NPT_String(search_criteria).Find("object.item.audioItem") >= 0) {
         // look for artist, album & genre filters
         NPT_String genre = FindSubCriteria(search_criteria, "upnp:genre");
         NPT_String album = FindSubCriteria(search_criteria, "upnp:album");

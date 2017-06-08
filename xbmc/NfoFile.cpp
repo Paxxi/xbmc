@@ -136,7 +136,7 @@ CNfoFile::NFOResult CNfoFile::Create(const std::string& strPath,
     {
       if (m_doc.find("[scrape url]") != std::string::npos)
         return PARTIAL_NFO;
-      else
+      
         return FULL_NFO;
     }
     else

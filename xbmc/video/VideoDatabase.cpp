@@ -910,9 +910,9 @@ int CVideoDatabase::AddFile(const CFileItem& item)
   {
     if (item.GetVideoInfoTag()->m_iFileId != -1) {
       return item.GetVideoInfoTag()->m_iFileId;
-    } else {
+    } 
       return 
-}AddFile(item.GetVideoInfoTag()->m_strFileNameAndPath);
+AddFile(item.GetVideoInfoTag()->m_strFileNameAndPath);
   }
   return AddFile(item.GetPath());
 }
@@ -1091,9 +1091,9 @@ int CVideoDatabase::GetFileId(const CFileItem &item)
   {
     if (item.GetVideoInfoTag()->m_iFileId != -1) {
       return item.GetVideoInfoTag()->m_iFileId;
-    } else {
+    } 
       return 
-}GetFileId(item.GetVideoInfoTag()->m_strFileNameAndPath);
+GetFileId(item.GetVideoInfoTag()->m_strFileNameAndPath);
   }
   return GetFileId(item.GetPath());
 }
@@ -1434,12 +1434,12 @@ int CVideoDatabase::AddToTable(const std::string& table, const std::string& firs
       int id = (int)m_pDS->lastinsertid();
       return id;
     }
-    else
-    {
+    
+    
       int id = m_pDS->fv(firstField.c_str()).get_asInt();
       m_pDS->close();
       return id;
-    }
+    
   }
   catch (...)
   {
@@ -1591,12 +1591,12 @@ int CVideoDatabase::AddSet(const std::string& strSet, const std::string& strOver
       int id = static_cast<int>(m_pDS->lastinsertid());
       return id;
     }
-    else
-    {
+    
+    
       int id = m_pDS->fv("idSet").get_asInt();
       m_pDS->close();
       return id;
-    }
+    
   }
   catch (...)
   {
@@ -4368,8 +4368,8 @@ void CVideoDatabase::SetVideoSettings(const std::string& strFilenameAndPath, con
       m_pDS->exec(strSQL);
       return ;
     }
-    else
-    { // add the items
+    
+    // add the items
       m_pDS->close();
       strSQL= "INSERT INTO settings (idFile,Deinterlace,ViewMode,ZoomAmount,PixelRatio, VerticalShift, "
                 "AudioStream,SubtitleStream,SubtitleDelay,SubtitlesOn,Brightness,"
@@ -4385,7 +4385,7 @@ void CVideoDatabase::SetVideoSettings(const std::string& strFilenameAndPath, con
                            setting.m_Sharpness, setting.m_NoiseReduction, setting.m_CustomNonLinStretch, setting.m_PostProcess, setting.m_ScalingMethod,
                            setting.m_StereoMode, setting.m_StereoInvert, setting.m_VideoStream);
       m_pDS->exec(strSQL);
-    }
+    
   }
   catch (...)
   {
@@ -6677,7 +6677,7 @@ bool CVideoDatabase::GetItems(const std::string &strBaseDir, VIDEODB_CONTENT_TYP
 {
   if (StringUtils::EqualsNoCase(itemType, "movies") && (mediaType == VIDEODB_CONTENT_MOVIES || mediaType == VIDEODB_CONTENT_MOVIE_SETS)) {
     return GetMoviesByWhere(strBaseDir, filter, items, sortDescription);
-  } else if (StringUtils::EqualsNoCase(itemType, "tvshows") && mediaType == VIDEODB_CONTENT_TVSHOWS) {
+  } if (StringUtils::EqualsNoCase(itemType, "tvshows") && mediaType == VIDEODB_CONTENT_TVSHOWS) {
     return GetTvShowsByWhere(strBaseDir, filter, items, sortDescription);
   } else if (StringUtils::EqualsNoCase(itemType, "musicvideos") && mediaType == VIDEODB_CONTENT_MUSICVIDEOS) {
     return GetMusicVideosByWhere(strBaseDir, filter, items, true, sortDescription);

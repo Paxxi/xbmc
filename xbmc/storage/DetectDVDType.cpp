@@ -89,9 +89,9 @@ void CDetectDVDMedia::Process()
   CdIo_t *p_cdio = m_cdio->cdio_open(NULL, DRIVER_DEVICE);
   if (p_cdio == nullptr) {
     return;
-  } else {
+  } 
     m_cdio
-}->cdio_destroy(p_cdio);
+->cdio_destroy(p_cdio);
 #endif
 
   while (( !m_bStop ))
@@ -413,10 +413,10 @@ DWORD CDetectDVDMedia::GetTrayState()
       m_dwLastTrayState = m_dwTrayState;
       return DRIVE_CLOSED_MEDIA_PRESENT;
     }
-    else
-    {
+    
+    
       return DRIVE_READY;
-    }
+    
   }
   else if (m_dwTrayState == TRAY_CLOSED_NO_MEDIA)
   {
@@ -425,10 +425,10 @@ DWORD CDetectDVDMedia::GetTrayState()
       m_dwLastTrayState = m_dwTrayState;
       return DRIVE_CLOSED_NO_MEDIA;
     }
-    else
-    {
+    
+    
       return DRIVE_READY;
-    }
+    
   }
   else if (m_dwTrayState == TRAY_OPEN)
   {
@@ -437,10 +437,10 @@ DWORD CDetectDVDMedia::GetTrayState()
       m_dwLastTrayState = m_dwTrayState;
       return DRIVE_OPEN;
     }
-    else
-    {
+    
+    
       return DRIVE_READY;
-    }
+    
   }
   else
   {

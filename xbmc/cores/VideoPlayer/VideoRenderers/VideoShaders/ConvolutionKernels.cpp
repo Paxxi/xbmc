@@ -229,7 +229,7 @@ double CConvolutionKernel::LanczosWeight(double x, double radius)
 
   if (ax == 0.0) {
     return 1.0;
-  } else if (ax < radius) {
+  } if (ax < radius) {
     return SINC(ax) * SINC(ax / radius);
   } else {
     return 0.0;
@@ -246,7 +246,7 @@ double CConvolutionKernel::BicubicWeight(double x, double B, double C)
             (-18 + 12*B + 6*C) * ax * ax +
             (6 - 2*B))/6;
   }
-  else if (ax<2.0)
+  if (ax<2.0)
   {
     return ((-B - 6*C) * ax * ax * ax +
             (6*B + 30*C) * ax * ax + (-12*B - 48*C) *
@@ -264,7 +264,7 @@ double CConvolutionKernel::Spline36Weight(double x)
 
   if      ( ax < 1.0 ) {
     return ( ( 13.0 / 11.0 * (ax      ) - 453.0 / 209.0 ) * (ax      ) -   3.0 / 209.0 ) * (ax      ) + 1.0;
-  } else if ( ax < 2.0 ) {
+  } if ( ax < 2.0 ) {
     return ( ( -6.0 / 11.0 * (ax - 1.0) + 270.0 / 209.0 ) * (ax - 1.0) - 156.0 / 209.0 ) * (ax - 1.0);
   } else if ( ax < 3.0 ) {
     return ( (  1.0 / 11.0 * (ax - 2.0) -  45.0 / 209.0 ) * (ax - 2.0) +  26.0 / 209.0 ) * (ax - 2.0);

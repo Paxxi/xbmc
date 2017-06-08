@@ -1015,8 +1015,8 @@ bool CDateTime::SetFromW3CDateTime(const std::string &dateTime, bool ignoreTimez
     // check if the timezone is UTC
     if (StringUtils::StartsWith(zone, "Z")) {
       return SetFromUTCDateTime(tmpDateTime);
-    } else
-    {
+    } 
+    
       // retrieve the timezone offset (ignoring the + or -)
       CDateTimeSpan zoneSpan; zoneSpan.SetFromTimeString(zone.substr(1));
       if (zoneSpan.GetSecondsTotal() != 0)
@@ -1027,7 +1027,7 @@ bool CDateTime::SetFromW3CDateTime(const std::string &dateTime, bool ignoreTimez
           tmpDateTime -= zoneSpan;
 }
       }
-    }
+    
   }
 
   *this = tmpDateTime;

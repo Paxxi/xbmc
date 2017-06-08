@@ -572,7 +572,7 @@ AE_DSP_BASETYPE CActiveAEDSPProcess::GetBaseType(AE_DSP_STREAM_PROPERTIES *props
 {
   if (!strcmp(props->strCodecId, "ac3")) {
     return AE_DSP_ABASE_AC3;
-  } else if (!strcmp(props->strCodecId, "eac3")) {
+  } if (!strcmp(props->strCodecId, "eac3")) {
     return AE_DSP_ABASE_EAC3;
   } else if (!strcmp(props->strCodecId, "dca") || !strcmp(props->strCodecId, "dts")) {
     return AE_DSP_ABASE_DTS;

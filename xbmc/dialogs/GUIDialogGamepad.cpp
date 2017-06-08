@@ -101,7 +101,7 @@ bool CGUIDialogGamepad::OnAction(const CAction &action)
     SetLine(2, CVariant{std::move(strHiddenInput)});
     return true;
   }
-  else if (action.GetButtonCode() == KEY_BUTTON_BACK || action.GetID() == ACTION_PREVIOUS_MENU || action.GetID() == ACTION_NAV_BACK)
+  if (action.GetButtonCode() == KEY_BUTTON_BACK || action.GetID() == ACTION_PREVIOUS_MENU || action.GetID() == ACTION_NAV_BACK)
   {
     m_bConfirmed = false;
     m_bCanceled = true;

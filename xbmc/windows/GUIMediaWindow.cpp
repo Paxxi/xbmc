@@ -269,7 +269,7 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         UpdateButtons();
         return true;
       }
-      else if (iControl == CONTROL_BTNSORTASC) // sort asc
+      if (iControl == CONTROL_BTNSORTASC) // sort asc
       {
         if (m_guiState.get())
           m_guiState->SetNextSortOrder();
@@ -320,7 +320,7 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         m_vecItems->SetPath("?");
         return true;
       }
-      else if ( message.GetParam1() == GUI_MSG_REFRESH_THUMBS )
+      if ( message.GetParam1() == GUI_MSG_REFRESH_THUMBS )
       {
         for (int i = 0; i < m_vecItems->Size(); i++)
           m_vecItems->Get(i)->FreeMemory(true);
@@ -1053,7 +1053,7 @@ bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
 
     return true;
   }
-  else if (pItem->IsPlugin() && !pItem->GetProperty("isplayable").asBoolean())
+  if (pItem->IsPlugin() && !pItem->GetProperty("isplayable").asBoolean())
   {
     return XFILE::CPluginDirectory::RunScriptWithParams(pItem->GetPath());
   }
@@ -1075,7 +1075,7 @@ bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
       g_windowManager.ActivateWindow(WINDOW_MUSIC_PLAYLIST_EDITOR,"newplaylist://");
       return true;
     }
-    else if (StringUtils::StartsWithNoCase(pItem->GetPath(), "newsmartplaylist://"))
+    if (StringUtils::StartsWithNoCase(pItem->GetPath(), "newsmartplaylist://"))
     {
       m_vecItems->RemoveDiscCache(GetID());
       if (CGUIDialogSmartPlaylistEditor::NewPlaylist(pItem->GetPath().substr(19)))

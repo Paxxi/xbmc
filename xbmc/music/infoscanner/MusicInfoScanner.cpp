@@ -1140,7 +1140,7 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
       nfoReader.GetDetails(albumInfo.GetAlbum());
       return INFO_ADDED;
     }
-    else if (result == CNfoFile::URL_NFO || result == CNfoFile::COMBINED_NFO)
+    if (result == CNfoFile::URL_NFO || result == CNfoFile::COMBINED_NFO)
     {
       CScraperUrl scrUrl(nfoReader.ScraperUrl());
       CMusicAlbumInfo albumNfo("nfo",scrUrl);

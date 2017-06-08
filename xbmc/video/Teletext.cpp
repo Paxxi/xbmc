@@ -482,7 +482,7 @@ bool CTeletextDecoder::HandleAction(const CAction &action)
 }
     return true;
   }
-  else if (action.GetID() == ACTION_MOVE_DOWN)
+  if (action.GetID() == ACTION_MOVE_DOWN)
   {
     if (m_RenderInfo.PageCatching) {
       CatchNextPage(1, 1);
@@ -589,7 +589,7 @@ bool CTeletextDecoder::HandleAction(const CAction &action)
     SwitchHintMode();
     return true;
   }
-  else if (action.GetID() == ACTION_TELETEXT_RED)
+  if (action.GetID() == ACTION_TELETEXT_RED)
   {
     ColorKey(m_RenderInfo.Prev_100);
     return true;
@@ -1768,7 +1768,7 @@ int CTeletextDecoder::TopText_GetNext(int startpage, int up, int findgroup)
 
   if (nextgrp) {
     return nextgrp;
-  } else if (nextblk) {
+  } if (nextblk) {
     return nextblk;
   } else {
     return current;
@@ -2930,7 +2930,7 @@ TextPageinfo_t* CTeletextDecoder::DecodePage(bool showl25,             // 1=deco
 }
       return PageInfo; /* don't interpret irregular pages */
     }
-    else if (PageInfo->function == FUNC_GPOP || PageInfo->function == FUNC_POP) /* object definitions */
+    if (PageInfo->function == FUNC_GPOP || PageInfo->function == FUNC_POP) /* object definitions */
     {
       for (int col = 0; col < 24*40; col++) {
         PageAtrb[col] = atr;

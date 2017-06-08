@@ -295,8 +295,8 @@ bool CPlayListASX::LoadData(std::istream& stream)
   {
     return LoadAsxIniInfo(stream);
   }
-  else
-  {
+  
+  
     CXBMCTinyXML xmlDoc;
     stream >> xmlDoc;
 
@@ -393,7 +393,7 @@ bool CPlayListASX::LoadData(std::istream& stream)
       }
       pElement = pElement->NextSiblingElement();
     }
-  }
+  
 
   return true;
 }

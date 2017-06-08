@@ -41,7 +41,7 @@ std::string CDefaultController::GetControllerID() const
 unsigned int CDefaultController::GetKeyID(const FeatureName& feature, ANALOG_STICK_DIRECTION dir /* = ANALOG_STICK_DIRECTION::UNKNOWN */) const
 {
   if      (feature == "a")             return KEY_JOYSTICK_BUTTON_A;
-  else if (feature == "b")             return KEY_JOYSTICK_BUTTON_B;
+  if (feature == "b")             return KEY_JOYSTICK_BUTTON_B;
   else if (feature == "x")             return KEY_JOYSTICK_BUTTON_X;
   else if (feature == "y")             return KEY_JOYSTICK_BUTTON_Y;
   else if (feature == "start")         return KEY_JOYSTICK_BUTTON_START;

@@ -123,7 +123,7 @@ bool CBuiltins::IsSystemPowerdownCommand(const std::string& execString)
   {
     return true;
   }
-  else if (execute == "shutdown")
+  if (execute == "shutdown")
   {
     switch (CServiceBroker::GetSettings().GetInt(CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE))
     {

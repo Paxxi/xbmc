@@ -215,9 +215,9 @@ int CExifParse::Get16(const void* const Short, const bool motorolaOrder)
 {
     if (motorolaOrder) {
         return (((unsigned char *)Short)[0] << 8) | ((unsigned char *)Short)[1];
-    } else {
+    } 
         return (((unsigned char *)Short)[1] << 8) | ((unsigned char *)Short)[0];
-    }
+    
 }
 
 //--------------------------------------------------------------------------
@@ -228,10 +228,10 @@ int CExifParse::Get32(const void* const Long, const bool motorolaOrder)
     if (motorolaOrder) {
         return  ((( char *)Long)[0] << 24) | (((unsigned char *)Long)[1] << 16)
           | (((unsigned char *)Long)[2] << 8 ) | (((unsigned char *)Long)[3] << 0 );
-    } else {
+    } 
         return  ((( char *)Long)[3] << 24) | (((unsigned char *)Long)[2] << 16)
           | (((unsigned char *)Long)[1] << 8 ) | (((unsigned char *)Long)[0] << 0 );
-    }
+    
 }
 
 //--------------------------------------------------------------------------

@@ -130,9 +130,9 @@ bool CDeviceKitDiskDevice::Mount()
 
     return m_isMounted;
   }
-  else {
+  
     CLog
-}::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to mount %s", toString().c_str());
+::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to mount %s", toString().c_str());
 
   return false;
 }
@@ -153,9 +153,9 @@ bool CDeviceKitDiskDevice::UnMount()
 
     return !m_isMounted;
   }
-  else {
+  
     CLog
-}::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to unmount %s", toString().c_str());
+::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to unmount %s", toString().c_str());
 
   return false;
 }

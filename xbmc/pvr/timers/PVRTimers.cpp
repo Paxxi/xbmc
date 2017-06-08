@@ -634,7 +634,7 @@ bool CPVRTimers::GetDirectory(const std::string& strPath, CFileItemList &items) 
       /* Root folder containing either timer rules or timers. */
       return GetRootDirectory(path, items);
     }
-    else if (path.IsTimerRule())
+    if (path.IsTimerRule())
     {
       /* Sub folder containing the timers scheduled by the given timer rule. */
       return GetSubDirectory(path, items);

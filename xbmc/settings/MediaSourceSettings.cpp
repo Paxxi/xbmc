@@ -157,7 +157,7 @@ VECSOURCES* CMediaSourceSettings::GetSources(const std::string &type)
 {
   if (type == "programs" || type == "myprograms")
     return &m_programSources;
-  else if (type == "files")
+  if (type == "files")
     return &m_fileSources;
   else if (type == "music")
     return &m_musicSources;
@@ -175,7 +175,7 @@ const std::string& CMediaSourceSettings::GetDefaultSource(const std::string &typ
 {
   if (type == "programs" || type == "myprograms")
     return m_defaultProgramSource;
-  else if (type == "files")
+  if (type == "files")
     return m_defaultFileSource;
   else if (type == "music")
     return m_defaultMusicSource;

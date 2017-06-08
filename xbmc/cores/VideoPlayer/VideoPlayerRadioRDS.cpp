@@ -1111,7 +1111,7 @@ unsigned int CDVDRadioRDSData::DecodeRT(uint8_t *msgElement, unsigned int len)
     m_UECPDataDeadBreak = true;
     return 0;
   }
-  else if (msgLength == 0 || (msgLength == 1 && bufConf == 0))
+  if (msgLength == 0 || (msgLength == 1 && bufConf == 0))
   {
     m_RT.clear();
     m_RT_Index = 0;

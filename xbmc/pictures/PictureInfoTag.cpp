@@ -960,7 +960,7 @@ const std::string CPictureInfoTag::GetInfo(int info) const
 int CPictureInfoTag::TranslateString(const std::string &info)
 {
   if (StringUtils::EqualsNoCase(info, "filename")) { return SLIDE_FILE_NAME;
-  } else if (StringUtils::EqualsNoCase(info, "path")) { return SLIDE_FILE_PATH;
+  } if (StringUtils::EqualsNoCase(info, "path")) { return SLIDE_FILE_PATH;
   } else if (StringUtils::EqualsNoCase(info, "filesize")) { return SLIDE_FILE_SIZE;
   } else if (StringUtils::EqualsNoCase(info, "filedate")) { return SLIDE_FILE_DATE;
   } else if (StringUtils::EqualsNoCase(info, "slideindex")) { return SLIDE_INDEX;

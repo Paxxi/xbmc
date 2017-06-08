@@ -42,11 +42,11 @@ char* getpath(char *buf, const char *full)
     buf[pos - full + 1] = 0;
     return buf;
   }
-  else
-  {
+  
+  
     buf[0] = 0;
     return buf;
-  }
+  
 }
 
 extern "C" HMODULE __stdcall dllLoadLibraryExtended(LPCSTR lib_file, LPCSTR sourcedll)

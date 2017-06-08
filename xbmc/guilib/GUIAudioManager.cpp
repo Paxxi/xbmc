@@ -172,11 +172,11 @@ void CGUIAudioManager::PlayPythonSound(const std::string& strFileName, bool useC
       sound->Play();
       return;
     }
-    else
-    {
+    
+    
       FreeSoundAllUsage(sound);
       m_pythonSounds.erase(itsb);
-    }
+    
   }
 
   IAESound *sound = LoadSound(strFileName);

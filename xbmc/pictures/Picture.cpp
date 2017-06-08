@@ -260,12 +260,12 @@ bool CPicture::CacheTexture(uint8_t *pixels, uint32_t width, uint32_t height, ui
     }
     return success;
   }
-  else
-  { // no orientation needed
+  
+  // no orientation needed
     dest_width = width;
     dest_height = height;
     return CreateThumbnailFromSurface(pixels, width, height, pitch, dest);
-  }
+  
   return false;
 }
 

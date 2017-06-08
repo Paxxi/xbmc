@@ -82,9 +82,9 @@ bool CDVDInputStreamPVRManager::IsEOF()
 
   if (m_pOtherStream) {
     return m_pOtherStream->IsEOF();
-  } else {
+  } 
     return m_eof;
-}
+
 }
 
 bool CDVDInputStreamPVRManager::Open()
@@ -250,8 +250,8 @@ int CDVDInputStreamPVRManager::Read(uint8_t* buf, int buf_size)
   {
     return m_pOtherStream->Read(buf, buf_size);
   }
-  else
-  {
+  
+  
     int ret = CServiceBroker::GetPVRManager().Clients()->ReadStream((BYTE*)buf, buf_size);
     if (ret < 0) {
       ret = -1;
@@ -263,7 +263,7 @@ int CDVDInputStreamPVRManager::Read(uint8_t* buf, int buf_size)
 }
 
     return ret;
-  }
+  
 }
 
 int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
@@ -272,13 +272,13 @@ int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
   {
     return m_pOtherStream->Seek(offset, whence);
   }
-  else
-  {
+  
+  
     if (whence == SEEK_POSSIBLE)
     {
       if (CServiceBroker::GetPVRManager().Clients()->CanSeekStream())
         return 1;
-      else
+      
         return 0;
     }
 
@@ -290,16 +290,16 @@ int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
 }
 
     return ret;
-  }
+  
 }
 
 int64_t CDVDInputStreamPVRManager::GetLength()
 {
   if (m_pOtherStream) {
     return m_pOtherStream->GetLength();
-  } else {
+  } 
     return 
-}CServiceBroker::GetPVRManager().Clients()->GetStreamLength();
+CServiceBroker::GetPVRManager().Clients()->GetStreamLength();
 }
 
 int CDVDInputStreamPVRManager::GetTotalTime()
@@ -383,7 +383,7 @@ bool CDVDInputStreamPVRManager::SelectChannel(const CPVRChannelPtr &channel)
     CFileItem item(channel);
     return CloseAndOpen(item.GetPath());
   }
-  else if (!m_isRecording)
+  if (!m_isRecording)
   {
     return CServiceBroker::GetPVRManager().ChannelSwitchById(channel->ChannelID());
   }
@@ -408,13 +408,13 @@ CDVDInputStream::ENextStream CDVDInputStreamPVRManager::NextStream()
   CDVDInputStream::ENextStream next;
   if (m_pOtherStream && ((next = m_pOtherStream->NextStream()) != NEXTSTREAM_NONE)) {
     return next;
-  } else if(!m_isRecording)
+  } if(!m_isRecording)
   {
     if (m_eof) {
       return NEXTSTREAM_OPEN;
-    } else {
+    } 
       return NEXTSTREAM_RETRY;
-}
+
   }
   return NEXTSTREAM_NONE;
 }
@@ -516,7 +516,7 @@ DemuxPacket* CDVDInputStreamPVRManager::ReadDemux()
   {
     return nullptr;
   }
-  else if (pPacket->iStreamId == DMX_SPECIALID_STREAMINFO)
+  if (pPacket->iStreamId == DMX_SPECIALID_STREAMINFO)
   {
     client->GetStreamProperties(m_StreamProps);
     return pPacket;

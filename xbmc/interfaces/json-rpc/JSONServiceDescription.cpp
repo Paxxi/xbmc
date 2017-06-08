@@ -666,7 +666,7 @@ JSONRPC_STATUS JSONSchemaTypeDefinition::Check(const CVariant &value, CVariant &
     errorData["message"] = errorMessage.c_str();
     return InvalidParams;
   }
-  else if (value.isNull() && !HasType(type, NullValue))
+  if (value.isNull() && !HasType(type, NullValue))
   {
     errorData["message"] = "Received value is null";
     return InvalidParams;
@@ -1338,9 +1338,9 @@ JSONRPC_STATUS JsonRpcMethod::Check(const CVariant &requestParameters, ITranspor
 
       return OK;
     }
-    else {
+    
       return BadPermission;
-}
+
   }
   
   return MethodNotFound;

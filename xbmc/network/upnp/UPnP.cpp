@@ -231,10 +231,10 @@ public:
             temp.SetProperty("original_listitem_url", item.GetPath());
             return SaveFileState(temp, CBookmark(), watched);
         }
-        else {
+        
             CLog::Log(LOGDEBUG, "UPNP: Marking video item %s as watched", item.GetPath().c_str());
             return InvokeUpdateObject(item.GetPath().c_str(), "<upnp:playCount>1</upnp:playCount>", "<upnp:playCount>0</upnp:playCount>");
-        }
+        
     }
 
     bool SaveFileState(const CFileItem& item, const CBookmark& bookmark, const bool updatePlayCount)

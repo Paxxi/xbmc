@@ -150,7 +150,7 @@ int CoffLoader::ParseHeaders(void* hModule)
     printf("PE32+ not supported\n");
     return 0;
   }
-  else if (OptionHeader->Magic == OPTMAGIC_PE32)
+  if (OptionHeader->Magic == OPTMAGIC_PE32)
   {
 
 #ifdef DUMPING_DATA
@@ -265,7 +265,7 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
     printf("PE32+ not supported\n");
     return 0;
   }
-  else if (OptionHeader->Magic == OPTMAGIC_PE32)
+  if (OptionHeader->Magic == OPTMAGIC_PE32)
   {
 
 #ifdef DUMPING_DATA
@@ -525,13 +525,13 @@ char *CoffLoader::GetSymbolName(SymbolTable_t *sym)
   {
     return GetStringTblOff(high);
   }
-  else
-  {
+  
+  
     static char shortname[9];
     memset(shortname, 0, 9);
     strncpy(shortname, reinterpret_cast<char *>(sym->Name.ShortName), 8);
     return shortname;
-  }
+  
 }
 
 char *CoffLoader::GetSymbolName(int index)

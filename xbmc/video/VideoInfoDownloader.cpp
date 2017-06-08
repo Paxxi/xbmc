@@ -188,9 +188,9 @@ bool CVideoInfoDownloader::GetDetails(const CScraperUrl &url,
     CloseThread();
     return true;
   }
-  else {  // unthreaded
+   // unthreaded
     return 
-}m_info->GetVideoDetails(*m_http, url, true/*fMovie*/, movieDetails);
+m_info->GetVideoDetails(*m_http, url, true/*fMovie*/, movieDetails);
 }
 
 bool CVideoInfoDownloader::GetEpisodeDetails(const CScraperUrl &url,
@@ -224,9 +224,9 @@ bool CVideoInfoDownloader::GetEpisodeDetails(const CScraperUrl &url,
     CloseThread();
     return true;
   }
-  else {  // unthreaded
+   // unthreaded
     return 
-}m_info->GetVideoDetails(*m_http, url, false/*fMovie*/, movieDetails);
+m_info->GetVideoDetails(*m_http, url, false/*fMovie*/, movieDetails);
 }
 
 bool CVideoInfoDownloader::GetEpisodeList(const CScraperUrl& url,
@@ -260,9 +260,9 @@ bool CVideoInfoDownloader::GetEpisodeList(const CScraperUrl& url,
     CloseThread();
     return true;
   }
-  else {  // unthreaded
+   // unthreaded
     return 
-}!(movieDetails = m_info->GetEpisodeList(*m_http, url)).empty();
+!(movieDetails = m_info->GetEpisodeList(*m_http, url)).empty();
 }
 
 void CVideoInfoDownloader::CloseThread()

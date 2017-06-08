@@ -174,9 +174,9 @@ float CRenderManager::GetAspectRatio()
   CSingleLock lock(m_statelock);
   if (m_pRenderer) {
     return m_pRenderer->GetAspectRatio();
-  } else {
+  } 
     return 1.0f;
-}
+
 }
 
 bool CRenderManager::Configure(VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers)
@@ -344,9 +344,9 @@ bool CRenderManager::IsConfigured() const
   CSingleLock lock(m_statelock);
   if (m_renderState == STATE_CONFIGURED) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CRenderManager::FrameWait(int ms)
@@ -367,9 +367,9 @@ bool CRenderManager::IsPresenting()
   CSingleLock lock(m_presentlock);
   if (!m_presentTimer.IsTimePast()) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CRenderManager::FrameMove()
@@ -381,7 +381,7 @@ void CRenderManager::FrameMove()
 
     if (m_renderState == STATE_UNCONFIGURED) {
       return;
-    } else if (m_renderState == STATE_CONFIGURING)
+    } if (m_renderState == STATE_CONFIGURING)
     {
       lock.Leave();
       if (!Configure()) {
@@ -525,7 +525,7 @@ bool CRenderManager::Flush()
       CLog::Log(LOGERROR, "%s - timed out waiting for renderer to flush", __FUNCTION__);
       return false;
     }
-    else
+    
       return true;
   }
   return true;
@@ -1218,9 +1218,9 @@ bool CRenderManager::Supports(ERENDERFEATURE feature)
   CSingleLock lock(m_statelock);
   if (m_pRenderer) {
     return m_pRenderer->Supports(feature);
-  } else {
+  } 
     return false;
-}
+
 }
 
 bool CRenderManager::Supports(ESCALINGMETHOD method)
@@ -1228,9 +1228,9 @@ bool CRenderManager::Supports(ESCALINGMETHOD method)
   CSingleLock lock(m_statelock);
   if (m_pRenderer) {
     return m_pRenderer->Supports(method);
-  } else {
+  } 
     return false;
-}
+
 }
 
 int CRenderManager::WaitForBuffer(volatile std::atomic_bool&bStop, int timeout)

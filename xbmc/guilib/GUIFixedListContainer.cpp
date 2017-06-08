@@ -233,7 +233,7 @@ bool CGUIFixedListContainer::SelectItemFromPoint(const CPoint &point)
     }
     return true;
   }
-  else if (pos > end && GetOffset() + maxCursor < (int)m_items.size() - 1)
+  if (pos > end && GetOffset() + maxCursor < (int)m_items.size() - 1)
   {
     if (!InsideLayout(m_layout, point))
       return false;

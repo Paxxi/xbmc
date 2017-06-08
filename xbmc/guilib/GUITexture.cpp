@@ -628,9 +628,9 @@ bool CGUITextureBase::SetWidth(float width)
     m_invalid = true;
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 bool CGUITextureBase::SetHeight(float height)
@@ -643,9 +643,9 @@ bool CGUITextureBase::SetHeight(float height)
     m_invalid = true;
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 bool CGUITextureBase::SetPosition(float posX, float posY)
@@ -657,9 +657,9 @@ bool CGUITextureBase::SetPosition(float posX, float posY)
     m_invalid = true;
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 bool CGUITextureBase::SetAspectRatio(const CAspectRatio &aspect)
@@ -670,9 +670,9 @@ bool CGUITextureBase::SetAspectRatio(const CAspectRatio &aspect)
     m_invalid = true;
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 bool CGUITextureBase::SetFileName(const std::string& filename)

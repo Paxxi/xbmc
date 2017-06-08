@@ -502,7 +502,7 @@ bool CDVDVideoCodecFFmpeg::AddData(const DemuxPacket &packet)
     return false;
   }
   // error
-  else if (ret)
+  if (ret)
   {
     // handle VC_NOBUFFER error for hw accel
     if (m_pHardware)
@@ -542,9 +542,9 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
     {
       if (m_pHardware->GetPicture(m_pCodecContext, pVideoPicture)) {
         return VC_PICTURE;
-      } else {
+      } 
         return VC_ERROR;
-}
+
     }
     else if (ret == VC_BUFFER) {
       ;
@@ -562,7 +562,7 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
 }
       return VC_PICTURE;
     }
-    else if (ret == VC_BUFFER) {
+    if (ret == VC_BUFFER) {
       ;
     } else {
       return ret;
@@ -604,9 +604,9 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
       {
         if (m_pHardware->GetPicture(m_pCodecContext, pVideoPicture)) {
           return VC_PICTURE;
-        } else {
+        } 
           return VC_ERROR;
-}
+
       }
       else
       {
@@ -622,9 +622,9 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
       {
         if (!SetPictureParams(pVideoPicture)) {
           return VC_ERROR;
-        } else {
+        } 
           return VC_PICTURE;
-}
+
       }
       else
       {
@@ -707,20 +707,20 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
       Reset();
       return ret;
     }
-    else if (ret == VC_PICTURE)
+    if (ret == VC_PICTURE)
     {
       if (m_pHardware->GetPicture(m_pCodecContext, pVideoPicture)) {
         return VC_PICTURE;
-      } else {
+      } 
         return VC_ERROR;
-}
+
     }
 
     return ret;
   }
   // process filters for sw decoding
-  else
-  {
+  
+  
     SetFilters();
 
     bool need_scale = std::find( m_formats.begin(),
@@ -769,10 +769,10 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
 
     if (!SetPictureParams(pVideoPicture)) {
       return VC_ERROR;
-    } else {
+    } 
       return VC_PICTURE;
-}
-  }
+
+  
 
   return VC_NONE;
 }
@@ -1108,7 +1108,7 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::FilterProcess(AVFrame* frame)
 
   if (result  == AVERROR(EAGAIN)) {
     return VC_BUFFER;
-  } else if (result == AVERROR_EOF)
+  } if (result == AVERROR_EOF)
   {
     result = av_buffersink_get_frame(m_pFilterOut, m_pFilterFrame);
     m_filterEof = true;
@@ -1137,9 +1137,9 @@ unsigned CDVDVideoCodecFFmpeg::GetAllowedReferences()
 {
   if(m_pHardware) {
     return m_pHardware->GetAllowedReferences();
-  } else {
+  } 
     return 0;
-}
+
 }
 
 bool CDVDVideoCodecFFmpeg::GetCodecStats(double &pts, int &droppedFrames, int &skippedPics)

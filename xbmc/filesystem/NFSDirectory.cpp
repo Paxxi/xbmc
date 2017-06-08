@@ -202,10 +202,10 @@ bool CNFSDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       {
         return GetServerList(items);
       }
-      else 
-      {
+      
+      
         return GetDirectoryFromExportList(myStrPath, items); 
-      }
+      
     }
     else
     {

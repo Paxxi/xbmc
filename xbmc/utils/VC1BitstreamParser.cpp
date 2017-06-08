@@ -137,16 +137,16 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
           uint8_t pic = br.ReadBits(3);
           return pic == 0x00 || pic == 0x01;
         }
-        else
-        {
+        
+        
           uint8_t pic(0);
           while (pic < 4 && br.ReadBits(1)) {++pic;
 }
           return pic == 2;
-        }
+        
         return false;
       }
-      else if (m_Profile != VC1_PROFILE_NOPROFILE)
+      if (m_Profile != VC1_PROFILE_NOPROFILE)
       {
         br.SkipBits(m_SimpleSkipBits); // quantizer
         uint8_t pic(br.ReadBits(1));
@@ -155,9 +155,9 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
             pic = br.ReadBits(1);
             return pic != 0;
           }
-          else {
+          
             return false;
-}
+
         }
         else {
           return pic != 0;

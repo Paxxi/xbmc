@@ -891,7 +891,7 @@ void CGUIEPGGridContainer::OnUp()
 
         return;
       }
-      else if (m_blockCursor <= 0 && m_blockOffset && m_blockOffset - BLOCK_SCROLL_OFFSET >= 0)
+      if (m_blockCursor <= 0 && m_blockOffset && m_blockOffset - BLOCK_SCROLL_OFFSET >= 0)
       {
         // this is the first item on page
         ScrollToBlockOffset(m_blockOffset - BLOCK_SCROLL_OFFSET);
@@ -942,7 +942,7 @@ void CGUIEPGGridContainer::OnDown()
 
         return;
       }
-      else if ((m_blockOffset != m_gridModel->GetBlockCount() - m_blocksPerPage) &&
+      if ((m_blockOffset != m_gridModel->GetBlockCount() - m_blocksPerPage) &&
                m_gridModel->GetBlockCount() > m_blocksPerPage &&
                m_blockOffset + BLOCK_SCROLL_OFFSET <= m_gridModel->GetBlockCount())
       {
@@ -973,7 +973,7 @@ void CGUIEPGGridContainer::OnLeft()
 
         return;
       }
-      else if (m_blockCursor <= 0 && m_blockOffset && m_blockOffset - BLOCK_SCROLL_OFFSET >= 0)
+      if (m_blockCursor <= 0 && m_blockOffset && m_blockOffset - BLOCK_SCROLL_OFFSET >= 0)
       {
         // this is the first item on page
         ScrollToBlockOffset(m_blockOffset - BLOCK_SCROLL_OFFSET);
@@ -1027,7 +1027,7 @@ void CGUIEPGGridContainer::OnRight()
 
         return;
       }
-      else if ((m_blockOffset != m_gridModel->GetBlockCount() - m_blocksPerPage) &&
+      if ((m_blockOffset != m_gridModel->GetBlockCount() - m_blocksPerPage) &&
                m_gridModel->GetBlockCount() > m_blocksPerPage &&
                m_blockOffset + BLOCK_SCROLL_OFFSET <= m_gridModel->GetBlockCount())
       {

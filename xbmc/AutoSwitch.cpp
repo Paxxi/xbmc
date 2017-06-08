@@ -66,9 +66,9 @@ int CAutoSwitch::GetView(const CFileItemList &vecItems)
     {
       if(MetadataPercentage(vecItems) > 0.25) {
         return DEFAULT_VIEW_INFO;
-      } else {
+      } 
         return DEFAULT_VIEW_LIST;
-}
+
     }
     break;
   }

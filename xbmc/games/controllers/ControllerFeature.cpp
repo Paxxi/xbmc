@@ -116,8 +116,8 @@ bool CControllerFeature::Deserialize(const TiXmlElement* pElement,
       CLog::Log(LOGERROR, "<%s> tag has no \"%s\" attribute", strType.c_str(), LAYOUT_XML_ATTR_INPUT_TYPE);
       return false;
     }
-    else
-    {
+    
+    
       m_inputType = CControllerTranslator::TranslateInputType(strInputType);
       if (m_inputType == INPUT_TYPE::UNKNOWN)
       {
@@ -125,7 +125,7 @@ bool CControllerFeature::Deserialize(const TiXmlElement* pElement,
                   strType.c_str(), LAYOUT_XML_ATTR_INPUT_TYPE, strInputType.c_str());
         return false;
       }
-    }
+    
   }
 
   return true;

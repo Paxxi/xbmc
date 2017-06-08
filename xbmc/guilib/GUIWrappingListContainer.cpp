@@ -198,7 +198,7 @@ bool CGUIWrappingListContainer::SelectItemFromPoint(const CPoint &point)
     }
     return true;
   }
-  else if (pos > end + 0.5f * sizeOfItem)
+  if (pos > end + 0.5f * sizeOfItem)
   { // scroll forward
     if (!InsideLayout(m_layout, point))
       return false;

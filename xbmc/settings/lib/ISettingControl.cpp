@@ -52,9 +52,9 @@ bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false 
       CLog::Log(LOGERROR, "ISettingControl: error reading \"delayed\" attribute of <control>");
       return false;
     }
-    else {
+    
       m_delayed = StringUtils::EqualsNoCase(strTmp, "true");
-}
+
   }
 
   return true;

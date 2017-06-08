@@ -205,8 +205,8 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
     if (std::static_pointer_cast<const CSettingBool>(setting)->GetValue())
       return StartZeroconf();
 #ifdef HAS_AIRPLAY
-    else
-    {
+    
+    
       // cannot disable 
       if (IsAirPlayServerRunning() || IsAirTunesServerRunning())
       {
@@ -215,7 +215,7 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
       }
 
       return StopZeroconf();
-    }
+    
 #endif // HAS_AIRPLAY
   }
   else
@@ -319,7 +319,7 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
   {
     if (std::static_pointer_cast<const CSettingBool>(setting)->GetValue())
       return StartUPnPRenderer();
-    else
+    
       return StopUPnPRenderer();
   }
   else if (settingId == CSettings::SETTING_SERVICES_UPNPCONTROLLER)
@@ -354,8 +354,8 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
 #endif // HAS_JSONRPC
       return result;
     }
-    else
-    {
+    
+    
       bool result = true;
 #ifdef HAS_EVENT_SERVER
       result = StopEventServer(true, true);
@@ -364,7 +364,7 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
       result &= StopJSONRPCServer(false);
 #endif // HAS_JSONRPC
       return result;
-    }
+    
   }
   else if (settingId == CSettings::SETTING_SERVICES_ESPORT)
   {

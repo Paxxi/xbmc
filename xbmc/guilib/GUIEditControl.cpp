@@ -90,7 +90,7 @@ bool CGUIEditControl::OnMessage(CGUIMessage &message)
     SetInputType(static_cast<INPUT_TYPE>(message.GetParam1()), message.GetParam2());
     return true;
   }
-  else if (message.GetMessage() == GUI_MSG_ITEM_SELECTED)
+  if (message.GetMessage() == GUI_MSG_ITEM_SELECTED)
   {
     message.SetLabel(GetLabel2());
     return true;
@@ -129,7 +129,7 @@ bool CGUIEditControl::OnAction(const CAction &action)
       }
       return true;
     }
-    else if (action.GetID() == ACTION_MOVE_LEFT ||
+    if (action.GetID() == ACTION_MOVE_LEFT ||
              action.GetID() == ACTION_CURSOR_LEFT)
     {
       if (m_cursorPos > 0)
@@ -165,7 +165,7 @@ bool CGUIEditControl::OnAction(const CAction &action)
         UpdateText(false);
         return true;
       }
-      else if (b == XBMCVK_END)
+      if (b == XBMCVK_END)
       {
         m_cursorPos = m_text2.length();
         UpdateText(false);
@@ -203,7 +203,7 @@ bool CGUIEditControl::OnAction(const CAction &action)
         }
         return true;
       }
-      else if (b == XBMCVK_RETURN || b == XBMCVK_NUMPADENTER)
+      if (b == XBMCVK_RETURN || b == XBMCVK_NUMPADENTER)
       {
         // enter - send click message, but otherwise ignore
         SEND_CLICK_MESSAGE(GetID(), GetParentID(), 1);

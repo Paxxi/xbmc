@@ -318,7 +318,7 @@ bool CAutorun::RunDisc(IDirectory* pDir, const std::string& strDrive, int& nAdde
               CLog::Log(LOGINFO,"HD DVD: External singlefile playback initiated: %s",hddvdname.c_str());
               g_application.PlayFile(item, hdVideoPlayer, false);
               return true;
-            } else
+            } 
               CLog::Log(LOGINFO,"HD DVD: No external player found. Fallback to internal one.");
           }
 

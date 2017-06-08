@@ -482,7 +482,7 @@ CUPnPRenderer::OnPlay(PLT_ActionReference& action)
 {
     if (g_windowManager.GetActiveWindow() == WINDOW_SLIDESHOW) {
         return NPT_SUCCESS;
-    } else if (g_application.m_pPlayer->IsPausedPlayback()) {
+    } if (g_application.m_pPlayer->IsPausedPlayback()) {
       CApplicationMessenger::GetInstance().SendMsg(TMSG_MEDIA_PAUSE);
     } else if (!g_application.m_pPlayer->IsPlaying()) {
         NPT_String uri, meta;
@@ -600,7 +600,7 @@ CUPnPRenderer::OnSetNextAVTransportURI(PLT_ActionReference& action)
 
         return NPT_SUCCESS;
 
-  } else if (g_windowManager.GetActiveWindow() == WINDOW_SLIDESHOW) {
+  } if (g_windowManager.GetActiveWindow() == WINDOW_SLIDESHOW) {
         return NPT_FAILURE;
   } else {
         return NPT_FAILURE;

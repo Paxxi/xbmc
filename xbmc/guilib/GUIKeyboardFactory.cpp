@@ -212,8 +212,8 @@ int CGUIKeyboardFactory::ShowAndVerifyPassword(std::string& strPassword, const s
     std::string md5pword2 = XBMC::XBMC_MD5::GetMD5(strUserInput);
     if (StringUtils::EqualsNoCase(strPassword, md5pword2)) {
       return 0;     // user entered correct password
-    } else { return 1;  // user must have entered an incorrect password
-}
+    } return 1;  // user must have entered an incorrect password
+
   }
   else
   {
@@ -223,7 +223,7 @@ int CGUIKeyboardFactory::ShowAndVerifyPassword(std::string& strPassword, const s
       StringUtils::ToLower(strPassword);
       return 0; // user entered correct password
     }
-    else return 1;
+    return 1;
   }
 }
 

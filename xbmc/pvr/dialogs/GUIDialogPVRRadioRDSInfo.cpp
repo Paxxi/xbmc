@@ -75,7 +75,7 @@ bool CGUIDialogPVRRadioRDSInfo::OnMessage(CGUIMessage& message)
       Close();
       return true;
     }
-    else if (iControl == SPIN_CONTROL_INFO)
+    if (iControl == SPIN_CONTROL_INFO)
     {
       CGUISpinControl *spin = (CGUISpinControl *)GetControl(SPIN_CONTROL_INFO);
       if (!spin) { return true;

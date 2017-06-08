@@ -194,7 +194,7 @@ bool CGUIDialogFileBrowser::OnMessage(CGUIMessage& message)
           OnClick(iItem);
           return true;
         }
-        else if ((iAction == ACTION_HIGHLIGHT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_SELECT_ITEM) &&
+        if ((iAction == ACTION_HIGHLIGHT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_SELECT_ITEM) &&
                 (m_multipleSelection && !pItem->m_bIsShareOrDrive && !pItem->m_bIsFolder))
         {
           pItem->Select(!pItem->IsSelected());
@@ -297,7 +297,7 @@ bool CGUIDialogFileBrowser::OnMessage(CGUIMessage& message)
         }
         return true;
       }
-      else if (message.GetParam1()==GUI_MSG_UPDATE_SOURCES)
+      if (message.GetParam1()==GUI_MSG_UPDATE_SOURCES)
       { // State of the sources changed, so update our view
         if (m_Directory->IsVirtualDirectoryRoot() && IsActive())
         {

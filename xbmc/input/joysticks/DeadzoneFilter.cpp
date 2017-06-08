@@ -96,7 +96,7 @@ float CDeadzoneFilter::ApplyDeadzone(float value, float deadzone)
 
   if (value > deadzone) {
     return (value - deadzone) / (1.0f - deadzone);
-  } else if (value < -deadzone) {
+  } if (value < -deadzone) {
     return (value + deadzone) / (1.0f - deadzone);
 }
 

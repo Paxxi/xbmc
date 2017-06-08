@@ -184,7 +184,7 @@ bool CActiveAESink::SupportsFormat(const std::string &device, AEAudioFormat &for
             itt4 = find(info.m_sampleRates.begin(), info.m_sampleRates.end(), samplerate);
             if (itt4 != info.m_sampleRates.end())
               return true;
-            else
+            
               return false;
           }
           else // format is not existent
@@ -1051,9 +1051,9 @@ unsigned int CActiveAESink::OutputSamples(CSampleBuffer* samples)
         m_stats->UpdateSinkDelay(status, samples->pool ? framesOrPackets : 0);
         return 0;
       }
-      else {
+      
         continue;
-}
+
     }
     else if (written > maxFrames)
     {

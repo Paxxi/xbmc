@@ -307,12 +307,12 @@ bool CEdl::ReadEdl(const std::string& strMovie, const float fFramesPerSecond)
               m_vecCuts.size(), m_vecSceneMarkers.size(), edlFilename.c_str());
     return true;
   }
-  else
-  {
+  
+  
     CLog::Log(LOGDEBUG, "%s - No cuts or scene markers found in EDL file: %s", __FUNCTION__,
               edlFilename.c_str());
     return false;
-  }
+  
 }
 
 bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond)
@@ -384,7 +384,7 @@ bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond
     Clear();
     return false;
   }
-  else if (HasCut())
+  if (HasCut())
   {
     CLog::Log(LOGDEBUG, "{0} - Read {1} commercial breaks from Comskip file: {2}", __FUNCTION__, m_vecCuts.size(),
               comskipFilename.c_str());
@@ -476,7 +476,7 @@ bool CEdl::ReadVideoReDo(const std::string& strMovie)
     Clear();
     return false;
   }
-  else if (HasCut() || HasSceneMarker())
+  if (HasCut() || HasSceneMarker())
   {
     CLog::Log(LOGDEBUG, "{0} - Read {1} cuts and {2} scene markers in VideoReDo file: {3}", __FUNCTION__,
               m_vecCuts.size(), m_vecSceneMarkers.size(), videoReDoFilename.c_str());
@@ -559,7 +559,7 @@ bool CEdl::ReadBeyondTV(const std::string& strMovie)
     Clear();
     return false;
   }
-  else if (HasCut())
+  if (HasCut())
   {
     CLog::Log(LOGDEBUG, "{0} - Read {1} commercial breaks from Beyond TV file: {2}", __FUNCTION__, m_vecCuts.size(),
               beyondTVFilename.c_str());
@@ -890,8 +890,8 @@ bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
     }
     return false;
   } 
-  else
-  {
+  
+  
     // Searching backwards
     for (int i = (int)m_vecCuts.size() - 1; i >= 0; i--)
     {
@@ -902,7 +902,7 @@ bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
           *pCut = m_vecCuts[i];
         return true;
       }
-      else if (iSeek > m_vecCuts[i].end) // after this cut
+      if (iSeek > m_vecCuts[i].end) // after this cut
       {
         if (pCut)
           *pCut = m_vecCuts[i];
@@ -910,7 +910,7 @@ bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
       }
     }
     return false;
-  }
+  
 }
 
 bool CEdl::GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker)

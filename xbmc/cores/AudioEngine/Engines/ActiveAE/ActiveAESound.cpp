@@ -119,9 +119,9 @@ CSoundPacket *CActiveAESound::GetSound(bool orig)
 {
   if (orig) {
     return m_orig_sound;
-  } else {
+  } 
     return m_dst_sound;
-}
+
 }
 
 bool CActiveAESound::Prepare()
@@ -162,7 +162,7 @@ int64_t CActiveAESound::Seek(void *h, int64_t pos, int whence)
   CFile* pFile = static_cast<CActiveAESound*>(h)->m_pFile;
   if(whence == AVSEEK_SIZE) {
     return pFile->GetLength();
-  } else {
+  } 
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
-}
+
 }

@@ -307,7 +307,7 @@ namespace XFILE
 
     if (playlist.GetType() == "mixed")
       return success || success2;
-    else if (playlist.GetType() == "musicvideos")
+    if (playlist.GetType() == "musicvideos")
       return success2;
     else
       return success;

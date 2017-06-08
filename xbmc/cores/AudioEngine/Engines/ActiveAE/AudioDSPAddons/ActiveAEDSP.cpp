@@ -854,7 +854,7 @@ bool CActiveAEDSP::HaveMenuHooks(AE_DSP_MENUHOOK_CAT cat, int iDSPAddonID)
       {
         if (iDSPAddonID > 0 && citr->second->GetID() == iDSPAddonID)
           return true;
-        else if (iDSPAddonID < 0) {
+        if (iDSPAddonID < 0) {
           return true;
 }
       }

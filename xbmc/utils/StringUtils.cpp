@@ -314,7 +314,7 @@ int compareWchar (const void* a, const void* b)
 {
   if (*(wchar_t*)a <  *(wchar_t*)b) {
     return -1;
-  } else if (*(wchar_t*)a >  *(wchar_t*)b) {
+  } if (*(wchar_t*)a >  *(wchar_t*)b) {
     return 1;
 }
   return 0;
@@ -884,7 +884,7 @@ int64_t StringUtils::AlphaNumericCompare(const wchar_t *left, const wchar_t *rig
   { // r is longer
     return -1;
   }
-  else if (*l)
+  if (*l)
   { // l is longer
     return 1;
   }

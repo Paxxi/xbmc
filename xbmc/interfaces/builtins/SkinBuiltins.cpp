@@ -328,7 +328,7 @@ static int SetString(const std::vector<std::string>& params)
     CServiceBroker::GetSettings().Save();
     return 0;
   }
-  else
+  
     string = CSkinSettings::GetInstance().TranslateString(params[0]);
 
   std::string value = CSkinSettings::GetInstance().GetString(string);

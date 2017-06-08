@@ -574,7 +574,7 @@ extern "C"
       dll_fclose(stream);
       return dll_fopen(path, mode);
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // Translate the path
       return freopen(CSpecialProtocol::TranslatePath(path).c_str(), mode, stream);
@@ -607,7 +607,7 @@ extern "C"
       }
       return ret;
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -640,7 +640,7 @@ extern "C"
       }
       return ret;
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -656,7 +656,7 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != nullptr) {
       return pFile->Stat(buf);
-    } else if (IS_STD_DESCRIPTOR(fd)) {
+    } if (IS_STD_DESCRIPTOR(fd)) {
       return _fstat64(fd, buf);
 }
     CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
@@ -674,7 +674,7 @@ extern "C"
       delete pFile;
       return 0;
     }
-    else if (!IS_STD_DESCRIPTOR(fd) && fd >= 0)
+    if (!IS_STD_DESCRIPTOR(fd) && fd >= 0)
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -692,7 +692,7 @@ extern "C"
       lPos = pFile->Seek(lPos, iWhence);
       return lPos;
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -710,7 +710,7 @@ extern "C"
     {
       return (__off_t)dll_lseeki64(fd, lPos, iWhence);
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -747,7 +747,7 @@ extern "C"
       g_emuFileWrapper.LockFileObjectByDescriptor(fd);
       return;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, let the operating system handle it
 #ifdef TARGET_POSIX
@@ -770,7 +770,7 @@ extern "C"
 }
       return -1;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, let the operating system handle it
 #ifdef TARGET_POSIX
@@ -791,7 +791,7 @@ extern "C"
       g_emuFileWrapper.UnlockFileObjectByDescriptor(fd);
       return;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, let the operating system handle it
 #ifdef TARGET_POSIX
@@ -811,7 +811,7 @@ extern "C"
     {
       return dll_close(fd) == 0 ? 0 : EOF;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, let the operating system handle it
       return fclose(stream);
@@ -1026,7 +1026,7 @@ extern "C"
       vecDirsOpen[iDirSlot].curr_index = 0;
       return (DIR *)&vecDirsOpen[iDirSlot];
     }
-    else
+    
       return nullptr;
   }
 
@@ -1157,8 +1157,8 @@ extern "C"
     if (pFile != nullptr)
     {
       if (pFile->GetPosition() < pFile->GetLength()) { return 0;
-      } else { return 1;
-}
+      } return 1;
+
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1211,7 +1211,7 @@ extern "C"
 
       return (int)buf;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1228,7 +1228,7 @@ extern "C"
       // This routine is normally implemented as a macro with the same result as fgetc().
       return dll_fgetc(stream);
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1278,10 +1278,10 @@ extern "C"
     {
       return dll_fputc(c, stream);
     }
-    else
-    {
+    
+    
       return putc(c, stream);
-    }
+    
     return EOF;
   }
 
@@ -1298,8 +1298,8 @@ extern "C"
       dllputs((char *)tmp);
       return character;
     }
-    else
-    {
+    
+    
       if (g_emuFileWrapper.StreamIsEmulatedFile(stream))
       {
         int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
@@ -1318,7 +1318,7 @@ extern "C"
         // let the operating system handle it
         return fputc(character, stream);
       }
-    }
+    
     CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
     return EOF;
   }
@@ -1330,8 +1330,8 @@ extern "C"
       dllputs(szLine);
       return 0;
     }
-    else
-    {
+    
+    
       if (g_emuFileWrapper.StreamIsEmulatedFile(stream))
       {
         size_t len = strlen(szLine);
@@ -1343,7 +1343,7 @@ extern "C"
         // let the operating system handle it
         return fputs(szLine, stream);
       }
-    }
+    
 
     CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
     return EOF;
@@ -1358,8 +1358,8 @@ extern "C"
       {
         return 0;
       }
-      else { return -1;
-}
+      return -1;
+
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1407,7 +1407,7 @@ extern "C"
       }
       return d;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1429,7 +1429,7 @@ extern "C"
     {
        return (off64_t)pFile->GetPosition();
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1450,7 +1450,7 @@ extern "C"
     {
        return (long)pFile->GetPosition();
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1471,7 +1471,7 @@ extern "C"
     {
        return (__int64)pFile->GetPosition();
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1543,7 +1543,7 @@ extern "C"
       pFile->Flush();
       return 0;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1562,7 +1562,7 @@ extern "C"
       // unimplemented
       return 0;
     }
-    else if (IS_STD_STREAM(stream)) {
+    if (IS_STD_STREAM(stream)) {
       return 0;
     } else {
       return ferror(stream);
@@ -1591,8 +1591,8 @@ extern "C"
       CLog::Log(LOGINFO, "  msg: %s", tmp);
       return strlen(tmp);
     }
-    else
-    {
+    
+    
       CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
       if (pFile != nullptr)
       {
@@ -1625,13 +1625,13 @@ extern "C"
         pFile->Write(tmp2, len);
         return len;
       }
-      else if (!IS_STD_STREAM(stream) && IS_VALID_STREAM(stream))
+      if (!IS_STD_STREAM(stream) && IS_VALID_STREAM(stream))
       {
         // it might be something else than a file, or the file is not emulated
         // let the operating system handle it
         return vfprintf(stream, format, va);
       }
-    }
+    
 
     CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
     return strlen(tmp);
@@ -1679,7 +1679,7 @@ extern "C"
 #endif
       return 0;
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1702,10 +1702,10 @@ extern "C"
       {
         return 0;
       }
-      else
-      {
+      
+      
         return EINVAL;
-      }
+      
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1734,7 +1734,7 @@ extern "C"
 #endif
       return dll_fsetpos64(stream, &tmpPos);
     }
-    else if (!IS_STD_STREAM(stream))
+    if (!IS_STD_STREAM(stream))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -1751,7 +1751,7 @@ extern "C"
     {
       return fd;
     }
-    else if (IS_STDIN_STREAM(stream))
+    if (IS_STDIN_STREAM(stream))
     {
       return 0;
     }
@@ -1928,7 +1928,7 @@ extern "C"
       buffer->st_mode = _S_IFREG;
       return 0;
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       CLog::Log(LOGWARNING, "msvcrt.dll: dll_fstati64 called, TODO: add 'int64 <-> long' type checking");      //warning
       // need to use fstat and convert everything
@@ -2167,7 +2167,7 @@ extern "C"
       pFile->Flush();
       return 0;
     }
-    else if (!IS_STD_DESCRIPTOR(fd))
+    if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
@@ -2282,7 +2282,7 @@ extern "C"
         pFile->Seek(-1, SEEK_CUR);
         return (int)data;
       }
-      else
+      
         return EOF;
     }
 #ifdef TARGET_POSIX
@@ -2315,7 +2315,7 @@ extern "C"
       unsigned char c = (unsigned char)data;
       if(pFile->Write(&c, 1) == 1)
         return data;
-      else
+      
         return EOF;
     }
 #ifdef TARGET_POSIX

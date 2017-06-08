@@ -531,7 +531,7 @@ CAEStreamInfo::DataType VideoPlayerCodec::GetPassthroughStreamType(AVCodecID cod
 
   if (supports) {
     return format.m_streamInfo.m_type;
-  } else {
+  } 
     return CAEStreamInfo::DataType::STREAM_TYPE_NULL;
-}
+
 }

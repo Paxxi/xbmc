@@ -93,9 +93,9 @@ bool CZeroconf::RemoveService(const std::string& fcr_identifier)
   m_service_map.erase(it);
   if(m_started) {
     return doRemoveService(fcr_identifier);
-  } else {
+  } 
     return true;
-}
+
 }
 
 bool CZeroconf::ForceReAnnounceService(const std::string& fcr_identifier)

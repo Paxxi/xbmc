@@ -73,7 +73,7 @@ bool CGUIDialogNetworkSetup::OnMessage(CGUIMessage& message)
         OnOK();
         return true;
       }
-      else if (iControl == CONTROL_CANCEL)
+      if (iControl == CONTROL_CANCEL)
       {
         OnCancel();
         return true;

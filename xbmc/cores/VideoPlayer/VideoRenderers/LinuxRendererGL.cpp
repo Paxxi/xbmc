@@ -797,9 +797,9 @@ void CLinuxRendererGL::UpdateVideoFilter()
 
   if (m_scalingMethodGui == CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ScalingMethod && !nonLinStretchChanged && !cmsChanged) {
     return;
-  } else {
+  } 
     m_reloadShaders = 1;
-}
+
 
   //recompile YUV shader when non-linear stretch is turned on/off
   //or when it's on and the scaling method changed
@@ -1686,7 +1686,7 @@ bool CLinuxRendererGL::CreateTexture(int index)
 {
   if (m_format == RENDER_FMT_NV12) {
     return CreateNV12Texture(index);
-  } else if (m_format == RENDER_FMT_YUYV422 ||
+  } if (m_format == RENDER_FMT_YUYV422 ||
            m_format == RENDER_FMT_UYVY422) {
     return CreateYUV422PackedTexture(index);
   } else {
@@ -1710,7 +1710,7 @@ bool CLinuxRendererGL::UploadTexture(int index)
 {
   if (m_format == RENDER_FMT_NV12) {
     return UploadNV12Texture(index);
-  } else if (m_format == RENDER_FMT_YUYV422 ||
+  } if (m_format == RENDER_FMT_YUYV422 ||
            m_format == RENDER_FMT_UYVY422) {
     return UploadYUV422PackedTexture(index);
   } else {
@@ -2594,9 +2594,9 @@ bool CLinuxRendererGL::Supports(ESCALINGMETHOD method)
       if(method != VS_SCALINGMETHOD_SPLINE36
       && method != VS_SCALINGMETHOD_LANCZOS3) {
         return true;
-      } else {
+      } 
         return 
-}g_advancedSettings.m_videoEnableHighQualityHwScalers;
+g_advancedSettings.m_videoEnableHighQualityHwScalers;
     }
   }
  

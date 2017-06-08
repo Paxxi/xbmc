@@ -239,9 +239,9 @@ unsigned int CActiveAEStream::GetSpace()
   CSingleLock lock(m_streamLock);
   if (m_format.m_dataFormat == AE_FMT_RAW) {
     return m_streamFreeBuffers;
-  } else {
+  } 
     return m_streamFreeBuffers * m_streamSpace;
-}
+
 }
 
 unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int offset, unsigned int frames, double pts)
@@ -609,7 +609,7 @@ bool CActiveAEStreamBuffers::HasInputLevel(int level)
   if ((m_inputSamples.size() + m_resampleBuffers->m_inputSamples.size()) >
       (m_resampleBuffers->m_allSamples.size() * level / 100))
     return true;
-  else
+  
     return false;
 }
 
@@ -724,7 +724,7 @@ bool CActiveAEStreamBuffers::IsDrained()
       m_inputSamples.empty() &&
       m_outputSamples.empty())
     return true;
-  else
+  
     return false;
 }
 

@@ -53,9 +53,9 @@ bool Message::Reply(int sig, void *data /* = NULL*/, int size /* = 0 */)
   {
     if (isOut) {
       return origin->SendInMessage(sig, data, size);
-    } else {
+    } 
       return origin->SendOutMessage(sig, data, size);
-}
+
   }
 
   origin->Lock();
@@ -221,9 +221,9 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, voi
 
   if (*retMsg) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 bool Protocol::ReceiveOutMessage(Message **msg)

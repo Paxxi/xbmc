@@ -179,8 +179,8 @@ int CAEStreamParser::AddData(uint8_t *data, unsigned int size, uint8_t **buffer/
     GetPacket(buffer, bufferSize);
     return copy;
   }
-  else
-  {
+  
+  
     unsigned int consumed = 0;
     unsigned int offset = 0;
     unsigned int room = sizeof(m_buffer) - m_bufferSize;
@@ -252,7 +252,7 @@ int CAEStreamParser::AddData(uint8_t *data, unsigned int size, uint8_t **buffer/
 }
 
     return consumed;
-  }
+  
 }
 
 void CAEStreamParser::GetPacket(uint8_t **buffer, unsigned int *bufferSize)
@@ -312,9 +312,9 @@ unsigned int CAEStreamParser::DetectType(uint8_t *data, unsigned int size)
       unsigned int skip = SyncDTS(data, size);
       if (m_hasSync || m_needBytes) {
         return skipped + skip;
-      } else {
+      } 
         possible = skipped;
-}
+
     }
 
     /* if it could be AC3 */
@@ -323,9 +323,9 @@ unsigned int CAEStreamParser::DetectType(uint8_t *data, unsigned int size)
       unsigned int skip = SyncAC3(data, size);
       if (m_hasSync) {
         return skipped + skip;
-      } else {
+      } 
         possible = skipped;
-}
+
     }
 
     /* if it could be TrueHD */
@@ -334,9 +334,9 @@ unsigned int CAEStreamParser::DetectType(uint8_t *data, unsigned int size)
       unsigned int skip = SyncTrueHD(data, size);
       if (m_hasSync) {
         return skipped + skip;
-      } else {
+      } 
         possible = skipped;
-}
+
     }
 
     /* move along one byte */
@@ -420,7 +420,7 @@ unsigned int CAEStreamParser::SyncAC3(uint8_t *data, unsigned int size)
         m_fsize = 0;
         return 0;
       }
-      else if (m_info.m_type == CAEStreamInfo::STREAM_TYPE_AC3 && skip == 0) {
+      if (m_info.m_type == CAEStreamInfo::STREAM_TYPE_AC3 && skip == 0) {
         return 0;
 }
 
@@ -449,8 +449,8 @@ unsigned int CAEStreamParser::SyncAC3(uint8_t *data, unsigned int size)
       CLog::Log(LOGINFO, "CAEStreamParser::SyncAC3 - AC3 stream detected (%d channels, %dHz)", m_info.m_channels, m_info.m_sampleRate);
       return skip;
     }
-    else
-    {
+    
+    
       // Enhanced AC-3
       uint8_t strmtyp = data[2] >> 6;
       if (strmtyp == 3) {
@@ -504,7 +504,7 @@ unsigned int CAEStreamParser::SyncAC3(uint8_t *data, unsigned int size)
 
       CLog::Log(LOGINFO, "CAEStreamParser::SyncAC3 - E-AC3 stream detected (%d channels, %dHz)", m_info.m_channels, m_info.m_sampleRate);
       return skip;
-    }
+    
   }
 
   // if we get here, the entire packet is invalid and we have lost sync
@@ -784,8 +784,8 @@ unsigned int CAEStreamParser::SyncTrueHD(uint8_t *data, unsigned int size)
       m_info.m_repeat = 1;
       return skip;
     }
-    else
-    {
+    
+    
       /* we cant sink to a subframe until we have the information from a master audio unit */
       if (!m_hasSync) {
         continue;
@@ -823,7 +823,7 @@ unsigned int CAEStreamParser::SyncTrueHD(uint8_t *data, unsigned int size)
         m_fsize = length;
         return skip;
       }
-    }
+    
   }
 
   /* lost sync */

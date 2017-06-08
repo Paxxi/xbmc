@@ -474,7 +474,7 @@ bool CPluginDirectory::RunScriptWithParams(const std::string& strPath)
   CLog::Log(LOGDEBUG, "%s - calling plugin %s('%s','%s','%s')", __FUNCTION__, addon->Name().c_str(), argv[0].c_str(), argv[1].c_str(), argv[2].c_str());
   if (CScriptInvocationManager::GetInstance().ExecuteAsync(addon->LibPath(), addon, argv) >= 0)
     return true;
-  else
+  
     CLog::Log(LOGERROR, "Unable to run plugin %s", addon->Name().c_str());
 
   return false;

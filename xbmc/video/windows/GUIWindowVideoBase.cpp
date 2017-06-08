@@ -155,7 +155,7 @@ bool CGUIWindowVideoBase::OnMessage(CGUIMessage& message)
           OnQueueItem(iItem);
           return true;
         }
-        else if (iAction == ACTION_SHOW_INFO)
+        if (iAction == ACTION_SHOW_INFO)
         {
           return OnItemInfo(iItem);
         }
@@ -381,7 +381,7 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItemPtr item, const ScraperPtr &info2, b
     if (!needsRefresh) {
       return pDlgInfo->HasUpdatedThumb();
     // check if the item in the video info dialog has changed and if so, get the new item
-    } else if (pDlgInfo->GetCurrentListItem() != NULL)
+    } if (pDlgInfo->GetCurrentListItem() != NULL)
     {
       item = pDlgInfo->GetCurrentListItem();
 
@@ -993,9 +993,9 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         CGUIMediaWindow::OnClick(itemNumber);
         return true;
       }
-      else {
+      
         return false;
-}
+
     }
   case CONTEXT_BUTTON_QUEUE_ITEM:
     OnQueueItem(itemNumber);
@@ -1628,7 +1628,7 @@ int CGUIWindowVideoBase::GetScraperForItem(CFileItem *item, ADDON::ScraperPtr &i
     info.reset();
     return 0;
   }
-  else if(m_vecItems->IsLiveTV())
+  if(m_vecItems->IsLiveTV())
   {
     info.reset();
     return 0;
@@ -1681,8 +1681,8 @@ bool CGUIWindowVideoBase::OnUnAssignContent(const std::string &path, int header,
     CUtil::DeleteVideoDatabaseDirectoryCache();
     return true;
   }
-  else
-  {
+  
+  
     if (!bCanceled)
     {
       ADDON::ScraperPtr info;
@@ -1690,7 +1690,7 @@ bool CGUIWindowVideoBase::OnUnAssignContent(const std::string &path, int header,
       settings.exclude = true;
       db.SetScraperForPath(path,info,settings);
     }
-  }
+  
   db.Close();
   
   return false;

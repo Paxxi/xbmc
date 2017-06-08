@@ -82,7 +82,7 @@ bool CGUIWindowPrograms::OnMessage(CGUIMessage& message)
           OnPlayMedia(iItem);
           return true;
         }
-        else if (iAction == ACTION_SHOW_INFO)
+        if (iAction == ACTION_SHOW_INFO)
         {
           OnItemInfo(iItem);
           return true;

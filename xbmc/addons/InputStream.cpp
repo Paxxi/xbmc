@@ -171,7 +171,7 @@ bool CInputStream::Supports(const CFileItem &fileitem)
   {
     if (addon.asString() != ID())
       return false;
-    else
+    
       return true;
   }
 
@@ -403,7 +403,7 @@ DemuxPacket* CInputStream::ReadDemux()
   {
     return nullptr;
   }
-  else if (pPacket->iStreamId == DMX_SPECIALID_STREAMINFO)
+  if (pPacket->iStreamId == DMX_SPECIALID_STREAMINFO)
   {
     UpdateStreams();
   }

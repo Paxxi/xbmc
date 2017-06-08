@@ -344,10 +344,10 @@ inline unsigned int AddNibble( unsigned int i_code, uint8_t* p_src, unsigned int
   {
     return ( i_code << 4 | ( p_src[(*pi_index)++ >> 1] & 0xf ) );
   }
-  else
-  {
+  
+  
     return ( i_code << 4 | p_src[(*pi_index)++ >> 1] >> 4 );
-  }
+  
 }
 
 /*****************************************************************************

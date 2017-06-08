@@ -556,7 +556,7 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
 
     return ACK;
   }
-  else if (parameterObject["item"].isMember("path"))
+  if (parameterObject["item"].isMember("path"))
   {
     bool random = (optionShuffled.isBoolean() && optionShuffled.asBoolean()) ||
                   (!optionShuffled.isBoolean() && parameterObject["item"]["random"].asBoolean());
@@ -707,7 +707,7 @@ JSONRPC_STATUS CPlayerOperations::Open(const std::string &method, ITransportLaye
 
       return ACK;
     }
-    else
+    
       return InvalidParams;
   }
 
@@ -1121,9 +1121,9 @@ PlayerType CPlayerOperations::GetPlayer(const CVariant &player)
 
   if (GetPlaylist(playerID) == iPlayer) {
     return playerID;
-  } else {
+  } 
     return None;
-}
+
 }
 
 int CPlayerOperations::GetPlaylist(PlayerType player)

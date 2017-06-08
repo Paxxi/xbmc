@@ -120,7 +120,7 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
     
 }if (path.Left(7).Compare("upnp://", true) != 0) {
         return nullptr;
-    } else if (path.Compare("upnp://", true) == 0) {
+    } if (path.Compare("upnp://", true) == 0) {
         return "UPnP Media Servers (Auto-Discover)";
     }
 

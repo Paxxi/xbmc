@@ -102,8 +102,8 @@ void CPtsTracker::Add(double pts)
 
     return;
   }
-  else
-  {
+  
+  
     if (!m_haspattern)
     {
       m_haspattern = true;
@@ -118,7 +118,7 @@ void CPtsTracker::Add(double pts)
       CLog::Log(LOGDEBUG, "CPtsTracker: detected pattern of length %i: %s, frameduration: %f",
                 (int)pattern.size(), GetPatternStr().c_str(), frameduration);
     }
-  }
+  
 
   m_frameduration = CalcFrameDuration();
 }

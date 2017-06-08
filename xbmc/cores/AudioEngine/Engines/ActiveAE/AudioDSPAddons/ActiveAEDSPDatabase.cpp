@@ -436,8 +436,8 @@ void CActiveAEDSPDatabase::SetActiveDSPSettings(const CFileItem &item, const CAu
       m_pDS->exec(strSQL);
       return ;
     }
-    else
-    { // add the items
+    
+    // add the items
       m_pDS->close();
       strSQL= "INSERT INTO settings ("
                 "id, "
@@ -456,7 +456,7 @@ void CActiveAEDSPDatabase::SetActiveDSPSettings(const CFileItem &item, const CAu
                            setting.m_MasterStreamBase,
                            setting.m_MasterModes[setting.m_MasterStreamType][setting.m_MasterStreamBase]);
       m_pDS->exec(strSQL);
-    }
+    
   }
   catch (...)
   {

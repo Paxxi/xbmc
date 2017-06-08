@@ -336,18 +336,18 @@ double CAudioSinkAE::GetClock()
 {
   if (m_pClock) {
     return (m_pClock->GetClock() + m_pClock->GetVsyncAdjust()) / DVD_TIME_BASE * 1000;
-  } else {
+  } 
     return 0.0;
-}
+
 }
 
 double CAudioSinkAE::GetClockSpeed()
 {
   if (m_pClock) {
     return m_pClock->GetClockSpeed();
-  } else {
+  } 
     return 1.0;
-}
+
 }
 
 CAEStreamInfo::DataType CAudioSinkAE::GetPassthroughStreamType(AVCodecID codecId, int samplerate)
@@ -392,7 +392,7 @@ CAEStreamInfo::DataType CAudioSinkAE::GetPassthroughStreamType(AVCodecID codecId
 
   if (supports) {
     return format.m_streamInfo.m_type;
-  } else {
+  } 
     return CAEStreamInfo::DataType::STREAM_TYPE_NULL;
-}
+
 }

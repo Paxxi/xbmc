@@ -573,7 +573,7 @@ EVENT_RESULT CGUIControlGroupList::OnMouseEvent(const CPoint &point, const CMous
         ScrollTo(nextOffset);
         return EVENT_RESULT_HANDLED;
       }
-      else if (event.m_id == ACTION_MOUSE_WHEEL_UP && nextOffset >= m_scroller.GetValue() && m_scroller.GetValue() > 0) // at least at our current offset
+      if (event.m_id == ACTION_MOUSE_WHEEL_UP && nextOffset >= m_scroller.GetValue() && m_scroller.GetValue() > 0) // at least at our current offset
       {
         ScrollTo(offset);
         return EVENT_RESULT_HANDLED;

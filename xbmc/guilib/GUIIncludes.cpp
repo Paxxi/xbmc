@@ -567,7 +567,7 @@ void CGUIIncludes::ResolveParametersForNode(TiXmlElement *node, const Params& pa
       node->Parent()->RemoveChild(node);
       return;
     }
-    else if (result != NO_PARAMS_FOUND)
+    if (result != NO_PARAMS_FOUND)
       attribute->SetValue(newValue);
     attribute = attribute->Next();
   }

@@ -90,9 +90,9 @@ std::string CAddonInfo::TranslateType(ADDON::TYPE type, bool pretty/*=false*/)
     {
       if (pretty && map.pretty) {
         return g_localizeStrings.Get(map.pretty);
-      } else {
+      } 
         return 
-}map.name;
+map.name;
     }
   }
   return "";
@@ -123,7 +123,7 @@ TYPE CAddonInfo::TranslateSubContent(const std::string& content)
 {
   if (content == "audio")
     return ADDON_AUDIO;
-  else if (content == "image")
+  if (content == "image")
     return ADDON_IMAGE;
   else if (content == "executable")
     return ADDON_EXECUTABLE;

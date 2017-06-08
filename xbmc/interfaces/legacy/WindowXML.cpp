@@ -363,7 +363,7 @@ namespace XBMCAddon
               UpdateFileList();*/
             return true;
           }
-          else if (iControl == CONTROL_BTNSORTBY) // sort by
+          if (iControl == CONTROL_BTNSORTBY) // sort by
           {
             CLog::Log(LOGINFO, "WindowXML: Internal sort button not implemented");
             /*if (m_guiState.get())
@@ -389,7 +389,7 @@ namespace XBMCAddon
                 PulseActionEvent();
                 return true;
               }
-              else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_DOUBLE_CLICK)
+              if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_DOUBLE_CLICK)
               {
                 invokeCallback(new CallbackFunction<WindowXML,int>(this,&WindowXML::onDoubleClick,iControl));
                 PulseActionEvent();

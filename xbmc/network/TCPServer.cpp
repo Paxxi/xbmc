@@ -87,9 +87,9 @@ bool CTCPServer::StartServer(int port, bool nonlocal)
     ServerInstance->Create(false, thread_stacksize);
     return true;
   }
-  else {
+  
     return false;
-}
+
 }
 
 void CTCPServer::StopServer(bool bWait)

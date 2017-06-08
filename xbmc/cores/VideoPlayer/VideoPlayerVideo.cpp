@@ -843,7 +843,7 @@ int CVideoPlayerVideo::OutputPicture(const VideoPicture* src, double pts)
       }
       return result | EOS_DROPPED;
     }
-    else if (pts < iPlayingClock)
+    if (pts < iPlayingClock)
     {
       return result | EOS_DROPPED;
     }
@@ -972,7 +972,7 @@ double CVideoPlayerVideo::GetCurrentPts()
 
   if (renderPts == DVD_NOPTS_VALUE) {
     return DVD_NOPTS_VALUE;
-  } else if (m_stalled)
+  } if (m_stalled)
     return DVD_NOPTS_VALUE;
   else if (m_speed == DVD_PLAYSPEED_NORMAL)
   {

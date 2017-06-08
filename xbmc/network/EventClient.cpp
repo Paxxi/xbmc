@@ -216,11 +216,11 @@ bool CEventClient::GetNextAction(CEventAction &action)
     m_actionQueue.pop();
     return true;
   }
-  else
-  {
+  
+  
     // we got nothing
     return false;
-  }
+  
 }
 
 bool CEventClient::ProcessPacket(CEventPacket *packet)
@@ -854,7 +854,7 @@ bool CEventClient::CheckButtonRepeat(unsigned int &next)
     next = now + m_iRepeatDelay;
     return true;
   }
-  else if ( now > next )
+  if ( now > next )
   {
     next = now + m_iRepeatSpeed;
     return true;

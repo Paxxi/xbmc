@@ -1086,13 +1086,13 @@ int CMusicDatabase::AddGenre(const std::string& strGenre1)
       m_genreCache.insert(std::pair<std::string, int>(strGenre1, idGenre));
       return idGenre;
     }
-    else
-    {
+    
+    
       int idGenre = m_pDS->fv("idGenre").get_asInt();
       m_genreCache.insert(std::pair<std::string, int>(strGenre1, idGenre));
       m_pDS->close();
       return idGenre;
-    }
+    
   }
   catch (...)
   {
@@ -1912,13 +1912,13 @@ int CMusicDatabase::AddPath(const std::string& strPath1)
       m_pathCache.insert(std::pair<std::string, int>(strPath, idPath));
       return idPath;
     }
-    else
-    {
+    
+    
       int idPath = m_pDS->fv("idPath").get_asInt();
       m_pathCache.insert(std::pair<std::string, int>(strPath, idPath));
       m_pDS->close();
       return idPath;
-    }
+    
   }
   catch (...)
   {
@@ -5145,9 +5145,9 @@ int CMusicDatabase::GetMusicNeedsTagScan()
     m_pDS->close();
     if (idVersion < iNeedsScan) {
       return idVersion;
-    } else {
+    } 
       return 0;
-}
+
   }
   catch (...)
   {
@@ -5493,7 +5493,7 @@ bool CMusicDatabase::UpdateArtistSortNames(int idArtist /*=-1*/)
  
   if (CommitMultipleExecute())
     return true;
-  else
+  
     CLog::Log(LOGERROR, "%s failed", __FUNCTION__); 
   return false;
 }
@@ -6052,7 +6052,7 @@ bool CMusicDatabase::GetItems(const std::string &strBaseDir, const std::string &
 {
   if (StringUtils::EqualsNoCase(itemType, "genres")) {
     return GetGenresNav(strBaseDir, items, filter);
-  } else if (StringUtils::EqualsNoCase(itemType, "years")) {
+  } if (StringUtils::EqualsNoCase(itemType, "years")) {
     return GetYearsNav(strBaseDir, items, filter);
   } else if (StringUtils::EqualsNoCase(itemType, "roles")) {
     return GetRolesNav(strBaseDir, items, filter);

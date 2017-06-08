@@ -80,9 +80,9 @@ bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
   duration = demux->GetStreamLength();
   if (duration > 0) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 int DegreeToOrientation(int degrees)
@@ -366,11 +366,11 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
     delete pInputStream;
     return retVal;
   }
-  else
-  {
+  
+  
     delete pInputStream;
     return false;
-  }
+  
 }
 
 bool CDVDFileInfo::DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDemux *pDemuxer, const std::vector<CStreamDetailSubtitle> &subs, CStreamDetails &details)

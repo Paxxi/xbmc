@@ -439,7 +439,7 @@ const CGUIControl* CGUIControlGroup::GetControl(int iControl) const
       const CGUIControl *control = i->second;
       if (control->IsVisible()) {
         return control;
-      } else if (!pPotential) {
+      } if (!pPotential) {
         pPotential = control;
 }
     }
@@ -594,7 +594,7 @@ bool CGUIControlGroup::InsertControl(CGUIControl *control, const CGUIControl *in
     CGUIControl *child = m_children[i];
     if (child->IsGroup() && ((CGUIControlGroup *)child)->InsertControl(control, insertPoint)) {
       return true;
-    } else if (child == insertPoint)
+    } if (child == insertPoint)
     {
       AddControl(control, i);
       return true;

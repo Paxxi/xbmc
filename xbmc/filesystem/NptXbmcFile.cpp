@@ -87,9 +87,9 @@ NPT_XbmcFileStream::Seek(NPT_Position offset)
     result = m_FileReference->Seek(offset, SEEK_SET)    ;
     if (result >= 0) {
         return NPT_SUCCESS;
-    } else {
+    } 
         return NPT_FAILURE;
-    }
+    
 }
 
 /*----------------------------------------------------------------------
@@ -102,9 +102,9 @@ NPT_XbmcFileStream::Tell(NPT_Position& offset)
     if (result >= 0) {
         offset = static_cast<NPT_Position>(result);
         return NPT_SUCCESS;
-    } else {
+    } 
         return NPT_FAILURE;
-    }
+    
 }
 
 /*----------------------------------------------------------------------
@@ -164,14 +164,14 @@ NPT_XbmcFileInputStream::Read(void*     buffer,
         if (bytes_read) { *bytes_read = (NPT_Size)nb_read;
 }
         return NPT_SUCCESS;
-    } else {
+    } 
         if (bytes_read) { *bytes_read = 0;
 }
         return NPT_ERROR_EOS;
     //} else { // currently no way to indicate failure
     //    if (bytes_read) *bytes_read = 0;
     //    return NPT_ERROR_READ_FAILED;
-    }
+    
 }
 
 /*----------------------------------------------------------------------
@@ -196,10 +196,10 @@ NPT_XbmcFileInputStream::GetAvailable(NPT_LargeSize& available)
     if (NPT_SUCCEEDED(GetSize(size)) && offset >= 0 && static_cast<NPT_LargeSize>(offset) <= size) {
         available = size - offset;
         return NPT_SUCCESS;
-    } else {
+    } 
         available = 0;
         return NPT_FAILURE;
-    }
+    
 }
 
 /*----------------------------------------------------------------------
@@ -243,11 +243,11 @@ NPT_XbmcFileOutputStream::Write(const void* buffer,
         if (bytes_written) { *bytes_written = static_cast<NPT_Size>(nb_written);
 }
         return NPT_SUCCESS;
-    } else {
+    } 
         if (bytes_written) { *bytes_written = 0;
 }
         return NPT_ERROR_WRITE_FAILED;
-    }
+    
 }
 
 /*----------------------------------------------------------------------
@@ -310,7 +310,7 @@ NPT_XbmcFile::Open(NPT_File::OpenMode mode)
     const char* name = (const char*)m_Delegator.GetPath();
     if (NPT_StringsEqual(name, NPT_FILE_STANDARD_INPUT)) {
         return NPT_ERROR_FILE_NOT_READABLE;
-    } else if (NPT_StringsEqual(name, NPT_FILE_STANDARD_OUTPUT)) {
+    } if (NPT_StringsEqual(name, NPT_FILE_STANDARD_OUTPUT)) {
         return NPT_ERROR_FILE_NOT_WRITABLE;
     } else if (NPT_StringsEqual(name, NPT_FILE_STANDARD_ERROR)) {
         return NPT_ERROR_FILE_NOT_WRITABLE;

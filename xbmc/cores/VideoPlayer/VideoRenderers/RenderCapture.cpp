@@ -48,7 +48,7 @@ bool CRenderCaptureBase::UseOcclusionQuery()
 {
   if (m_flags & CAPTUREFLAG_IMMEDIATELY) {
     return false;
-  } else if ((g_advancedSettings.m_videoCaptureUseOcclusionQuery == 0) ||
+  } if ((g_advancedSettings.m_videoCaptureUseOcclusionQuery == 0) ||
            (g_advancedSettings.m_videoCaptureUseOcclusionQuery == -1 &&
             g_Windowing.GetRenderQuirks() & RENDER_QUIRKS_BROKEN_OCCLUSION_QUERY))
     return false;
@@ -269,11 +269,11 @@ void* CRenderCaptureGL::GetRenderBuffer()
   {
     return nullptr; //offset into the pbo
   }
-  else
+  
 #endif
-  {
+  
     return m_pixels;
-  }
+  
 }
 
 void CRenderCaptureGL::ReadOut()

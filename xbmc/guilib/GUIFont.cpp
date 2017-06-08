@@ -168,9 +168,9 @@ bool CGUIFont::UpdateScrollInfo(const vecText &text, CScrollInfo &scrollInfo)
 
   if (scrollInfo.pixelPos != old.pixelPos) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, color_t shadowColor,
@@ -234,7 +234,7 @@ void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, colo
 wchar_t CGUIFont::RemapGlyph(wchar_t letter)
 {
   if (letter == 0x2019 || letter == 0x2018) { return 0x0027;  // single quotes
-  } else if (letter == 0x201c || letter == 0x201d) { return 0x0022;
+  } if (letter == 0x201c || letter == 0x201d) { return 0x0022;
 }
   return 0; // no decent character map
 }

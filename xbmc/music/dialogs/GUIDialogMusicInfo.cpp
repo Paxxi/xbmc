@@ -154,7 +154,7 @@ bool CGUIDialogMusicInfo::OnAction(const CAction &action)
     SetUserrating(userrating + 1);
     return true;
   }
-  else if (action.GetID() == ACTION_DECREASE_RATING)
+  if (action.GetID() == ACTION_DECREASE_RATING)
   {
     SetUserrating(userrating - 1);
     return true;

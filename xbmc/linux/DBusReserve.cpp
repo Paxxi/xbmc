@@ -83,7 +83,7 @@ bool CDBusReserve::AcquireDevice(const std::string& device)
     CLog::Log(LOGERROR, "CDBusReserve::AcquireDevice(%s): Request name failed", device.c_str());
     return false;
   }
-  else if(res == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+  if(res == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
   {
     CLog::Log(LOGDEBUG, "CDBusReserve::AcquireDevice(%s): Request name succeeded", device.c_str());
     m_devs.push_back(device);

@@ -136,7 +136,7 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
         UpdateFileList();*/
         return true;
       }
-      else if (iControl == CONTROL_BTNSORTBY) // sort by
+      if (iControl == CONTROL_BTNSORTBY) // sort by
       {
         CLog::Log(LOGINFO, "WindowXML: Internal sort button not implemented");
         /*if (m_guiState.get())

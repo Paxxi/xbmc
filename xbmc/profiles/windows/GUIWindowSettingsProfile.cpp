@@ -136,7 +136,7 @@ bool CGUIWindowSettingsProfile::OnMessage(CGUIMessage& message)
             }
             return true;
           }
-          else if (iItem < (int)CProfilesManager::GetInstance().GetNumberOfProfiles())
+          if (iItem < (int)CProfilesManager::GetInstance().GetNumberOfProfiles())
           {
             if (CGUIDialogProfileSettings::ShowForProfile(iItem))
             {

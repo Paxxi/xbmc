@@ -105,7 +105,7 @@ bool CRendererVDPAU::Supports(ERENDERFEATURE feature)
     return (m_renderMethod & RENDER_GLSL)
         || (m_renderMethod & RENDER_ARB);
   }
-  else if (feature == RENDERFEATURE_NOISE ||
+  if (feature == RENDERFEATURE_NOISE ||
            feature == RENDERFEATURE_SHARPNESS)
   {
     if (m_format == RENDER_FMT_VDPAU) {
@@ -161,9 +161,9 @@ bool CRendererVDPAU::Supports(ESCALINGMETHOD method)
     if(method != VS_SCALINGMETHOD_SPLINE36
         && method != VS_SCALINGMETHOD_LANCZOS3) {
       return true;
-    } else {
+    } 
       return 
-}g_advancedSettings.m_videoEnableHighQualityHwScalers;
+g_advancedSettings.m_videoEnableHighQualityHwScalers;
   }
 
   return false;
@@ -238,7 +238,7 @@ bool CRendererVDPAU::CreateTexture(int index)
 {
   if (!m_isYuv) {
     return CreateVDPAUTexture(index);
-  } else if (m_isYuv) {
+  } if (m_isYuv) {
     return CreateVDPAUTexture420(index);
   } else {
     return false;
@@ -258,7 +258,7 @@ bool CRendererVDPAU::UploadTexture(int index)
 {
   if (!m_isYuv) {
     return UploadVDPAUTexture(index);
-  } else if (m_isYuv) {
+  } if (m_isYuv) {
     return UploadVDPAUTexture420(index);
   } else {
     return false;

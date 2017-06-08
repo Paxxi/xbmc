@@ -262,11 +262,11 @@ int CPosixFile::IoControl(EIoControl request, void* param)
 }
     return ioctl(m_fd, (reinterpret_cast<SNativeIoControl*>(param))->request, (reinterpret_cast<SNativeIoControl*>(param))->param);
   }
-  else if (request == IOCTRL_SEEK_POSSIBLE)
+  if (request == IOCTRL_SEEK_POSSIBLE)
   {
     if (GetPosition() < 0) {
       return -1; // current position is unknown, can't test seeking
-    } else if (m_filePos > 0)
+    } if (m_filePos > 0)
     {
       const int64_t orgPos = m_filePos;
       // try to seek one byte back
@@ -293,9 +293,9 @@ int CPosixFile::IoControl(EIoControl request, void* param)
 
       if (GetLength() <= 0) {
         return -1; // size of file is zero or can be zero, can't test seeking
-      } else {
+      } 
         return 0; // size of file is 1 byte or more and seeking not possible
-}
+
     }
   }
   
@@ -342,9 +342,9 @@ bool CPosixFile::Rename(const CURL& url, const CURL& urlnew)
     {
       if (XFILE::CFile::Delete(name)) {
         return true;
-      } else {
+      } 
         XFILE::CFile::Delete(newName);
-}
+
     }
   }
 

@@ -174,7 +174,7 @@ bool CDatabaseManager::UpdateVersion(CDatabase &db, const std::string &dbName)
     CLog::Log(LOGERROR, "Can't update database %s from version %i - it's too old", dbName.c_str(), version);
     return false;
   }
-  else if (version < db.GetSchemaVersion())
+  if (version < db.GetSchemaVersion())
   {
     CLog::Log(LOGNOTICE, "Attempting to update the database %s from version %i to %i", dbName.c_str(), version, db.GetSchemaVersion());
     bool success = true;

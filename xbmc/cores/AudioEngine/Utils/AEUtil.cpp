@@ -149,9 +149,9 @@ const unsigned int CAEUtil::DataFormatToUsedBits(const enum AEDataFormat dataFor
   if (dataFormat == AE_FMT_S24BE4 || dataFormat == AE_FMT_S24LE4 ||
       dataFormat == AE_FMT_S24NE4 || dataFormat == AE_FMT_S24NE4MSB) {
     return 24;
-  } else {
+  } 
     return DataFormatToBits(dataFormat);
-}
+
 }
 
 const unsigned int CAEUtil::DataFormatToDitherBits(const enum AEDataFormat dataFormat)
@@ -161,9 +161,9 @@ const unsigned int CAEUtil::DataFormatToDitherBits(const enum AEDataFormat dataF
 }
   if (dataFormat == AE_FMT_S24NE3) {
     return -8;
-  } else {
+  } 
     return 0;
-}
+
 }
 
 const char* CAEUtil::StreamTypeToStr(const enum CAEStreamInfo::DataType dataType)
@@ -349,7 +349,7 @@ inline float CAEUtil::SoftClamp(const float x)
     */
     if (x < -3.0f) {
       return -1.0f;
-    } else if (x >  3.0f) {
+    } if (x >  3.0f) {
       return 1.0f;
 }
     float y = x * x;
@@ -605,9 +605,9 @@ AVSampleFormat CAEUtil::GetAVSampleFormat(AEDataFormat format)
     {
       if (AE_IS_PLANAR(format)) {
         return AV_SAMPLE_FMT_FLTP;
-      } else {
+      } 
         return AV_SAMPLE_FMT_FLT;
-}
+
     }
   }
 }

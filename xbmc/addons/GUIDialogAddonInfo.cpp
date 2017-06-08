@@ -94,11 +94,11 @@ bool CGUIDialogAddonInfo::OnMessage(CGUIMessage& message)
           OnInstall();
           return true;
         }
-        else
-        {
+        
+        
           OnUninstall();
           return true;
-        }
+        
       }
       else if (iControl == CONTROL_BTN_SELECT)
       {

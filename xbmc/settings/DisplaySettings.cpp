@@ -594,7 +594,7 @@ RESOLUTION CDisplaySettings::GetResolutionFromString(const std::string &strResol
 {
   if (strResolution == "DESKTOP")
     return RES_DESKTOP;
-  else if (strResolution == "WINDOW")
+  if (strResolution == "WINDOW")
     return RES_WINDOW;
   else if (strResolution.size() >= 21)
   {

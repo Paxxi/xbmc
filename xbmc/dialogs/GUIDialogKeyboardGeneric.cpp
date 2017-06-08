@@ -666,8 +666,8 @@ bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback, const
     typedString = pKeyboard->GetText();
     return true;
   }
-  else { return false;
-}
+  return false;
+
 }
 
 float CGUIDialogKeyboardGeneric::GetStringWidth(const std::wstring & utf16)

@@ -177,7 +177,7 @@ public:
     {
       if ((ss.flags & CDemuxStream::FLAG_FORCED) && g_LangCodeExpander.CompareISO639Codes(ss.language, audiolang))
         return false;
-      else
+      
         return true;
     }
 
@@ -375,9 +375,9 @@ int CSelectionStreams::IndexOf(StreamType type, int source, int64_t demuxerId, i
   }
   if(id < 0) {
     return count;
-  } else {
+  } 
     return -1;
-}
+
 }
 
 int CSelectionStreams::IndexOf(StreamType type, const CVideoPlayer& p) const
@@ -1716,9 +1716,9 @@ bool CVideoPlayer::CheckIsCurrent(CCurrentStream& current, CDemuxStream* stream,
   && current.source == stream->source
   && current.type   == stream->type) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CVideoPlayer::ProcessPacket(CDemuxStream* pStream, DemuxPacket* pPacket)
@@ -3239,7 +3239,7 @@ void CVideoPlayer::Seek(bool bPlus, bool bLargeStep, bool bChapterOverride)
       SeekChapter(GetChapter() - 1);
       return;
     }
-    else if (GetChapter() < GetChapterCount())
+    if (GetChapter() < GetChapterCount())
     {
       SeekChapter(GetChapter() + 1);
       return;
@@ -4610,11 +4610,11 @@ bool CVideoPlayer::OnAction(const CAction &action)
           {
             if (pMenus->OnMouseClick(pt))
               return true;
-            else
-            {
+            
+            
               CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_TRIGGER_OSD)));
               return false;
-            }
+            
           }
           return pMenus->OnMouseMove(pt);
         }
@@ -4727,8 +4727,8 @@ bool CVideoPlayer::OnAction(const CAction &action)
             m_messenger.Put(new CDVDMsgPlayerSeek(mode));
             return true;
           }
-          else
-          {
+          
+          
             // Go back to beginning
             CDVDMsgPlayerSeek::CMode mode;
             mode.time = 0;
@@ -4740,7 +4740,7 @@ bool CVideoPlayer::OnAction(const CAction &action)
 
             m_messenger.Put(new CDVDMsgPlayerSeek(mode));
             return true;
-          }
+          
         }
         if (!CServiceBroker::GetPVRManager().GetCurrentChannel())
         {
@@ -4826,9 +4826,9 @@ bool CVideoPlayer::IsInMenuInternal() const
   {
     if (m_dvd.state == DVDSTATE_STILL) {
       return true;
-    } else {
+    } 
       return pStream->IsInMenu();
-}
+
   }
   return false;
 }
@@ -5312,9 +5312,9 @@ bool CVideoPlayer::GetStreamDetails(CStreamDetails &details)
     }
     return result;
   }
-  else {
+  
     return false;
-}
+
 }
 
 std::string CVideoPlayer::GetPlayingTitle()

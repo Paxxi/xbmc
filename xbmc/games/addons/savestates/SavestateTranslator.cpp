@@ -26,7 +26,7 @@ using namespace GAME;
 SAVETYPE CSavestateTranslator::TranslateType(const std::string& type)
 {
   if      (type == SAVESTATE_TYPE_AUTO)   return SAVETYPE::AUTO;
-  else if (type == SAVESTATE_TYPE_SLOT)   return SAVETYPE::SLOT;
+  if (type == SAVESTATE_TYPE_SLOT)   return SAVETYPE::SLOT;
   else if (type == SAVESTATE_TYPE_MANUAL) return SAVETYPE::MANUAL;
 
   return SAVETYPE::UNKNOWN;

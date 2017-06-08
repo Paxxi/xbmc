@@ -164,11 +164,11 @@ bool CGUIPassword::CheckStartUpLock()
     g_passwordManager.iMasterLockRetriesLeft = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_MASTERLOCK_MAXRETRIES);
     return true;  // OK The MasterCode Accepted! XBMC Can Run!
   }
-  else
-  {
+  
+  
     CApplicationMessenger::GetInstance().PostMsg(TMSG_SHUTDOWN); // Turn off the box
     return false;
-  }
+  
 }
 
 bool CGUIPassword::SetMasterLockMode(bool bDetails)
@@ -203,8 +203,8 @@ bool CGUIPassword::IsProfileLockUnlocked(int iProfile, bool& bCanceled, bool pro
 }
   if (iProfileToCheck == 0) {
     return IsMasterLockUnlocked(prompt,bCanceled);
-  } else
-  {
+  } 
+  
     CProfile *profile = CProfilesManager::GetInstance().GetProfile(iProfileToCheck);
     if (!profile) {
       return false;
@@ -228,7 +228,7 @@ bool CGUIPassword::IsProfileLockUnlocked(int iProfile, bool& bCanceled, bool pro
        if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE) {
         return CheckLock(profile->getLockMode(),profile->getLockCode(),20095,bCanceled);
 }
-  }
+  
 
   return true;
 }
@@ -353,13 +353,13 @@ bool CGUIPassword::CheckSettingLevelLock(const SettingLevel& level, bool enforce
           windowID <= WINDOW_SETTINGS_MYPVR))) {
     return true; //Already unlocked
   
-  } else if (lockLevel == LOCK_LEVEL::ALL) {
+  } if (lockLevel == LOCK_LEVEL::ALL) {
     return IsMasterLockUnlocked(true);
   } else if (static_cast<int>(lockLevel)-1 <= static_cast<short>(level))
   {
     if (enforce) {
       return IsMasterLockUnlocked(true);
-    } else if (!IsMasterLockUnlocked(false))
+    } if (!IsMasterLockUnlocked(false))
     {
       //Current Setting level is higher than our permission... so lower the viewing level
       SettingLevel newLevel = static_cast<SettingLevel>(static_cast<short>(lockLevel-2));
@@ -435,9 +435,9 @@ bool CGUIPassword::CheckMenuLock(int iWindowID)
   }
   if (bCheckPW) {
     return IsMasterLockUnlocked(true); //Now let's check the PW if we need!
-  } else {
+  } 
     return true;
-}
+
 }
 
 bool CGUIPassword::LockSource(const std::string& strType, const std::string& strName, bool bState)

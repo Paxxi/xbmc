@@ -749,14 +749,14 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     Deinitialize();
     return false;
   }
-  else
-  {
+  
+  
     unsigned int packetSize = a->minreq;
     m_BufferSize = a->tlength;
     m_periodSize = a->minreq;
 
     format.m_frames = packetSize / frameSize;
-  }
+  
 
   {
     CSingleLock lock(m_sec);

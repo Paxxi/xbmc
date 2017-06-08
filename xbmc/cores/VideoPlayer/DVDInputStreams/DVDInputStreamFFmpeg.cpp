@@ -50,9 +50,9 @@ bool CDVDInputStreamFFmpeg::IsEOF()
 {
   if(m_aborted) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 bool CDVDInputStreamFFmpeg::Open()
@@ -123,7 +123,7 @@ uint16_t CDVDInputStreamFFmpeg::GetProxyPort() const
   if (value == "socks4" || value == "socks4a" ||
       value == "socks5" || value == "socks5-remote")
     return 1080;
-  else
+  
     return 3128;
 }
 

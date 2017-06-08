@@ -491,8 +491,8 @@ long MysqlDatabase::nextid(const char* sname) {
 }
       return id;
     }
-    else
-    {
+    
+    
       MYSQL_ROW row = mysql_fetch_row(res);
       //id = (int)row[0];
       id = -1;
@@ -504,7 +504,7 @@ long MysqlDatabase::nextid(const char* sname) {
       if ((last_err = query_with_reconnect(sqlcmd)) != 0) { return DB_UNEXPECTED_RESULT;
 }
       return id;
-    }
+    
   }
   return DB_UNEXPECTED_RESULT;
 }
@@ -1294,9 +1294,9 @@ bool MysqlDatabase::mysqlStrAccumAppend(StrAccum *p, const char *z, int N) {
       mysqlStrAccumReset(p);
       p->tooBig = 1;
       return false;
-    }else{
-      p->nAlloc = szNew;
     }
+      p->nAlloc = szNew;
+    
     zNew = reinterpret_cast<char *>(malloc(p->nAlloc));
     if( zNew ){
       memcpy(zNew, p->zText, p->nChar);

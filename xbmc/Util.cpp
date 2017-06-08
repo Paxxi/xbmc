@@ -2365,7 +2365,7 @@ bool CUtil::ValidatePort(int port)
 #ifdef TARGET_POSIX
   if (!CUtil::CanBindPrivileged() && (port < 1024 || port > 65535)) {
     return false;
-  } else
+  } 
 #endif
   if (port <= 0 || port > 65535) {
     return false;

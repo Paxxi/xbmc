@@ -5278,7 +5278,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
   { // single category
     if (cat.name == "false" || cat.name == "no")
       return SYSTEM_ALWAYS_FALSE;
-    else if (cat.name == "true" || cat.name == "yes")
+    if (cat.name == "true" || cat.name == "yes")
       return SYSTEM_ALWAYS_TRUE;
   }
   else if (info.size() == 2)
@@ -5290,7 +5290,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       {
         return AddMultiInfo(GUIInfo(STRING_IS_EMPTY, TranslateSingleString(prop.param(), listItemDependent)));
       }
-      else if (prop.num_params() == 2)
+      if (prop.num_params() == 2)
       {
         for (size_t i = 0; i < sizeof(string_bools) / sizeof(infomap); i++)
         {
@@ -5401,7 +5401,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         if (prop.name == "memory")
         {
           if (param == "free") return SYSTEM_FREE_MEMORY;
-          else if (param == "free.percent") return SYSTEM_FREE_MEMORY_PERCENT;
+          if (param == "free.percent") return SYSTEM_FREE_MEMORY_PERCENT;
           else if (param == "used") return SYSTEM_USED_MEMORY;
           else if (param == "used.percent") return SYSTEM_USED_MEMORY_PERCENT;
           else if (param == "total") return SYSTEM_TOTAL_MEMORY;
@@ -5441,18 +5441,18 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       }
       if (prop.name == "alarmlessorequal" && prop.num_params() == 2)
         return AddMultiInfo(GUIInfo(SYSTEM_ALARM_LESS_OR_EQUAL, ConditionalStringParameter(prop.param(0)), ConditionalStringParameter(prop.param(1))));
-      else if (prop.name == "date")
+      if (prop.name == "date")
       {
         if (prop.num_params() == 2) {
           return AddMultiInfo(GUIInfo(SYSTEM_DATE, StringUtils::DateStringToYYYYMMDD(prop.param(0)) % 10000, StringUtils::DateStringToYYYYMMDD(prop.param(1)) % 10000));
-        } else if (prop.num_params() == 1)
+        } if (prop.num_params() == 1)
         {
           int dateformat = StringUtils::DateStringToYYYYMMDD(prop.param(0));
           if (dateformat <= 0) { // not concrete date
             return AddMultiInfo(GUIInfo(SYSTEM_DATE, ConditionalStringParameter(prop.param(0), true), -1));
-          } else {
+          } 
             return AddMultiInfo(GUIInfo(SYSTEM_DATE, dateformat % 10000));
-}
+
         }
         return SYSTEM_DATE;
       }
@@ -5469,22 +5469,22 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
 }
           return AddMultiInfo(GUIInfo(SYSTEM_TIME, timeFormat));
         }
-        else {
+        
           return AddMultiInfo(GUIInfo(SYSTEM_TIME, StringUtils::TimeStringToSeconds(prop.param(0)), StringUtils::TimeStringToSeconds(prop.param(1))));
-}
+
       }
     }
     else if (cat.name == "library")
     {
       if (prop.name == "isscanning") return LIBRARY_IS_SCANNING;
-      else if (prop.name == "isscanningvideo") return LIBRARY_IS_SCANNING_VIDEO; //! @todo change to IsScanning(Video)
+      if (prop.name == "isscanningvideo") return LIBRARY_IS_SCANNING_VIDEO; //! @todo change to IsScanning(Video)
       else if (prop.name == "isscanningmusic") return LIBRARY_IS_SCANNING_MUSIC;
       else if (prop.name == "hascontent" && prop.num_params())
       {
         std::string cat = prop.param(0);
         StringUtils::ToLower(cat);
         if (cat == "music") return LIBRARY_HAS_MUSIC;
-        else if (cat == "video") return LIBRARY_HAS_VIDEO;
+        if (cat == "video") return LIBRARY_HAS_VIDEO;
         else if (cat == "movies") return LIBRARY_HAS_MOVIES;
         else if (cat == "tvshows") return LIBRARY_HAS_TVSHOWS;
         else if (cat == "musicvideos") return LIBRARY_HAS_MUSICVIDEOS;
@@ -5504,7 +5504,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       }
       if (prop.name == "content" && prop.num_params())
         return AddMultiInfo(GUIInfo(MUSICPLAYER_CONTENT, ConditionalStringParameter(prop.param()), 0));
-      else if (prop.name == "property")
+      if (prop.name == "property")
       {
         // properties are stored case sensitive in m_listItemProperties, but lookup is insensitive in CGUIListItem::GetProperty
         if (StringUtils::EqualsNoCase(prop.param(), "fanart_image"))
@@ -5585,7 +5585,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       {
         if (cat.name == "listitem")
           return AddMultiInfo(GUIInfo(ret, 0, offset, INFOFLAG_LISTITEM_WRAP));
-        else if (cat.name == "listitemposition")
+        if (cat.name == "listitemposition")
           return AddMultiInfo(GUIInfo(ret, 0, offset, INFOFLAG_LISTITEM_POSITION));
         else if (cat.name == "listitemabsolute")
           return AddMultiInfo(GUIInfo(ret, 0, offset, INFOFLAG_LISTITEM_ABSOLUTE));
@@ -5623,13 +5623,13 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         {
           if (prop.num_params() == 2) {
             return AddMultiInfo(GUIInfo(SKIN_STRING, CSkinSettings::GetInstance().TranslateString(prop.param(0)), ConditionalStringParameter(prop.param(1))));
-          } else {
+          } 
             return AddMultiInfo(GUIInfo(SKIN_STRING, CSkinSettings::GetInstance().TranslateString(prop.param(0))));
-}
+
         }
         if (prop.name == "hassetting")
           return AddMultiInfo(GUIInfo(SKIN_BOOL, CSkinSettings::GetInstance().TranslateBool(prop.param(0))));
-        else if (prop.name == "hastheme")
+        if (prop.name == "hastheme")
           return AddMultiInfo(GUIInfo(SKIN_HAS_THEME, ConditionalStringParameter(prop.param(0))));
       }
     }
@@ -5687,8 +5687,8 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
       {
         if (prop.num_params() <= 0) {
           return ret;
-        } else
-        {
+        } 
+        
           int playlistid = PLAYLIST_NONE;
           if (StringUtils::EqualsNoCase(prop.param(), "video")) {
             playlistid = PLAYLIST_VIDEO;
@@ -5699,7 +5699,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
           if (playlistid > PLAYLIST_NONE) {
             return AddMultiInfo(GUIInfo(ret, playlistid));
 }
-        }
+        
       }
     }
     else if (cat.name == "pvr")
@@ -5758,7 +5758,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         int value = TranslateMusicPlayerString(info[2].name); // musicplayer.position(foo).bar
         return AddMultiInfo(GUIInfo(value, 0, position));
       }
-      else if (info[1].name == "offset")
+      if (info[1].name == "offset")
       {
         int position = atoi(info[1].param().c_str());
         int value = TranslateMusicPlayerString(info[2].name); // musicplayer.offset(foo).bar
@@ -5851,7 +5851,7 @@ int CGUIInfoManager::TranslateMusicPlayerString(const std::string &info) const
 TIME_FORMAT CGUIInfoManager::TranslateTimeFormat(const std::string &format)
 {
   if (format.empty()) return TIME_FORMAT_GUESS;
-  else if (StringUtils::EqualsNoCase(format, "hh")) { return TIME_FORMAT_HH;
+  if (StringUtils::EqualsNoCase(format, "hh")) { return TIME_FORMAT_HH;
   } else if (StringUtils::EqualsNoCase(format, "mm")) { return TIME_FORMAT_MM;
   } else if (StringUtils::EqualsNoCase(format, "ss")) { return TIME_FORMAT_SS;
   } else if (StringUtils::EqualsNoCase(format, "hh:mm")) { return TIME_FORMAT_HH_MM;

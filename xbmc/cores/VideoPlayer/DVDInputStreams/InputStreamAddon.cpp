@@ -168,9 +168,9 @@ bool CInputStreamAddon::OpenDemux()
 {
   if (m_hasDemux) {
     return true;
-  } else {
+  } 
     return false;
-}
+
 }
 
 DemuxPacket* CInputStreamAddon::ReadDemux()

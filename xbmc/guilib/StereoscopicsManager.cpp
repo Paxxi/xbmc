@@ -422,7 +422,7 @@ bool CStereoscopicsManager::OnAction(const CAction &action)
     SetStereoModeByUser(GetNextSupportedStereoMode(mode));
     return true;
   }
-  else if (action.GetID() == ACTION_STEREOMODE_PREVIOUS)
+  if (action.GetID() == ACTION_STEREOMODE_PREVIOUS)
   {
     SetStereoModeByUser(GetNextSupportedStereoMode(mode, RENDER_STEREO_MODE_COUNT - 1));
     return true;

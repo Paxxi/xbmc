@@ -90,9 +90,9 @@ namespace ADDON
 }
     if (*a) {
       return *a == '~' ? -1 : 1;
-    } else {
+    } 
       return *b == '~' ? 1 : -1;
-}
+
   }
 
   bool AddonVersion::operator<(const AddonVersion& other) const

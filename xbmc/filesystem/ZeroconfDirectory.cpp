@@ -191,8 +191,8 @@ bool CZeroconfDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     }
     return true;
   } 
-  else
-  {
+  
+  
     //decode the path first
     std::string decoded(CURL::Decode(path));
     try
@@ -204,8 +204,8 @@ bool CZeroconfDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         CLog::Log(LOGINFO, "CZeroconfDirectory::GetDirectory service ( %s ) could not be resolved in time", zeroconf_service.GetName().c_str());
         return false;
       }
-      else
-      {
+      
+      
         assert(!zeroconf_service.GetIP().empty());
         CURL service;
         service.SetPort(zeroconf_service.GetPort());
@@ -226,14 +226,14 @@ bool CZeroconfDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         {
           return true;
         }
-        else//no txt record path - so let the CDirectory handler show the folders
-        {          
+        //no txt record path - so let the CDirectory handler show the folders
+                 
           return CDirectory::GetDirectory(service.Get(), items, "", DIR_FLAG_ALLOW_PROMPT); 
-        }
-      }
+        
+      
     } catch (std::runtime_error& e) {
       CLog::Log(LOGERROR, "CZeroconfDirectory::GetDirectory failed getting directory: '%s'. Error: '%s'", decoded.c_str(), e.what());
       return false;
     }
-  }
+  
 }

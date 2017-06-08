@@ -88,7 +88,7 @@ bool CZeroconfBrowserAvahi::doAddServiceType ( const std::string& fcr_service_ty
   tBrowserMap::iterator it = m_browsers.find ( fcr_service_type );
   if ( it != m_browsers.end() )
     return false;
-  else
+  
     it = m_browsers.insert ( std::make_pair ( fcr_service_type, ( AvahiServiceBrowser* ) 0 ) ).first;
 
   //if the client is running, we directly create a browser for the service here
@@ -100,11 +100,11 @@ bool CZeroconfBrowserAvahi::doAddServiceType ( const std::string& fcr_service_ty
       m_browsers.erase ( it );
       return false;
     }
-    else
-    {
+    
+    
       it->second = browser;
       return true;
-    }
+    
   }
   else
   {
@@ -119,8 +119,8 @@ bool CZeroconfBrowserAvahi::doRemoveServiceType ( const std::string& fcr_service
   tBrowserMap::iterator it = m_browsers.find ( fcr_service_type );
   if ( it == m_browsers.end() )
     return false;
-  else
-  {
+  
+  
     if ( it->second )
     {
       avahi_service_browser_free ( it->second );
@@ -135,7 +135,7 @@ bool CZeroconfBrowserAvahi::doRemoveServiceType ( const std::string& fcr_service
       else
         ++itr;
     }
-  }
+  
   return true;
 }
 

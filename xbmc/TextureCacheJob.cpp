@@ -87,7 +87,7 @@ bool CTextureCacheJob::CacheTexture(CBaseTexture **out_texture)
   m_details.hash = GetImageHash(image);
   if (m_details.hash.empty())
     return false;
-  else if (m_details.hash == m_oldHash)
+  if (m_details.hash == m_oldHash)
     return true;
 
 #if defined(HAS_OMXPLAYER)

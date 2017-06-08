@@ -545,9 +545,9 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message, int window)
   CGUIWindow* pWindow = GetWindow(window);
   if(pWindow) {
     return pWindow->OnMessage(message);
-  } else {
+  } 
     return false;
-}
+
 }
 
 void CGUIWindowManager::AddUniqueInstance(CGUIWindow *window)
@@ -1639,7 +1639,7 @@ bool CGUIWindowManager::HasVisibleControls()
     CGUIWindow *window(GetWindow(GetActiveWindow()));
     return !window || window->HasVisibleControls();
   }
-  else
+  
     return true;
 }
 

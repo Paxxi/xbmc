@@ -174,7 +174,7 @@ int CGUIDialogYesNo::GetDefaultLabelID(int controlId) const
 {
   if (controlId == CONTROL_NO_BUTTON) {
     return 106;
-  } else if (controlId == CONTROL_YES_BUTTON) {
+  } if (controlId == CONTROL_YES_BUTTON) {
     return 107;
 }
   return CGUIDialogBoxBase::GetDefaultLabelID(controlId);

@@ -877,7 +877,7 @@ JSONRPC_STATUS CAudioLibrary::GetAdditionalDetails(const CVariant &parameterObje
   CMusicDatabase musicdb;
   if (CMediaTypes::IsMediaType(items.GetContent(), MediaTypeArtist))
     return GetAdditionalArtistDetails(parameterObject, items, musicdb);
-  else if (CMediaTypes::IsMediaType(items.GetContent(), MediaTypeAlbum))
+  if (CMediaTypes::IsMediaType(items.GetContent(), MediaTypeAlbum))
     return GetAdditionalAlbumDetails(parameterObject, items, musicdb);
   else if (CMediaTypes::IsMediaType(items.GetContent(), MediaTypeSong))
     return GetAdditionalSongDetails(parameterObject, items, musicdb);

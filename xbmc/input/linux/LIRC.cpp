@@ -276,7 +276,7 @@ void CRemoteControl::Update()
       m_holdTime = 0;
       return;
     }
-    else if (repeat > g_advancedSettings.m_remoteDelay)
+    if (repeat > g_advancedSettings.m_remoteDelay)
     {
       m_holdTime = now - m_firstClickTime;
     }

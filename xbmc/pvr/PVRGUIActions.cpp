@@ -584,7 +584,7 @@ namespace PVR
     {
       if (timer->IsRecording())
         return StopRecording(item);
-      else
+      
         return DeleteTimer(item);
     }
     else

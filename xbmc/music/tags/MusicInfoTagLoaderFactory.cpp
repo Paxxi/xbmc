@@ -93,7 +93,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& i
     return (IMusicInfoTagLoader*)pTagLoader;
   }
 #ifdef HAS_DVD_DRIVE
-  else if (strExtension == "cdda")
+  if (strExtension == "cdda")
   {
     auto pTagLoader = new CMusicInfoTagLoaderCDDA();
     return (IMusicInfoTagLoader*)pTagLoader;

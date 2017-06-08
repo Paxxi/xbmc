@@ -159,7 +159,7 @@ bool CGUIDialogPVRGuideSearch::OnMessage(CGUIMessage& message)
         Close();
         return true;
       }
-      else if (iControl == CONTROL_BTN_CANCEL)
+      if (iControl == CONTROL_BTN_CANCEL)
       {
         Close();
         m_bCanceled = true;

@@ -174,7 +174,7 @@ bool CPVRChannelGroupsContainer::GetDirectory(const std::string& strPath, CFileI
 
     return true;
   }
-  else if (fileName == "channels/tv")
+  if (fileName == "channels/tv")
   {
     return GetGroupsDirectory(&results, false);
   }

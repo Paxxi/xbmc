@@ -353,14 +353,14 @@ bool CGUIBaseContainer::OnAction(const CAction &action)
         }
         return true;
       }
-      else
-      {
+      
+      
         //if HOLD_TIME_START is reached we need
         //a sane initial value for calculating m_scrollItemsPerPage
         m_lastHoldTime = CTimeUtils::GetFrameTime();
         m_scrollItemsPerFrame = 0.0f;
         return CGUIControl::OnAction(action);
-      }
+      
     }
   case ACTION_CONTEXT_MENU:
     if (OnContextMenu()) {
@@ -434,7 +434,7 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
         SelectItem(message.GetParam1());
         return true;
       }
-      else if (message.GetMessage() == GUI_MSG_LABEL_RESET)
+      if (message.GetMessage() == GUI_MSG_LABEL_RESET)
       {
         Reset();
         SetPageControlRange();
@@ -446,7 +446,7 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
       SelectItem(message.GetParam1());
       return true;
     }
-    else if (message.GetMessage() == GUI_MSG_SETFOCUS)
+    if (message.GetMessage() == GUI_MSG_SETFOCUS)
     {
       if (message.GetParam1()) // subfocus item is specified, so set the offset appropriately
       {
@@ -526,7 +526,7 @@ void CGUIBaseContainer::OnLeft()
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
   if (m_orientation == HORIZONTAL && MoveUp(wrapAround)) {
     return;
-  } else if (m_orientation == VERTICAL)
+  } if (m_orientation == VERTICAL)
   {
     CGUIListItemLayout *focusedLayout = GetFocusedLayout();
     if (focusedLayout && focusedLayout->MoveLeft()) {
@@ -542,7 +542,7 @@ void CGUIBaseContainer::OnRight()
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
   if (m_orientation == HORIZONTAL && MoveDown(wrapAround)) {
     return;
-  } else if (m_orientation == VERTICAL)
+  } if (m_orientation == VERTICAL)
   {
     CGUIListItemLayout *focusedLayout = GetFocusedLayout();
     if (focusedLayout && focusedLayout->MoveRight()) {

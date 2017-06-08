@@ -227,9 +227,9 @@ float CEngineStats::GetWaterLevel()
   CSingleLock lock(m_lock);
   if (m_pcmOutput) {
     return static_cast<float>(m_bufferedSamples) / m_sinkSampleRate;
-  } else {
+  } 
     return static_cast<float>(m_bufferedSamples) * m_sinkFormat.m_streamInfo.GetDuration() / 1000;
-}
+
 }
 
 void CEngineStats::SetSuspended(bool state)
@@ -2983,9 +2983,9 @@ bool CActiveAE::CompareFormat(AEAudioFormat &lhs, AEAudioFormat &rhs)
       lhs.m_dataFormat != rhs.m_dataFormat ||
       lhs.m_sampleRate != rhs.m_sampleRate) {
     return false;
-  } else {
+  } 
     return true;
-}
+
 }
 
 //-----------------------------------------------------------------------------
