@@ -134,7 +134,7 @@ bool CGUIWindowPVRRecordingsBase::Update(const std::string &strDirectory, bool u
 
   if (bReturn)
   {
-    // TODO: does it make sense to show the non-deleted recordings, although user wants
+    // TODO(per): does it make sense to show the non-deleted recordings, although user wants
     //       to see the deleted recordings? Or is this just another hack to avoid misbehavior
     //       of CGUIMediaWindow if it has no content?
 

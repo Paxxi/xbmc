@@ -1581,7 +1581,7 @@ void CVideoPlayer::Process()
         m_VideoPlayerVideo->SendMessage(new CDVDMsg(CDVDMsg::VIDEO_DRAIN));
       }
 
-      { // TODO: only used by OMXPlayer, find better solution
+      { // TODO(per): only used by OMXPlayer, find better solution
         if (m_CurrentAudio.inited)
           m_VideoPlayerAudio->SendMessage(new CDVDMsg(CDVDMsg::GENERAL_EOF));
         if (m_CurrentVideo.inited)

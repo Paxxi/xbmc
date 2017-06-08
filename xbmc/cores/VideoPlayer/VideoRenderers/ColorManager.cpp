@@ -59,7 +59,7 @@ CColorManager::~CColorManager()
 
 bool CColorManager::IsEnabled()
 {
-  //TODO: check that the configuration is valid here (files exist etc)
+  // TODO(per): check that the configuration is valid here (files exist etc)
 
   return CServiceBroker::GetSettings().GetBool("videoscreen.cmsenabled");
 }
@@ -306,7 +306,7 @@ bool CColorManager::Load3dLut(const std::string filename, uint16_t **CLUT, int *
   }
 
   int lutsamples = rSize * gSize * bSize * 3;
-  *CLUTsize = rSize; // TODO: assumes cube
+  *CLUTsize = rSize; // TODO(per): assumes cube
   *CLUT = reinterpret_cast<uint16_t*>(malloc(lutsamples * sizeof(uint16_t)));
 
   lutFile.Seek(header.lutFileOffset, SEEK_SET);

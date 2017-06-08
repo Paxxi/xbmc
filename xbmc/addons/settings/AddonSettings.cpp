@@ -62,7 +62,7 @@ SettingPtr InitializeFromOldSettingWithoutDefinition(ADDON::CAddonSettings& sett
   setting->SetLevel(SettingLevelInternal);
   setting->SetVisible(false);
   setting->SetDefault(defaultValue);
-  // TODO: setting->SetAllowEmpty(true);
+  // TODO(per): setting->SetAllowEmpty(true);
 
   return setting;
 }
@@ -724,7 +724,7 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAction(std::string settingId,
     setting = settingString;
   }
 
-  // TODO: option == "close"
+  // TODO(per): option == "close"
   setting->SetControl(control);
 
   return setting;
@@ -962,7 +962,7 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
     return nullptr;
   }
 
-  // TODO: support multiple addon types
+  // TODO(per): support multiple addon types
   if (addonTypes.size() > 1)
   {
     CLog::Log(LOGERROR, "CAddonSettings[%s]: multiple addon types are not supported (addon setting \"%s\")", m_addon.lock()->ID().c_str(), settingId.c_str());
