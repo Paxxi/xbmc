@@ -119,25 +119,28 @@ void CBaseTexture::Allocate(unsigned int width, unsigned int height, unsigned in
 
 void CBaseTexture::Update(unsigned int width, unsigned int height, unsigned int pitch, unsigned int format, const unsigned char *pixels, bool loadToGPU)
 {
-  if (pixels == nullptr)
+  if (pixels == nullptr) {
     return;
+}
 
-  if (format & XB_FMT_DXT_MASK)
+  if (format & XB_FMT_DXT_MASK) {
     return;
+}
 
   Allocate(width, height, format);
   
-  if (m_pixels == nullptr)
+  if (m_pixels == nullptr) {
     return;
+}
 
   unsigned int srcPitch = pitch ? pitch : GetPitch(width);
   unsigned int srcRows = GetRows(height);
   unsigned int dstPitch = GetPitch(m_textureWidth);
   unsigned int dstRows = GetRows(m_textureHeight);
 
-  if (srcPitch == dstPitch)
+  if (srcPitch == dstPitch) {
     memcpy(m_pixels, pixels, srcPitch * std::min(srcRows, dstRows));
-  else
+  } else
   {
     const unsigned char *src = pixels;
     unsigned char* dst = m_pixels;
@@ -150,14 +153,16 @@ void CBaseTexture::Update(unsigned int width, unsigned int height, unsigned int 
   }
   ClampToEdge();
 
-  if (loadToGPU)
+  if (loadToGPU) {
     LoadToGPU();
+}
 }
 
 void CBaseTexture::ClampToEdge()
 {
-  if (m_pixels == nullptr)
+  if (m_pixels == nullptr) {
     return;
+}
 
   unsigned int imagePitch = GetPitch(m_imageWidth);
   unsigned int imageRows = GetRows(m_imageHeight);
@@ -170,8 +175,9 @@ void CBaseTexture::ClampToEdge()
     unsigned char *dst = m_pixels;
     for (unsigned int y = 0; y < imageRows; y++)
     {
-      for (unsigned int x = imagePitch; x < texturePitch; x += blockSize)
+      for (unsigned int x = imagePitch; x < texturePitch; x += blockSize) {
         memcpy(dst + x, src, blockSize);
+}
       dst += texturePitch;
     }
   }
@@ -212,8 +218,9 @@ CBaseTexture *CBaseTexture::LoadFromFile(const std::string& texturePath, unsigne
   }
 #endif
   auto texture = new CTexture();
-  if (texture->LoadFromFileInternal(texturePath, idealWidth, idealHeight, requirePixels, strMimeType))
+  if (texture->LoadFromFileInternal(texturePath, idealWidth, idealHeight, requirePixels, strMimeType)) {
     return texture;
+}
   delete texture;
   return nullptr;
 }
@@ -247,24 +254,27 @@ bool CBaseTexture::LoadFromFileInternal(const std::string& texturePath, unsigned
   XFILE::CFile file;
   XFILE::auto_buffer buf;
 
-  if (file.LoadFile(texturePath, buf) <= 0)
+  if (file.LoadFile(texturePath, buf) <= 0) {
     return false;
+}
 
   CURL url(texturePath);
   // make sure resource:// paths are properly resolved
   if (url.IsProtocol("resource"))
   {
     std::string translatedPath;
-    if (XFILE::CResourceFile::TranslatePath(url, translatedPath))
+    if (XFILE::CResourceFile::TranslatePath(url, translatedPath)) {
       url.Parse(translatedPath);
+}
   }
 
   // handle xbt:// paths differently because it allows loading the texture directly from memory
   if (url.IsProtocol("xbt"))
   {
     XFILE::CXbtFile xbtFile;
-    if (!xbtFile.Open(url))
+    if (!xbtFile.Open(url)) {
       return false;
+}
 
     return LoadFromMemory(xbtFile.GetImageWidth(), xbtFile.GetImageHeight(), 0, xbtFile.GetImageFormat(),
                           xbtFile.HasImageAlpha(), reinterpret_cast<unsigned char*>(buf.get()));
@@ -315,8 +325,9 @@ bool CBaseTexture::LoadIImage(IImage *pImage, unsigned char* buffer, unsigned in
       Allocate(pImage->Width(), pImage->Height(), XB_FMT_A8R8G8B8);
       if (m_pixels != nullptr && pImage->Decode(m_pixels, GetTextureWidth(), GetRows(), GetPitch(), XB_FMT_A8R8G8B8))
       {
-        if (pImage->Orientation())
+        if (pImage->Orientation()) {
           m_orientation = pImage->Orientation() - 1;
+}
         m_hasAlpha = pImage->hasAlpha();
         m_originalWidth = pImage->originalWidth();
         m_originalHeight = pImage->originalHeight();
@@ -342,8 +353,9 @@ bool CBaseTexture::LoadFromMemory(unsigned int width, unsigned int height, unsig
 
 bool CBaseTexture::LoadPaletted(unsigned int width, unsigned int height, unsigned int pitch, unsigned int format, const unsigned char *pixels, const COLOR *palette)
 {
-  if (pixels == nullptr || palette == nullptr)
+  if (pixels == nullptr || palette == nullptr) {
     return false;
+}
 
   Allocate(width, height, format);
 

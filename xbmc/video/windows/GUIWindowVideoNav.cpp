@@ -196,9 +196,9 @@ bool CGUIWindowVideoNav::OnMessage(CGUIMessage& message)
       int iControl = message.GetSenderId();
       if (iControl == CONTROL_BTNPARTYMODE)
       {
-        if (g_partyModeManager.IsEnabled())
+        if (g_partyModeManager.IsEnabled()) {
           g_partyModeManager.Disable();
-        else
+        } else
         {
           if (!g_partyModeManager.Enable(PARTYMODECONTEXT_VIDEO))
           {
@@ -228,10 +228,11 @@ bool CGUIWindowVideoNav::OnMessage(CGUIMessage& message)
       }
       else if (iControl == CONTROL_BTNSHOWALL)
       {
-        if (CMediaSettings::GetInstance().GetWatchedMode(m_vecItems->GetContent()) == WatchedModeAll)
+        if (CMediaSettings::GetInstance().GetWatchedMode(m_vecItems->GetContent()) == WatchedModeAll) {
           CMediaSettings::GetInstance().SetWatchedMode(m_vecItems->GetContent(), WatchedModeUnwatched);
-        else
+        } else {
           CMediaSettings::GetInstance().SetWatchedMode(m_vecItems->GetContent(), WatchedModeAll);
+}
         CServiceBroker::GetSettings().Save();
         OnFilterItems(GetProperty("filter").asString());
         UpdateButtons();
@@ -264,8 +265,9 @@ SelectFirstUnwatchedItem CGUIWindowVideoNav::GetSettingSelectFirstUnwatchedItem(
     if (nodeType == NODE_TYPE_SEASONS || nodeType == NODE_TYPE_EPISODES)
     {
       int iValue = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOLIBRARY_TVSHOWSSELECTFIRSTUNWATCHEDITEM);
-      if (iValue >= SelectFirstUnwatchedItem::NEVER && iValue <= SelectFirstUnwatchedItem::ALWAYS)
+      if (iValue >= SelectFirstUnwatchedItem::NEVER && iValue <= SelectFirstUnwatchedItem::ALWAYS) {
         return (SelectFirstUnwatchedItem)iValue;
+}
     }
   }
 
@@ -275,8 +277,9 @@ SelectFirstUnwatchedItem CGUIWindowVideoNav::GetSettingSelectFirstUnwatchedItem(
 IncludeAllSeasonsAndSpecials CGUIWindowVideoNav::GetSettingIncludeAllSeasonsAndSpecials()
 {
   int iValue = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOLIBRARY_TVSHOWSINCLUDEALLSEASONSANDSPECIALS);
-  if (iValue >= IncludeAllSeasonsAndSpecials::NEITHER && iValue <= IncludeAllSeasonsAndSpecials::SPECIALS)
+  if (iValue >= IncludeAllSeasonsAndSpecials::NEITHER && iValue <= IncludeAllSeasonsAndSpecials::SPECIALS) {
     return (IncludeAllSeasonsAndSpecials)iValue;
+}
 
   return IncludeAllSeasonsAndSpecials::NEITHER;
 }
@@ -295,8 +298,9 @@ int CGUIWindowVideoNav::GetFirstUnwatchedItemIndex(bool includeAllSeasons, bool 
 
     CVideoInfoTag *pTag = pItem->GetVideoInfoTag();
 
-    if ((!includeAllSeasons && pTag->m_iSeason < 0) || (!includeSpecials && pTag->m_iSeason == 0))
+    if ((!includeAllSeasons && pTag->m_iSeason < 0) || (!includeSpecials && pTag->m_iSeason == 0)) {
       continue;
+}
 
     // Is the season unwatched, and is its season number lower than the currently identified
     // first unwatched season
@@ -465,8 +469,9 @@ bool CGUIWindowVideoNav::GetDirectory(const std::string &strDirectory, CFileItem
           int seasonParam = params.GetSeason();
 
           // grab all season art when flatten always
-          if (seasonParam == -2 && iFlatten == 2)
+          if (seasonParam == -2 && iFlatten == 2) {
             seasonParam = -1;
+}
 
           if (seasonParam >= -1)
             seasonID = m_database.GetSeasonId(details.m_iDbId, seasonParam);
@@ -484,8 +489,9 @@ bool CGUIWindowVideoNav::GetDirectory(const std::string &strDirectory, CFileItem
               items.SetArtFallback("thumb", "season.banner");
           }
         }
-        else
-          items.SetContent("seasons");
+        else {
+          items
+}.SetContent("seasons");
       }
       else if (node == NODE_TYPE_TITLE_MOVIES ||
                node == NODE_TYPE_RECENTLY_ADDED_MOVIES)
@@ -504,16 +510,16 @@ bool CGUIWindowVideoNav::GetDirectory(const std::string &strDirectory, CFileItem
         items.SetContent("movies");
       }
       else if (node == NODE_TYPE_TITLE_TVSHOWS ||
-               node == NODE_TYPE_INPROGRESS_TVSHOWS)
+               node == NODE_TYPE_INPROGRESS_TVSHOWS) {
         items.SetContent("tvshows");
-      else if (node == NODE_TYPE_TITLE_MUSICVIDEOS ||
-               node == NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS)
+      } else if (node == NODE_TYPE_TITLE_MUSICVIDEOS ||
+               node == NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS) {
         items.SetContent("musicvideos");
-      else if (node == NODE_TYPE_GENRE)
+      } else if (node == NODE_TYPE_GENRE) {
         items.SetContent("genres");
-      else if (node == NODE_TYPE_COUNTRY)
+      } else if (node == NODE_TYPE_COUNTRY) {
         items.SetContent("countries");
-      else if (node == NODE_TYPE_ACTOR)
+      } else if (node == NODE_TYPE_ACTOR)
       {
         if (params.GetContentType() == VIDEODB_CONTENT_MUSICVIDEOS)
           items.SetContent("artists");
@@ -803,9 +809,9 @@ void CGUIWindowVideoNav::OnItemInfo(const CFileItem& fileItem, ADDON::ScraperPtr
   if (!scraper || scraper->Content() == CONTENT_NONE)
   {
     m_database.Open(); // since we can be called from the music library without being inited
-    if (fileItem.IsVideoDb())
+    if (fileItem.IsVideoDb()) {
       scraper = m_database.GetScraperForPath(fileItem.GetVideoInfoTag()->m_strPath);
-    else
+    } else
     {
       std::string strPath,strFile;
       URIUtils::Split(fileItem.GetPath(),strPath,strFile);
@@ -1154,8 +1160,9 @@ bool CGUIWindowVideoNav::OnClick(int iItem, const std::string &player)
       return true;
 
     CVideoDatabase videodb;
-    if (!videodb.Open())
+    if (!videodb.Open()) {
       return true;
+}
 
     // get the media type and convert from plural to singular (by removing the trailing "s")
     std::string mediaType = item->GetPath().substr(9);
@@ -1277,8 +1284,9 @@ bool CGUIWindowVideoNav::ApplyWatchedFilter(CFileItemList &items)
   ||  node == NODE_TYPE_TITLE_MUSICVIDEOS
   ||  node == NODE_TYPE_RECENTLY_ADDED_EPISODES
   ||  node == NODE_TYPE_RECENTLY_ADDED_MOVIES
-  ||  node == NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS)
+  ||  node == NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS) {
     filterWatched = true;
+}
   if (!items.IsVideoDb())
     filterWatched = true;
   if (items.GetContent() == "tvshows" &&

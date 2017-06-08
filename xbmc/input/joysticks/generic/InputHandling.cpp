@@ -70,10 +70,11 @@ bool CInputHandling::OnAxisMotion(unsigned int axisIndex, float position, int ce
 
     // Calculate the direction the trigger travels from the center point
     SEMIAXIS_DIRECTION dir;
-    if (center > 0)
+    if (center > 0) {
       dir = SEMIAXIS_DIRECTION::NEGATIVE;
-    else
+    } else {
       dir = SEMIAXIS_DIRECTION::POSITIVE;
+}
 
     CDriverPrimitive offsetSemiaxis(axisIndex, center, dir, range);
 

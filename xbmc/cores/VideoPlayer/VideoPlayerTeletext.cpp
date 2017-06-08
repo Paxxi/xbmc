@@ -41,28 +41,34 @@ void CDVDTeletextTools::NextDec(int *i) /* skip to next decimal */
 {
   (*i)++;
 
-  if ((*i & 0x0F) > 0x09)
+  if ((*i & 0x0F) > 0x09) {
     *i += 0x06;
+}
 
-  if ((*i & 0xF0) > 0x90)
+  if ((*i & 0xF0) > 0x90) {
     *i += 0x60;
+}
 
-  if (*i > 0x899)
+  if (*i > 0x899) {
     *i = 0x100;
+}
 }
 
 void CDVDTeletextTools::PrevDec(int *i)           /* counting down */
 {
   (*i)--;
 
-  if ((*i & 0x0F) > 0x09)
+  if ((*i & 0x0F) > 0x09) {
     *i -= 0x06;
+}
 
-  if ((*i & 0xF0) > 0x90)
+  if ((*i & 0xF0) > 0x90) {
     *i -= 0x60;
+}
 
-  if (*i < 0x100)
+  if (*i < 0x100) {
     *i = 0x899;
+}
 }
 
 /* print hex-number into string, s points to last digit, caller has to provide enough space, no termination */
@@ -112,8 +118,9 @@ CDVDTeletextData::~CDVDTeletextData()
 
 bool CDVDTeletextData::CheckStream(CDVDStreamInfo &hints)
 {
-  if (hints.codec == AV_CODEC_ID_DVB_TELETEXT)
+  if (hints.codec == AV_CODEC_ID_DVB_TELETEXT) {
     return true;
+}
 
   return false;
 }
@@ -160,18 +167,21 @@ void CDVDTeletextData::ResetTeletextCache()
       if (m_TXTCache.astCachetable[i][j])
       {
         TextPageinfo_t *p = &(m_TXTCache.astCachetable[i][j]->pageinfo);
-        if (p->p24)
+        if (p->p24) {
           free(p->p24);
+}
 
         if (p->ext)
         {
-          if (p->ext->p27)
+          if (p->ext->p27) {
             free(p->ext->p27);
+}
 
           for (auto & d26 : p->ext->p26)
           {
-            if (d26)
+            if (d26) {
               free(d26);
+}
           }
           free(p->ext);
         }
@@ -286,8 +296,9 @@ void CDVDTeletextData::Process()
             b1 = dehamming[vtxt_row[0]];
             b2 = dehamming[vtxt_row[1]];
 
-            if (b1 == 0xFF || b2 == 0xFF)
+            if (b1 == 0xFF || b2 == 0xFF) {
               continue;
+}
 
             b1 &= 8;
 
@@ -346,8 +357,9 @@ void CDVDTeletextData::Process()
               AllocateCache(magazine);
               LoadPage(m_TXTCache.CurrentPage[magazine], m_TXTCache.CurrentSubPage[magazine], pagedata[magazine]);
               pageinfo_thread = &(m_TXTCache.astCachetable[m_TXTCache.CurrentPage[magazine]][m_TXTCache.CurrentSubPage[magazine]]->pageinfo);
-              if (!pageinfo_thread)
+              if (!pageinfo_thread) {
                 continue;
+}
 
               if ((m_TXTCache.PageReceiving & 0xff) == 0xfe) /* ?fe: magazine organization table (MOT) */
                 pageinfo_thread->function = FUNC_MOT;
@@ -393,16 +405,18 @@ void CDVDTeletextData::Process()
 
               /* check parity, copy line 0 to cache (start and end 8 bytes are not needed and used otherwise) */
               unsigned char *p = m_TXTCache.astCachetable[m_TXTCache.CurrentPage[magazine]][m_TXTCache.CurrentSubPage[magazine]]->p0;
-              for (int i = 10; i < 42-8; i++)
+              for (int i = 10; i < 42-8; i++) {
                 *p++ = deparity[vtxt_row[i]];
+}
 
               if (!IsDec(m_TXTCache.PageReceiving))
                 continue; /* valid hex page number: just copy headline, ignore TimeString */
 
               /* copy TimeString */
               p = m_TXTCache.TimeString;
-              for (int i = 42-8; i < 42; i++)
+              for (int i = 42-8; i < 42; i++) {
                 *p++ = deparity[vtxt_row[i]];
+}
             }
             else if (packet_number == 29 && dehamming[vtxt_row[2]]== 0) /* packet 29/0 replaces 28/0 for a whole magazine */
             {
@@ -412,8 +426,9 @@ void CDVDTeletextData::Process()
               /* packet>0, 0 has been correctly received, buffer allocated */
             {
               pageinfo_thread = &(m_TXTCache.astCachetable[m_TXTCache.CurrentPage[magazine]][m_TXTCache.CurrentSubPage[magazine]]->pageinfo);
-              if (!pageinfo_thread)
+              if (!pageinfo_thread) {
                 continue;
+}
 
               /* pointer to current info struct */
               if (packet_number <= 25)
@@ -425,10 +440,12 @@ void CDVDTeletextData::Process()
                 }
                 else
                 {
-                  if (!(pageinfo_thread->p24))
+                  if (!(pageinfo_thread->p24)) {
                     pageinfo_thread->p24 = (unsigned char*) calloc(2, 40);
-                  if (pageinfo_thread->p24)
+}
+                  if (pageinfo_thread->p24) {
                     p = pageinfo_thread->p24 + (packet_number - 24) * 40;
+}
                 }
                 if (p)
                 {
@@ -453,8 +470,9 @@ void CDVDTeletextData::Process()
               else if (packet_number == 27)
               {
                 int descode = dehamming[vtxt_row[2]]; /* designation code (0..15) */
-                if (descode == 0xff)
+                if (descode == 0xff) {
                   continue;
+}
 
                 if (descode == 0) // reading FLOF-Pagelinks
                 {
@@ -471,8 +489,9 @@ void CDVDTeletextData::Process()
                       if (b2 != 0xff && b3 != 0xff)
                       {
                         b4 = ((b1 ^ (dehamming[vtxt_row[8+i*6]]>>1)) & 6) | ((b1 ^ (dehamming[vtxt_row[6+i*6]]>>3)) & 1);
-                        if (b4 == 0)
+                        if (b4 == 0) {
                           b4 = 8;
+}
                         if (b2 <= 9 && b3 <= 9)
                           m_TXTCache.FlofPages[m_TXTCache.CurrentPage[magazine] ][i] = b4<<8 | b2<<4 | b3;
                       }
@@ -487,17 +506,21 @@ void CDVDTeletextData::Process()
                       {
                         for (;
                             l >= 2 && 0 == m_TXTCache.FlofPages[m_TXTCache.CurrentPage[magazine]][l];
-                            l--)
+                            l--) {
                           ; /* find used linkindex */
+}
                         for (;
                             e >= 1 && !isalnum(p[e]);
-                            e--)
+                            e--) {
                           ; /* find end */
+}
                         for (a = a1 = e - 1;
                             a >= 0 && p[a] >= ' ';
-                            a--) /* find start */
-                          if (p[a] > ' ')
+                            a--) { /* find start */
+                          if (p[a] > ' ') {
                           a1 = a; /* first non-space */
+}
+}
                         if (a >= 0 && l >= 2)
                         {
                           strncpy(m_TXTCache.ADIPTable[m_TXTCache.FlofPages[m_TXTCache.CurrentPage[magazine]][l]], (const char*) &p[a1], 12);
@@ -515,21 +538,26 @@ void CDVDTeletextData::Process()
                   int i;
                   Textp27_t *p;
 
-                  if (!pageinfo_thread->ext)
+                  if (!pageinfo_thread->ext) {
                     pageinfo_thread->ext = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
-                  if (!pageinfo_thread->ext)
+}
+                  if (!pageinfo_thread->ext) {
                     continue;
-                  if (!(pageinfo_thread->ext->p27))
+}
+                  if (!(pageinfo_thread->ext->p27)) {
                     pageinfo_thread->ext->p27 = (Textp27_t*) calloc(4, sizeof(Textp27_t));
-                  if (!(pageinfo_thread->ext->p27))
+}
+                  if (!(pageinfo_thread->ext->p27)) {
                     continue;
+}
                   p = pageinfo_thread->ext->p27;
                   for (i = 0; i < 4; i++)
                   {
                     int d1 = CDVDTeletextTools::deh24(&vtxt_row[6*i + 3]);
                     int d2 = CDVDTeletextTools::deh24(&vtxt_row[6*i + 6]);
-                    if (d1 < 0 || d2 < 0)
+                    if (d1 < 0 || d2 < 0) {
                       continue;
+}
 
                     p->local = i & 0x01;
                     p->drcs = !!(i & 0x02);
@@ -540,12 +568,13 @@ void CDVDTeletextData::Process()
                        ((d1 & 0x0003c000) >> (14-4)) |
                        ((d1 & 0x00003800) >> (11-8))) ^
                       (dehamming[vtxt_row[0]] << 8);
-                    if (p->page < 0x100)
+                    if (p->page < 0x100) {
                       p->page += 0x800;
+}
                     p->subpage = d2 >> 2;
-                    if ((p->page & 0xff) == 0xff)
+                    if ((p->page & 0xff) == 0xff) {
                       p->page = 0;
-                    else if (p->page > 0x899)
+                    } else if (p->page > 0x899)
                     {
                       // workaround for crash on RTL Shop ...
                       // sorry.. i dont understand whats going wrong here :)
@@ -554,10 +583,11 @@ void CDVDTeletextData::Process()
                     else if (m_TXTCache.astCachetable[p->page][0])  /* link valid && linked page cached */
                     {
                       TextPageinfo_t *pageinfo_link = &(m_TXTCache.astCachetable[p->page][0]->pageinfo);
-                      if (p->local)
+                      if (p->local) {
                         pageinfo_link->function = p->drcs ? FUNC_DRCS : FUNC_POP;
-                      else
+                      } else {
                         pageinfo_link->function = p->drcs ? FUNC_GDRCS : FUNC_GPOP;
+}
                     }
                     p++; /*  */
                   }
@@ -566,24 +596,30 @@ void CDVDTeletextData::Process()
               else if (packet_number == 26)
               {
                 int descode = dehamming[vtxt_row[2]]; /* designation code (0..15) */
-                if (descode == 0xff)
+                if (descode == 0xff) {
                   continue;
+}
 
-                if (!pageinfo_thread->ext)
+                if (!pageinfo_thread->ext) {
                   pageinfo_thread->ext = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
-                if (!pageinfo_thread->ext)
+}
+                if (!pageinfo_thread->ext) {
                   continue;
-                if (!(pageinfo_thread->ext->p26[descode]))
+}
+                if (!(pageinfo_thread->ext->p26[descode])) {
                   pageinfo_thread->ext->p26[descode] = (unsigned char*) malloc(13 * 3);
-                if (pageinfo_thread->ext->p26[descode])
+}
+                if (pageinfo_thread->ext->p26[descode]) {
                   memcpy(pageinfo_thread->ext->p26[descode], &vtxt_row[3], 13 * 3);
+}
               }
               else if (packet_number == 28)
               {
                 int descode = dehamming[vtxt_row[2]]; /* designation code (0..15) */
 
-                if (descode == 0xff)
+                if (descode == 0xff) {
                   continue;
+}
 
                 if (descode != 2)
                 {
@@ -670,13 +706,16 @@ void CDVDTeletextData::Decode_p2829(unsigned char *vtxt_row, TextExtData_t **ptE
   int t1 = CDVDTeletextTools::deh24(&vtxt_row[7-4]);
   int t2 = CDVDTeletextTools::deh24(&vtxt_row[10-4]);
 
-  if (t1 < 0 || t2 < 0)
+  if (t1 < 0 || t2 < 0) {
     return;
+}
 
-  if (!(*ptExtData))
+  if (!(*ptExtData)) {
     (*ptExtData) = (TextExtData_t*) calloc(1, sizeof(TextExtData_t));
-  if (!(*ptExtData))
+}
+  if (!(*ptExtData)) {
     return;
+}
 
   (*ptExtData)->p28Received = 1;
   (*ptExtData)->DefaultCharset = (t1>>7) & 0x7f;
@@ -694,8 +733,9 @@ void CDVDTeletextData::Decode_p2829(unsigned char *vtxt_row, TextExtData_t **ptE
     if (bitsleft < 12)
     {
       t2 |= CDVDTeletextTools::deh24(p) << bitsleft;
-      if (t2 < 0)  /* hamming error */
+      if (t2 < 0) {  /* hamming error */
         break;
+}
       p += 3;
       bitsleft += 18;
     }

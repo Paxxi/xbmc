@@ -57,12 +57,13 @@ static int Unicodedecode( uint8_t *data, int len, char *target )
 {
   int p = 1, i = 0;
 
-  if( ( data[ 0 ] == 8 ) || ( data[ 0 ] == 16 ) ) do {
+  if( ( data[ 0 ] == 8 ) || ( data[ 0 ] == 16 ) ) { do {
     if( data[ 0 ] == 16 ) p++;  /* Ignore MSB of unicode16 */
     if( p < len ) {
       target[ i++ ] = data[ p++ ];
     }
   } while( p < len );
+}
 
   target[ i ] = '\0';
   return 0;
@@ -110,8 +111,9 @@ static int UDFAD( uint8_t *ptr, uint32_t len, struct FileAD *fad)
 {
   struct AD *ad;
 
-  if (fad->num_AD  >= UDF_MAX_AD_CHAINS)
+  if (fad->num_AD  >= UDF_MAX_AD_CHAINS) {
     return len;
+}
 
   ad =  &fad->AD_chain[fad->num_AD];
   ad->Partition = fad->Partition;
@@ -256,8 +258,9 @@ static int UDFFileEntry( uint8_t *data, struct FileAD *fad )
   L_EA = GETN4( 168 );
   L_AD = GETN4( 172 );
 
-  if (176 + L_EA + L_AD > DVD_VIDEO_LB_LEN)
+  if (176 + L_EA + L_AD > DVD_VIDEO_LB_LEN) {
     return 0;
+}
 
   p = 176 + L_EA;
   fad->num_AD = 0;
@@ -273,14 +276,16 @@ uint32_t UDFFilePos(struct FileAD *File, uint64_t pos, uint64_t *res)
 
   for (i = 0; i < File->num_AD; i++) {
 
-    if (pos < File->AD_chain[i].Length)
+    if (pos < File->AD_chain[i].Length) {
       break;
+}
 
     pos -= File->AD_chain[i].Length;
   }
 
-  if (i == File->num_AD)
+  if (i == File->num_AD) {
     return 0;
+}
 
   *res = (uint64_t)(File->Partition_Start + File->AD_chain[i].Location) * DVD_VIDEO_LB_LEN + pos;
   return File->AD_chain[i].Length - (uint32_t)pos;
@@ -291,10 +296,11 @@ uint32_t UDFFileBlockPos(struct FileAD *File, uint32_t lb)
   uint64_t res;
   uint32_t rem;
   rem = UDFFilePos(File, lb * DVD_VIDEO_LB_LEN, &res);
-  if(rem > 0)
+  if(rem > 0) {
     return (uint32_t)(res / DVD_VIDEO_LB_LEN);
-  else
+  } else {
     return 0;
+}
 }
 
 static int UDFFileIdentifier( uint8_t *data, uint8_t *FileCharacteristics,
@@ -307,9 +313,10 @@ static int UDFFileIdentifier( uint8_t *data, uint8_t *FileCharacteristics,
   L_FI = GETN1(19);
   UDFLongAD(&data[20], FileICB);
   L_IU = GETN2(36);
-  if (L_FI) Unicodedecode(&data[38 + L_IU], L_FI, FileName);
-  else FileName[0] = '\0';
-  return 4 * ((38 + L_FI + L_IU + 3) / 4);
+  if (L_FI) { Unicodedecode(&data[38 + L_IU], L_FI, FileName);
+  } else { FileName[0] = '\0';
+  
+}return 4 * ((38 + L_FI + L_IU + 3) / 4);
 }
 
 static int UDFDescriptor( uint8_t *data, uint16_t *TagID )
@@ -333,8 +340,9 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
   struct Partition partition;
 
   if(!(GetUDFCache(PartitionCache, 0, &partition))) {
-    if(!UDFFindPartition(0, &partition))
+    if(!UDFFindPartition(0, &partition)) {
       return 0;
+}
   }
 
   /* Scan dir for ICB of file */
@@ -356,10 +364,11 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
       p -= DVD_VIDEO_LB_LEN;
 
       //Dir.Length -= DVD_VIDEO_LB_LEN;
-      if (dirp->dir_length >= DVD_VIDEO_LB_LEN)
+      if (dirp->dir_length >= DVD_VIDEO_LB_LEN) {
         dirp->dir_length -= DVD_VIDEO_LB_LEN;
-      else
+      } else {
         dirp->dir_length = 0;
+}
 
       if( DVDReadLBUDF( lbnum, 2, directory, 0 ) <= 0 ) {
         return 0;
@@ -375,9 +384,9 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
       dirp->current_p = p;
       dirp->dir_current = lbnum;
 
-      if (!*filename)  // No filename, simulate "." dirname
+      if (!*filename) {  // No filename, simulate "." dirname
         strcpy((char *)dirp->entry.d_name, ".");
-      else {
+      } else {
         // Bah, MSVC don't have strlcpy()
         strncpy((char *)dirp->entry.d_name, filename,
                 sizeof(dirp->entry.d_name)-1);
@@ -386,12 +395,14 @@ int udf25::UDFScanDirX( udf_dir_t *dirp )
 
 
       // Look up the Filedata
-      if( !UDFMapICB( FileICB, &partition, &File))
+      if( !UDFMapICB( FileICB, &partition, &File)) {
         return 0;
-      if (File.Type == 4)
+}
+      if (File.Type == 4) {
         dirp->entry.d_type = DVD_DT_DIR;
-      else
+      } else {
         dirp->entry.d_type = DVD_DT_REG; // Add more types?
+}
 
       dirp->entry.d_filesize = File.Length;
 
@@ -412,16 +423,18 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
   struct udf_cache *c;
   void *tmp;
 
-  if(DVDUDFCacheLevel(-1) <= 0)
+  if(DVDUDFCacheLevel(-1) <= 0) {
     return 0;
+}
 
   c = (struct udf_cache *)GetUDFCacheHandle();
 
   if(c == nullptr) {
     c = (struct udf_cache *)calloc(1, sizeof(struct udf_cache));
     /* fprintf(stderr, "calloc: %d\n", sizeof(struct udf_cache)); */
-    if(c == nullptr)
+    if(c == nullptr) {
       return 0;
+}
     SetUDFCacheHandle(c);
   }
 
@@ -530,13 +543,15 @@ int udf25::GetUDFCache(UDFCacheType type, uint32_t nr, void *data)
   int n;
   struct udf_cache *c;
 
-  if(DVDUDFCacheLevel(-1) <= 0)
+  if(DVDUDFCacheLevel(-1) <= 0) {
     return 0;
+}
 
   c = (struct udf_cache *)GetUDFCacheHandle();
 
-  if(c == nullptr)
+  if(c == nullptr) {
     return 0;
+}
 
   switch(type) {
   case AVDPCache:
@@ -629,8 +644,9 @@ int udf25::UDFGetAVDP( struct avdp_t *avdp)
   int terminate;
   struct avdp_t;
 
-  if(GetUDFCache(AVDPCache, 0, avdp))
+  if(GetUDFCache(AVDPCache, 0, avdp)) {
     return 1;
+}
 
   /* Find Anchor */
   lastsector = 0;
@@ -655,16 +671,18 @@ int udf25::UDFGetAVDP( struct avdp_t *avdp)
         terminate = 1;
       } else {
         //! @todo Find last sector of the disc (this is optional).
-        if( lastsector )
+        if( lastsector ) {
           /* Try #2, backup anchor */
           lbnum = lastsector - 256;
-        else
+        } else {
           /* Unable to find last sector */
           return 0;
+}
       }
-    } else
+    } else {
       /* It's an anchor! We can leave */
       break;
+}
   }
   /* Main volume descriptor */
   UDFExtentAD( &Anchor[ 16 ], &MVDS_length, &MVDS_location );
@@ -690,8 +708,9 @@ int udf25::UDFFindPartition( int partnum, struct Partition *part )
   int i, volvalid;
   struct avdp_t avdp;
 
-  if(!UDFGetAVDP(&avdp))
+  if(!UDFGetAVDP(&avdp)) {
     return 0;
+}
 
   /* Main volume descriptor */
   MVDS_location = avdp.mvds.location;
@@ -721,8 +740,9 @@ int udf25::UDFFindPartition( int partnum, struct Partition *part )
         /* Logical Volume Descriptor */
         if( UDFLogVolume( LogBlock, part->VolumeDesc ) ) {
           //! @todo sector size wrong!
-        } else
+        } else {
           volvalid = 1;
+}
       }
 
     } while( ( lbnum <= MVDS_location + ( MVDS_length - 1 )
@@ -870,8 +890,9 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
 
     if(!GetUDFCache(LBUDFCache, lbnum, &cached_dir)) {
       dir_lba = (Dir.AD_chain[0].Length + DVD_VIDEO_LB_LEN) / DVD_VIDEO_LB_LEN;
-      if((cached_dir_base = (uint8_t *)malloc(dir_lba * DVD_VIDEO_LB_LEN + 2048)) == nullptr)
+      if((cached_dir_base = (uint8_t *)malloc(dir_lba * DVD_VIDEO_LB_LEN + 2048)) == nullptr) {
         return 0;
+}
       cached_dir = (uint8_t *)(((uintptr_t)cached_dir_base & ~((uintptr_t)2047)) + 2048);
       if( DVDReadLBUDF( lbnum, dir_lba, cached_dir, 0) <= 0 ) {
         free(cached_dir_base);
@@ -889,11 +910,13 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
         data[1] = cached_dir;
         SetUDFCache(LBUDFCache, lbnum, data);
       }
-    } else
+    } else {
       in_cache = 1;
+}
 
-    if(cached_dir == nullptr)
+    if(cached_dir == nullptr) {
       return 0;
+}
 
     p = 0;
 
@@ -919,13 +942,15 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
           }
         }
       } else {
-        if(cache_file_info && (!in_cache) && found)
+        if(cache_file_info && (!in_cache) && found) {
           return 1;
+}
         return 0;
       }
     }
-    if(cache_file_info && (!in_cache) && found)
+    if(cache_file_info && (!in_cache) && found) {
       return 1;
+}
     return 0;
   }
 
@@ -950,8 +975,9 @@ int udf25::UDFScanDir(const struct FileAD& Dir, char *FileName, struct Partition
       if( !strcasecmp( FileName, filename ) ) {
         return 1;
       }
-    } else
+    } else {
       return 0;
+}
   }
 
   return 0;
@@ -970,8 +996,9 @@ udf25::~udf25( )
 
   struct udf_cache * cache = (struct udf_cache *) m_udfcache;
 
-  if (!cache)
+  if (!cache) {
     return;
+}
 
   if (cache->lbs)
   {
@@ -1020,14 +1047,16 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
         UDFDescriptor( LogBlock, &TagID );
 
       /* File Set Descriptor */
-      if( TagID == 256 )  /* File Set Descriptor */
+      if( TagID == 256 ) {  /* File Set Descriptor */
         UDFLongAD( &LogBlock[ 400 ], &RootICB );
+}
     } while( ( lbnum < partition.Start + partition.Length )
              && ( TagID != 8 ) && ( TagID != 256 ) );
 
     /* Sanity checks. */
-    if( TagID != 256 )
+    if( TagID != 256 ) {
       return nullptr;
+}
     /* This following test will fail under UDF2.50 images, as it is no longer
      * valid */
     /*if( RootICB.Partition != 0 )
@@ -1036,10 +1065,12 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
   }
 
   /* Find root dir */
-  if( !UDFMapICB( RootICB, &partition, &File ) )
+  if( !UDFMapICB( RootICB, &partition, &File ) ) {
     return nullptr;
-  if( File.Type != 4 )
+}
+  if( File.Type != 4 ) {
     return nullptr;  /* Root dir should be dir */
+}
   {
     int cache_file_info = 0;
     /* Tokenize filepath */
@@ -1047,23 +1078,28 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
 
     while( token != nullptr ) {
       if( !UDFScanDir( File, token, &partition, &ICB,
-                       cache_file_info))
+                       cache_file_info)) {
         return nullptr;
-      if( !UDFMapICB( ICB, &partition, &File ) )
+}
+      if( !UDFMapICB( ICB, &partition, &File ) ) {
         return nullptr;
-      if(!strcmp(token, "index.bdmv"))
+}
+      if(!strcmp(token, "index.bdmv")) {
         cache_file_info = 1;
+}
       token = strtok( nullptr, "/" );
     }
   }
 
   /* Sanity check. */
-  if( File.AD_chain[0].Partition != 0 )
+  if( File.AD_chain[0].Partition != 0 ) {
     return nullptr;
+}
   *filesize = File.Length;
   /* Hack to not return partition.Start for empty files. */
-  if( !File.AD_chain[0].Location )
+  if( !File.AD_chain[0].Location ) {
     return nullptr;
+}
 
   /* Allocate a new UDF_FILE and return it. */
   result = (struct FileAD *) malloc(sizeof(*result));
@@ -1093,12 +1129,14 @@ HANDLE udf25::OpenFile( const char* filename )
   UDF_FILE file = nullptr;
   BD_FILE bdfile = nullptr;
 
-  if(!m_fp)
+  if(!m_fp) {
     return INVALID_HANDLE_VALUE;
+}
 
   file = UDFFindFile(filename, &filesize);
-  if(!file)
+  if(!file) {
     return INVALID_HANDLE_VALUE;
+}
 
   bdfile = (BD_FILE)calloc(1, sizeof(*bdfile));
 
@@ -1117,21 +1155,24 @@ long udf25::ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize)
   int      ret;
 
   /* Check arguments. */
-  if( bdfile == nullptr || pBuffer == nullptr )
+  if( bdfile == nullptr || pBuffer == nullptr ) {
     return -1;
+}
 
   len_origin = lSize;
   while(lSize > 0)
   {
     len = UDFFilePos(bdfile->file, bdfile->seek_pos, &pos);
-    if(len == 0)
+    if(len == 0) {
       break;
+}
 
     // correct for partition indirection if applicable
     pos -= bdfile->file->Partition_Start_Correction * DVD_VIDEO_LB_LEN;
 
-    if((uint32_t)lSize < len)
+    if((uint32_t)lSize < len) {
       len = lSize;
+}
 
     ret = ReadAt(pos, len, pBuffer);
     if(ret < 0)
@@ -1140,8 +1181,9 @@ long udf25::ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize)
       return ret;
     }
 
-    if(ret == 0)
+    if(ret == 0) {
       break;
+}
 
     bdfile->seek_pos += ret;
     pBuffer          += ret;
@@ -1153,8 +1195,9 @@ long udf25::ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize)
 
 void udf25::CloseFile(HANDLE hFile)
 {
-  if(hFile == INVALID_HANDLE_VALUE)
+  if(hFile == INVALID_HANDLE_VALUE) {
     return;
+}
 
   BD_FILE bdfile = (BD_FILE)hFile;
   if(bdfile)
@@ -1168,8 +1211,9 @@ int64_t udf25::Seek(HANDLE hFile, int64_t lOffset, int whence)
 {
   BD_FILE bdfile = (BD_FILE)hFile;
 
-  if(bdfile == nullptr)
+  if(bdfile == nullptr) {
     return -1;
+}
 
   int64_t seek_pos = bdfile->seek_pos;
   switch (whence)
@@ -1202,8 +1246,9 @@ int64_t udf25::GetFileSize(HANDLE hFile)
 {
   BD_FILE bdfile = (BD_FILE)hFile;
 
-  if(bdfile == nullptr)
+  if(bdfile == nullptr) {
     return -1;
+}
 
   return bdfile->filesize;
 }
@@ -1212,8 +1257,9 @@ int64_t udf25::GetFilePosition(HANDLE hFile)
 {
   BD_FILE bdfile = (BD_FILE)hFile;
 
-  if(bdfile == nullptr)
+  if(bdfile == nullptr) {
     return -1;
+}
 
   return bdfile->seek_pos;
 }
@@ -1225,8 +1271,9 @@ udf_dir_t *udf25::OpenDir( const char *subdir )
 
   bd_file = (BD_FILE)OpenFile(subdir);
 
-  if (bd_file == (BD_FILE)INVALID_HANDLE_VALUE)
+  if (bd_file == (BD_FILE)INVALID_HANDLE_VALUE) {
     return nullptr;
+}
 
   result = (udf_dir_t *)calloc(1, sizeof(udf_dir_t));
   if (!result) {

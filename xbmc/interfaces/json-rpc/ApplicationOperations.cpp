@@ -84,8 +84,9 @@ JSONRPC_STATUS CApplicationOperations::SetVolume(const std::string &method, ITra
     else
       return InvalidParams;
 
-    if (ret != ACK && ret != OK)
+    if (ret != ACK && ret != OK) {
       return ret;
+}
   }
   else
     return InvalidParams;

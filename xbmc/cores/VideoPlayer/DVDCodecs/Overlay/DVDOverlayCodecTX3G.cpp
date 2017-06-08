@@ -77,27 +77,31 @@ CDVDOverlayCodecTX3G::CDVDOverlayCodecTX3G() : CDVDOverlayCodec("TX3G Subtitle D
 
 CDVDOverlayCodecTX3G::~CDVDOverlayCodecTX3G()
 {
-  if (m_pOverlay)
+  if (m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 bool CDVDOverlayCodecTX3G::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
 {
-  if (hints.codec == AV_CODEC_ID_MOV_TEXT)
+  if (hints.codec == AV_CODEC_ID_MOV_TEXT) {
     return true;
+}
   return false;
 }
 
 void CDVDOverlayCodecTX3G::Dispose()
 {
-  if (m_pOverlay)
+  if (m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
 {
-  if (m_pOverlay)
+  if (m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 
   m_pOverlay = new CDVDOverlayText();
   CDVDOverlayCodec::GetAbsoluteTimes(m_pOverlay->iPTSStartTime, m_pOverlay->iPTSStopTime, pPacket, m_pOverlay->replace);
@@ -133,8 +137,9 @@ int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
     // Read TextSampleModifierBox
     LEN_CHECK(4);
     uint32_t size = READ_U32();
-    if (size == 0)
+    if (size == 0) {
       size = pos - end;   // extends to end of packet
+}
     if (size == 1)
     {
       CLog::Log(LOGDEBUG, "CDVDOverlayCodecTX3G: TextSampleModifierBox has unsupported large size" );
@@ -175,10 +180,12 @@ int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
         // we alloc enough space above and this
         // fixes borken encoders that do not handle
         // endChar correctly.
-        if (curRecord.bgnChar > textLength)
+        if (curRecord.bgnChar > textLength) {
           curRecord.bgnChar = textLength;
-        if (curRecord.endChar > textLength)
+}
+        if (curRecord.endChar > textLength) {
           curRecord.endChar = textLength;
+}
 
         bgnStyle.get()[curRecord.bgnChar] |= curRecord.faceStyleFlags;
         endStyle.get()[curRecord.endChar] |= curRecord.faceStyleFlags;
@@ -271,14 +278,16 @@ int CDVDOverlayCodecTX3G::Decode(DemuxPacket *pPacket)
 
 void CDVDOverlayCodecTX3G::Reset()
 {
-  if (m_pOverlay)
+  if (m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 void CDVDOverlayCodecTX3G::Flush()
 {
-  if (m_pOverlay)
+  if (m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 CDVDOverlay* CDVDOverlayCodecTX3G::GetOverlay()

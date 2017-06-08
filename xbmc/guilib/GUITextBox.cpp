@@ -61,8 +61,9 @@ CGUITextBox::CGUITextBox(const CGUITextBox &from)
   m_minHeight = from.m_minHeight;
   m_renderHeight = from.m_renderHeight;
   m_autoScrollRepeatAnim = nullptr;
-  if (from.m_autoScrollRepeatAnim)
+  if (from.m_autoScrollRepeatAnim) {
     m_autoScrollRepeatAnim = new CAnimation(*from.m_autoScrollRepeatAnim);
+}
   m_label = from.m_label;
   m_info = from.m_info;
   // defaults
@@ -135,8 +136,9 @@ void CGUITextBox::Process(unsigned int currentTime, CDirtyRegionList &dirtyregio
   {
     if (!m_autoScrollCondition || m_autoScrollCondition->Get())
     {
-      if (m_lastRenderTime)
+      if (m_lastRenderTime) {
         m_autoScrollDelayTime += currentTime - m_lastRenderTime;
+}
       if (m_autoScrollDelayTime > (unsigned int)m_autoScrollDelay && m_scrollSpeed == 0)
       { // delay is finished - start scrolling
         MarkDirtyRegion();
@@ -146,9 +148,9 @@ void CGUITextBox::Process(unsigned int currentTime, CDirtyRegionList &dirtyregio
         { // at the end, run a delay and restart
           if (m_autoScrollRepeatAnim)
           {
-            if (m_autoScrollRepeatAnim->GetState() == ANIM_STATE_NONE)
+            if (m_autoScrollRepeatAnim->GetState() == ANIM_STATE_NONE) {
               m_autoScrollRepeatAnim->QueueAnimation(ANIM_PROCESS_NORMAL);
-            else if (m_autoScrollRepeatAnim->GetState() == ANIM_STATE_APPLIED)
+            } else if (m_autoScrollRepeatAnim->GetState() == ANIM_STATE_APPLIED)
             { // reset to the start of the list and start the scrolling again
               m_offset = 0;
               m_scrollOffset = 0;
@@ -177,8 +179,9 @@ void CGUITextBox::Process(unsigned int currentTime, CDirtyRegionList &dirtyregio
   if (m_scrollSpeed != 0)
     MarkDirtyRegion();
 
-  if (m_lastRenderTime)
+  if (m_lastRenderTime) {
     m_scrollOffset += m_scrollSpeed * (currentTime - m_lastRenderTime);
+}
   if ((m_scrollSpeed < 0 && m_scrollOffset < m_offset * m_itemHeight) ||
       (m_scrollSpeed > 0 && m_scrollOffset > m_offset * m_itemHeight))
   {
@@ -221,18 +224,21 @@ void CGUITextBox::Render()
       {
         float textHeight = m_font->GetTextHeight(std::min((unsigned int)m_lines.size(), m_itemsPerPage));
 
-        if (textHeight <= m_renderHeight)
+        if (textHeight <= m_renderHeight) {
           posY += (m_renderHeight - textHeight) * 0.5f;
+}
       }
 
       alignment &= ~XBFONT_CENTER_Y;
     }
 
     // alignment correction
-    if (alignment & XBFONT_CENTER_X)
+    if (alignment & XBFONT_CENTER_X) {
       posX += m_width * 0.5f;
-    if (alignment & XBFONT_RIGHT)
+}
+    if (alignment & XBFONT_RIGHT) {
       posX += m_width;
+}
 
     if (m_font)
     {
@@ -364,8 +370,9 @@ void CGUITextBox::SetAutoScrolling(const TiXmlNode *node)
     if (scroll->FirstChild())
       m_autoScrollCondition = g_infoManager.Register(scroll->FirstChild()->ValueStr(), GetParentID());
     int repeatTime;
-    if (scroll->Attribute("repeat", &repeatTime))
+    if (scroll->Attribute("repeat", &repeatTime)) {
       m_autoScrollRepeatAnim = new CAnimation(CAnimation::CreateFader(100, 0, repeatTime, 1000));
+}
   }
 }
 
@@ -381,8 +388,9 @@ void CGUITextBox::SetAutoScrolling(int delay, int time, int repeatTime, const st
 void CGUITextBox::ResetAutoScrolling()
 {
   m_autoScrollDelayTime = 0;
-  if (m_autoScrollRepeatAnim)
+  if (m_autoScrollRepeatAnim) {
     m_autoScrollRepeatAnim->ResetAnimation();
+}
 }
 
 unsigned int CGUITextBox::GetRows() const
@@ -397,8 +405,9 @@ int CGUITextBox::GetNumPages() const
 
 int CGUITextBox::GetCurrentPage() const
 {
-  if (m_offset + m_itemsPerPage >= GetRows())  // last page
+  if (m_offset + m_itemsPerPage >= GetRows()) {  // last page
     return GetNumPages();
+}
   return m_offset / m_itemsPerPage + 1;
 }
 

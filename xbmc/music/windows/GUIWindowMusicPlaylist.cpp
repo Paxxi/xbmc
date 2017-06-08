@@ -184,12 +184,13 @@ bool CGUIWindowMusicPlayList::OnMessage(CGUIMessage& message)
       {
         // increment repeat state
         PLAYLIST::REPEAT_STATE state = g_playlistPlayer.GetRepeat(PLAYLIST_MUSIC);
-        if (state == PLAYLIST::REPEAT_NONE)
+        if (state == PLAYLIST::REPEAT_NONE) {
           g_playlistPlayer.SetRepeat(PLAYLIST_MUSIC, PLAYLIST::REPEAT_ALL);
-        else if (state == PLAYLIST::REPEAT_ALL)
+        } else if (state == PLAYLIST::REPEAT_ALL) {
           g_playlistPlayer.SetRepeat(PLAYLIST_MUSIC, PLAYLIST::REPEAT_ONE);
-        else
+        } else {
           g_playlistPlayer.SetRepeat(PLAYLIST_MUSIC, PLAYLIST::REPEAT_NONE);
+}
 
         // save settings
         CMediaSettings::GetInstance().SetMusicPlaylistRepeat(g_playlistPlayer.GetRepeat(PLAYLIST_MUSIC) == PLAYLIST::REPEAT_ALL);
@@ -249,10 +250,11 @@ bool CGUIWindowMusicPlayList::MoveCurrentPlayListItem(int iItem, int iAction, bo
 {
   int iSelected = iItem;
   int iNew = iSelected;
-  if (iAction == ACTION_MOVE_ITEM_UP)
+  if (iAction == ACTION_MOVE_ITEM_UP) {
     iNew--;
-  else
+  } else {
     iNew++;
+}
 
   // is the currently playing item affected?
   bool bFixCurrentSong = false;
@@ -267,10 +269,11 @@ bool CGUIWindowMusicPlayList::MoveCurrentPlayListItem(int iItem, int iAction, bo
     if (bFixCurrentSong)
     {
       int iCurrentSong = g_playlistPlayer.GetCurrentSong();
-      if (iSelected == iCurrentSong)
+      if (iSelected == iCurrentSong) {
         iCurrentSong = iNew;
-      else if (iNew == iCurrentSong)
+      } else if (iNew == iCurrentSong) {
         iCurrentSong = iSelected;
+}
       g_playlistPlayer.SetCurrentSong(iCurrentSong);
     }
 
@@ -404,8 +407,9 @@ void CGUIWindowMusicPlayList::UpdateButtons()
 
   // update buttons
   CONTROL_DESELECT(CONTROL_BTNSHUFFLE);
-  if (g_playlistPlayer.IsShuffled(PLAYLIST_MUSIC))
+  if (g_playlistPlayer.IsShuffled(PLAYLIST_MUSIC)) {
     CONTROL_SELECT(CONTROL_BTNSHUFFLE);
+}
 
   // update repeat button
   int iRepeat = 595 + g_playlistPlayer.GetRepeat(PLAYLIST_MUSIC);
@@ -420,9 +424,9 @@ void CGUIWindowMusicPlayList::UpdateButtons()
 
 bool CGUIWindowMusicPlayList::OnPlayMedia(int iItem, const std::string &player)
 {
-  if (g_partyModeManager.IsEnabled())
+  if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Play(iItem);
-  else
+  } else
   {
     int iPlaylist=m_guiState->GetPlaylist();
     if (iPlaylist!=PLAYLIST_NONE)
@@ -509,8 +513,9 @@ void CGUIWindowMusicPlayList::GetContextButtons(int itemNumber, CContextButtons 
     {
       // we can move the item to any position not where we are, and any position not above currently
       // playing item in party mode
-      if (itemNumber != m_movingFrom && (!g_partyModeManager.IsEnabled() || itemNumber > itemPlaying))
+      if (itemNumber != m_movingFrom && (!g_partyModeManager.IsEnabled() || itemNumber > itemPlaying)) {
         buttons.Add(CONTEXT_BUTTON_MOVE_HERE, 13252);         // move item here
+}
       buttons.Add(CONTEXT_BUTTON_CANCEL_MOVE, 13253);
     }
     else
@@ -525,14 +530,18 @@ void CGUIWindowMusicPlayList::GetContextButtons(int itemNumber, CContextButtons 
         buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14077);     // Remove Favourite
       else
         buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14076);     // Add To Favourites;
-      if (itemNumber > (g_partyModeManager.IsEnabled() ? 1 : 0))
+      if (itemNumber > (g_partyModeManager.IsEnabled() ? 1 : 0)) {
         buttons.Add(CONTEXT_BUTTON_MOVE_ITEM_UP, 13332);
-      if (itemNumber + 1 < m_vecItems->Size())
+}
+      if (itemNumber + 1 < m_vecItems->Size()) {
         buttons.Add(CONTEXT_BUTTON_MOVE_ITEM_DOWN, 13333);
-      if (!g_partyModeManager.IsEnabled() || itemNumber != itemPlaying)
+}
+      if (!g_partyModeManager.IsEnabled() || itemNumber != itemPlaying) {
         buttons.Add(CONTEXT_BUTTON_MOVE_ITEM, 13251);
-      if (itemNumber != itemPlaying)
+}
+      if (itemNumber != itemPlaying) {
         buttons.Add(CONTEXT_BUTTON_DELETE, 1210); // Remove
+}
     }
   }
 
@@ -656,11 +665,12 @@ void CGUIWindowMusicPlayList::MoveItem(int iStart, int iDest)
   while (i != iDest)
   {
     // try to swap adjacent items
-    if (MoveCurrentPlayListItem(i, iAction, false))
+    if (MoveCurrentPlayListItem(i, iAction, false)) {
       i = i + (1 * iDirection);
     // we hit currently playing song, so abort
-    else
+    } else {
       break;
+}
   }
   Refresh();
 

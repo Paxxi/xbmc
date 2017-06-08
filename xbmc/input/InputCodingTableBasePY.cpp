@@ -448,8 +448,9 @@ std::vector<std::wstring> CInputCodingTableBasePY::GetResponse(int)
 
 bool CInputCodingTableBasePY::GetWordListPage(const std::string& strCode, bool isFirstPage)
 {
-  if (!isFirstPage)
+  if (!isFirstPage) {
     return false;
+}
 
   m_words.clear();
   auto finder = codemap.find(strCode);

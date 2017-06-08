@@ -61,16 +61,18 @@ void CAppParamParser::Parse(const char* const* argv, int nArgs)
           }
         }
       }
-      else if (strnicmp(argv[i], "-n", 2) == 0 || strnicmp(argv[i], "--nolirc", 8) == 0)
+      else if (strnicmp(argv[i], "-n", 2) == 0 || strnicmp(argv[i], "--nolirc", 8) == 0) {
         CInputManager::GetInstance().DisableRemoteControl();
+}
 
       if (stricmp(argv[i], "-d") == 0)
       {
         if (i + 1 < nArgs)
         {
           int sleeptime = atoi(argv[i + 1]);
-          if (sleeptime > 0 && sleeptime < 360)
+          if (sleeptime > 0 && sleeptime < 360) {
             Sleep(sleeptime*1000);
+}
         }
         i++;
       }

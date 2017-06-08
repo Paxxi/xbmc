@@ -88,8 +88,9 @@ void CGUIDialog::OnWindowLoaded()
 bool CGUIDialog::OnAction(const CAction &action)
 {
   // keyboard or controller movement should prevent autoclosing
-  if (!action.IsMouse() && m_autoClosing)
+  if (!action.IsMouse() && m_autoClosing) {
     SetAutoClose(m_showDuration);
+}
 
   return CGUIWindow::OnAction(action);
 }
@@ -228,8 +229,9 @@ void CGUIDialog::Open(const std::string &param /* = "" */)
 
 void CGUIDialog::Render()
 {
-  if (!m_active)
+  if (!m_active) {
     return;
+}
 
   CGUIWindow::Render();
 }
@@ -249,8 +251,9 @@ void CGUIDialog::SetAutoClose(unsigned int timeoutMs)
 
 void CGUIDialog::ResetAutoClose()
 {
-  if (m_autoClosing && m_active)
+  if (m_autoClosing && m_active) {
     m_showStartTime = CTimeUtils::GetFrameTime();
+}
 }
 
 void CGUIDialog::CancelAutoClose()

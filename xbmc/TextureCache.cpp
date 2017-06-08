@@ -64,8 +64,9 @@ bool CTextureCache::IsCachedImage(const std::string &url) const
 {
   if (url.empty())
     return false;
-  if (!CURL::IsFullPath(url))
+  if (!CURL::IsFullPath(url)) {
     return true;
+}
   if (URIUtils::PathHasParent(url, "special://skin", true) ||
       URIUtils::PathHasParent(url, "special://temp", true) ||
       URIUtils::PathHasParent(url, "resource://", true) ||
@@ -93,8 +94,9 @@ std::string CTextureCache::GetCachedImage(const std::string &image, CTextureDeta
   // lookup the item in the database
   if (GetCachedTexture(url, details))
   {
-    if (trackUsage)
+    if (trackUsage) {
       IncrementUseCount(details);
+}
     return GetCachedPath(details.file);
   }
   return "";
@@ -165,8 +167,9 @@ std::string CTextureCache::CacheImage(const std::string &image, CBaseTexture **t
     }
   }
   CTextureDetails tempDetails;
-  if (!details)
+  if (!details) {
     details = &tempDetails;
+}
   return GetCachedImage(url, *details, true);
 }
 
@@ -287,8 +290,9 @@ void CTextureCache::OnCachingComplete(bool success, CTextureCacheJob *job)
 
 void CTextureCache::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 {
-  if (strcmp(job->GetType(), kJobTypeCacheImage) == 0)
+  if (strcmp(job->GetType(), kJobTypeCacheImage) == 0) {
     OnCachingComplete(success, (CTextureCacheJob *)job);
+}
   return CJobQueue::OnJobComplete(jobID, success, job);
 }
 
@@ -308,8 +312,9 @@ void CTextureCache::OnJobProgress(unsigned int jobID, unsigned int progress, uns
     }
     CancelJob(job);
   }
-  else
-    CJobQueue::OnJobProgress(jobID, progress, total, job);
+  else {
+    CJobQueue
+}::OnJobProgress(jobID, progress, total, job);
 }
 
 bool CTextureCache::Export(const std::string &image, const std::string &destination, bool overwrite)

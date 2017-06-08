@@ -95,8 +95,9 @@ void CGUIVisualisationControl::Process(unsigned int currentTime, CDirtyRegionLis
 {
   if (g_application.m_pPlayer->IsPlayingAudio())
   {
-    if (m_bInvalidated)
+    if (m_bInvalidated) {
       FreeResources(true);
+}
 
     if (!m_addon && !m_bAttemptedLoad)
     {

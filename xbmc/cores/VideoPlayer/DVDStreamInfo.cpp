@@ -86,8 +86,9 @@ bool CDVDStreamInfo::Equal(const CDVDStreamInfo& right, bool withextradata)
   ||  uniqueId  != right.uniqueId
   ||  realtime  != right.realtime
   ||  codec_tag != right.codec_tag
-  ||  flags     != right.flags)
+  ||  flags     != right.flags) {
     return false;
+}
 
   if( withextradata )
   {
@@ -118,8 +119,9 @@ bool CDVDStreamInfo::Equal(const CDVDStreamInfo& right, bool withextradata)
   ||  blockalign    != right.blockalign
   ||  bitrate       != right.bitrate
   ||  bitspersample != right.bitspersample
-  ||  channellayout != right.channellayout)
+  ||  channellayout != right.channellayout) {
     return false;
+}
 
   // SUBTITLE
 
@@ -152,8 +154,9 @@ void CDVDStreamInfo::Assign(const CDVDStreamInfo& right, bool withextradata)
   {
     extrasize = right.extrasize;
     extradata = malloc(extrasize);
-    if (!extradata)
+    if (!extradata) {
       return;
+}
     memcpy(extradata, right.extradata, extrasize);
   }
   else
@@ -210,8 +213,9 @@ void CDVDStreamInfo::Assign(const CDemuxStream& right, bool withextradata)
   {
     extrasize = right.ExtraSize;
     extradata = malloc(extrasize);
-    if (!extradata)
+    if (!extradata) {
       return;
+}
     memcpy(extradata, right.ExtraData, extrasize);
   }
 

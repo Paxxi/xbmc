@@ -88,31 +88,35 @@ bool CDVDVideoPPFFmpeg::CheckInit(int iWidth, int iHeight)
   }
 
 
-  if(m_pMode)
+  if(m_pMode) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 void CDVDVideoPPFFmpeg::SetType(const std::string& mType, bool deinterlace)
 {
   m_deinterlace = deinterlace;
 
-  if (mType == m_sType)
+  if (mType == m_sType) {
     return;
+}
 
   m_sType = mType;
 
-  if(m_pContext || m_pMode)
+  if(m_pContext || m_pMode) {
     Dispose();
+}
 }
 
 bool CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
 {
   m_pSource =  pPicture;
 
-  if(m_pSource->format != RENDER_FMT_YUV420P)
+  if(m_pSource->format != RENDER_FMT_YUV420P) {
     return false;
+}
 
   if( !CheckInit(m_pSource->iWidth, m_pSource->iHeight) )
   {
@@ -123,9 +127,9 @@ bool CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
   //If no target was set or we are using internal buffer, make sure it's correctly sized
   if(m_pTarget == &m_FrameBuffer || !m_pTarget)
   {
-    if(CheckFrameBuffer(m_pSource))
+    if(CheckFrameBuffer(m_pSource)) {
       m_pTarget = &m_FrameBuffer;
-    else
+    } else
     {
       m_pTarget = nullptr;
       return false;
@@ -144,8 +148,9 @@ bool CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
 
   //Copy frame information over to target, but make sure it is set as allocated should decoder have forgotten
   m_pTarget->iFlags = m_pSource->iFlags | DVP_FLAG_ALLOCATED;
-  if (m_deinterlace)
+  if (m_deinterlace) {
     m_pTarget->iFlags &= ~DVP_FLAG_INTERLACED;
+}
   m_pTarget->iFrameType = m_pSource->iFrameType;
   m_pTarget->iRepeatPicture = m_pSource->iRepeatPicture;
   m_pTarget->iDuration = m_pSource->iDuration;
@@ -166,12 +171,13 @@ bool CDVDVideoPPFFmpeg::CheckFrameBuffer(const VideoPicture* pSource)
   if( m_FrameBuffer.iFlags & DVP_FLAG_ALLOCATED && (m_FrameBuffer.iWidth != pSource->iWidth || m_FrameBuffer.iHeight != pSource->iHeight))
   {
     m_FrameBuffer.iFlags &= ~DVP_FLAG_ALLOCATED;
-    for(int i = 0;i<3;i++)
+    for(int i = 0;i<3;i++) {
       if(m_FrameBuffer.data[i])
       {
         delete[] m_FrameBuffer.data[i];
         m_FrameBuffer.data[i] = nullptr;
       }
+}
   }
 
   if(!(m_FrameBuffer.iFlags & DVP_FLAG_ALLOCATED))

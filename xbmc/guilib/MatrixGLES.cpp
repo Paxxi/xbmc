@@ -296,8 +296,9 @@ bool CMatrixGL::Project(GLfloat objx, GLfloat objy, GLfloat objz, const GLfloat 
   in[3]=1.0;
   __gluMultMatrixVecf(modelMatrix, in, out);
   __gluMultMatrixVecf(projMatrix, out, in);
-  if (in[3] == 0.0)
+  if (in[3] == 0.0) {
     return false;
+}
   in[0] /= in[3];
   in[1] /= in[3];
   in[2] /= in[3];

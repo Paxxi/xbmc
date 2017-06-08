@@ -37,8 +37,9 @@ namespace XBMCAddon
     {
       // we do not create our own playlist, just using the ones from playlistplayer
       if (iPlayList != PLAYLIST_MUSIC &&
-          iPlayList != PLAYLIST_VIDEO)
+          iPlayList != PLAYLIST_VIDEO) {
         throw PlayListException("PlayList does not exist");
+}
 
       pPlayList = &g_playlistPlayer.GetPlaylist(playList);
       iPlayList = playList;
@@ -102,9 +103,10 @@ namespace XBMCAddon
           }
         }
       }
-      else
+      else {
         // filename is not a valid playlist
         throw PlayListException("Not a valid playlist");
+}
 
       return true;
     }
@@ -146,8 +148,9 @@ namespace XBMCAddon
       long pos = i;
       if (pos < 0) pos += iPlayListSize;
 
-      if (pos < 0 || pos >= iPlayListSize)
+      if (pos < 0 || pos >= iPlayListSize) {
         throw PlayListException("array out of bound");
+}
 
       CFileItemPtr ptr((*pPlayList)[pos]);
 

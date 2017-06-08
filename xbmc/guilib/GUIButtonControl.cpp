@@ -59,10 +59,11 @@ void CGUIButtonControl::Process(unsigned int currentTime, CDirtyRegionList &dirt
     if (m_pulseOnSelect)
     {
       unsigned int alphaCounter = m_focusCounter + 2;
-      if ((alphaCounter % 128) >= 64)
+      if ((alphaCounter % 128) >= 64) {
         alphaChannel = alphaCounter % 64;
-      else
+      } else {
         alphaChannel = 63 - (alphaCounter % 64);
+}
 
       alphaChannel += 192;
       alphaChannel = (unsigned int)((float)m_alpha * (float)alphaChannel / 255.0f);
@@ -210,15 +211,17 @@ bool CGUIButtonControl::OnMessage(CGUIMessage& message)
     }
     if (message.GetMessage() == GUI_MSG_SET_SELECTED)
     {
-      if (!m_bSelected)
+      if (!m_bSelected) {
         SetInvalid();
+}
       m_bSelected = true;
       return true;
     }
     if (message.GetMessage() == GUI_MSG_SET_DESELECTED)
     {
-      if (m_bSelected)
+      if (m_bSelected) {
         SetInvalid();
+}
       m_bSelected = false;
       return true;
     }

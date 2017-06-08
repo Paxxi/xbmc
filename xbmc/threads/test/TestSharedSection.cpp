@@ -52,8 +52,10 @@ public:
     L lock(sec);
     haslock = true;
     obtainedlock = true;
-    if (wait)
+    if (wait) { {
       wait->Wait();
+}
+}
     haslock = false;
   }
 };

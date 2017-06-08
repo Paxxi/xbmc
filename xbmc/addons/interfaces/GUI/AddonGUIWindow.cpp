@@ -68,8 +68,9 @@ CGUIAddonWindow::~CGUIAddonWindow(void)
 bool CGUIAddonWindow::OnAction(const CAction &action)
 {
   // Let addon decide whether it wants to handle action first
-  if (CBOnAction && CBOnAction(m_clientHandle, action.GetID()))
+  if (CBOnAction && CBOnAction(m_clientHandle, action.GetID())) {
     return true;
+}
 
   return CGUIWindow::OnAction(action);
 }
@@ -90,8 +91,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
     case GUI_MSG_WINDOW_INIT:
     {
       CGUIMediaWindow::OnMessage(message);
-      if (CBOnInit)
+      if (CBOnInit) {
         CBOnInit(m_clientHandle);
+}
 
       return true;
     }
@@ -155,8 +157,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
                                                  message.GetParam1() == ACTION_MOUSE_LEFT_CLICK)) ||
                                                  !controlClicked->IsContainer())
           {
-            if (CBOnClick(m_clientHandle, iControl))
+            if (CBOnClick(m_clientHandle, iControl)) {
               return true;
+}
           }
           else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_RIGHT_CLICK)
           {

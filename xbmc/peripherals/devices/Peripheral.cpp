@@ -145,12 +145,14 @@ bool CPeripheral::Initialise()
 {
   bool bReturn(false);
 
-  if (m_bError)
+  if (m_bError) {
     return bReturn;
+}
 
   bReturn = true;
-  if (m_bInitialised)
+  if (m_bInitialised) {
     return bReturn;
+}
 
   m_manager.GetSettingsFromMapping(*this);
 

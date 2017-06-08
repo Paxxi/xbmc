@@ -53,8 +53,9 @@ bool CDNSNameCache::Lookup(const std::string& strHostName, std::string& strIpAdd
   }
 
   // check if there's a custom entry or if it's already cached
-  if(g_DNSCache.GetCached(strHostName, strIpAddress))
+  if(g_DNSCache.GetCached(strHostName, strIpAddress)) {
     return true;
+}
 
 #ifndef TARGET_WINDOWS
   // perform netbios lookup (win32 is handling this via gethostbyname)

@@ -180,8 +180,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
   if (settingId == CSettings::SETTING_SERVICES_WEBSERVER ||
       settingId == CSettings::SETTING_SERVICES_WEBSERVERPORT)
   {
-    if (IsWebserverRunning() && !StopWebserver())
+    if (IsWebserverRunning() && !StopWebserver()) {
       return false;
+}
 
     if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_WEBSERVER))
     {
@@ -193,9 +194,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
     }
   }
   else if (settingId == CSettings::SETTING_SERVICES_ESPORT ||
-           settingId == CSettings::SETTING_SERVICES_WEBSERVERPORT)
+           settingId == CSettings::SETTING_SERVICES_WEBSERVERPORT) {
     return ValidatePort(std::static_pointer_cast<const CSettingInt>(setting)->GetValue());
-  else
+  } else
 #endif // HAS_WEB_SERVER
 
 #ifdef HAS_ZEROCONF
@@ -257,11 +258,13 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
         ret = false;
 #endif //HAS_AIRTUNES
       
-      if (!StopAirPlayServer(true))
+      if (!StopAirPlayServer(true)) {
         ret = false;
+}
 
-      if (!ret)
+      if (!ret) {
         return false;
+}
     }
   }
   else if (settingId == CSettings::SETTING_SERVICES_AIRPLAYVIDEOSUPPORT)
@@ -276,8 +279,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
     }
     else
     {
-      if (!StopAirPlayServer(true))
+      if (!StopAirPlayServer(true)) {
         return false;
+}
     }
   }
   else if (settingId == CSettings::SETTING_SERVICES_AIRPLAYPASSWORD ||
@@ -298,8 +302,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
   {
     if (std::static_pointer_cast<const CSettingBool>(setting)->GetValue())
     {
-      if (!StartUPnPServer())
+      if (!StartUPnPServer()) {
         return false;
+}
 
       // always stop and restart the client and controller if necessary
       StopUPnPClient();
@@ -365,8 +370,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
   {
 #ifdef HAS_EVENT_SERVER
     // restart eventserver without asking user
-    if (!StopEventServer(true, false))
+    if (!StopEventServer(true, false)) {
       return false;
+}
 
     if (!StartEventServer())
     {
@@ -385,8 +391,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
 #ifdef HAS_EVENT_SERVER
     if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESENABLED))
     {
-      if (!StopEventServer(true, true))
+      if (!StopEventServer(true, true)) {
         return false;
+}
 
       if (!StartEventServer())
       {
@@ -399,8 +406,9 @@ bool CNetworkServices::OnSettingChanging(std::shared_ptr<const CSetting> setting
 #ifdef HAS_JSONRPC
     if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESENABLED))
     {
-      if (!StopJSONRPCServer(true))
+      if (!StopJSONRPCServer(true)) {
         return false;
+}
 
       if (!StartJSONRPCServer())
       {
@@ -526,8 +534,9 @@ bool CNetworkServices::StartWebserver()
     return false;
   }
 
-  if (IsWebserverRunning())
+  if (IsWebserverRunning()) {
     return true;
+}
 
   if (!m_webserver.Start(webPort, CServiceBroker::GetSettings().GetString(CSettings::SETTING_SERVICES_WEBSERVERUSERNAME), CServiceBroker::GetSettings().GetString(CSettings::SETTING_SERVICES_WEBSERVERPASSWORD)))
     return false;
@@ -559,8 +568,9 @@ bool CNetworkServices::IsWebserverRunning()
 bool CNetworkServices::StopWebserver()
 {
 #ifdef HAS_WEB_SERVER
-  if (!IsWebserverRunning())
+  if (!IsWebserverRunning()) {
     return true;
+}
 
   if (!m_webserver.Stop() || m_webserver.IsStarted())
   {
@@ -591,8 +601,9 @@ bool CNetworkServices::StartAirPlayServer()
   if (!g_application.getNetwork().IsAvailable() || !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_AIRPLAY))
     return false;
 
-  if (IsAirPlayServerRunning())
+  if (IsAirPlayServerRunning()) {
     return true;
+}
   
   if (!CAirPlayServer::StartServer(g_advancedSettings.m_airPlayPort, true))
     return false;
@@ -633,8 +644,9 @@ bool CNetworkServices::IsAirPlayServerRunning()
 bool CNetworkServices::StopAirPlayServer(bool bWait)
 {
 #ifdef HAS_AIRPLAY
-  if (!IsAirPlayServerRunning())
+  if (!IsAirPlayServerRunning()) {
     return true;
+}
 
   CAirPlayServer::StopServer(bWait);
 
@@ -695,8 +707,9 @@ bool CNetworkServices::StartJSONRPCServer()
   if (!CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESENABLED))
     return false;
 
-  if (IsJSONRPCServerRunning())
+  if (IsJSONRPCServerRunning()) {
     return true;
+}
 
   if (!CTCPServer::StartServer(g_advancedSettings.m_jsonTcpPort, CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESALLINTERFACES)))
     return false;
@@ -722,8 +735,9 @@ bool CNetworkServices::IsJSONRPCServerRunning()
 bool CNetworkServices::StopJSONRPCServer(bool bWait)
 {
 #ifdef HAS_JSONRPC
-  if (!IsJSONRPCServerRunning())
+  if (!IsJSONRPCServerRunning()) {
     return true;
+}
 
   CTCPServer::StopServer(bWait);
 
@@ -742,8 +756,9 @@ bool CNetworkServices::StartEventServer()
   if (!CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESENABLED))
     return false;
 
-  if (IsEventServerRunning())
+  if (IsEventServerRunning()) {
     return true;
+}
 
   CEventServer* server = CEventServer::GetInstance();
   if (!server)
@@ -770,8 +785,9 @@ bool CNetworkServices::IsEventServerRunning()
 bool CNetworkServices::StopEventServer(bool bWait, bool promptuser)
 {
 #ifdef HAS_EVENT_SERVER
-  if (!IsEventServerRunning())
+  if (!IsEventServerRunning()) {
     return true;
+}
 
   CEventServer* server = CEventServer::GetInstance();
   if (!server)
@@ -797,8 +813,9 @@ bool CNetworkServices::StopEventServer(bool bWait, bool promptuser)
   }
   else
   {
-    if (!bWait)
+    if (!bWait) {
       CLog::Log(LOGNOTICE, "ES: Stopping event server");
+}
 
     CEventServer::GetInstance()->StopServer(bWait);
   }
@@ -814,8 +831,9 @@ bool CNetworkServices::RefreshEventServer()
   if (!CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ESENABLED))
     return false;
 
-  if (!IsEventServerRunning())
+  if (!IsEventServerRunning()) {
     return false;
+}
 
   CEventServer::GetInstance()->RefreshSettings();
   return true;
@@ -849,8 +867,9 @@ bool CNetworkServices::StartUPnP()
 bool CNetworkServices::StopUPnP(bool bWait)
 {
 #ifdef HAS_UPNP
-  if (!CUPnP::IsInstantiated())
+  if (!CUPnP::IsInstantiated()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "stopping upnp");
   CUPnP::ReleaseInstance(bWait);
@@ -881,8 +900,9 @@ bool CNetworkServices::IsUPnPClientRunning()
 bool CNetworkServices::StopUPnPClient()
 {
 #ifdef HAS_UPNP
-  if (!IsUPnPClientRunning())
+  if (!IsUPnPClientRunning()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "stopping upnp client");
   CUPnP::GetInstance()->StopClient();
@@ -917,8 +937,9 @@ bool CNetworkServices::IsUPnPControllerRunning()
 bool CNetworkServices::StopUPnPController()
 {
 #ifdef HAS_UPNP
-  if (!IsUPnPControllerRunning())
+  if (!IsUPnPControllerRunning()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "stopping upnp controller");
   CUPnP::GetInstance()->StopController();
@@ -951,8 +972,9 @@ bool CNetworkServices::IsUPnPRendererRunning()
 bool CNetworkServices::StopUPnPRenderer()
 {
 #ifdef HAS_UPNP
-  if (!IsUPnPRendererRunning())
+  if (!IsUPnPRendererRunning()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "stopping upnp renderer");
   CUPnP::GetInstance()->StopRenderer();
@@ -985,8 +1007,9 @@ bool CNetworkServices::IsUPnPServerRunning()
 bool CNetworkServices::StopUPnPServer()
 {
 #ifdef HAS_UPNP
-  if (!IsUPnPServerRunning())
+  if (!IsUPnPServerRunning()) {
     return true;
+}
 
   StopUPnPController();
 
@@ -1000,8 +1023,9 @@ bool CNetworkServices::StopUPnPServer()
   
 bool CNetworkServices::StartRss()
 {
-  if (IsRssRunning())
+  if (IsRssRunning()) {
     return true;
+}
 
   CRssManager::GetInstance().Start();
   return true;
@@ -1014,8 +1038,9 @@ bool CNetworkServices::IsRssRunning()
 
 bool CNetworkServices::StopRss()
 {
-  if (!IsRssRunning())
+  if (!IsRssRunning()) {
     return true;
+}
 
   CRssManager::GetInstance().Stop();
   return true;
@@ -1027,8 +1052,9 @@ bool CNetworkServices::StartZeroconf()
   if (!CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SERVICES_ZEROCONF))
     return false;
 
-  if (IsZeroconfRunning())
+  if (IsZeroconfRunning()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "starting zeroconf publishing");
   return CZeroconf::GetInstance()->Start();
@@ -1047,8 +1073,9 @@ bool CNetworkServices::IsZeroconfRunning()
 bool CNetworkServices::StopZeroconf()
 {
 #ifdef HAS_ZEROCONF
-  if (!IsZeroconfRunning())
+  if (!IsZeroconfRunning()) {
     return true;
+}
 
   CLog::Log(LOGNOTICE, "stopping zeroconf publishing");
   CZeroconf::GetInstance()->Stop();
@@ -1060,12 +1087,14 @@ bool CNetworkServices::StopZeroconf()
 
 bool CNetworkServices::ValidatePort(int port)
 {
-  if (port <= 0 || port > 65535)
+  if (port <= 0 || port > 65535) {
     return false;
+}
 
 #ifdef TARGET_LINUX
-  if (!CUtil::CanBindPrivileged() && (port < 1024 || port > 65535))
+  if (!CUtil::CanBindPrivileged() && (port < 1024 || port > 65535)) {
     return false;
+}
 #endif
 
   return true;

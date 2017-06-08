@@ -71,8 +71,9 @@ DWORD BytesPerPixelFromFormat(XB_D3DFORMAT format)
 
 bool IsPalettedFormat(XB_D3DFORMAT format)
 {
-  if (format == XB_D3DFMT_P8)
+  if (format == XB_D3DFMT_P8) {
     return true;
+}
   return false;
 }
 
@@ -117,23 +118,26 @@ bool IsSwizzledFormat(XB_D3DFORMAT format)
 // Currently only works for 32bit and 8bit textures, with power of 2 width and height
 void Unswizzle(const void *src, unsigned int depth, unsigned int width, unsigned int height, void *dest)
 {
-  if (height == 0 || width == 0)
+  if (height == 0 || width == 0) {
     return;
+}
 
   for (UINT y = 0; y < height; y++)
   {
     UINT sy = 0;
     if (y < width)
     {
-      for (int bit = 0; bit < 16; bit++)
+      for (int bit = 0; bit < 16; bit++) {
         sy |= ((y >> bit) & 1) << (2*bit);
+}
       sy <<= 1; // y counts twice
     }
     else
     {
       UINT y_mask = y % width;
-      for (int bit = 0; bit < 16; bit++)
+      for (int bit = 0; bit < 16; bit++) {
         sy |= ((y_mask >> bit) & 1) << (2*bit);
+}
       sy <<= 1; // y counts twice
       sy += (y / width) * width * width;
     }
@@ -143,19 +147,22 @@ void Unswizzle(const void *src, unsigned int depth, unsigned int width, unsigned
       UINT sx = 0;
       if (x < height * 2)
       {
-        for (int bit = 0; bit < 16; bit++)
+        for (int bit = 0; bit < 16; bit++) {
           sx |= ((x >> bit) & 1) << (2*bit);
+}
       }
       else
       {
         int x_mask = x % (2*height);
-        for (int bit = 0; bit < 16; bit++)
+        for (int bit = 0; bit < 16; bit++) {
           sx |= ((x_mask >> bit) & 1) << (2*bit);
+}
         sx += (x / (2 * height)) * 2 * height * height;
       }
       BYTE *s = (BYTE *)src + (sx + sy)*depth;
-      for (unsigned int i = 0; i < depth; ++i)
+      for (unsigned int i = 0; i < depth; ++i) {
         *d++ = *s++;
+}
     }
   }
 }
@@ -183,16 +190,18 @@ void DXT1toARGB(const void *src, void *dest, unsigned int destWidth)
     red[3] = (red[0] + 2 * red[1] + 1) / 3;
     green[3] = (green[0] + 2 * green[1] + 1) / 3;
     blue[3] = (blue[0] + 2 * blue[1] + 1) / 3;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
       colour[i] = (red[i] << 16) | (green[i] << 8) | blue[i] | 0xFF000000;
+}
   }
   else
   {
     red[2] = (red[0] + red[1]) / 2;
     green[2] = (green[0] + green[1]) / 2;
     blue[2] = (blue[0] + blue[1]) / 2;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++) {
       colour[i] = (red[i] << 16) | (green[i] << 8) | blue[i] | 0xFF000000;
+}
     colour[3] = 0;  // transparent
   }
   // ok, now grab the bits
@@ -267,8 +276,9 @@ void DXT4toARGB(const void *src, void *dest, unsigned int destWidth)
   red[3] = (red[0] + 2 * red[1] + 1) / 3;
   green[3] = (green[0] + 2 * green[1] + 1) / 3;
   blue[3] = (blue[0] + 2 * blue[1] + 1) / 3;
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++) {
     colour[i] = (red[i] << 16) | (green[i] << 8) | blue[i];
+}
   // and assign them to our texture
   for (int y = 0; y < 4; y++)
   {
@@ -368,10 +378,11 @@ void GetTextureFromData(D3DTexture *pTex, void *texData, CBaseTexture **ppTextur
       texDataStart = unswizzled;
     }
 
-    if (IsPalettedFormat(fmt))
+    if (IsPalettedFormat(fmt)) {
       (*ppTexture)->LoadPaletted(width, height, pitch, XB_FMT_A8R8G8B8, texDataStart, color);
-    else
+    } else {
       (*ppTexture)->LoadFromMemory(width, height, pitch, XB_FMT_A8R8G8B8, true, texDataStart);
+}
 
     if (IsSwizzledFormat(fmt) || fmt == XB_D3DFMT_DXT1 || fmt == XB_D3DFMT_DXT2 || fmt == XB_D3DFMT_DXT4)
     {

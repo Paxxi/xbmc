@@ -39,12 +39,14 @@ CVideoLibraryCleaningJob::~CVideoLibraryCleaningJob()
 
 bool CVideoLibraryCleaningJob::operator==(const CJob* job) const
 {
-  if (strcmp(job->GetType(), GetType()) != 0)
+  if (strcmp(job->GetType(), GetType()) != 0) {
     return false;
+}
 
   const CVideoLibraryCleaningJob* cleaningJob = dynamic_cast<const CVideoLibraryCleaningJob*>(job);
-  if (cleaningJob == nullptr)
+  if (cleaningJob == nullptr) {
     return false;
+}
 
   return m_paths == cleaningJob->m_paths &&
          m_showDialog == cleaningJob->m_showDialog;

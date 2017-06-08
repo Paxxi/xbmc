@@ -116,10 +116,11 @@ bool CTextureCacheJob::CacheTexture(CBaseTexture **out_texture)
     {
       m_details.width = width;
       m_details.height = height;
-      if (out_texture) // caller wants the texture
+      if (out_texture) { // caller wants the texture
         *out_texture = texture;
-      else
+      } else {
         delete texture;
+}
       return true;
     }
   }
@@ -204,12 +205,14 @@ CBaseTexture *CTextureCacheJob::LoadImage(const std::string &image, unsigned int
   CFileItem file(image, false);
   file.FillInMimeType();
   if (!(file.IsPicture() && !(file.IsZIP() || file.IsRAR() || file.IsCBR() || file.IsCBZ() ))
-      && !StringUtils::StartsWithNoCase(file.GetMimeType(), "image/") && !StringUtils::EqualsNoCase(file.GetMimeType(), "application/octet-stream")) // ignore non-pictures
+      && !StringUtils::StartsWithNoCase(file.GetMimeType(), "image/") && !StringUtils::EqualsNoCase(file.GetMimeType(), "application/octet-stream")) { // ignore non-pictures
     return nullptr;
+}
 
   CBaseTexture *texture = CBaseTexture::LoadFromFile(image, width, height, requirePixels, file.GetMimeType());
-  if (!texture)
+  if (!texture) {
     return nullptr;
+}
 
   // EXIF bits are interpreted as: <flipXY><flipY*flipX><flipX>
   // where to undo the operation we apply them in reverse order <flipX>*<flipY*flipX>*<flipXY>
@@ -224,8 +227,9 @@ bool CTextureCacheJob::UpdateableURL(const std::string &url) const
 {
   // we don't constantly check online images
   if (StringUtils::StartsWith(url, "http://") ||
-      StringUtils::StartsWith(url, "https://"))
+      StringUtils::StartsWith(url, "https://")) {
     return false;
+}
   return true;
 }
 
@@ -239,8 +243,9 @@ std::string CTextureCacheJob::GetImageHash(const std::string &url)
   if (XFILE::CFile::Stat(url, &st) == 0)
   {
     int64_t time = st.st_mtime;
-    if (!time)
+    if (!time) {
       time = st.st_ctime;
+}
     if (time || st.st_size)
       return StringUtils::Format("d%" PRId64"s%" PRId64, time, st.st_size);
 

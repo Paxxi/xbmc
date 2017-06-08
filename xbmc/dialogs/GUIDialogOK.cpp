@@ -49,8 +49,9 @@ bool CGUIDialogOK::OnMessage(CGUIMessage& message)
 bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant text)
 {
   CGUIDialogOK *dialog = g_windowManager.GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
-  if (!dialog)
+  if (!dialog) {
     return false;
+}
   dialog->SetHeading(heading);
   dialog->SetText(text);
   dialog->Open();
@@ -61,8 +62,9 @@ bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant text)
 bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant line0, CVariant line1, CVariant line2)
 {
   CGUIDialogOK *dialog = g_windowManager.GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
-  if (!dialog) 
+  if (!dialog) { 
     return false;
+}
   dialog->SetHeading(heading);
   dialog->SetLine(0, line0);
   dialog->SetLine(1, line1);
@@ -83,7 +85,8 @@ void CGUIDialogOK::OnInitWindow()
 
 int CGUIDialogOK::GetDefaultLabelID(int controlId) const
 {
-  if (controlId == CONTROL_YES_BUTTON)
+  if (controlId == CONTROL_YES_BUTTON) {
     return 186;
+}
   return CGUIDialogBoxBase::GetDefaultLabelID(controlId);
 }

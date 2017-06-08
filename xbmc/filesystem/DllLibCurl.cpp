@@ -39,8 +39,9 @@ extern "C"
 
 void ssl_lock_callback(int mode, int type, char *file, int line)
 {
-  if (!m_sslLockArray)
+  if (!m_sslLockArray) {
     return;
+}
 
   if (mode & CRYPTO_LOCK)
     m_sslLockArray[type]->lock();
@@ -138,8 +139,9 @@ void DllLibCurlGlobal::Unload()
 void DllLibCurlGlobal::CheckIdle()
 {
   /* avoid locking section here, to avoid stalling gfx thread on loads*/
-  if(g_curlReferences == 0)
+  if(g_curlReferences == 0) {
     return;
+}
 
   CSingleLock lock(m_critSection);
   /* 20 seconds idle time before closing handle */
@@ -309,15 +311,17 @@ void DllLibCurlGlobal::easy_duplicate(CURL_HANDLE* easy, CURLM* multi, CURL_HAND
     if( it->m_easy == easy )
     {
       SSession session = *it;
-      if(easy_out && easy)
+      if(easy_out && easy) {
         session.m_easy = *easy_out;
-      else
+      } else {
         session.m_easy = nullptr;
+}
 
-      if(multi_out && multi)
+      if(multi_out && multi) {
         session.m_multi = *multi_out;
-      else
+      } else {
         session.m_multi = nullptr;
+}
 
       Load();
       m_sessions.push_back(session);

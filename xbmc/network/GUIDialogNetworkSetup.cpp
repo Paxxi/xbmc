@@ -262,8 +262,9 @@ void CGUIDialogNetworkSetup::OnProtocolChange()
   if (settingControl != NULL && settingControl->GetControl() != NULL)
   {
     CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), settingControl->GetID());
-    if (!OnMessage(msg))
+    if (!OnMessage(msg)) {
       return;
+}
     m_protocol = (NET_PROTOCOL)msg.GetParam1();
     // set defaults for the port
     if (m_protocol == NET_PROTOCOL_FTP)
@@ -435,28 +436,29 @@ std::string CGUIDialogNetworkSetup::ConstructPath() const
 void CGUIDialogNetworkSetup::SetPath(const std::string &path)
 {
   CURL url(path);
-  if (url.IsProtocol("smb"))
+  if (url.IsProtocol("smb")) {
     m_protocol = NET_PROTOCOL_SMB;
-  else if (url.IsProtocol("ftp"))
+  } else if (url.IsProtocol("ftp")) {
     m_protocol = NET_PROTOCOL_FTP;
-  else if (url.IsProtocol("http"))
+  } else if (url.IsProtocol("http")) {
     m_protocol = NET_PROTOCOL_HTTP;
-  else if (url.IsProtocol("https"))
+  } else if (url.IsProtocol("https")) {
     m_protocol = NET_PROTOCOL_HTTPS;
-  else if (url.IsProtocol("dav"))
+  } else if (url.IsProtocol("dav")) {
     m_protocol = NET_PROTOCOL_DAV;
-  else if (url.IsProtocol("davs"))
+  } else if (url.IsProtocol("davs")) {
     m_protocol = NET_PROTOCOL_DAVS;
-  else if (url.IsProtocol("upnp"))
+  } else if (url.IsProtocol("upnp")) {
     m_protocol = NET_PROTOCOL_UPNP;
-  else if (url.IsProtocol("rss"))
+  } else if (url.IsProtocol("rss")) {
     m_protocol = NET_PROTOCOL_RSS;
-  else if (url.IsProtocol("nfs"))
+  } else if (url.IsProtocol("nfs")) {
     m_protocol = NET_PROTOCOL_NFS;
-  else if (url.IsProtocol("sftp") || url.IsProtocol("ssh"))
+  } else if (url.IsProtocol("sftp") || url.IsProtocol("ssh")) {
     m_protocol = NET_PROTOCOL_SFTP;
-  else
+  } else {
     m_protocol = NET_PROTOCOL_SMB;  // default to smb
+}
   m_username = url.GetUserName();
   m_password = url.GetPassWord();
   m_port = StringUtils::Format("%i", url.GetPort());

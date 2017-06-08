@@ -82,8 +82,9 @@ void CGUIControllerList::Deinitialize()
 
 bool CGUIControllerList::Refresh()
 {
-  if (!RefreshControllers())
+  if (!RefreshControllers()) {
     return false;
+}
 
   CleanupButtons();
 
@@ -98,8 +99,9 @@ bool CGUIControllerList::Refresh()
       m_controllerList->AddControl(pButton);
 
       // Just in case
-      if (buttonId >= MAX_CONTROLLER_COUNT)
+      if (buttonId >= MAX_CONTROLLER_COUNT) {
         break;
+}
     }
   }
 
@@ -117,8 +119,9 @@ void CGUIControllerList::OnFocus(unsigned int controllerIndex)
 
     //! @todo Activate controller for all game controller controls
     CGUIGameController* pController = dynamic_cast<CGUIGameController*>(m_guiWindow->GetControl(CONTROL_GAME_CONTROLLER));
-    if (pController)
+    if (pController) {
       pController->ActivateController(controller);
+}
   }
 }
 
@@ -137,8 +140,9 @@ void CGUIControllerList::ResetController()
     // For now, ask the user if they would like to reset all peripherals
     // "Reset controller profile"
     // "Would you like to reset this controller profile for all devices?"
-    if (!CGUIDialogYesNo::ShowAndGetInput(35060, 35061))
+    if (!CGUIDialogYesNo::ShowAndGetInput(35060, 35061)) {
       return;
+}
 
     CServiceBroker::GetPeripherals().ResetButtonMaps(strControllerId);
   }
@@ -193,6 +197,7 @@ bool CGUIControllerList::RefreshControllers()
 
 void CGUIControllerList::CleanupButtons()
 {
-  if (m_controllerList)
+  if (m_controllerList) {
     m_controllerList->ClearAll();
+}
 }

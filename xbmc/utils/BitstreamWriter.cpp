@@ -102,8 +102,9 @@ void CBitstreamWriter::FlushBits()
 {
   if (!writer_le)
   {
-    if (bit_left < 32)
+    if (bit_left < 32) {
       bit_buf <<= bit_left;
+}
   }
   while (bit_left < 32)
   {

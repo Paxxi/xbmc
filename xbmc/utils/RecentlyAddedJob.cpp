@@ -362,14 +362,17 @@ bool CRecentlyAddedJob::UpdateTotal()
 bool CRecentlyAddedJob::DoWork()
 {
   bool ret = true;
-  if (m_flag & Audio)
+  if (m_flag & Audio) {
     ret &= UpdateMusic();
+}
   
-  if (m_flag & Video)
+  if (m_flag & Video) {
     ret &= UpdateVideo();
+}
   
-  if (m_flag & Totals)
+  if (m_flag & Totals) {
     ret &= UpdateTotal();
+}
     
   return ret; 
 }

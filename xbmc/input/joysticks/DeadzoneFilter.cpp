@@ -51,12 +51,14 @@ float CDeadzoneFilter::FilterAxis(unsigned int axisIndex, float axisValue)
   bool bSuccess = GetDeadzone(axisIndex, deadzone, DEFAULT_LEFT_STICK_NAME, SETTING_LEFT_STICK_DEADZONE) ||
                   GetDeadzone(axisIndex, deadzone, DEFAULT_RIGHT_STICK_NAME, SETTING_RIGHT_STICK_DEADZONE);
 
-  if (bSuccess)
+  if (bSuccess) {
     return ApplyDeadzone(axisValue, deadzone);
+}
 
   // Always filter noise about the center
-  if (std::abs(axisValue) < AXIS_EPSILON)
+  if (std::abs(axisValue) < AXIS_EPSILON) {
     axisValue = 0.0f;
+}
 
   return axisValue;
 }
@@ -88,13 +90,15 @@ bool CDeadzoneFilter::GetDeadzone(unsigned int axisIndex, float& deadzone, const
 
 float CDeadzoneFilter::ApplyDeadzone(float value, float deadzone)
 {
-  if (deadzone < 0.0f || deadzone >= 1.0f)
+  if (deadzone < 0.0f || deadzone >= 1.0f) {
     return 0.0f;
+}
 
-  if (value > deadzone)
+  if (value > deadzone) {
     return (value - deadzone) / (1.0f - deadzone);
-  else if (value < -deadzone)
+  } else if (value < -deadzone) {
     return (value + deadzone) / (1.0f - deadzone);
+}
 
   return 0.0f;
 }

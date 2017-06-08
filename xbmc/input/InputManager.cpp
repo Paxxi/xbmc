@@ -124,8 +124,9 @@ bool CInputManager::ProcessRemote(int windowId)
 bool CInputManager::ProcessPeripherals(float frameTime)
 {
   CKey key;
-  if (CServiceBroker::GetPeripherals().GetNextKeypress(frameTime, key))
+  if (CServiceBroker::GetPeripherals().GetNextKeypress(frameTime, key)) {
     return OnKey(key);
+}
   return false;
 }
 
@@ -138,8 +139,9 @@ bool CInputManager::ProcessMouse(int windowId)
 
   // Get the mouse command ID
   uint32_t mousekey = m_Mouse.GetKey();
-  if (mousekey == KEY_MOUSE_NOOP)
+  if (mousekey == KEY_MOUSE_NOOP) {
     return true;
+}
 
   // Reset the screensaver and idle timers
   g_application.ResetSystemIdleTimer();
@@ -153,14 +155,16 @@ bool CInputManager::ProcessMouse(int windowId)
   CAction mouseaction = CButtonTranslator::GetInstance().GetAction(windowId, key);
 
   // Deactivate mouse if non-mouse action
-  if (!mouseaction.IsMouse())
+  if (!mouseaction.IsMouse()) {
     m_Mouse.SetActive(false);
+}
 
   // Consume ACTION_NOOP.
   // Some views or dialogs gets closed after any ACTION and
   // a sensitive mouse might cause problems.
-  if (mouseaction.GetID() == ACTION_NOOP)
+  if (mouseaction.GetID() == ACTION_NOOP) {
     return false;
+}
 
   // If we couldn't find an action return false to indicate we have not
   // handled this mouse action
@@ -194,8 +198,9 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
 {
 #ifdef HAS_EVENT_SERVER
   CEventServer* es = CEventServer::GetInstance();
-  if (!es || !es->Running() || es->GetNumberOfClients() == 0)
+  if (!es || !es->Running() || es->GetNumberOfClients() == 0) {
     return false;
+}
 
   // process any queued up actions
   if (es->ExecuteNextAction())
@@ -215,8 +220,9 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
   // es->ExecuteNextAction() invalidates the ref to the CEventServer instance
   // when the action exits XBMC
   es = CEventServer::GetInstance();
-  if (!es || !es->Running() || es->GetNumberOfClients() == 0)
+  if (!es || !es->Running() || es->GetNumberOfClients() == 0) {
     return false;
+}
   unsigned int wKeyID = es->GetButtonCode(strMapName, isAxis, fAmount, isJoystick);
 
   if (wKeyID)
@@ -263,28 +269,29 @@ bool CInputManager::ProcessEventServer(int windowId, float frameTime)
         return OnKey(key);
       }
 
-      if (wKeyID == KEY_BUTTON_LEFT_ANALOG_TRIGGER)
+      if (wKeyID == KEY_BUTTON_LEFT_ANALOG_TRIGGER) {
         key = CKey(wKeyID, (BYTE)(255 * fAmount), 0, 0.0, 0.0, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_RIGHT_ANALOG_TRIGGER)
+      } else if (wKeyID == KEY_BUTTON_RIGHT_ANALOG_TRIGGER) {
         key = CKey(wKeyID, 0, (BYTE)(255 * fAmount), 0.0, 0.0, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_LEFT)
+      } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_LEFT) {
         key = CKey(wKeyID, 0, 0, -fAmount, 0.0, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_RIGHT)
+      } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_RIGHT) {
         key = CKey(wKeyID, 0, 0, fAmount, 0.0, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_UP)
+      } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_UP) {
         key = CKey(wKeyID, 0, 0, 0.0, fAmount, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_DOWN)
+      } else if (wKeyID == KEY_BUTTON_LEFT_THUMB_STICK_DOWN) {
         key = CKey(wKeyID, 0, 0, 0.0, -fAmount, 0.0, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_LEFT)
+      } else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_LEFT) {
         key = CKey(wKeyID, 0, 0, 0.0, 0.0, -fAmount, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT)
+      } else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT) {
         key = CKey(wKeyID, 0, 0, 0.0, 0.0, fAmount, 0.0, frameTime);
-      else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_UP)
+      } else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_UP) {
         key = CKey(wKeyID, 0, 0, 0.0, 0.0, 0.0, fAmount, frameTime);
-      else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_DOWN)
+      } else if (wKeyID == KEY_BUTTON_RIGHT_THUMB_STICK_DOWN) {
         key = CKey(wKeyID, 0, 0, 0.0, 0.0, 0.0, -fAmount, frameTime);
-      else
+      } else {
         key = CKey(wKeyID);
+}
       key.SetFromService(true);
       return OnKey(key);
     }
@@ -392,8 +399,9 @@ bool CInputManager::OnEvent(XBMC_Event& newEvent)
       m_LastKey.Reset();  // OnKey is reentrant; need to do this before entering
       OnKey(key);
     }
-    else
+    else {
       m_LastKey.Reset();
+}
     OnKeyUp(m_Keyboard.TranslateKey(newEvent.key.keysym));
     break;
   case XBMC_MOUSEBUTTONDOWN:
@@ -422,8 +430,9 @@ bool CInputManager::OnEvent(XBMC_Event& newEvent)
         }
       }
 
-      if (handled)
+      if (handled) {
         break;
+}
     }
 
     if (!handled)
@@ -441,16 +450,17 @@ bool CInputManager::OnEvent(XBMC_Event& newEvent)
     }
     int actionId = 0;
     std::string actionString;
-    if (newEvent.touch.action == ACTION_GESTURE_BEGIN || newEvent.touch.action == ACTION_GESTURE_END)
+    if (newEvent.touch.action == ACTION_GESTURE_BEGIN || newEvent.touch.action == ACTION_GESTURE_END) {
       actionId = newEvent.touch.action;
-    else
+    } else
     {
       int iWin = g_windowManager.GetActiveWindowID();
       CButtonTranslator::GetInstance().TranslateTouchAction(iWin, newEvent.touch.action, newEvent.touch.pointers, actionId, actionString);
     }
 
-    if (actionId <= 0)
+    if (actionId <= 0) {
       return false;
+}
 
     if ((actionId >= ACTION_TOUCH_TAP && actionId <= ACTION_GESTURE_END)
         || (actionId >= ACTION_MOUSE_START && actionId <= ACTION_MOUSE_END))
@@ -515,8 +525,9 @@ bool CInputManager::OnKey(const CKey& key)
       CLog::LogF(LOGDEBUG, "action %s [%d], toggling state of playing device", action.GetName().c_str(), action.GetID());
       bool result;
       CApplicationMessenger::GetInstance().SendMsg(TMSG_CECTOGGLESTATE, 0, 0, static_cast<void*>(&result));
-      if (!result)
+      if (!result) {
         return true;
+}
     }
     else
     {
@@ -550,13 +561,15 @@ bool CInputManager::OnKey(const CKey& key)
       {
         // If this is an edit control set usekeyboard to true. This causes the
         // keypress to be processed directly not through the key mappings.
-        if (control->GetControlType() == CGUIControl::GUICONTROL_EDIT)
+        if (control->GetControlType() == CGUIControl::GUICONTROL_EDIT) {
           useKeyboard = true;
+}
 
         // If the key pressed is shift-A to shift-Z set usekeyboard to true.
         // This causes the keypress to be used for list navigation.
-        if (control->IsContainer() && key.GetModifiers() == CKey::MODIFIER_SHIFT && key.GetVKey() >= XBMCVK_A && key.GetVKey() <= XBMCVK_Z)
+        if (control->IsContainer() && key.GetModifiers() == CKey::MODIFIER_SHIFT && key.GetVKey() >= XBMCVK_A && key.GetVKey() <= XBMCVK_Z) {
           useKeyboard = true;
+}
       }
     }
     if (useKeyboard)
@@ -587,9 +600,9 @@ bool CInputManager::OnKey(const CKey& key)
       // else pass the keys through directly
       if (!action.GetID())
       {
-        if (key.GetFromService())
+        if (key.GetFromService()) {
           action = CAction(key.GetButtonCode() != KEY_INVALID ? key.GetButtonCode() : 0, key.GetUnicode());
-        else
+        } else
         {
           // Check for paste keypress
 #ifdef TARGET_WINDOWS
@@ -597,7 +610,7 @@ bool CInputManager::OnKey(const CKey& key)
           if (key.GetVKey() == XBMCVK_V && key.GetModifiers() == CKey::MODIFIER_CTRL)
 #elif defined(TARGET_LINUX)
           // In Linux paste is ctrl-V
-          if (key.GetVKey() == XBMCVK_V && key.GetModifiers() == CKey::MODIFIER_CTRL)
+          if (key.GetVKey() == XBMCVK_V && key.GetModifiers() == CKey::MODIFIER_CTRL) {
 #elif defined(TARGET_DARWIN_OSX)
           // In OSX paste is cmd-V
           if (key.GetVKey() == XBMCVK_V && key.GetModifiers() == CKey::MODIFIER_META)
@@ -607,11 +620,12 @@ bool CInputManager::OnKey(const CKey& key)
 #endif
             action = CAction(ACTION_PASTE);
           // If the unicode is non-zero the keypress is a non-printing character
-          else if (key.GetUnicode())
+          } else if (key.GetUnicode()) {
             action = CAction(key.GetAscii() | KEY_ASCII, key.GetUnicode());
           // The keypress is a non-printing character
-          else
-            action = CAction(key.GetVKey() | KEY_VKEY);
+          } else {
+            action 
+}= CAction(key.GetVKey() | KEY_VKEY);
         }
       }
 
@@ -623,11 +637,13 @@ bool CInputManager::OnKey(const CKey& key)
     }
     if (key.GetFromService())
     {
-      if (key.GetButtonCode() != KEY_INVALID)
+      if (key.GetButtonCode() != KEY_INVALID) {
         action = CButtonTranslator::GetInstance().GetAction(iWin, key);
+}
     }
-    else
+    else {
       action = CButtonTranslator::GetInstance().GetAction(iWin, key);
+}
   }
   if (!key.IsAnalogButton())
     CLog::LogF(LOGDEBUG, "%s pressed, action is %s", m_Keyboard.GetKeyName((int)key.GetButtonCode()).c_str(), action.GetName().c_str());
@@ -677,8 +693,9 @@ bool CInputManager::ExecuteInputAction(const CAction &action)
   if (action.GetHoldTime())
   {
     bResult = g_application.OnAction(action);
-    if (bResult)
+    if (bResult) {
       g_audioManager.PlayActionSound(action);
+}
   }
   else
   {

@@ -69,10 +69,11 @@ CGUITextLayout* COverlayText::GetFontLayout(const std::string &font, int color, 
                                                     , height
                                                     , style
                                                     , true, 1.0f, 1.0f, &pal, true);
-    if (!subtitle_font || !border_font)
+    if (!subtitle_font || !border_font) {
       CLog::Log(LOGERROR, "CGUIWindowFullScreen::OnMessage(WINDOW_INIT) - Unable to load subtitle font");
-    else
+    } else {
       return new CGUITextLayout(subtitle_font, true, 0, border_font);
+}
   }
 
   return nullptr;
@@ -127,19 +128,21 @@ COverlayText::COverlayText(CDVDOverlayText * src)
   else
   {
     if(m_subalign == SUBTITLE_ALIGN_TOP_INSIDE ||
-       m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
+       m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE) {
       m_align  = ALIGN_VIDEO;
-    else
+    } else {
       m_align = ALIGN_SCREEN;
+}
 
     m_pos    = POSITION_RELATIVE;
     m_x      = 0.5f;
 
     if(m_subalign == SUBTITLE_ALIGN_TOP_INSIDE ||
-       m_subalign == SUBTITLE_ALIGN_TOP_OUTSIDE)
+       m_subalign == SUBTITLE_ALIGN_TOP_OUTSIDE) {
       m_y    = 0.0f;
-    else
+    } else {
       m_y    = 1.0f;
+}
   }
   m_width  = 0;
   m_height = 0;
@@ -157,8 +160,9 @@ COverlayText::~COverlayText()
 void COverlayText::PrepareRender(const std::string &font, int color, int height, int style,
                                  const std::string &fontcache, const std::string &fontbordercache)
 {
-  if (!m_layout)
+  if (!m_layout) {
     m_layout = GetFontLayout(font, color, height, style, fontcache, fontbordercache);
+}
 
   if (m_layout == nullptr)
   {
@@ -173,8 +177,9 @@ void COverlayText::PrepareRender(const std::string &font, int color, int height,
 
 void COverlayText::Render(OVERLAY::SRenderState &state)
 {
-  if(m_layout == nullptr)
+  if(m_layout == nullptr) {
     return;
+}
 
   CRect rd = g_graphicsContext.GetViewWindow();
   RESOLUTION_INFO res = g_graphicsContext.GetResInfo();
@@ -200,8 +205,9 @@ void COverlayText::Render(OVERLAY::SRenderState &state)
 
   if (m_subalign == SUBTITLE_ALIGN_MANUAL
   ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE
-  ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
+  ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE) {
     y -= m_height;
+}
 
   // clamp inside screen
   y = std::max(y, (float) res.Overscan.top);

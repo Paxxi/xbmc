@@ -60,8 +60,9 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
 
   udf_dir_t *dirp = udfIsoReader.OpenDir(strSub.c_str());
 
-  if (dirp == nullptr)
+  if (dirp == nullptr) {
     return false;
+}
 
   udf_dirent_t *dp = nullptr;
   while ((dp = udfIsoReader.ReadDir(dirp)) != nullptr)
@@ -99,8 +100,9 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
 bool CUDFDirectory::Exists(const CURL& url)
 {
   CFileItemList items;
-  if (GetDirectory(url, items))
+  if (GetDirectory(url, items)) {
     return true;
+}
 
   return false;
 }

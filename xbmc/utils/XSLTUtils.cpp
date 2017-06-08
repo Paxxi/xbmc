@@ -49,12 +49,15 @@ m_xmlInput(nullptr), m_xmlOutput(nullptr), m_xmlStylesheet(nullptr), m_xsltStyle
 
 XSLTUtils::~XSLTUtils()
 {
-  if (m_xmlInput)
+  if (m_xmlInput) {
     xmlFreeDoc(m_xmlInput);
-  if (m_xmlOutput)
+}
+  if (m_xmlOutput) {
     xmlFreeDoc(m_xmlOutput);
-  if (m_xsltStylesheet)
+}
+  if (m_xsltStylesheet) {
     xsltFreeStylesheet(m_xsltStylesheet);
+}
 }
 
 bool XSLTUtils::XSLTTransform(std::string& output)
@@ -86,8 +89,9 @@ bool XSLTUtils::XSLTTransform(std::string& output)
 bool XSLTUtils::SetInput(const std::string& input)
 {
   m_xmlInput = xmlParseMemory(input.c_str(), input.size());
-  if (!m_xmlInput)
+  if (!m_xmlInput) {
     return false;
+}
   return true;
 }
 

@@ -46,8 +46,9 @@ bool CAudioEncoder::Init(audioenc_callbacks &callbacks)
 
   // create encoder instance
   m_context = m_struct.toAddon.Create(&callbacks);
-  if (!m_context)
+  if (!m_context) {
     return false;
+}
 
   return m_struct.toAddon.Start(m_context,
                                 m_iInChannels,
@@ -77,8 +78,9 @@ bool CAudioEncoder::Close()
   if (!Initialized() || !m_context)
     return false;
 
-  if (!m_struct.toAddon.Finish(m_context))
+  if (!m_struct.toAddon.Finish(m_context)) {
     return false;
+}
 
   m_struct.toAddon.Free(m_context);
   m_context = nullptr;

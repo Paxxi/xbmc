@@ -47,8 +47,9 @@ int CHTTPFileHandler::HandleRequest()
 
 bool CHTTPFileHandler::GetLastModifiedDate(CDateTime &lastModified) const
 {
-  if (!m_lastModified.IsValid())
+  if (!m_lastModified.IsValid()) {
     return false;
+}
 
   lastModified = m_lastModified;
   return true;
@@ -87,8 +88,9 @@ void CHTTPFileHandler::SetFile(const std::string& file, int responseStatus)
     else
     {
       struct __stat64 statBuffer;
-      if (fileObj.Stat(&statBuffer) == 0)
+      if (fileObj.Stat(&statBuffer) == 0) {
         SetLastModifiedDate(&statBuffer);
+}
     }
   }
 
@@ -100,8 +102,9 @@ void CHTTPFileHandler::SetFile(const std::string& file, int responseStatus)
   }
 
   // disable caching if the last modified date couldn't be read
-  if (!m_lastModified.IsValid())
+  if (!m_lastModified.IsValid()) {
     m_canBeCached = false;
+}
 }
 
 void CHTTPFileHandler::SetLastModifiedDate(const struct __stat64 *statBuffer)
@@ -113,6 +116,7 @@ void CHTTPFileHandler::SetLastModifiedDate(const struct __stat64 *statBuffer)
 #else
   time = localtime((time_t *)&statBuffer->st_mtime);
 #endif
-  if (time != nullptr)
+  if (time != nullptr) {
     m_lastModified = *time;
+}
 }

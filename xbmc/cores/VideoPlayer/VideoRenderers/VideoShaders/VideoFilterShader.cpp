@@ -98,22 +98,24 @@ ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool str
   {
     shadername = "convolution-4x4.glsl";
 #if defined(HAS_GL)
-    if (m_floattex)
+    if (m_floattex) {
       m_internalformat = GL_RGBA16F_ARB;
-    else
+    } else {
 #endif
       m_internalformat = GL_RGBA;
+}
   }
   else if (m_method == VS_SCALINGMETHOD_SPLINE36 || 
            m_method == VS_SCALINGMETHOD_LANCZOS3)
   {
     shadername = "convolution-6x6.glsl";
 #if defined(HAS_GL)
-    if (m_floattex)
+    if (m_floattex) {
       m_internalformat = GL_RGB16F_ARB;
-    else
+    } else {
 #endif
       m_internalformat = GL_RGB;
+}
   }
 
   if (m_floattex)
@@ -122,13 +124,14 @@ ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool str
     defines = "#define HAS_FLOAT_TEXTURE 0\n";
 
   //don't compile in stretch support when it's not needed
-  if (stretch)
+  if (stretch) {
     defines += "#define XBMC_STRETCH 1\n";
-  else
+  } else {
     defines += "#define XBMC_STRETCH 0\n";
 
   // get defines from the output stage if used
-  m_glslOutput = output;
+  
+}m_glslOutput = output;
   if (m_glslOutput) {
     defines += m_glslOutput->GetDefines();
   }
@@ -235,8 +238,9 @@ void ConvolutionFilterShader::OnDisabled()
 
 void ConvolutionFilterShader::Free()
 {
-  if (m_kernelTex1)
+  if (m_kernelTex1) {
     glDeleteTextures(1, &m_kernelTex1);
+}
   m_kernelTex1 = 0;
   if (m_glslOutput) m_glslOutput->Free();
   BaseVideoFilterShader::Free();

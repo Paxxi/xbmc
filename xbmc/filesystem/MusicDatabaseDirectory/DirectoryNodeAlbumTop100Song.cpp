@@ -32,8 +32,9 @@ CDirectoryNodeAlbumTop100Song::CDirectoryNodeAlbumTop100Song(const std::string& 
 bool CDirectoryNodeAlbumTop100Song::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   std::string strBaseDir=BuildPath();
   bool bSuccess=musicdatabase.GetTop100AlbumSongs(strBaseDir, items);

@@ -78,10 +78,11 @@ bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
     return false;
 
   duration = demux->GetStreamLength();
-  if (duration > 0)
+  if (duration > 0) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 int DegreeToOrientation(int degrees)
@@ -118,8 +119,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
   if (!pInputStream->Open())
   {
     CLog::Log(LOGERROR, "InputStream: Error opening, %s", redactPath.c_str());
-    if (pInputStream)
+    if (pInputStream) {
       delete pInputStream;
+}
     return false;
   }
 
@@ -138,8 +140,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Exception thrown when opening demuxer", __FUNCTION__);
-    if (pDemuxer)
+    if (pDemuxer) {
       delete pDemuxer;
+}
     delete pInputStream;
     return false;
   }
@@ -227,8 +230,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
           DemuxPacket* pPacket = pDemuxer->Read();
           packetsTried++;
 
-          if (!pPacket)
+          if (!pPacket) {
             break;
+}
 
           if (pPacket->iStreamId != nVideoStream)
           {
@@ -248,8 +252,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
 
           if (iDecoderState == CDVDVideoCodec::VC_PICTURE)
           {
-            if(!(picture.iFlags & DVP_FLAG_DROPPED))
+            if(!(picture.iFlags & DVP_FLAG_DROPPED)) {
               break;
+}
           }
 
         } while (abort_index--);
@@ -259,8 +264,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
           {
             unsigned int nWidth = g_advancedSettings.m_imageRes;
             double aspect = (double)picture.iDisplayWidth / (double)picture.iDisplayHeight;
-            if(hint.forced_aspect && hint.aspect != 0)
+            if(hint.forced_aspect && hint.aspect != 0) {
               aspect = hint.aspect;
+}
             unsigned int nHeight = (unsigned int)((double)g_advancedSettings.m_imageRes / aspect);
 
             uint8_t *pOutBuf = (uint8_t*)av_malloc(nWidth * nHeight * 4);
@@ -294,8 +300,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
     }
   }
 
-  if (pDemuxer)
+  if (pDemuxer) {
     delete pDemuxer;
+}
 
   delete pInputStream;
 
@@ -317,8 +324,9 @@ bool CDVDFileInfo::ExtractThumb(const std::string &strPath,
  */
 bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
 {
-  if (!pItem)
+  if (!pItem) {
     return false;
+}
 
   std::string strFileNameAndPath;
   if (pItem->HasVideoInfoTag())
@@ -334,8 +342,9 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
   CFileItem item(playablePath, false);
   item.SetMimeTypeForInternetFile();
   CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(nullptr, item);
-  if (!pInputStream)
+  if (!pInputStream) {
     return false;
+}
 
   if (pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER))
   {
@@ -450,8 +459,9 @@ bool CDVDFileInfo::DemuxerToStreamDetails(CDVDInputStream *pInputStream, CDVDDem
     if(((CDVDInputStreamBluray*)pInputStream)->GetTotalTime() > 0)
     {
       CStreamDetailVideo* detailVideo = (CStreamDetailVideo*)details.GetNthStream(CStreamDetail::VIDEO, 0);
-      if (detailVideo)
+      if (detailVideo) {
         detailVideo->m_iDuration = ((CDVDInputStreamBluray*)pInputStream)->GetTotalTime() / 1000;
+}
     }
   }
 #endif

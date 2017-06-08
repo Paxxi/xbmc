@@ -535,8 +535,9 @@ static bool Browse(const CURL& path, CFileItemList &items)
   if (repo == "all")
   {
     CAddonDatabase database;
-    if (!database.Open() || !database.GetRepositoryContent(addons))
+    if (!database.Open() || !database.GetRepositoryContent(addons)) {
       return false;
+}
     items.SetProperty("reponame", g_localizeStrings.Get(24087));
     items.SetLabel(g_localizeStrings.Get(24087));
   }
@@ -575,8 +576,9 @@ static bool Browse(const CURL& path, CFileItemList &items)
 
 static bool GetRecentlyUpdatedAddons(VECADDONS& addons)
 {
-  if (!CAddonMgr::GetInstance().GetInstalledAddons(addons))
+  if (!CAddonMgr::GetInstance().GetInstalledAddons(addons)) {
     return false;
+}
 
   auto limit = CDateTime::GetCurrentDateTime() - CDateTimeSpan(14, 0, 0, 0);
   auto isOld = [limit](const AddonPtr& addon){ return addon->LastUpdated() < limit; };
@@ -738,8 +740,9 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   else if (endpoint == "recently_updated")
   {
     VECADDONS addons;
-    if (!GetRecentlyUpdatedAddons(addons))
+    if (!GetRecentlyUpdatedAddons(addons)) {
       return false;
+}
 
     CAddonsDirectory::GenerateAddonListing(path, addons, items, g_localizeStrings.Get(24004));
     return true;
@@ -847,8 +850,9 @@ CFileItemPtr CAddonsDirectory::FileItemFromAddon(const AddonPtr &addon,
 bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, VECADDONS &addons)
 {
   CPluginSource::Content type = CPluginSource::Translate(content);
-  if (type == CPluginSource::UNKNOWN)
+  if (type == CPluginSource::UNKNOWN) {
     return false;
+}
 
   VECADDONS tempAddons;
   CAddonMgr::GetInstance().GetAddons(tempAddons, ADDON_PLUGIN);
@@ -884,8 +888,9 @@ bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, VECADDON
 bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, CFileItemList &items)
 {
   VECADDONS addons;
-  if (!GetScriptsAndPlugins(content, addons))
+  if (!GetScriptsAndPlugins(content, addons)) {
     return false;
+}
 
   for (AddonPtr& addon : addons)
   {

@@ -107,13 +107,15 @@ CVideoPlayerVideo::~CVideoPlayerVideo()
 double CVideoPlayerVideo::GetOutputDelay()
 {
   double time = m_messageQueue.GetPacketCount(CDVDMsg::DEMUXER_PACKET);
-  if( m_fFrameRate )
+  if( m_fFrameRate ) {
     time = (time * DVD_TIME_BASE) / m_fFrameRate;
-  else
+  } else {
     time = 0.0;
+}
 
-  if( m_speed != 0 )
+  if( m_speed != 0 ) {
     time = time * DVD_PLAYSPEED_NORMAL / abs(m_speed);
+}
 
   return time;
 }
@@ -123,8 +125,9 @@ bool CVideoPlayerVideo::OpenStream(CDVDStreamInfo hint)
   CRenderInfo info;
   info = m_renderManager.GetRenderInfo();
 
-  if (hint.flags & AV_DISPOSITION_ATTACHED_PIC)
+  if (hint.flags & AV_DISPOSITION_ATTACHED_PIC) {
     return false;
+}
   if (hint.extrasize == 0)
   {
     // codecs which require extradata
@@ -135,8 +138,9 @@ bool CVideoPlayerVideo::OpenStream(CDVDStreamInfo hint)
         hint.codec == AV_CODEC_ID_HEVC ||
         hint.codec == AV_CODEC_ID_MPEG4 ||
         hint.codec == AV_CODEC_ID_WMV3 ||
-        hint.codec == AV_CODEC_ID_VC1)
+        hint.codec == AV_CODEC_ID_VC1) {
       return false;
+}
   }
 
   CLog::Log(LOGNOTICE, "Creating video codec with codec id: %i", hint.codec);
@@ -203,10 +207,11 @@ void CVideoPlayerVideo::OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec)
   }
 
   // use aspect in stream if available
-  if(hint.forced_aspect)
+  if(hint.forced_aspect) {
     m_fForcedAspectRatio = static_cast<float>(hint.aspect);
-  else
+  } else {
     m_fForcedAspectRatio = 0.0f;
+}
 
   if (m_pVideoCodec && m_pVideoCodec->Reconfigure(hint))
   {
@@ -608,12 +613,14 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(double &frametime, double &pts)
       m_picture.pts = pts;
       hasTimestamp = false;
     }
-    else if (m_picture.pts == DVD_NOPTS_VALUE)
+    else if (m_picture.pts == DVD_NOPTS_VALUE) {
       m_picture.pts = m_picture.dts;
+}
 
     // use forced aspect if any
-    if( m_fForcedAspectRatio != 0.0f )
+    if( m_fForcedAspectRatio != 0.0f ) {
       m_picture.iDisplayWidth = (int) (m_picture.iDisplayHeight * m_fForcedAspectRatio);
+}
 
     // if frame has a pts (usually originiating from demux packet), use that
     if (m_picture.pts != DVD_NOPTS_VALUE)
@@ -646,8 +653,9 @@ bool CVideoPlayerVideo::ProcessDecoderOutput(double &frametime, double &pts)
     }
 
     // guess next frame pts. iDuration is always valid
-    if (m_speed != 0)
+    if (m_speed != 0) {
       pts += m_picture.iDuration * m_speed / abs(m_speed);
+}
 
     if (iResult & EOS_ABORT)
     {
@@ -691,8 +699,9 @@ void CVideoPlayerVideo::Flush(bool sync)
 void CVideoPlayerVideo::ProcessOverlays(VideoPicture* pSource, double pts)
 {
   // remove any overlays that are out of time
-  if (m_syncState == IDVDStreamPlayer::SYNC_INSYNC)
+  if (m_syncState == IDVDStreamPlayer::SYNC_INSYNC) {
     m_pOverlayContainer->CleanUp(pts - m_iSubtitleDelay);
+}
 
   VecOverlays overlays;
 
@@ -746,8 +755,9 @@ std::string CVideoPlayerVideo::GetStereoMode()
     default:                                  stereo_mode = m_hints.stereo_mode; break;
   }
 
-  if(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_StereoInvert)
+  if(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_StereoInvert) {
     stereo_mode = GetStereoModeInvert(stereo_mode);
+}
   return stereo_mode;
 }
 
@@ -773,8 +783,9 @@ int CVideoPlayerVideo::OutputPicture(const VideoPicture* src, double pts)
   double config_framerate = m_bFpsInvalid ? 0.0 : m_fFrameRate;
 
   unsigned flags = 0;
-  if(pPicture->color_range == 1)
+  if(pPicture->color_range == 1) {
     flags |= CONF_FLAGS_YUV_FULLRANGE;
+}
 
   flags |= GetFlagsChromaPosition(pPicture->chroma_position)
               |  GetFlagsColorMatrix(pPicture->color_matrix, pPicture->iWidth, pPicture->iHeight)
@@ -869,14 +880,16 @@ int CVideoPlayerVideo::OutputPicture(const VideoPicture* src, double pts)
   if (pPicture->iFlags & DVP_FLAG_INTERLACED)
   {
     deintMethod = CMediaSettings::GetInstance().GetCurrentVideoSettings().m_InterlaceMethod;
-    if (!m_processInfo.Supports(deintMethod))
+    if (!m_processInfo.Supports(deintMethod)) {
       deintMethod = m_processInfo.GetDeinterlacingMethodDefault();
+}
     if (deintMethod != EINTERLACEMETHOD::VS_INTERLACEMETHOD_NONE)
     {
-      if (pPicture->iFlags & DVP_FLAG_TOP_FIELD_FIRST)
+      if (pPicture->iFlags & DVP_FLAG_TOP_FIELD_FIRST) {
         mDisplayField = FS_TOP;
-      else
+      } else {
         mDisplayField = FS_BOT;
+}
     }
   }
 
@@ -957,14 +970,15 @@ double CVideoPlayerVideo::GetCurrentPts()
   // get render stats
   m_renderManager.GetStats(sleepTime, renderPts, queued, discard);
 
-  if (renderPts == DVD_NOPTS_VALUE)
+  if (renderPts == DVD_NOPTS_VALUE) {
     return DVD_NOPTS_VALUE;
-  else if (m_stalled)
+  } else if (m_stalled)
     return DVD_NOPTS_VALUE;
   else if (m_speed == DVD_PLAYSPEED_NORMAL)
   {
-    if (renderPts < 0)
+    if (renderPts < 0) {
       renderPts = 0;
+}
   }
   return renderPts;
 }
@@ -1058,18 +1072,20 @@ int CVideoPlayerVideo::CalcDropRequirement(double pts)
   m_droppingStats.m_lastPts = pts;
 
   // get decoder stats
-  if (!m_pVideoCodec->GetCodecStats(iDecoderPts, iDroppedFrames, iSkippedPicture))
+  if (!m_pVideoCodec->GetCodecStats(iDecoderPts, iDroppedFrames, iSkippedPicture)) {
     iDecoderPts = pts;
-  if (iDecoderPts == DVD_NOPTS_VALUE)
+}
+  if (iDecoderPts == DVD_NOPTS_VALUE) {
     iDecoderPts = pts;
+}
 
   // get render stats
   m_renderManager.GetStats(lateframes, iRenderPts, queued, discard);
   iBufferLevel = queued + discard;
 
-  if (iBufferLevel < 0)
+  if (iBufferLevel < 0) {
     result |= EOS_BUFFER_LEVEL;
-  else if (iBufferLevel < 2)
+  } else if (iBufferLevel < 2)
   {
     result |= EOS_BUFFER_LEVEL;
     if (g_advancedSettings.CanLogComponent(LOGVIDEO))

@@ -171,11 +171,11 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
 
   m_streamTypeDetected = DetectStreamType(&currentFile);
 
-  if (iStreamType == AE_DSP_ASTREAM_AUTO)
+  if (iStreamType == AE_DSP_ASTREAM_AUTO) {
     m_streamTypeUsed = m_streamTypeDetected;
-  else if (iStreamType >= AE_DSP_ASTREAM_BASIC && iStreamType < AE_DSP_ASTREAM_AUTO)
+  } else if (iStreamType >= AE_DSP_ASTREAM_BASIC && iStreamType < AE_DSP_ASTREAM_AUTO) {
     m_streamTypeUsed = iStreamType;
-  else
+  } else
   {
     CLog::Log(LOGERROR, "ActiveAE DSP - %s - Unknown audio stream type, falling back to basic", __FUNCTION__);
     m_streamTypeUsed = AE_DSP_ASTREAM_BASIC;
@@ -189,8 +189,9 @@ bool CActiveAEDSPProcess::Create(const AEAudioFormat &inputFormat, const AEAudio
     int identifier = CMediaSettings::GetInstance().GetCurrentVideoSettings().m_AudioStream;
     if(identifier < 0)
       identifier = g_application.m_pPlayer->GetAudioStream();
-    if (identifier < 0)
+    if (identifier < 0) {
       identifier = 0;
+}
 
     SPlayerAudioStreamInfo info;
     g_application.m_pPlayer->GetAudioStreamInfo(identifier, info);
@@ -514,9 +515,9 @@ void CActiveAEDSPProcess::ForceReinit()
 AE_DSP_STREAMTYPE CActiveAEDSPProcess::DetectStreamType(const CFileItem *item)
 {
   AE_DSP_STREAMTYPE detected = AE_DSP_ASTREAM_BASIC;
-  if (item->HasMusicInfoTag())
+  if (item->HasMusicInfoTag()) {
     detected = AE_DSP_ASTREAM_MUSIC;
-  else if (item->HasVideoInfoTag() || g_application.m_pPlayer->HasVideo())
+  } else if (item->HasVideoInfoTag() || g_application.m_pPlayer->HasVideo())
     detected = AE_DSP_ASTREAM_MOVIE;
 //    else if (item->HasVideoInfoTag())
 //      detected = AE_DSP_ASTREAM_GAME;
@@ -569,28 +570,29 @@ AE_DSP_STREAMTYPE CActiveAEDSPProcess::GetUsedStreamType()
 
 AE_DSP_BASETYPE CActiveAEDSPProcess::GetBaseType(AE_DSP_STREAM_PROPERTIES *props)
 {
-  if (!strcmp(props->strCodecId, "ac3"))
+  if (!strcmp(props->strCodecId, "ac3")) {
     return AE_DSP_ABASE_AC3;
-  else if (!strcmp(props->strCodecId, "eac3"))
+  } else if (!strcmp(props->strCodecId, "eac3")) {
     return AE_DSP_ABASE_EAC3;
-  else if (!strcmp(props->strCodecId, "dca") || !strcmp(props->strCodecId, "dts"))
+  } else if (!strcmp(props->strCodecId, "dca") || !strcmp(props->strCodecId, "dts")) {
     return AE_DSP_ABASE_DTS;
-  else if (!strcmp(props->strCodecId, "dtshd_hra"))
+  } else if (!strcmp(props->strCodecId, "dtshd_hra")) {
     return AE_DSP_ABASE_DTSHD_HRA;
-  else if (!strcmp(props->strCodecId, "dtshd_ma"))
+  } else if (!strcmp(props->strCodecId, "dtshd_ma")) {
     return AE_DSP_ABASE_DTSHD_MA;
-  else if (!strcmp(props->strCodecId, "truehd"))
+  } else if (!strcmp(props->strCodecId, "truehd")) {
     return AE_DSP_ABASE_TRUEHD;
-  else if (!strcmp(props->strCodecId, "mlp"))
+  } else if (!strcmp(props->strCodecId, "mlp")) {
     return AE_DSP_ABASE_MLP;
-  else if (!strcmp(props->strCodecId, "flac"))
+  } else if (!strcmp(props->strCodecId, "flac")) {
     return AE_DSP_ABASE_FLAC;
-  else if (props->iChannels > 2)
+  } else if (props->iChannels > 2) {
     return AE_DSP_ABASE_MULTICHANNEL;
-  else if (props->iChannels == 2)
+  } else if (props->iChannels == 2) {
     return AE_DSP_ABASE_STEREO;
-  else
+  } else {
     return AE_DSP_ABASE_MONO;
+}
 }
 
 AE_DSP_BASETYPE CActiveAEDSPProcess::GetUsedBaseType()
@@ -618,8 +620,9 @@ bool CActiveAEDSPProcess::GetMasterModeTypeInformation(AE_DSP_STREAMTYPE &stream
 {
   streamTypeUsed  = (AE_DSP_STREAMTYPE)m_addonStreamProperties.iStreamType;
 
-  if (m_activeMode < 0)
+  if (m_activeMode < 0) {
     return false;
+}
 
   baseType = m_addons_MasterProc[m_activeMode].pMode->BaseType();
   iModeID  = m_addons_MasterProc[m_activeMode].pMode->ModeID();
@@ -655,11 +658,11 @@ bool CActiveAEDSPProcess::MasterModeChange(int iModeID, AE_DSP_STREAMTYPE iStrea
   {
     AE_DSP_STREAMTYPE old = m_streamTypeUsed;
     CLog::Log(LOGDEBUG, "  ----  Input stream  ----");
-    if (iStreamType == AE_DSP_ASTREAM_AUTO)
+    if (iStreamType == AE_DSP_ASTREAM_AUTO) {
       m_streamTypeUsed = m_streamTypeDetected;
-    else if (iStreamType >= AE_DSP_ASTREAM_BASIC && iStreamType < AE_DSP_ASTREAM_AUTO)
+    } else if (iStreamType >= AE_DSP_ASTREAM_BASIC && iStreamType < AE_DSP_ASTREAM_AUTO) {
       m_streamTypeUsed = iStreamType;
-    else
+    } else
     {
       CLog::Log(LOGWARNING, "ActiveAE DSP - %s - Unknown audio stream type, falling back to basic", __FUNCTION__);
       m_streamTypeUsed = AE_DSP_ASTREAM_BASIC;
@@ -742,8 +745,9 @@ void CActiveAEDSPProcess::ClearArray(float **array, unsigned int samples)
   unsigned int presentFlag = 1;
   for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
-    if (m_addonSettings.lOutChannelPresentFlags & presentFlag)
+    if (m_addonSettings.lOutChannelPresentFlags & presentFlag) {
       memset(array[i], 0, samples*sizeof(float));
+}
     presentFlag <<= 1;
   }
 }
@@ -928,8 +932,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
     startTime = CurrentHostCounter();
 
     frames = m_addon_InputResample.pAddon->InputResampleProcess(&m_addon_InputResample.handle, lastOutArray, m_processArray[togglePtr], frames);
-    if (frames == 0)
+    if (frames == 0) {
       return false;
+}
 
     m_addon_InputResample.iLastTime += 1000 * 10000 * (CurrentHostCounter() - startTime) / hostFrequency;
 
@@ -946,8 +951,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
     startTime = CurrentHostCounter();
 
     frames = m_addons_PreProc[i].pAddon->PreProcess(&m_addons_PreProc[i].handle, m_addons_PreProc[i].iAddonModeNumber, lastOutArray, m_processArray[togglePtr], frames);
-    if (frames == 0)
+    if (frames == 0) {
       return false;
+}
 
     m_addons_PreProc[i].iLastTime += 1000 * 10000 * (CurrentHostCounter() - startTime) / hostFrequency;
 
@@ -965,8 +971,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
     startTime = CurrentHostCounter();
 
     frames = m_addons_MasterProc[m_activeMode].pAddon->MasterProcess(&m_addons_MasterProc[m_activeMode].handle, lastOutArray, m_processArray[togglePtr], frames);
-    if (frames == 0)
+    if (frames == 0) {
       return false;
+}
 
     m_addons_MasterProc[m_activeMode].iLastTime += 1000 * 10000 * (CurrentHostCounter() - startTime) / hostFrequency;
 
@@ -1014,8 +1021,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
     startTime = CurrentHostCounter();
 
     frames = m_addons_PostProc[i].pAddon->PostProcess(&m_addons_PostProc[i].handle, m_addons_PostProc[i].iAddonModeNumber, lastOutArray, m_processArray[togglePtr], frames);
-    if (frames == 0)
+    if (frames == 0) {
       return false;
+}
 
     m_addons_PostProc[i].iLastTime += 1000 * 10000 * (CurrentHostCounter() - startTime) / hostFrequency;
 
@@ -1033,8 +1041,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
     startTime = CurrentHostCounter();
 
     frames = m_addon_OutputResample.pAddon->OutputResampleProcess(&m_addon_OutputResample.handle, lastOutArray, m_processArray[togglePtr], frames);
-    if (frames == 0)
+    if (frames == 0) {
       return false;
+}
 
     m_addon_OutputResample.iLastTime += 1000 * 10000 * (CurrentHostCounter() - startTime) / hostFrequency;
 
@@ -1045,8 +1054,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
   /**
    * Setup ffmpeg convert array for output stream, performed here to now last array
    */
-  if (needDSPAddonsReinit)
+  if (needDSPAddonsReinit) {
     SetFFMpegDSPProcessorArray(m_ffMpegConvertArray[FFMPEG_PROC_ARRAY_OUT], lastOutArray, m_idx_out, m_addonSettings.lOutChannelPresentFlags);
+}
 
   /**
    * Convert back to required output format
@@ -1062,8 +1072,9 @@ bool CActiveAEDSPProcess::Process(CSampleBuffer *in, CSampleBuffer *out)
   /**
    * Update cpu process percent usage values for modes and total (every second)
    */
-  if (iTime >= m_iLastProcessTime + 1000*10000)
+  if (iTime >= m_iLastProcessTime + 1000*10000) {
     CalculateCPUUsage(iTime);
+}
 
   return true;
 }
@@ -1074,48 +1085,55 @@ bool CActiveAEDSPProcess::RecheckProcessArray(unsigned int inputFrames)
   unsigned int framesNeeded;
   unsigned int framesOut = m_processArraySize;
 
-  if (inputFrames > framesOut)
+  if (inputFrames > framesOut) {
     framesOut = inputFrames;
+}
 
   if (m_addon_InputResample.pAddon)
   {
     framesNeeded = m_addon_InputResample.pAddon->InputResampleProcessNeededSamplesize(&m_addon_InputResample.handle);
-    if (framesNeeded > framesOut)
+    if (framesNeeded > framesOut) {
       framesOut = framesNeeded;
+}
   }
 
   for (unsigned int i = 0; i < m_addons_PreProc.size(); ++i)
   {
     framesNeeded = m_addons_PreProc[i].pAddon->PreProcessNeededSamplesize(&m_addons_PreProc[i].handle, m_addons_PreProc[i].iAddonModeNumber);
-    if (framesNeeded > framesOut)
+    if (framesNeeded > framesOut) {
       framesOut = framesNeeded;
+}
   }
 
   if (m_addons_MasterProc[m_activeMode].pAddon)
   {
     framesNeeded = m_addons_MasterProc[m_activeMode].pAddon->MasterProcessNeededSamplesize(&m_addons_MasterProc[m_activeMode].handle);
-    if (framesNeeded > framesOut)
+    if (framesNeeded > framesOut) {
       framesOut = framesNeeded;
+}
   }
 
   for (unsigned int i = 0; i < m_addons_PostProc.size(); ++i)
   {
     framesNeeded = m_addons_PostProc[i].pAddon->PostProcessNeededSamplesize(&m_addons_PostProc[i].handle, m_addons_PostProc[i].iAddonModeNumber);
-    if (framesNeeded > framesOut)
+    if (framesNeeded > framesOut) {
       framesOut = framesNeeded;
+}
   }
 
   if (m_addon_OutputResample.pAddon)
   {
     framesNeeded = m_addon_OutputResample.pAddon->OutputResampleProcessNeededSamplesize(&m_addon_OutputResample.handle);
-    if (framesNeeded > framesOut)
+    if (framesNeeded > framesOut) {
       framesOut = framesNeeded;
+}
   }
 
   if (framesOut > m_processArraySize)
   {
-    if (!ReallocProcessArray(framesOut))
+    if (!ReallocProcessArray(framesOut)) {
       return false;
+}
 
     m_processArraySize = framesOut;
   }

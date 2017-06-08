@@ -52,15 +52,17 @@ std::string CDefaultJoystick::ControllerID() const
 
 bool CDefaultJoystick::HasFeature(const FeatureName& feature) const
 {
-  if (GetKeyID(feature) != 0)
+  if (GetKeyID(feature) != 0) {
     return true;
+}
 
   // Try analog stick directions
   if (GetKeyID(feature, ANALOG_STICK_DIRECTION::UP)    != 0 ||
       GetKeyID(feature, ANALOG_STICK_DIRECTION::DOWN)  != 0 ||
       GetKeyID(feature, ANALOG_STICK_DIRECTION::RIGHT) != 0 ||
-      GetKeyID(feature, ANALOG_STICK_DIRECTION::LEFT)  != 0)
+      GetKeyID(feature, ANALOG_STICK_DIRECTION::LEFT)  != 0) {
     return true;
+}
 
   return false;
 }
@@ -140,8 +142,9 @@ bool CDefaultJoystick::OnAnalogStickMotion(const FeatureName& feature, float x, 
   }
 
   // Now activate direction the analog stick is pointing
-  if (magnitude != 0.0f)
+  if (magnitude != 0.0f) {
     bHandled = ActivateDirection(feature, magnitude, analogStickDir, motionTimeMs);
+}
 
   return bHandled;
 }
@@ -157,8 +160,9 @@ int CDefaultJoystick::GetActionID(const FeatureName& feature)
   const int windowId = GetWindowID();
   const bool bFallthrough = GetFallthrough();
 
-  if (keyId > 0)
+  if (keyId > 0) {
     return m_handler->GetActionID(keyId, windowId, bFallthrough);
+}
 
   return ACTION_NONE;
 }

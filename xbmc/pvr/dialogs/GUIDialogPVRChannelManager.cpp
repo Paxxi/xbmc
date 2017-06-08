@@ -239,8 +239,9 @@ bool CGUIDialogPVRChannelManager::OnClickButtonRadioTV(CGUIMessage &message)
   if (m_bContainsChanges)
   {
     CGUIDialogYesNo* pDialog = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-    if (!pDialog)
+    if (!pDialog) {
       return true;
+}
 
     pDialog->SetHeading(CVariant{20052});
     pDialog->SetLine(0, CVariant{""});
@@ -286,8 +287,9 @@ bool CGUIDialogPVRChannelManager::OnClickButtonRadioActive(CGUIMessage &message)
 bool CGUIDialogPVRChannelManager::OnClickButtonRadioParentalLocked(CGUIMessage &message)
 {
   CGUIMessage msg(GUI_MSG_IS_SELECTED, GetID(), RADIOBUTTON_PARENTAL_LOCK);
-  if (!OnMessage(msg))
+  if (!OnMessage(msg)) {
     return false;
+}
 
   bool selected(msg.GetParam1() == 1);
 
@@ -335,8 +337,9 @@ bool CGUIDialogPVRChannelManager::OnClickButtonChannelLogo(CGUIMessage &message)
   CFileItemPtr pItem = m_channelItems->Get(m_iSelected);
   if (!pItem)
     return false;
-  if (CProfilesManager::GetInstance().GetCurrentProfile().canWriteSources() && !g_passwordManager.IsProfileLockUnlocked())
+  if (CProfilesManager::GetInstance().GetCurrentProfile().canWriteSources() && !g_passwordManager.IsProfileLockUnlocked()) {
     return false;
+}
 
   // setup our thumb list
   CFileItemList items;
@@ -431,8 +434,9 @@ bool CGUIDialogPVRChannelManager::OnClickButtonGroupManager(CGUIMessage &message
 {
   /* Load group manager dialog */
   CGUIDialogPVRGroupManager* pDlgInfo = g_windowManager.GetWindow<CGUIDialogPVRGroupManager>(WINDOW_DIALOG_PVR_GROUP_MANAGER);
-  if (!pDlgInfo)
+  if (!pDlgInfo) {
     return false;
+}
 
   pDlgInfo->SetRadio(m_bIsRadio);
 
@@ -449,8 +453,9 @@ bool CGUIDialogPVRChannelManager::OnClickButtonNewChannel()
   if (CServiceBroker::GetPVRManager().Clients()->CreatedClientAmount() > 1)
   {
     CGUIDialogSelect* pDlgSelect = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
-    if (!pDlgSelect)
+    if (!pDlgSelect) {
       return false;
+}
 
     pDlgSelect->SetHeading(CVariant{19213}); // Select Client
 
@@ -471,12 +476,13 @@ bool CGUIDialogPVRChannelManager::OnClickButtonNewChannel()
     channel->SetClientID(iClientID);
 
     PVR_ERROR ret = CServiceBroker::GetPVRManager().Clients()->OpenDialogChannelAdd(channel);
-    if (ret == PVR_ERROR_NO_ERROR)
+    if (ret == PVR_ERROR_NO_ERROR) {
       Update();
-    else if (ret == PVR_ERROR_NOT_IMPLEMENTED)
+    } else if (ret == PVR_ERROR_NOT_IMPLEMENTED) {
       CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19038}); // "Information", "Not supported by the PVR backend."
-    else
+    } else {
       CGUIDialogOK::ShowAndGetInput(CVariant{2103}, CVariant{16029});  // "Add-on error", "Check the log for more information about this message."
+}
   }
   return true;
 }
@@ -557,10 +563,11 @@ bool CGUIDialogPVRChannelManager::OnPopupMenu(int iItem)
   CContextButtons buttons;
 
   // mark the item
-  if (iItem >= 0 && iItem < m_channelItems->Size())
+  if (iItem >= 0 && iItem < m_channelItems->Size()) {
     m_channelItems->Get(iItem)->Select(true);
-  else
+  } else {
     return false;
+}
 
   CFileItemPtr pItem = m_channelItems->Get(iItem);
   if (!pItem)
@@ -580,8 +587,9 @@ bool CGUIDialogPVRChannelManager::OnPopupMenu(int iItem)
   if (iItem >= 0 && iItem < m_channelItems->Size())
     m_channelItems->Get(iItem)->Select(false);
 
-  if (choice < 0)
+  if (choice < 0) {
     return false;
+}
 
   return OnContextButton(iItem, (CONTEXT_BUTTON)choice);
 }
@@ -603,16 +611,18 @@ bool CGUIDialogPVRChannelManager::OnContextButton(int itemNumber, CONTEXT_BUTTON
   else if (button == CONTEXT_BUTTON_SETTINGS)
   {
     PVR_ERROR ret = CServiceBroker::GetPVRManager().Clients()->OpenDialogChannelSettings(pItem->GetPVRChannelInfoTag());
-    if (ret == PVR_ERROR_NOT_IMPLEMENTED)
+    if (ret == PVR_ERROR_NOT_IMPLEMENTED) {
       CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19038}); // "Information", "Not supported by the PVR backend."
-    else if (ret != PVR_ERROR_NO_ERROR)
+    } else if (ret != PVR_ERROR_NO_ERROR) {
       CGUIDialogOK::ShowAndGetInput(CVariant{2103}, CVariant{16029});  // "Add-on error", "Check the log for more information about this message."
+}
   }
   else if (button == CONTEXT_BUTTON_DELETE)
   {
     CGUIDialogYesNo* pDialog = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-    if (!pDialog)
+    if (!pDialog) {
       return true;
+}
 
     pDialog->SetHeading(CVariant{19211}); // Delete channel
     pDialog->SetText(CVariant{750});      // Are you sure?
@@ -629,10 +639,11 @@ bool CGUIDialogPVRChannelManager::OnContextButton(int itemNumber, CONTEXT_BUTTON
         m_viewControl.SetItems(*m_channelItems);
         Renumber();
       }
-      else if (ret == PVR_ERROR_NOT_IMPLEMENTED)
+      else if (ret == PVR_ERROR_NOT_IMPLEMENTED) {
         CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19038}); // "Information", "Not supported by the PVR backend."
-      else
+      } else {
         CGUIDialogOK::ShowAndGetInput(CVariant{2103}, CVariant{16029});  // "Add-on error", "Check the log for more information about this message."
+}
     }
   }
   else if (button == CONTEXT_BUTTON_EDIT_SOURCE)
@@ -713,10 +724,11 @@ void CGUIDialogPVRChannelManager::Update()
   if (!m_clientsWithSettingsList.empty())
     m_bAllowNewChannel = true;
 
-  if (m_bAllowNewChannel)
+  if (m_bAllowNewChannel) {
     SET_CONTROL_VISIBLE(BUTTON_NEW_CHANNEL);
-  else
+  } else {
     SET_CONTROL_HIDDEN(BUTTON_NEW_CHANNEL);
+}
 
   Renumber();
   m_viewControl.SetItems(*m_channelItems);
@@ -764,8 +776,9 @@ bool CGUIDialogPVRChannelManager::PersistChannel(const CFileItemPtr &pItem, cons
 
 void CGUIDialogPVRChannelManager::SaveList()
 {
-  if (!m_bContainsChanges)
+  if (!m_bContainsChanges) {
    return;
+}
 
   /* display the progress dialog */
   CGUIDialogProgress* pDlgProgress = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);

@@ -96,8 +96,9 @@ bool CPeripheralJoystickEmulation::OnKeyPress(const CKey& key)
     if (!it->second.bPromiscuous)
     {
       bHandled = it->second.handler->OnKeyPress(key);
-      if (bHandled)
+      if (bHandled) {
         break;
+}
     }
   }
 

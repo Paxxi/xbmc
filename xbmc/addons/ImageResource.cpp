@@ -42,8 +42,9 @@ CImageResource::CImageResource(CAddonInfo addonInfo, std::string type)
 void CImageResource::OnPreUnInstall()
 {
   CURL xbtUrl;
-  if (!HasXbt(xbtUrl))
+  if (!HasXbt(xbtUrl)) {
     return;
+}
 
   // if there's an XBT we need to remove it from the XBT manager
   XFILE::CXbtManager::GetInstance().Release(xbtUrl);
@@ -52,8 +53,9 @@ void CImageResource::OnPreUnInstall()
 bool CImageResource::IsAllowed(const std::string &file) const
 {
   // check if the file path points to a directory
-  if (URIUtils::HasSlashAtEnd(file, true))
+  if (URIUtils::HasSlashAtEnd(file, true)) {
     return true;
+}
 
   std::string ext = URIUtils::GetExtension(file);
   return file.empty() ||

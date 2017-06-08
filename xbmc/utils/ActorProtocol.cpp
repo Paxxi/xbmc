@@ -30,16 +30,19 @@ void Message::Release()
   isSyncFini = true;
   origin->Unlock();
 
-  if (skip)
+  if (skip) {
     return;
+}
 
   // free data buffer
-  if (data != buffer)
+  if (data != buffer) {
     delete [] data;
+}
 
   // delete event in case of sync message
-  if (event)
+  if (event) {
     delete event;
+}
 
   origin->ReturnMessage(this);
 }
@@ -48,10 +51,11 @@ bool Message::Reply(int sig, void *data /* = NULL*/, int size /* = 0 */)
 {
   if (!isSync)
   {
-    if (isOut)
+    if (isOut) {
       return origin->SendInMessage(sig, data, size);
-    else
+    } else {
       return origin->SendOutMessage(sig, data, size);
+}
   }
 
   origin->Lock();
@@ -64,18 +68,20 @@ bool Message::Reply(int sig, void *data /* = NULL*/, int size /* = 0 */)
     replyMessage = msg;
     if (data)
     {
-      if (size > MSG_INTERNAL_BUFFER_SIZE)
+      if (size > MSG_INTERNAL_BUFFER_SIZE) {
         msg->data = new uint8_t[size];
-      else
+      } else {
         msg->data = msg->buffer;
+}
       memcpy(msg->data, data, size);
     }
   }
 
   origin->Unlock();
 
-  if (event)
+  if (event) {
     event->Set();
+}
 
   return true;
 }
@@ -128,20 +134,22 @@ void Protocol::ReturnMessage(Message *msg)
 bool Protocol::SendOutMessage(int signal, void *data /* = NULL */, int size /* = 0 */, Message *outMsg /* = NULL */)
 {
   Message *msg;
-  if (outMsg)
+  if (outMsg) {
     msg = outMsg;
-  else
+  } else {
     msg = GetMessage();
+}
 
   msg->signal = signal;
   msg->isOut = true;
 
   if (data)
   {
-    if (size > MSG_INTERNAL_BUFFER_SIZE)
+    if (size > MSG_INTERNAL_BUFFER_SIZE) {
       msg->data = new uint8_t[size];
-    else
+    } else {
       msg->data = msg->buffer;
+}
     memcpy(msg->data, data, size);
   }
 
@@ -156,20 +164,22 @@ bool Protocol::SendOutMessage(int signal, void *data /* = NULL */, int size /* =
 bool Protocol::SendInMessage(int signal, void *data /* = NULL */, int size /* = 0 */, Message *outMsg /* = NULL */)
 {
   Message *msg;
-  if (outMsg)
+  if (outMsg) {
     msg = outMsg;
-  else
+  } else {
     msg = GetMessage();
+}
 
   msg->signal = signal;
   msg->isOut = false;
 
   if (data)
   {
-    if (size > MSG_INTERNAL_BUFFER_SIZE)
+    if (size > MSG_INTERNAL_BUFFER_SIZE) {
       msg->data = new uint8_t[size];
-    else
+    } else {
       msg->data = msg->buffer;
+}
     memcpy(msg->data, data, size);
   }
 
@@ -194,24 +204,26 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, voi
   if (!msg->event->WaitMSec(timeout))
   {
     msg->origin->Lock();
-    if (msg->replyMessage)
+    if (msg->replyMessage) {
       *retMsg = msg->replyMessage;
-    else
+    } else
     {
       *retMsg = nullptr;
       msg->isSyncTimeout = true;
     }
     msg->origin->Unlock();
   }
-  else
+  else {
     *retMsg = msg->replyMessage;
+}
 
   msg->Release();
 
-  if (*retMsg)
+  if (*retMsg) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 bool Protocol::ReceiveOutMessage(Message **msg)
@@ -245,11 +257,13 @@ void Protocol::Purge()
 {
   Message *msg;
 
-  while (ReceiveInMessage(&msg))
+  while (ReceiveInMessage(&msg)) {
     msg->Release();
+}
 
-  while (ReceiveOutMessage(&msg))
+  while (ReceiveOutMessage(&msg)) {
     msg->Release();
+}
 }
 
 void Protocol::PurgeIn(int signal)

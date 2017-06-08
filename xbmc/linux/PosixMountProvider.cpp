@@ -68,12 +68,14 @@ void CPosixMountProvider::GetDrives(VECSOURCES &drives)
             || strcmp(fs, "reiserfs") == 0 || strcmp(fs, "xfs") == 0
             || strcmp(fs, "ntfs-3g") == 0 || strcmp(fs, "iso9660") == 0
             || strcmp(fs, "exfat") == 0
-            || strcmp(fs, "fusefs") == 0 || strcmp(fs, "hfs") == 0)
+            || strcmp(fs, "fusefs") == 0 || strcmp(fs, "hfs") == 0) {
           accepted = true;
+}
 
         // Ignore root
-        if (strcmp(mount, "/") == 0)
+        if (strcmp(mount, "/") == 0) {
           accepted = false;
+}
 
         if(accepted)
           result.push_back(mount);
@@ -136,8 +138,9 @@ bool CPosixMountProvider::Eject(const std::string& mountpath)
   std::string cmd = "umount \"" + mountpath + "\"";
   int status = system(cmd.c_str());
 
-  if (status == 0)
+  if (status == 0) {
     return true;
+}
 
   return false;
 }

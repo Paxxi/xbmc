@@ -98,8 +98,9 @@ void CGUIDialogBoxBase::SetText(CVariant text)
 
 void CGUIDialogBoxBase::SetChoice(int iButton, const CVariant &choice) // iButton == 0 for no, 1 for yes
 {
-  if (iButton < 0 || iButton >= DIALOG_MAX_CHOICES)
+  if (iButton < 0 || iButton >= DIALOG_MAX_CHOICES) {
     return;
+}
 
   std::string label = GetLocalized(choice);
   CSingleLock lock(m_section);
@@ -133,11 +134,13 @@ void CGUIDialogBoxBase::Process(unsigned int currentTime, CDirtyRegionList &dirt
     {
       std::vector<std::string> lines = StringUtils::Split(text, "\n", DIALOG_MAX_LINES);
       lines.resize(DIALOG_MAX_LINES);
-      for (size_t i = 0 ; i < lines.size(); ++i)
+      for (size_t i = 0 ; i < lines.size(); ++i) {
         SET_CONTROL_LABEL(CONTROL_LINES_START + i, lines[i]);
+}
     }
-    for (size_t i = 0 ; i < choices.size() ; ++i)
+    for (size_t i = 0 ; i < choices.size() ; ++i) {
       SET_CONTROL_LABEL(CONTROL_CHOICES_START + i, choices[i]);
+}
   }
   CGUIDialog::Process(currentTime, dirtyregions);
 }
@@ -149,8 +152,9 @@ void CGUIDialogBoxBase::OnInitWindow()
 
   m_hasTextbox = false;
   const CGUIControl *control = GetControl(CONTROL_TEXTBOX);
-  if (control && control->GetControlType() == CGUIControl::GUICONTROL_TEXTBOX)
+  if (control && control->GetControlType() == CGUIControl::GUICONTROL_TEXTBOX) {
     m_hasTextbox = true;
+}
 
   // set initial labels
   {
@@ -180,10 +184,11 @@ void CGUIDialogBoxBase::OnDeinitWindow(int nextWindowID)
 
 std::string CGUIDialogBoxBase::GetLocalized(const CVariant &var) const
 {
-  if (var.isString())
+  if (var.isString()) {
     return var.asString();
-  else if (var.isInteger() && var.asInteger())
+  } else if (var.isInteger() && var.asInteger()) {
     return g_localizeStrings.Get((uint32_t)var.asInteger());
+}
   return "";
 }
 

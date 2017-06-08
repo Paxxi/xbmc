@@ -36,18 +36,19 @@ CConvolutionKernel::CConvolutionKernel(ESCALINGMETHOD method, int size)
   m_size = size;
   m_floatpixels = new float[m_size * 4];
 
-  if (method == VS_SCALINGMETHOD_LANCZOS2)
+  if (method == VS_SCALINGMETHOD_LANCZOS2) {
     Lanczos2();
-  else if (method == VS_SCALINGMETHOD_SPLINE36_FAST)
+  } else if (method == VS_SCALINGMETHOD_SPLINE36_FAST) {
     Spline36Fast();
-  else if (method == VS_SCALINGMETHOD_LANCZOS3_FAST)
+  } else if (method == VS_SCALINGMETHOD_LANCZOS3_FAST) {
     Lanczos3Fast();
-  else if (method == VS_SCALINGMETHOD_SPLINE36)
+  } else if (method == VS_SCALINGMETHOD_SPLINE36) {
     Spline36();
-  else if (method == VS_SCALINGMETHOD_LANCZOS3)
+  } else if (method == VS_SCALINGMETHOD_LANCZOS3) {
     Lanczos3();
-  else if (method == VS_SCALINGMETHOD_CUBIC)
+  } else if (method == VS_SCALINGMETHOD_CUBIC) {
     Bicubic(1.0 / 3.0, 1.0 / 3.0);
+}
 
   ToIntFract();
   ToUint8();
@@ -69,18 +70,21 @@ void CConvolutionKernel::Lanczos2()
     double x = (double)i / (double)m_size;
 
     //generate taps
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       m_floatpixels[i * 4 + j] = (float)LanczosWeight(x + (double)(j - 2), 2.0);
+}
 
     //any collection of 4 taps added together needs to be exactly 1.0
     //for lanczos this is not always the case, so we take each collection of 4 taps
     //and divide those taps by the sum of the taps
     float weight = 0.0;
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       weight += m_floatpixels[i * 4 + j];
+}
 
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       m_floatpixels[i * 4 + j] /= weight;
+}
   }
 }
 
@@ -106,11 +110,13 @@ void CConvolutionKernel::Lanczos3Fast()
     //for lanczos this is not always the case, so we take each collection of 4 taps
     //and divide those taps by the sum of the taps
     float weight = 0.0;
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       weight += m_floatpixels[i * 4 + j];
+}
 
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       m_floatpixels[i * 4 + j] /= weight;
+}
   }
 }
 
@@ -123,8 +129,9 @@ void CConvolutionKernel::Lanczos3()
     double x = (double)i / (double)m_size;
 
     //generate taps
-    for (int j = 0; j < 3; j++)
+    for (int j = 0; j < 3; j++) {
       m_floatpixels[i * 4 + j] = (float)LanczosWeight(x * 2.0 + (double)(j * 2 - 3), 3.0);
+}
 
     m_floatpixels[i * 4 + 3] = 0.0;
   }
@@ -161,11 +168,13 @@ void CConvolutionKernel::Spline36Fast()
     m_floatpixels[i * 4 + 3] = (float)(Spline36Weight(x + 1.0) + Spline36Weight(x + 2.0));
 
     float weight = 0.0;
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       weight += m_floatpixels[i * 4 + j];
+}
 
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       m_floatpixels[i * 4 + j] /= weight;
+}
   }
 }
 
@@ -176,8 +185,9 @@ void CConvolutionKernel::Spline36()
     double x = (double)i / (double)m_size;
 
     //generate taps
-    for (int j = 0; j < 3; j++)
+    for (int j = 0; j < 3; j++) {
       m_floatpixels[i * 4 + j] = (float)Spline36Weight(x * 2.0 + (double)(j * 2 - 3));
+}
 
     m_floatpixels[i * 4 + 3] = 0.0;
   }
@@ -207,8 +217,9 @@ void CConvolutionKernel::Bicubic(double B, double C)
     double x = (double)i / (double)m_size;
 
     //generate taps
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 4; j++) {
       m_floatpixels[i * 4 + j] = (float)BicubicWeight(x + (double)(j - 2), B, C);
+}
   }
 }
 
@@ -216,12 +227,13 @@ double CConvolutionKernel::LanczosWeight(double x, double radius)
 {
   double ax = fabs(x);
 
-  if (ax == 0.0)
+  if (ax == 0.0) {
     return 1.0;
-  else if (ax < radius)
+  } else if (ax < radius) {
     return SINC(ax) * SINC(ax / radius);
-  else
+  } else {
     return 0.0;
+}
 }
 
 double CConvolutionKernel::BicubicWeight(double x, double B, double C)
@@ -250,12 +262,13 @@ double CConvolutionKernel::Spline36Weight(double x)
 {
   double ax = fabs(x);
 
-  if      ( ax < 1.0 )
+  if      ( ax < 1.0 ) {
     return ( ( 13.0 / 11.0 * (ax      ) - 453.0 / 209.0 ) * (ax      ) -   3.0 / 209.0 ) * (ax      ) + 1.0;
-  else if ( ax < 2.0 )
+  } else if ( ax < 2.0 ) {
     return ( ( -6.0 / 11.0 * (ax - 1.0) + 270.0 / 209.0 ) * (ax - 1.0) - 156.0 / 209.0 ) * (ax - 1.0);
-  else if ( ax < 3.0 )
+  } else if ( ax < 3.0 ) {
     return ( (  1.0 / 11.0 * (ax - 2.0) -  45.0 / 209.0 ) * (ax - 2.0) +  26.0 / 209.0 ) * (ax - 2.0);
+}
   return 0.0;
 }
 
@@ -270,10 +283,11 @@ void CConvolutionKernel::ToIntFract()
   for (int i = 0; i < m_size * 4; i++)
   {
     int value = MathUtils::round_int((m_floatpixels[i] + 1.0) / 2.0 * 65535.0);
-    if (value < 0)
+    if (value < 0) {
       value = 0;
-    else if (value > 65535)
+    } else if (value > 65535) {
       value = 65535;
+}
 
     int integer = value / 256;
     int fract   = value % 256;
@@ -291,10 +305,11 @@ void CConvolutionKernel::ToUint8()
   for (int i = 0; i < m_size * 4; i++)
   {
     int value = MathUtils::round_int((m_floatpixels[i] * 0.5 + 0.5) * 255.0);
-    if (value < 0)
+    if (value < 0) {
       value = 0;
-    else if (value > 255)
+    } else if (value > 255) {
       value = 255;
+}
 
     m_uint8pixels[i] = (uint8_t)value;
   }

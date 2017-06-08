@@ -91,8 +91,9 @@ bool CGUIWindowMusicPlaylistEditor::OnMessage(CGUIMessage& message)
 
   case GUI_MSG_NOTIFY_ALL:
     {
-      if (message.GetParam1()==GUI_MSG_REMOVED_MEDIA)
+      if (message.GetParam1()==GUI_MSG_REMOVED_MEDIA) {
         DeleteRemoveableMediaDirectoryCache();
+}
     }
     break;
 
@@ -103,14 +104,15 @@ bool CGUIWindowMusicPlaylistEditor::OnMessage(CGUIMessage& message)
       {
         int item = GetCurrentPlaylistItem();
         int action = message.GetParam1();
-        if (action == ACTION_CONTEXT_MENU || action == ACTION_MOUSE_RIGHT_CLICK)
+        if (action == ACTION_CONTEXT_MENU || action == ACTION_MOUSE_RIGHT_CLICK) {
           OnPlaylistContext();
-        else if (action == ACTION_QUEUE_ITEM || action == ACTION_DELETE_ITEM || action == ACTION_MOUSE_MIDDLE_CLICK)
+        } else if (action == ACTION_QUEUE_ITEM || action == ACTION_DELETE_ITEM || action == ACTION_MOUSE_MIDDLE_CLICK) {
           OnDeletePlaylistItem(item);
-        else if (action == ACTION_MOVE_ITEM_UP)
+        } else if (action == ACTION_MOVE_ITEM_UP) {
           OnMovePlaylistItem(item, -1);
-        else if (action == ACTION_MOVE_ITEM_DOWN)
+        } else if (action == ACTION_MOVE_ITEM_DOWN) {
           OnMovePlaylistItem(item, 1);
+}
         return true;
       }
       else if (control == CONTROL_LOAD_PLAYLIST)
@@ -213,8 +215,9 @@ void CGUIWindowMusicPlaylistEditor::PlayItem(int iItem)
 
 void CGUIWindowMusicPlaylistEditor::OnQueueItem(int iItem)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return;
+}
 
   // add this item to our playlist.  We make a new copy here as we may be rendering them side by side,
   // and thus want a different layout for each item
@@ -273,8 +276,9 @@ int CGUIWindowMusicPlaylistEditor::GetCurrentPlaylistItem()
   CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), CONTROL_PLAYLIST);
   OnMessage(msg);
   int item = msg.GetParam1();
-  if (item > m_playlist->Size())
+  if (item > m_playlist->Size()) {
     return -1;
+}
   return item;
 }
 
@@ -291,8 +295,9 @@ void CGUIWindowMusicPlaylistEditor::OnDeletePlaylistItem(int item)
 void CGUIWindowMusicPlaylistEditor::OnMovePlaylistItem(int item, int direction)
 {
   if (item < 0) return;
-  if (item + direction >= m_playlist->Size() || item + direction < 0)
+  if (item + direction >= m_playlist->Size() || item + direction < 0) {
     return;
+}
   m_playlist->Swap(item, item + direction);
   UpdatePlaylist();
   CGUIMessage msg(GUI_MSG_ITEM_SELECT, GetID(), CONTROL_PLAYLIST, item + direction);

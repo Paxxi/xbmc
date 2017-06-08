@@ -51,8 +51,9 @@ CXHandle::CXHandle(const CXHandle &src)
 
   Init();
 
-  if (src.m_hMutex)
+  if (src.m_hMutex) {
     m_hMutex = new CCriticalSection();
+}
 
   fd = src.fd;
   m_bManualEvent = src.m_bManualEvent;
@@ -126,21 +127,25 @@ void CXHandle::DumpObjectTracker() {
 }
 
 bool CloseHandle(HANDLE hObject) {
-  if (!hObject)
+  if (!hObject) {
     return false;
+}
 
-  if (hObject == INVALID_HANDLE_VALUE || hObject == (HANDLE)-1)
+  if (hObject == INVALID_HANDLE_VALUE || hObject == (HANDLE)-1) {
     return true;
+}
 
   bool bDelete = false;
   {
     CSingleLock lock((*hObject->m_internalLock));
-    if (--hObject->m_nRefCount == 0)
+    if (--hObject->m_nRefCount == 0) {
       bDelete = true;
+}
   }
 
-  if (bDelete)
+  if (bDelete) {
     delete hObject;
+}
 
   return true;
 }
@@ -160,16 +165,18 @@ BOOL WINAPI DuplicateHandle(
       && hTargetProcessHandle == GetCurrentProcess()
       && dwOptions            == DUPLICATE_SAME_ACCESS);
 
-  if (hSourceHandle == INVALID_HANDLE_VALUE)
+  if (hSourceHandle == INVALID_HANDLE_VALUE) {
     return FALSE;
+}
 
   {
     CSingleLock lock(*(hSourceHandle->m_internalLock));
     hSourceHandle->m_nRefCount++;
   }
 
-  if(lpTargetHandle)
+  if(lpTargetHandle) {
     *lpTargetHandle = hSourceHandle;
+}
 
   return TRUE;
 }

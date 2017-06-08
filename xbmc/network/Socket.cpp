@@ -89,8 +89,9 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
     }
   }
 
-  if (m_iSock == INVALID_SOCKET)
+  if (m_iSock == INVALID_SOCKET) {
     m_iSock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+}
 
   if (m_iSock == INVALID_SOCKET)
   {
@@ -126,26 +127,29 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
   // bind to any address or localhost
   if (m_ipv6Socket)
   {
-    if (localOnly)
+    if (localOnly) {
       m_addr = CAddress("::1");
-    else
+    } else {
       m_addr = CAddress("::");
+}
   }
   else
   {
-    if (localOnly)
+    if (localOnly) {
       m_addr = CAddress("127.0.0.1");
-    else
+    } else {
       m_addr = CAddress("0.0.0.0");
+}
   }
 
   // bind the socket ( try from port to port+range )
   for (m_iPort = port; m_iPort <= port + range; ++m_iPort)
   {
-    if (m_ipv6Socket)
+    if (m_ipv6Socket) {
       m_addr.saddr.saddr6.sin6_port = htons(m_iPort);
-    else
+    } else {
       m_addr.saddr.saddr4.sin_port = htons(m_iPort);
+}
 
     if (bind(m_iSock, (struct sockaddr*)&m_addr.saddr, m_addr.size) != 0)
     {
@@ -185,8 +189,9 @@ void CPosixUDPSocket::Close()
 
 int CPosixUDPSocket::Read(CAddress& addr, const int buffersize, void *buffer)
 {
-  if (m_ipv6Socket)
+  if (m_ipv6Socket) {
     addr.SetAddress("::");
+}
   return (int)recvfrom(m_iSock, (char*)buffer, (size_t)buffersize, 0,
                        (struct sockaddr*)&addr.saddr, &addr.size);
 }
@@ -225,8 +230,9 @@ void CSocketListener::AddSocket(CBaseSocket *sock)
     m_sockets.push_back(sock);
     FD_SET(sock->Socket(), &m_fdset);
 #ifndef WINSOCK_VERSION
-    if (sock->Socket() > m_iMaxSockets)
+    if (sock->Socket() > m_iMaxSockets) {
       m_iMaxSockets = sock->Socket();
+}
 #endif
   }
 }
@@ -280,8 +286,9 @@ void CSocketListener::Clear()
 
 CBaseSocket* CSocketListener::GetFirstReadySocket()
 {
-  if (m_iReadyCount<=0)
+  if (m_iReadyCount<=0) {
     return nullptr;
+}
 
   for (int i = 0 ; i < (int)m_sockets.size() ; i++)
   {
@@ -296,8 +303,9 @@ CBaseSocket* CSocketListener::GetFirstReadySocket()
 
 CBaseSocket* CSocketListener::GetNextReadySocket()
 {
-  if (m_iReadyCount<=0)
+  if (m_iReadyCount<=0) {
     return nullptr;
+}
 
   for (int i = m_iCurrentSocket+1 ; i<(int)m_sockets.size() ; i++)
   {

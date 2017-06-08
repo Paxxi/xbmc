@@ -56,11 +56,13 @@ bool CDVDDemuxBXA::Open(CDVDInputStream* pInput)
 
   Dispose();
 
-  if(!pInput || !pInput->IsStreamType(DVDSTREAM_TYPE_FILE))
+  if(!pInput || !pInput->IsStreamType(DVDSTREAM_TYPE_FILE)) {
     return false;
+}
 
-  if(pInput->Read((uint8_t *)&m_header, sizeof(Demux_BXA_FmtHeader)) < 1)
+  if(pInput->Read((uint8_t *)&m_header, sizeof(Demux_BXA_FmtHeader)) < 1) {
     return false;
+}
 
   // file valid?
   if (strncmp(m_header.fourcc, "BXA ", 4) != 0 || m_header.type != BXA_PACKET_TYPE_FMT_DEMUX)
@@ -73,8 +75,9 @@ bool CDVDDemuxBXA::Open(CDVDInputStream* pInput)
 
   m_stream = new CDemuxStreamAudioBXA(this, "BXA");
 
-  if(!m_stream)
+  if(!m_stream) {
     return false;
+}
 
   m_stream->iSampleRate     = m_header.sampleRate;
   m_stream->iBitsPerSample  = m_header.bitsPerSample;
@@ -106,8 +109,9 @@ void CDVDDemuxBXA::Reset()
 
 void CDVDDemuxBXA::Abort()
 {
-  if(m_pInput)
+  if(m_pInput) {
     return m_pInput->Abort();
+}
 }
 
 void CDVDDemuxBXA::Flush()
@@ -117,15 +121,17 @@ void CDVDDemuxBXA::Flush()
 #define BXA_READ_SIZE 4096
 DemuxPacket* CDVDDemuxBXA::Read()
 {
-  if(!m_pInput)
+  if(!m_pInput) {
     return nullptr;
+}
 
   DemuxPacket* pPacket = CDVDDemuxUtils::AllocateDemuxPacket(BXA_READ_SIZE);
 
   if (!pPacket)
   {
-    if (m_pInput)
+    if (m_pInput) {
       m_pInput->Close();
+}
     return nullptr;
   }
 
@@ -158,8 +164,9 @@ DemuxPacket* CDVDDemuxBXA::Read()
 
 CDemuxStream* CDVDDemuxBXA::GetStream(int iStreamId) const
 {
-  if(iStreamId != 0)
+  if(iStreamId != 0) {
     return nullptr;
+}
 
   return m_stream;
 }

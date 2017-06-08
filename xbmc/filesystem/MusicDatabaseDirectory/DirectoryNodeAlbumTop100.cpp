@@ -50,8 +50,9 @@ std::string CDirectoryNodeAlbumTop100::GetLocalizedName() const
 bool CDirectoryNodeAlbumTop100::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   VECALBUMS albums;
   if (!musicdatabase.GetTop100Albums(albums))

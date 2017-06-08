@@ -225,8 +225,9 @@ void CPVRRecording::Reset()
 bool CPVRRecording::Delete()
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->DeleteRecording(*this);
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     return false;
+}
 
   OnDelete();
   return true;
@@ -249,8 +250,9 @@ void CPVRRecording::OnDelete()
 bool CPVRRecording::Undelete()
 {
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->UndeleteRecording(*this);
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     return false;
+}
 
   return true;
 }
@@ -259,8 +261,9 @@ bool CPVRRecording::Rename(const std::string &strNewName)
 {
   m_strTitle = StringUtils::Format("%s", strNewName.c_str());
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->RenameRecording(*this);
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     return false;
+}
 
   return true;
 }
@@ -323,8 +326,9 @@ CBookmark CPVRRecording::GetResumePoint() const
 
 void CPVRRecording::UpdateMetadata(CVideoDatabase &db)
 {
-  if (m_bGotMetaData)
+  if (m_bGotMetaData) {
     return;
+}
 
   if (!CServiceBroker::GetPVRManager().Clients()->SupportsRecordingPlayCount(m_iClientId))
   {
@@ -397,8 +401,9 @@ void CPVRRecording::Update(const CPVRRecording &tag)
     m_strShowTitle = strEpisode;
   }
 
-  if (m_bIsDeleted)
+  if (m_bIsDeleted) {
     OnDelete();
+}
 
   UpdatePath();
 }

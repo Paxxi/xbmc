@@ -122,8 +122,9 @@ double CEventScanner::GetRateHz() const
       scanRateHz = handle->GetRateHz();
   }
 
-  if (scanRateHz == 0.0)
+  if (scanRateHz == 0.0) {
     scanRateHz = DEFAULT_SCAN_RATE_HZ;
+}
 
   return scanRateHz;
 }

@@ -49,8 +49,9 @@ bool IFile::ReadString(char *szLine, int iLineLength)
 
   int64_t iFilePos = GetPosition();
   int iBytesRead = Read( (unsigned char*)szLine, iLineLength - 1);
-  if (iBytesRead <= 0)
+  if (iBytesRead <= 0) {
     return false;
+}
 
   szLine[iBytesRead] = 0;
 

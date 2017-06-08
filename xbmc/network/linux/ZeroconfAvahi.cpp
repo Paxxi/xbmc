@@ -119,10 +119,12 @@ CZeroconfAvahi::~CZeroconfAvahi()
   }
 
   //free the client (frees all browsers, groups, ...)
-  if (mp_client)
+  if (mp_client) {
     avahi_client_free(mp_client);
-  if (mp_poll)
+}
+  if (mp_poll) {
     avahi_threaded_poll_free(mp_poll);
+}
 }
 
 bool CZeroconfAvahi::doPublishService(const std::string& fcr_identifier,
@@ -369,8 +371,9 @@ bool CZeroconfAvahi::createClient()
     }
     mp_client = avahi_client_new(avahi_threaded_poll_get(mp_poll),
                                  AVAHI_CLIENT_NO_FAIL, &clientCallback,this,nullptr);
-    if (!mp_client)
+    if (!mp_client) {
       return false;
+}
     return true;
 }
 

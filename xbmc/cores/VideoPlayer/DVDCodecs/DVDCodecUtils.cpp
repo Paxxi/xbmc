@@ -253,10 +253,11 @@ VideoPicture* CDVDCodecUtils::ConvertToYUV422PackedPicture(VideoPicture *pSrc, E
         int      dstStride[] = { pPicture->iLineSize[0], 0,                  0,                  0    };
 
         int dstformat;
-        if (format == RENDER_FMT_UYVY422)
+        if (format == RENDER_FMT_UYVY422) {
           dstformat = AV_PIX_FMT_UYVY422;
-        else
+        } else {
           dstformat = AV_PIX_FMT_YUYV422;
+}
 
         struct SwsContext *ctx = sws_getContext(pSrc->iWidth, pSrc->iHeight, AV_PIX_FMT_YUV420P,
                                                            pPicture->iWidth, pPicture->iHeight, (AVPixelFormat)dstformat,
@@ -353,8 +354,9 @@ bool CDVDCodecUtils::IsVP3CompatibleWidth(int width)
   int unsupported[] = {49, 54, 59, 64, 113, 118, 123, 128};
   for (int i : unsupported)
   {
-    if (i == (width + 15) / 16)
+    if (i == (width + 15) / 16) {
       return false;
+}
   }
   return true;
 }
@@ -380,14 +382,16 @@ double CDVDCodecUtils::NormalizeFrameduration(double frameduration, bool *match)
 
   if (selected != -1)
   {
-    if (match)
+    if (match) {
       *match = true;
+}
     return durations[selected];
   }
   else
   {
-    if (match)
+    if (match) {
       *match = false;
+}
     return frameduration;
   }
 }
@@ -413,8 +417,9 @@ ERenderFormat CDVDCodecUtils::EFormatFromPixfmt(int fmt)
 {
   for(const EFormatMap *p = g_format_map; p->pix_fmt != AV_PIX_FMT_NONE; ++p)
   {
-    if(p->pix_fmt == fmt)
+    if(p->pix_fmt == fmt) {
       return p->format;
+}
   }
   return RENDER_FMT_NONE;
 }
@@ -423,8 +428,9 @@ AVPixelFormat CDVDCodecUtils::PixfmtFromEFormat(ERenderFormat fmt)
 {
   for(const EFormatMap *p = g_format_map; p->pix_fmt != AV_PIX_FMT_NONE; ++p)
   {
-    if(p->format == fmt)
+    if(p->format == fmt) {
       return p->pix_fmt;
+}
   }
   return AV_PIX_FMT_NONE;
 }

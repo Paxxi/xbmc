@@ -106,8 +106,9 @@ void CSeekHandler::Reset()
 
 int CSeekHandler::GetSeekStepSize(SeekType type, int step)
 {
-  if (step == 0)
+  if (step == 0) {
     return 0;
+}
 
   std::vector<int> seekSteps(step > 0 ? m_forwardSeekSteps.at(type) : m_backwardSeekSteps.at(type));
 
@@ -153,20 +154,23 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
   {
     //100% over 1 second.
     float speed = 100.0f;
-    if( duration )
+    if( duration ) {
       speed *= duration;
-    else
-      speed /= g_graphicsContext.GetFPS();
+    } else {
+      speed 
+}/= g_graphicsContext.GetFPS();
 
     double totalTime = g_application.GetTotalTime();
-    if (totalTime < 0)
+    if (totalTime < 0) {
       totalTime = 0;
+}
 
     double seekSize = (amount * amount * speed) * totalTime / 100;
-    if (forward)
+    if (forward) {
       m_seekSize += seekSize;
-    else
+    } else {
       m_seekSize -= seekSize;
+}
   }
   else
   {
@@ -189,8 +193,9 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
 void CSeekHandler::SeekSeconds(int seconds)
 {
   // abort if we do not have a play time or already perform a seek
-  if (seconds == 0)
+  if (seconds == 0) {
     return;
+}
 
   CSingleLock lock(m_critSection);
   m_seekSize = seconds;
@@ -271,8 +276,9 @@ bool CSeekHandler::OnAction(const CAction &action)
 
   SeekType type = g_application.CurrentFileItem().IsAudio() ? SEEK_TYPE_MUSIC : SEEK_TYPE_VIDEO;
 
-  if (SeekTimeCode(action))
+  if (SeekTimeCode(action)) {
     return true;
+}
 
   switch (action.GetID())
   {
@@ -312,8 +318,9 @@ bool CSeekHandler::OnAction(const CAction &action)
     case ACTION_ANALOG_SEEK_FORWARD:
     case ACTION_ANALOG_SEEK_BACK:
     {
-      if (action.GetAmount())
+      if (action.GetAmount()) {
         Seek(action.GetID() == ACTION_ANALOG_SEEK_FORWARD, action.GetAmount(), action.GetRepeat(), true);
+}
       return true;
     }
     case REMOTE_0:
@@ -351,8 +358,9 @@ bool CSeekHandler::OnAction(const CAction &action)
 
 bool CSeekHandler::SeekTimeCode(const CAction &action)
 {
-  if (m_timeCodePosition <= 0)
+  if (m_timeCodePosition <= 0) {
     return false;
+}
 
   switch (action.GetID())
   {
@@ -400,13 +408,14 @@ void CSeekHandler::ChangeTimeCode(int remote)
   {
     m_timerTimeCode.StartZero();
 
-    if (m_timeCodePosition < 6)
+    if (m_timeCodePosition < 6) {
       m_timeCodeStamp[m_timeCodePosition++] = remote - REMOTE_0;
-    else
+    } else
     {
       // rotate around
-      for (int i = 0; i < 5; i++)
+      for (int i = 0; i < 5; i++) {
         m_timeCodeStamp[i] = m_timeCodeStamp[i + 1];
+}
       m_timeCodeStamp[5] = remote - REMOTE_0;
     }
    }
@@ -418,8 +427,9 @@ int CSeekHandler::GetTimeCodeSeconds() const
   {
     // Convert the timestamp into an integer
     int tot = 0;
-    for (int i = 0; i < m_timeCodePosition; i++)
+    for (int i = 0; i < m_timeCodePosition; i++) {
       tot = tot * 10 + m_timeCodeStamp[i];
+}
 
     // Interpret result as HHMMSS
     int s = tot % 100; tot /= 100;

@@ -302,8 +302,9 @@ bool CDirectory::Exists(const CURL& url, bool bUseCache /* = true */)
       URIUtils::AddSlashAtEnd(realPath);
       if (g_directoryCache.FileExists(realPath, bPathInCache))
         return true;
-      if (bPathInCache)
+      if (bPathInCache) {
         return false;
+}
     }
     std::unique_ptr<IDirectory> pDirectory(CDirectoryFactory::Create(realURL));
     if (pDirectory.get())

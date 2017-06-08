@@ -47,11 +47,13 @@ bool CSpeed::operator >(const CSpeed& right) const
   assert(IsValid());
   assert(right.IsValid());
 
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     return false;
+}
 
-  if (this == &right)
+  if (this == &right) {
     return false;
+}
 
   return (m_value > right.m_value);
 }
@@ -66,11 +68,13 @@ bool CSpeed::operator <(const CSpeed& right) const
   assert(IsValid());
   assert(right.IsValid());
 
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     return false;
+}
 
-  if (this == &right)
+  if (this == &right) {
     return false;
+}
 
   return (m_value < right.m_value);
 }
@@ -85,11 +89,13 @@ bool CSpeed::operator ==(const CSpeed& right) const
   assert(IsValid());
   assert(right.IsValid());
 
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     return false;
+}
 
-  if (this == &right)
+  if (this == &right) {
     return true;
+}
 
   return (m_value == right.m_value);
 }
@@ -149,10 +155,11 @@ CSpeed CSpeed::operator +(const CSpeed& right) const
 
   CSpeed temp(*this);
 
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     temp.SetValid(false);
-  else
+  } else {
     temp.m_value += right.m_value;
+}
 
   return temp;
 }
@@ -163,10 +170,11 @@ CSpeed CSpeed::operator -(const CSpeed& right) const
   assert(right.IsValid());
 
   CSpeed temp(*this);
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     temp.SetValid(false);
-  else
+  } else {
     temp.m_value -= right.m_value;
+}
 
   return temp;
 }
@@ -177,10 +185,11 @@ CSpeed CSpeed::operator *(const CSpeed& right) const
   assert(right.IsValid());
 
   CSpeed temp(*this);
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     temp.SetValid(false);
-  else
+  } else {
     temp.m_value *= right.m_value;
+}
   return temp;
 }
 
@@ -190,10 +199,11 @@ CSpeed CSpeed::operator /(const CSpeed& right) const
   assert(right.IsValid());
 
   CSpeed temp(*this);
-  if (!IsValid() || !right.IsValid())
+  if (!IsValid() || !right.IsValid()) {
     temp.SetValid(false);
-  else
+  } else {
     temp.m_value /= right.m_value;
+}
   return temp;
 }
 
@@ -235,8 +245,9 @@ bool CSpeed::operator >(double right) const
 {
   assert(IsValid());
 
-  if (!IsValid())
+  if (!IsValid()) {
     return false;
+}
 
   return (m_value > right);
 }
@@ -250,8 +261,9 @@ bool CSpeed::operator <(double right) const
 {
   assert(IsValid());
 
-  if (!IsValid())
+  if (!IsValid()) {
     return false;
+}
 
   return (m_value < right);
 }
@@ -263,8 +275,9 @@ bool CSpeed::operator <=(double right) const
 
 bool CSpeed::operator ==(double right) const
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return false;
+}
 
   return (m_value == right);
 }
@@ -384,30 +397,42 @@ CSpeed CSpeed::CreateFromKnots(double value)
 
 CSpeed CSpeed::CreateFromBeaufort(unsigned int value)
 {
-  if (value == 0)
+  if (value == 0) {
     return CSpeed(0.15);
-  if (value == 1)
+}
+  if (value == 1) {
     return CSpeed(0.9);
-  if (value == 2)
+}
+  if (value == 2) {
     return CSpeed(2.4);
-  if (value == 3)
+}
+  if (value == 3) {
     return CSpeed(4.4);
-  if (value == 4)
+}
+  if (value == 4) {
     return CSpeed(6.75);
-  if (value == 5)
+}
+  if (value == 5) {
     return CSpeed(9.4);
-  if (value == 6)
+}
+  if (value == 6) {
     return CSpeed(12.35);
-  if (value == 7)
+}
+  if (value == 7) {
     return CSpeed(15.55);
-  if (value == 8)
+}
+  if (value == 8) {
     return CSpeed(18.95);
-  if (value == 9)
+}
+  if (value == 9) {
     return CSpeed(22.6);
-  if (value == 10)
+}
+  if (value == 10) {
     return CSpeed(26.45);
-  if (value == 11)
+}
+  if (value == 11) {
     return CSpeed(30.5);
+}
 
   return CSpeed(32.6);
 }
@@ -488,30 +513,42 @@ double CSpeed::ToKnots() const
 
 double CSpeed::ToBeaufort() const
 {
-  if (m_value < 0.3)
+  if (m_value < 0.3) {
     return 0;
-  if (m_value >= 0.3 && m_value < 1.5)
+}
+  if (m_value >= 0.3 && m_value < 1.5) {
     return 1;
-  if (m_value >= 1.5 && m_value < 3.3)
+}
+  if (m_value >= 1.5 && m_value < 3.3) {
     return 2;
-  if (m_value >= 3.3 && m_value < 5.5)
+}
+  if (m_value >= 3.3 && m_value < 5.5) {
     return 3;
-  if (m_value >= 5.5 && m_value < 8.0)
+}
+  if (m_value >= 5.5 && m_value < 8.0) {
     return 4;
-  if (m_value >= 8.0 && m_value < 10.8)
+}
+  if (m_value >= 8.0 && m_value < 10.8) {
     return 5;
-  if (m_value >= 10.8 && m_value < 13.9)
+}
+  if (m_value >= 10.8 && m_value < 13.9) {
     return 6;
-  if (m_value >= 13.9 && m_value < 17.2)
+}
+  if (m_value >= 13.9 && m_value < 17.2) {
     return 7;
-  if (m_value >= 17.2 && m_value < 20.7)
+}
+  if (m_value >= 17.2 && m_value < 20.7) {
     return 8;
-  if (m_value >= 20.7 && m_value < 24.5)
+}
+  if (m_value >= 20.7 && m_value < 24.5) {
     return 9;
-  if (m_value >= 24.5 && m_value < 28.4)
+}
+  if (m_value >= 24.5 && m_value < 28.4) {
     return 10;
-  if (m_value >= 28.4 && m_value < 32.6)
+}
+  if (m_value >= 28.4 && m_value < 32.6) {
     return 11;
+}
 
   return 12;
 }
@@ -533,8 +570,9 @@ double CSpeed::ToFurlongPerFortnight() const
 
 double CSpeed::To(Unit speedUnit) const
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return 0;
+}
 
   double value = 0.0;
 

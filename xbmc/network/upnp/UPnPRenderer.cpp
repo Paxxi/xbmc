@@ -242,8 +242,9 @@ CUPnPRenderer::ProcessHttpGetRequest(NPT_HttpRequest&              request,
 void
 CUPnPRenderer::Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
 {
-    if (strcmp(sender, "xbmc") != 0)
+    if (strcmp(sender, "xbmc") != 0) {
       return;
+}
 
     NPT_AutoLock lock(m_state);
     PLT_Service *avt, *rct;
@@ -309,8 +310,9 @@ CUPnPRenderer::UpdateState()
     /* don't update state while transitioning */
     NPT_String state;
     avt->GetStateVariableValue("TransportState", state);
-    if(state == "TRANSITIONING")
+    if(state == "TRANSITIONING") {
         return;
+}
 
     avt->SetStateVariable("TransportStatus", "OK");
 
@@ -408,10 +410,11 @@ CUPnPRenderer::GetMetadata(NPT_String& meta)
     if (object) {
         // fetch the item's artwork
         std::string thumb;
-        if (object->m_ObjectClass.type == "object.item.audioItem.musicTrack")
+        if (object->m_ObjectClass.type == "object.item.audioItem.musicTrack") {
             thumb = g_infoManager.GetImage(MUSICPLAYER_COVER, -1);
-        else
+        } else {
             thumb = g_infoManager.GetImage(VIDEOPLAYER_COVER, -1);
+}
 
         thumb = CTextureUtils::GetWrappedImageURL(thumb);
 

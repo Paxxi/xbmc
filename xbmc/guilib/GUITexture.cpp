@@ -130,8 +130,9 @@ bool CGUITextureBase::AllocateOnDemand()
   }
   else
   { // hidden, so deallocate as applicable
-    if (m_allocateDynamically && IsAllocated())
+    if (m_allocateDynamically && IsAllocated()) {
       FreeResources();
+}
     // reset animated textures (animgifs)
     ResetAnimState();
   }
@@ -148,11 +149,13 @@ bool CGUITextureBase::Process(unsigned int currentTime)
   if (m_texture.size() > 1)
     changed |= UpdateAnimFrame(currentTime);
 
-  if (m_invalid)
+  if (m_invalid) {
     changed |= CalculateSize();
+}
 
-  if (m_isAllocated)
+  if (m_isAllocated) {
     changed |= !ReadyToRender();
+}
 
   return changed;
 }
@@ -174,8 +177,9 @@ void CGUITextureBase::Render()
 
   // diffuse color
   color_t color = (m_info.diffuseColor) ? (color_t)m_info.diffuseColor : m_diffuseColor;
-  if (m_alpha != 0xFF)
+  if (m_alpha != 0xFF) {
 	  color = MIX_ALPHA(m_alpha, color);
+}
 
   color = g_graphicsContext.MergeAlpha(color);
 
@@ -318,8 +322,9 @@ bool CGUITextureBase::AllocResources()
       {
         m_isAllocated = LARGE;
 
-        if (!texture.size()) // not ready as yet
+        if (!texture.size()) { // not ready as yet
           return false;
+}
 
         m_texture = texture;
 
@@ -336,8 +341,9 @@ bool CGUITextureBase::AllocResources()
     // set allocated to true even if we couldn't load the image to save
     // us hitting the disk every frame
     m_isAllocated = texture.size() ? NORMAL : NORMAL_FAILED;
-    if (!texture.size())
+    if (!texture.size()) {
       return false;
+}
     m_texture = texture;
     changed = true;
   }
@@ -366,10 +372,12 @@ bool CGUITextureBase::CalculateSize()
   m_texCoordsScaleU = 1.0f / m_texture.m_texWidth;
   m_texCoordsScaleV = 1.0f / m_texture.m_texHeight;
 
-  if (m_width == 0)
+  if (m_width == 0) {
     m_width = m_frameWidth;
-  if (m_height == 0)
+}
+  if (m_height == 0) {
     m_height = m_frameHeight;
+}
 
   float newPosX = m_posX;
   float newPosY = m_posY;
@@ -382,8 +390,9 @@ bool CGUITextureBase::CalculateSize()
     float pixelRatio = g_graphicsContext.GetScalingPixelRatio();
 
     float fSourceFrameRatio = m_frameWidth / m_frameHeight;
-    if (GetOrientation() & 4)
+    if (GetOrientation() & 4) {
       fSourceFrameRatio = m_frameHeight / m_frameWidth;
+}
     float fOutputFrameRatio = fSourceFrameRatio / pixelRatio;
 
     // maximize the width
@@ -401,18 +410,20 @@ bool CGUITextureBase::CalculateSize()
       newHeight = m_frameHeight * sqrt(pixelRatio);
     }
 
-    if (m_aspect.align & ASPECT_ALIGN_LEFT)
+    if (m_aspect.align & ASPECT_ALIGN_LEFT) {
       newPosX = m_posX;
-    else if (m_aspect.align & ASPECT_ALIGN_RIGHT)
+    } else if (m_aspect.align & ASPECT_ALIGN_RIGHT) {
       newPosX = m_posX + m_width - newWidth;
-    else
+    } else {
       newPosX = m_posX + (m_width - newWidth) * 0.5f;
-    if (m_aspect.align & ASPECT_ALIGNY_TOP)
+}
+    if (m_aspect.align & ASPECT_ALIGNY_TOP) {
       newPosY = m_posY;
-    else if (m_aspect.align & ASPECT_ALIGNY_BOTTOM)
+    } else if (m_aspect.align & ASPECT_ALIGNY_BOTTOM) {
       newPosY = m_posY + m_height - newHeight;
-    else
+    } else {
       newPosY = m_posY + (m_height - newHeight) * 0.5f;
+}
   }
   
   m_vertex.SetRect(newPosX, newPosY, newPosX + newWidth, newPosY + newHeight);
@@ -613,8 +624,9 @@ bool CGUITextureBase::SetWidth(float width)
     m_invalid = true;
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 bool CGUITextureBase::SetHeight(float height)
@@ -627,8 +639,9 @@ bool CGUITextureBase::SetHeight(float height)
     m_invalid = true;
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 bool CGUITextureBase::SetPosition(float posX, float posY)
@@ -640,8 +653,9 @@ bool CGUITextureBase::SetPosition(float posX, float posY)
     m_invalid = true;
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 bool CGUITextureBase::SetAspectRatio(const CAspectRatio &aspect)
@@ -652,8 +666,9 @@ bool CGUITextureBase::SetAspectRatio(const CAspectRatio &aspect)
     m_invalid = true;
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 bool CGUITextureBase::SetFileName(const std::string& filename)

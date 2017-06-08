@@ -54,8 +54,9 @@ bool CRetroPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options
 
   CSingleLock lock(m_mutex);
 
-  if (IsPlaying())
+  if (IsPlaying()) {
     CloseFile();
+}
 
   PrintGameInfo(file);
 
@@ -92,8 +93,9 @@ bool CRetroPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options
       std::string redactedSavestatePath = CURL::GetRedacted(file.GetGameInfoTag()->GetSavestate());
       CLog::Log(LOGDEBUG, "RetroPlayer: Loading savestate %s", redactedSavestatePath.c_str());
 
-      if (!SetPlayerState(file.GetGameInfoTag()->GetSavestate()))
+      if (!SetPlayerState(file.GetGameInfoTag()->GetSavestate())) {
         CLog::Log(LOGERROR, "RetroPlayer: Failed to load savestate");
+}
     }
 
     SetSpeed(1);
@@ -146,8 +148,9 @@ bool CRetroPlayer::CanPause()
 
 void CRetroPlayer::Pause()
 {
-  if (!CanPause())
+  if (!CanPause()) {
     return;
+}
 
   if (m_gameClient)
   {
@@ -167,8 +170,9 @@ void CRetroPlayer::Seek(bool bPlus /* = true */,
                         bool bLargeStep /* = false */,
                         bool bChapterOverride /* = false */)
 {
-  if (!CanSeek())
+  if (!CanSeek()) {
     return;
+}
 
   if (m_gameClient)
   {
@@ -194,17 +198,20 @@ void CRetroPlayer::Seek(bool bPlus /* = true */,
 
 void CRetroPlayer::SeekPercentage(float fPercent /* = 0 */)
 {
-  if (!CanSeek())
+  if (!CanSeek()) {
     return;
+}
 
-  if (fPercent < 0.0f  )
+  if (fPercent < 0.0f  ) {
     fPercent = 0.0f;
-  else if (fPercent > 100.0f)
+  } else if (fPercent > 100.0f) {
     fPercent = 100.0f;
+}
 
   int64_t totalTime = GetTotalTime();
-  if (totalTime != 0)
+  if (totalTime != 0) {
     SeekTime(static_cast<int64_t>(totalTime * fPercent / 100.0f));
+}
 }
 
 float CRetroPlayer::GetPercentage()
@@ -214,8 +221,9 @@ float CRetroPlayer::GetPercentage()
     const float timeMs = static_cast<float>(m_gameClient->GetPlayback()->GetTimeMs());
     const float totalMs = static_cast<float>(m_gameClient->GetPlayback()->GetTotalTimeMs());
 
-    if (totalMs != 0.0f)
+    if (totalMs != 0.0f) {
       return timeMs / totalMs * 100.0f;
+}
   }
 
   return 0.0f;
@@ -228,8 +236,9 @@ float CRetroPlayer::GetCachePercentage()
     const float cacheMs = static_cast<float>(m_gameClient->GetPlayback()->GetCacheTimeMs());
     const float totalMs = static_cast<float>(m_gameClient->GetPlayback()->GetTotalTimeMs());
 
-    if (totalMs != 0.0f)
+    if (totalMs != 0.0f) {
       return cacheMs / totalMs * 100.0f;
+}
   }
   return 0.0f;
 }
@@ -242,8 +251,9 @@ void CRetroPlayer::SetMute(bool bOnOff)
 
 void CRetroPlayer::SeekTime(int64_t iTime /* = 0 */)
 {
-  if (!CanSeek())
+  if (!CanSeek()) {
     return;
+}
 
   if (m_gameClient)
   {
@@ -254,8 +264,9 @@ void CRetroPlayer::SeekTime(int64_t iTime /* = 0 */)
 
 bool CRetroPlayer::SeekTimeRelative(int64_t iTime)
 {
-  if (!CanSeek())
+  if (!CanSeek()) {
     return false;
+}
 
   SeekTime(GetTime() + iTime);
 
@@ -288,10 +299,11 @@ void CRetroPlayer::SetSpeed(float speed)
   {
     if (m_gameClient->GetPlayback()->GetSpeed() != speed)
     {
-      if (speed == 1.0f)
+      if (speed == 1.0f) {
         m_callback.OnPlayBackResumed();
-      else if (speed == 0.0f)
+      } else if (speed == 0.0f) {
         m_callback.OnPlayBackPaused();
+}
     }
 
     m_gameClient->GetPlayback()->SetSpeed(speed);
@@ -352,8 +364,9 @@ void CRetroPlayer::PrintGameInfo(const CFileItem &file) const
     CLog::Log(LOGDEBUG, "RetroPlayer: Platform: %s", tag->GetPlatform().c_str());
     CLog::Log(LOGDEBUG, "RetroPlayer: Genres: %s", StringUtils::Join(tag->GetGenres(), ", ").c_str());
     CLog::Log(LOGDEBUG, "RetroPlayer: Developer: %s", tag->GetDeveloper().c_str());
-    if (tag->GetYear() > 0)
+    if (tag->GetYear() > 0) {
       CLog::Log(LOGDEBUG, "RetroPlayer: Year: %u", tag->GetYear());
+}
     CLog::Log(LOGDEBUG, "RetroPlayer: Game Code: %s", tag->GetID().c_str());
     CLog::Log(LOGDEBUG, "RetroPlayer: Region: %s", tag->GetRegion().c_str());
     CLog::Log(LOGDEBUG, "RetroPlayer: Publisher: %s", tag->GetPublisher().c_str());

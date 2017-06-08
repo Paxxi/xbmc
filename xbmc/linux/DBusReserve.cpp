@@ -36,8 +36,9 @@ CDBusReserve::CDBusReserve()
   dbus_error_init(&error);
   
   m_conn = dbus_bus_get (DBUS_BUS_SESSION, &error);
-  if (!m_conn)
+  if (!m_conn) {
     CLog::Log(LOGERROR, "CDBusReserve::CDBusReserve: Failed to get dbus conn");
+}
 
   dbus_error_free(&error);
 }
@@ -70,8 +71,9 @@ bool CDBusReserve::AcquireDevice(const std::string& device)
   std::string object  = "/org/freedesktop/ReserveDevice1/" + device;
   const char * interface = "org.freedesktop.ReserveDevice1";
 
-  if (!m_conn)
+  if (!m_conn) {
     return false;
+}
 
   res = dbus_bus_request_name(m_conn, service.c_str()
                                   , DBUS_NAME_FLAG_DO_NOT_QUEUE | (prio == INT_MAX ? 0 : DBUS_NAME_FLAG_ALLOW_REPLACEMENT)

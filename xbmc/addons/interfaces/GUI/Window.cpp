@@ -164,8 +164,9 @@ void* Interface_GUIWindow::create(void* kodiBase, const char* xml_filename,
   }
 
   int id = GetNextAvailableWindowId();
-  if (id < 0)
+  if (id < 0) {
     return nullptr;
+}
 
   CGUIWindow *window;
   if (!as_dialog)
@@ -908,8 +909,9 @@ CGUIControl* CGUIAddonWindow::GetAddonControl(int controlId, CGUIControl::GUICON
 bool CGUIAddonWindow::OnAction(const CAction& action)
 {
   // Let addon decide whether it wants to handle action first
-  if (CBOnAction && CBOnAction(m_clientHandle, action.GetID()))
+  if (CBOnAction && CBOnAction(m_clientHandle, action.GetID())) {
     return true;
+}
 
   return CGUIWindow::OnAction(action);
 }
@@ -928,8 +930,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
     {
       CGUIMediaWindow::OnMessage(message);
       
-      if (CBOnInit)
+      if (CBOnInit) {
         CBOnInit(m_clientHandle);
+}
       return true;
     }
     break;
@@ -944,8 +947,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
       }
       // check if our focused control is one of our category buttons
       int iControl = message.GetControlId();
-      if (CBOnFocus)
+      if (CBOnFocus) {
         CBOnFocus(m_clientHandle, iControl);
+}
     }
     break;
 
@@ -972,8 +976,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
                                                  message.GetParam1() == ACTION_MOUSE_LEFT_CLICK)) ||
                                                  !controlClicked->IsContainer())
           {
-            if (CBOnClick)
+            if (CBOnClick) {
               return CBOnClick(m_clientHandle, iControl);
+}
           }
           else if (controlClicked->IsContainer() && (message.GetParam1() == ACTION_MOUSE_RIGHT_CLICK ||
                                                      message.GetParam1() == ACTION_CONTEXT_MENU))
@@ -982,8 +987,9 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
             {
               // Check addon want to handle right click for a context menu, if
               // not used from addon becomes "GetContextButtons(...)" called.
-              if (CBOnAction(m_clientHandle, ACTION_CONTEXT_MENU))
+              if (CBOnAction(m_clientHandle, ACTION_CONTEXT_MENU)) {
                 return true;
+}
             }
           }
         }
@@ -1064,8 +1070,9 @@ int CGUIAddonWindow::GetListSize()
 
 CFileItemPtr* CGUIAddonWindow::GetListItem(int position)
 {
-  if (position < 0 || position >= m_vecItems->Size())
+  if (position < 0 || position >= m_vecItems->Size()) {
     return nullptr;
+}
   return new CFileItemPtr(m_vecItems->Get(position));
 }
 
@@ -1106,8 +1113,9 @@ void CGUIAddonWindow::GetContextButtons(int itemNumber, CContextButtons& buttons
 
 bool CGUIAddonWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (CBOnContextButton)
+  if (CBOnContextButton) {
     return CBOnContextButton(m_clientHandle, itemNumber, static_cast<unsigned int>(button));
+}
   return false;
 }
 

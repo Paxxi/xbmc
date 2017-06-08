@@ -52,8 +52,9 @@ void CDatabaseManager::Initialize(bool addonsOnly)
 {
   Deinitialize();
   { CAddonDatabase db; UpdateDatabase(db); }
-  if (addonsOnly)
+  if (addonsOnly) {
     return;
+}
   CLog::Log(LOGDEBUG, "%s, updating databases...", __FUNCTION__);
 
   // NOTE: Order here is important. In particular, CTextureDatabase has to be updated
@@ -131,8 +132,9 @@ bool CDatabaseManager::Update(CDatabase &db, const DatabaseSettings &settings)
 
         db.Close();
 
-        if (copy_fail)
+        if (copy_fail) {
           return false;
+}
 
         if (!db.Connect(latestDb, dbSettings, false))
         {

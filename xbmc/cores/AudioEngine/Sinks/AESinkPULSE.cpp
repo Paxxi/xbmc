@@ -211,34 +211,40 @@ static void StreamLatencyUpdateCallback(pa_stream *s, void *userdata)
 static void SinkInputInfoCallback(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
 {
   CAESinkPULSE *p = (CAESinkPULSE*) userdata;
-  if (!p || !p->IsInitialized())
+  if (!p || !p->IsInitialized()) {
     return;
+}
 
-  if(i && i->has_volume && !i->corked)
+  if(i && i->has_volume && !i->corked) {
     p->UpdateInternalVolume(&(i->volume));
+}
 }
 
 static void SinkInputInfoChangedCallback(pa_context *c, pa_subscription_event_type_t t, uint32_t idx, void *userdata)
 {
   CAESinkPULSE* p = (CAESinkPULSE*) userdata;
-  if (!p || !p->IsInitialized())
+  if (!p || !p->IsInitialized()) {
     return;
+}
 
-   if (idx != pa_stream_get_index(p->GetInternalStream()))
+   if (idx != pa_stream_get_index(p->GetInternalStream())) {
      return;
+}
 
    pa_operation* op = pa_context_get_sink_input_info(c, idx, SinkInputInfoCallback, p);
-   if (op == nullptr)
+   if (op == nullptr) {
      CLog::Log(LOGERROR, "PulseAudio: Failed to sync volume");
-   else
+   } else {
     pa_operation_unref(op);
+}
 }
 
 static void SinkChangedCallback(pa_context *c, pa_subscription_event_type_t t, uint32_t idx, void *userdata)
 {
   CAESinkPULSE* p = (CAESinkPULSE*) userdata;
-  if(!p)
+  if(!p) {
     return;
+}
 
   CSingleLock lock(p->m_sec);
   if (p->IsInitialized())
@@ -282,13 +288,15 @@ struct SinkInfoStruct
 static void SinkInfoCallback(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 {
   SinkInfoStruct *sinkStruct = (SinkInfoStruct *)userdata;
-  if (!sinkStruct)
+  if (!sinkStruct) {
     return;
+}
 
   if(i)
   {
-    if (i->flags && (i->flags & PA_SINK_HARDWARE))
+    if (i->flags && (i->flags & PA_SINK_HARDWARE)) {
       sinkStruct->isHWDevice = true;
+}
 
     sinkStruct->samplerate = i->sample_spec.rate;
     sinkStruct->device_found = true;
@@ -378,8 +386,9 @@ static CAEChannelInfo PAChannelToAEChannelMap(const pa_channel_map& channels)
   for (unsigned int i=0; i<channels.channels; i++)
   {
     ch = PAChannelToAEChannel(channels.map[i]);
-    if(ch != AE_CH_NULL)
+    if(ch != AE_CH_NULL) {
       info += ch;
+}
   }
   return info;
 }
@@ -388,8 +397,9 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
 {
 
   SinkInfoStruct *sinkStruct = (SinkInfoStruct *)userdata;
-  if (!sinkStruct)
+  if (!sinkStruct) {
     return;
+}
 
   if(sinkStruct->list->empty())
   {
@@ -420,8 +430,9 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
     device.m_channels = PAChannelToAEChannelMap(i->channel_map);
 
     // Don't add devices that would not have a channel map
-    if(device.m_channels.Count() == 0)
+    if(device.m_channels.Count() == 0) {
       valid = false;
+}
 
     device.m_sampleRates.assign(defaultSampleRates, defaultSampleRates + ARRAY_SIZE(defaultSampleRates));
 
@@ -457,8 +468,9 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
       device.m_deviceType = AE_DEVTYPE_IEC958;
       device.m_dataFormats.push_back(AE_FMT_RAW);
     }
-    else
+    else {
       device.m_deviceType = AE_DEVTYPE_PCM;
+}
 
     device.m_wantsIECPassthrough = true;
 
@@ -534,8 +546,9 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
      pa_fmt = AEStreamFormatToPulseFormat(format.m_streamInfo.m_type);
      m_passthrough = true;
    }
-   else
+   else {
     pa_fmt = AEFormatToPulseFormat(format.m_dataFormat);
+}
 
    if (pa_fmt == PA_SAMPLE_INVALID)
    {
@@ -601,10 +614,11 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
 
   pa_format_info *info[1];
   info[0] = pa_format_info_new();
-  if (m_passthrough)
+  if (m_passthrough) {
     info[0]->encoding = AEStreamFormatToPulseEncoding(format.m_streamInfo.m_type);
-  else
+  } else {
    info[0]->encoding = AEFormatToPulseEncoding(format.m_dataFormat);
+}
 
   if (info[0]->encoding == PA_ENCODING_INVALID)
   {
@@ -694,11 +708,13 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   // by default PA will upmix / remix everything when multi channel layout is configured
   // if we have enough channels in the target layout ask PA not to remix to related channels
   // 1:1 remapping is allowed though
-  if (!m_passthrough && !use_pa_mixing)
+  if (!m_passthrough && !use_pa_mixing) {
     flags |= PA_STREAM_NO_REMIX_CHANNELS;
+}
 
-  if (m_passthrough)
+  if (m_passthrough) {
     flags |= PA_STREAM_PASSTHROUGH;
+}
 
   if (pa_stream_connect_playback(m_Stream, isDefaultDevice ? NULL : device.c_str(), &buffer_attr, (pa_stream_flags) flags, NULL, NULL) < 0)
   {
@@ -748,15 +764,17 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     pa_context_set_subscribe_callback(m_Context, SinkChangedCallback, this);
     const pa_subscription_mask_t mask = PA_SUBSCRIPTION_MASK_SINK;
     pa_operation *op = pa_context_subscribe(m_Context, mask, nullptr, this);
-    if (op != nullptr)
+    if (op != nullptr) {
       pa_operation_unref(op);
+}
 
     // Register Callback for Sink Info changes - this handles volume
     pa_context_set_subscribe_callback(m_Context, SinkInputInfoChangedCallback, this);
     const pa_subscription_mask_t mask_input = PA_SUBSCRIPTION_MASK_SINK_INPUT;
     pa_operation* op_sinfo = pa_context_subscribe(m_Context, mask_input, nullptr, this);
-    if (op_sinfo != nullptr)
+    if (op_sinfo != nullptr) {
       pa_operation_unref(op_sinfo);
+}
   }
 
   pa_threaded_mainloop_unlock(m_MainLoop);
@@ -786,13 +804,15 @@ void CAESinkPULSE::Deinitialize()
   m_passthrough = false;
   m_periodSize = 0;
 
-  if (m_Stream)
+  if (m_Stream) {
     Drain();
+}
 
   {
     CSingleExit exit(m_sec);
-    if (m_MainLoop)
+    if (m_MainLoop) {
       pa_threaded_mainloop_stop(m_MainLoop);
+}
   }
 
   if (m_Stream)
@@ -829,8 +849,9 @@ void CAESinkPULSE::GetDelay(AEDelayStatus& status)
   pa_usec_t r_usec;
   int negative;
 
-  if (pa_stream_get_latency(m_Stream, &r_usec, &negative) < 0)
+  if (pa_stream_get_latency(m_Stream, &r_usec, &negative) < 0) {
     r_usec = 0;
+}
 
   pa_threaded_mainloop_unlock(m_MainLoop);
   status.SetDelay(r_usec / 1000000.0);
@@ -843,8 +864,9 @@ double CAESinkPULSE::GetCacheTotal()
 
 unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
 {
-  if (!m_IsAllocated)
+  if (!m_IsAllocated) {
     return 0;
+}
 
   if (m_IsStreamPaused)
   {
@@ -857,8 +879,9 @@ unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsig
   unsigned int length = 0;
   void *buffer = data[0]+offset*m_format.m_frameSize;
   // care a bit for fragmentation
-  while ((length = pa_stream_writable_size(m_Stream)) < m_periodSize)
+  while ((length = pa_stream_writable_size(m_Stream)) < m_periodSize) {
     pa_threaded_mainloop_wait(m_MainLoop);
+}
 
   length =  std::min((unsigned int)length, available);
 
@@ -877,8 +900,9 @@ unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsig
 
 void CAESinkPULSE::Drain()
 {
-  if (!m_IsAllocated)
+  if (!m_IsAllocated) {
     return;
+}
 
   pa_threaded_mainloop_lock(m_MainLoop);
   WaitForOperation(pa_stream_drain(m_Stream, nullptr, nullptr), m_MainLoop, "Drain");
@@ -894,8 +918,9 @@ pa_stream* CAESinkPULSE::GetInternalStream()
 
 void CAESinkPULSE::UpdateInternalVolume(const pa_cvolume* nVol)
 {
-  if (!nVol)
+  if (!nVol) {
     return;
+}
 
   pa_volume_t o_vol = pa_cvolume_avg(&m_Volume);
   pa_volume_t n_vol = pa_cvolume_avg(nVol);
@@ -930,16 +955,18 @@ void CAESinkPULSE::SetVolume(float volume)
     pa_volume_t pavolume = per_cent_volume * PA_VOLUME_NORM;
     unsigned int sink_input_idx = pa_stream_get_index(m_Stream);
 
-    if ( pavolume <= 0 )
+    if ( pavolume <= 0 ) {
       pa_cvolume_mute(&m_Volume, m_Channels);
-    else
+    } else {
       pa_cvolume_set(&m_Volume, m_Channels, pavolume);
+}
 
       pa_operation *op = pa_context_set_sink_input_volume(m_Context, sink_input_idx, &m_Volume, nullptr, nullptr);
-      if (op == nullptr)
+      if (op == nullptr) {
         CLog::Log(LOGERROR, "PulseAudio: Failed to set volume");
-      else
+      } else {
         pa_operation_unref(op);
+}
 
     pa_threaded_mainloop_unlock(m_MainLoop);
   }
@@ -965,8 +992,9 @@ void CAESinkPULSE::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 
   pa_threaded_mainloop_unlock(mainloop);
 
-  if (mainloop)
+  if (mainloop) {
     pa_threaded_mainloop_stop(mainloop);
+}
 
   if (context)
   {
@@ -992,8 +1020,9 @@ void CAESinkPULSE::Pause(bool pause)
 {
   pa_threaded_mainloop_lock(m_MainLoop);
 
-  if (!WaitForOperation(pa_stream_cork(m_Stream, pause ? 1 : 0, nullptr, nullptr), m_MainLoop, pause ? "Pause" : "Resume"))
+  if (!WaitForOperation(pa_stream_cork(m_Stream, pause ? 1 : 0, nullptr, nullptr), m_MainLoop, pause ? "Pause" : "Resume")) {
     pause = !pause;
+}
 
   m_IsStreamPaused = pause;
   pa_threaded_mainloop_unlock(m_MainLoop);
@@ -1001,13 +1030,15 @@ void CAESinkPULSE::Pause(bool pause)
 
 inline bool CAESinkPULSE::WaitForOperation(pa_operation *op, pa_threaded_mainloop *mainloop, const char *LogEntry = "")
 {
-  if (op == nullptr)
+  if (op == nullptr) {
     return false;
+}
 
   bool success = true;
 
-  while (pa_operation_get_state(op) == PA_OPERATION_RUNNING)
+  while (pa_operation_get_state(op) == PA_OPERATION_RUNNING) {
     pa_threaded_mainloop_wait(mainloop);
+}
 
   if (pa_operation_get_state(op) != PA_OPERATION_DONE)
   {

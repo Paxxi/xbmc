@@ -196,12 +196,14 @@ void CSong::MergeScrapedSong(const CSong& source, bool override)
 {
   if ((override && !source.strTitle.empty()) || strTitle.empty())
     strTitle = source.strTitle;
-  if ((override && source.iTrack != 0) || iTrack == 0)
+  if ((override && source.iTrack != 0) || iTrack == 0) {
     iTrack = source.iTrack;
+}
   // artist = source.artist; // artist is read-only from the database
-  if (override)
+  if (override) {
     artistCredits = source.artistCredits;
-  else if (source.artistCredits.size() > artistCredits.size())
+  } else { if 
+}(source.artistCredits.size() > artistCredits.size())
     artistCredits.insert(artistCredits.end(), source.artistCredits.begin()+artistCredits.size(), source.artistCredits.end());
 }
 

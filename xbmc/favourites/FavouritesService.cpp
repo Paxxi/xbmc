@@ -98,8 +98,9 @@ bool CFavouritesService::Persist()
   CXBMCTinyXML doc;
   TiXmlElement xmlRootElement("favourites");
   TiXmlNode *rootNode = doc.InsertEndChild(xmlRootElement);
-  if (!rootNode)
+  if (!rootNode) {
     return false;
+}
 
   for (const auto& item : m_favourites)
   {

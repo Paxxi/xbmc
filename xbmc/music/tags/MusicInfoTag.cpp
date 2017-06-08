@@ -740,9 +740,9 @@ void CMusicInfoTag::SetSong(const CSong& song)
      During processing e.g. Cue Sheets, song may only have artist description string 
      rather than a fully populated artist credits vector.
   */
-  if (!song.HasArtistCredits())
+  if (!song.HasArtistCredits()) {
     SetArtist(song.GetArtistString()); //Sets both artist description string and artist vector from string
-  else
+  } else
   {
     SetArtistDesc(song.GetArtistString());
     SetArtist(song.GetArtist());
@@ -774,10 +774,12 @@ void CMusicInfoTag::SetSong(const CSong& song)
   SetAlbumId(song.idAlbum);
   SetDatabaseId(song.idSong, MediaTypeSong);
 
-  if (song.replayGain.Get(ReplayGain::TRACK).Valid())
+  if (song.replayGain.Get(ReplayGain::TRACK).Valid()) {
     m_replayGain.Set(ReplayGain::TRACK, song.replayGain.Get(ReplayGain::TRACK));
-  if (song.replayGain.Get(ReplayGain::ALBUM).Valid())
+}
+  if (song.replayGain.Get(ReplayGain::ALBUM).Valid()) {
     m_replayGain.Set(ReplayGain::ALBUM, song.replayGain.Get(ReplayGain::ALBUM));
+}
 
   SetLoaded();
 }

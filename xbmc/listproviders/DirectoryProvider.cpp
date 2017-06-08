@@ -83,8 +83,9 @@ public:
     if (CDirectory::GetDirectory(m_url, items, ""))
     {
       // sort the items if necessary
-      if (m_sort.sortBy != SortByNone)
+      if (m_sort.sortBy != SortByNone) {
         items.Sort(m_sort);
+}
 
       // limit must not exceed the number of items
       int limit = (m_limit == 0) ? items.Size() : std::min((int) m_limit, items.Size());
@@ -204,18 +205,20 @@ bool CDirectoryProvider::Update(bool forceRefresh)
   fireJob |= UpdateLimit();
 
   CSingleLock lock(m_section);
-  if (m_updateState == INVALIDATED)
+  if (m_updateState == INVALIDATED) {
     fireJob = true;
-  else if (m_updateState == DONE)
+  } else if (m_updateState == DONE) {
     changed = true;
+}
 
   m_updateState = OK;
 
   if (fireJob)
   {
     CLog::Log(LOGDEBUG, "CDirectoryProvider[%s]: refreshing..", m_currentUrl.c_str());
-    if (m_jobID)
+    if (m_jobID) {
       CJobManager::GetInstance().CancelJob(m_jobID);
+}
     m_jobID = CJobManager::GetInstance().AddJob(new CDirectoryJob(m_currentUrl, m_currentSort, m_currentLimit, m_parentID), this);
   }
 
@@ -230,8 +233,9 @@ bool CDirectoryProvider::Update(bool forceRefresh)
 void CDirectoryProvider::Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
 {
   // we are only interested in library, player and GUI changes
-  if ((flag & (VideoLibrary | AudioLibrary | Player | GUI)) == 0)
+  if ((flag & (VideoLibrary | AudioLibrary | Player | GUI)) == 0) {
     return;
+}
 
   {
     CSingleLock lock(m_section);
@@ -250,8 +254,9 @@ void CDirectoryProvider::Announce(AnnouncementFlag flag, const char *sender, con
       {
         if (m_currentSort.sortBy == SortByLastPlayed ||
             m_currentSort.sortBy == SortByPlaycount ||
-            m_currentSort.sortBy == SortByLastUsed)
+            m_currentSort.sortBy == SortByLastUsed) {
           m_updateState = INVALIDATED;
+}
       }
     }
     else
@@ -265,8 +270,9 @@ void CDirectoryProvider::Announce(AnnouncementFlag flag, const char *sender, con
       if (strcmp(message, "OnScanFinished") == 0 ||
           strcmp(message, "OnCleanFinished") == 0 ||
           strcmp(message, "OnUpdate") == 0 ||
-          strcmp(message, "OnRemove") == 0)
+          strcmp(message, "OnRemove") == 0) {
         m_updateState = INVALIDATED;
+}
     }
   }
 }
@@ -290,8 +296,9 @@ void CDirectoryProvider::OnAddonEvent(const ADDON::AddonEvent& event)
     if (typeid(event) == typeid(ADDON::AddonEvents::Enabled) ||
         typeid(event) == typeid(ADDON::AddonEvents::Disabled) ||
         typeid(event) == typeid(ADDON::AddonEvents::InstalledChanged) ||
-        typeid(event) == typeid(ADDON::AddonEvents::MetadataChanged))
+        typeid(event) == typeid(ADDON::AddonEvents::MetadataChanged)) {
       m_updateState = INVALIDATED;
+}
   }
 }
 
@@ -304,8 +311,9 @@ void CDirectoryProvider::OnPVRManagerEvent(const PVR::PVREvent& event)
         event == ManagerStopped ||
         event == ManagerError ||
         event == ManagerInterrupted ||
-        event == RecordingsInvalidated)
+        event == RecordingsInvalidated) {
       m_updateState = INVALIDATED;
+}
   }
 }
 
@@ -319,8 +327,9 @@ void CDirectoryProvider::OnFavouritesEvent(const CFavouritesService::FavouritesU
 void CDirectoryProvider::Reset()
 {
   CSingleLock lock(m_section);
-  if (m_jobID)
+  if (m_jobID) {
     CJobManager::GetInstance().CancelJob(m_jobID);
+}
   m_jobID = 0;
   m_items.clear();
   m_currentTarget.clear();
@@ -349,8 +358,9 @@ void CDirectoryProvider::OnJobComplete(unsigned int jobID, bool success, CJob *j
     m_items = ((CDirectoryJob*)job)->GetItems();
     m_currentTarget = ((CDirectoryJob*)job)->GetTarget();
     ((CDirectoryJob*)job)->GetItemTypes(m_itemTypes);
-    if (m_updateState == OK)
+    if (m_updateState == OK) {
       m_updateState = DONE;
+}
   }
   m_jobID = 0;
 }
@@ -459,8 +469,9 @@ bool CDirectoryProvider::UpdateLimit()
 {
   CSingleLock lock(m_section);
   unsigned int value = m_limit.GetIntValue(m_parentID);
-  if (value == m_currentLimit)
+  if (value == m_currentLimit) {
     return false;
+}
 
   m_currentLimit = value;
 
@@ -472,11 +483,13 @@ bool CDirectoryProvider::UpdateSort()
   CSingleLock lock(m_section);
   SortBy sortMethod(SortUtils::SortMethodFromString(m_sortMethod.GetLabel(m_parentID, false)));
   SortOrder sortOrder(SortUtils::SortOrderFromString(m_sortOrder.GetLabel(m_parentID, false)));
-  if (sortOrder == SortOrderNone)
+  if (sortOrder == SortOrderNone) {
     sortOrder = SortOrderAscending;
+}
 
-  if (sortMethod == m_currentSort.sortBy && sortOrder == m_currentSort.sortOrder)
+  if (sortMethod == m_currentSort.sortBy && sortOrder == m_currentSort.sortOrder) {
     return false;
+}
 
   m_currentSort.sortBy = sortMethod;
   m_currentSort.sortOrder = sortOrder;

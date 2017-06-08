@@ -121,8 +121,9 @@ namespace XbmcThreads
     {
       CEvent* cur = *iter;
       CSingleLock lock2(cur->mutex);
-      if (cur->signaled) 
+      if (cur->signaled) { 
         signaled = cur;
+}
     }
     // ==================================================
 
@@ -140,10 +141,11 @@ namespace XbmcThreads
     CEvent* ret = signaled;
     if (numWaits == 0) 
     {
-      if (signaled)
+      if (signaled) {
         // This acquires and releases the CEvent::mutex. This is fine since the
         //  CEventGroup::mutex is already being held
         signaled->WaitMSec(0); // reset the event if needed
+}
       signaled = nullptr;  // clear the signaled if all the waiters are gone
     }
     return ret;
@@ -183,10 +185,11 @@ namespace XbmcThreads
     while(!done)
     {
       CEvent* cur = va_arg(ap,CEvent*);
-      if (cur)
+      if (cur) {
         events.push_back(cur);
-      else
+      } else {
         done = true;
+}
     }
     va_end(ap);
 

@@ -153,10 +153,11 @@ void CFTPParse::setTime(std::string str)
       /* set the year */
       if ((current_time->tm_mon - time_struct.tm_mon < 0) ||
          ((current_time->tm_mon - time_struct.tm_mon == 0) &&
-          (current_time->tm_mday - time_struct.tm_mday < 0)))
+          (current_time->tm_mday - time_struct.tm_mday < 0))) {
         time_struct.tm_year = current_time->tm_year - 1;
-      else
+      } else {
         time_struct.tm_year = current_time->tm_year;
+}
     }
     else
     {
@@ -236,13 +237,15 @@ void CFTPParse::setTime(std::string str)
 
     /* set the year */
     time_struct.tm_year = atoi(year.c_str());
-    if (time_struct.tm_year < 70)
+    if (time_struct.tm_year < 70) {
       time_struct.tm_year += 100;
+}
 
     /* set the hour */
     time_struct.tm_hour = atoi(hour.c_str());
-    if (time_struct.tm_hour == 12)
+    if (time_struct.tm_hour == 12) {
       time_struct.tm_hour -= 12;
+}
     if (pcrecpp::RE("PM").FullMatch(am_or_pm))
       time_struct.tm_hour += 12;
 
@@ -265,16 +268,17 @@ int CFTPParse::getDayOfWeek(int month, int date, int year)
 
   /* First determine the anchor day */
   int anchor;
-  if (year >= 1900 && year < 2000)
+  if (year >= 1900 && year < 2000) {
     anchor = 3;
-  else if (year >= 2000 && year < 2100)
+  } else if (year >= 2000 && year < 2100) {
     anchor = 2;
-  else if (year >= 2100 && year < 2200)
+  } else if (year >= 2100 && year < 2200) {
     anchor = 0;
-  else if (year >= 2200 && year < 2300)
+  } else if (year >= 2200 && year < 2300) {
     anchor = 5;
-  else // must have been given an invalid year :-/
+  } else { // must have been given an invalid year :-/
     return -1;
+}
 
   /* Now determine the doomsday */
   int y = year % 100;
@@ -283,53 +287,67 @@ int CFTPParse::getDayOfWeek(int month, int date, int year)
 
   /* Determine if the given year is a leap year */
   int leap_year = 0;
-  if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+  if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
     leap_year = 1;
+}
 
   /* Now select a doomsday for the given month */
   int mdday = 1;
   if (month == 1)
   {
-    if (leap_year)
+    if (leap_year) {
       mdday = 4;
-    else
+    } else {
       mdday = 3;
+}
   }
   if (month == 2)
   {
-    if (leap_year)
+    if (leap_year) {
       mdday = 1;
-    else
+    } else {
       mdday = 7;
+}
   }
-  if (month == 3)
+  if (month == 3) {
     mdday = 7;
-  if (month == 4)
+}
+  if (month == 4) {
     mdday = 4;
-  if (month == 5)
+}
+  if (month == 5) {
     mdday = 9;
-  if (month == 6)
+}
+  if (month == 6) {
     mdday = 6;
-  if (month == 7)
+}
+  if (month == 7) {
     mdday = 11;
-  if (month == 8)
+}
+  if (month == 8) {
     mdday = 8;
-  if (month == 9)
+}
+  if (month == 9) {
     mdday = 5;
-  if (month == 10)
+}
+  if (month == 10) {
     mdday = 10;
-  if (month == 11)
+}
+  if (month == 11) {
     mdday = 9;
-  if (month == 12)
+}
+  if (month == 12) {
     mdday = 12;
+}
 
   /* Now calculate the day of the week
    * Sunday = 0, Monday = 1, Tuesday = 2, Wednesday = 3, Thursday = 4,
    * Friday = 5, Saturday = 6.
    */
   int day_of_week = ((date - 1) % 7) - ((mdday - 1) % 7) + dday;
-  if (day_of_week >= 7)
+  if (day_of_week >= 7) {
     day_of_week -= 7;
+}
 
   return day_of_week;
 }

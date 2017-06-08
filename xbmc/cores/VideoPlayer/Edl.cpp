@@ -89,8 +89,9 @@ bool CEdl::ReadEditDecisionLists(const std::string& strMovie, const float fFrame
     CLog::Log(LOGDEBUG, "%s - Assuming 1080i interlaced content. Adjusted frames per second from %.3f to %.3f",
               __FUNCTION__, fFrameRate, fFramesPerSecond);
   }
-  else // Assume everything else is not interlaced, e.g. 720p.
+  else { // Assume everything else is not interlaced, e.g. 720p.
     fFramesPerSecond = fFrameRate;
+}
 
   bool bFound = false;
 
@@ -110,17 +111,21 @@ bool CEdl::ReadEditDecisionLists(const std::string& strMovie, const float fFrame
     /*
      * Read any available file format until a valid EDL related file is found.
      */
-    if (!bFound)
+    if (!bFound) {
       bFound = ReadVideoReDo(strMovie);
+}
 
-    if (!bFound)
+    if (!bFound) {
       bFound = ReadEdl(strMovie, fFramesPerSecond);
+}
 
-    if (!bFound)
+    if (!bFound) {
       bFound = ReadComskip(strMovie, fFramesPerSecond);
+}
 
-    if (!bFound)
+    if (!bFound) {
       bFound = ReadBeyondTV(strMovie);
+}
   }
 
   /*
@@ -134,8 +139,9 @@ bool CEdl::ReadEditDecisionLists(const std::string& strMovie, const float fFrame
     bFound = ReadPvr(strMovie);
   }
 
-  if (bFound)
+  if (bFound) {
     MergeShortCommBreaks();
+}
 
   return bFound;
 }
@@ -345,8 +351,9 @@ bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond
     CLog::Log(LOGWARNING, "%s - Frame rate not in Comskip file. Using detected frames per second: %.3f",
               __FUNCTION__, fFrameRate);
   }
-  else
+  else {
     fFrameRate /= 100; // Reduce by factor of 100 to get fps.
+}
 
   (void)comskipFile.ReadString(szBuffer, 1023); // Line 2. Ignore "-------------"
 
@@ -364,8 +371,9 @@ bool CEdl::ReadComskip(const std::string& strMovie, const float fFramesPerSecond
       cut.action = COMM_BREAK;
       bValid = AddCut(cut);
     }
-    else
+    else {
       bValid = false;
+}
   }
   comskipFile.Close();
 
@@ -441,17 +449,19 @@ bool CEdl::ReadVideoReDo(const std::string& strMovie)
         cut.action = CUT;
         bValid = AddCut(cut);
       }
-      else
+      else {
         bValid = false;
+}
     }
     else if (strncmp(szBuffer, VIDEOREDO_TAG_SCENE, strlen(VIDEOREDO_TAG_SCENE)) == 0) // Found the <SceneMarker > tag
     {
       int iScene;
       double dSceneMarker;
-      if (sscanf(szBuffer + strlen(VIDEOREDO_TAG_SCENE), " %i>%lf", &iScene, &dSceneMarker) == 2)
+      if (sscanf(szBuffer + strlen(VIDEOREDO_TAG_SCENE), " %i>%lf", &iScene, &dSceneMarker) == 2) {
         bValid = AddSceneMarker((int64_t)(dSceneMarker / 10000)); // Times need adjusting by 1/10,000 to get ms.
-      else
+      } else {
         bValid = false;
+}
     }
     /*
      * Ignore any other tags.
@@ -684,10 +694,12 @@ bool CEdl::AddCut(Cut& cut)
     int autowait = g_advancedSettings.m_iEdlCommBreakAutowait * 1000; // seconds -> ms
     int autowind = g_advancedSettings.m_iEdlCommBreakAutowind * 1000; // seconds -> ms
 
-    if (cut.start > 0) // Only autowait if not at the start.
+    if (cut.start > 0) { // Only autowait if not at the start.
      cut.start += autowait;
-    if (cut.end > cut.start + autowind) // Only autowind if it won't go back past the start (should never happen).
+}
+    if (cut.end > cut.start + autowind) { // Only autowind if it won't go back past the start (should never happen).
      cut.end -= autowind;
+}
   }
 
   /*
@@ -716,8 +728,9 @@ bool CEdl::AddCut(Cut& cut)
     }
   }
 
-  if (cut.action == CUT)
+  if (cut.action == CUT) {
     m_iTotalCutTime += cut.end - cut.start;
+}
 
   return true;
 }
@@ -726,8 +739,9 @@ bool CEdl::AddSceneMarker(const int iSceneMarker)
 {
   Cut cut;
 
-  if (InCut(iSceneMarker, &cut) && cut.action == CUT) // Only works for current cuts.
+  if (InCut(iSceneMarker, &cut) && cut.action == CUT) { // Only works for current cuts.
     return false;
+}
 
   CLog::Log(LOGDEBUG, "%s - Inserting new scene marker: %s", __FUNCTION__,
             MillisecondsToTimeString(iSceneMarker).c_str());
@@ -748,8 +762,9 @@ int CEdl::GetTotalCutTime() const
 
 int CEdl::RemoveCutTime(int iSeek) const
 {
-  if (!HasCut())
+  if (!HasCut()) {
     return iSeek;
+}
 
   /**
    * @todo Consider an optimization of using the (now unused) total cut time if the seek time
@@ -772,8 +787,9 @@ int CEdl::RemoveCutTime(int iSeek) const
 
 int CEdl::RestoreCutTime(int iClock) const
 {
-  if (!HasCut())
+  if (!HasCut()) {
     return iClock;
+}
 
   int iSeek = iClock;
   for (int i = 0; i < (int)m_vecCuts.size(); i++)
@@ -899,8 +915,9 @@ bool CEdl::GetNearestCut(bool bPlus, const int iSeek, Cut *pCut) const
 
 bool CEdl::GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker)
 {
-  if (!HasSceneMarker())
+  if (!HasSceneMarker()) {
     return false;
+}
 
   int iSeek = RestoreCutTime(iClock);
 
@@ -937,8 +954,9 @@ bool CEdl::GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker)
    * picked up when scene markers are added.
    */
   Cut cut;
-  if (bFound && InCut(*iSceneMarker, &cut) && cut.action == CUT)
+  if (bFound && InCut(*iSceneMarker, &cut) && cut.action == CUT) {
     *iSceneMarker = cut.end;
+}
 
   return bFound;
 }

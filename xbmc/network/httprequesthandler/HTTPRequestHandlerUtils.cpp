@@ -67,16 +67,18 @@ bool HTTPRequestHandlerUtils::GetRequestedRanges(struct MHD_Connection *connecti
 {
   ranges.Clear();
 
-  if (connection == nullptr)
+  if (connection == nullptr) {
     return false;
+}
 
   return ranges.Parse(GetRequestHeaderValue(connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_RANGE), totalLength);
 }
 
 int HTTPRequestHandlerUtils::FillArgumentMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
 {
-  if (cls == nullptr || key == nullptr)
+  if (cls == nullptr || key == nullptr) {
     return MHD_NO;
+}
 
   std::map<std::string, std::string> *arguments = reinterpret_cast<std::map<std::string, std::string>*>(cls);
   arguments->insert(std::make_pair(key, value != nullptr ? value : ""));
@@ -86,8 +88,9 @@ int HTTPRequestHandlerUtils::FillArgumentMap(void *cls, enum MHD_ValueKind kind,
 
 int HTTPRequestHandlerUtils::FillArgumentMultiMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
 {
-  if (cls == nullptr || key == nullptr)
+  if (cls == nullptr || key == nullptr) {
     return MHD_NO;
+}
 
   std::multimap<std::string, std::string> *arguments = reinterpret_cast<std::multimap<std::string, std::string>*>(cls);
   arguments->insert(std::make_pair(key, value != nullptr ? value : ""));

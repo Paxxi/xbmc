@@ -87,8 +87,9 @@ bool CTCPServer::StartServer(int port, bool nonlocal)
     ServerInstance->Create(false, thread_stacksize);
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 void CTCPServer::StopServer(bool bWait)
@@ -106,8 +107,9 @@ void CTCPServer::StopServer(bool bWait)
 
 bool CTCPServer::IsRunning()
 {
-  if (ServerInstance == nullptr)
+  if (ServerInstance == nullptr) {
     return false;
+}
 
   return ((CThread*)ServerInstance)->IsRunning();
 }
@@ -282,8 +284,9 @@ bool CTCPServer::Initialize()
 
 bool CTCPServer::InitializeBlue()
 {
-  if (!m_nonlocal)
+  if (!m_nonlocal) {
     return false;
+}
 
 #ifdef TARGET_WINDOWS
 
@@ -372,8 +375,9 @@ bool CTCPServer::InitializeBlue()
   }
 
   socklen_t len = sizeof(sa);
-  if (getsockname(fd, (struct sockaddr*)&sa, &len) < 0)
+  if (getsockname(fd, (struct sockaddr*)&sa, &len) < 0) {
     CLog::Log(LOGERROR, "JSONRPC Server: Failed to get bluetooth port");
+}
 
   if (listen(fd, 10) < 0)
   {
@@ -469,8 +473,9 @@ bool CTCPServer::InitializeTCP()
 
   Deinitialize();
 
-  if ((fd = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "JSONRPC")) == INVALID_SOCKET)
+  if ((fd = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "JSONRPC")) == INVALID_SOCKET) {
     return false;
+}
 
   m_servers.push_back(fd);
   return true;
@@ -492,8 +497,9 @@ void CTCPServer::Deinitialize()
   m_servers.clear();
 
 #ifdef HAVE_LIBBLUETOOTH
-  if (m_sdpd)
+  if (m_sdpd) {
     sdp_close((sdp_session_t*)m_sdpd);
+}
   m_sdpd = nullptr;
 #endif
 
@@ -572,10 +578,11 @@ void CTCPServer::CTCPClient::PushBuffer(CTCPServer *host, const char *buffer, in
     if (m_beginChar != 0)
     {
       m_buffer.push_back(c);
-      if (c == m_beginChar)
+      if (c == m_beginChar) {
         m_beginBrackets++;
-      else if (c == m_endChar)
+      } else if (c == m_endChar) {
         m_endBrackets++;
+}
       if (m_beginBrackets > 0 && m_endBrackets > 0 && m_beginBrackets == m_endBrackets)
       {
         std::string line = CJSONRPC::MethodCall(m_buffer, host, this);
@@ -646,8 +653,9 @@ CTCPServer::CWebSocketClient& CTCPServer::CWebSocketClient::operator=(const CWeb
 void CTCPServer::CWebSocketClient::Send(const char *data, unsigned int size)
 {
   const CWebSocketMessage *msg = m_websocket->Send(WebSocketTextFrame, data, size);
-  if (msg == nullptr || !msg->IsComplete())
+  if (msg == nullptr || !msg->IsComplete()) {
     return;
+}
 
   std::vector<const CWebSocketFrame *> frames = msg->GetFrames();
   for (unsigned int index = 0; index < frames.size(); index++)
@@ -680,8 +688,9 @@ void CTCPServer::CWebSocketClient::PushBuffer(CTCPServer *host, const char *buff
   }
   while (len > 0 && msg != NULL);
 
-  if (m_websocket->GetState() == WebSocketStateClosed)
+  if (m_websocket->GetState() == WebSocketStateClosed) {
     Disconnect();
+}
 }
 
 void CTCPServer::CWebSocketClient::Disconnect()
@@ -691,8 +700,9 @@ void CTCPServer::CWebSocketClient::Disconnect()
     if (m_websocket->GetState() != WebSocketStateClosed && m_websocket->GetState() != WebSocketStateNotConnected)
     {
       const CWebSocketFrame *closeFrame = m_websocket->Close();
-      if (closeFrame)
+      if (closeFrame) {
         Send(closeFrame->GetFrameData(), (unsigned int)closeFrame->GetFrameLength());
+}
     }
 
     if (m_websocket->GetState() == WebSocketStateClosed)

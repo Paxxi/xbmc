@@ -58,8 +58,9 @@ void CAudioDecoder::Destroy()
 
   m_pcmBuffer.Destroy();
 
-  if ( m_codec )
+  if ( m_codec ) {
     delete m_codec;
+}
   m_codec = nullptr;
 
   m_canPlay = false;
@@ -107,8 +108,9 @@ bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
   if (file.HasMusicInfoTag())
   {
     // set total time from the given tag
-    if (file.GetMusicInfoTag()->GetDuration())
+    if (file.GetMusicInfoTag()->GetDuration()) {
       m_codec->SetTotalTime(file.GetMusicInfoTag()->GetDuration());
+}
 
     // update ReplayGain from the given tag if it's better then original (cuesheet)
     ReplayGain rgInfo = m_codec->m_tag.GetReplayGain();
@@ -129,8 +131,9 @@ bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
       m_codec->m_tag.SetReplayGain(rgInfo);
   }
 
-  if (seekOffset)
+  if (seekOffset) {
     m_codec->Seek(seekOffset);
+}
 
   m_status = STATUS_QUEUING;
 
@@ -142,8 +145,9 @@ bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
 AEAudioFormat CAudioDecoder::GetFormat()
 {
   AEAudioFormat format;
-  if (!m_codec)
+  if (!m_codec) {
     return format;
+}
   return m_codec->m_format;
 }
 
@@ -151,8 +155,9 @@ int64_t CAudioDecoder::Seek(int64_t time)
 {
   m_pcmBuffer.Clear();
   m_rawBufferSize = 0;
-  if (!m_codec)
+  if (!m_codec) {
     return 0;
+}
   if (time < 0) time = 0;
   if (time > m_codec->m_TotalTime) time = m_codec->m_TotalTime;
   return m_codec->Seek(time);
@@ -160,21 +165,24 @@ int64_t CAudioDecoder::Seek(int64_t time)
 
 void CAudioDecoder::SetTotalTime(int64_t time)
 {
-  if (m_codec)
+  if (m_codec) {
     m_codec->m_TotalTime = time;
+}
 }
 
 int64_t CAudioDecoder::TotalTime()
 {
-  if (m_codec)
+  if (m_codec) {
     return m_codec->m_TotalTime;
+}
   return 0;
 }
 
 unsigned int CAudioDecoder::GetDataSize(bool checkPktSize)
 {
-  if (m_status == STATUS_QUEUING || m_status == STATUS_NO_FILE)
+  if (m_status == STATUS_QUEUING || m_status == STATUS_NO_FILE) {
     return 0;
+}
 
   if (m_codec->m_format.m_dataFormat != AE_FMT_RAW)
   {
@@ -190,8 +198,9 @@ unsigned int CAudioDecoder::GetDataSize(bool checkPktSize)
   }
   else
   {
-    if (m_status == STATUS_ENDING)
+    if (m_status == STATUS_ENDING) {
       m_status = STATUS_ENDED;
+}
     return m_rawBufferSize;
   }
 }
@@ -225,8 +234,9 @@ void *CAudioDecoder::GetData(unsigned int samples)
 
 uint8_t *CAudioDecoder::GetRawData(int &size)
 {
-  if (m_status == STATUS_ENDING)
+  if (m_status == STATUS_ENDING) {
     m_status = STATUS_ENDED;
+}
 
   if (m_rawBufferSize)
   {
@@ -239,12 +249,14 @@ uint8_t *CAudioDecoder::GetRawData(int &size)
 
 int CAudioDecoder::ReadSamples(int numsamples)
 {
-  if (m_status == STATUS_NO_FILE || m_status == STATUS_ENDING || m_status == STATUS_ENDED)
+  if (m_status == STATUS_NO_FILE || m_status == STATUS_ENDING || m_status == STATUS_ENDED) {
     return RET_SLEEP;             // nothing loaded yet
+}
 
   // start playing once we're fully queued and we're ready to go
-  if (m_status == STATUS_QUEUED && m_canPlay)
+  if (m_status == STATUS_QUEUED && m_canPlay) {
     m_status = STATUS_PLAYING;
+}
 
   // grab a lock to ensure the codec is created at this point.
   CSingleLock lock(m_critSection);
@@ -276,8 +288,9 @@ int CAudioDecoder::ReadSamples(int numsamples)
         {
           // setup ending if we're within set time of the end (currently just EOF)
           m_eof = true;
-          if (m_status < STATUS_ENDING)
+          if (m_status < STATUS_ENDING) {
             m_status = STATUS_ENDING;
+}
         }
 
         return RET_SUCCESS;
@@ -292,8 +305,9 @@ int CAudioDecoder::ReadSamples(int numsamples)
       {
         m_eof = true;
         // setup ending if we're within set time of the end (currently just EOF)
-        if (m_status < STATUS_ENDING)
+        if (m_status < STATUS_ENDING) {
           m_status = STATUS_ENDING;
+}
       }
     }
   }
@@ -321,8 +335,9 @@ int CAudioDecoder::ReadSamples(int numsamples)
       {
         m_eof = true;
         // setup ending if we're within set time of the end (currently just EOF)
-        if (m_status < STATUS_ENDING)
+        if (m_status < STATUS_ENDING) {
           m_status = STATUS_ENDING;
+}
       }
     }
   }
@@ -333,8 +348,9 @@ float CAudioDecoder::GetReplayGain(float &peakVal)
 {
 #define REPLAY_GAIN_DEFAULT_LEVEL 89.0f
   const ReplayGainSettings &replayGainSettings = g_application.GetReplayGainSettings();
-  if (replayGainSettings.iType == ReplayGain::NONE)
+  if (replayGainSettings.iType == ReplayGain::NONE) {
     return 1.0f;
+}
 
   // Compute amount of gain
   float replaydB = (float)replayGainSettings.iNoGainPreAmp;
@@ -345,14 +361,16 @@ float CAudioDecoder::GetReplayGain(float &peakVal)
     if (rgInfo.Get(ReplayGain::ALBUM).HasGain())
     {
       replaydB = (float)replayGainSettings.iPreAmp + rgInfo.Get(ReplayGain::ALBUM).Gain();
-      if (rgInfo.Get(ReplayGain::ALBUM).HasPeak())
+      if (rgInfo.Get(ReplayGain::ALBUM).HasPeak()) {
         peak = rgInfo.Get(ReplayGain::ALBUM).Peak();
+}
     }
     else if (rgInfo.Get(ReplayGain::TRACK).HasGain())
     {
       replaydB = (float)replayGainSettings.iPreAmp + rgInfo.Get(ReplayGain::TRACK).Gain();
-      if (rgInfo.Get(ReplayGain::TRACK).HasPeak())
+      if (rgInfo.Get(ReplayGain::TRACK).HasPeak()) {
         peak = rgInfo.Get(ReplayGain::TRACK).Peak();
+}
     }
   }
   else if (replayGainSettings.iType == ReplayGain::TRACK)
@@ -360,14 +378,16 @@ float CAudioDecoder::GetReplayGain(float &peakVal)
     if (rgInfo.Get(ReplayGain::TRACK).HasGain())
     {
       replaydB = (float)replayGainSettings.iPreAmp + rgInfo.Get(ReplayGain::TRACK).Gain();
-      if (rgInfo.Get(ReplayGain::TRACK).HasPeak())
+      if (rgInfo.Get(ReplayGain::TRACK).HasPeak()) {
         peak = rgInfo.Get(ReplayGain::TRACK).Peak();
+}
     }
     else if (rgInfo.Get(ReplayGain::ALBUM).HasGain())
     {
       replaydB = (float)replayGainSettings.iPreAmp + rgInfo.Get(ReplayGain::ALBUM).Gain();
-      if (rgInfo.Get(ReplayGain::ALBUM).HasPeak())
+      if (rgInfo.Get(ReplayGain::ALBUM).HasPeak()) {
         peak = rgInfo.Get(ReplayGain::ALBUM).Peak();
+}
     }
   }
   // convert to a gain type

@@ -48,10 +48,11 @@ CDVDInputStreamFFmpeg::~CDVDInputStreamFFmpeg()
 
 bool CDVDInputStreamFFmpeg::IsEOF()
 {
-  if(m_aborted)
+  if(m_aborted) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 bool CDVDInputStreamFFmpeg::Open()

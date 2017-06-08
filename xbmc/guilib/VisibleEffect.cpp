@@ -79,10 +79,11 @@ void CAnimEffect::Calculate(unsigned int time, const CPoint &center)
   assert(m_delay + m_length);
   // calculate offset and tweening
   float offset = 0.0f;  // delayed forward, or finished reverse
-  if (time >= m_delay && time < m_delay + m_length)
+  if (time >= m_delay && time < m_delay + m_length) {
     offset = (float)(time - m_delay) / m_length;
-  else if (time >= m_delay + m_length)
+  } else if (time >= m_delay + m_length) {
     offset = 1.0f;
+}
   if (m_pTweener)
     offset = m_pTweener->Tween(offset, 0.0f, 1.0f, 1.0f);
   // and apply the effect
@@ -141,8 +142,9 @@ std::shared_ptr<Tweener> CAnimEffect::GetTweener(const TiXmlElement *pAnimationN
       m_pTweener = std::shared_ptr<Tweener>(new QuadTweener(accel));
       m_pTweener->SetEasing(EASE_IN);
     }
-    else
-      m_pTweener = std::shared_ptr<Tweener>(new LinearTweener());
+    else {
+      m_pTweener 
+}= std::shared_ptr<Tweener>(new LinearTweener());
   }
 
   return m_pTweener;
@@ -222,9 +224,9 @@ CRotateEffect::CRotateEffect(const TiXmlElement *node, EFFECT_TYPE effect) : CAn
   const char *centerPos = node->Attribute("center");
   if (centerPos)
   {
-    if (strcmpi(centerPos, "auto") == 0)
+    if (strcmpi(centerPos, "auto") == 0) {
       m_autoCenter = true;
-    else
+    } else
     {
       std::vector<std::string> commaSeparated = StringUtils::Split(centerPos, ",");
       if (commaSeparated.size() > 1)
@@ -316,9 +318,9 @@ CZoomEffect::CZoomEffect(const TiXmlElement *node, const CRect &rect) : CAnimEff
   const char *centerPos = node->Attribute("center");
   if (centerPos)
   {
-    if (strcmpi(centerPos, "auto") == 0)
+    if (strcmpi(centerPos, "auto") == 0) {
       m_autoCenter = true;
-    else
+    } else
     {
       std::vector<std::string> commaSeparated = StringUtils::Split(centerPos, ",");
       if (commaSeparated.size() > 1)
@@ -425,23 +427,26 @@ void CAnimation::Animate(unsigned int time, bool startAnim)
   // First start any queued animations
   if (m_queuedProcess == ANIM_PROCESS_NORMAL)
   {
-    if (m_currentProcess == ANIM_PROCESS_REVERSE)
+    if (m_currentProcess == ANIM_PROCESS_REVERSE) {
       m_start = time - m_amount;  // reverse direction of animation
-    else
+    } else {
       m_start = time;
+}
     m_currentProcess = ANIM_PROCESS_NORMAL;
   }
   else if (m_queuedProcess == ANIM_PROCESS_REVERSE)
   {
-    if (m_currentProcess == ANIM_PROCESS_NORMAL)
+    if (m_currentProcess == ANIM_PROCESS_NORMAL) {
       m_start = time - (m_length - m_amount); // reverse direction of animation
-    else if (m_currentProcess == ANIM_PROCESS_NONE)
+    } else if (m_currentProcess == ANIM_PROCESS_NONE) {
       m_start = time;
+}
     m_currentProcess = ANIM_PROCESS_REVERSE;
   }
   // reset the queued state once we've rendered to ensure allocation has occured
-  if (startAnim || m_queuedProcess == ANIM_PROCESS_REVERSE)
+  if (startAnim || m_queuedProcess == ANIM_PROCESS_REVERSE) {
     m_queuedProcess = ANIM_PROCESS_NONE;
+}
 
   // Update our animation process
   if (m_currentProcess == ANIM_PROCESS_NORMAL)
@@ -469,8 +474,9 @@ void CAnimation::Animate(unsigned int time, bool startAnim)
         m_amount = 0;
         m_start = time;
       }
-      else
+      else {
         m_currentState = ANIM_STATE_APPLIED;
+}
     }
   }
   else if (m_currentProcess == ANIM_PROCESS_REVERSE)
@@ -488,8 +494,9 @@ void CAnimation::Animate(unsigned int time, bool startAnim)
         m_currentProcess = ANIM_PROCESS_NORMAL;
         m_start = time;
       }
-      else
+      else {
         m_currentState = ANIM_STATE_APPLIED;
+}
     }
   }
 }
@@ -531,22 +538,24 @@ void CAnimation::Calculate(const CPoint &center)
   for (unsigned int i = 0; i < m_effects.size(); i++)
   {
     CAnimEffect *effect = m_effects[i];
-    if (effect->GetLength())
+    if (effect->GetLength()) {
       effect->Calculate(m_delay + m_amount, center);
-    else
+    } else
     { // effect has length zero, so either apply complete
-      if (m_currentProcess == ANIM_PROCESS_NORMAL)
+      if (m_currentProcess == ANIM_PROCESS_NORMAL) {
         effect->ApplyState(ANIM_STATE_APPLIED, center);
-      else
+      } else {
         effect->ApplyState(ANIM_STATE_NONE, center);
+}
     }
   }
 }
 
 void CAnimation::RenderAnimation(TransformMatrix &matrix, const CPoint &center)
 {
-  if (m_currentProcess != ANIM_PROCESS_NONE)
+  if (m_currentProcess != ANIM_PROCESS_NONE) {
     Calculate(center);
+}
   // If we have finished an animation, reset the animation state
   // We do this here (rather than in Animate()) as we need the
   // currentProcess information in the UpdateStates() function of the
@@ -588,14 +597,15 @@ void CAnimation::UpdateCondition(const CGUIListItem *item)
   if (!m_condition)
     return;
   bool condition = m_condition->Get(item);
-  if (condition && !m_lastCondition)
+  if (condition && !m_lastCondition) {
     QueueAnimation(ANIM_PROCESS_NORMAL);
-  else if (!condition && m_lastCondition)
+  } else if (!condition && m_lastCondition)
   {
-    if (m_reversible)
+    if (m_reversible) {
       QueueAnimation(ANIM_PROCESS_REVERSE);
-    else
+    } else {
       ResetAnimation();
+}
   }
   m_lastCondition = condition;
 }
@@ -603,10 +613,11 @@ void CAnimation::UpdateCondition(const CGUIListItem *item)
 void CAnimation::SetInitialCondition()
 {
   m_lastCondition = m_condition ? m_condition->Get() : false;
-  if (m_lastCondition)
+  if (m_lastCondition) {
     ApplyAnimation();
-  else
+  } else {
     ResetAnimation();
+}
 }
 
 void CAnimation::Create(const TiXmlElement *node, const CRect &rect, int context)
@@ -619,8 +630,9 @@ void CAnimation::Create(const TiXmlElement *node, const CRect &rect, int context
   if (condition)
     m_condition = g_infoManager.Register(condition, context);
   const char *reverse = node->Attribute("reversible");
-  if (reverse && strcmpi(reverse, "false") == 0)
+  if (reverse && strcmpi(reverse, "false") == 0) {
     m_reversible = false;
+}
 
   const TiXmlElement *effect = node->FirstChildElement("effect");
 
@@ -646,11 +658,13 @@ void CAnimation::Create(const TiXmlElement *node, const CRect &rect, int context
 
     // pulsed or loop animations
     const char *pulse = node->Attribute("pulse");
-    if (pulse && strcmpi(pulse, "true") == 0)
+    if (pulse && strcmpi(pulse, "true") == 0) {
       m_repeatAnim = ANIM_REPEAT_PULSE;
+}
     const char *loop = node->Attribute("loop");
-    if (loop && strcmpi(loop, "true") == 0)
+    if (loop && strcmpi(loop, "true") == 0) {
       m_repeatAnim = ANIM_REPEAT_LOOP;
+}
   }
 
   if (!effect)
@@ -766,8 +780,9 @@ float CScroller::Tween(float progress)
       // a = 2 , b = -1
       return (2 * m_pTweener->Tween(progress, 0, 1, 1) - 1);
     }
-    else 
-      return m_pTweener->Tween(progress, 0, 1, 1);
+    else { 
+      return 
+}m_pTweener->Tween(progress, 0, 1, 1);
   }
   else
     return progress;
@@ -775,8 +790,9 @@ float CScroller::Tween(float progress)
 
 bool CScroller::Update(unsigned int time)
 {
-  if (!m_startTime)
+  if (!m_startTime) {
     m_startTime = time;
+}
   if (m_delta != 0)
   {
     if (time - m_startTime >= m_duration) // we are finished
@@ -787,10 +803,12 @@ bool CScroller::Update(unsigned int time)
       m_delta = 0;
       m_startPosition = 0;
     }
-    else
+    else {
       m_scrollValue = m_startPosition + Tween((float)(time - m_startTime) / m_duration) * m_delta;
+}
     return true;
   }
-  else
+  else {
     return false;
+}
 }

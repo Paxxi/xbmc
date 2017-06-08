@@ -62,16 +62,18 @@ bool CFrameBufferObject::IsSupported()
 
 bool CFrameBufferObject::Initialize()
 {
-  if (!IsSupported())
+  if (!IsSupported()) {
     return false;
+}
 
   Cleanup();
 
   glGenFramebuffersEXT(1, &m_fbo);
   VerifyGLState();
 
-  if (!m_fbo)
+  if (!m_fbo) {
     return false;
+}
 
   m_valid = true;
   return true;
@@ -79,14 +81,17 @@ bool CFrameBufferObject::Initialize()
 
 void CFrameBufferObject::Cleanup()
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return;
+}
 
-  if (m_fbo)
+  if (m_fbo) {
     glDeleteFramebuffersEXT(1, &m_fbo);
+}
 
-  if (m_texid)
+  if (m_texid) {
     glDeleteTextures(1, &m_texid);
+}
 
   m_texid = 0;
   m_fbo = 0;
@@ -97,11 +102,13 @@ void CFrameBufferObject::Cleanup()
 bool CFrameBufferObject::CreateAndBindToTexture(GLenum target, int width, int height, GLenum format, GLenum type,
                                                 GLenum filter, GLenum clampmode)
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return false;
+}
 
-  if (m_texid)
+  if (m_texid) {
     glDeleteTextures(1, &m_texid);
+}
 
   glGenTextures(1, &m_texid);
   glBindTexture(target, m_texid);
@@ -123,8 +130,9 @@ void CFrameBufferObject::SetFiltering(GLenum target, GLenum mode)
 
 bool CFrameBufferObject::BindToTexture(GLenum target, GLuint texid)
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return false;
+}
 
   m_bound = false;
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
@@ -156,8 +164,9 @@ bool CFrameBufferObject::BeginRender()
 // Finish rendering to FBO
 void CFrameBufferObject::EndRender() const
 {
-  if (IsValid())
+  if (IsValid()) {
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
 }
 
 #endif

@@ -47,8 +47,9 @@ bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo &hints)
   char line[1024];
 
   CRegExp reg;
-  if (!reg.RegComp("\\[([0-9]+)\\]\\[([0-9]+)\\]"))
+  if (!reg.RegComp("\\[([0-9]+)\\]\\[([0-9]+)\\]")) {
     return false;
+}
   CDVDSubtitleTagMicroDVD TagConv;
 
   while (m_pStream->ReadLine(line, sizeof(line)))

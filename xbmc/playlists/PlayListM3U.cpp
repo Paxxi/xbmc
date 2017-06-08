@@ -156,8 +156,9 @@ bool CPlayListM3U::Load(const std::string& strFileName)
 
       // Skip self - do not load playlist recursively
       // We compare case-less in case user has input incorrect case of the current playlist
-      if (StringUtils::EqualsNoCase(URIUtils::GetFileName(strFileName), m_strPlayListName))
+      if (StringUtils::EqualsNoCase(URIUtils::GetFileName(strFileName), m_strPlayListName)) {
         continue;
+}
 
       if (strFileName.length() > 0)
       {
@@ -185,8 +186,9 @@ bool CPlayListM3U::Load(const std::string& strFileName)
           // Prevent load message from file and override offset set here
           newItem->GetMusicInfoTag()->SetLoaded();
           newItem->GetMusicInfoTag()->SetTitle(strInfo);
-          if (iEndOffset)
+          if (iEndOffset) {
             lDuration = (iEndOffset - iStartOffset + 37) / 75;
+}
         }
         if (newItem->IsVideo() && !newItem->HasVideoInfoTag()) // File is a video and needs a VideoInfoTag
           newItem->GetVideoInfoTag()->Reset(); // Force VideoInfoTag creation

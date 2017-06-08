@@ -108,8 +108,9 @@ bool CFileOperationJob::DoProcessFile(FileAction action, const std::string& strF
   if (action == ActionCopy || action == ActionReplace || (action == ActionMove && !CanBeRenamed(strFileA, strFileB)))
   {
     struct __stat64 data;
-    if (CFile::Stat(strFileA, &data) == 0)
+    if (CFile::Stat(strFileA, &data) == 0) {
       time += data.st_size;
+}
   }
 
   fileOperations.push_back(CFileOperation(action, strFileA, strFileB, time));
@@ -277,12 +278,13 @@ bool CFileOperationJob::CFileOperation::ExecuteOperation(CFileOperationJob *base
       break;
 
     case ActionMove:
-      if (CanBeRenamed(m_strFileA, m_strFileB))
+      if (CanBeRenamed(m_strFileA, m_strFileB)) {
         bResult = CFile::Rename(m_strFileA, m_strFileB);
-      else if (CFile::Copy(m_strFileA, m_strFileB, this, &data))
+      } else if (CFile::Copy(m_strFileA, m_strFileB, this, &data)) {
         bResult = CFile::Delete(m_strFileA);
-      else
+      } else {
         bResult = false;
+}
       break;
 
     case ActionDelete:
@@ -314,9 +316,9 @@ inline bool CFileOperationJob::CanBeRenamed(const std::string &strFileA, const s
   if (strFileA[1] == ':' && strFileA[0] == strFileB[0])
     return true;
 #else
-  if (URIUtils::IsHD(strFileA) && URIUtils::IsHD(strFileB))
+  if (URIUtils::IsHD(strFileA) && URIUtils::IsHD(strFileB)) {
     return true;
-  else if (URIUtils::IsSmb(strFileA) && URIUtils::IsSmb(strFileB)) {
+  } else if (URIUtils::IsSmb(strFileA) && URIUtils::IsSmb(strFileB)) {
     CURL smbFileA(strFileA), smbFileB(strFileB);
     return smbFileA.GetHostName() == smbFileB.GetHostName() &&
            smbFileA.GetShareName() == smbFileB.GetShareName();
@@ -345,12 +347,14 @@ bool CFileOperationJob::CFileOperation::OnFileCallback(void* pContext, int iperc
 
 bool CFileOperationJob::operator==(const CJob* job) const
 {
-  if (strcmp(job->GetType(), GetType()) != 0)
+  if (strcmp(job->GetType(), GetType()) != 0) {
     return false;
+}
 
   const CFileOperationJob* rjob = dynamic_cast<const CFileOperationJob*>(job);
-  if (rjob == nullptr)
+  if (rjob == nullptr) {
     return false;
+}
 
   if (GetAction() != rjob->GetAction() ||
       m_strDestFile != rjob->m_strDestFile ||

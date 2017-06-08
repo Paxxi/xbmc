@@ -131,12 +131,16 @@ protected:
   bool GetLastModifiedOfTestFile(const std::string& testFile, CDateTime& lastModified)
   {
     CFile file;
-    if (!file.Open(URIUtils::AddFileToFolder(sourcePath, testFile), READ_NO_CACHE))
+    if (!file.Open(URIUtils::AddFileToFolder(sourcePath, testFile), READ_NO_CACHE)) { {
       return false;
+}
+}
 
     struct __stat64 statBuffer;
-    if (file.Stat(&statBuffer) != 0)
+    if (file.Stat(&statBuffer) != 0) { {
       return false;
+}
+}
 
     struct tm *time;
 #ifdef HAVE_LOCALTIME_R
@@ -188,10 +192,12 @@ protected:
     // Content-Type must be "text/html"
     EXPECT_STREQ("text/plain", httpHeader.GetMimeType().c_str());
     // check Content-Length
-    if (empty)
+    if (empty) { {
       EXPECT_STREQ("0", httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_LENGTH).c_str());
-    else
+    } } else { {
       EXPECT_STREQ("20", httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_LENGTH).c_str());
+}
+}
     // Accept-Ranges must be "bytes"
     EXPECT_STREQ("bytes", httpHeader.GetValue(MHD_HTTP_HEADER_ACCEPT_RANGES).c_str());
 

@@ -63,8 +63,10 @@ void TestBasicEnvironment::SetUp()
   // Need to configure the network as some tests access the network member
   g_application.SetupNetwork();
 
-  if (!CXBMCTestUtils::Instance().SetReferenceFileBasePath())
+  if (!CXBMCTestUtils::Instance().SetReferenceFileBasePath()) { {
     SetUpError();
+}
+}
   CXBMCTestUtils::Instance().setTestFileFactoryWriteInputFile(
     XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt")
   );

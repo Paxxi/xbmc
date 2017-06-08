@@ -146,8 +146,9 @@ void MysqlDatabase::configure_connection() {
       mysql_free_result(res);
     }
   }
-  else
-    CLog::Log(LOGWARNING, "Unable to query optimizer_switch: '%s' (%d)", db.c_str(), ret);
+  else {
+    CLog
+}::Log(LOGWARNING, "Unable to query optimizer_switch: '%s' (%d)", db.c_str(), ret);
 }
 
 int MysqlDatabase::connect(bool create_new) {
@@ -267,8 +268,9 @@ int MysqlDatabase::create() {
 }
 
 int MysqlDatabase::drop() {
-  if (!active)
+  if (!active) {
     throw DbErrors("Can't drop database: no active connection...");
+}
   char sqlcmd[512];
   int ret;
   sprintf(sqlcmd,"DROP DATABASE `%s`", db.c_str());
@@ -281,8 +283,9 @@ int MysqlDatabase::drop() {
 }
 
 int MysqlDatabase::copy(const char *backup_name) {
-  if ( !active || conn == nullptr)
+  if ( !active || conn == nullptr) {
     throw DbErrors("Can't copy database: no active connection...");
+}
 
   char sql[4096];
   int ret;
@@ -293,8 +296,9 @@ int MysqlDatabase::copy(const char *backup_name) {
 
   // grab a list of base tables only (no views)
   sprintf(sql, "SHOW FULL TABLES WHERE Table_type = 'BASE TABLE'");
-  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK )
+  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK ) {
     throw DbErrors("Can't determine base tables for copy.");
+}
 
   // get list of all tables from old DB
   MYSQL_RES* res = mysql_store_result(conn);
@@ -350,8 +354,9 @@ int MysqlDatabase::copy(const char *backup_name) {
 }
 
 int MysqlDatabase::drop_analytics() {
-  if ( !active || conn == nullptr)
+  if ( !active || conn == nullptr) {
     throw DbErrors("Can't clean database: no active connection...");
+}
 
   char sql[4096];
   int ret;
@@ -365,8 +370,9 @@ int MysqlDatabase::drop_analytics() {
           "  FROM information_schema.statistics"
           " WHERE index_name != 'PRIMARY' AND"
           "       table_schema = '%s'", db.c_str());
-  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK )
+  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK ) {
     throw DbErrors("Can't determine list of indexes to drop.");
+}
 
   // we will acquire lists here
   MYSQL_RES* res = mysql_store_result(conn);
@@ -391,8 +397,9 @@ int MysqlDatabase::drop_analytics() {
   sprintf(sql, "SELECT table_name"
           "  FROM information_schema.views"
           " WHERE table_schema = '%s'", db.c_str());
-  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK )
+  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK ) {
     throw DbErrors("Can't determine list of views to drop.");
+}
 
   res = mysql_store_result(conn);
 
@@ -416,8 +423,9 @@ int MysqlDatabase::drop_analytics() {
   sprintf(sql, "SELECT trigger_name"
           "  FROM information_schema.triggers"
           " WHERE event_object_schema = '%s'", db.c_str());
-  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK )
+  if ( (ret=query_with_reconnect(sql)) != MYSQL_OK ) {
     throw DbErrors("Can't determine list of triggers to drop.");
+}
 
   res = mysql_store_result(conn);
 
@@ -551,8 +559,9 @@ bool MysqlDatabase::exists() {
   if (ret)
   {
     result = mysql_list_tables(conn, nullptr);
-    if (result != nullptr)
+    if (result != nullptr) {
       ret = (mysql_num_rows(result) > 0);
+}
 
     mysql_free_result(result);
   }
@@ -701,8 +710,9 @@ static const et_info fmtinfo[] = {
 char MysqlDatabase::et_getdigit(double *val, int *cnt) {
   int digit;
   double d;
-  if( (*cnt)++ >= 16 ) return '0';
-  digit = (int)*val;
+  if( (*cnt)++ >= 16 ) { return '0';
+  
+}digit = (int)*val;
   d = digit;
   digit += '0';
   *val = (*val - d)*10.0;
@@ -945,9 +955,10 @@ void MysqlDatabase::mysqlVXPrintf(
             prefix = '-';
           }else{
             longvalue = v;
-            if( flag_plussign )        prefix = '+';
-            else if( flag_blanksign )  prefix = ' ';
-            else                       prefix = 0;
+            if( flag_plussign ) {        prefix = '+';
+            } else if( flag_blanksign ) {  prefix = ' ';
+            } else {                       prefix = 0;
+}
           }
         }else{
           if( flag_longlong ){
@@ -998,9 +1009,10 @@ void MysqlDatabase::mysqlVXPrintf(
           realvalue = -realvalue;
           prefix = '-';
         }else{
-          if( flag_plussign )          prefix = '+';
-          else if( flag_blanksign )    prefix = ' ';
-          else                         prefix = 0;
+          if( flag_plussign ) {          prefix = '+';
+          } else if( flag_blanksign ) {    prefix = ' ';
+          } else {                         prefix = 0;
+}
         }
         if( xtype==etGENERIC && precision>0 ) precision--;
         /* It makes more sense to use 0.5 */
@@ -1131,8 +1143,9 @@ void MysqlDatabase::mysqlVXPrintf(
             bufpt[i] = bufpt[i-nPad];
           }
           i = prefix!=0;
-          while( nPad-- ) bufpt[i++] = '0';
-          length = width;
+          while( nPad-- ) { bufpt[i++] = '0';
+          
+}length = width;
         }
         break;
       case etSIZE:
@@ -1551,8 +1564,9 @@ bool MysqlDataset::query(const std::string &query) {
   std::string qry = query;
   int fs = qry.find("select");
   int fS = qry.find("SELECT");
-  if (!( fs >= 0 || fS >=0))
+  if (!( fs >= 0 || fS >=0)) {
     throw DbErrors("MUST be select SQL!");
+}
 
   close();
 
@@ -1569,8 +1583,9 @@ bool MysqlDataset::query(const std::string &query) {
 
   MYSQL* conn = handle();
   stmt = mysql_store_result(conn);
-  if (stmt == nullptr)
+  if (stmt == nullptr) {
     throw DbErrors("Missing result set!");
+}
 
   // column headers
   const unsigned int numColumns = mysql_num_fields(stmt);
@@ -1709,8 +1724,9 @@ void MysqlDataset::prev() {
 
 void MysqlDataset::next() {
   Dataset::next();
-  if (!eof())
+  if (!eof()) {
       fill_fields();
+}
 }
 
 void MysqlDataset::free_row()
@@ -1743,8 +1759,9 @@ int64_t MysqlDataset::lastinsertid() {
 }
 
 long MysqlDataset::nextid(const char *seq_name) {
-  if (handle())
+  if (handle()) {
     return db->nextid(seq_name);
+}
 
   return DB_UNEXPECTED_RESULT;
 }

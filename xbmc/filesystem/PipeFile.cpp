@@ -98,22 +98,25 @@ ssize_t CPipeFile::Write(const void* lpBuf, size_t uiBufSize)
 
 void CPipeFile::SetEof()
 {
-  if (!m_pipe)
+  if (!m_pipe) {
     return ;
+}
   m_pipe->SetEof();
 }
 
 bool CPipeFile::IsEof()
 {
-  if (!m_pipe)
+  if (!m_pipe) {
     return true;
+}
   return m_pipe->IsEof();
 }
 
 bool CPipeFile::IsEmpty()
 {
-  if (!m_pipe)
+  if (!m_pipe) {
     return true;
+}
   return m_pipe->IsEmpty();
 }
 
@@ -139,8 +142,9 @@ bool CPipeFile::IsClosed()
 
 void CPipeFile::Flush()
 {
-  if (m_pipe)
+  if (m_pipe) {
     m_pipe->Flush();
+}
 }
 
 bool CPipeFile::OpenForWrite(const CURL& url, bool bOverWrite)

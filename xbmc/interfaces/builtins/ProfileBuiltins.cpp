@@ -72,8 +72,9 @@ static int LogOff(const std::vector<std::string>& params)
   if (g_application.IsMusicScanning())
     g_application.StopMusicScan();
 
-  if (CVideoLibraryQueue::GetInstance().IsRunning())
+  if (CVideoLibraryQueue::GetInstance().IsRunning()) {
     CVideoLibraryQueue::GetInstance().CancelAllJobs();
+}
 
   ADDON::CAddonMgr::GetInstance().StopServices(true);
 
@@ -84,8 +85,9 @@ static int LogOff(const std::vector<std::string>& params)
   g_application.WakeUpScreenSaverAndDPMS();
   g_windowManager.ActivateWindow(WINDOW_LOGIN_SCREEN, {}, false);
 
-  if (!CNetworkServices::GetInstance().StartEventServer()) // event server could be needed in some situations
+  if (!CNetworkServices::GetInstance().StartEventServer()) { // event server could be needed in some situations
     CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(33102), g_localizeStrings.Get(33100));
+}
 
   return 0;
 }

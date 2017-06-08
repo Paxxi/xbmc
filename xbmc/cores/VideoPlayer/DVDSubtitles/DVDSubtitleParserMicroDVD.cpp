@@ -48,14 +48,16 @@ bool CDVDSubtitleParserMicroDVD::Open(CDVDStreamInfo &hints)
     m_framerate = (double)hints.fpsscale / (double)hints.fpsrate;
     m_framerate *= DVD_TIME_BASE;
   }
-  else
+  else {
     m_framerate = DVD_TIME_BASE / 25.0;
+}
 
   char line[1024];
 
   CRegExp reg;
-  if (!reg.RegComp("\\{([0-9]+)\\}\\{([0-9]+)\\}"))
+  if (!reg.RegComp("\\{([0-9]+)\\}\\{([0-9]+)\\}")) {
     return false;
+}
   CDVDSubtitleTagMicroDVD TagConv;
 
   while (m_pStream->ReadLine(line, sizeof(line)))

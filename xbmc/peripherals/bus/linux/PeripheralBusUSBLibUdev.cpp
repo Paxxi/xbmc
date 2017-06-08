@@ -131,8 +131,9 @@ bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
     if (bContinue)
     {
       dev = udev_device_get_parent(udev_device_get_parent(parent));
-      if (!dev || !udev_device_get_sysattr_value(dev,"idVendor") || !udev_device_get_sysattr_value(dev, "idProduct"))
+      if (!dev || !udev_device_get_sysattr_value(dev,"idVendor") || !udev_device_get_sysattr_value(dev, "idProduct")) {
         bContinue = false;
+}
     }
 
     if (bContinue)
@@ -242,9 +243,9 @@ bool CPeripheralBusUSB::WaitForUpdate()
 
   /* we have to read the message from the queue, even though we're not actually using it */
   struct udev_device *dev = udev_monitor_receive_device(m_udevMon);
-  if (dev)
+  if (dev) {
     udev_device_unref(dev);
-  else
+  } else
   {
     CLog::Log(LOGERROR, "%s - failed to get device from udev_monitor_receive_device()", __FUNCTION__);
     Clear();

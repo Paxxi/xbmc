@@ -393,8 +393,9 @@ void CPeripheralBusAddon::OnEvent(const ADDON::AddonEvent& event)
 {
   if (typeid(event) == typeid(ADDON::AddonEvents::Enabled) ||
       typeid(event) == typeid(ADDON::AddonEvents::Disabled) ||
-      typeid(event) == typeid(ADDON::AddonEvents::InstalledChanged))
+      typeid(event) == typeid(ADDON::AddonEvents::InstalledChanged)) {
     UpdateAddons();
+}
 }
 
 bool CPeripheralBusAddon::SplitLocation(const std::string& strLocation, PeripheralAddonPtr& addon, unsigned int& peripheralIndex) const
@@ -421,8 +422,9 @@ bool CPeripheralBusAddon::SplitLocation(const std::string& strLocation, Peripher
       const char* strJoystickIndex = parts[1].c_str();
       char* p = nullptr;
       peripheralIndex = strtol(strJoystickIndex, &p, 10);
-      if (strJoystickIndex != p)
+      if (strJoystickIndex != p) {
         return true;
+}
     }
   }
   return false;

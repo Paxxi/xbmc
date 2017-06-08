@@ -86,10 +86,11 @@ static const std::string getListOfAddonClassesAsString(XBMCAddon::AddonClass::Re
   bool firstTime = true;
   for (std::set<XBMCAddon::AddonClass*>::iterator iter = acs.begin(); iter != acs.end(); ++iter)
   {
-    if (!firstTime)
+    if (!firstTime) {
       message += ",";
-    else
+    } else {
       firstTime = false;
+}
     message += (*iter)->GetClassname();
   }
 
@@ -516,8 +517,9 @@ bool CPythonInvoker::stop(bool abort)
       pulseGlobalEvent();
     }
 
-    if (old != nullptr)
+    if (old != nullptr) {
       PyThreadState_Swap(old);
+}
 
     lock.Leave();
     PyEval_ReleaseLock();
@@ -625,8 +627,9 @@ void CPythonInvoker::initializeModules(const std::map<std::string, PythonModuleI
 
 bool CPythonInvoker::initializeModule(PythonModuleInitialization module)
 {
-  if (module == nullptr)
+  if (module == nullptr) {
     return false;
+}
 
   module();
   return true;

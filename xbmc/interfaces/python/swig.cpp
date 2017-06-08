@@ -98,8 +98,9 @@ namespace PythonBindings
   // need to compare the typestring
   bool isParameterRightType(const char* passedType, const char* expectedType, const char* methodNamespacePrefix, bool tryReverse)
   {
-    if (strcmp(expectedType,passedType) == 0)
+    if (strcmp(expectedType,passedType) == 0) {
       return true;
+}
 
     // well now things are a bit more complicated. We need to see if the passed type
     // is a subset of the overall type
@@ -140,8 +141,9 @@ namespace PythonBindings
 
     // so far we applied the namespace to the expected type. Now lets try
     //  the reverse if we haven't already.
-    if (tryReverse)
+    if (tryReverse) {
       return isParameterRightType(expectedType, passedType, methodNamespacePrefix, false);
+}
 
     return false;
   }
@@ -152,10 +154,11 @@ namespace PythonBindings
 
     std::string msg;
     std::string type, value, traceback;
-    if (!ParsePythonException(type, value, traceback))
+    if (!ParsePythonException(type, value, traceback)) {
       UncheckedException::SetMessage("Strange: No Python exception occured");
-    else
+    } else {
       SetMessage(type, value, traceback);
+}
   }
 
   PythonToCppException::PythonToCppException(const std::string &exceptionType, const std::string &exceptionValue, const std::string &exceptionTraceback) : XbmcCommons::UncheckedException(" ")
@@ -173,8 +176,9 @@ namespace PythonBindings
     PyObject* pystring = nullptr;
 
     PyErr_Fetch(&exc_type, &exc_value, &exc_traceback);
-    if (exc_type == nullptr && exc_value == nullptr && exc_traceback == nullptr)
+    if (exc_type == nullptr && exc_value == nullptr && exc_traceback == nullptr) {
       return false;
+}
 
     exceptionType.clear();
     exceptionValue.clear();
@@ -256,18 +260,20 @@ namespace PythonBindings
   XBMCAddon::AddonClass* doretrieveApiInstance(const PyHolder* pythonObj, const TypeInfo* typeInfo, const char* expectedType, 
                               const char* methodNamespacePrefix, const char* methodNameForErrorString)
   {
-    if (pythonObj->magicNumber != XBMC_PYTHON_TYPE_MAGIC_NUMBER)
+    if (pythonObj->magicNumber != XBMC_PYTHON_TYPE_MAGIC_NUMBER) {
       throw XBMCAddon::WrongTypeException("Non api type passed to \"%s\" in place of the expected type \"%s.\"",
                                           methodNameForErrorString, expectedType);
+}
     if (!isParameterRightType(typeInfo->swigType,expectedType,methodNamespacePrefix))
     {
       // maybe it's a child class
-      if (typeInfo->parentType)
+      if (typeInfo->parentType) {
         return doretrieveApiInstance(pythonObj, typeInfo->parentType,expectedType, 
                                      methodNamespacePrefix, methodNameForErrorString);
-      else
+      } else {
         throw XBMCAddon::WrongTypeException("Incorrect type passed to \"%s\", was expecting a \"%s\" but received a \"%s\"",
                                  methodNameForErrorString,expectedType,typeInfo->swigType);
+}
     }
     return ((PyHolder*)pythonObj)->pSelf;
   }
@@ -316,8 +322,9 @@ namespace PythonBindings
   void cleanForDealloc(XBMCAddon::AddonClass* c) 
   { 
     XBMC_TRACE;
-    if (handleInterpRegistrationForClean(c))
+    if (handleInterpRegistrationForClean(c)) {
       c->Release();
+}
   }
 
   /**
@@ -368,8 +375,9 @@ namespace PythonBindings
     self->magicNumber = XBMC_PYTHON_TYPE_MAGIC_NUMBER;
     self->typeInfo = typeInfo;
     self->pSelf = api;
-    if (incrementRefCount)
+    if (incrementRefCount) {
       Py_INCREF((PyObject*)self);
+}
     return (PyObject*)self;
   }
 

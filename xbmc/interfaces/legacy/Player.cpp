@@ -42,8 +42,9 @@ namespace XBMCAddon
     {
       iPlayList = PLAYLIST_MUSIC;
 
-      if (_playerCore != 0)
+      if (_playerCore != 0) {
         CLog::Log(LOGERROR, "xbmc.Player: Requested non-default player. This behavior is deprecated, plugins may no longer specify a player");
+}
 
 
       // now that we're done, register hook me into the system
@@ -115,8 +116,9 @@ namespace XBMCAddon
       CMediaSettings::GetInstance().SetVideoStartWindowed(windowed);
 
       // play current file in playlist
-      if (g_playlistPlayer.GetCurrentPlaylist() != iPlayList)
+      if (g_playlistPlayer.GetCurrentPlaylist() != iPlayList) {
         g_playlistPlayer.SetCurrentPlaylist(iPlayList);
+}
       CApplicationMessenger::GetInstance().SendMsg(TMSG_PLAYLISTPLAYER_PLAY, g_playlistPlayer.GetCurrentSong());
     }
 
@@ -132,12 +134,14 @@ namespace XBMCAddon
         // play a python playlist (a playlist from playlistplayer.cpp)
         iPlayList = playlist->getPlayListId();
         g_playlistPlayer.SetCurrentPlaylist(iPlayList);
-        if (startpos > -1)
+        if (startpos > -1) {
           g_playlistPlayer.SetCurrentSong(startpos);
+}
         CApplicationMessenger::GetInstance().SendMsg(TMSG_PLAYLISTPLAYER_PLAY, startpos);
       }
-      else
+      else {
         playCurrent(windowed);
+}
     }
 
     void Player::stop()
@@ -323,8 +327,9 @@ namespace XBMCAddon
         throw PlayerException("XBMC is not playing any videofile");
 
       const CVideoInfoTag* movie = g_infoManager.GetCurrentMovieTag();
-      if (movie)
+      if (movie) {
         return new InfoTagVideo(*movie);
+}
 
       return new InfoTagVideo();
     }
@@ -336,8 +341,9 @@ namespace XBMCAddon
         throw PlayerException("XBMC is not playing any music file");
 
       const MUSIC_INFO::CMusicInfoTag* tag = g_infoManager.GetCurrentSongTag();
-      if (tag)
+      if (tag) {
         return new InfoTagMusic(*tag);
+}
 
       return new InfoTagMusic();
     }

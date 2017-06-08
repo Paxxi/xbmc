@@ -226,8 +226,9 @@ CDateTime CPVREpgInfoTag::GetCurrentPlayingTime() const
   {
     // Timeshifting active?
     time_t time = CServiceBroker::GetPVRManager().Clients()->GetPlayingTime();
-    if (time > 0) // returns 0 in case no client is currently playing
+    if (time > 0) { // returns 0 in case no client is currently playing
       now = time;
+}
   }
   return now;
 }
@@ -261,10 +262,11 @@ float CPVREpgInfoTag::ProgressPercentage() const
   m_endTime.GetAsTime(endTime);
   iDuration = endTime - startTime > 0 ? endTime - startTime : 3600;
 
-  if (currentTime >= startTime && currentTime <= endTime)
+  if (currentTime >= startTime && currentTime <= endTime) {
     fReturn = static_cast<float>(currentTime - startTime) * 100.0f / iDuration;
-  else if (currentTime > endTime)
+  } else if (currentTime > endTime) {
     fReturn = 100.0f;
+}
 
   return fReturn;
 }
@@ -277,8 +279,9 @@ int CPVREpgInfoTag::Progress() const
 
   m_startTime.GetAsTime(startTime);
   iDuration = currentTime - startTime;
-  if (iDuration <= 0)
+  if (iDuration <= 0) {
     return 0;
+}
 
   return iDuration;
 }
@@ -355,9 +358,9 @@ std::string CPVREpgInfoTag::Title(bool bOverrideParental /* = false */) const
 {
   std::string strTitle;
 
-  if (!bOverrideParental && IsParentalLocked())
+  if (!bOverrideParental && IsParentalLocked()) {
     strTitle = g_localizeStrings.Get(19266); // parental locked
-  else if (m_strTitle.empty() && !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_HIDENOINFOAVAILABLE))
+  } else if (m_strTitle.empty() && !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_EPG_HIDENOINFOAVAILABLE))
     strTitle = g_localizeStrings.Get(19055); // no information available
   else
     strTitle = m_strTitle;
@@ -369,8 +372,9 @@ std::string CPVREpgInfoTag::PlotOutline(bool bOverrideParental /* = false */) co
 {
   std::string retVal;
 
-  if (bOverrideParental || !IsParentalLocked())
+  if (bOverrideParental || !IsParentalLocked()) {
     retVal = m_strPlotOutline;
+}
 
   return retVal;
 }
@@ -379,8 +383,9 @@ std::string CPVREpgInfoTag::Plot(bool bOverrideParental /* = false */) const
 {
   std::string retVal;
 
-  if (bOverrideParental || !IsParentalLocked())
+  if (bOverrideParental || !IsParentalLocked()) {
     retVal = m_strPlot;
+}
 
   return retVal;
 }
@@ -389,8 +394,9 @@ std::string CPVREpgInfoTag::OriginalTitle(bool bOverrideParental /* = false */) 
 {
   std::string retVal;
 
-  if (bOverrideParental || !IsParentalLocked())
+  if (bOverrideParental || !IsParentalLocked()) {
     retVal = m_strOriginalTitle;
+}
 
   return retVal;
 }
@@ -602,13 +608,15 @@ bool CPVREpgInfoTag::Update(const CPVREpgInfoTag &tag, bool bUpdateBroadcastId /
         m_strIconPath        != tag.m_strIconPath ||
         m_iFlags             != tag.m_iFlags
     );
-    if (bUpdateBroadcastId)
+    if (bUpdateBroadcastId) {
       bChanged |= (m_iBroadcastId != tag.m_iBroadcastId);
+}
 
     if (bChanged)
     {
-      if (bUpdateBroadcastId)
+      if (bUpdateBroadcastId) {
         m_iBroadcastId     = tag.m_iBroadcastId;
+}
 
       m_strTitle           = tag.m_strTitle;
       m_strPlotOutline     = tag.m_strPlotOutline;
@@ -653,8 +661,9 @@ bool CPVREpgInfoTag::Update(const CPVREpgInfoTag &tag, bool bUpdateBroadcastId /
       m_strIconPath        = tag.m_strIconPath;
     }
   }
-  if (bChanged)
+  if (bChanged) {
     UpdatePath();
+}
 
   return bChanged;
 }
@@ -679,8 +688,9 @@ bool CPVREpgInfoTag::Persist(bool bSingleUpdate /* = true */)
   {
     bReturn = true;
 
-    if (iId > 0)
+    if (iId > 0) {
       m_iBroadcastId = iId;
+}
   }
 
   return bReturn;
@@ -749,8 +759,9 @@ void CPVREpgInfoTag::SetEpg(CPVREpg *epg)
 bool CPVREpgInfoTag::IsSeries() const
 {
   CSingleLock lock(m_critSection);
-  if ((m_iFlags & EPG_TAG_FLAG_IS_SERIES) > 0 || SeriesNumber() > 0 || EpisodeNumber() > 0 || EpisodePart() > 0)
+  if ((m_iFlags & EPG_TAG_FLAG_IS_SERIES) > 0 || SeriesNumber() > 0 || EpisodeNumber() > 0 || EpisodePart() > 0) {
     return true;
-  else
+  } else {
     return false;
+}
 }

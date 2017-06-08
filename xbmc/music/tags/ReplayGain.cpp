@@ -38,8 +38,9 @@ static int index(ReplayGain::Type aType)
 
 const ReplayGain::Info& ReplayGain::Get(Type aType) const
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     return m_data[index(aType)];
+}
 
   static Info invalid;
   return invalid;
@@ -47,32 +48,37 @@ const ReplayGain::Info& ReplayGain::Get(Type aType) const
 
 void ReplayGain::Set(Type aType, const Info& aInfo)
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     m_data[index(aType)] = aInfo;
+}
 }
 
 void ReplayGain::ParseGain(Type aType, const std::string& aStrGain)
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     m_data[index(aType)].SetGain(aStrGain);
+}
 }
 
 void ReplayGain::SetGain(Type aType, float aGain)
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     m_data[index(aType)].SetGain(aGain);
+}
 }
 
 void ReplayGain::ParsePeak(Type aType, const std::string& aStrPeak)
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     m_data[index(aType)].SetPeak(aStrPeak);
+}
 }
 
 void ReplayGain::SetPeak(Type aType, float aPeak)
 {
-  if (TypeIsValid(aType))
+  if (TypeIsValid(aType)) {
     m_data[index(aType)].SetPeak(aPeak);
+}
 }
 
 std::string ReplayGain::Get() const

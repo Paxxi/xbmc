@@ -478,11 +478,13 @@ static char *rds_entitychar(char *text)
       }
       memmove(text+lof, entitychar[i], 1);
       memmove(text+lof+1, temp+l, lre);
-      if (space != 0)
+      if (space != 0) {
         memmove(text+lof+1+lre, "       ", l-1);
+}
     }
-    else
+    else {
       ++i;
+}
   }
 
   return text;
@@ -494,8 +496,9 @@ static unsigned short crc16_ccitt(const unsigned char *data, int len, bool skipf
   // with start 0xffff and result inverse
   unsigned short crc = 0xffff;
 
-  if (skipfirst)
+  if (skipfirst) {
     ++data;
+}
 
   while (len--)
   {
@@ -533,8 +536,9 @@ CDVDRadioRDSData::~CDVDRadioRDSData()
 
 bool CDVDRadioRDSData::CheckStream(CDVDStreamInfo &hints)
 {
-  if (hints.type == STREAM_RADIO_RDS)
+  if (hints.type == STREAM_RADIO_RDS) {
     return true;
+}
 
   return false;
 }
@@ -614,8 +618,9 @@ void CDVDRadioRDSData::ResetRDSCache()
   m_RT_MaxSize = 4;
   m_RT_NewItem = false;
   m_RT_Index = 0;
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < 5; ++i) {
     memset(m_RT_Text[i], 0, RT_MEL);
+}
   m_RT.clear();
 
   m_RTPlus_TToggle = false;
@@ -779,8 +784,9 @@ void CDVDRadioRDSData::ProcessUECP(const unsigned char *data, unsigned int len)
         m_UECPData[++m_UECPDataIndex] = data[i];
       }
 
-      if (data[i] == 0xfd && m_UECPDataIndex > 0)                 //!< stuffing found
+      if (data[i] == 0xfd && m_UECPDataIndex > 0) {                 //!< stuffing found
         m_UECPDatabStuff = true;
+}
 
       if (m_UECPDataIndex >= UECP_SIZE_MAX)                       //!< max. UECP data length, garbage ?
       {
@@ -892,13 +898,15 @@ unsigned int CDVDRadioRDSData::DecodePS(uint8_t *msgElement)
 
   for (int i = 0; i < 8; ++i)
   {
-    if (text[i] <= 0xfe)
+    if (text[i] <= 0xfe) {
       m_PS_Text[m_PS_Index][i] = (text[i] >= 0x80) ? sRDSAddChar[text[i]-0x80] : text[i]; //!< additional rds-character, see RBDS-Standard, Annex E
+}
   }
 
   ++m_PS_Index;
-  if (m_PS_Index >= PS_TEXT_ENTRIES)
+  if (m_PS_Index >= PS_TEXT_ENTRIES) {
     m_PS_Index = 0;
+}
 
   m_PS_Present = true;
   return 11;
@@ -1036,11 +1044,13 @@ unsigned int CDVDRadioRDSData::DecodePTY(uint8_t *msgElement)
 
     // save info
     m_currentInfoTag->SetRadioStyle(pty_skin_info_table[m_PTY][m_RDS_IsRBDS].style_name);
-    if (!m_RTPlus_GenrePresent && !m_PTYN_Present)
+    if (!m_RTPlus_GenrePresent && !m_PTYN_Present) {
       SetRadioStyle(g_localizeStrings.Get(pty_skin_info_table[m_PTY][m_RDS_IsRBDS].name));
+}
 
-    if (m_PTY == RDS_PTY_ALARM_TEST)
+    if (m_PTY == RDS_PTY_ALARM_TEST) {
       CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(29931), g_localizeStrings.Get(29970), TOAST_DISPLAY_TIME, false);
+}
 
     if (m_PTY == RDS_PTY_ALARM)
     {
@@ -1058,8 +1068,9 @@ unsigned int CDVDRadioRDSData::DecodePTYN(uint8_t *msgElement)
 
   for (int i = 0; i < 8; ++i)
   {
-    if (text[i] <= 0xfe)
+    if (text[i] <= 0xfe) {
       m_PTYN[i] = (text[i] >= 0x80) ? sRDSAddChar[text[i]-0x80] : text[i];
+}
   }
 
   m_PTYN_Present = true;
@@ -1104,8 +1115,9 @@ unsigned int CDVDRadioRDSData::DecodeRT(uint8_t *msgElement, unsigned int len)
   {
     m_RT.clear();
     m_RT_Index = 0;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 5; ++i) {
       memset(m_RT_Text[i], 0, RT_MEL);
+}
   }
   else
   {
@@ -1118,8 +1130,9 @@ unsigned int CDVDRadioRDSData::DecodeRT(uint8_t *msgElement, unsigned int len)
     memset(temptext, 0x0, RT_MEL);
     for (unsigned int i = 1, ii = 0; i < msgLength; ++i)
     {
-      if (msgElement[UECP_ME_DATA+i] <= 0xfe) // additional rds-character, see RBDS-Standard, Annex E
+      if (msgElement[UECP_ME_DATA+i] <= 0xfe) { // additional rds-character, see RBDS-Standard, Annex E
         temptext[ii++] = (msgElement[UECP_ME_DATA+i] >= 0x80) ? sRDSAddChar[msgElement[UECP_ME_DATA+i]-0x80] : msgElement[UECP_ME_DATA+i];
+}
     }
     memcpy(m_RTPlus_WorkText, temptext, RT_MEL);
     rds_entitychar(temptext);
@@ -1128,8 +1141,9 @@ unsigned int CDVDRadioRDSData::DecodeRT(uint8_t *msgElement, unsigned int len)
     bool repeat = false;
     for (int ind = 0; ind < m_RT_MaxSize; ++ind)
     {
-      if (memcmp(m_RT_Text[ind], temptext, RT_MEL) == 0)
+      if (memcmp(m_RT_Text[ind], temptext, RT_MEL) == 0) {
         repeat = true;
+}
     }
     if (!repeat)
     {
@@ -1144,8 +1158,9 @@ unsigned int CDVDRadioRDSData::DecodeRT(uint8_t *msgElement, unsigned int len)
         m_RT.pop_back();
 
       ++m_RT_Index;
-      if (m_RT_Index >= m_RT_MaxSize)
+      if (m_RT_Index >= m_RT_MaxSize) {
         m_RT_Index = 0;
+}
     }
     m_RTPlus_iToggle = 0x03;     // Bit 0/1 = Title/Artist
   }
@@ -1167,17 +1182,21 @@ unsigned int CDVDRadioRDSData::DecodeRTC(uint8_t *msgElement)
   bool    minus   = (msgElement[UECP_CLOCK_LOCALOFFSET] & 0x20) != 0;
   if (minus)
   {
-    if (msgElement[UECP_CLOCK_LOCALOFFSET] >> 1)
+    if (msgElement[UECP_CLOCK_LOCALOFFSET] >> 1) {
       hours -= msgElement[UECP_CLOCK_LOCALOFFSET] >> 1;
-    if (msgElement[UECP_CLOCK_LOCALOFFSET] & 1)
+}
+    if (msgElement[UECP_CLOCK_LOCALOFFSET] & 1) {
       minutes -= 30;
+}
   }
   else
   {
-    if (msgElement[UECP_CLOCK_LOCALOFFSET] >> 1)
+    if (msgElement[UECP_CLOCK_LOCALOFFSET] >> 1) {
       hours += msgElement[UECP_CLOCK_LOCALOFFSET] >> 1;
-    if (msgElement[UECP_CLOCK_LOCALOFFSET] & 1)
+}
+    if (msgElement[UECP_CLOCK_LOCALOFFSET] & 1) {
       minutes += 30;
+}
   }
   m_RTC_DateTime.SetDateTime(msgElement[UECP_CLOCK_YEAR], msgElement[UECP_CLOCK_MONTH], msgElement[UECP_CLOCK_DAY],
                             hours, minutes, msgElement[UECP_CLOCK_SECONDS]);
@@ -1225,8 +1244,9 @@ unsigned int CDVDRadioRDSData::DecodeODA(uint8_t *msgElement, unsigned int len)
 
 unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int len)
 {
-  if (m_RTPlus_iToggle == 0)    // RTplus tags V2.1, only if RT
+  if (m_RTPlus_iToggle == 0) {    // RTplus tags V2.1, only if RT
     return 10;
+}
 
   if (!m_RTPlus_Present)
   {
@@ -1255,8 +1275,9 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
   rtp_len[1]   = 0x1f & msgElement[9];
 
   /// Hack for error on BR Classic
-  if ((msgElement[5]&0x10) && (msgElement[5]&0x08) && rtp_typ[0] == RTPLUS_INFO_URL && rtp_typ[1] == RTPLUS_ITEM_ARTIST)
+  if ((msgElement[5]&0x10) && (msgElement[5]&0x08) && rtp_typ[0] == RTPLUS_INFO_URL && rtp_typ[1] == RTPLUS_ITEM_ARTIST) {
     return 10;
+}
 
   // save info
   MUSIC_INFO::CMusicInfoTag *currentMusic = g_application.CurrentFileItem().GetMusicInfoTag();
@@ -1285,8 +1306,9 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
             if (memcmp(m_RTPlus_Title, m_RTPlus_Temptext, RT_MEL) != 0 || (msgElement[5] & 0x10) != m_RTPlus_ItemToggle)
             {
               memcpy(m_RTPlus_Title, m_RTPlus_Temptext, RT_MEL);
-              if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1)
+              if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1) {
                 m_RTPlus_iDiffs = (int) m_RTPlus_iTime.GetElapsedSeconds();
+}
               if (!m_RT_NewItem)
               {
                 m_RTPlus_Starttime = time(nullptr);
@@ -1313,8 +1335,9 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
             if (memcmp(m_RTPlus_Artist, m_RTPlus_Temptext, RT_MEL) != 0 || (msgElement[5] & 0x10) != m_RTPlus_ItemToggle)
             {
               memcpy(m_RTPlus_Artist, m_RTPlus_Temptext, RT_MEL);
-              if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1)
+              if (m_RTPlus_Show && m_RTPlus_iTime.GetElapsedSeconds() > 1) {
                 m_RTPlus_iDiffs = (int) m_RTPlus_iTime.GetElapsedSeconds();
+}
               if (!m_RT_NewItem)
               {
                 m_RTPlus_Starttime = time(nullptr);
@@ -1527,16 +1550,18 @@ unsigned int CDVDRadioRDSData::DecodeRTPlus(uint8_t *msgElement, unsigned int le
 unsigned int CDVDRadioRDSData::DecodeTMC(uint8_t *msgElement, unsigned int len)
 {
   unsigned int msgElementLength = msgElement[1];
-  if (msgElementLength == 0)
+  if (msgElementLength == 0) {
     msgElementLength = 6;
+}
   if (msgElementLength + 2 > len)
   {
     m_UECPDataDeadBreak = true;
     return 0;
   }
 
-  for (unsigned int i = 0; i < msgElementLength; i += 5)
+  for (unsigned int i = 0; i < msgElementLength; i += 5) {
     SendTMCSignal(msgElement[2], msgElement+3+i);
+}
 
   return msgElementLength + 2;
 }
@@ -1638,10 +1663,11 @@ unsigned int CDVDRadioRDSData::DecodeSlowLabelingCodes(uint8_t *msgElement)
       break;
     }
     case VARCODE_LANGUAGE_CODES:      // language codes
-      if (slowLabellingCode > 1 && slowLabellingCode < 0x80)
+      if (slowLabellingCode > 1 && slowLabellingCode < 0x80) {
         m_currentInfoTag->SetLanguage(piRDSLanguageCodes[slowLabellingCode]);
-      else
+      } else {
         CLog::Log(LOGERROR, "Radio RDS - %s - invalid language code %i", __FUNCTION__, slowLabellingCode);
+}
       break;
 
     case VARCODE_TMC_IDENT:           // TMC identification
@@ -1733,8 +1759,9 @@ unsigned int CDVDRadioRDSData::DecodeTDC(uint8_t *msgElement, unsigned int len)
 
 void CDVDRadioRDSData::SendTMCSignal(unsigned int flags, uint8_t *data)
 {
-  if (!(flags & 0x80) && (memcmp(data, m_TMC_LastData, 5) == 0))
+  if (!(flags & 0x80) && (memcmp(data, m_TMC_LastData, 5) == 0)) {
     return;
+}
 
   memcpy(m_TMC_LastData, data, 5);
 

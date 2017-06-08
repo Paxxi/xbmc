@@ -42,12 +42,14 @@ bool CVideoLibraryScanningJob::Cancel()
 
 bool CVideoLibraryScanningJob::operator==(const CJob* job) const
 {
-  if (strcmp(job->GetType(), GetType()) != 0)
+  if (strcmp(job->GetType(), GetType()) != 0) {
     return false;
+}
 
   const CVideoLibraryScanningJob* scanningJob = dynamic_cast<const CVideoLibraryScanningJob*>(job);
-  if (scanningJob == nullptr)
+  if (scanningJob == nullptr) {
     return false;
+}
 
   return m_directory == scanningJob->m_directory &&
          m_scanAll == scanningJob->m_scanAll;

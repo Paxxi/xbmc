@@ -69,8 +69,9 @@ bool CSavestateWriter::Initialize(const CGameClient* gameClient, uint64_t frameH
   if (m_savestate.Path().empty())
     CLog::Log(LOGDEBUG, "Failed to calculate savestate path");
 
-  if (m_fps == 0.0)
+  if (m_fps == 0.0) {
     return false; // Sanity check
+}
 
   return !m_savestate.Path().empty();
 }
@@ -79,8 +80,9 @@ bool CSavestateWriter::WriteSave(IMemoryStream* memoryStream)
 {
   using namespace XFILE;
 
-  if (memoryStream->CurrentFrame() == nullptr)
+  if (memoryStream->CurrentFrame() == nullptr) {
     return false;
+}
 
   m_savestate.SetSize(memoryStream->FrameSize());
 
@@ -111,8 +113,9 @@ void CSavestateWriter::WriteThumb()
 
   // Calculate width and height
   float aspectRatio = g_application.m_pPlayer->GetRenderAspectRatio();
-  if (aspectRatio <= 0.0f)
+  if (aspectRatio <= 0.0f) {
     aspectRatio = 1.0f;
+}
 
   unsigned int width;
   unsigned int height;
@@ -145,8 +148,9 @@ void CSavestateWriter::WriteThumb()
 
     g_application.m_pPlayer->RenderCaptureRelease(captureId);
   }
-  else
+  else {
     CLog::Log(LOGERROR, "Failed to capture thumbnail");
+}
 
   // Free pixels
   delete[] pixels;

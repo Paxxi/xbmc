@@ -43,8 +43,9 @@ CGUIRenderingControl::CGUIRenderingControl(const CGUIRenderingControl &from)
 
 bool CGUIRenderingControl::InitCallback(IRenderingCallback *callback)
 {
-  if (!callback)
+  if (!callback) {
     return false;
+}
 
   CSingleLock lock(m_rendering);
   g_graphicsContext.CaptureStateBlock();
@@ -61,10 +62,11 @@ bool CGUIRenderingControl::InitCallback(IRenderingCallback *callback)
 #if HAS_DX
   device = g_Windowing.Get3D11Device();
 #endif
-  if (callback->Create((int)(x+0.5f), (int)(y+0.5f), (int)(w+0.5f), (int)(h+0.5f), device))
+  if (callback->Create((int)(x+0.5f), (int)(y+0.5f), (int)(w+0.5f), (int)(h+0.5f), device)) {
     m_callback = callback;
-  else
+  } else {
     return false;
+}
 
   g_graphicsContext.ApplyStateBlock();
   return true;

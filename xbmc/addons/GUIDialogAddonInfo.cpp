@@ -316,8 +316,9 @@ void CGUIDialogAddonInfo::OnToggleAutoUpdates()
 
 void CGUIDialogAddonInfo::OnInstall()
 {
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return;
+}
 
   if (m_localAddon || !m_item->HasAddonInfo())
     return;
@@ -414,16 +415,19 @@ void CGUIDialogAddonInfo::OnUninstall()
   if (!m_localAddon.get())
     return;
 
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return;
+}
 
   // ensure the addon is not a dependency of other installed addons
-  if (PromptIfDependency(24037, 24047))
+  if (PromptIfDependency(24037, 24047)) {
     return;
+}
 
   // prompt user to be sure
-  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{24037}, CVariant{750}))
+  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{24037}, CVariant{750})) {
     return;
+}
 
   bool removeData = false;
   if (CDirectory::Exists("special://profile/addon_data/"+m_localAddon->ID()))
@@ -439,18 +443,21 @@ void CGUIDialogAddonInfo::OnEnableDisable()
   if (!m_localAddon)
     return;
 
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return;
+}
 
   if (m_addonEnabled)
   {
-    if (PromptIfDependency(24075, 24091))
+    if (PromptIfDependency(24075, 24091)) {
       return; //required. can't disable
+}
 
     CAddonMgr::GetInstance().DisableAddon(m_localAddon->ID());
   }
-  else
-    CAddonMgr::GetInstance().EnableAddon(m_localAddon->ID());
+  else {
+    CAddonMgr
+}::GetInstance().EnableAddon(m_localAddon->ID());
 
   UpdateControls();
 }
@@ -466,10 +473,12 @@ bool CGUIDialogAddonInfo::ShowForItem(const CFileItemPtr& item)
     return false;
 
   CGUIDialogAddonInfo* dialog = g_windowManager.GetWindow<CGUIDialogAddonInfo>(WINDOW_DIALOG_ADDON_INFO);
-  if (!dialog)
+  if (!dialog) {
     return false;
-  if (!dialog->SetItem(item))
+}
+  if (!dialog->SetItem(item)) {
     return false;
+}
 
   dialog->Open(); 
   return true;

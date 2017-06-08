@@ -79,8 +79,9 @@ CWakeOnAccess::WakeUpEntry::WakeUpEntry (bool isAwake)
 {
   nextWake = CDateTime::GetCurrentDateTime();
 
-  if (isAwake)
+  if (isAwake) {
     nextWake += timeout;
+}
 }
 
 //**
@@ -135,13 +136,15 @@ class NestDetect
 public:
   NestDetect() : m_gui_thread (g_application.IsCurrentThread())
   {
-    if (m_gui_thread)
+    if (m_gui_thread) {
       ++m_nest;
+}
   }
   ~NestDetect()
   {
-    if (m_gui_thread)
+    if (m_gui_thread) {
       m_nest--;
+}
   }
   static int Level()
   {
@@ -201,16 +204,18 @@ public:
 
     while (!end_time.IsTimePast())
     {
-      if (waitObj.SuccessWaiting())
+      if (waitObj.SuccessWaiting()) {
         return Success;
+}
             
       if (m_dialog)
       {
         if (!m_dialog->IsActive())
           m_dialog->Open();
 
-        if (m_dialog->IsCanceled())
+        if (m_dialog->IsCanceled()) {
           return Canceled;
+}
 
         m_dialog->Progress();
 
@@ -241,8 +246,9 @@ public:
     unsigned long address = ntohl(HostToIP(m_host));
     bool online = g_application.getNetwork().HasInterfaceForIP(address);
 
-    if (!online) // setup endtime so we dont return true until network is consistently connected
+    if (!online) { // setup endtime so we dont return true until network is consistently connected
       m_end.Set (m_settle_time_ms);
+}
 
     return online && m_end.IsTimePast();
   }
@@ -295,8 +301,9 @@ private:
       {
         while (!ShouldCancel(0,0))
         {
-          if (PingResponseWaiter::Ping(m_server))
+          if (PingResponseWaiter::Ping(m_server)) {
             return true;
+}
         }
         return false;
       }
@@ -336,8 +343,9 @@ bool CWakeOnAccess::WakeUpHost(const CURL& url)
 
 bool CWakeOnAccess::WakeUpHost (const std::string& hostName, const std::string& customMessage)
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return true; // bail if feature is turned off
+}
 
   WakeUpEntry server;
 
@@ -347,8 +355,9 @@ bool CWakeOnAccess::WakeUpHost (const std::string& hostName, const std::string& 
 
     NestDetect nesting ; // detect recursive calls on gui thread..
 
-    if (nesting.IsNested()) // we might get in trouble if it gets called back in loop
+    if (nesting.IsNested()) { // we might get in trouble if it gets called back in loop
       CLog::Log(LOGWARNING,"WakeOnAccess recursively called on gui-thread [%d]", NestDetect::Level());
+}
 
     bool ret = WakeUpHost(server);
 
@@ -413,8 +422,9 @@ bool CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
     ProgressDialogHelper::wait_result 
       result = dlg.ShowAndWait (waitObj, server.wait_online1_sec, LOCALIZED(13030));
 
-    if (result == ProgressDialogHelper::TimedOut)
+    if (result == ProgressDialogHelper::TimedOut) {
       result = dlg.ShowAndWait (waitObj, server.wait_online2_sec, LOCALIZED(13031));
+}
 
     if (result != ProgressDialogHelper::Success)
     {
@@ -484,9 +494,10 @@ void CWakeOnAccess::TouchHostEntry (const std::string& hostName)
 
 static void AddHost (const std::string& host, std::vector<std::string>& hosts)
 {
-  for (std::vector<std::string>::const_iterator it = hosts.begin(); it != hosts.end(); ++it)
+  for (std::vector<std::string>::const_iterator it = hosts.begin(); it != hosts.end(); ++it) {
     if (StringUtils::EqualsNoCase(host, *it))
       return; // allready there ..
+}
 
   if (!host.empty())
     hosts.push_back(host);
@@ -643,8 +654,9 @@ void CWakeOnAccess::OnSettingChanged(std::shared_ptr<const CSetting> setting)
 
     SetEnabled(enabled);
 
-    if (enabled)
+    if (enabled) {
       QueueMACDiscoveryForAllRemotes();
+}
   }
 }
 
@@ -693,12 +705,14 @@ void CWakeOnAccess::LoadFromXML()
   SetEnabled(enabled);
 
   int tmp;
-  if (XMLUtils::GetInt(pRootElement, "netinittimeout", tmp, 0, 5 * 60))
+  if (XMLUtils::GetInt(pRootElement, "netinittimeout", tmp, 0, 5 * 60)) {
     m_netinit_sec = tmp;
+}
   CLog::Log(LOGNOTICE,"  -Network init timeout : [%d] sec", m_netinit_sec);
   
-  if (XMLUtils::GetInt(pRootElement, "netsettletime", tmp, 0, 5 * 1000))
+  if (XMLUtils::GetInt(pRootElement, "netsettletime", tmp, 0, 5 * 1000)) {
     m_netsettle_ms = tmp;
+}
   CLog::Log(LOGNOTICE,"  -Network settle time  : [%d] ms", m_netsettle_ms);
 
   const TiXmlNode* pWakeUp = pRootElement->FirstChildElement("wakeup");
@@ -707,11 +721,13 @@ void CWakeOnAccess::LoadFromXML()
     WakeUpEntry entry;
 
     std::string strtmp;
-    if (XMLUtils::GetString(pWakeUp, "host", strtmp))
+    if (XMLUtils::GetString(pWakeUp, "host", strtmp)) {
       entry.host = strtmp;
+}
 
-    if (XMLUtils::GetString(pWakeUp, "mac", strtmp))
+    if (XMLUtils::GetString(pWakeUp, "mac", strtmp)) {
       entry.mac = strtmp;
+}
 
     if (entry.host.empty())
       CLog::Log(LOGERROR, "%s - Missing <host> tag or it's empty", __FUNCTION__);
@@ -725,17 +741,21 @@ void CWakeOnAccess::LoadFromXML()
       if (XMLUtils::GetInt(pWakeUp, "pingmode", tmp, 0, USHRT_MAX))
         entry.ping_mode = (unsigned short) tmp;
 
-      if (XMLUtils::GetInt(pWakeUp, "timeout", tmp, 10, 12 * 60 * 60))
+      if (XMLUtils::GetInt(pWakeUp, "timeout", tmp, 10, 12 * 60 * 60)) {
         entry.timeout.SetDateTimeSpan (0, 0, 0, tmp);
+}
 
-      if (XMLUtils::GetInt(pWakeUp, "waitonline", tmp, 0, 10 * 60)) // max 10 minutes
+      if (XMLUtils::GetInt(pWakeUp, "waitonline", tmp, 0, 10 * 60)) { // max 10 minutes
         entry.wait_online1_sec = tmp;
+}
 
-      if (XMLUtils::GetInt(pWakeUp, "waitonline2", tmp, 0, 10 * 60)) // max 10 minutes
+      if (XMLUtils::GetInt(pWakeUp, "waitonline2", tmp, 0, 10 * 60)) { // max 10 minutes
         entry.wait_online2_sec = tmp;
+}
 
-      if (XMLUtils::GetInt(pWakeUp, "waitservices", tmp, 0, 5 * 60)) // max 5 minutes
+      if (XMLUtils::GetInt(pWakeUp, "waitservices", tmp, 0, 5 * 60)) { // max 5 minutes
         entry.wait_services_sec = tmp;
+}
 
       CLog::Log(LOGNOTICE,"  Registering wakeup entry:");
       CLog::Log(LOGNOTICE,"    HostName        : %s", entry.host.c_str());

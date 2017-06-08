@@ -96,8 +96,9 @@ IFile* CFileFactory::CreateLoader(const std::string& strFileName)
 
 IFile* CFileFactory::CreateLoader(const CURL& url)
 {
-  if (!CWakeOnAccess::GetInstance().WakeUpHost(url))
+  if (!CWakeOnAccess::GetInstance().WakeUpHost(url)) {
     return nullptr;
+}
 
   std::string strProtocol = url.GetProtocol();
   StringUtils::ToLower(strProtocol);
@@ -118,12 +119,13 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
 #if defined(TARGET_ANDROID)
   if (url.IsProtocol("apk")) return new CAPKFile();
 #endif
-  if (url.IsProtocol("zip")) return new CZipFile();
-  else if (url.IsProtocol("xbt")) return new CXbtFile();
-  else if (url.IsProtocol("musicdb")) return new CMusicDatabaseFile();
-  else if (url.IsProtocol("videodb")) return new CVideoDatabaseFile();
-  else if (url.IsProtocol("library")) return nullptr;
-  else if (url.IsProtocol("special")) return new CSpecialProtocolFile();
+  if (url.IsProtocol("zip")) { return new CZipFile();
+  } else if (url.IsProtocol("xbt")) { return new CXbtFile();
+  } else if (url.IsProtocol("musicdb")) { return new CMusicDatabaseFile();
+  } else if (url.IsProtocol("videodb")) { return new CVideoDatabaseFile();
+  } else if (url.IsProtocol("library")) { return nullptr;
+  } else { if 
+}(url.IsProtocol("special")) return new CSpecialProtocolFile();
   else if (url.IsProtocol("multipath")) return new CMultiPathFile();
   else if (url.IsProtocol("image")) return new CImageFile();
 #ifdef TARGET_POSIX

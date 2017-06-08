@@ -39,13 +39,15 @@ CPlaylistDirectory::~CPlaylistDirectory()
 bool CPlaylistDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 {
   int playlistTyp=PLAYLIST_NONE;
-  if (url.IsProtocol("playlistmusic"))
+  if (url.IsProtocol("playlistmusic")) {
     playlistTyp=PLAYLIST_MUSIC;
-  else if (url.IsProtocol("playlistvideo"))
+  } else if (url.IsProtocol("playlistvideo")) {
     playlistTyp=PLAYLIST_VIDEO;
+}
 
-  if (playlistTyp==PLAYLIST_NONE)
+  if (playlistTyp==PLAYLIST_NONE) {
     return false;
+}
 
   CPlayList& playlist = g_playlistPlayer.GetPlaylist(playlistTyp);
   items.Reserve(playlist.size());

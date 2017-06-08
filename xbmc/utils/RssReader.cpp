@@ -334,8 +334,9 @@ bool CRssReader::Parse(int iFeed)
 {
   TiXmlElement* rootXmlNode = m_xml.RootElement();
 
-  if (!rootXmlNode)
+  if (!rootXmlNode) {
     return false;
+}
 
   TiXmlElement* rssXmlNode = nullptr;
 
@@ -393,16 +394,18 @@ void CRssReader::SetObserver(IRssObserver *observer)
 
 void CRssReader::UpdateObserver()
 {
-  if (!m_pObserver)
+  if (!m_pObserver) {
     return;
+}
 
   vecText feed;
   getFeed(feed);
   if (!feed.empty())
   {
     CSingleLock lock(g_graphicsContext);
-    if (m_pObserver) // need to check again when locked to make sure observer wasnt removed
+    if (m_pObserver) { // need to check again when locked to make sure observer wasnt removed
       m_pObserver->OnFeedUpdate(feed);
+}
   }
 }
 

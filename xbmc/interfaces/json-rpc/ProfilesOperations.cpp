@@ -53,10 +53,11 @@ JSONRPC_STATUS CProfilesOperations::GetProfiles(const std::string &method, ITran
         int index = CProfilesManager::GetInstance().GetProfileIndex(profilename);
         const CProfile *profile = CProfilesManager::GetInstance().GetProfile(index);
         LockType locktype = LOCK_MODE_UNKNOWN;
-        if (index == 0)
+        if (index == 0) {
           locktype = CProfilesManager::GetInstance().GetMasterProfile().getLockMode();
-        else
+        } else {
           locktype = profile->getLockMode();
+}
         (*profileiter)["lockmode"] = locktype;
       }
       break;
@@ -91,13 +92,15 @@ JSONRPC_STATUS CProfilesOperations::LoadProfile(const std::string &method, ITran
   std::string profilename = parameterObject["profile"].asString();
   int index = CProfilesManager::GetInstance().GetProfileIndex(profilename);
   
-  if (index < 0)
+  if (index < 0) {
     return InvalidParams;
+}
 
   // get the profile
   const CProfile *profile = CProfilesManager::GetInstance().GetProfile(index);
-  if (profile == nullptr)
+  if (profile == nullptr) {
     return InvalidParams;
+}
 
   bool bPrompt = parameterObject["prompt"].asBoolean();
   bool bCanceled = false;
@@ -107,9 +110,9 @@ JSONRPC_STATUS CProfilesOperations::LoadProfile(const std::string &method, ITran
   // the user is prompted and provides the correct password
   // we can load the requested profile
   if (profile->getLockMode() == LOCK_MODE_EVERYONE ||
-     (bPrompt && g_passwordManager.IsProfileLockUnlocked(index, bCanceled, bPrompt)))
+     (bPrompt && g_passwordManager.IsProfileLockUnlocked(index, bCanceled, bPrompt))) {
     bLoadProfile = true;
-  else if (!bCanceled)  // Password needed and user provided it
+  } else if (!bCanceled)  // Password needed and user provided it
   {
     const CVariant &passwordObject = parameterObject["password"];
     std::string strToVerify = profile->getLockCode();

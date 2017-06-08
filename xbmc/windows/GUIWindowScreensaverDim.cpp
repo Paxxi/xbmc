@@ -41,8 +41,9 @@ void CGUIWindowScreensaverDim::UpdateVisibility()
 {
   if (g_application.IsInScreenSaver())
   {
-    if (m_visible)
+    if (m_visible) {
       return;
+}
 
     std::string usedId = g_application.ScreensaverIdInUse();
     if  (usedId == "screensaver.xbmc.builtin.dim" ||

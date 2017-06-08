@@ -30,8 +30,9 @@ bool CSettingConditionItem::Deserialize(const TiXmlNode *node)
     return false;
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == nullptr)
+  if (elem == nullptr) {
     return false;
+}
 
   // get the "name" attribute
   const char *strAttribute = elem->Attribute(SETTING_XML_ATTR_NAME);
@@ -48,8 +49,9 @@ bool CSettingConditionItem::Deserialize(const TiXmlNode *node)
 
 bool CSettingConditionItem::Check() const
 {
-  if (m_settingsManager == nullptr)
+  if (m_settingsManager == nullptr) {
     return false;
+}
 
   return m_settingsManager->GetConditions().Check(m_name, m_value, m_settingsManager->GetSetting(m_setting)) == !m_negated;
 }
@@ -64,13 +66,15 @@ bool CSettingConditionCombination::Check() const
       continue;
 
     CSettingConditionCombination *combination = static_cast<CSettingConditionCombination*>((*operation).get());
-    if (combination == nullptr)
+    if (combination == nullptr) {
       continue;
+}
     
-    if (combination->Check())
+    if (combination->Check()) {
       ok = true;
-    else if (m_operation == BooleanLogicOperationAnd)
+    } else if (m_operation == BooleanLogicOperationAnd) {
       return false;
+}
   }
 
   for (CBooleanLogicValues::const_iterator value = m_values.begin();
@@ -80,13 +84,15 @@ bool CSettingConditionCombination::Check() const
       continue;
 
     CSettingConditionItem *condition = static_cast<CSettingConditionItem*>((*value).get());
-    if (condition == nullptr)
+    if (condition == nullptr) {
       continue;
+}
 
-    if (condition->Check())
+    if (condition->Check()) {
       ok = true;
-    else if (m_operation == BooleanLogicOperationAnd)
+    } else if (m_operation == BooleanLogicOperationAnd) {
       return false;
+}
   }
 
   return ok;
@@ -101,8 +107,9 @@ CSettingCondition::CSettingCondition(CSettingsManager *settingsManager /* = NULL
 bool CSettingCondition::Check() const
 {
   CSettingConditionCombination *combination = static_cast<CSettingConditionCombination*>(m_operation.get());
-  if (combination == nullptr)
+  if (combination == nullptr) {
     return false;
+}
 
   return combination->Check();
 }

@@ -84,8 +84,9 @@ int CMultiPathFile::Stat(const CURL& url, struct __stat64* buffer)
     std::string filePath = vecPaths[i];
     filePath = URIUtils::AddFileToFolder(filePath, fileName);
     int ret = CFile::Stat(filePath, buffer);
-    if (ret == 0)
+    if (ret == 0) {
       return ret;
+}
   }
   return -1;
 }

@@ -80,31 +80,38 @@ void CWinSystemBase::UpdateDesktopResolution(RESOLUTION_INFO& newRes, int screen
   newRes.strMode = StringUtils::Format("%dx%d", width, height);
   if (refreshRate > 1)
     newRes.strMode += StringUtils::Format("@ %.2f", refreshRate);
-  if (dwFlags & D3DPRESENTFLAG_INTERLACED)
+  if (dwFlags & D3DPRESENTFLAG_INTERLACED) {
     newRes.strMode += "i";
-  if (dwFlags & D3DPRESENTFLAG_MODE3DTB)
+  
+}if (dwFlags & D3DPRESENTFLAG_MODE3DTB) {
     newRes.strMode += "tab";
-  if (dwFlags & D3DPRESENTFLAG_MODE3DSBS)
+  
+}if (dwFlags & D3DPRESENTFLAG_MODE3DSBS) {
     newRes.strMode += "sbs";
-  if (screen > 0)
+  
+}if (screen > 0)
     newRes.strMode = StringUtils::Format("%s #%d", newRes.strMode.c_str(), screen + 1);
-  if (refreshRate > 1)
+  if (refreshRate > 1) {
     newRes.strMode += " - Full Screen";
-}
+
+}}
 
 void CWinSystemBase::UpdateResolutions()
 {
   // add the window res - defaults are fine.
   RESOLUTION_INFO& window = CDisplaySettings::GetInstance().GetResolutionInfo(RES_WINDOW);
   window.bFullScreen = false;
-  if (window.iWidth == 0)
+  if (window.iWidth == 0) {
     window.iWidth = 720;
-  if (window.iHeight == 0)
+}
+  if (window.iHeight == 0) {
     window.iHeight = 480;
+}
   window.iScreenWidth  = window.iWidth;
   window.iScreenHeight = window.iHeight;
-  if (window.iSubtitles == 0)
+  if (window.iSubtitles == 0) {
     window.iSubtitles = (int)(0.965 * window.iHeight);
+}
   window.fPixelRatio = 1.0f;
   window.strMode = "Windowed";
 }
@@ -122,9 +129,10 @@ void CWinSystemBase::SetWindowResolution(int width, int height)
 
 int CWinSystemBase::DesktopResolution(int screen)
 {
-  for (int idx = 0; idx < GetNumScreens(); idx++)
+  for (int idx = 0; idx < GetNumScreens(); idx++) {
     if (CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP + idx).iScreen == screen)
       return RES_DESKTOP + idx;
+}
   // Uh? something's wrong, fallback to default res of main screen
   return RES_DESKTOP;
 }
@@ -138,7 +146,7 @@ static void AddResolution(std::vector<RESOLUTION_WHR> &resolutions, unsigned int
   float refreshrate = resInfo.fRefreshRate;
 
   // don't touch RES_DESKTOP
-  for (unsigned int idx = 1; idx < resolutions.size(); idx++)
+  for (unsigned int idx = 1; idx < resolutions.size(); idx++) {
     if (   resolutions[idx].width == width
         && resolutions[idx].height == height
         &&(resolutions[idx].flags & D3DPRESENTFLAG_MODEMASK) == flags)
@@ -152,6 +160,7 @@ static void AddResolution(std::vector<RESOLUTION_WHR> &resolutions, unsigned int
       // no need to add the resolution again
       return;
     }
+}
 
   RESOLUTION_WHR res = {width, height, flags, (int)addindex};
   resolutions.push_back(res);
@@ -188,9 +197,10 @@ static void AddRefreshRate(std::vector<REFRESHRATE> &refreshrates, unsigned int 
 {
   float RefreshRate = CDisplaySettings::GetInstance().GetResolutionInfo(addindex).fRefreshRate;
 
-  for (unsigned int idx = 0; idx < refreshrates.size(); idx++)
+  for (unsigned int idx = 0; idx < refreshrates.size(); idx++) {
     if (   refreshrates[idx].RefreshRate == RefreshRate)
       return; // already taken care of.
+}
 
   REFRESHRATE rr = {RefreshRate, (int)addindex};
   refreshrates.push_back(rr);

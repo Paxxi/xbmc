@@ -73,9 +73,9 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
     flags = O_RDWR;
     mode |= S_IWUSR;
   }
-  else if ( (dwDesiredAccess & FILE_READ_DATA) == FILE_READ_DATA)
+  else if ( (dwDesiredAccess & FILE_READ_DATA) == FILE_READ_DATA) {
     flags = O_RDONLY;
-  else
+  } else
   {
     CLog::Log(LOGERROR, "CreateFile does not permit access other than read and/or write");
     return INVALID_HANDLE_VALUE;
@@ -104,8 +104,9 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
 
   int fd = 0;
 
-  if (dwFlagsAndAttributes & FILE_FLAG_NO_BUFFERING)
+  if (dwFlagsAndAttributes & FILE_FLAG_NO_BUFFERING) {
     flags |= O_SYNC;
+}
 
   // we always open files with fileflag O_NONBLOCK to support
   // cdrom devices, but we then turn it of for actual reads
@@ -135,8 +136,9 @@ HANDLE CreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess,
 
   if (fd == -1)
   {
-    if (errno == 20)
+    if (errno == 20) {
       CLog::Log(LOGWARNING,"%s, error %d opening file <%s>, flags:%x, mode:%x. ", __FUNCTION__, errno, lpFileName, flags, mode);
+}
     return INVALID_HANDLE_VALUE;
   }
 
@@ -205,8 +207,9 @@ BOOL WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite,
 DWORD  SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
                       int32_t *lpDistanceToMoveHigh, DWORD dwMoveMethod)
 {
-  if (hFile == nullptr)
+  if (hFile == nullptr) {
     return 0;
+}
 
   LONGLONG offset = lDistanceToMove;
   if (lpDistanceToMoveHigh)
@@ -218,10 +221,11 @@ DWORD  SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
   }
 
   int nMode = SEEK_SET;
-  if (dwMoveMethod == FILE_CURRENT)
+  if (dwMoveMethod == FILE_CURRENT) {
     nMode = SEEK_CUR;
-  else if (dwMoveMethod == FILE_END)
+  } else if (dwMoveMethod == FILE_END) {
     nMode = SEEK_END;
+}
 
   off64_t currOff;
 #if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
@@ -258,29 +262,34 @@ BOOL GetDiskFreeSpaceEx(
     return false;
 #endif
 
-  if (lpFreeBytesAvailable)
+  if (lpFreeBytesAvailable) {
     lpFreeBytesAvailable->QuadPart =  (ULONGLONG)fsInfo.f_bavail * (ULONGLONG)fsInfo.f_bsize;
+}
 
-  if (lpTotalNumberOfBytes)
+  if (lpTotalNumberOfBytes) {
     lpTotalNumberOfBytes->QuadPart = (ULONGLONG)fsInfo.f_blocks * (ULONGLONG)fsInfo.f_bsize;
+}
 
-  if (lpTotalNumberOfFreeBytes)
+  if (lpTotalNumberOfFreeBytes) {
     lpTotalNumberOfFreeBytes->QuadPart = (ULONGLONG)fsInfo.f_bfree * (ULONGLONG)fsInfo.f_bsize;
+}
 
   return true;
 }
 
 DWORD GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
 {
-  if (lpTimeZoneInformation == nullptr)
+  if (lpTimeZoneInformation == nullptr) {
     return TIME_ZONE_ID_INVALID;
+}
 
   memset(lpTimeZoneInformation, 0, sizeof(TIME_ZONE_INFORMATION));
 
   struct tm t;
   time_t tt = time(nullptr);
-  if(localtime_r(&tt, &t))
+  if(localtime_r(&tt, &t)) {
     lpTimeZoneInformation->Bias = -t.tm_gmtoff / 60;
+}
 
   swprintf(lpTimeZoneInformation->StandardName, 31, L"%s", tzname[0]);
   swprintf(lpTimeZoneInformation->DaylightName, 31, L"%s", tzname[1]);
@@ -295,10 +304,11 @@ BOOL SetFilePointerEx(  HANDLE hFile,
 {
 
   int nMode = SEEK_SET;
-  if (dwMoveMethod == FILE_CURRENT)
+  if (dwMoveMethod == FILE_CURRENT) {
     nMode = SEEK_CUR;
-  else if (dwMoveMethod == FILE_END)
+  } else if (dwMoveMethod == FILE_END) {
     nMode = SEEK_END;
+}
 
   off64_t toMove = liDistanceToMove.QuadPart;
 
@@ -308,16 +318,18 @@ BOOL SetFilePointerEx(  HANDLE hFile,
   off64_t currOff = lseek64(hFile->fd, toMove, nMode);
 #endif
 
-  if (lpNewFilePointer)
+  if (lpNewFilePointer) {
     lpNewFilePointer->QuadPart = currOff;
+}
 
   return true;
 }
 
 int _fstat64(int fd, struct __stat64 *buffer)
 {
-  if (buffer == nullptr)
+  if (buffer == nullptr) {
     return -1;
+}
 
   return fstat64(fd, buffer);
 }
@@ -325,8 +337,9 @@ int _fstat64(int fd, struct __stat64 *buffer)
 int _stat64(   const char *path,   struct __stat64 *buffer )
 {
 
-  if (buffer == nullptr || path == nullptr)
+  if (buffer == nullptr || path == nullptr) {
     return -1;
+}
 
   return stat64(path, buffer);
 }

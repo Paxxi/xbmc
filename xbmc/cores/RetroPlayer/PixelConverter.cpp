@@ -40,8 +40,9 @@ CPixelConverter::CPixelConverter() :
 
 bool CPixelConverter::Open(AVPixelFormat pixfmt, AVPixelFormat targetfmt, unsigned int width, unsigned int height)
 {
-  if (pixfmt == targetfmt || width == 0 || height == 0)
+  if (pixfmt == targetfmt || width == 0 || height == 0) {
     return false;
+}
 
   m_renderFormat = CDVDCodecUtils::EFormatFromPixfmt(targetfmt);
   if (m_renderFormat == RENDER_FMT_NONE)
@@ -89,8 +90,9 @@ void CPixelConverter::Dispose()
 
 bool CPixelConverter::Decode(const uint8_t* pData, unsigned int size)
 {
-  if (pData == nullptr || size == 0 || m_swsContext == nullptr)
+  if (pData == nullptr || size == 0 || m_swsContext == nullptr) {
     return false;
+}
 
   uint8_t* dataMutable = const_cast<uint8_t*>(pData);
 

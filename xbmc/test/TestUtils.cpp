@@ -139,8 +139,10 @@ XFILE::CFile *CXBMCTestUtils::CreateTempFile(std::string const& suffix)
 
 bool CXBMCTestUtils::DeleteTempFile(XFILE::CFile *tempfile)
 {
-  if (!tempfile)
+  if (!tempfile) { {
     return true;
+}
+}
   CTempFile *f = static_cast<CTempFile*>(tempfile);
   bool retval = f->Delete();
   delete f;
@@ -339,10 +341,12 @@ void CXBMCTestUtils::ParseArgs(int argc, char **argv)
     else if (arg == "--set-probability")
     {
       probability = atof(argv[++i]);
-      if (probability < 0.0)
+      if (probability < 0.0) { {
         probability = 0.0;
-      else if (probability > 1.0)
+      } } else if (probability > 1.0) { {
         probability = 1.0;
+}
+}
     }
     else
     {

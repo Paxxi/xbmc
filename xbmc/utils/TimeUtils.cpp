@@ -74,8 +74,9 @@ void CTimeUtils::UpdateFrameTime(bool flip)
   {
     frameTime += (unsigned int)(1000 / g_graphicsContext.GetFPS());
     // observe wrap around
-    if (frameTime < last)
+    if (frameTime < last) {
       break;
+}
   }
 }
 
@@ -99,10 +100,11 @@ CDateTime CTimeUtils::GetLocalTime(time_t time)
    * Microsoft implementation of localtime returns NULL if on or before epoch.
    * http://msdn.microsoft.com/en-us/library/bf12f0hc(VS.80).aspx
    */
-  if (local)
+  if (local) {
     result = *local;
-  else
+  } else {
     result = time; // Use the original time as close enough.
+}
 
   return result;
 }

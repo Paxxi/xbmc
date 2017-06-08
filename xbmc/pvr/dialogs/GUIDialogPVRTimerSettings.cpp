@@ -129,8 +129,9 @@ void CGUIDialogPVRTimerSettings::SetTimer(const CPVRTimerInfoTagPtr &timer)
 
   m_startLocalTime = m_timerInfoTag->StartAsLocalTime();
   m_endLocalTime   = m_timerInfoTag->EndAsLocalTime();
-  if (m_bIsNewTimer && (m_startLocalTime == m_endLocalTime))
+  if (m_bIsNewTimer && (m_startLocalTime == m_endLocalTime)) {
     m_endLocalTime += CDateTimeSpan(0, 2, 0, 0);
+}
 
   m_timerStartTimeStr = m_startLocalTime.GetAsLocalizedTime("", false);
   m_timerEndTimeStr   = m_endLocalTime.GetAsLocalizedTime("", false);
@@ -193,8 +194,9 @@ void CGUIDialogPVRTimerSettings::SetTimer(const CPVRTimerInfoTagPtr &timer)
       }
     }
 
-    if (!bChannelSet)
+    if (!bChannelSet) {
       CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::SetTimer - Unable to map PVR_CHANNEL_INVALID_UID to channel entry!");
+}
   }
   else
   {
@@ -211,8 +213,9 @@ void CGUIDialogPVRTimerSettings::SetTimer(const CPVRTimerInfoTagPtr &timer)
       }
     }
 
-    if (!bChannelSet)
+    if (!bChannelSet) {
       CLog::Log(LOGERROR, "CGUIDialogPVRTimerSettings::SetTimer - Unable to map channel uid to channel entry!");
+}
   }
 }
 
@@ -1115,8 +1118,9 @@ bool CGUIDialogPVRTimerSettings::TypeReadOnlyCondition(const std::string &condit
     return false;
   }
 
-  if (!StringUtils::EqualsNoCase(value, "true"))
+  if (!StringUtils::EqualsNoCase(value, "true")) {
     return false;
+}
 
   std::string cond(condition);
   cond.erase(cond.find(TYPE_DEP_ENABLE_COND_ID_POSTFIX));
@@ -1178,8 +1182,9 @@ bool CGUIDialogPVRTimerSettings::TypeSupportsCondition(const std::string &condit
     return false;
   }
 
-  if (!StringUtils::EqualsNoCase(value, "true"))
+  if (!StringUtils::EqualsNoCase(value, "true")) {
     return false;
+}
 
   int idx = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
   const auto entry = pThis->m_typeEntries.find(idx);
@@ -1257,8 +1262,9 @@ bool CGUIDialogPVRTimerSettings::StartAnytimeSetCondition(const std::string &con
     return false;
   }
 
-  if (!StringUtils::EqualsNoCase(value, "true"))
+  if (!StringUtils::EqualsNoCase(value, "true")) {
     return false;
+}
 
   // "any time" setting is only relevant for epg-based timers.
   if (!pThis->m_timerType->IsEpgBased())
@@ -1300,8 +1306,9 @@ bool CGUIDialogPVRTimerSettings::EndAnytimeSetCondition(const std::string &condi
     return false;
   }
 
-  if (!StringUtils::EqualsNoCase(value, "true"))
+  if (!StringUtils::EqualsNoCase(value, "true")) {
     return false;
+}
 
   // "any time" setting is only relevant for epg-based timers.
   if (!pThis->m_timerType->IsEpgBased())

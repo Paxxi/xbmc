@@ -237,10 +237,11 @@ bool field_value::get_asBool() const {
       return bool_value;
       }
     case ft_Char: {
-      if (char_value == 'T' || char_value == 't')
+      if (char_value == 'T' || char_value == 't') {
 	return true;
-      else
+      } else {
 	return false;
+}
     }
     case ft_Short: {
       return (bool)short_value;
@@ -275,11 +276,12 @@ char field_value::get_asChar() const {
       return str_value[0];
     }
     case ft_Boolean:{
-      if (bool_value) 
+      if (bool_value) { 
 	return 'T';
-      else
+      } else {
 	return 'F';
-    }
+    
+}}
     case ft_Char: {
       return  char_value;
     }

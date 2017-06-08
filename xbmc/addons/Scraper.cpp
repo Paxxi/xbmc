@@ -351,8 +351,9 @@ std::string CScraper::InternalRun(const std::string& function,
 
 bool CScraper::Load()
 {
-  if (m_fLoaded || m_isPython)
+  if (m_fLoaded || m_isPython) {
     return true;
+}
 
   bool result=m_parser.Load(LibPath());
   if (result)
@@ -415,8 +416,9 @@ bool CScraper::IsInUse() const
 
 bool CScraper::IsNoop()
 {
-  if (!Load())
+  if (!Load()) {
     throw CScraperError();
+}
 
   return !m_isPython && m_parser.IsNoop();
 }
@@ -427,8 +429,9 @@ CScraperUrl CScraper::NfoUrl(const std::string &sNfoContent)
 {
   CScraperUrl scurlRet;
 
-  if (IsNoop())
+  if (IsNoop()) {
     return scurlRet;
+}
 
   // scraper function takes contents of .nfo file, returns XML (see below)
   std::vector<std::string> vcsIn;
@@ -473,12 +476,13 @@ CScraperUrl CScraper::NfoUrl(const std::string &sNfoContent)
       if (pId && pId->FirstChild())
         scurlRet.strId = pId->FirstChild()->Value();
 
-      if (pxeUrl && pxeUrl->Attribute("function"))
+      if (pxeUrl && pxeUrl->Attribute("function")) {
         continue;
+}
 
-      if (pxeUrl)
+      if (pxeUrl) {
         scurlRet.ParseElement(pxeUrl);
-      else if (!strcmp(doc.RootElement()->Value(), "url"))
+      } else if (!strcmp(doc.RootElement()->Value(), "url"))
         scurlRet.ParseElement(doc.RootElement());
       else
         continue;
@@ -549,12 +553,13 @@ CScraperUrl CScraper::ResolveIDToUrl(const std::string& externalID)
       if (pId && pId->FirstChild())
         scurlRet.strId = pId->FirstChild()->Value();
 
-      if (pxeUrl && pxeUrl->Attribute("function"))
+      if (pxeUrl && pxeUrl->Attribute("function")) {
         continue;
+}
 
-      if (pxeUrl)
+      if (pxeUrl) {
         scurlRet.ParseElement(pxeUrl);
-      else if (!strcmp(doc.RootElement()->Value(), "url"))
+      } else if (!strcmp(doc.RootElement()->Value(), "url"))
         scurlRet.ParseElement(doc.RootElement());
       else
         continue;
@@ -1284,8 +1289,9 @@ EPISODELIST CScraper::GetEpisodeList(XFILE::CCurlFile &fcurl, const CScraperUrl 
             scurlEp.strTitle = g_localizeStrings.Get(416);
         XMLUtils::GetString(pxeMovie, "id", scurlEp.strId);
 
-        for ( ; pxeLink && pxeLink->FirstChild(); pxeLink = pxeLink->NextSiblingElement("url"))
+        for ( ; pxeLink && pxeLink->FirstChild(); pxeLink = pxeLink->NextSiblingElement("url")) {
           scurlEp.ParseElement(pxeLink);
+}
 
         // date must be the format of yyyy-mm-dd
         ep.cDate.SetValid(FALSE);
@@ -1425,8 +1431,9 @@ bool CScraper::GetArtistDetails(CCurlFile &fcurl, const CScraperUrl &scurl,
 
 bool CScraper::GetArtwork(XFILE::CCurlFile &fcurl, CVideoInfoTag &details)
 {
-  if (!details.HasUniqueID())
+  if (!details.HasUniqueID()) {
     return false;
+}
 
   CLog::Log(LOGDEBUG, "%s: Reading artwork for '%s' using %s scraper "
     "(file: '%s', content: '%s', version: '%s')", __FUNCTION__, details.GetUniqueID().c_str(),

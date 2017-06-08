@@ -85,15 +85,16 @@ bool CGUIFixedListContainer::OnAction(const CAction &action)
 bool CGUIFixedListContainer::MoveUp(bool wrapAround)
 {
   int item = GetSelectedItem();
-  if (item > 0)
+  if (item > 0) {
     SelectItem(item - 1);
-  else if (wrapAround)
+  } else if (wrapAround)
   {
     SelectItem((int)m_items.size() - 1);
     SetContainerMoving(-1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -107,8 +108,9 @@ bool CGUIFixedListContainer::MoveDown(bool wrapAround)
     SelectItem(0);
     SetContainerMoving(1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -143,10 +145,12 @@ void CGUIFixedListContainer::ValidateOffset()
 {
   if (!m_layout) return;
   // ensure our fixed cursor position is valid
-  if (m_fixedCursor >= m_itemsPerPage)
+  if (m_fixedCursor >= m_itemsPerPage) {
     m_fixedCursor = m_itemsPerPage - 1;
-  if (m_fixedCursor < 0)
+}
+  if (m_fixedCursor < 0) {
     m_fixedCursor = 0;
+}
   // compute our minimum and maximum cursor positions
   int minCursor, maxCursor;
   GetCursorRange(minCursor, maxCursor);
@@ -171,8 +175,9 @@ void CGUIFixedListContainer::ValidateOffset()
 
 int CGUIFixedListContainer::GetCursorFromPoint(const CPoint &point, CPoint *itemPoint) const
 {
-  if (!m_focusedLayout || !m_layout)
+  if (!m_focusedLayout || !m_layout) {
     return -1;
+}
   int minCursor, maxCursor;
   GetCursorRange(minCursor, maxCursor);
   // see if the point is either side of our focus range
@@ -199,8 +204,9 @@ int CGUIFixedListContainer::GetCursorFromPoint(const CPoint &point, CPoint *item
 
 bool CGUIFixedListContainer::SelectItemFromPoint(const CPoint &point)
 {
-  if (!m_focusedLayout || !m_layout)
+  if (!m_focusedLayout || !m_layout) {
     return false;
+}
 
   MarkDirtyRegion();
 
@@ -243,8 +249,9 @@ bool CGUIFixedListContainer::SelectItemFromPoint(const CPoint &point)
   else
   { // select the appropriate item
     int cursor = GetCursorFromPoint(point);
-    if (cursor < 0)
+    if (cursor < 0) {
       return false;
+}
     // calling SelectItem() here will focus the item and scroll, which isn't really what we're after
     SetCursor(cursor);
     return true;
@@ -266,10 +273,11 @@ void CGUIFixedListContainer::SelectItem(int item)
     int cursor;
     if ((int)m_items.size() - 1 - item <= maxCursor - m_fixedCursor)
       cursor = std::max(m_fixedCursor, maxCursor + item - (int)m_items.size() + 1);
-    else if (item <= m_fixedCursor - minCursor)
+    else if (item <= m_fixedCursor - minCursor) {
       cursor = std::min(m_fixedCursor, minCursor + item);
-    else
+    } else {
       cursor = m_fixedCursor;
+}
     if (cursor != GetCursor())
       SetContainerMoving(cursor - GetCursor());
     SetCursor(cursor);

@@ -432,8 +432,9 @@ void CNfsConnection::keepAlive(std::string _exportPath, struct nfsfh  *_pFileHan
   // time suggests it.
   struct nfs_context *pContext = getContextFromMap(_exportPath, true);
   
-  if (!pContext)// this should normally never happen - paranoia
+  if (!pContext) {// this should normally never happen - paranoia
     pContext = m_pNfsContext;
+}
   
   CLog::Log(LOGNOTICE, "NFS: sending keep alive after %i s.",KEEP_ALIVE_TIMEOUT/2);
   CSingleLock lock(*this);
@@ -555,8 +556,9 @@ bool CNFSFile::Open(const CURL& url)
    
   CSingleLock lock(gNfsConnection);
   
-  if(!gNfsConnection.Connect(url, filename))
+  if(!gNfsConnection.Connect(url, filename)) {
     return false;
+}
   
   m_pNfsContext = gNfsConnection.GetNfsContext(); 
   m_exportPath = gNfsConnection.GetContextMapId();
@@ -606,8 +608,9 @@ int CNFSFile::Stat(const CURL& url, struct __stat64* buffer)
   CSingleLock lock(gNfsConnection);
   std::string filename;
   
-  if(!gNfsConnection.Connect(url,filename))
+  if(!gNfsConnection.Connect(url,filename)) {
     return -1;
+}
    
 
   NFSSTAT tmpBuffer = {0};
@@ -781,8 +784,9 @@ bool CNFSFile::Delete(const CURL& url)
   CSingleLock lock(gNfsConnection);
   std::string filename;
   
-  if(!gNfsConnection.Connect(url, filename))
+  if(!gNfsConnection.Connect(url, filename)) {
     return false;
+}
   
   
   ret = gNfsConnection.GetImpl()->nfs_unlink(gNfsConnection.GetNfsContext(), filename.c_str());
@@ -800,8 +804,9 @@ bool CNFSFile::Rename(const CURL& url, const CURL& urlnew)
   CSingleLock lock(gNfsConnection);
   std::string strFile;
   
-  if(!gNfsConnection.Connect(url,strFile))
+  if(!gNfsConnection.Connect(url,strFile)) {
     return false;
+}
   
   std::string strFileNew;
   std::string strDummy;
@@ -827,8 +832,9 @@ bool CNFSFile::OpenForWrite(const CURL& url, bool bOverWrite)
   CSingleLock lock(gNfsConnection);
   std::string filename;
   
-  if(!gNfsConnection.Connect(url,filename))
+  if(!gNfsConnection.Connect(url,filename)) {
     return false;
+}
   
   m_pNfsContext = gNfsConnection.GetNfsContext();
   m_exportPath = gNfsConnection.GetContextMapId();

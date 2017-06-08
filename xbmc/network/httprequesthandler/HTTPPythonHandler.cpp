@@ -91,8 +91,9 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
   // determine the last modified date
   const CURL pathToUrl(m_scriptPath);
   struct __stat64 statBuffer;
-  if (XFILE::CFile::Stat(pathToUrl, &statBuffer) != 0)
+  if (XFILE::CFile::Stat(pathToUrl, &statBuffer) != 0) {
     return;
+}
 
   struct tm* time;
 #ifdef HAVE_LOCALTIME_R
@@ -101,8 +102,9 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
 #else
   time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-  if (time == nullptr)
+  if (time == nullptr) {
     return;
+}
 
   m_lastModified = *time;
 }
@@ -118,8 +120,9 @@ bool CHTTPPythonHandler::CanHandleRequest(const HTTPRequest &request) const
 
   // static webinterfaces aren't allowed to run python scripts
   ADDON::CWebinterface* webinterface = static_cast<ADDON::CWebinterface*>(addon.get());
-  if (webinterface->GetType() != ADDON::WebinterfaceTypeWsgi)
+  if (webinterface->GetType() != ADDON::WebinterfaceTypeWsgi) {
     return false;
+}
 
   return true;
 }
@@ -200,8 +203,9 @@ int CHTTPPythonHandler::HandleRequest()
         m_response.type = HTTPMemoryDownloadNoFreeCopy;
       m_response.headers = pythonFinalizedRequest->responseHeaders;
 
-      if (pythonFinalizedRequest->lastModifiedTime.IsValid())
+      if (pythonFinalizedRequest->lastModifiedTime.IsValid()) {
         m_lastModified = pythonFinalizedRequest->lastModifiedTime;
+}
     }
     else
     {
@@ -233,8 +237,9 @@ int CHTTPPythonHandler::HandleRequest()
 
 bool CHTTPPythonHandler::GetLastModifiedDate(CDateTime &lastModified) const
 {
-  if (!m_lastModified.IsValid())
+  if (!m_lastModified.IsValid()) {
     return false;
+}
 
   lastModified = m_lastModified;
   return true;

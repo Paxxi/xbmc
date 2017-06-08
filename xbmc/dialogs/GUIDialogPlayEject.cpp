@@ -90,14 +90,16 @@ bool CGUIDialogPlayEject::ShowAndGetInput(const CFileItem & item,
   unsigned int uiAutoCloseTime /* = 0 */)
 {
   // Make sure we're actually dealing with a Disc Stub
-  if (!item.IsDiscStub())
+  if (!item.IsDiscStub()) {
     return false;
+}
 
   // Create the dialog
   CGUIDialogPlayEject * pDialog = (CGUIDialogPlayEject *)g_windowManager.
     GetWindow(WINDOW_DIALOG_PLAY_EJECT);
-  if (!pDialog)
+  if (!pDialog) {
     return false;
+}
 
   // Figure out Lines 1 and 2 of the dialog
   std::string strLine1, strLine2;

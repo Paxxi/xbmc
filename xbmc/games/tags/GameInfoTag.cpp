@@ -72,8 +72,9 @@ bool CGameInfoTag::operator==(const CGameInfoTag& tag) const
 {
   if (this != &tag)
   {
-    if (m_bLoaded != tag.m_bLoaded)
+    if (m_bLoaded != tag.m_bLoaded) {
       return false;
+}
 
     if (m_bLoaded)
     {

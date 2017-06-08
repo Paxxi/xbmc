@@ -55,8 +55,9 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
         for (unsigned int index = 0; index < size && !accessible; index++)
         {
           sources = CMediaSourceSettings::GetInstance().GetSources(sourceTypes[index]);
-          if (sources == nullptr)
+          if (sources == nullptr) {
             continue;
+}
 
           for (VECSOURCES::const_iterator source = sources->begin(); source != sources->end() && !accessible; ++source)
           {
@@ -77,11 +78,12 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
         }
       }
 
-      if (accessible)
+      if (accessible) {
         responseStatus = MHD_HTTP_OK;
       // the file exists but not in one of the defined sources so we deny access to it
-      else
+      } else {
         responseStatus = MHD_HTTP_UNAUTHORIZED;
+}
     }
     else
       responseStatus = MHD_HTTP_NOT_FOUND;

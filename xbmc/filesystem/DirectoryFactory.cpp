@@ -108,13 +108,15 @@ using namespace XFILE;
  */
 IDirectory* CDirectoryFactory::Create(const CURL& url)
 {
-  if (!CWakeOnAccess::GetInstance().WakeUpHost(url))
+  if (!CWakeOnAccess::GetInstance().WakeUpHost(url)) {
     return nullptr;
+}
 
   CFileItem item(url.Get(), true);
   IFileDirectory* pDir=CFileDirectoryFactory::Create(url, &item);
-  if (pDir)
+  if (pDir) {
     return pDir;
+}
 
 #ifdef TARGET_POSIX
   if (url.GetProtocol().empty() || url.IsProtocol("file")) return new CPosixDirectory();

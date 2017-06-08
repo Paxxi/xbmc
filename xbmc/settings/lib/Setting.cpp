@@ -73,28 +73,33 @@ bool CSetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
     return false;
 
   const TiXmlElement *element = node->ToElement();
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   // get the attributes label and help
   int tmp = -1;
-  if (element->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &tmp) == TIXML_SUCCESS && tmp > 0)
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &tmp) == TIXML_SUCCESS && tmp > 0) {
     m_label = tmp;
+}
   
   tmp = -1;
-  if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &tmp) == TIXML_SUCCESS && tmp > 0)
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &tmp) == TIXML_SUCCESS && tmp > 0) {
     m_help = tmp;
+}
   const char *parentSetting = element->Attribute(SETTING_XML_ATTR_PARENT);
   if (parentSetting != NULL)
     m_parentSetting = parentSetting;
 
   // get the <level>
   int level = -1;
-  if (XMLUtils::GetInt(node, SETTING_XML_ELM_LEVEL, level))
+  if (XMLUtils::GetInt(node, SETTING_XML_ELM_LEVEL, level)) {
     m_level = (SettingLevel)level;
+}
     
-  if (m_level < (int)SettingLevelBasic || m_level > (int)SettingLevelInternal)
+  if (m_level < (int)SettingLevelBasic || m_level > (int)SettingLevelInternal) {
     m_level = SettingLevelStandard;
+}
 
   const TiXmlNode *dependencies = node->FirstChild(SETTING_XML_ELM_DEPENDENCIES);
   if (dependencies != nullptr)
@@ -220,40 +225,45 @@ bool CSetting::IsVisible() const
 
 bool CSetting::OnSettingChanging(std::shared_ptr<const CSetting> setting)
 {
-  if (m_callback == nullptr)
+  if (m_callback == nullptr) {
     return true;
+}
     
   return m_callback->OnSettingChanging(setting);
 }
   
 void CSetting::OnSettingChanged(std::shared_ptr<const CSetting> setting)
 {
-  if (m_callback == nullptr)
+  if (m_callback == nullptr) {
     return;
+}
 
   m_callback->OnSettingChanged(setting);
 }
 
 void CSetting::OnSettingAction(std::shared_ptr<const CSetting> setting)
 {
-  if (m_callback == nullptr)
+  if (m_callback == nullptr) {
     return;
+}
 
   m_callback->OnSettingAction(setting);
 }
 
 bool CSetting::OnSettingUpdate(std::shared_ptr<CSetting> setting, const char *oldSettingId, const TiXmlNode *oldSettingNode)
 {
-  if (m_callback == nullptr)
+  if (m_callback == nullptr) {
     return false;
+}
 
   return m_callback->OnSettingUpdate(setting, oldSettingId, oldSettingNode);
 }
 
 void CSetting::OnSettingPropertyChanged(std::shared_ptr<const CSetting> setting, const char *propertyName)
 {
-  if (m_callback == nullptr)
+  if (m_callback == nullptr) {
     return;
+}
 
   m_callback->OnSettingPropertyChanged(setting, propertyName);
 }
@@ -365,12 +375,13 @@ bool CSettingList::Deserialize(const TiXmlNode *node, bool update /* = false */)
       m_delimiter = delimiter;
 
     XMLUtils::GetInt(constraints, SETTING_XML_ELM_MINIMUM_ITEMS, m_minimumItems);
-    if (m_minimumItems < 0)
+    if (m_minimumItems < 0) {
       m_minimumItems = 0;
+}
     XMLUtils::GetInt(constraints, SETTING_XML_ELM_MAXIMUM_ITEMS, m_maximumItems);
-    if (m_maximumItems <= 0)
+    if (m_maximumItems <= 0) {
       m_maximumItems = -1;
-    else if (m_maximumItems < m_minimumItems)
+    } else if (m_maximumItems < m_minimumItems)
     {
       CLog::Log(LOGWARNING, "CSettingList: invalid <minimum> (%d) and/or <maximum> (%d) of %s", m_minimumItems, m_maximumItems, m_id.c_str());
       return false;
@@ -405,8 +416,9 @@ int CSettingList::GetElementType() const
 bool CSettingList::FromString(const std::string &value)
 {
   SettingList values;
-  if (!fromString(value, values))
+  if (!fromString(value, values)) {
     return false;
+}
 
   return SetValue(values);
 }
@@ -480,8 +492,9 @@ bool CSettingList::SetValue(const SettingList &values)
       equal = false;
   }
 
-  if (equal)
+  if (equal) {
     return true;
+}
 
   SettingList oldValues = m_values;
   m_values.clear();
@@ -632,9 +645,9 @@ bool CSettingBool::Deserialize(const TiXmlNode *node, bool update /* = false */)
     
   // get the default value
   bool value;
-  if (XMLUtils::GetBoolean(node, SETTING_XML_ELM_DEFAULT, value))
+  if (XMLUtils::GetBoolean(node, SETTING_XML_ELM_DEFAULT, value)) {
     m_value = m_default = value;
-  else if (!update)
+  } else if (!update)
   {
     CLog::Log(LOGERROR, "CSettingBool: error reading the default value of \"%s\"", m_id.c_str());
     return false;
@@ -646,8 +659,9 @@ bool CSettingBool::Deserialize(const TiXmlNode *node, bool update /* = false */)
 bool CSettingBool::FromString(const std::string &value)
 {
   bool bValue;
-  if (!fromString(value, bValue))
+  if (!fromString(value, bValue)) {
     return false;
+}
 
   return SetValue(bValue);
 }
@@ -673,8 +687,9 @@ bool CSettingBool::SetValue(bool value)
 {
   CExclusiveLock lock(m_critical);
 
-  if (value == m_value)
+  if (value == m_value) {
     return true;
+}
 
   bool oldValue = m_value;
   m_value = value;
@@ -790,9 +805,9 @@ bool CSettingInt::Deserialize(const TiXmlNode *node, bool update /* = false */)
 
   // get the default value
   int value;
-  if (XMLUtils::GetInt(node, SETTING_XML_ELM_DEFAULT, value))
+  if (XMLUtils::GetInt(node, SETTING_XML_ELM_DEFAULT, value)) {
     m_value = m_default = value;
-  else if (!update)
+  } else if (!update)
   {
     CLog::Log(LOGERROR, "CSettingInt: error reading the default value of \"%s\"", m_id.c_str());
     return false;
@@ -847,8 +862,9 @@ bool CSettingInt::Deserialize(const TiXmlNode *node, bool update /* = false */)
 bool CSettingInt::FromString(const std::string &value)
 {
   int iValue;
-  if (!fromString(value, iValue))
+  if (!fromString(value, iValue)) {
     return false;
+}
 
   return SetValue(iValue);
 }
@@ -870,8 +886,9 @@ bool CSettingInt::Equals(const std::string &value) const
 bool CSettingInt::CheckValidity(const std::string &value) const
 {
   int iValue;
-  if (!fromString(value, iValue))
+  if (!fromString(value, iValue)) {
     return false;
+}
 
   return CheckValidity(iValue);
 }
@@ -899,11 +916,13 @@ bool CSettingInt::SetValue(int value)
 {
   CExclusiveLock lock(m_critical);
 
-  if (value == m_value)
+  if (value == m_value) {
     return true;
+}
 
-  if (!CheckValidity(value))
+  if (!CheckValidity(value)) {
     return false;
+}
 
   int oldValue = m_value;
   m_value = value;
@@ -958,15 +977,17 @@ IntegerSettingOptions CSettingInt::UpdateDynamicOptions()
   if (m_optionsFiller == nullptr)
   {
     m_optionsFiller = (IntegerSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(shared_from_base<CSettingInt>());
-    if (m_optionsFiller == nullptr)
+    if (m_optionsFiller == nullptr) {
       return options;
+}
   }
 
   int bestMatchingValue = m_value;
   m_optionsFiller(shared_from_base<CSettingInt>(), options, bestMatchingValue, m_optionsFillerData);
 
-  if (bestMatchingValue != m_value)
+  if (bestMatchingValue != m_value) {
     SetValue(bestMatchingValue);
+}
 
   bool changed = m_dynamicOptions.size() != options.size();
   if (!changed)
@@ -1017,8 +1038,9 @@ bool CSettingInt::fromString(const std::string &strValue, int &value)
 
   char *end = nullptr;
   value = (int)strtol(strValue.c_str(), &end, 10);
-  if (end != nullptr && *end != '\0')
+  if (end != nullptr && *end != '\0') {
     return false; 
+}
 
   return true;
 }
@@ -1065,9 +1087,9 @@ bool CSettingNumber::Deserialize(const TiXmlNode *node, bool update /* = false *
     
   // get the default value
   double value;
-  if (XMLUtils::GetDouble(node, SETTING_XML_ELM_DEFAULT, value))
+  if (XMLUtils::GetDouble(node, SETTING_XML_ELM_DEFAULT, value)) {
     m_value = m_default = value;
-  else if (!update)
+  } else if (!update)
   {
     CLog::Log(LOGERROR, "CSettingNumber: error reading the default value of \"%s\"", m_id.c_str());
     return false;
@@ -1090,8 +1112,9 @@ bool CSettingNumber::Deserialize(const TiXmlNode *node, bool update /* = false *
 bool CSettingNumber::FromString(const std::string &value)
 {
   double dValue;
-  if (!fromString(value, dValue))
+  if (!fromString(value, dValue)) {
     return false;
+}
 
   return SetValue(dValue);
 }
@@ -1114,8 +1137,9 @@ bool CSettingNumber::Equals(const std::string &value) const
 bool CSettingNumber::CheckValidity(const std::string &value) const
 {
   double dValue;
-  if (!fromString(value, dValue))
+  if (!fromString(value, dValue)) {
     return false;
+}
 
   return CheckValidity(dValue);
 }
@@ -1124,8 +1148,9 @@ bool CSettingNumber::CheckValidity(double value) const
 {
   CSharedLock lock(m_critical);
   if (m_min != m_max &&
-     (value < m_min || value > m_max))
+     (value < m_min || value > m_max)) {
     return false;
+}
 
   return true;
 }
@@ -1134,11 +1159,13 @@ bool CSettingNumber::SetValue(double value)
 {
   CExclusiveLock lock(m_critical);
 
-  if (value == m_value)
+  if (value == m_value) {
     return true;
+}
 
-  if (!CheckValidity(value))
+  if (!CheckValidity(value)) {
     return false;
+}
 
   double oldValue = m_value;
   m_value = value;
@@ -1188,8 +1215,9 @@ bool CSettingNumber::fromString(const std::string &strValue, double &value)
 
   char *end = nullptr;
   value = strtod(strValue.c_str(), &end);
-  if (end != nullptr && *end != '\0')
+  if (end != nullptr && *end != '\0') {
     return false;
+}
 
   return true;
 }
@@ -1311,8 +1339,9 @@ bool CSettingString::SetValue(const std::string &value)
   if (value == m_value)
     return true;
     
-  if (!CheckValidity(value))
+  if (!CheckValidity(value)) {
     return false;
+}
 
   std::string oldValue = m_value;
   m_value = value;
@@ -1367,8 +1396,9 @@ StringSettingOptions CSettingString::UpdateDynamicOptions()
   if (m_optionsFiller == nullptr)
   {
     m_optionsFiller = (StringSettingOptionsFiller)m_settingsManager->GetSettingOptionsFiller(shared_from_base<CSettingString>());
-    if (m_optionsFiller == nullptr)
+    if (m_optionsFiller == nullptr) {
       return options;
+}
   }
 
   std::string bestMatchingValue = m_value;

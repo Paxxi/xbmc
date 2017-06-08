@@ -73,8 +73,9 @@ bool CGUIWindowGames::OnMessage(CGUIMessage& message)
     }
     case GUI_MSG_CLICKED:
     {
-      if (OnClickMsg(message.GetSenderId(), message.GetParam1()))
+      if (OnClickMsg(message.GetSenderId(), message.GetParam1())) {
         return true;
+}
       break;
     }
     default:
@@ -159,8 +160,9 @@ bool CGUIWindowGames::OnClick(int iItem, const std::string &player /* = "" */)
       CFileItemList items;
       if (m_rootDir.GetDirectory(CURL(item->GetPath()), items))
       {
-        if (items.Size() == 0)
+        if (items.Size() == 0) {
           bIsGame = true;
+}
       }
 
       if (!bIsGame)

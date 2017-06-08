@@ -63,8 +63,9 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
     return false;
 
   CGUIDialogProfileSettings *dialog = g_windowManager.GetWindow<CGUIDialogProfileSettings>(WINDOW_DIALOG_PROFILE_SETTINGS);
-  if (dialog == nullptr)
+  if (dialog == nullptr) {
     return false;
+}
 
   dialog->m_needsSaving = false;
   dialog->m_isDefault = iProfile == 0;
@@ -113,11 +114,13 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
     dialog->m_thumb = profile->getThumb();
     dialog->m_directory = profile->getDirectory();
     dialog->m_dbMode = profile->canWriteDatabases() ? 0 : 1;
-    if (profile->hasDatabases())
+    if (profile->hasDatabases()) {
       dialog->m_dbMode += 2;
+}
     dialog->m_sourcesMode = profile->canWriteSources() ? 0 : 1;
-    if (profile->hasSources())
+    if (profile->hasSources()) {
       dialog->m_sourcesMode += 2;
+}
 
     dialog->m_locks = profile->GetLocks();
   }
@@ -143,8 +146,9 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
       CProfilesManager::GetInstance().AddProfile(profile);
       bool exists = XFILE::CFile::Exists(URIUtils::AddFileToFolder("special://masterprofile/", dialog->m_directory, "guisettings.xml"));
 
-      if (exists && !CGUIDialogYesNo::ShowAndGetInput(CVariant{20058}, CVariant{20104}))
+      if (exists && !CGUIDialogYesNo::ShowAndGetInput(CVariant{20058}, CVariant{20104})) {
         exists = false;
+}
 
       if (!exists)
       {
@@ -159,12 +163,13 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
       }
 
       exists = XFILE::CFile::Exists(URIUtils::AddFileToFolder("special://masterprofile/", dialog->m_directory, "sources.xml"));
-      if (exists && !CGUIDialogYesNo::ShowAndGetInput(CVariant{20058}, CVariant{20106}))
+      if (exists && !CGUIDialogYesNo::ShowAndGetInput(CVariant{20058}, CVariant{20106})) {
         exists = false;
+}
 
       if (!exists)
       {
-        if ((dialog->m_sourcesMode & 2) == 2)
+        if ((dialog->m_sourcesMode & 2) == 2) {
           // prompt user to copy masterprofile's sources.xml file
           // If 'start fresh' (no) is selected, do nothing.
           if (CGUIDialogYesNo::ShowAndGetInput(CVariant{20058}, CVariant{20071}, CVariant{""}, CVariant{""}, CVariant{20044}, CVariant{20064}))
@@ -172,6 +177,7 @@ bool CGUIDialogProfileSettings::ShowForProfile(unsigned int iProfile, bool first
             XFILE::CFile::Copy(URIUtils::AddFileToFolder("special://masterprofile/", "sources.xml"),
                                 URIUtils::AddFileToFolder("special://masterprofile/", dialog->m_directory, "sources.xml"));
           }
+}
       }
     }
 
@@ -273,10 +279,12 @@ void CGUIDialogProfileSettings::OnSettingAction(std::shared_ptr<const CSetting> 
     {
       if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE && !m_isDefault)
       {
-        if (CGUIDialogYesNo::ShowAndGetInput(CVariant{20066}, CVariant{20118}))
+        if (CGUIDialogYesNo::ShowAndGetInput(CVariant{20066}, CVariant{20118})) {
           g_passwordManager.SetMasterLockMode(false);
-        if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE)
+}
+        if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE) {
           return;
+}
       }
       if (CGUIDialogLockSettings::ShowAndGetLock(m_locks, m_isDefault ? 12360 : 20068,
               CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE || m_isDefault))

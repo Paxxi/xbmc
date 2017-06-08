@@ -69,22 +69,23 @@ bool CGUIDialogSmartPlaylistRule::OnMessage(CGUIMessage& message)
   case GUI_MSG_CLICKED:
     {
       int iControl = message.GetSenderId();
-      if (iControl == CONTROL_OK)
+      if (iControl == CONTROL_OK) {
         OnOK();
-      else if (iControl == CONTROL_CANCEL)
+      } else if (iControl == CONTROL_CANCEL) {
         OnCancel();
-      else if (iControl == CONTROL_VALUE)
+      } else if (iControl == CONTROL_VALUE)
       {
         std::string parameter;
         OnEditChanged(iControl, parameter);
         m_rule.SetParameter(parameter);
       }
-      else if (iControl == CONTROL_OPERATOR)
+      else if (iControl == CONTROL_OPERATOR) {
         OnOperator();
-      else if (iControl == CONTROL_FIELD)
+      } else if (iControl == CONTROL_FIELD) {
         OnField();
-      else if (iControl == CONTROL_BROWSE)
+      } else if (iControl == CONTROL_BROWSE) {
         OnBrowse();
+}
       return true;
     }
     break;
@@ -449,8 +450,9 @@ void CGUIDialogSmartPlaylistRule::OnField()
     if (*field == m_rule.m_field)
       selected = std::distance(fields.begin(), field);
   }
-  if (selected > -1)
+  if (selected > -1) {
     dialog->SetSelected(selected);
+}
   dialog->Open();
   int newSelected = dialog->GetSelectedItem();
   // check if selection has changed

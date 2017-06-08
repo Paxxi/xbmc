@@ -82,8 +82,9 @@ CViewStateSettings& CViewStateSettings::GetInstance()
 
 bool CViewStateSettings::Load(const TiXmlNode *settings)
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
   const TiXmlNode *pElement = settings->FirstChildElement(XML_VIEWSTATESETTINGS);
@@ -96,8 +97,9 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
   for (std::map<std::string, CViewState*>::iterator viewState = m_viewStates.begin(); viewState != m_viewStates.end(); ++viewState)
   {
     const TiXmlNode* pViewState = pElement->FirstChildElement(viewState->first);
-    if (pViewState == nullptr)
+    if (pViewState == nullptr) {
       continue;
+}
 
     XMLUtils::GetInt(pViewState, XML_VIEWMODE, viewState->second->m_viewMode, DEFAULT_VIEW_LIST, DEFAULT_VIEW_MAX);
 
@@ -135,13 +137,15 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
     if (pEventLogNode != nullptr)
     {
       int eventLevel;
-      if (XMLUtils::GetInt(pEventLogNode, XML_EVENTLOG_LEVEL, eventLevel, (const int)EventLevel::Basic, (const int)EventLevel::Error))
+      if (XMLUtils::GetInt(pEventLogNode, XML_EVENTLOG_LEVEL, eventLevel, (const int)EventLevel::Basic, (const int)EventLevel::Error)) {
         m_eventLevel = (EventLevel)eventLevel;
-      else
+      } else {
         m_eventLevel = EventLevel::Basic;
+}
 
-      if (!XMLUtils::GetBoolean(pEventLogNode, XML_EVENTLOG_LEVEL_HIGHER, m_eventShowHigherLevels))
+      if (!XMLUtils::GetBoolean(pEventLogNode, XML_EVENTLOG_LEVEL_HIGHER, m_eventShowHigherLevels)) {
         m_eventShowHigherLevels = true;
+}
     }
   }
 
@@ -150,8 +154,9 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
 
 bool CViewStateSettings::Save(TiXmlNode *settings) const
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
   // add the <viewstates> tag
@@ -167,8 +172,9 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement newElement(viewState->first);
     TiXmlNode *pNewNode = pViewStateNode->InsertEndChild(newElement);
-    if (pNewNode == nullptr)
+    if (pNewNode == nullptr) {
       continue;
+}
 
     XMLUtils::SetInt(pNewNode, XML_VIEWMODE, viewState->second->m_viewMode);
     XMLUtils::SetInt(pNewNode, XML_SORTMETHOD, (int)viewState->second->m_sortDescription.sortBy);
@@ -181,8 +187,9 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement generalElement(XML_GENERAL);
     generalNode = settings->InsertEndChild(generalElement);
-    if (generalNode == nullptr)
+    if (generalNode == nullptr) {
       return false;
+}
   }
 
   XMLUtils::SetInt(generalNode, XML_SETTINGLEVEL, (int)m_settingLevel);
@@ -192,8 +199,9 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement eventLogElement(XML_EVENTLOG);
     eventLogNode = generalNode->InsertEndChild(eventLogElement);
-    if (eventLogNode == nullptr)
+    if (eventLogNode == nullptr) {
       return false;
+}
   }
 
   XMLUtils::SetInt(eventLogNode, XML_EVENTLOG_LEVEL, (int)m_eventLevel);
@@ -229,12 +237,14 @@ CViewState* CViewStateSettings::Get(const std::string &viewState)
 
 void CViewStateSettings::SetSettingLevel(SettingLevel settingLevel)
 {
-  if (settingLevel < SettingLevelBasic)
+  if (settingLevel < SettingLevelBasic) {
     m_settingLevel = SettingLevelBasic;
-  if (settingLevel > SettingLevelExpert)
+}
+  if (settingLevel > SettingLevelExpert) {
     m_settingLevel = SettingLevelExpert;
-  else
+  } else {
     m_settingLevel = settingLevel;
+}
 }
 
 void CViewStateSettings::CycleSettingLevel()
@@ -245,19 +255,22 @@ void CViewStateSettings::CycleSettingLevel()
 SettingLevel CViewStateSettings::GetNextSettingLevel() const
 {
   SettingLevel level = (SettingLevel)((int)m_settingLevel + 1);
-  if (level > SettingLevelExpert)
+  if (level > SettingLevelExpert) {
     level = SettingLevelBasic;
+}
   return level;
 }
 
 void CViewStateSettings::SetEventLevel(EventLevel eventLevel)
 {
-  if (eventLevel < EventLevel::Basic)
+  if (eventLevel < EventLevel::Basic) {
     m_eventLevel = EventLevel::Basic;
-  if (eventLevel > EventLevel::Error)
+}
+  if (eventLevel > EventLevel::Error) {
     m_eventLevel = EventLevel::Error;
-  else
+  } else {
     m_eventLevel = eventLevel;
+}
 }
 
 void CViewStateSettings::CycleEventLevel()
@@ -268,8 +281,9 @@ void CViewStateSettings::CycleEventLevel()
 EventLevel CViewStateSettings::GetNextEventLevel() const
 {
   EventLevel level = (EventLevel)((int)m_eventLevel + 1);
-  if (level > EventLevel::Error)
+  if (level > EventLevel::Error) {
     level = EventLevel::Basic;
+}
   return level;
 }
 
@@ -279,8 +293,9 @@ void CViewStateSettings::AddViewState(const std::string& strTagName, int default
     return;
 
   auto viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
-  if (viewState == nullptr)
+  if (viewState == nullptr) {
     return;
+}
 
   m_viewStates.insert(make_pair(strTagName, viewState));
 }

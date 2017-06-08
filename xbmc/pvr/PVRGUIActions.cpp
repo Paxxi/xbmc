@@ -94,8 +94,9 @@ namespace PVR
   {
     m_bSuccess = DoRun(m_item);
 
-    if (m_bSuccess)
+    if (m_bSuccess) {
       CServiceBroker::GetPVRManager().TriggerRecordingsUpdate();
+}
   }
 
   class AsyncRenameRecording : public AsyncRecordingAction
@@ -220,8 +221,9 @@ namespace PVR
       return false;
     }
 
-    if (windowToClose)
+    if (windowToClose) {
       windowToClose->Close();
+}
 
     windowSearch->SetItemToSearch(item);
     g_windowManager.ActivateWindow(windowSearchId);
@@ -448,8 +450,9 @@ namespace PVR
     if (!channel)
       return bReturn;
 
-    if (!CheckParentalLock(channel))
+    if (!CheckParentalLock(channel)) {
       return bReturn;
+}
 
     if (CServiceBroker::GetPVRManager().Clients()->HasTimerSupport(channel->ClientID()))
     {
@@ -666,10 +669,11 @@ namespace PVR
     }
 
     CGUIWindowPVRBase *pvrWindow = dynamic_cast<CGUIWindowPVRBase*>(g_windowManager.GetWindow(g_windowManager.GetActiveWindow()));
-    if (pvrWindow)
+    if (pvrWindow) {
       pvrWindow->DoRefresh();
-    else
+    } else {
       CLog::Log(LOGERROR, "CPVRGUIActions - %s - called on non-pvr window. no refresh possible.", __FUNCTION__);
+}
 
     return true;
   }
@@ -756,8 +760,9 @@ namespace PVR
 
   bool CPVRGUIActions::StopRecording(const CFileItemPtr &item) const
   {
-    if (!DeleteTimer(item, true, false))
+    if (!DeleteTimer(item, true, false)) {
       return false;
+}
 
     CServiceBroker::GetPVRManager().TriggerRecordingsUpdate();
     return true;
@@ -795,8 +800,9 @@ namespace PVR
     if ((!item->IsPVRRecording() && !item->m_bIsFolder) || item->IsParentFolder())
       return false;
 
-    if (!ConfirmDeleteRecording(item))
+    if (!ConfirmDeleteRecording(item)) {
       return false;
+}
 
     if (!AsyncDeleteRecording().Execute(item))
     {
@@ -821,8 +827,9 @@ namespace PVR
 
   bool CPVRGUIActions::DeleteAllRecordingsFromTrash() const
   {
-    if (!ConfirmDeleteAllRecordingsFromTrash())
+    if (!ConfirmDeleteAllRecordingsFromTrash()) {
       return false;
+}
 
     if (!AsyncEmptyRecordingsTrash().Execute(CFileItemPtr()))
       return false;
@@ -875,10 +882,11 @@ namespace PVR
       choices.Add(CONTEXT_BUTTON_RESUME_ITEM, resumeString);
       choices.Add(CONTEXT_BUTTON_PLAY_ITEM, 12021); // Play from beginning
       int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-      if (choice > 0)
+      if (choice > 0) {
         item->m_lStartOffset = choice == CONTEXT_BUTTON_RESUME_ITEM ? STARTOFFSET_RESUME : 0;
-      else
+      } else {
         bPlayIt = false; // context menu cancelled
+}
     }
     return bPlayIt;
   }
@@ -892,10 +900,11 @@ namespace PVR
     }
     else
     {
-      if (bFallbackToPlay)
+      if (bFallbackToPlay) {
         item->m_lStartOffset = 0;
-      else
+      } else {
         return false;
+}
     }
 
     return PlayRecording(item, false);
@@ -922,8 +931,9 @@ namespace PVR
     {
       bSwitchSuccessful = g_application.m_pPlayer->SwitchChannel(channel);
 
-      if (bSwitchSuccessful)
+      if (bSwitchSuccessful) {
         CheckAndSwitchToFullscreen(bFullscreen);
+}
     }
 
     return bSwitchSuccessful;
@@ -1048,8 +1058,9 @@ namespace PVR
                                                        CVariant{19000}, // "Switch to channel"
                                                        CVariant{19687}, // "Play recording"
                                                        0); // no autoclose
-        if (bCancel)
+        if (bCancel) {
           return false;
+}
 
         if (bPlayRecording)
         {
@@ -1092,23 +1103,26 @@ namespace PVR
     switch (type)
     {
       case PlaybackTypeRadio:
-        if (CServiceBroker::GetPVRManager().IsPlayingRadio())
+        if (CServiceBroker::GetPVRManager().IsPlayingRadio()) {
           return true;
+}
 
         channel = CServiceBroker::GetPVRManager().ChannelGroups()->GetGroupAllRadio()->GetLastPlayedChannel();
         bIsRadio = true;
         break;
 
       case PlaybackTypeTV:
-        if (CServiceBroker::GetPVRManager().IsPlayingTV())
+        if (CServiceBroker::GetPVRManager().IsPlayingTV()) {
           return true;
+}
 
         channel = CServiceBroker::GetPVRManager().ChannelGroups()->GetGroupAllTV()->GetLastPlayedChannel();
         break;
 
       default:
-        if (CServiceBroker::GetPVRManager().IsPlaying())
+        if (CServiceBroker::GetPVRManager().IsPlaying()) {
           return true;
+}
 
         channel = CServiceBroker::GetPVRManager().ChannelGroups()->GetLastPlayedChannel();
         break;
@@ -1155,8 +1169,9 @@ namespace PVR
     }
 
     int iPlayMode = m_settings.GetIntValue(CSettings::SETTING_PVRPLAYBACK_STARTLAST);
-    if (iPlayMode == CONTINUE_LAST_CHANNEL_OFF)
+    if (iPlayMode == CONTINUE_LAST_CHANNEL_OFF) {
       return false;
+}
 
     // Only switch to the channel if it was playing on last app quit.
     if (bWasPlaying)
@@ -1211,18 +1226,20 @@ namespace PVR
       return false;
 
     CGUIWindowPVRBase *pvrWindow = dynamic_cast<CGUIWindowPVRBase*>(g_windowManager.GetWindow(g_windowManager.GetActiveWindow()));
-    if (pvrWindow)
+    if (pvrWindow) {
       pvrWindow->DoRefresh();
-    else
+    } else {
       CLog::Log(LOGERROR, "CPVRGUIActions - %s - called on non-pvr window. no refresh possible.", __FUNCTION__);
+}
 
     return true;
   }
 
   bool CPVRGUIActions::StartChannelScan()
   {
-    if (!CServiceBroker::GetPVRManager().IsStarted() || IsRunningChannelScan())
+    if (!CServiceBroker::GetPVRManager().IsStarted() || IsRunningChannelScan()) {
       return false;
+}
 
     PVR_CLIENT scanClient;
     std::vector<PVR_CLIENT> possibleScanClients = CServiceBroker::GetPVRManager().Clients()->GetClientsSupportingChannelScan();
@@ -1283,8 +1300,9 @@ namespace PVR
 
   bool CPVRGUIActions::ProcessMenuHooks(const CFileItemPtr &item)
   {
-    if (!CServiceBroker::GetPVRManager().IsStarted())
+    if (!CServiceBroker::GetPVRManager().IsStarted()) {
       return false;
+}
 
     int iClientID = -1;
     PVR_MENUHOOK_CAT menuCategory = PVR_MENUHOOK_SETTING;
@@ -1398,10 +1416,11 @@ namespace PVR
         selection = pDialog->GetSelectedItem();
       }
 
-      if (selection >= 0)
+      if (selection >= 0) {
         client->CallMenuHook(hooks->at(hookIDs.at(selection)), item.get());
-      else
+      } else {
         return false;
+}
     }
 
     return true;
@@ -1553,8 +1572,9 @@ namespace PVR
   {
     // window/dialog specific input handler
     CPVRChannelNumberInputHandler *windowInputHandler = dynamic_cast<CPVRChannelNumberInputHandler*>(g_windowManager.GetWindow(g_windowManager.GetFocusedWindow()));
-    if (windowInputHandler)
+    if (windowInputHandler) {
       return *windowInputHandler;
+}
 
     // default
     return m_channelNumberInputHandler;
@@ -1571,10 +1591,11 @@ namespace PVR
       bSwitchToPreviousChannel = (iChannelNumber == 0 && GetCurrentDigitCount() == 1);
     }
 
-    if (iChannelNumber > 0)
+    if (iChannelNumber > 0) {
       SwitchToChannel(iChannelNumber);
-    else if (bSwitchToPreviousChannel)
+    } else if (bSwitchToPreviousChannel) {
       SwitchToPreviousChannel();
+}
   }
 
   void CPVRChannelSwitchingInputHandler::SwitchToChannel(int iChannelNumber)

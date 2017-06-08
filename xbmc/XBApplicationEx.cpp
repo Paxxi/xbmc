@@ -143,8 +143,9 @@ INT CXBApplicationEx::Run(CFileItemList &playlist)
       else if (!m_renderGUI)
       {
         frameTime = XbmcThreads::SystemClockMillis() - lastFrameTime;
-        if(frameTime < noRenderFrameTime)
+        if(frameTime < noRenderFrameTime) {
           Sleep(noRenderFrameTime - frameTime);
+}
       }
 #ifdef XBMC_TRACK_EXCEPTIONS
     }

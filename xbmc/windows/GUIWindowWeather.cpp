@@ -171,8 +171,9 @@ void CGUIWindowWeather::UpdateLocations()
       labels.push_back(make_pair(strLabel, i));
     }
     // in case it's a button, set the label
-    if (i == iCurWeather)
+    if (i == iCurWeather) {
       SET_CONTROL_LABEL(CONTROL_SELECTLOCATION,strLabel);
+}
   }
 
   SET_CONTROL_LABELS(CONTROL_SELECTLOCATION, iCurWeather, &labels);
@@ -228,8 +229,9 @@ void CGUIWindowWeather::FrameMove()
  */
 void CGUIWindowWeather::SetLocation(int loc)
 {
-  if (loc < 1 || loc > (int)m_maxLocation)
+  if (loc < 1 || loc > (int)m_maxLocation) {
     return;
+}
   // Avoid a settings write if old location == new location
   if (g_weatherManager.GetArea() != loc)
   {

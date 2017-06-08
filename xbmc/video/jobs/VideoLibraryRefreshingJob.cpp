@@ -51,12 +51,14 @@ CVideoLibraryRefreshingJob::~CVideoLibraryRefreshingJob()
 
 bool CVideoLibraryRefreshingJob::operator==(const CJob* job) const
 {
-  if (strcmp(job->GetType(), GetType()) != 0)
+  if (strcmp(job->GetType(), GetType()) != 0) {
     return false;
+}
 
   const CVideoLibraryRefreshingJob* refreshingJob = dynamic_cast<const CVideoLibraryRefreshingJob*>(job);
-  if (refreshingJob == nullptr)
+  if (refreshingJob == nullptr) {
     return false;
+}
 
   return m_item->GetPath() == refreshingJob->m_item->GetPath();
 }
@@ -95,10 +97,11 @@ bool CVideoLibraryRefreshingJob::Work(CVideoDatabase &db)
       // check if there's an NFO for the item
       CNfoFile::NFOResult nfoResult = scanner.CheckForNFOFile(m_item.get(), scanSettings.parent_name_root, scraper, scraperUrl);
       // if there's no NFO remember it in case we have to refresh again
-      if (nfoResult == CNfoFile::ERROR_NFO)
+      if (nfoResult == CNfoFile::ERROR_NFO) {
         ignoreNfo = true;
-      else if (nfoResult != CNfoFile::NO_NFO)
+      } else if (nfoResult != CNfoFile::NO_NFO) {
         hasDetails = true;
+}
 
 
       // if we are performing a forced refresh ask the user to choose between using a valid NFO and a valid scraper
@@ -167,10 +170,10 @@ bool CVideoLibraryRefreshingJob::Work(CVideoDatabase &db)
 
             // check if the user has chosen one of the results
             int selectedItem = selectDialog->GetSelectedItem();
-            if (selectedItem >= 0)
+            if (selectedItem >= 0) {
               scraperUrl = itemResultList.at(selectedItem);
             // the user hasn't chosen one of the results and but has chosen to manually enter a title to use
-            else if (selectDialog->IsButtonPressed())
+            } else if (selectDialog->IsButtonPressed())
             {
               // ask the user to input a title to use
               if (!CGUIKeyboardFactory::ShowAndGetInput(itemTitle, g_localizeStrings.Get(scraper->Content() == CONTENT_TVSHOWS ? 20357 : 16009), false))
@@ -181,8 +184,9 @@ bool CVideoLibraryRefreshingJob::Work(CVideoDatabase &db)
               continue;
             }
             // nothing else we can do
-            else
+            else {
               return false;
+}
           }
 
           CLog::Log(LOGDEBUG, "CVideoLibraryRefreshingJob: user selected item '%s' with URL '%s'", scraperUrl.strTitle.c_str(), scraperUrl.m_url.at(0).m_url.c_str());
@@ -284,10 +288,11 @@ bool CVideoLibraryRefreshingJob::Work(CVideoDatabase &db)
       {
         if (!m_item->m_bIsFolder)
           db.DeleteEpisode(dbId);
-        else if (m_refreshAll)
+        else if (m_refreshAll) {
           db.DeleteTvShow(dbId);
-        else
+        } else {
           db.DeleteDetailsForTvShow(dbId);
+}
       }
     }
 

@@ -240,10 +240,11 @@ void CDateTimeSpan::SetFromPeriod(const std::string &period)
   if (pos != std::string::npos)
   {
     std::string units = period.substr(pos, 3);
-    if (StringUtils::EqualsNoCase(units, "wee"))
+    if (StringUtils::EqualsNoCase(units, "wee")) {
       days *= 7;
-    else if (StringUtils::EqualsNoCase(units, "mon"))
+    } else if (StringUtils::EqualsNoCase(units, "mon")) {
       days *= 31;
+}
   }
 
   SetDateTimeSpan(days, 0, 0, 0);
@@ -699,8 +700,9 @@ bool CDateTime::SetFromDateString(const std::string &date)
     return false;
   }
 
-  if (SetFromDBDate(date))
+  if (SetFromDBDate(date)) {
     return true;
+}
 
   const char* months[] = {"january","february","march","april","may","june","july","august","september","october","november","december",nullptr};
   int j=0;
@@ -723,8 +725,9 @@ bool CDateTime::SetFromDateString(const std::string &date)
   std::string strYear = date.substr(date.find(' ', iPos2) + 1);
   while (months[j] && stricmp(strMonth.c_str(),months[j]) != 0)
     j++;
-  if (!months[j])
+  if (!months[j]) {
     return false;
+}
 
   return SetDateTime(atol(strYear.c_str()),j+1,atol(strDay.c_str()),0,0,0);
 }
@@ -955,8 +958,9 @@ bool CDateTime::SetFromW3CDate(const std::string &dateTime)
   }
 
   CDateTime tmpDateTime(year, month, day, 0, 0, 0);
-  if (tmpDateTime.IsValid())
+  if (tmpDateTime.IsValid()) {
     *this = tmpDateTime;
+}
 
   return IsValid();
 }
@@ -1002,24 +1006,26 @@ bool CDateTime::SetFromW3CDateTime(const std::string &dateTime, bool ignoreTimez
     sec  = atoi(time.substr(6, 2).c_str());
 
   CDateTime tmpDateTime(year, month, day, hour, min, sec);
-  if (!tmpDateTime.IsValid())
+  if (!tmpDateTime.IsValid()) {
     return false;
+}
 
   if (!ignoreTimezone && !zone.empty())
   {
     // check if the timezone is UTC
-    if (StringUtils::StartsWith(zone, "Z"))
+    if (StringUtils::StartsWith(zone, "Z")) {
       return SetFromUTCDateTime(tmpDateTime);
-    else
+    } else
     {
       // retrieve the timezone offset (ignoring the + or -)
       CDateTimeSpan zoneSpan; zoneSpan.SetFromTimeString(zone.substr(1));
       if (zoneSpan.GetSecondsTotal() != 0)
       {
-        if (StringUtils::StartsWith(zone, "+"))
+        if (StringUtils::StartsWith(zone, "+")) {
           tmpDateTime += zoneSpan;
-        else if (StringUtils::StartsWith(zone, "-"))
+        } else if (StringUtils::StartsWith(zone, "-")) {
           tmpDateTime -= zoneSpan;
+}
       }
     }
   }
@@ -1103,8 +1109,9 @@ bool CDateTime::SetFromRFC1123DateTime(const std::string &dateTime)
     }
   }
 
-  if (month < 1)
+  if (month < 1) {
     return false;
+}
 
   int year = strtol(date.substr(12, 4).c_str(), NULL, 10);
   int hour = strtol(date.substr(17, 2).c_str(), NULL, 10);
@@ -1238,10 +1245,11 @@ std::string CDateTime::GetAsLocalizedTime(const std::string &format, bool withSe
       int hour=dateTime.wHour;
       if (c=='h')
       { // recalc to 12 hour clock
-        if (hour > 11)
+        if (hour > 11) {
           hour -= (12 * (hour > 12));
-        else
+        } else {
           hour += (12 * (hour < 1));
+}
       }
 
       // Format hour string with the length of the mask
@@ -1309,8 +1317,9 @@ std::string CDateTime::GetAsLocalizedTime(const std::string &format, bool withSe
 
         strOut+=str;
       }
-      else
-        strOut.erase(strOut.size()-1,1);
+      else {
+        strOut
+}.erase(strOut.size()-1,1);
     }
     else if (c=='x') // add meridiem symbol
     {
@@ -1328,8 +1337,9 @@ std::string CDateTime::GetAsLocalizedTime(const std::string &format, bool withSe
 
       strOut+=strMeridiem;
     }
-    else // everything else pass to output
+    else { // everything else pass to output
       strOut+=c;
+}
   }
 
   return strOut;
@@ -1464,8 +1474,9 @@ std::string CDateTime::GetAsLocalizedDate(const std::string &strFormat) const
 
       strOut+=str;
     }
-    else // everything else pass to output
+    else { // everything else pass to output
       strOut+=c;
+}
   }
 
   return strOut;
@@ -1488,18 +1499,20 @@ std::string CDateTime::GetAsRFC1123DateTime() const
   CDateTime time(GetAsUTCDateTime());
 
   int weekDay = time.GetDayOfWeek();
-  if (weekDay < 0)
+  if (weekDay < 0) {
     weekDay = 0;
-  else if (weekDay > 6)
+  } else if (weekDay > 6) {
     weekDay = 6;
+}
   if (weekDay != time.GetDayOfWeek())
     CLog::Log(LOGWARNING, "Invalid day of week %d in %s", time.GetDayOfWeek(), time.GetAsDBDateTime().c_str());
 
   int month = time.GetMonth();
-  if (month < 1)
+  if (month < 1) {
     month = 1;
-  else if (month > 12)
+  } else if (month > 12) {
     month = 12;
+}
   if (month != time.GetMonth())
     CLog::Log(LOGWARNING, "Invalid month %d in %s", time.GetMonth(), time.GetAsDBDateTime().c_str());
 
@@ -1517,8 +1530,9 @@ std::string CDateTime::GetAsW3CDate() const
 std::string CDateTime::GetAsW3CDateTime(bool asUtc /* = false */) const
 {
   CDateTime w3cDate = *this;
-  if (asUtc)
+  if (asUtc) {
     w3cDate = GetAsUTCDateTime();
+}
   SYSTEMTIME st;
   w3cDate.GetAsSystemTime(st);
 

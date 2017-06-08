@@ -103,10 +103,11 @@ static MHD_Response* create_response(size_t size, void* data, int free, int copy
 {
 #if (MHD_VERSION >= 0x00094001)
   MHD_ResponseMemoryMode mode = MHD_RESPMEM_PERSISTENT;
-  if (copy)
+  if (copy) {
     mode = MHD_RESPMEM_MUST_COPY;
-  else if (free)
+  } else if (free) {
     mode = MHD_RESPMEM_MUST_FREE;
+}
   return MHD_create_response_from_buffer(size, data, mode);
 #else
   return MHD_create_response_from_data(size, data, free, copy);
@@ -142,15 +143,17 @@ bool CWebServer::IsAuthenticated(HTTPRequest request) const
 {
   CSingleLock lock(m_critSection);
 
-  if (!m_authenticationRequired)
+  if (!m_authenticationRequired) {
     return true;
+}
 
   // try to retrieve username and password for basic authentication
   char* password = nullptr;
   char* username = MHD_basic_auth_get_username_password(request.connection, &password);
 
-  if (username == nullptr || password == nullptr)
+  if (username == nullptr || password == nullptr) {
     return false;
+}
 
   // compare the received username and password
   bool authenticated = m_authenticationUsername.compare(username) == 0 &&
@@ -415,8 +418,9 @@ int CWebServer::FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& hand
       // don't cache HTML, CSS and JavaScript files
       if (!StringUtils::EqualsNoCase(responseDetails.contentType, "text/html") &&
           !StringUtils::EqualsNoCase(responseDetails.contentType, "text/css") &&
-          !StringUtils::EqualsNoCase(responseDetails.contentType, "application/javascript"))
+          !StringUtils::EqualsNoCase(responseDetails.contentType, "application/javascript")) {
         maxAge = CDateTimeSpan(365, 0, 0, 0).GetSecondsTotal();
+}
     }
 
     // if the response can't be cached or the maximum age is 0 force the client not to cache
@@ -515,8 +519,9 @@ bool CWebServer::IsRequestRanged(HTTPRequest request, const CDateTime &lastModif
 
       // check if the last modification is newer than the If-Range date
       // if so we have to server the whole file instead
-      if (lastModified.GetAsUTCDateTime() > ifRangeDate)
+      if (lastModified.GetAsUTCDateTime() > ifRangeDate) {
         ranges.Clear();
+}
     }
   }
 
@@ -597,8 +602,9 @@ bool CWebServer::ProcessPostData(HTTPRequest request, ConnectionHandler *connect
 
 void CWebServer::FinalizePostDataProcessing(ConnectionHandler *connectionHandler) const
 {
-  if (connectionHandler->postprocessor == nullptr)
+  if (connectionHandler->postprocessor == nullptr) {
     return;
+}
 
   MHD_destroy_post_processor(connectionHandler->postprocessor);
 }
@@ -944,8 +950,9 @@ int CWebServer::SendErrorResponse(HTTPRequest request, int errorType, HTTPMethod
 {
   struct MHD_Response *response = nullptr;
   int ret = CreateErrorResponse(request.connection, errorType, method, response);
-  if (ret == MHD_NO)
+  if (ret == MHD_NO) {
     return MHD_NO;
+}
 
   return SendResponse(request, errorType, response);
 }
@@ -955,10 +962,11 @@ void* CWebServer::UriRequestLogger(void *cls, const char *uri)
   CWebServer *webServer = reinterpret_cast<CWebServer*>(cls);
 
   // log the full URI
-  if (webServer == nullptr)
+  if (webServer == nullptr) {
     CLog::Log(LOGDEBUG, "CWebServer[unknown]: request received for %s", uri);
-  else
+  } else {
     webServer->LogRequest(uri);
+}
 
   // create and return a new connection handler
   return new ConnectionHandler(uri);
@@ -966,8 +974,9 @@ void* CWebServer::UriRequestLogger(void *cls, const char *uri)
 
 void CWebServer::LogRequest(const char* uri) const
 {
-  if (uri == nullptr)
+  if (uri == nullptr) {
     return;
+}
 
   CLog::Log(LOGDEBUG, "CWebServer[%hu]: request received for %s", m_port, uri);
 }
@@ -1095,9 +1104,9 @@ static void panicHandlerForMHD(void* unused, const char* file, unsigned int line
 // local helper
 static void logFromMHD(void* unused, const char* fmt, va_list ap)
 {
-  if (fmt == nullptr || fmt[0] == 0)
+  if (fmt == nullptr || fmt[0] == 0) {
     CLog::Log(LOGERROR, "CWebServer: MHD reported error with empty string");
-  else
+  } else
   {
     std::string errDsc = StringUtils::FormatV(fmt, ap);
     if (errDsc.empty())
@@ -1178,8 +1187,9 @@ bool CWebServer::Start(uint16_t port, const std::string &username, const std::st
       m_port = port;
       CLog::Log(LOGNOTICE, "CWebServer[%hu]: Started", m_port);
     }
-    else
+    else {
       CLog::Log(LOGERROR, "CWebServer[%hu]: Failed to start", port);
+}
   }
 
   return m_running;
@@ -1187,14 +1197,17 @@ bool CWebServer::Start(uint16_t port, const std::string &username, const std::st
 
 bool CWebServer::Stop()
 {
-  if (!m_running)
+  if (!m_running) {
     return true;
+}
 
-  if (m_daemon_ip6 != nullptr)
+  if (m_daemon_ip6 != nullptr) {
     MHD_stop_daemon(m_daemon_ip6);
+}
 
-  if (m_daemon_ip4 != nullptr)
+  if (m_daemon_ip4 != nullptr) {
     MHD_stop_daemon(m_daemon_ip4);
+}
     
   m_running = false;
   CLog::Log(LOGNOTICE, "CWebServer[%hu]: Stopped", m_port);
@@ -1219,8 +1232,9 @@ void CWebServer::SetCredentials(const std::string &username, const std::string &
 
 void CWebServer::RegisterRequestHandler(IHTTPRequestHandler *handler)
 {
-  if (handler == nullptr)
+  if (handler == nullptr) {
     return;
+}
 
   const auto& it = std::find(m_requestHandlers.cbegin(), m_requestHandlers.cend(), handler);
   if (it != m_requestHandlers.cend())
@@ -1233,8 +1247,9 @@ void CWebServer::RegisterRequestHandler(IHTTPRequestHandler *handler)
 
 void CWebServer::UnregisterRequestHandler(IHTTPRequestHandler *handler)
 {
-  if (handler == nullptr)
+  if (handler == nullptr) {
     return;
+}
 
   m_requestHandlers.erase(std::remove(m_requestHandlers.begin(), m_requestHandlers.end(), handler), m_requestHandlers.end());
 }

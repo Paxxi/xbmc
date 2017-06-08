@@ -41,8 +41,9 @@ bool CDriverReceiving::SetRumbleState(const FeatureName& feature, float magnitud
     CDriverPrimitive primitive;
     if (m_buttonMap->GetScalar(feature, primitive))
     {
-      if (primitive.Type() == PRIMITIVE_TYPE::MOTOR)
+      if (primitive.Type() == PRIMITIVE_TYPE::MOTOR) {
         bHandled = m_receiver->SetMotorState(primitive.Index(), magnitude);
+}
     }
   }
 

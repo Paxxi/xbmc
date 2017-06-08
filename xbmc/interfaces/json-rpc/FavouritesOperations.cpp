@@ -136,8 +136,9 @@ JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string &method, IT
   {
     item = CFileItem(parameterObject["windowparameter"].asString(), true);
     contextWindow = CButtonTranslator::TranslateWindow(parameterObject["window"].asString());
-    if (contextWindow == WINDOW_INVALID)
+    if (contextWindow == WINDOW_INVALID) {
       return InvalidParams;
+}
   } 
   else if (type.compare("script") == 0) 
   {
@@ -156,8 +157,9 @@ JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string &method, IT
   if (ParameterNotNull(parameterObject,"thumbnail"))
     item.SetArt("thumb", parameterObject["thumbnail"].asString());
 
-  if (CServiceBroker::GetFavouritesService().AddOrRemove(item, contextWindow))
+  if (CServiceBroker::GetFavouritesService().AddOrRemove(item, contextWindow)) {
     return ACK;
-  else
+  } else {
     return FailedToExecute;
+}
 }

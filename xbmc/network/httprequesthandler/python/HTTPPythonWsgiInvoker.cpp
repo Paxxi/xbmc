@@ -109,11 +109,13 @@ CHTTPPythonWsgiInvoker::~CHTTPPythonWsgiInvoker()
 
 HTTPPythonRequest* CHTTPPythonWsgiInvoker::GetRequest()
 {
-  if (m_request == nullptr || m_wsgiResponse == nullptr)
+  if (m_request == nullptr || m_wsgiResponse == nullptr) {
     return nullptr;
+}
 
-  if (m_internalError)
+  if (m_internalError) {
     return m_request;
+}
 
   m_wsgiResponse->Finalize(m_request);
   return m_request;
@@ -390,12 +392,14 @@ std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(
 
 void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void* environment)
 {
-  if (environment == nullptr)
+  if (environment == nullptr) {
     return;
+}
 
   PyObject* pyEnviron = reinterpret_cast<PyObject*>(environment);
-  if (pyEnviron == nullptr)
+  if (pyEnviron == nullptr) {
     return;
+}
 
   // WSGI-defined variables
   {
@@ -413,8 +417,9 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   {
     // wsgi.input
     auto  wsgiInputStream = new XBMCAddon::xbmcwsgi::WsgiInputStream();
-    if (request != nullptr)
+    if (request != nullptr) {
       wsgiInputStream->SetRequest(request);
+}
 
     PythonBindings::prepareForReturn(wsgiInputStream);
     PyObject* pyWsgiInputStream = PythonBindings::makePythonInstance(wsgiInputStream, false);
@@ -424,8 +429,9 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   {
     // wsgi.errors
     auto  wsgiErrorStream = new XBMCAddon::xbmcwsgi::WsgiErrorStream();
-    if (request != nullptr)
+    if (request != nullptr) {
       wsgiErrorStream->SetRequest(request);
+}
 
     PythonBindings::prepareForReturn(wsgiErrorStream);
     PyObject* pyWsgiErrorStream = PythonBindings::makePythonInstance(wsgiErrorStream, false);

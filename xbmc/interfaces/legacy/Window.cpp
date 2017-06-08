@@ -118,8 +118,9 @@ namespace XBMCAddon
         // user specified window id, use this one if it exists
         // It is not possible to capture key presses or button presses
         CGUIWindow* pWindow = g_windowManager.GetWindow(existingWindowId);
-        if (!pWindow)
+        if (!pWindow) {
           throw WindowException("Window id does not exist");
+}
 
         setWindow(new ProxyExistingWindowInterceptor(pWindow));
       }
@@ -359,9 +360,10 @@ namespace XBMCAddon
         break;
       }
 
-      if (!pControl)
+      if (!pControl) {
         // throw an exception
         throw WindowException("Unknown control type for python");
+}
 
       // we have a valid control here, fill in all the 'Control' data
       pControl->pGUIControl = pGUIControl;
@@ -410,8 +412,9 @@ namespace XBMCAddon
       // workaround - for scripts which try to access the active control (focused) when there is none.
       // for example - the case when the mouse enters the screen.
       CGUIControl *pControl = ref(window)->GetFocusedControl();
-      if (action.IsMouse() && !pControl)
+      if (action.IsMouse() && !pControl) {
         return ret;
+}
 
       AddonClass::Ref<Action> inf(new Action(action));
       invokeCallback(new CallbackFunction<Window,AddonClass::Ref<Action> >(this,&Window::onAction,inf.get()));
@@ -440,8 +443,9 @@ namespace XBMCAddon
     {
       XBMC_TRACE;
       // default onAction behavior
-      if(action->id == ACTION_PREVIOUS_MENU || action->id == ACTION_NAV_BACK)
+      if(action->id == ACTION_PREVIOUS_MENU || action->id == ACTION_NAV_BACK) {
         close();
+}
     }
 
     bool Window::OnMessage(CGUIMessage& message)
@@ -505,8 +509,9 @@ namespace XBMCAddon
     void Window::setFocus(Control* pControl)
     {
       XBMC_TRACE;
-      if(pControl == nullptr)
+      if(pControl == nullptr) {
         throw WindowException("Object should be of type Control");
+}
 
       CGUIMessage msg = CGUIMessage(GUI_MSG_SETFOCUS,pControl->iParentId, pControl->iControlId);
       g_windowManager.SendThreadMessage(msg, pControl->iParentId);
@@ -525,8 +530,9 @@ namespace XBMCAddon
       SingleLockWithDelayGuard gslock(g_graphicsContext,languageHook);
 
       int iControlId = ref(window)->GetFocusedControlID();
-      if(iControlId == -1)
+      if(iControlId == -1) {
         throw WindowException("No control in this window has focus");
+}
       // Sine I'm already holding the lock theres no reason to give it to GetFocusedControlID
       return GetControlById(iControlId,nullptr);
     }
@@ -536,8 +542,9 @@ namespace XBMCAddon
       XBMC_TRACE;
       SingleLockWithDelayGuard gslock(g_graphicsContext,languageHook);
       int iControlId = ref(window)->GetFocusedControlID();
-      if(iControlId == -1)
+      if(iControlId == -1) {
         throw WindowException("No control in this window has focus");
+}
       return (long)iControlId;
     }
 
@@ -552,8 +559,9 @@ namespace XBMCAddon
     {
       XBMC_TRACE;
       // type checking, object should be of type Control
-      if(pControl == nullptr)
+      if(pControl == nullptr) {
         throw WindowException("Object should be of type Control");
+}
 
       {
         MaybeLock mlock(gcontext);
@@ -612,8 +620,9 @@ namespace XBMCAddon
     void Window::setCoordinateResolution(long res)
     {
       XBMC_TRACE;
-      if (res < RES_HDTV_1080i || res > RES_AUTORES)
+      if (res < RES_HDTV_1080i || res > RES_AUTORES) {
         throw WindowException("Invalid resolution.");
+}
 
       SingleLockWithDelayGuard gslock(g_graphicsContext,languageHook);
       ref(window)->SetCoordsRes(g_graphicsContext.GetResInfo((RESOLUTION)res));
@@ -662,8 +671,9 @@ namespace XBMCAddon
       XBMC_TRACE;
       bModal = false;
 
-      if (!existingWindow)
+      if (!existingWindow) {
         PulseActionEvent();
+}
 
       {
         DelayedCallGuard dcguard(languageHook);
@@ -720,11 +730,13 @@ namespace XBMCAddon
     void Window::doAddControl(Control* pControl, CCriticalSection* gcontext, bool wait)
     {
       XBMC_TRACE;
-      if(pControl == nullptr)
+      if(pControl == nullptr) {
         throw WindowException("NULL Control passed to WindowBase::addControl");
+}
 
-      if(pControl->iControlId != 0)
+      if(pControl->iControlId != 0) {
         throw WindowException("Control is already used");
+}
 
       // lock xbmc GUI before accessing data from it
       pControl->iParentId = iWindowId;

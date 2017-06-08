@@ -96,13 +96,15 @@ static inline size_t Clamp(int64_t newPosition, size_t bufferSize)
 
 static int mem_file_read(void *h, uint8_t* buf, int size)
 {
-  if (size < 0)
+  if (size < 0) {
     return -1;
+}
 
   MemBuffer* mbuf = static_cast<MemBuffer*>(h);
   int64_t unread = mbuf->size - mbuf->pos;
-  if (unread <= 0)
+  if (unread <= 0) {
     return 0;
+}
   
   size_t tocopy = std::min((size_t)size, (size_t)unread);
   memcpy(buf, mbuf->data + mbuf->pos, tocopy);
@@ -127,8 +129,9 @@ static int64_t mem_file_seek(void *h, int64_t pos, int whence)
   {
     mbuf->pos = Clamp(((int64_t)mbuf->pos) + pos, mbuf->size);
   }
-  else
+  else {
     CLog::LogFunction(LOGERROR, __FUNCTION__, "Unknown seek mode: %i", whence);
+}
 
   return mbuf->pos;
 }
@@ -215,15 +218,15 @@ bool CFFmpegImage::Initialize(unsigned char* buffer, unsigned int bufSize)
   bool is_tiff = (bufSize > 2 && buffer[0] == 'I' && buffer[1] == 'I' && buffer[2] == '*');
 
   AVInputFormat* inp = nullptr;
-  if (is_jpeg)
+  if (is_jpeg) {
     inp = av_find_input_format("jpeg_pipe");
-  else if (m_strMimeType == "image/apng")
+  } else if (m_strMimeType == "image/apng")
     inp = av_find_input_format("apng");
-  else if (is_png)
+  else if (is_png) {
     inp = av_find_input_format("png_pipe");
-  else if (is_tiff)
+  } else if (is_tiff) {
     inp = av_find_input_format("tiff_pipe");
-  else if (m_strMimeType == "image/jp2")
+  } else if (m_strMimeType == "image/jp2")
     inp = av_find_input_format("j2k_pipe");
   else if (m_strMimeType == "image/webp")
     inp = av_find_input_format("webp_pipe");
@@ -317,8 +320,9 @@ AVFrame* CFFmpegImage::ExtractFrame()
   m_originalHeight = m_height;
 
   const AVPixFmtDescriptor* pixDescriptor = av_pix_fmt_desc_get(static_cast<AVPixelFormat>(frame->format));
-  if (pixDescriptor && ((pixDescriptor->flags & (AV_PIX_FMT_FLAG_ALPHA | AV_PIX_FMT_FLAG_PAL)) != 0))
+  if (pixDescriptor && ((pixDescriptor->flags & (AV_PIX_FMT_FLAG_ALPHA | AV_PIX_FMT_FLAG_PAL)) != 0)) {
     m_hasAlpha = true;
+}
 
   AVDictionary* dic = av_frame_get_metadata(frame);
   AVDictionaryEntry* entry = nullptr;
@@ -330,8 +334,9 @@ AVFrame* CFFmpegImage::ExtractFrame()
       int orientation = atoi(entry->value);
       // only values between including 0 and including 8
       // http://sylvana.net/jpegcrop/exif_orientation.html
-      if (orientation >= 0 && orientation <= 8)
+      if (orientation >= 0 && orientation <= 8) {
         m_orientation = (unsigned int)orientation;
+}
     }
   }
   av_packet_unref(&pkt);
@@ -368,8 +373,9 @@ void CFFmpegImage::FreeIOCtx(AVIOContext** ioctx)
 bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int width, unsigned int height,
                           unsigned int pitch, unsigned int format)
 {
-  if (m_width == 0 || m_height == 0 || format != XB_FMT_A8R8G8B8)
+  if (m_width == 0 || m_height == 0 || format != XB_FMT_A8R8G8B8) {
     return false;
+}
 
   if (pixels == nullptr)
   {
@@ -393,15 +399,18 @@ int CFFmpegImage::EncodeFFmpegFrame(AVCodecContext *avctx, AVPacket *pkt, int *g
   *got_packet = 0;
 
   ret = avcodec_send_frame(avctx, frame);
-  if (ret < 0)
+  if (ret < 0) {
     return ret;
+}
 
   ret = avcodec_receive_packet(avctx, pkt);
-  if (!ret)
+  if (!ret) {
     *got_packet = 1;
+}
 
-  if (ret == AVERROR(EAGAIN))
+  if (ret == AVERROR(EAGAIN)) {
     return 0;
+}
 
   return ret;
 }
@@ -417,15 +426,18 @@ int CFFmpegImage::DecodeFFmpegFrame(AVCodecContext *avctx, AVFrame *frame, int *
     ret = avcodec_send_packet(avctx, pkt);
     // In particular, we don't expect AVERROR(EAGAIN), because we read all
     // decoded frames with avcodec_receive_frame() until done.
-    if (ret < 0)
+    if (ret < 0) {
       return ret;
+}
   }
 
   ret = avcodec_receive_frame(avctx, frame);
-  if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+  if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF) {
     return ret;
-  if (ret >= 0) // static code analysers would complain
+}
+  if (ret >= 0) { // static code analysers would complain
    *got_frame = 1;
+}
 
   return 0;
 }
@@ -457,8 +469,9 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
   bool needsCopy = false;
   int pixelsSize = pitch * height;
   bool aligned = (((uintptr_t)(const void *)(pixels)) % (32) == 0);
-  if (!aligned)
+  if (!aligned) {
     CLog::Log(LOGDEBUG, "Alignment of external buffer is not suitable for ffmpeg intrinsics - please fix your malloc");
+}
 
   if (aligned && size == pixelsSize && (int)pitch == pictureRGB->linesize[0])
   {

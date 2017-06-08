@@ -48,14 +48,16 @@ bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     TranslateAliasShortcut(root);
 
   DIR *dir = opendir(root.c_str());
-  if (!dir)
+  if (!dir) {
     return false;
+}
 
   struct dirent* entry;
   while ((entry = readdir(dir)) != nullptr)
   {
-    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
       continue;
+}
 
     std::string itemLabel(entry->d_name);
     CCharsetConverter::unknownToUTF8(itemLabel);
@@ -152,15 +154,17 @@ bool CPosixDirectory::RemoveRecursive(const CURL& url)
     TranslateAliasShortcut(root);
 
   DIR *dir = opendir(root.c_str());
-  if (!dir)
+  if (!dir) {
     return false;
+}
 
   bool success(true);
   struct dirent* entry;
   while ((entry = readdir(dir)) != nullptr)
   {
-    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
       continue;
+}
 
     std::string itemLabel(entry->d_name);
     CCharsetConverter::unknownToUTF8(itemLabel);

@@ -174,12 +174,14 @@ bool CPartyModeManager::Enable(PartyModeContext context /*= PARTYMODECONTEXT_MUS
   }
 
   // calculate history size
-  if (m_iMatchingSongs < 50)
+  if (m_iMatchingSongs < 50) {
     m_songsInHistory = 0;
-  else
+  } else {
     m_songsInHistory = (int)(m_iMatchingSongs/2);
-  if (m_songsInHistory > 200)
+}
+  if (m_songsInHistory > 200) {
     m_songsInHistory = 200;
+}
 
   CLog::Log(LOGINFO,"PARTY MODE MANAGER: Matching songs = %i, History size = %i", m_iMatchingSongs, m_songsInHistory);
   CLog::Log(LOGINFO,"PARTY MODE MANAGER: Party mode enabled!");
@@ -221,8 +223,9 @@ bool CPartyModeManager::Enable(PartyModeContext context /*= PARTYMODECONTEXT_MUS
 
 void CPartyModeManager::Disable()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return;
+}
   m_bEnabled = false;
   Announce();
   CLog::Log(LOGINFO,"PARTY MODE MANAGER: Party mode disabled.");
@@ -230,70 +233,82 @@ void CPartyModeManager::Disable()
 
 void CPartyModeManager::OnSongChange(bool bUpdatePlayed /* = false */)
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return;
+}
   Process();
-  if (bUpdatePlayed)
+  if (bUpdatePlayed) {
     m_iSongsPlayed++;
+}
 }
 
 void CPartyModeManager::AddUserSongs(CPlayList& tempList, bool bPlay /* = false */)
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return;
+}
 
   // where do we add?
   int iAddAt = -1;
-  if (m_iLastUserSong < 0 || bPlay)
+  if (m_iLastUserSong < 0 || bPlay) {
     iAddAt = 1; // under the currently playing song
-  else
+  } else {
     iAddAt = m_iLastUserSong + 1; // under the last user added song
+}
 
   int iNewUserSongs = tempList.size();
   CLog::Log(LOGINFO,"PARTY MODE MANAGER: Adding %i user selected songs at %i", iNewUserSongs, iAddAt);
 
   int iPlaylist = PLAYLIST_MUSIC;
-  if (m_bIsVideo)
+  if (m_bIsVideo) {
     iPlaylist = PLAYLIST_VIDEO;
+}
   g_playlistPlayer.GetPlaylist(iPlaylist).Insert(tempList, iAddAt);
 
   // update last user added song location
-  if (m_iLastUserSong < 0)
+  if (m_iLastUserSong < 0) {
     m_iLastUserSong = 0;
+}
   m_iLastUserSong += iNewUserSongs;
 
-  if (bPlay)
+  if (bPlay) {
     Play(1);
+}
 }
 
 void CPartyModeManager::AddUserSongs(CFileItemList& tempList, bool bPlay /* = false */)
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return;
+}
 
   // where do we add?
   int iAddAt = -1;
-  if (m_iLastUserSong < 0 || bPlay)
+  if (m_iLastUserSong < 0 || bPlay) {
     iAddAt = 1; // under the currently playing song
-  else
+  } else {
     iAddAt = m_iLastUserSong + 1; // under the last user added song
+}
 
   int iNewUserSongs = tempList.Size();
   CLog::Log(LOGINFO,"PARTY MODE MANAGER: Adding %i user selected songs at %i", iNewUserSongs, iAddAt);
 
   int iPlaylist = PLAYLIST_MUSIC;
-  if (m_bIsVideo)
+  if (m_bIsVideo) {
     iPlaylist = PLAYLIST_VIDEO;
+}
 
   g_playlistPlayer.GetPlaylist(iPlaylist).Insert(tempList, iAddAt);
 
   // update last user added song location
-  if (m_iLastUserSong < 0)
+  if (m_iLastUserSong < 0) {
     m_iLastUserSong = 0;
+}
   m_iLastUserSong += iNewUserSongs;
 
-  if (bPlay)
+  if (bPlay) {
     Play(1);
+}
 }
 
 void CPartyModeManager::Process()
@@ -308,13 +323,15 @@ void CPartyModeManager::Process()
 bool CPartyModeManager::AddRandomSongs(int iSongs /* = 0 */)
 {
   int iPlaylist = PLAYLIST_MUSIC;
-  if (m_bIsVideo)
+  if (m_bIsVideo) {
     iPlaylist = PLAYLIST_VIDEO;
+}
 
   CPlayList& playlist = g_playlistPlayer.GetPlaylist(iPlaylist);
   int iMissingSongs = QUEUE_DEPTH - playlist.size();
-  if (iSongs <= 0)
+  if (iSongs <= 0) {
     iSongs = iMissingSongs;
+}
   // distribute between types if mixed
   int iSongsToAdd=iSongs;
   int iVidsToAdd=iSongs;
@@ -322,17 +339,19 @@ bool CPartyModeManager::AddRandomSongs(int iSongs /* = 0 */)
   {
     if (iSongs == 1)
     {
-      if (rand() % 10 < 7) // 70 % chance of grabbing a song
+      if (rand() % 10 < 7) { // 70 % chance of grabbing a song
         iVidsToAdd = 0;
-      else
+      } else {
         iSongsToAdd = 0;
+}
     }
     if (iSongs > 1) // grab 70 % songs, 30 % mvids
     {
       iSongsToAdd = (int).7f*iSongs;
       iVidsToAdd = (int).3f*iSongs;
-      while (iSongsToAdd+iVidsToAdd < iSongs) // correct any rounding by adding songs
+      while (iSongsToAdd+iVidsToAdd < iSongs) { // correct any rounding by adding songs
         iSongsToAdd++;
+}
     }
   }
 
@@ -465,11 +484,13 @@ bool CPartyModeManager::ReapSongs()
     {
       g_playlistPlayer.GetPlaylist(iPlaylist).Remove(i);
       iCurrentSong--;
-      if (i <= m_iLastUserSong)
+      if (i <= m_iLastUserSong) {
         m_iLastUserSong--;
+}
     }
-    else
+    else {
       i++;
+}
   }
 
   g_playlistPlayer.SetCurrentSong(iCurrentSong);
@@ -524,53 +545,61 @@ void CPartyModeManager::OnError(int iError, const std::string&  strLogMessage)
 
 int CPartyModeManager::GetSongsPlayed()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iSongsPlayed;
 }
 
 int CPartyModeManager::GetMatchingSongs()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iMatchingSongs;
 }
 
 int CPartyModeManager::GetMatchingSongsPicked()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iMatchingSongsPicked;
 }
 
 int CPartyModeManager::GetMatchingSongsLeft()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iMatchingSongsLeft;
 }
 
 int CPartyModeManager::GetRelaxedSongs()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iRelaxedSongs;
 }
 
 int CPartyModeManager::GetRandomSongs()
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return -1;
+}
   return m_iRandomSongs;
 }
 
 PartyModeContext CPartyModeManager::GetType() const
 {
-  if (!IsEnabled())
+  if (!IsEnabled()) {
     return PARTYMODECONTEXT_UNKNOWN;
+}
 
-  if (m_bIsVideo)
+  if (m_bIsVideo) {
     return PARTYMODECONTEXT_VIDEO;
+}
 
   return PARTYMODECONTEXT_MUSIC;
 }
@@ -701,10 +730,12 @@ void CPartyModeManager::GetRandomSelection(std::vector< std::pair<int,int> >& in
 bool CPartyModeManager::IsEnabled(PartyModeContext context /* = PARTYMODECONTEXT_UNKNOWN */) const
 {
   if (!m_bEnabled) return false;
-  if (context == PARTYMODECONTEXT_VIDEO)
+  if (context == PARTYMODECONTEXT_VIDEO) {
     return m_bIsVideo;
-  if (context == PARTYMODECONTEXT_MUSIC)
+}
+  if (context == PARTYMODECONTEXT_MUSIC) {
     return !m_bIsVideo;
+}
   return true; // unknown, but we're enabled
 }
 

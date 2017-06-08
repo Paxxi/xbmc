@@ -98,8 +98,9 @@ bool CGUIDialogExtendedProgressBar::OnMessage(CGUIMessage& message)
 
 void CGUIDialogExtendedProgressBar::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {
-  if (m_active)
+  if (m_active) {
     UpdateState(currentTime);
+}
 
   CGUIDialog::Process(currentTime, dirtyregions);
 }

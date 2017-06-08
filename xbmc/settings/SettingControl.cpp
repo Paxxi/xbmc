@@ -80,8 +80,9 @@ bool CSettingControlFormattedRange::Deserialize(const TiXmlNode *node, bool upda
           const TiXmlElement *minimumElem = minimumNode->ToElement();
           if (minimumElem != nullptr)
           {
-            if (minimumElem->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &m_minimumLabel) != TIXML_SUCCESS)
+            if (minimumElem->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &m_minimumLabel) != TIXML_SUCCESS) {
               m_minimumLabel = -1;
+}
           }
         }
       }
@@ -102,8 +103,9 @@ bool CSettingControlSpinner::SetFormat(const std::string &format)
 {
   if (!StringUtils::EqualsNoCase(format, "string") &&
       !StringUtils::EqualsNoCase(format, "integer") &&
-      !StringUtils::EqualsNoCase(format, "number"))
+      !StringUtils::EqualsNoCase(format, "number")) {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);
@@ -130,8 +132,9 @@ bool CSettingControlEdit::SetFormat(const std::string &format)
       !StringUtils::EqualsNoCase(format, "number") &&
       !StringUtils::EqualsNoCase(format, "ip") &&
       !StringUtils::EqualsNoCase(format, "md5") &&
-      !StringUtils::EqualsNoCase(format, "urlencoded"))
+      !StringUtils::EqualsNoCase(format, "urlencoded")) {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);
@@ -176,10 +179,11 @@ bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = 
         const char *strShowDetails = nullptr;
         if ((strShowDetails = show->Attribute(SETTING_XML_ATTR_SHOW_DETAILS)) != nullptr)
         {
-          if (StringUtils::EqualsNoCase(strShowDetails, "false") || StringUtils::EqualsNoCase(strShowDetails, "true"))
+          if (StringUtils::EqualsNoCase(strShowDetails, "false") || StringUtils::EqualsNoCase(strShowDetails, "true")) {
             m_showAddonDetails = StringUtils::EqualsNoCase(strShowDetails, "true");
-          else
+          } else {
             CLog::Log(LOGWARNING, "CSettingControlButton: error reading \"details\" attribute of <show>");
+}
         }
 
         if (!m_showInstallableAddons)
@@ -187,10 +191,11 @@ bool CSettingControlButton::Deserialize(const TiXmlNode *node, bool update /* = 
           const char *strShowMore = nullptr;
           if ((strShowMore = show->Attribute(SETTING_XML_ATTR_SHOW_MORE)) != nullptr)
           {
-            if (StringUtils::EqualsNoCase(strShowMore, "false") || StringUtils::EqualsNoCase(strShowMore, "true"))
+            if (StringUtils::EqualsNoCase(strShowMore, "false") || StringUtils::EqualsNoCase(strShowMore, "true")) {
               m_showMoreAddons = StringUtils::EqualsNoCase(strShowMore, "true");
-            else
+            } else {
               CLog::Log(LOGWARNING, "CSettingControlButton: error reading \"more\" attribute of <show>");
+}
           }
         }
       }
@@ -209,8 +214,9 @@ bool CSettingControlButton::SetFormat(const std::string &format)
       !StringUtils::EqualsNoCase(format, "action") &&
       !StringUtils::EqualsNoCase(format, "infolabel") &&
       !StringUtils::EqualsNoCase(format, "date") &&
-      !StringUtils::EqualsNoCase(format, "time"))
+      !StringUtils::EqualsNoCase(format, "time")) {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);
@@ -233,8 +239,9 @@ bool CSettingControlList::Deserialize(const TiXmlNode *node, bool update /* = fa
 bool CSettingControlList::SetFormat(const std::string &format)
 {
   if (!StringUtils::EqualsNoCase(format, "string") &&
-      !StringUtils::EqualsNoCase(format, "integer"))
+      !StringUtils::EqualsNoCase(format, "integer")) {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);
@@ -263,14 +270,15 @@ bool CSettingControlSlider::Deserialize(const TiXmlNode *node, bool update /* = 
 
 bool CSettingControlSlider::SetFormat(const std::string &format)
 {
-  if (StringUtils::EqualsNoCase(format, "percentage"))
+  if (StringUtils::EqualsNoCase(format, "percentage")) {
     m_formatString = "%i %%";
-  else if (StringUtils::EqualsNoCase(format, "integer"))
+  } else if (StringUtils::EqualsNoCase(format, "integer")) {
     m_formatString = "%d";
-  else if (StringUtils::EqualsNoCase(format, "number"))
+  } else if (StringUtils::EqualsNoCase(format, "number")) {
     m_formatString = "%.1f";
-  else
+  } else {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);
@@ -287,8 +295,9 @@ bool CSettingControlRange::Deserialize(const TiXmlNode *node, bool update /* = f
   if (formatLabel != nullptr)
   {
     XMLUtils::GetInt(node, SETTING_XML_ELM_CONTROL_FORMATLABEL, m_formatLabel);
-    if (m_formatLabel < 0)
+    if (m_formatLabel < 0) {
       return false;
+}
 
     const char *formatValue = formatLabel->Attribute(SETTING_XML_ELM_CONTROL_FORMATVALUE);
     if (formatValue != nullptr)
@@ -309,17 +318,18 @@ bool CSettingControlRange::Deserialize(const TiXmlNode *node, bool update /* = f
 
 bool CSettingControlRange::SetFormat(const std::string &format)
 {
-  if (StringUtils::EqualsNoCase(format, "percentage"))
+  if (StringUtils::EqualsNoCase(format, "percentage")) {
     m_valueFormat = "%i %%";
-  else if (StringUtils::EqualsNoCase(format, "integer"))
+  } else if (StringUtils::EqualsNoCase(format, "integer")) {
     m_valueFormat = "%d";
-  else if (StringUtils::EqualsNoCase(format, "number"))
+  } else if (StringUtils::EqualsNoCase(format, "number")) {
     m_valueFormat = "%.1f";
-  else if (StringUtils::EqualsNoCase(format, "date") ||
-           StringUtils::EqualsNoCase(format, "time"))
+  } else if (StringUtils::EqualsNoCase(format, "date") ||
+           StringUtils::EqualsNoCase(format, "time")) {
     m_valueFormat.clear();
-  else
+  } else {
     return false;
+}
 
   m_format = format;
   StringUtils::ToLower(m_format);

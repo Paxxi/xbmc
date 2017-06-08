@@ -78,8 +78,9 @@ bool CImageLoader::DoWork()
     CLog::Log(LOGERROR, "%s - Direct texture file loading failed for %s", __FUNCTION__, loadPath.c_str());
   }
 
-  if (!m_use_cache)
+  if (!m_use_cache) {
     return false; // We're done
+}
 
   // not in our texture cache or it failed to load from it, so try and load directly and then cache the result
   CTextureCache::GetInstance().CacheImage(texturePath, &m_texture);
@@ -110,10 +111,11 @@ bool CGUILargeTextureManager::CLargeTexture::DecrRef(bool deleteImmediately)
   m_refCount--;
   if (m_refCount == 0)
   {
-    if (deleteImmediately)
+    if (deleteImmediately) {
       delete this;
-    else
+    } else {
       m_timeToDelete = CTimeUtils::GetFrameTime() + TIME_TO_DELETE;
+}
     return true;
   }
   return false;
@@ -169,15 +171,17 @@ bool CGUILargeTextureManager::GetImage(const std::string &path, CTextureArray &t
     CLargeTexture *image = *it;
     if (image->GetPath() == path)
     {
-      if (firstRequest)
+      if (firstRequest) {
         image->AddRef();
+}
       texture = image->GetTexture();
       return texture.size() > 0;
     }
   }
 
-  if (firstRequest)
+  if (firstRequest) {
     QueueImage(path, useCache);
+}
 
   return true;
 }

@@ -50,8 +50,9 @@ bool CGUIDialogVisualisationPresetList::OnMessage(CGUIMessage &message)
 
 void CGUIDialogVisualisationPresetList::OnSelect(int idx)
 {
-  if (m_viz)
+  if (m_viz) {
     m_viz->OnAction(VIS_ACTION_LOAD_PRESET, static_cast<void*>(&idx));
+}
 }
 
 void CGUIDialogVisualisationPresetList::SetVisualisation(CVisualisation* vis)
@@ -81,8 +82,9 @@ void CGUIDialogVisualisationPresetList::OnInitWindow()
 {
   CGUIMessage msg(GUI_MSG_GET_VISUALISATION, 0, 0);
   g_windowManager.SendMessage(msg);
-  if (msg.GetPointer())
+  if (msg.GetPointer()) {
     SetVisualisation(static_cast<CVisualisation*>(msg.GetPointer()));
+}
   CGUIDialogSelect::OnInitWindow();
 }
 

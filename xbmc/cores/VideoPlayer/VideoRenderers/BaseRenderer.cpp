@@ -251,10 +251,12 @@ void CBaseRenderer::CalcNormalRenderRect(float offsetX, float offsetY, float wid
   newHeight *= zoomAmount;
 
   // if we are less than one pixel off use the complete screen instead
-  if (std::abs(newWidth - width) < 1.0f)
+  if (std::abs(newWidth - width) < 1.0f) {
     newWidth = width;
-  if (std::abs(newHeight - height) < 1.0f)
+}
+  if (std::abs(newHeight - height) < 1.0f) {
     newHeight = height;
+}
 
   // Centre the movie
   float posY = (height - newHeight) / 2;
@@ -269,10 +271,11 @@ void CBaseRenderer::CalcNormalRenderRect(float offsetX, float offsetY, float wid
   // if vertical shift is -2 it will be completely shifted out the top,
   // if it's 2 it will be completely shifted out the bottom
   float shiftRange = std::min(newHeight, newHeight - (newHeight - height) / 2.0f);
-  if (verticalShift > 1.0f)
+  if (verticalShift > 1.0f) {
     posY += shiftRange * (verticalShift - 1.0f);
-  else if (verticalShift < -1.0f)
+  } else if (verticalShift < -1.0f) {
     posY += shiftRange * (verticalShift + 1.0f);
+}
 
   m_destRect.x1 = (float)MathUtils::round_int(posX + offsetX);
   m_destRect.x2 = m_destRect.x1 + MathUtils::round_int(newWidth);
@@ -323,8 +326,9 @@ void CBaseRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsign
   // This indicates either a scaling has taken place (which we didn't ask for) or it has
   // found an aspect ratio parameter from the file, and is changing the frame size based
   // on that.
-  if (m_sourceWidth == (unsigned int) desired_width && m_sourceHeight == (unsigned int) desired_height)
+  if (m_sourceWidth == (unsigned int) desired_width && m_sourceHeight == (unsigned int) desired_height) {
     return ;
+}
 
   // mplayer is scaling in one or both directions.  We must alter our Source Pixel Ratio
   float imageFrameRatio = (float)m_sourceWidth / m_sourceHeight;
@@ -351,24 +355,30 @@ void CBaseRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsign
   // Finally, check for a VCD, SVCD or DVD frame size as these need special aspect ratios
   if (m_sourceWidth == 352)
   { // VCD?
-    if (m_sourceHeight == 240) // NTSC
+    if (m_sourceHeight == 240) { // NTSC
       m_sourceFrameRatio = imageFrameRatio * NTSCPixelRatio;
-    if (m_sourceHeight == 288) // PAL
+}
+    if (m_sourceHeight == 288) { // PAL
       m_sourceFrameRatio = imageFrameRatio * PALPixelRatio;
+}
   }
   if (m_sourceWidth == 480)
   { // SVCD?
-    if (m_sourceHeight == 480) // NTSC
+    if (m_sourceHeight == 480) { // NTSC
       m_sourceFrameRatio = imageFrameRatio * 3.0f / 2.0f * NTSCPixelRatio * Non4by3Correction;
-    if (m_sourceHeight == 576) // PAL
+}
+    if (m_sourceHeight == 576) { // PAL
       m_sourceFrameRatio = imageFrameRatio * 3.0f / 2.0f * PALPixelRatio * Non4by3Correction;
+}
   }
   if (m_sourceWidth == 720)
   { // DVD?
-    if (m_sourceHeight == 480) // NTSC
+    if (m_sourceHeight == 480) { // NTSC
       m_sourceFrameRatio = imageFrameRatio * NTSCPixelRatio * Non4by3Correction;
-    if (m_sourceHeight == 576) // PAL
+}
+    if (m_sourceHeight == 576) { // PAL
       m_sourceFrameRatio = imageFrameRatio * PALPixelRatio * Non4by3Correction;
+}
   }
 }
 
@@ -386,8 +396,9 @@ void CBaseRenderer::ManageRenderArea()
 
   if(CONF_FLAGS_STEREO_CADENCE(m_iFlags) == CONF_FLAGS_STEREO_CADANCE_RIGHT_LEFT)
   {
-    if     (stereo_view == RENDER_STEREO_VIEW_LEFT)  stereo_view = RENDER_STEREO_VIEW_RIGHT;
-    else if(stereo_view == RENDER_STEREO_VIEW_RIGHT) stereo_view = RENDER_STEREO_VIEW_LEFT;
+    if     (stereo_view == RENDER_STEREO_VIEW_LEFT) {  stereo_view = RENDER_STEREO_VIEW_RIGHT;
+    } else if(stereo_view == RENDER_STEREO_VIEW_RIGHT) { stereo_view = RENDER_STEREO_VIEW_LEFT;
+}
   }
 
   if (m_format != RENDER_FMT_BYPASS)
@@ -431,28 +442,30 @@ EShaderFormat CBaseRenderer::GetShaderFormat(ERenderFormat renderFormat)
 {
   EShaderFormat ret = SHADER_NONE;
 
-  if (m_format == RENDER_FMT_YUV420P)
+  if (m_format == RENDER_FMT_YUV420P) {
     ret = SHADER_YV12;
-  else if (m_format == RENDER_FMT_YUV420P10)
+  } else if (m_format == RENDER_FMT_YUV420P10) {
     ret = SHADER_YV12_10;
-  else if (m_format == RENDER_FMT_YUV420P16)
+  } else if (m_format == RENDER_FMT_YUV420P16) {
     ret = SHADER_YV12_16;
-  else if (m_format == RENDER_FMT_NV12)
+  } else if (m_format == RENDER_FMT_NV12) {
     ret = SHADER_NV12;
-  else if (m_format == RENDER_FMT_YUYV422)
+  } else if (m_format == RENDER_FMT_YUYV422) {
     ret = SHADER_YUY2;
-  else if (m_format == RENDER_FMT_UYVY422)
+  } else if (m_format == RENDER_FMT_UYVY422) {
     ret = SHADER_UYVY;
-  else
+  } else {
     CLog::Log(LOGERROR, "CBaseRenderer::GetShaderFormat - unsupported format %d", renderFormat);
+}
 
   return ret;
 }
 
 void CBaseRenderer::SetViewMode(int viewMode)
 {
-  if (viewMode < ViewModeNormal || viewMode > ViewModeZoom110Width)
+  if (viewMode < ViewModeNormal || viewMode > ViewModeZoom110Width) {
     viewMode = ViewModeNormal;
+}
 
   CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = viewMode;
 

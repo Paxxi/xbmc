@@ -46,8 +46,9 @@ void *_aligned_malloc(size_t s, size_t alignTo) {
 }
 
 void _aligned_free(void *p) {
-  if (!p)
+  if (!p) {
     return;
+}
 
   char *pFull = *(char **)(((char *)p) - sizeof(char *));
   free(pFull);
@@ -61,8 +62,9 @@ static FILE* procMeminfoFP = nullptr;
 
 void GlobalMemoryStatusEx(LPMEMORYSTATUSEX lpBuffer)
 {
-  if (!lpBuffer)
+  if (!lpBuffer) {
     return;
+}
 
   memset(lpBuffer, 0, sizeof(MEMORYSTATUSEX));
   lpBuffer->dwLength = sizeof(MEMORYSTATUSEX);
@@ -152,30 +154,31 @@ void GlobalMemoryStatusEx(LPMEMORYSTATUSEX lpBuffer)
   struct sysinfo info;
   char name[32];
   unsigned val;
-  if (!procMeminfoFP && (procMeminfoFP = fopen("/proc/meminfo", "r")) == nullptr)
+  if (!procMeminfoFP && (procMeminfoFP = fopen("/proc/meminfo", "r")) == nullptr) {
     sysinfo(&info);
-  else
+  } else
   {
     memset(&info, 0, sizeof(struct sysinfo));
     info.mem_unit = 4096;
     while (fscanf(procMeminfoFP, "%31s %u%*[^\n]\n", name, &val) != EOF)
     {
-      if (strncmp("MemTotal:", name, 9) == 0)
+      if (strncmp("MemTotal:", name, 9) == 0) {
         info.totalram = val/4;
-      else if (strncmp("MemFree:", name, 8) == 0)
+      } else if (strncmp("MemFree:", name, 8) == 0) {
         info.freeram = val/4;
-      else if (strncmp("Buffers:", name, 8) == 0)
+      } else if (strncmp("Buffers:", name, 8) == 0) {
         info.bufferram += val/4;
-      else if (strncmp("Cached:", name, 7) == 0)
+      } else if (strncmp("Cached:", name, 7) == 0) {
         info.bufferram += val/4;
-      else if (strncmp("SwapTotal:", name, 10) == 0)
+      } else if (strncmp("SwapTotal:", name, 10) == 0) {
         info.totalswap = val/4;
-      else if (strncmp("SwapFree:", name, 9) == 0)
+      } else if (strncmp("SwapFree:", name, 9) == 0) {
         info.freeswap = val/4;
-      else if (strncmp("HighTotal:", name, 10) == 0)
+      } else if (strncmp("HighTotal:", name, 10) == 0) {
         info.totalhigh = val/4;
-      else if (strncmp("HighFree:", name, 9) == 0)
+      } else if (strncmp("HighFree:", name, 9) == 0) {
         info.freehigh = val/4;
+}
     }
     rewind(procMeminfoFP);
     fflush(procMeminfoFP);

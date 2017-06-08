@@ -47,8 +47,9 @@ CLogindUPowerSyscall::CLogindUPowerSyscall()
   CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "EnumerateDevices");
   m_hasUPower = message.SendSystem() != nullptr;
 
-  if (!m_hasUPower)
+  if (!m_hasUPower) {
     CLog::Log(LOGINFO, "LogindUPowerSyscall - UPower not found, battery information will not be available");
+}
 
   m_canPowerdown = LogindCheckCapability("CanPowerOff");
   m_canReboot    = LogindCheckCapability("CanReboot");
@@ -58,8 +59,9 @@ CLogindUPowerSyscall::CLogindUPowerSyscall()
   InhibitDelayLock();
 
   m_batteryLevel = 0;
-  if (m_hasUPower)
+  if (m_hasUPower) {
     UpdateBatteryLevel();
+}
 
   DBusError error;
   dbus_error_init(&error);
@@ -78,8 +80,9 @@ CLogindUPowerSyscall::CLogindUPowerSyscall()
   dbus_connection_set_exit_on_disconnect(m_connection, false);
   dbus_bus_add_match(m_connection, "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'", nullptr);
 
-  if (m_hasUPower)
+  if (m_hasUPower) {
     dbus_bus_add_match(m_connection, "type='signal',interface='org.freedesktop.UPower',member='DeviceChanged'", nullptr);
+}
 
   dbus_connection_flush(m_connection);
   dbus_error_free(&error);
@@ -183,8 +186,9 @@ void CLogindUPowerSyscall::UpdateBatteryLevel()
   CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "EnumerateDevices");
   DBusMessage *reply = message.SendSystem();
 
-  if (!reply)
+  if (!reply) {
     return;
+}
 
   if (!dbus_message_get_args(reply, nullptr, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &source, &length, DBUS_TYPE_INVALID))
   {
@@ -248,20 +252,23 @@ bool CLogindUPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
       {
         bool lowBattery = m_lowBattery;
         UpdateBatteryLevel();
-        if (m_lowBattery && !lowBattery)
+        if (m_lowBattery && !lowBattery) {
           callback->OnLowBattery();
+}
 
         result = true;
       }
-      else
+      else {
         CLog::Log(LOGDEBUG, "LogindUPowerSyscall - Received unknown signal %s", dbus_message_get_member(msg));
+}
 
       dbus_message_unref(msg);
     }
   }
 
-  if (releaseLock)
+  if (releaseLock) {
     ReleaseDelayLock();
+}
 
   return result;
 }

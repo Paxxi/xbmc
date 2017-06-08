@@ -116,8 +116,9 @@ int CSimpleFileCache::Open()
 
 void CSimpleFileCache::Close()
 {
-  if (m_hDataAvailEvent)
+  if (m_hDataAvailEvent) {
     delete m_hDataAvailEvent;
+}
 
   m_hDataAvailEvent = nullptr;
 
@@ -261,8 +262,9 @@ void CSimpleFileCache::EndOfInput()
 
 int64_t CSimpleFileCache::CachedDataEndPosIfSeekTo(int64_t iFilePosition)
 {
-  if (iFilePosition >= m_nStartPosition && iFilePosition <= m_nStartPosition + m_nWritePosition)
+  if (iFilePosition >= m_nStartPosition && iFilePosition <= m_nStartPosition + m_nWritePosition) {
     return m_nStartPosition + m_nWritePosition;
+}
   return iFilePosition;
 }
 

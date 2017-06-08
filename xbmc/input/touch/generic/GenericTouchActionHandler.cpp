@@ -100,36 +100,40 @@ bool CGenericTouchActionHandler::OnTouchGestureEnd(float x, float y, float offse
 
 void CGenericTouchActionHandler::OnTap(float x, float y, int32_t pointers /* = 1 */)
 {
-  if (pointers <= 0 || pointers > 10)
+  if (pointers <= 0 || pointers > 10) {
     return;
+}
 
   sendEvent(ACTION_TOUCH_TAP, (uint16_t)x, (uint16_t)y, 0.0f, 0.0f, pointers);
 }
 
 void CGenericTouchActionHandler::OnLongPress(float x, float y, int32_t pointers /* = 1 */)
 {
-  if (pointers <= 0 || pointers > 10)
+  if (pointers <= 0 || pointers > 10) {
     return;
+}
 
   sendEvent(ACTION_TOUCH_LONGPRESS, (uint16_t)x, (uint16_t)y, 0.0f, 0.0f, pointers);
 }
 
 void CGenericTouchActionHandler::OnSwipe(TouchMoveDirection direction, float xDown, float yDown, float xUp, float yUp, float velocityX, float velocityY, int32_t pointers /* = 1 */)
 {
-  if (pointers <= 0 || pointers > 10)
+  if (pointers <= 0 || pointers > 10) {
     return;
+}
 
   int actionId = 0;
-  if (direction == TouchMoveDirectionLeft)
+  if (direction == TouchMoveDirectionLeft) {
     actionId = ACTION_GESTURE_SWIPE_LEFT;
-  else if (direction == TouchMoveDirectionRight)
+  } else if (direction == TouchMoveDirectionRight) {
     actionId = ACTION_GESTURE_SWIPE_RIGHT;
-  else if (direction == TouchMoveDirectionUp)
+  } else if (direction == TouchMoveDirectionUp) {
     actionId = ACTION_GESTURE_SWIPE_UP;
-  else if (direction == TouchMoveDirectionDown)
+  } else if (direction == TouchMoveDirectionDown) {
     actionId = ACTION_GESTURE_SWIPE_DOWN;
-  else
+  } else {
     return;
+}
 
   sendEvent(actionId, xUp, yUp, velocityX, velocityY, pointers);
 }

@@ -46,8 +46,9 @@ std::string CDirectoryNodeGrouped::GetLocalizedName() const
 bool CDirectoryNodeGrouped::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   return musicdatabase.GetItems(BuildPath(), GetContentType(), items);
 }

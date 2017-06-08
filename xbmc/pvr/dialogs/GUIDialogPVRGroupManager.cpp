@@ -142,8 +142,9 @@ bool CGUIDialogPVRGroupManager::ActionButtonDeleteGroup(CGUIMessage &message)
       return bReturn;
 
     CGUIDialogYesNo* pDialog = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-    if (!pDialog)
+    if (!pDialog) {
       return bReturn;
+}
 
     pDialog->SetHeading(CVariant{117});
     pDialog->SetLine(0, CVariant{""});

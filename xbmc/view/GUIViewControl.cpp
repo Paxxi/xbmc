@@ -80,19 +80,25 @@ void CGUIViewControl::SetCurrentView(int viewMode, bool bRefresh /* = false */)
 
   // first find a view that matches this view, if possible...
   int newView = GetView(type, id);
-  if (newView < 0) // no suitable view that matches both id and type, so try just type
+  if (newView < 0) { // no suitable view that matches both id and type, so try just type
     newView = GetView(type, 0);
-  if (newView < 0 && type == VIEW_TYPE_BIG_ICON) // try icon view if they want big icon
+}
+  if (newView < 0 && type == VIEW_TYPE_BIG_ICON) { // try icon view if they want big icon
     newView = GetView(VIEW_TYPE_ICON, 0);
-  if (newView < 0 && type == VIEW_TYPE_BIG_INFO)
+}
+  if (newView < 0 && type == VIEW_TYPE_BIG_INFO) {
     newView = GetView(VIEW_TYPE_INFO, 0);
-  if (newView < 0) // try a list view
+}
+  if (newView < 0) { // try a list view
     newView = GetView(VIEW_TYPE_LIST, 0);
-  if (newView < 0) // try anything!
+}
+  if (newView < 0) { // try anything!
     newView = GetView(VIEW_TYPE_NONE, 0);
+}
 
-  if (newView < 0)
+  if (newView < 0) {
     return;
+}
 
   m_currentView = newView;
   CGUIControl *pNewView = m_visibleViews[m_currentView];
@@ -102,8 +108,9 @@ void CGUIViewControl::SetCurrentView(int viewMode, bool bRefresh /* = false */)
     (*view)->SetVisible(false);
   pNewView->SetVisible(true);
 
-  if (!bRefresh && pNewView == previousView)
+  if (!bRefresh && pNewView == previousView) {
     return; // no need to actually update anything (other than visibility above)
+}
 
 //  CLog::Log(LOGDEBUG,"SetCurrentView: Oldview: %i, Newview :%i", m_currentView, viewMode);
 
@@ -159,15 +166,17 @@ void CGUIViewControl::UpdateView()
 
 int CGUIViewControl::GetSelectedItem(const CGUIControl *control) const
 {
-  if (!control || !m_fileItems)
+  if (!control || !m_fileItems) {
     return -1;
+}
 
   CGUIMessage msg(GUI_MSG_ITEM_SELECTED, m_parentWindow, control->GetID());
   g_windowManager.SendMessage(msg, m_parentWindow);
 
   int iItem = msg.GetParam1();
-  if (iItem >= m_fileItems->Size())
+  if (iItem >= m_fileItems->Size()) {
     return -1;
+}
 
   return iItem;
 }
@@ -198,8 +207,9 @@ std::string CGUIViewControl::GetSelectedItemPath() const
 
 void CGUIViewControl::SetSelectedItem(int item)
 {
-  if (!m_fileItems || item < 0 || item >= m_fileItems->Size())
+  if (!m_fileItems || item < 0 || item >= m_fileItems->Size()) {
     return;
+}
 
   if (m_currentView < 0 || m_currentView >= (int)m_visibleViews.size())
     return; // no valid current view!
@@ -356,7 +366,8 @@ void CGUIViewControl::UpdateViewVisibility()
       if (view->IsVisibleFromSkin())
         m_visibleViews.push_back(view);
     }
-    else
-      m_visibleViews.push_back(view);
+    else {
+      m_visibleViews
+}.push_back(view);
   }
 }

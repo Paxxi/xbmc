@@ -113,8 +113,9 @@ bool CGLSLVertexShader::Compile()
 
 void CGLSLVertexShader::Free()
 {
-  if (m_vertexShader)
+  if (m_vertexShader) {
     glDeleteShader(m_vertexShader);
+}
   m_vertexShader = 0;
 }
 
@@ -159,8 +160,9 @@ bool CARBVertexShader::Compile()
 
 void CARBVertexShader::Free()
 {
-  if (m_vertexShader)
+  if (m_vertexShader) {
     glDeleteProgramsARB(1, &m_vertexShader);
+}
   m_vertexShader = 0;
 }
 #endif
@@ -209,8 +211,9 @@ bool CGLSLPixelShader::Compile()
 
 void CGLSLPixelShader::Free()
 {
-  if (m_pixelShader)
+  if (m_pixelShader) {
     glDeleteShader(m_pixelShader);
+}
   m_pixelShader = 0;
 }
 
@@ -243,9 +246,10 @@ bool CARBPixelShader::Compile()
   if (err>0)
   {
     const char* errStr = (const char*)glGetString(GL_PROGRAM_ERROR_STRING_ARB);
-    if (!errStr)
+    if (!errStr) {
       errStr = "NULL";
-    CLog::Log(LOGERROR, "GL: Error compiling ARB pixel shader, GL_PROGRAM_ERROR_STRING_ARB = %s", errStr);
+    
+}CLog::Log(LOGERROR, "GL: Error compiling ARB pixel shader, GL_PROGRAM_ERROR_STRING_ARB = %s", errStr);
     m_compiled = false;
   }
   else
@@ -258,8 +262,9 @@ bool CARBPixelShader::Compile()
 
 void CARBPixelShader::Free()
 {
-  if (m_pixelShader)
+  if (m_pixelShader) {
     glDeleteProgramsARB(1, &m_pixelShader);
+}
   m_pixelShader = 0;
 }
 

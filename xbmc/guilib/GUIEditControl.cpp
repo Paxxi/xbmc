@@ -332,8 +332,9 @@ void CGUIEditControl::OnClick()
     {
       CDateTime dateTime;
       dateTime.SetFromDBDate(utf8);
-      if (dateTime < CDateTime(2000,1, 1, 0, 0, 0))
+      if (dateTime < CDateTime(2000,1, 1, 0, 0, 0)) {
         dateTime = CDateTime(2000, 1, 1, 0, 0, 0);
+}
       SYSTEMTIME date;
       dateTime.GetAsSystemTime(date);
       if (CGUIDialogNumeric::ShowAndGetDate(date, !m_inputHeading.empty() ? m_inputHeading : g_localizeStrings.Get(21420)))
@@ -410,8 +411,9 @@ void CGUIEditControl::RecalcLabelPosition()
   float afterCursorWidth = m_label.CalcTextWidth(text.substr(0, m_cursorPos) + L'|');
   float leftTextWidth = m_label.GetRenderRect().Width();
   float maxTextWidth = m_label.GetMaxWidth();
-  if (leftTextWidth > 0)
+  if (leftTextWidth > 0) {
     maxTextWidth -= leftTextWidth + spaceWidth;
+}
 
   // if skinner forgot to set height :p
   if (m_height == 0 && m_label.GetLabelInfo().font)
@@ -435,14 +437,16 @@ void CGUIEditControl::RecalcLabelPosition()
       m_textOffset = maxTextWidth - m_textWidth;
     }
   }
-  else
+  else {
     m_textOffset = 0;
+}
 }
 
 void CGUIEditControl::ProcessText(unsigned int currentTime)
 {
-  if (m_smsTimer.IsRunning() && m_smsTimer.GetElapsedMilliseconds() > smsDelay)
+  if (m_smsTimer.IsRunning() && m_smsTimer.GetElapsedMilliseconds() > smsDelay) {
     UpdateText();
+}
 
   if (m_bInvalidated)
   {
@@ -524,8 +528,9 @@ void CGUIEditControl::RenderText()
 CGUILabel::COLOR CGUIEditControl::GetTextColor() const
 {
   CGUILabel::COLOR color = CGUIButtonControl::GetTextColor();
-  if (color != CGUILabel::COLOR_DISABLED && HasInvalidInput())
+  if (color != CGUILabel::COLOR_DISABLED && HasInvalidInput()) {
     return CGUILabel::COLOR_INVALID;
+}
 
   return color;
 }
@@ -547,8 +552,9 @@ std::wstring CGUIEditControl::GetDisplayedText() const
       text.append(1, m_text2[m_cursorPos - 1]);
       text.append(m_text2.size() - m_cursorPos, L'*');
     }
-    else
-      text.append(m_text2.size(), L'*');
+    else {
+      text
+}.append(m_text2.size(), L'*');
   }
   else if (!m_edit.empty())
     text.insert(m_editOffset, m_edit);
@@ -564,8 +570,9 @@ bool CGUIEditControl::SetStyledText(const std::wstring &text)
   colors.push_back(m_label.GetLabelInfo().textColor);
   colors.push_back(m_label.GetLabelInfo().disabledColor);
   color_t select = m_label.GetLabelInfo().selectedColor;
-  if (!select)
+  if (!select) {
     select = 0xFFFF0000;
+}
   colors.push_back(select);
   colors.push_back(0x00FFFFFF);
 
@@ -577,17 +584,18 @@ bool CGUIEditControl::SetStyledText(const std::wstring &text)
   for (unsigned int i = 0; i < text.size(); i++)
   {
     unsigned int ch = text[i];
-    if (m_editLength > 0 && startSelection <= i && i < endSelection)
+    if (m_editLength > 0 && startSelection <= i && i < endSelection) {
       ch |= (2 << 16); // highlight the letters we're playing with
-    else if (!m_edit.empty() && (i < startHighlight || i >= endHighlight))
+    } else if (!m_edit.empty() && (i < startHighlight || i >= endHighlight))
       ch |= (1 << 16); // dim the bits we're not editing
     styled.push_back(ch);
   }
 
   // show the cursor
   unsigned int ch = L'|';
-  if ((++m_cursorBlink % 64) > 32)
+  if ((++m_cursorBlink % 64) > 32) {
     ch |= (3 << 16);
+}
   styled.insert(styled.begin() + m_cursorPos, ch);
 
   return m_label2.SetStyledText(styled, colors);
@@ -631,13 +639,15 @@ std::string CGUIEditControl::GetLabel2() const
 
 bool CGUIEditControl::ClearMD5()
 {
-  if (!(m_inputType == INPUT_TYPE_PASSWORD_MD5 || m_inputType == INPUT_TYPE_PASSWORD_NUMBER_VERIFY_NEW) || !m_isMD5)
+  if (!(m_inputType == INPUT_TYPE_PASSWORD_MD5 || m_inputType == INPUT_TYPE_PASSWORD_NUMBER_VERIFY_NEW) || !m_isMD5) {
     return false;
+}
   
   m_text2.clear();
   m_cursorPos = 0;
-  if (m_inputType != INPUT_TYPE_PASSWORD_NUMBER_VERIFY_NEW)
+  if (m_inputType != INPUT_TYPE_PASSWORD_NUMBER_VERIFY_NEW) {
     m_isMD5 = false;
+}
   return true;
 }
 
@@ -707,8 +717,9 @@ void CGUIEditControl::OnPasteClipboard()
 
 void CGUIEditControl::SetInputValidation(StringValidation::Validator inputValidator, void *data /* = NULL */)
 {
-  if (m_inputValidator == inputValidator)
+  if (m_inputValidator == inputValidator) {
     return;
+}
   
   m_inputValidator = inputValidator;
   m_inputValidatorData = data;
@@ -718,8 +729,9 @@ void CGUIEditControl::SetInputValidation(StringValidation::Validator inputValida
 
 bool CGUIEditControl::ValidateInput(const std::wstring &data) const
 {
-  if (m_inputValidator == nullptr)
+  if (m_inputValidator == nullptr) {
     return true;
+}
 
   return m_inputValidator(GetLabel2(), (void*)(m_inputValidatorData != NULL ? m_inputValidatorData : this));
 }

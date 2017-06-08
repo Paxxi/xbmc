@@ -79,8 +79,9 @@ void CPortMapper::Notify(const Observable &obs, const ObservableMessage msg)
 
 void CPortMapper::ProcessPeripherals()
 {
-  if (m_peripheralManager == nullptr || m_portManager == nullptr)
+  if (m_peripheralManager == nullptr || m_portManager == nullptr) {
     return;
+}
 
   PeripheralVector joysticks;
   m_peripheralManager->GetPeripheralsWithFeature(joysticks, FEATURE_JOYSTICK);

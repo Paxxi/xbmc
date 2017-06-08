@@ -273,8 +273,9 @@ void CZeroconfBrowserAvahi::browseCallback (
       CLog::Log ( LOGDEBUG, "CZeroconfBrowserAvahi::browseCallback all for now (service = %s)", type);
       //if this browser already sent the all for now message, we need to update the gui now
       bool success = p_instance->m_all_for_now_browsers.insert(browser).second;
-      if(!success)
+      if(!success) {
         CLog::Log ( LOGDEBUG, "CZeroconfBrowserAvahi::browseCallback AVAHI_BROWSER_ALL_FOR_NOW sent twice?!");
+}
       update_gui = true;
       break;
   }
@@ -296,8 +297,9 @@ CZeroconfBrowser::ZeroconfService::tTxtRecordMap GetTxtRecords(AvahiStringList *
   {
     char *key, *value;
 
-    if( avahi_string_list_get_pair( i, &key, &value, nullptr ) < 0 )
+    if( avahi_string_list_get_pair( i, &key, &value, nullptr ) < 0 ) {
       continue;
+}
 
     recordMap.insert(
       std::make_pair(
@@ -306,10 +308,12 @@ CZeroconfBrowser::ZeroconfService::tTxtRecordMap GetTxtRecords(AvahiStringList *
       )
     );
     
-    if( key )
+    if( key ) {
       avahi_free(key);
-    if( value )
+}
+    if( value ) {
       avahi_free(value);
+}
   }
   return recordMap;
 }

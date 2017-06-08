@@ -57,8 +57,9 @@ namespace XBMCAddon
           if (abortEvent.WaitMSec(t))
             return true;
         }
-        if (languageHook)
+        if (languageHook) {
           languageHook->MakePendingCalls();
+}
       }
       return false;
     }

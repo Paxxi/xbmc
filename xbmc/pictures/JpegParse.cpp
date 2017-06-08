@@ -166,8 +166,9 @@ bool CJpegParse::ExtractInfo (CFile& infile)
     BYTE marker = 0;
     for (a=0; a<7; a++) {
       bytesRead = infile.Read(&marker, sizeof(BYTE));
-      if (marker != 0xFF)
+      if (marker != 0xFF) {
         break;
+}
 
       if (a >= 6)
       {
@@ -322,8 +323,9 @@ bool CJpegParse::Process (const char *picFileName)
 
   bool result = ExtractInfo(file);
   file.Close();
-  if (result == false)
+  if (result == false) {
     printf("JpgParse: Not a JPEG file %s", picFileName);
+}
   return result;
 }
 

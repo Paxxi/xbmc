@@ -51,8 +51,9 @@ std::string CDirectoryNodeAlbumCompilations::GetLocalizedName() const
 bool CDirectoryNodeAlbumCompilations::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

@@ -43,11 +43,13 @@ static bool ReadString(FILE* file, char* str, size_t max_length)
 
 static bool ReadUInt32(FILE* file, uint32_t& value)
 {
-  if (file == nullptr)
+  if (file == nullptr) {
     return false;
+}
 
-  if (fread(&value, sizeof(uint32_t), 1, file) != 1)
+  if (fread(&value, sizeof(uint32_t), 1, file) != 1) {
     return false;
+}
 
   value = Endian_SwapLE32(value);
   return true;
@@ -55,11 +57,13 @@ static bool ReadUInt32(FILE* file, uint32_t& value)
 
 static bool ReadUInt64(FILE* file, uint64_t& value)
 {
-  if (file == nullptr)
+  if (file == nullptr) {
     return false;
+}
 
-  if (fread(&value, sizeof(uint64_t), 1, file) != 1)
+  if (fread(&value, sizeof(uint64_t), 1, file) != 1) {
     return false;
+}
 
   value = Endian_SwapLE64(value);
   return true;
@@ -90,28 +94,32 @@ bool CXBTFReader::Open(const std::string& path)
 #else
   m_file = fopen(m_path.c_str(), "rb");
 #endif
-  if (m_file == nullptr)
+  if (m_file == nullptr) {
     return false;
+}
 
   // read the magic word
   char magic[4];
-  if (!ReadString(m_file, magic, sizeof(magic)))
+  if (!ReadString(m_file, magic, sizeof(magic))) {
     return false;
+}
 
   if (strncmp(XBTF_MAGIC.c_str(), magic, sizeof(magic)) != 0)
     return false;
 
   // read the version
   char version[1];
-  if (!ReadString(m_file, version, sizeof(version)))
+  if (!ReadString(m_file, version, sizeof(version))) {
     return false;
+}
 
   if (strncmp(XBTF_VERSION.c_str(), version, sizeof(version)) != 0)
     return false;
 
   unsigned int nofFiles;
-  if (!ReadUInt32(m_file, nofFiles))
+  if (!ReadUInt32(m_file, nofFiles)) {
     return false;
+}
 
   for (uint32_t i = 0; i < nofFiles; i++)
   {
@@ -126,44 +134,53 @@ bool CXBTFReader::Open(const std::string& path)
       return false;
     xbtfFile.SetPath(path);
 
-    if (!ReadUInt32(m_file, u32))
+    if (!ReadUInt32(m_file, u32)) {
       return false;
+}
     xbtfFile.SetLoop(u32);
 
     unsigned int nofFrames;
-    if (!ReadUInt32(m_file, nofFrames))
+    if (!ReadUInt32(m_file, nofFrames)) {
       return false;
+}
 
     for (uint32_t j = 0; j < nofFrames; j++)
     {
       CXBTFFrame frame;
 
-      if (!ReadUInt32(m_file, u32))
+      if (!ReadUInt32(m_file, u32)) {
         return false;
+}
       frame.SetWidth(u32);
 
-      if (!ReadUInt32(m_file, u32))
+      if (!ReadUInt32(m_file, u32)) {
         return false;
+}
       frame.SetHeight(u32);
 
-      if (!ReadUInt32(m_file, u32))
+      if (!ReadUInt32(m_file, u32)) {
         return false;
+}
       frame.SetFormat(u32);
 
-      if (!ReadUInt64(m_file, u64))
+      if (!ReadUInt64(m_file, u64)) {
         return false;
+}
       frame.SetPackedSize(u64);
 
-      if (!ReadUInt64(m_file, u64))
+      if (!ReadUInt64(m_file, u64)) {
         return false;
+}
       frame.SetUnpackedSize(u64);
 
-      if (!ReadUInt32(m_file, u32))
+      if (!ReadUInt32(m_file, u32)) {
         return false;
+}
       frame.SetDuration(u32);
 
-      if (!ReadUInt64(m_file, u64))
+      if (!ReadUInt64(m_file, u64)) {
         return false;
+}
       frame.SetOffset(u64);
 
       xbtfFile.GetFrames().push_back(frame);
@@ -199,30 +216,35 @@ void CXBTFReader::Close()
 
 time_t CXBTFReader::GetLastModificationTimestamp() const
 {
-  if (m_file == nullptr)
+  if (m_file == nullptr) {
     return 0;
+}
 
   struct stat fileStat;
-  if (fstat(fileno(m_file), &fileStat) == -1)
+  if (fstat(fileno(m_file), &fileStat) == -1) {
     return 0;
+}
 
   return fileStat.st_mtime;
 }
 
 bool CXBTFReader::Load(const CXBTFFrame& frame, unsigned char* buffer) const
 {
-  if (m_file == nullptr)
+  if (m_file == nullptr) {
     return false;
+}
 
 #if defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
   if (fseeko(m_file, static_cast<off_t>(frame.GetOffset()), SEEK_SET) == -1)
 #else
-  if (fseeko64(m_file, static_cast<off_t>(frame.GetOffset()), SEEK_SET) == -1)
+  if (fseeko64(m_file, static_cast<off_t>(frame.GetOffset()), SEEK_SET) == -1) {
 #endif
     return false;
+}
 
-  if (fread(buffer, 1, static_cast<size_t>(frame.GetPackedSize()), m_file) != frame.GetPackedSize())
+  if (fread(buffer, 1, static_cast<size_t>(frame.GetPackedSize()), m_file) != frame.GetPackedSize()) {
     return false;
+}
 
   return true;
 }

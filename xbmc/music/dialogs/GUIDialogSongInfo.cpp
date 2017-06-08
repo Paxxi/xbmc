@@ -406,8 +406,9 @@ void CGUIDialogSongInfo::OnSetUserrating()
     dialog->Open();
 
     int iItem = dialog->GetSelectedItem();
-    if (iItem < 0)
+    if (iItem < 0) {
       return;
+}
 
     SetUserrating(iItem);
   }

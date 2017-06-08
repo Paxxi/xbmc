@@ -175,8 +175,9 @@ ThreadIdentifier CThread::ThreadId() const
 
 void CThread::Process()
 {
-  if(m_pRunnable)
+  if(m_pRunnable) {
     m_pRunnable->Run();
+}
 }
 
 bool CThread::IsCurrentThread() const
@@ -191,10 +192,11 @@ CThread* CThread::GetCurrentThread()
 
 void CThread::Sleep(unsigned int milliseconds)
 {
-  if(milliseconds > 10 && IsCurrentThread())
+  if(milliseconds > 10 && IsCurrentThread()) {
     m_StopEvent.WaitMSec(milliseconds);
-  else
+  } else {
     XbmcThreads::ThreadSleep(milliseconds);
+}
 }
 
 void CThread::Action()
@@ -206,14 +208,16 @@ void CThread::Action()
   catch (const XbmcCommons::UncheckedException &e)
   {
     e.LogThrowMessage("OnStartup");
-    if (IsAutoDelete())
+    if (IsAutoDelete()) {
       return;
+}
   }
   catch (...)
   {
     LOG(LOGERROR, "%s - thread %s, Unhandled exception caught in thread startup, aborting. auto delete: %d", __FUNCTION__, m_ThreadName.c_str(), IsAutoDelete());
-    if (IsAutoDelete())
+    if (IsAutoDelete()) {
       return;
+}
   }
 
   try

@@ -144,8 +144,9 @@ bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
 TiXmlElement *CLibraryDirectory::LoadXML(const std::string &xmlFile)
 {
-  if (!CFile::Exists(xmlFile))
+  if (!CFile::Exists(xmlFile)) {
     return nullptr;
+}
 
   if (!m_doc.LoadFile(xmlFile))
     return nullptr;

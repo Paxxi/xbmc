@@ -99,8 +99,9 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
     break;
   case ACTION_VIS_PRESET_SHOW:
     {
-      if (!m_lockedTimer.IsRunning() || m_bShowPreset)
+      if (!m_lockedTimer.IsRunning() || m_bShowPreset) {
         m_bShowPreset = !m_bShowPreset;
+}
       return true;
     }
     break;
@@ -134,8 +135,9 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
   if (passToVis)
   {
     CGUIControl *control = GetControl(CONTROL_VIS);
-    if (control)
+    if (control) {
       return control->OnAction(action);
+}
   }
 
   return CGUIWindow::OnAction(action);
@@ -150,8 +152,9 @@ bool CGUIWindowVisualisation::OnMessage(CGUIMessage& message)
   case GUI_MSG_PLAYBACK_STARTED:
     {
       CGUIControl *control = GetControl(CONTROL_VIS);
-      if (control)
+      if (control) {
         return control->OnMessage(message);
+}
     }
     break;
   case GUI_MSG_VISUALISATION_ACTION:
@@ -206,8 +209,9 @@ EVENT_RESULT CGUIWindowVisualisation::OnMouseEvent(const CPoint &point, const CM
     OnAction(CAction(ACTION_SHOW_GUI));
     return EVENT_RESULT_HANDLED;
   }
-  if (event.m_id == ACTION_GESTURE_NOTIFY)
+  if (event.m_id == ACTION_GESTURE_NOTIFY) {
     return EVENT_RESULT_UNHANDLED;
+}
   if (event.m_id != ACTION_MOUSE_MOVE || event.m_offsetX || event.m_offsetY)
   { // some other mouse action has occurred - bring up the OSD
     CGUIDialog *pOSD = g_windowManager.GetDialog(WINDOW_DIALOG_MUSIC_OSD);

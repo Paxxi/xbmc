@@ -26,12 +26,14 @@
 
 bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false */)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == nullptr)
+  if (elem == nullptr) {
     return false;
+}
 
   const char *strTmp = elem->Attribute(SETTING_XML_ATTR_FORMAT);
   std::string format;
@@ -50,8 +52,9 @@ bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false 
       CLog::Log(LOGERROR, "ISettingControl: error reading \"delayed\" attribute of <control>");
       return false;
     }
-    else
+    else {
       m_delayed = StringUtils::EqualsNoCase(strTmp, "true");
+}
   }
 
   return true;

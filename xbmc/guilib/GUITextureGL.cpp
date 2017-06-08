@@ -189,8 +189,9 @@ void CGUITextureGL::DrawQuad(const CRect &rect, color_t color, CBaseTexture *tex
     glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PREVIOUS);
     glTexEnvf(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
   }
-  else
+  else {
   glDisable(GL_TEXTURE_2D);
+}
 
   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);          // Turn Blending On
@@ -220,8 +221,9 @@ void CGUITextureGL::DrawQuad(const CRect &rect, color_t color, CBaseTexture *tex
   glVertex3f(rect.x1, rect.y2, 0);
 
   glEnd();
-  if (texture)
+  if (texture) {
     glDisable(GL_TEXTURE_2D);
+}
 }
 
 #endif

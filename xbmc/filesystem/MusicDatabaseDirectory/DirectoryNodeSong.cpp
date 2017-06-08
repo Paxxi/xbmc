@@ -33,8 +33,9 @@ CDirectoryNodeSong::CDirectoryNodeSong(const std::string& strName, CDirectoryNod
 bool CDirectoryNodeSong::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

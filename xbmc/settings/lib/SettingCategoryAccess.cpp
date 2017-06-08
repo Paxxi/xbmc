@@ -27,12 +27,14 @@ bool CSettingCategoryAccessCondition::Check() const
   if (m_value.empty())
     return true;
 
-  if (m_settingsManager == nullptr)
+  if (m_settingsManager == nullptr) {
     return false;
+}
 
   bool found = m_settingsManager->GetConditions().Check(m_value, "true");
-  if (m_negated)
+  if (m_negated) {
     return !found;
+}
 
   return found;
 }

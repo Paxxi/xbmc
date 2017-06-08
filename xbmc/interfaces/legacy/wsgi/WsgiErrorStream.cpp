@@ -64,8 +64,9 @@ namespace XBMCAddon
 #ifndef SWIG
     void WsgiErrorStream::SetRequest(HTTPPythonRequest* request)
     {
-      if (m_request != nullptr)
+      if (m_request != nullptr) {
         return;
+}
 
       m_request = request;
     }

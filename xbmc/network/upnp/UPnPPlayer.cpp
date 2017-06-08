@@ -68,32 +68,36 @@ public:
 
   void OnSetAVTransportURIResult(NPT_Result res, PLT_DeviceDataReference& device, void* userdata) override
   {
-    if(NPT_FAILED(res))
+    if(NPT_FAILED(res)) {
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnSetAVTransportURIResult failed");
+}
     m_resstatus = res;
     m_resevent.Set();
   }
 
   void OnPlayResult(NPT_Result res, PLT_DeviceDataReference& device, void* userdata) override
   {
-    if(NPT_FAILED(res))
+    if(NPT_FAILED(res)) {
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnPlayResult failed");
+}
     m_resstatus = res;
     m_resevent.Set();
   }
 
   void OnStopResult(NPT_Result res, PLT_DeviceDataReference& device, void* userdata) override
   {
-    if(NPT_FAILED(res))
+    if(NPT_FAILED(res)) {
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnStopResult failed");
+}
     m_resstatus = res;
     m_resevent.Set();
   }
 
   void OnGetMediaInfoResult(NPT_Result res, PLT_DeviceDataReference& device, PLT_MediaInfo* info, void* userdata) override
   {
-    if(NPT_FAILED(res) || info == nullptr)
+    if(NPT_FAILED(res) || info == nullptr) {
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnGetMediaInfoResult failed");
+}
   }
 
   void OnGetTransportInfoResult(NPT_Result res, PLT_DeviceDataReference& device, PLT_TransportInfo* info, void* userdata) override
@@ -107,16 +111,18 @@ public:
       m_trainfo.cur_transport_state  = "STOPPED";
       m_trainfo.cur_transport_status = "ERROR_OCCURED";
     }
-    else
+    else {
       m_trainfo = *info;
+}
     m_traevnt.Set();
   }
 
   void UpdatePositionInfo()
   {
     if(m_postime == 0
-    || m_postime > CTimeUtils::GetFrameTime())
+    || m_postime > CTimeUtils::GetFrameTime()) {
       return;
+}
 
     m_control->GetTransportInfo(m_device, m_instance, this);
     m_control->GetPositionInfo(m_device, m_instance, this);
@@ -132,8 +138,9 @@ public:
       CLog::Log(LOGERROR, "UPNP: CUPnPPlayer : OnGetMediaInfoResult failed");
       m_posinfo = PLT_PositionInfo();
     }
-    else
+    else {
       m_posinfo = *info;
+}
     m_postime = CTimeUtils::GetFrameTime() + 500;
     m_posevnt.Set();
   }
@@ -189,11 +196,13 @@ CUPnPPlayer::~CUPnPPlayer()
 
 static NPT_Result WaitOnEvent(CEvent& event, XbmcThreads::EndTime& timeout, CGUIDialogBusy*& dialog)
 {
-  if(event.WaitMSec(0))
+  if(event.WaitMSec(0)) {
     return NPT_SUCCESS;
+}
 
-  if (!CGUIDialogBusy::WaitOnEvent(event))
+  if (!CGUIDialogBusy::WaitOnEvent(event)) {
     return NPT_FAILURE;
+}
 
   return NPT_SUCCESS;
 }
@@ -287,8 +296,9 @@ int CUPnPPlayer::PlayFile(const CFileItem& file, const CPlayerOptions& options, 
 
     { CSingleLock lock(m_delegate->m_section);
       if(m_delegate->m_trainfo.cur_transport_state == "PLAYING"
-      || m_delegate->m_trainfo.cur_transport_state == "PAUSED_PLAYBACK")
+      || m_delegate->m_trainfo.cur_transport_state == "PAUSED_PLAYBACK") {
         break;
+}
 
       if(m_delegate->m_trainfo.cur_transport_state  == "STOPPED"
       && m_delegate->m_trainfo.cur_transport_status != "OK")
@@ -359,8 +369,9 @@ bool CUPnPPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options)
     /* make sure the attached player is actually playing */
     { CSingleLock lock(m_delegate->m_section);
       if(m_delegate->m_trainfo.cur_transport_state != "PLAYING"
-      && m_delegate->m_trainfo.cur_transport_state != "PAUSED_PLAYBACK")
+      && m_delegate->m_trainfo.cur_transport_state != "PAUSED_PLAYBACK") {
         goto failed;
+}
     }
   }
   else
@@ -449,15 +460,16 @@ failed:
 
 void CUPnPPlayer::Pause()
 {
-  if(IsPaused())
+  if(IsPaused()) {
     NPT_CHECK_LABEL(m_control->Play(m_delegate->m_device
                                   , m_delegate->m_instance
                                   , "1"
                                   , m_delegate), failed);
-  else
+  } else {
     NPT_CHECK_LABEL(m_control->Pause(m_delegate->m_device
                                    , m_delegate->m_instance
                                    , m_delegate), failed);
+}
 
   return;
 failed:
@@ -481,17 +493,19 @@ failed:
 float CUPnPPlayer::GetPercentage()
 {
   int64_t tot = GetTotalTime();
-  if(tot)
+  if(tot) {
     return 100.0f * GetTime() / tot;
-  else
+  } else {
     return 0.0f;
+}
 }
 
 void CUPnPPlayer::SeekPercentage(float percent)
 {
   int64_t tot = GetTotalTime();
-  if (tot)
+  if (tot) {
     SeekTime((int64_t)(tot * percent / 100));
+}
 }
 
 void CUPnPPlayer::Seek(bool bPlus, bool bLargeStep, bool bChapterOverride)
@@ -608,10 +622,11 @@ void CUPnPPlayer::SetSpeed(float speed)
 
 float CUPnPPlayer::GetSpeed()
 {
-  if (IsPaused())
+  if (IsPaused()) {
     return 0;
-  else
+  } else {
     return 1;
+}
 }
 
 } /* namespace UPNP */

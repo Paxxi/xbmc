@@ -85,10 +85,11 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
       // If there is remained Korean, merge code into character
       if (choseong != -1) // There is choseong
       {
-        if (jungseong != -1) // choseong+jungseong+(jongseong)
+        if (jungseong != -1) { // choseong+jungseong+(jongseong)
           korean += MergeCode(choseong, jungseong, jongseong);
-        else // Only choseong
-          korean += dicChoseong.at(choseong);
+        } else { // Only choseong
+          korean 
+}+= dicChoseong.at(choseong);
       }
       else
       {
@@ -126,29 +127,29 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
               jungseong = -1;
             }
           }
-          else if (jongseong == 0 && key == 9)  // "ㄳ"
+          else if (jongseong == 0 && key == 9) {  // "ㄳ"
             jongseong = 2;
-          else if (jongseong == 3 && key == 12) // "ㄵ"
+          } else if (jongseong == 3 && key == 12) { // "ㄵ"
             jongseong = 4;
-          else if (jongseong == 3 && key == 18) // "ㄶ"
+          } else if (jongseong == 3 && key == 18) { // "ㄶ"
             jongseong = 5;
-          else if (jongseong == 7 && key == 0)  // "ㄺ"
+          } else if (jongseong == 7 && key == 0) {  // "ㄺ"
             jongseong = 8;
-          else if (jongseong == 7 && key == 6)  // "ㄻ"
+          } else if (jongseong == 7 && key == 6) {  // "ㄻ"
             jongseong = 9;
-          else if (jongseong == 7 && key == 7)  // "ㄼ"
+          } else if (jongseong == 7 && key == 7) {  // "ㄼ"
             jongseong = 10;
-          else if (jongseong == 7 && key == 9)  // "ㄽ"
+          } else if (jongseong == 7 && key == 9) {  // "ㄽ"
             jongseong = 11;
-          else if (jongseong == 7 && key == 16) // "ㄾ"
+          } else if (jongseong == 7 && key == 16) { // "ㄾ"
             jongseong = 12;
-          else if (jongseong == 7 && key == 17) // "ㄿ"
+          } else if (jongseong == 7 && key == 17) { // "ㄿ"
             jongseong = 13;
-          else if (jongseong == 7 && key == 18) // "ㅀ"
+          } else if (jongseong == 7 && key == 18) { // "ㅀ"
             jongseong = 14;
-          else if (jongseong == 16 && key == 9) // "ㅄ"
+          } else if (jongseong == 16 && key == 9) { // "ㅄ"
             jongseong = 17;
-          else // Jongseong is completed. So new consonant is choseong.
+          } else // Jongseong is completed. So new consonant is choseong.
           {						
             korean += MergeCode(choseong, jungseong, jongseong);
             choseong = dicChoseong.find(dicKorean.at(key));
@@ -302,10 +303,11 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
           newCho = dicChoseong.find(dicJongseong.at(jongseong));
           jongseong = -1;
         }
-        if (choseong != -1) // If previous character has choseong and jungseong.
+        if (choseong != -1) { // If previous character has choseong and jungseong.
           korean += MergeCode(choseong, jungseong, jongseong);
-        else // If previous character has Jongseong only.
-          korean += dicJongseong.at(jongseong);
+        } else { // If previous character has Jongseong only.
+          korean 
+}+= dicJongseong.at(jongseong);
 
         choseong = newCho;
         jungseong = -1;
@@ -316,21 +318,21 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
         jungseong = dicJungseong.find(dicKorean.at(key));
       }
       // If there is jungseong already, jungseong is double vowel.
-      else if (jungseong == 8 && key == 19)   // "ㅘ"
+      else if (jungseong == 8 && key == 19) {   // "ㅘ"
         jungseong = 9;
-      else if (jungseong == 8 && key == 20)   // "ㅙ"
+      } else if (jungseong == 8 && key == 20) {   // "ㅙ"
         jungseong = 10;
-      else if (jungseong == 8 && key == 32)   // "ㅚ"
+      } else if (jungseong == 8 && key == 32) {   // "ㅚ"
         jungseong = 11;
-      else if (jungseong == 13 && key == 23)  // "ㅝ"
+      } else if (jungseong == 13 && key == 23) {  // "ㅝ"
         jungseong = 14;
-      else if (jungseong == 13 && key == 24)  // "ㅞ"
+      } else if (jungseong == 13 && key == 24) {  // "ㅞ"
         jungseong = 15;
-      else if (jungseong == 13 && key == 32)  // "ㅟ"
+      } else if (jungseong == 13 && key == 32) {  // "ㅟ"
         jungseong = 16;
-      else if (jungseong == 18 && key == 32)  // "ㅢ"
+      } else if (jungseong == 18 && key == 32) {  // "ㅢ"
         jungseong = 19;
-      else // If two vowel cannot be double vowel.
+      } else // If two vowel cannot be double vowel.
       {
         if (choseong != -1) // Previous character is completed. 
                             // Current character is begin with jungseong.
@@ -338,8 +340,9 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
           korean += MergeCode(choseong, jungseong, jongseong);
           choseong = -1;
         }
-        else // Previous character has jungseon only.
-          korean += dicJungseong.at(jungseong);
+        else { // Previous character has jungseon only.
+          korean 
+}+= dicJungseong.at(jungseong);
         jungseong = -1;
         korean += dicKorean.at(key);
       }
@@ -349,10 +352,11 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
   // Process last character
   if (choseong != -1)
   {
-    if (jungseong != -1) // Current character has choseong and jungseong.
+    if (jungseong != -1) { // Current character has choseong and jungseong.
       korean += MergeCode(choseong, jungseong, jongseong);
-    else // Current character has choseong only.
-      korean += dicChoseong.at(choseong);
+    } else { // Current character has choseong only.
+      korean 
+}+= dicChoseong.at(choseong);
   }
   else
   {

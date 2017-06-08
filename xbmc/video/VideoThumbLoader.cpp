@@ -274,8 +274,9 @@ bool CVideoThumbLoader::LoadItem(CFileItem* pItem)
 bool CVideoThumbLoader::LoadItemCached(CFileItem* pItem)
 {
   if (pItem->m_bIsShareOrDrive
-  ||  pItem->IsParentFolder())
+  ||  pItem->IsParentFolder()) {
     return false;
+}
 
   m_videoDatabase->Open();
 

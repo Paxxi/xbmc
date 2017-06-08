@@ -323,8 +323,9 @@ unsigned int CGUIEPGGridContainerModel::GetGridStartPadding() const
 {
   unsigned int iEpgLingerTime = g_advancedSettings.m_iEpgLingerTime;
 
-  if (iEpgLingerTime < GRID_START_PADDING)
+  if (iEpgLingerTime < GRID_START_PADDING) {
     return iEpgLingerTime;
+}
 
   return GRID_START_PADDING; // minutes
 }
@@ -403,8 +404,9 @@ void CGUIEPGGridContainerModel::FreeRulerMemory(int keepStart, int keepEnd)
     // wrapping
     for (int i = keepEnd + 1; i < keepStart && i < RulerItemsSize(); ++i)
     {
-      if (i == 0)
+      if (i == 0) {
         continue;
+}
 
       m_rulerItems[i]->FreeMemory();
     }

@@ -302,8 +302,9 @@ void Dataset::edit() {
 
 
 void Dataset::post() {
-  if (ds_state == dsInsert) make_insert();
-  else if (ds_state == dsEdit) make_edit();
+  if (ds_state == dsInsert) { make_insert();
+  } else if (ds_state == dsEdit) { make_edit();
+}
 }
 
 
@@ -315,11 +316,12 @@ void Dataset::deletion() {
 bool Dataset::set_field_value(const char *f_name, const field_value &value) {
   bool found = false;
   if ((ds_state == dsInsert) || (ds_state == dsEdit)) {
-      for (unsigned int i=0; i < fields_object->size(); i++) 
+      for (unsigned int i=0; i < fields_object->size(); i++) { 
 	if (str_compare((*edit_object)[i].props.name.c_str(), f_name)==0) {
 			     (*edit_object)[i].val = value;
 			     found = true;
 	}
+}
       if (!found) throw DbErrors("Field not found: %s",f_name);
     return true;
   }
@@ -361,10 +363,11 @@ const field_value Dataset::get_field_value(const char *f_name) {
   if (ds_state != dsInactive)
   {
     if (ds_state == dsEdit || ds_state == dsInsert){
-      for (unsigned int i=0; i < edit_object->size(); i++)
+      for (unsigned int i=0; i < edit_object->size(); i++) {
         if (str_compare((*edit_object)[i].props.name.c_str(), f_name)==0) {
           return (*edit_object)[i].val;
         }
+}
       throw DbErrors("Field not found: %s",f_name);
     }
     else
@@ -374,14 +377,16 @@ const field_value Dataset::get_field_value(const char *f_name) {
         return get_field_value(static_cast<int>(fieldIndexMap_Entries[fieldIndexMapID].fieldIndex));
 
       const char* name=strstr(f_name, ".");
-      if (name)
+      if (name) {
         name++;
+}
 
-      for (unsigned int i=0; i < fields_object->size(); i++) 
+      for (unsigned int i=0; i < fields_object->size(); i++) { 
         if (str_compare((*fields_object)[i].props.name.c_str(), f_name) == 0 || (name && str_compare((*fields_object)[i].props.name.c_str(), name) == 0)) {
           fieldIndexMap_Entries[fieldIndexMapID].fieldIndex = i;
           return (*fields_object)[i].val;
         }
+}
     }
     throw DbErrors("Field not found: %s",f_name);
   }
@@ -393,14 +398,16 @@ const field_value Dataset::get_field_value(const char *f_name) {
 const field_value Dataset::get_field_value(int index) {
   if (ds_state != dsInactive) {
     if (ds_state == dsEdit || ds_state == dsInsert){
-      if (index < 0 || index >= field_count())
+      if (index < 0 || index >= field_count()) {
         throw DbErrors("Field index not found: %d",index);
+}
 
       return (*edit_object)[index].val;
     }
     else
-      if (index < 0 || index >= field_count())
+      if (index < 0 || index >= field_count()) {
         throw DbErrors("Field index not found: %d",index);
+}
 
       return (*fields_object)[index].val;
   }
@@ -453,11 +460,12 @@ bool Dataset::locate(){
   first();
   while (!eof()) {
     result = true;
-    for (i=plist.begin();i!=plist.end();++i)
+    for (i=plist.begin();i!=plist.end();++i) {
       if (fv(i->first.c_str()).get_asString() == i->second.get_asString()) {
 	continue;
       }
       else {result = false; break;}
+}
     if (result) { return result;}
     next();
   }
@@ -476,11 +484,12 @@ bool Dataset::findNext() {
   std::map<std::string, field_value>::const_iterator i;
   while (!eof()) {
     result = true;
-    for (i=plist.begin();i!=plist.end();++i)
+    for (i=plist.begin();i!=plist.end();++i) {
       if (fv(i->first.c_str()).get_asString() == i->second.get_asString()) {
 	continue;
       }
       else {result = false; break;}
+}
     if (result) { return result;}
     next();
   }
@@ -534,23 +543,26 @@ int Dataset::field_count() { return fields_object->size();}
 int Dataset::fieldCount() { return fields_object->size();}
 
 const char *Dataset::fieldName(int n) {
-  if ( n < field_count() && n >= 0)
+  if ( n < field_count() && n >= 0) {
     return (*fields_object)[n].props.name.c_str();
-  else
+  } else {
     return nullptr;
+}
 }
 
 int Dataset::fieldSize(int n) {
-  if ( n < field_count() && n >= 0)
+  if ( n < field_count() && n >= 0) {
     return (*fields_object)[n].props.field_len;
-  else
+  } else {
     return 0;
+}
 }
 
 int Dataset::fieldIndex(const char *fn) {
-for (unsigned int i=0; i < fields_object->size(); i++)
+for (unsigned int i=0; i < fields_object->size(); i++) {
       if ((*fields_object)[i].props.name == fn)
 	return i;
+}
   return -1;
 }
 

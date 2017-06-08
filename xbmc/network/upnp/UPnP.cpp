@@ -103,16 +103,21 @@ NPT_Console::Output(const char* msg) { }
 
 int ConvertLogLevel(int nptLogLevel)
 {
-    if (nptLogLevel >= NPT_LOG_LEVEL_FATAL)
+    if (nptLogLevel >= NPT_LOG_LEVEL_FATAL) {
         return LOGFATAL;
-    if (nptLogLevel >= NPT_LOG_LEVEL_SEVERE)
+}
+    if (nptLogLevel >= NPT_LOG_LEVEL_SEVERE) {
         return LOGERROR;
-    if (nptLogLevel >= NPT_LOG_LEVEL_WARNING)
+}
+    if (nptLogLevel >= NPT_LOG_LEVEL_WARNING) {
         return LOGWARNING;
-    if (nptLogLevel >= NPT_LOG_LEVEL_INFO)
+}
+    if (nptLogLevel >= NPT_LOG_LEVEL_INFO) {
         return LOGNOTICE;
-    if (nptLogLevel >= NPT_LOG_LEVEL_FINE)
+}
+    if (nptLogLevel >= NPT_LOG_LEVEL_FINE) {
         return LOGINFO;
+}
 
     return LOGDEBUG;
 }
@@ -571,8 +576,9 @@ CUPnP::DestroyControlPoint()
 void
 CUPnP::StartClient()
 {
-    if (m_MediaBrowser != nullptr)
+    if (m_MediaBrowser != nullptr) {
         return;
+}
 
     CreateControlPoint();
 
@@ -586,14 +592,16 @@ CUPnP::StartClient()
 void
 CUPnP::StopClient()
 {
-    if (m_MediaBrowser == nullptr)
+    if (m_MediaBrowser == nullptr) {
         return;
+}
 
     delete m_MediaBrowser;
     m_MediaBrowser = nullptr;
 
-    if (!IsControllerStarted())
+    if (!IsControllerStarted()) {
         DestroyControlPoint();
+}
 }
 
 /*----------------------------------------------------------------------
@@ -602,8 +610,9 @@ CUPnP::StopClient()
 void
 CUPnP::StartController()
 {
-    if (m_MediaController != nullptr)
+    if (m_MediaController != nullptr) {
         return;
+}
 
     CreateControlPoint();
 
@@ -616,14 +625,16 @@ CUPnP::StartController()
 void
 CUPnP::StopController()
 {
-  if (m_MediaController == nullptr)
+  if (m_MediaController == nullptr) {
       return;
+}
 
   delete m_MediaController;
   m_MediaController = nullptr;
 
-  if (!IsClientStarted())
+  if (!IsClientStarted()) {
       DestroyControlPoint();
+}
 }
 
 /*----------------------------------------------------------------------

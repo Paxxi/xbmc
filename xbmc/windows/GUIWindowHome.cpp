@@ -80,15 +80,17 @@ void CGUIWindowHome::Announce(AnnouncementFlag flag, const char *sender, const c
   CLog::Log(LOGDEBUG, "GOT ANNOUNCEMENT, type: %i, from %s, message %s",(int)flag, sender, message);
 
   // we are only interested in library changes
-  if ((flag & (VideoLibrary | AudioLibrary)) == 0)
+  if ((flag & (VideoLibrary | AudioLibrary)) == 0) {
     return;
+}
 
   if (data.isMember("transaction") && data["transaction"].asBoolean())
     return;
 
   if (strcmp(message, "OnScanStarted") == 0 ||
-      strcmp(message, "OnCleanStarted") == 0)
+      strcmp(message, "OnCleanStarted") == 0) {
     return;
+}
 
   bool onUpdate = strcmp(message, "OnUpdate") == 0;
   // always update Totals except on an OnUpdate with no playcount update
@@ -98,10 +100,11 @@ void CGUIWindowHome::Announce(AnnouncementFlag flag, const char *sender, const c
   // always update the full list except on an OnUpdate
   if (!onUpdate)
   {
-    if (flag & VideoLibrary)
+    if (flag & VideoLibrary) {
       ra_flag |= Video;
-    else if (flag & AudioLibrary)
+    } else if (flag & AudioLibrary) {
       ra_flag |= Audio;
+}
   }
 
   CGUIMessage reload(GUI_MSG_NOTIFY_ALL, GetID(), 0, GUI_MSG_REFRESH_THUMBS, ra_flag);
@@ -126,12 +129,14 @@ void CGUIWindowHome::AddRecentlyAddedJobs(int flag)
                                   // reset this since we're going to execute a job
 
       // we're about to add one so set the indicator
-      if (flag)
+      if (flag) {
         m_recentlyAddedRunning = true; // this will happen in the if clause below
+}
     }
-    else
+    else {
       // since we're going to skip a job, mark that one came in and ...
       m_cumulativeUpdateFlag |= flag; // this will be used later
+}
   }
 
   if (flag && getAJob)
@@ -153,8 +158,9 @@ void CGUIWindowHome::OnJobComplete(unsigned int jobID, bool success, CJob *job)
     m_recentlyAddedRunning = false; /// we're done.
   }
 
-  if (flag)
+  if (flag) {
     AddRecentlyAddedJobs(0 /* the flag will be set inside AddRecentlyAddedJobs via m_cumulativeUpdateFlag */ );
+}
 }
 
 

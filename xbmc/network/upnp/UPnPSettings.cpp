@@ -62,8 +62,9 @@ bool CUPnPSettings::Load(const std::string &file)
 
   Clear();
 
-  if (!CFile::Exists(file))
+  if (!CFile::Exists(file)) {
     return false;
+}
   
   CXBMCTinyXML doc;
   if (!doc.LoadFile(file))
@@ -96,8 +97,9 @@ bool CUPnPSettings::Save(const std::string &file) const
   CXBMCTinyXML doc;
   TiXmlElement xmlRootElement(XML_UPNP);
   TiXmlNode *pRoot = doc.InsertEndChild(xmlRootElement);
-  if (pRoot == nullptr)
+  if (pRoot == nullptr) {
     return false;
+}
 
   XMLUtils::SetString(pRoot, XML_SERVER_UUID, m_serverUUID);
   XMLUtils::SetInt(pRoot, XML_SERVER_PORT, m_serverPort);

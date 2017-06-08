@@ -46,8 +46,9 @@ public:
         return 0;
       }
       num--;
-      if (m_data[m_offset / 8] & (1 << (7 - (m_offset & 7))))
+      if (m_data[m_offset / 8] & (1 << (7 - (m_offset & 7)))) {
         r |= 1 << num;
+}
       m_offset++;
     }
     return r;
@@ -58,8 +59,9 @@ public:
     int bits = 0;
     for (int b = 0; !b; lzb++, bits++)
     {
-      if (bits > maxbits)
+      if (bits > maxbits) {
         return 0;
+}
       b = readBits(1);
     }
     return (1 << lzb) - 1 + readBits(lzb);
@@ -200,8 +202,9 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
             int oddidx = (buf[4] & 0x80) ? 0 : 1;
             int cc_count = (buf[4] & 0x3e) >> 1;
             int extrafield = buf[4] & 0x01;
-            if (extrafield)
+            if (extrafield) {
               cc_count++;
+}
 
             if (cc_count > 0 && len >= 5 + cc_count * 3 * 2)
             {
@@ -213,8 +216,9 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
               {
                 for (int j = 0; j < 2; j++)
                 {
-                  if (i == cc_count - 1 && extrafield && j == 1)
+                  if (i == cc_count - 1 && extrafield && j == 1) {
                     break;
+}
 
                   if ((oddidx == j) && (src[0] == 0xFF))
                   {
@@ -243,10 +247,11 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
           CBitstream bs(buf, len * 8);
           bs.readGolombUE();
           int sliceType = bs.readGolombUE();
-          if (sliceType == 2 || sliceType == 7) // I slice
+          if (sliceType == 2 || sliceType == 7) { // I slice
             picType = 1;
-          else if (sliceType == 0 || sliceType == 5) // P slice
+          } else if (sliceType == 0 || sliceType == 5) { // P slice
             picType = 2;
+}
           if (picType == 0)
           {
             while (!m_ccTempBuffer.empty())
@@ -283,8 +288,9 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
   {
     if (!m_ccDecoder)
     {
-      if (!OpenDecoder())
+      if (!OpenDecoder()) {
         return nullptr;
+}
     }
     std::sort(m_ccReorderBuffer.begin(), m_ccReorderBuffer.end(), reorder_sort);
     pPacket = Decode();
@@ -311,8 +317,9 @@ void CDVDDemuxCC::Handler(int service, void *userdata)
       ctx->m_streamdata.erase(ctx->m_streamdata.begin() + idx);
       ctx->m_ccDecoder->m_seen608 = false;
     }
-    if (service == 0)
+    if (service == 0) {
       return;
+}
   }
 
   for (idx = 0; idx < ctx->m_streamdata.size(); idx++)
@@ -333,10 +340,11 @@ void CDVDDemuxCC::Handler(int service, void *userdata)
     data.service = service;
     ctx->m_streamdata.push_back(data);
 
-    if (service == 0)
+    if (service == 0) {
       ctx->m_ccDecoder->m_seen608 = true;
-    else
+    } else {
       ctx->m_ccDecoder->m_seen708 = true;
+}
   }
 
   ctx->m_streamdata[idx].pts = ctx->m_curPts;

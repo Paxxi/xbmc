@@ -80,12 +80,12 @@ bool CGUISettingsSliderControl::OnAction(const CAction &action)
   // intercept ACTION_SELECT_ITEM because onclick functionality is different from base class
   if (action.GetID() == ACTION_SELECT_ITEM)
   { 
-    if (!IsActive())
+    if (!IsActive()) {
       m_active = true;
      // switch between the two sliders
-    else if (m_rangeSelection && m_currentSelector == RangeSelectorLower)
+    } else if (m_rangeSelection && m_currentSelector == RangeSelectorLower) {
       SwitchRangeSelector();
-    else
+    } else
     {
       m_active = false;
       if (m_rangeSelection)

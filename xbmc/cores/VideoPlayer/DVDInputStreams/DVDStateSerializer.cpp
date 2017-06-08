@@ -211,8 +211,9 @@ bool CDVDStateSerializer::XMLToDVDState( dvd_state_t *state, const std::string &
 
   xmlDoc.Parse(xmlstate);
 
-  if( xmlDoc.Error() )
+  if( xmlDoc.Error() ) {
     return false;
+}
 
   TiXmlHandle hRoot( xmlDoc.RootElement() );
   if( strcmp( hRoot.Element()->Value(), "navstate" ) != 0 ) return false;
@@ -227,8 +228,9 @@ bool CDVDStateSerializer::XMLToDVDState( dvd_state_t *state, const std::string &
     element->Attribute("index", &index);
 
     text = TiXmlHandle( element ).FirstChildElement("value").FirstChild().Text();
-    if( text && index >= 0 && index < 24 )
+    if( text && index >= 0 && index < 24 ) {
       sscanf(text->Value(), "0x%hx", &state->registers.SPRM[index]);
+}
 
     element = element->NextSiblingElement("sprm");
   }
@@ -240,66 +242,82 @@ bool CDVDStateSerializer::XMLToDVDState( dvd_state_t *state, const std::string &
     if( index >= 0 && index < 16 )
     {
       text = TiXmlHandle( element ).FirstChildElement("value").FirstChild().Text();
-      if( text )
+      if( text ) {
         sscanf(text->Value(), "0x%hx", &state->registers.GPRM[index]);
+}
 
       text = TiXmlHandle( element ).FirstChildElement("mode").FirstChild().Text();
-      if( text )
+      if( text ) {
         sscanf(text->Value(), "0x%c", &state->registers.GPRM_mode[index]);
+}
 
       text = TiXmlHandle( element ).FirstChildElement("time").FirstChildElement("tv_sec").FirstChild().Text();
-      if( text )
+      if( text ) {
         sscanf(text->Value(), "%ld", &state->registers.GPRM_time[index].tv_sec);
+}
 
       text = TiXmlHandle( element ).FirstChildElement("time").FirstChildElement("tv_usec").FirstChild().Text();
-      if( text )
+      if( text ) {
         sscanf(text->Value(), "%ld", (long int*)&state->registers.GPRM_time[index].tv_usec);
+}
     }
     element = element->NextSiblingElement("gprm");
   }
 
-  if( (text = hRoot.FirstChildElement("domain").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("domain").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", (int*) &state->domain);
+}
 
-  if( (text = hRoot.FirstChildElement("vtsn").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("vtsn").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->vtsN);
+}
 
-  if( (text = hRoot.FirstChildElement("pgcn").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("pgcn").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->pgcN);
+}
 
-  if( (text = hRoot.FirstChildElement("pgn").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("pgn").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->pgN);
+}
 
-  if( (text = hRoot.FirstChildElement("celln").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("celln").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->cellN);
+}
 
-  if( (text = hRoot.FirstChildElement("cell_restart").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("cell_restart").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->cell_restart);
+}
 
-  if( (text = hRoot.FirstChildElement("blockn").FirstChild().Text()) )
+  if( (text = hRoot.FirstChildElement("blockn").FirstChild().Text()) ) {
     sscanf(text->Value(), "%d", &state->blockN);
+}
 
   { TiXmlHandle hrsm = hRoot.FirstChildElement("rsm");
 
-    if( (text = hrsm.FirstChildElement("vtsn").FirstChild().Text()) )
+    if( (text = hrsm.FirstChildElement("vtsn").FirstChild().Text()) ) {
       sscanf(text->Value(), "%d", &state->rsm_vtsN);
+}
 
-    if( (text = hrsm.FirstChildElement("blockn").FirstChild().Text()) )
+    if( (text = hrsm.FirstChildElement("blockn").FirstChild().Text()) ) {
       sscanf(text->Value(), "%d", &state->rsm_blockN);
+}
 
-    if( (text = hrsm.FirstChildElement("pgcn").FirstChild().Text()) )
+    if( (text = hrsm.FirstChildElement("pgcn").FirstChild().Text()) ) {
       sscanf(text->Value(), "%d", &state->rsm_pgcN);
+}
 
-    if( (text = hrsm.FirstChildElement("celln").FirstChild().Text()) )
+    if( (text = hrsm.FirstChildElement("celln").FirstChild().Text()) ) {
       sscanf(text->Value(), "%d", &state->rsm_cellN);
+}
 
     element = hrsm.FirstChildElement("registers").FirstChildElement("sprm").Element();
     while( element )
     {
       element->Attribute("index", &index);
       text = TiXmlHandle(element).FirstChildElement("value").FirstChild().Text();
-      if( text && index >= 0 && index < 5 )
+      if( text && index >= 0 && index < 5 ) {
         sscanf(text->Value(), "0x%hx", &state->rsm_regs[index]);
+}
 
       element = element->NextSiblingElement("sprm");
     }

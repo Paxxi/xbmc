@@ -71,8 +71,9 @@ bool CVirtualDirectory::GetDirectory(const CURL& url, CFileItemList &items, bool
 {
   std::string strPath = url.Get();
   int flags = m_flags;
-  if (!bUseFileDirectories)
+  if (!bUseFileDirectories) {
     flags |= DIR_FLAG_NO_FILE_DIRS;
+}
   if (!strPath.empty() && strPath != "files://")
     return CDirectory::GetDirectory(strPath, items, m_strFileMask, flags, m_allowThreads);
 
@@ -105,25 +106,29 @@ bool CVirtualDirectory::IsSource(const std::string& strPath, VECSOURCES *sources
   // just to make sure there's no mixed slashing in share/default defines
   // ie. f:/video and f:\video was not be recognised as the same directory,
   // resulting in navigation to a lower directory then the share.
-  if(URIUtils::IsDOSPath(strPathCpy))
+  if(URIUtils::IsDOSPath(strPathCpy)) {
     StringUtils::Replace(strPathCpy, '/', '\\');
+}
 
   VECSOURCES shares;
-  if (sources)
+  if (sources) {
     shares = *sources;
-  else
+  } else {
     GetSources(shares);
+}
   for (int i = 0; i < (int)shares.size(); ++i)
   {
     const CMediaSource& share = shares.at(i);
     std::string strShare = share.strPath;
     StringUtils::TrimRight(strShare, "/\\");
-    if(URIUtils::IsDOSPath(strShare))
+    if(URIUtils::IsDOSPath(strShare)) {
       StringUtils::Replace(strShare, '/', '\\');
+}
     if (strShare == strPathCpy)
     {
-      if (name)
+      if (name) {
         *name = share.strName;
+}
       return true;
     }
   }
@@ -150,8 +155,9 @@ bool CVirtualDirectory::IsInSource(const std::string &path) const
     {
       CMediaSource &share = shares[i];
       if (URIUtils::IsOnDVD(share.strPath) &&
-          URIUtils::PathHasParent(path, share.strPath))
+          URIUtils::PathHasParent(path, share.strPath)) {
         return true;
+}
     }
     return false;
   }
@@ -164,8 +170,9 @@ void CVirtualDirectory::GetSources(VECSOURCES &shares) const
   shares = m_vecSources;
   // add our plug n play shares
 
-  if (m_allowNonLocalSources)
+  if (m_allowNonLocalSources) {
     g_mediaManager.GetRemovableDrives(shares);
+}
 
 #ifdef HAS_DVD_DRIVE
   // and update our dvd share

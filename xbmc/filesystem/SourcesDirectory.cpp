@@ -48,8 +48,9 @@ bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   VECSOURCES sources;
   VECSOURCES *sourcesFromType = CMediaSourceSettings::GetInstance().GetSources(type);
-  if (!sourcesFromType)
+  if (!sourcesFromType) {
     return false;
+}
 
   sources = *sourcesFromType;
   g_mediaManager.GetRemovableDrives(sources);

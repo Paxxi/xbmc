@@ -110,8 +110,9 @@ void CGUIDialogSlider::ShowAndGetInput(const std::string &label, float value, fl
 {
   // grab the slider dialog
   CGUIDialogSlider *slider = g_windowManager.GetWindow<CGUIDialogSlider>(WINDOW_DIALOG_SLIDER);
-  if (!slider)
+  if (!slider) {
     return;
+}
 
   // set the label and value
   slider->Initialize();
@@ -124,8 +125,9 @@ void CGUIDialogSlider::Display(int label, float value, float min, float delta, f
 {
   // grab the slider dialog
   CGUIDialogSlider *slider = g_windowManager.GetWindow<CGUIDialogSlider>(WINDOW_DIALOG_SLIDER);
-  if (!slider)
+  if (!slider) {
     return;
+}
 
   // set the label and value
   slider->Initialize();

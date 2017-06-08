@@ -259,10 +259,12 @@ void CGUIPanelContainer::OnLeft()
 {
   CGUIAction action = GetAction(ACTION_MOVE_LEFT);
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
-  if (m_orientation == VERTICAL && MoveLeft(wrapAround))
+  if (m_orientation == VERTICAL && MoveLeft(wrapAround)) {
     return;
-  if (m_orientation == HORIZONTAL && MoveUp(wrapAround))
+}
+  if (m_orientation == HORIZONTAL && MoveUp(wrapAround)) {
     return;
+}
   CGUIControl::OnLeft();
 }
 
@@ -270,10 +272,12 @@ void CGUIPanelContainer::OnRight()
 {
   CGUIAction action = GetAction(ACTION_MOVE_RIGHT);
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
-  if (m_orientation == VERTICAL && MoveRight(wrapAround))
+  if (m_orientation == VERTICAL && MoveRight(wrapAround)) {
     return;
-  if (m_orientation == HORIZONTAL && MoveDown(wrapAround))
+}
+  if (m_orientation == HORIZONTAL && MoveDown(wrapAround)) {
     return;
+}
   return CGUIControl::OnRight();
 }
 
@@ -281,10 +285,12 @@ void CGUIPanelContainer::OnUp()
 {
   CGUIAction action = GetAction(ACTION_MOVE_UP);
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
-  if (m_orientation == VERTICAL && MoveUp(wrapAround))
+  if (m_orientation == VERTICAL && MoveUp(wrapAround)) {
     return;
-  if (m_orientation == HORIZONTAL && MoveLeft(wrapAround))
+}
+  if (m_orientation == HORIZONTAL && MoveLeft(wrapAround)) {
     return;
+}
   CGUIControl::OnUp();
 }
 
@@ -292,10 +298,12 @@ void CGUIPanelContainer::OnDown()
 {
   CGUIAction action = GetAction(ACTION_MOVE_DOWN);
   bool wrapAround = action.GetNavigation() == GetID() || !action.HasActionsMeetingCondition();
-  if (m_orientation == VERTICAL && MoveDown(wrapAround))
+  if (m_orientation == VERTICAL && MoveDown(wrapAround)) {
     return;
-  if (m_orientation == HORIZONTAL && MoveRight(wrapAround))
+}
+  if (m_orientation == HORIZONTAL && MoveRight(wrapAround)) {
     return;
+}
   return CGUIControl::OnDown();
 }
 
@@ -320,8 +328,9 @@ bool CGUIPanelContainer::MoveDown(bool wrapAround)
     ScrollToOffset(0);
     SetContainerMoving(1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -341,24 +350,26 @@ bool CGUIPanelContainer::MoveUp(bool wrapAround)
     ScrollToOffset(offset);
     SetContainerMoving(-1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
 bool CGUIPanelContainer::MoveLeft(bool wrapAround)
 {
   int col = GetCursor() % m_itemsPerRow;
-  if (col > 0)
+  if (col > 0) {
     SetCursor(GetCursor() - 1);
-  else if (wrapAround)
+  } else if (wrapAround)
   { // wrap around
     SetCursor(GetCursor() + m_itemsPerRow - 1);
     if (GetOffset() * m_itemsPerRow + GetCursor() >= (int)m_items.size())
       SetCursor((int)m_items.size() - GetOffset() * m_itemsPerRow - 1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -367,10 +378,11 @@ bool CGUIPanelContainer::MoveRight(bool wrapAround)
   int col = GetCursor() % m_itemsPerRow;
   if (col + 1 < m_itemsPerRow && GetOffset() * m_itemsPerRow + GetCursor() + 1 < (int)m_items.size())
     SetCursor(GetCursor() + 1);
-  else if (wrapAround) // move first item in row
+  else if (wrapAround) { // move first item in row
     SetCursor(GetCursor() - col);
-  else
+  } else {
     return false;
+}
   return true;
 }
 
@@ -455,8 +467,9 @@ int CGUIPanelContainer::CorrectOffset(int offset, int cursor) const
 
 int CGUIPanelContainer::GetCursorFromPoint(const CPoint &point, CPoint *itemPoint) const
 {
-  if (!m_layout)
+  if (!m_layout) {
     return -1;
+}
 
   float sizeX = m_orientation == VERTICAL ? m_layout->Size(HORIZONTAL) : m_layout->Size(VERTICAL);
   float sizeY = m_orientation == VERTICAL ? m_layout->Size(VERTICAL) : m_layout->Size(HORIZONTAL);
@@ -482,8 +495,9 @@ int CGUIPanelContainer::GetCursorFromPoint(const CPoint &point, CPoint *itemPoin
 bool CGUIPanelContainer::SelectItemFromPoint(const CPoint &point)
 {
   int cursor = GetCursorFromPoint(point);
-  if (cursor < 0)
+  if (cursor < 0) {
     return false;
+}
   SetCursor(cursor);
   return true;
 }

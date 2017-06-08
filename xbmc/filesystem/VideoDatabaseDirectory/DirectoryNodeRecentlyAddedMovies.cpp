@@ -32,8 +32,9 @@ CDirectoryNodeRecentlyAddedMovies::CDirectoryNodeRecentlyAddedMovies(const std::
 bool CDirectoryNodeRecentlyAddedMovies::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
   
   bool bSuccess=videodatabase.GetRecentlyAddedMoviesNav(BuildPath(), items);
 

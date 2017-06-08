@@ -160,8 +160,9 @@ JSONRPC_STATUS CSettingsOperations::GetSettings(const std::string &method, ITran
 
     sections.push_back(section);
   }
-  else
-    sections = CServiceBroker::GetSettings().GetSections();
+  else {
+    sections 
+}= CServiceBroker::GetSettings().GetSections();
 
   result["settings"] = CVariant(CVariant::VariantTypeArray);
 
@@ -191,13 +192,15 @@ JSONRPC_STATUS CSettingsOperations::GetSettings(const std::string &method, ITran
         }
         found = true;
 
-        if (doFilter)
+        if (doFilter) {
           break;
+}
       }
     }
 
-    if (doFilter && !found)
+    if (doFilter && !found) {
       return InvalidParams;
+}
   }
 
   return OK;
@@ -340,12 +343,15 @@ JSONRPC_STATUS CSettingsOperations::ResetSettingValue(const std::string &method,
 
 int CSettingsOperations::ParseSettingLevel(const std::string &strLevel)
 {
-  if (StringUtils::EqualsNoCase(strLevel, "basic"))
+  if (StringUtils::EqualsNoCase(strLevel, "basic")) {
     return SettingLevelBasic;
-  if (StringUtils::EqualsNoCase(strLevel, "advanced"))
+}
+  if (StringUtils::EqualsNoCase(strLevel, "advanced")) {
     return SettingLevelAdvanced;
-  if (StringUtils::EqualsNoCase(strLevel, "expert"))
+}
+  if (StringUtils::EqualsNoCase(strLevel, "expert")) {
     return SettingLevelExpert;
+}
 
   return SettingLevelStandard;
 }

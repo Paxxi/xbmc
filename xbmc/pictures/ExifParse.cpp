@@ -275,8 +275,9 @@ double CExifParse::ConvertAnyFormat(const void* const ValuePtr, int Format)
       Num = Get32(ValuePtr, m_MotorolaOrder);
       Den = Get32(4+(char *)ValuePtr, m_MotorolaOrder);
 
-      if (Den == 0)    Value = 0;
-      else             Value = (double)Num/Den;
+      if (Den == 0) {    Value = 0;
+      } else {             Value = (double)Num/Den;
+}
     }
     break;
 
@@ -498,12 +499,13 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         {
           // As some implementations use spaces instead of \0 for the padding,
           // we're not so strict and check only the prefix.
-          if (memcmp(ValuePtr, "ASCII", 5) == 0)
+          if (memcmp(ValuePtr, "ASCII", 5) == 0) {
             m_ExifInfo->CommentsCharset = EXIF_COMMENT_CHARSET_ASCII;
-          else if (memcmp(ValuePtr, "UNICODE", 7) == 0)
+          } else if (memcmp(ValuePtr, "UNICODE", 7) == 0) {
             m_ExifInfo->CommentsCharset = EXIF_COMMENT_CHARSET_UNICODE;
-          else if (memcmp(ValuePtr, "JIS", 3) == 0)
+          } else if (memcmp(ValuePtr, "JIS", 3) == 0) {
             m_ExifInfo->CommentsCharset = EXIF_COMMENT_CHARSET_JIS;
+}
 
           int length = ByteCount - EXIF_COMMENT_CHARSET_LENGTH;
           length = min(length, MAX_COMMENT);
@@ -560,8 +562,9 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // Simplest way of expressing exposure time, so I trust it most.
         // (overwrite previously computd value if there is one)
         float expTime = (float)ConvertAnyFormat(ValuePtr, Format);
-        if (expTime)
+        if (expTime) {
           m_ExifInfo->ExposureTime = expTime;
+}
         }
       break;
 
@@ -644,8 +647,9 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
 
       case TAG_ISO_EQUIVALENT:
         m_ExifInfo->ISOequivalent = (int)ConvertAnyFormat(ValuePtr, Format);
-        if (m_ExifInfo->ISOequivalent < 50)
+        if (m_ExifInfo->ISOequivalent < 50) {
           m_ExifInfo->ISOequivalent *= 200;          // Fixes strange encoding on some older digicams.
+}
       break;
 
       case TAG_EXPOSURE_MODE:
@@ -946,9 +950,10 @@ void CExifParse::ProcessGpsInfo(
       break;
 
       case TAG_GPS_ALT_REF:
-        if (ValuePtr[0] != 0)
+        if (ValuePtr[0] != 0) {
           m_ExifInfo->GpsAlt[0] = '-';
-        m_ExifInfo->GpsAlt[1] = 0;
+        
+}m_ExifInfo->GpsAlt[1] = 0;
       break;
 
       case TAG_GPS_ALT:

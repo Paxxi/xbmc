@@ -114,8 +114,9 @@ void CPVRGUIInfo::Stop()
 
 void CPVRGUIInfo::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  if (msg == ObservableMessageTimers || msg == ObservableMessageTimersReset)
+  if (msg == ObservableMessageTimers || msg == ObservableMessageTimersReset) {
     UpdateTimersCache();
+}
 }
 
 void CPVRGUIInfo::ShowPlayerInfo(int iTimeout)
@@ -123,8 +124,9 @@ void CPVRGUIInfo::ShowPlayerInfo(int iTimeout)
   {
     CSingleLock lock(m_critSection);
 
-    if (iTimeout > 0)
+    if (iTimeout > 0) {
       m_ToggleShowInfo.Set(iTimeout * 1000);
+}
   }
 
   g_infoManager.SetShowInfo(true);
@@ -519,18 +521,19 @@ int CPVRGUIInfo::TranslateIntInfo(DWORD dwInfo) const
   int iReturn(0);
   CSingleLock lock(m_critSection);
 
-  if (dwInfo == PVR_PLAYING_PROGRESS)
+  if (dwInfo == PVR_PLAYING_PROGRESS) {
     iReturn = (int) ((float) GetStartTime() / m_iDuration * 100);
-  else if (dwInfo == PVR_ACTUAL_STREAM_SIG_PROGR)
+  } else if (dwInfo == PVR_ACTUAL_STREAM_SIG_PROGR) {
     iReturn = (int) ((float) m_qualityInfo.iSignal / 0xFFFF * 100);
-  else if (dwInfo == PVR_ACTUAL_STREAM_SNR_PROGR)
+  } else if (dwInfo == PVR_ACTUAL_STREAM_SNR_PROGR) {
     iReturn = (int) ((float) m_qualityInfo.iSNR / 0xFFFF * 100);
-  else if (dwInfo == PVR_BACKEND_DISKSPACE_PROGR)
+  } else if (dwInfo == PVR_BACKEND_DISKSPACE_PROGR)
   {
-    if (m_iBackendDiskTotal > 0)
+    if (m_iBackendDiskTotal > 0) {
       iReturn = static_cast<int>(100 * m_iBackendDiskUsed / m_iBackendDiskTotal);
-    else
+    } else {
       iReturn = 0xFF;
+}
   }
   else if (dwInfo == PVR_TIMESHIFT_PROGRESS)
   {
@@ -603,18 +606,20 @@ void CPVRGUIInfo::CharInfoUNC(std::string &strValue) const
 
 void CPVRGUIInfo::CharInfoFrontendName(std::string &strValue) const
 {
-  if (!strlen(m_qualityInfo.strAdapterName))
+  if (!strlen(m_qualityInfo.strAdapterName)) {
     strValue = g_localizeStrings.Get(13205);
-  else
-    strValue = m_qualityInfo.strAdapterName;
+  } else {
+    strValue 
+}= m_qualityInfo.strAdapterName;
 }
 
 void CPVRGUIInfo::CharInfoFrontendStatus(std::string &strValue) const
 {
-  if (!strlen(m_qualityInfo.strAdapterStatus))
+  if (!strlen(m_qualityInfo.strAdapterStatus)) {
     strValue = g_localizeStrings.Get(13205);
-  else
-    strValue = m_qualityInfo.strAdapterStatus;
+  } else {
+    strValue 
+}= m_qualityInfo.strAdapterStatus;
 }
 
 void CPVRGUIInfo::CharInfoBackendName(std::string &strValue) const
@@ -648,8 +653,9 @@ void CPVRGUIInfo::CharInfoBackendDiskspace(std::string &strValue) const
         StringUtils::SizeToString(diskTotal - diskUsed).c_str(),
         StringUtils::SizeToString(diskTotal).c_str());
   }
-  else
+  else {
     strValue = g_localizeStrings.Get(13205);
+}
 }
 
 void CPVRGUIInfo::CharInfoBackendChannels(std::string &strValue) const
@@ -695,26 +701,29 @@ void CPVRGUIInfo::CharInfoEncryption(std::string &strValue) const
 
 void CPVRGUIInfo::CharInfoService(std::string &strValue) const
 {
-  if (!strlen(m_qualityInfo.strServiceName))
+  if (!strlen(m_qualityInfo.strServiceName)) {
     strValue = g_localizeStrings.Get(13205);
-  else
-    strValue = m_qualityInfo.strServiceName;
+  } else {
+    strValue 
+}= m_qualityInfo.strServiceName;
 }
 
 void CPVRGUIInfo::CharInfoMux(std::string &strValue) const
 {
-  if (!strlen(m_qualityInfo.strMuxName))
+  if (!strlen(m_qualityInfo.strMuxName)) {
     strValue = g_localizeStrings.Get(13205);
-  else
-    strValue = m_qualityInfo.strMuxName;
+  } else {
+    strValue 
+}= m_qualityInfo.strMuxName;
 }
 
 void CPVRGUIInfo::CharInfoProvider(std::string &strValue) const
 {
-  if (!strlen(m_qualityInfo.strProviderName))
+  if (!strlen(m_qualityInfo.strProviderName)) {
     strValue = g_localizeStrings.Get(13205);
-  else
-    strValue = m_qualityInfo.strProviderName;
+  } else {
+    strValue 
+}= m_qualityInfo.strProviderName;
 }
 
 void CPVRGUIInfo::UpdateBackendCache()
@@ -921,8 +930,9 @@ bool CPVRGUIInfo::TimerInfo::TimerInfoToggle()
   {
     unsigned int iPrevious = m_iTimerInfoToggleCurrent;
     unsigned int iBoundary = m_iRecordingTimerAmount > 0 ? m_iRecordingTimerAmount : m_iTimerAmount;
-    if (++m_iTimerInfoToggleCurrent > iBoundary - 1)
+    if (++m_iTimerInfoToggleCurrent > iBoundary - 1) {
       m_iTimerInfoToggleCurrent = 0;
+}
 
     return m_iTimerInfoToggleCurrent != iPrevious;
   }
@@ -932,8 +942,9 @@ bool CPVRGUIInfo::TimerInfo::TimerInfoToggle()
 
 void CPVRGUIInfo::TimerInfo::UpdateTimersToggle()
 {
-  if (!TimerInfoToggle())
+  if (!TimerInfoToggle()) {
     return;
+}
 
   std::string strActiveTimerTitle;
   std::string strActiveTimerChannelName;

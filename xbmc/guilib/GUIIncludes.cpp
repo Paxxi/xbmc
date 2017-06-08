@@ -108,8 +108,9 @@ void CGUIIncludes::Clear()
 
 void CGUIIncludes::Load(const std::string &file)
 {
-  if (!Load_Internal(file))
+  if (!Load_Internal(file)) {
     return;
+}
   FlattenExpressions();
   FlattenSkinVariableConditions();
 }
@@ -117,8 +118,9 @@ void CGUIIncludes::Load(const std::string &file)
 bool CGUIIncludes::Load_Internal(const std::string &file)
 {
   // check to see if we already have this loaded
-  if (HasLoaded(file))
+  if (HasLoaded(file)) {
     return true;
+}
 
   CXBMCTinyXML doc;
   if (!doc.LoadFile(file))
@@ -148,8 +150,9 @@ bool CGUIIncludes::Load_Internal(const std::string &file)
 
 void CGUIIncludes::LoadDefaults(const TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
   
   const TiXmlElement* child = node->FirstChildElement("default");
   while (child)
@@ -164,8 +167,9 @@ void CGUIIncludes::LoadDefaults(const TiXmlElement *node)
 
 void CGUIIncludes::LoadExpressions(const TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   const TiXmlElement* child = node->FirstChildElement("expression");
   while (child)
@@ -181,8 +185,9 @@ void CGUIIncludes::LoadExpressions(const TiXmlElement *node)
 
 void CGUIIncludes::LoadConstants(const TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   const TiXmlElement* child = node->FirstChildElement("constant");
   while (child)
@@ -197,8 +202,9 @@ void CGUIIncludes::LoadConstants(const TiXmlElement *node)
 
 void CGUIIncludes::LoadVariables(const TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   const TiXmlElement* child = node->FirstChildElement("variable");
   while (child)
@@ -213,8 +219,9 @@ void CGUIIncludes::LoadVariables(const TiXmlElement *node)
 
 void CGUIIncludes::LoadIncludes(const TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   const TiXmlElement* child = node->FirstChildElement("include");
   while (child)
@@ -230,10 +237,11 @@ void CGUIIncludes::LoadIncludes(const TiXmlElement *node)
       // if there's a <param> tag there also must be a <definition> tag
       Params defaultParams;
       bool haveParamTags = GetParameters(child, "default", defaultParams);
-      if (haveParamTags && !definitionTag)
+      if (haveParamTags && !definitionTag) {
         CLog::Log(LOGWARNING, "Skin has invalid include definition: %s", tagName);
-      else
-        m_includes.insert({ tagName, { *includeBody, std::move(defaultParams) } });
+      } else {
+        m_includes
+}.insert({ tagName, { *includeBody, std::move(defaultParams) } });
     }
     else if (child->Attribute("file"))
     {
@@ -245,8 +253,9 @@ void CGUIIncludes::LoadIncludes(const TiXmlElement *node)
         if (g_infoManager.Register(condition)->Get())
           Load_Internal(file);
       }
-      else
-        Load_Internal(file);
+      else {
+        Load_Internal
+}(file);
     }
     child = child->NextSiblingElement("include");
   }
@@ -361,8 +370,9 @@ void CGUIIncludes::SetDefaults(TiXmlElement *node)
 
 void CGUIIncludes::ResolveConstants(TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   TiXmlNode *child = node->FirstChild();
   if (child && child->Type() == TiXmlNode::TINYXML_TEXT && m_constantNodes.count(node->ValueStr()))
@@ -384,8 +394,9 @@ void CGUIIncludes::ResolveConstants(TiXmlElement *node)
 
 void CGUIIncludes::ResolveExpressions(TiXmlElement *node)
 {
-  if (!node)
+  if (!node) {
     return;
+}
 
   TiXmlNode *child = node->FirstChild();
   if (child && child->Type() == TiXmlNode::TINYXML_TEXT && m_expressionNodes.count(node->ValueStr()))
@@ -516,9 +527,9 @@ bool CGUIIncludes::GetParameters(const TiXmlElement *include, const char *valueA
 
         // <param name="posx" value="120" />
         const char *value = param->Attribute(valueAttribute);         // try attribute first
-        if (value)
+        if (value) {
           paramValue = value;
-        else
+        } else
         {
           // <param name="posx">120</param>
           const TiXmlNode *child = param->FirstChild();
@@ -537,8 +548,9 @@ bool CGUIIncludes::GetParameters(const TiXmlElement *include, const char *valueA
 
 void CGUIIncludes::ResolveParametersForNode(TiXmlElement *node, const Params& params)
 {
-  if (!node)
+  if (!node) {
     return;
+}
   std::string newValue;
   // run through this element's attributes, resolving any parameters
   TiXmlAttribute *attribute = node->FirstAttribute();

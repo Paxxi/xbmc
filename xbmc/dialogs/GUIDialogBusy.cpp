@@ -52,8 +52,9 @@ public:
 
 bool CGUIDialogBusy::Wait(IRunnable *runnable, unsigned int displaytime /* = 100 */, bool allowCancel /* = true */)
 {
-  if (!runnable)
+  if (!runnable) {
     return false;
+}
   CBusyWaiter waiter(runnable);
   return waiter.Wait(displaytime, allowCancel);
 }
@@ -129,8 +130,9 @@ void CGUIDialogBusy::DoProcess(unsigned int currentTime, CDirtyRegionList &dirty
 
 void CGUIDialogBusy::Render()
 {
-  if(!m_bLastVisible)
+  if(!m_bLastVisible) {
     return;
+}
   CGUIDialog::Render();
 }
 

@@ -34,8 +34,9 @@ NODE_TYPE CDirectoryNodeGrouped::GetChildType() const
   CQueryParams params;
   CollectQueryParams(params);
 
-  if (params.GetContentType() == VIDEODB_CONTENT_MOVIES)
+  if (params.GetContentType() == VIDEODB_CONTENT_MOVIES) {
     return NODE_TYPE_TITLE_MOVIES;
+}
   if (params.GetContentType() == VIDEODB_CONTENT_MUSICVIDEOS)
   {
     if (GetType() == NODE_TYPE_ACTOR)
@@ -59,8 +60,9 @@ std::string CDirectoryNodeGrouped::GetLocalizedName() const
 bool CDirectoryNodeGrouped::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

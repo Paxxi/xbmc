@@ -33,8 +33,9 @@ BitstreamStats::BitstreamStats(unsigned int nEstimatedBitrate)
   m_nEstimatedBitrate = nEstimatedBitrate;
   m_tmStart = 0LL;
 
-  if (m_tmFreq == 0LL)
+  if (m_tmFreq == 0LL) {
     m_tmFreq = CurrentHostFrequency();
+}
 }
 
 BitstreamStats::~BitstreamStats()
@@ -48,8 +49,9 @@ void BitstreamStats::AddSampleBytes(unsigned int nBytes)
 void BitstreamStats::AddSampleBits(unsigned int nBits)
 {
   m_nBitCount += nBits;
-  if (m_nBitCount >= m_nEstimatedBitrate)
+  if (m_nBitCount >= m_nEstimatedBitrate) {
     CalculateBitrate();
+}
 }
 
 void BitstreamStats::Start()
@@ -69,11 +71,13 @@ void BitstreamStats::CalculateBitrate()
   {
     m_dBitrate = (double)m_nBitCount / elapsed;
 
-    if (m_dBitrate > m_dMaxBitrate)
+    if (m_dBitrate > m_dMaxBitrate) {
       m_dMaxBitrate = m_dBitrate;
+}
 
-    if (m_dBitrate < m_dMinBitrate || m_dMinBitrate == -1)
+    if (m_dBitrate < m_dMinBitrate || m_dMinBitrate == -1) {
       m_dMinBitrate = m_dBitrate;
+}
 
     Start();
   }

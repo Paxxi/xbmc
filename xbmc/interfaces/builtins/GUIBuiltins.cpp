@@ -147,8 +147,9 @@ static int ActivateAndFocus(const std::vector<std::string>& params)
     }
 
   }
-  else
-    CLog::Log(LOGERROR, "Replace/ActivateWindowAndFocus called with invalid destination window: %s", strWindow.c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "Replace/ActivateWindowAndFocus called with invalid destination window: %s", strWindow.c_str());
 
   return 1;
 }
@@ -199,8 +200,9 @@ static int AlarmClock(const std::vector<std::string>& params)
   if( g_alarmClock.IsRunning() )
     g_alarmClock.Stop(params[0],silent);
   // no negative times not allowed, loop must have a positive time
-  if (seconds < 0 || (seconds == 0 && loop))
+  if (seconds < 0 || (seconds == 0 && loop)) {
     return false;
+}
   g_alarmClock.Start(params[0], seconds, params[1], silent, loop);
 
   return 0;
@@ -391,9 +393,9 @@ static int SetProperty(const std::vector<std::string>& params)
 static int SetStereoMode(const std::vector<std::string>& params)
 {
   CAction action = CStereoscopicsManager::GetInstance().ConvertActionCommandToAction("SetStereoMode", params[0]);
-  if (action.GetID() != ACTION_NONE)
+  if (action.GetID() != ACTION_NONE) {
     CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(action)));
-  else
+  } else
   {
     CLog::Log(LOGERROR,"Builtin 'SetStereoMode' called with unknown parameter: %s", params[0].c_str());
     return -2;

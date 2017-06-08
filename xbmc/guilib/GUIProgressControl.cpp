@@ -135,8 +135,9 @@ bool CGUIProgressControl::OnMessage(CGUIMessage& message)
 void CGUIProgressControl::SetPercentage(float fPercent)
 {
   fPercent = std::max(0.0f, std::min(fPercent, 100.0f));
-  if (m_fPercent != fPercent)
+  if (m_fPercent != fPercent) {
     SetInvalid();
+}
   m_fPercent = fPercent;
 }
 
@@ -324,8 +325,9 @@ void CGUIProgressControl::UpdateInfo(const CGUIListItem *item)
     if (m_iInfoCode)
     {
       int value;
-      if (g_infoManager.GetInt(value, m_iInfoCode, m_parentID, item))
+      if (g_infoManager.GetInt(value, m_iInfoCode, m_parentID, item)) {
         m_fPercent = (float)value;
+}
 
       if (m_fPercent < 0.0f) m_fPercent = 0.0f;
       if (m_fPercent > 100.0f) m_fPercent = 100.0f;

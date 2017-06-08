@@ -134,8 +134,9 @@ void CGUIDialogProgress::OnWindowLoaded()
   {
     // make sure we have the appropriate info set
     CGUIProgressControl *progress = (CGUIProgressControl *)control;
-    if (!progress->GetInfo())
+    if (!progress->GetInfo()) {
       progress->SetInfo(SYSTEM_PROGRESS_BAR);
+}
   }
 }
 
@@ -157,11 +158,13 @@ void CGUIDialogProgress::SetProgressAdvance(int nSteps/*=1*/)
 {
   m_iCurrent+=nSteps;
 
-  if (m_iCurrent>m_iMax)
+  if (m_iCurrent>m_iMax) {
     m_iCurrent=0;
+}
 
-  if (m_iMax > 0)
+  if (m_iMax > 0) {
     SetPercentage((m_iCurrent*100)/m_iMax);
+}
 }
 
 bool CGUIDialogProgress::Abort()
@@ -186,14 +189,16 @@ void CGUIDialogProgress::Process(unsigned int currentTime, CDirtyRegionList &dir
       showProgress = m_showProgress;
       showCancel   = m_bCanCancel;
     }
-    if (showProgress)
+    if (showProgress) {
       SET_CONTROL_VISIBLE(CONTROL_PROGRESS_BAR);
-    else
+    } else {
       SET_CONTROL_HIDDEN(CONTROL_PROGRESS_BAR);
-    if (showCancel)
+}
+    if (showCancel) {
       SET_CONTROL_VISIBLE(CONTROL_NO_BUTTON);
-    else
+    } else {
       SET_CONTROL_HIDDEN(CONTROL_NO_BUTTON);
+}
   }
   CGUIDialogBoxBase::Process(currentTime, dirtyregions);
 }
@@ -209,7 +214,8 @@ void CGUIDialogProgress::OnInitWindow()
 
 int CGUIDialogProgress::GetDefaultLabelID(int controlId) const
 {
-  if (controlId == CONTROL_NO_BUTTON)
+  if (controlId == CONTROL_NO_BUTTON) {
     return 222;
+}
   return CGUIDialogBoxBase::GetDefaultLabelID(controlId);
 }

@@ -76,8 +76,9 @@ unsigned int CRetroPlayerAudio::NormalizeSamplerate(unsigned int samplerate) con
 
 bool CRetroPlayerAudio::OpenPCMStream(AEDataFormat format, unsigned int samplerate, const CAEChannelInfo& channelLayout)
 {
-  if (m_pAudioStream != nullptr)
+  if (m_pAudioStream != nullptr) {
     CloseStream();
+}
 
   CLog::Log(LOGINFO, "RetroPlayerAudio: Creating audio stream, sample rate = %d", samplerate);
 
@@ -159,8 +160,9 @@ void CRetroPlayerAudio::AddData(const uint8_t* data, unsigned int size)
             m_pAudioCodec.reset();
         }
 
-        if (m_pAudioStream)
+        if (m_pAudioStream) {
           m_pAudioStream->AddData(audioframe.data, 0, audioframe.nb_frames);
+}
       }
     }
     else if (m_pAudioStream)

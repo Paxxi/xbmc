@@ -107,8 +107,9 @@ public:
   }
   ~FileReader() override
   {
-    if (m_opened)
+    if (m_opened) {
       m_file.Close();
+}
 
   }
 private:
@@ -208,8 +209,9 @@ void CCueDocument::GetSongs(VECSONGS &songs)
     aSong.genre = StringUtils::Split(m_strGenre, g_advancedSettings.m_musicItemSeparator);
     aSong.iYear = m_iYear;
     aSong.iTrack = track.iTrackNumber;
-    if (m_iDiscNumber > 0)
+    if (m_iDiscNumber > 0) {
       aSong.iTrack |= (m_iDiscNumber << 16); // see CMusicInfoTag::GetDiscNumber()
+}
     if (track.strTitle.length() == 0) // No track information for this track!
       aSong.strTitle = StringUtils::Format("Track {:2d}", track.iTrackNumber);
     else
@@ -217,17 +219,20 @@ void CCueDocument::GetSongs(VECSONGS &songs)
     aSong.strFileName = track.strFile;
     aSong.iStartOffset = track.iStartTime;
     aSong.iEndOffset = track.iEndTime;
-    if (aSong.iEndOffset)
+    if (aSong.iEndOffset) {
       // Convert offset in frames (75 per second) to duration in whole seconds with rounding 
       aSong.iDuration = (aSong.iEndOffset - aSong.iStartOffset + 37) / 75;
-    else
+    } else {
       aSong.iDuration = 0;
+}
 
-    if (m_albumReplayGain.Valid())
+    if (m_albumReplayGain.Valid()) {
       aSong.replayGain.Set(ReplayGain::ALBUM, m_albumReplayGain);
+}
 
-    if (track.replayGain.Valid())
+    if (track.replayGain.Valid()) {
       aSong.replayGain.Set(ReplayGain::TRACK, track.replayGain);
+}
 
     songs.push_back(aSong);
   }
@@ -288,8 +293,9 @@ void CCueDocument::Clear()
 bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
 {
   Clear();
-  if (!reader.ready())
+  if (!reader.ready()) {
     return false;
+}
 
   std::string strLine;
   std::string strCurrentFile = "";
@@ -301,8 +307,9 @@ bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
   // Run through the .CUE file and extract the tracks...
   while (true)
   {
-    if (!reader.ReadLine(strLine))
+    if (!reader.ReadLine(strLine)) {
       break;
+}
     if (StringUtils::StartsWithNoCase(strLine, "INDEX 01"))
     {
       if (bCurrentFileChanged)
@@ -357,8 +364,9 @@ bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
     else if (StringUtils::StartsWithNoCase(strLine, "REM DISCNUMBER"))
     {
       int iDiscNumber = ExtractNumericInfo(strLine.substr(14));
-      if (iDiscNumber > 0)
+      if (iDiscNumber > 0) {
         m_iDiscNumber = iDiscNumber;
+}
     }
     else if (StringUtils::StartsWithNoCase(strLine, "FILE"))
     {
@@ -376,8 +384,9 @@ bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
     else if (StringUtils::StartsWithNoCase(strLine, "REM DATE"))
     {
       int iYear = ExtractNumericInfo(strLine.substr(8));
-      if (iYear > 0)
+      if (iYear > 0) {
         m_iYear = iYear;
+}
     }
     else if (StringUtils::StartsWithNoCase(strLine, "REM GENRE"))
     {
@@ -395,13 +404,15 @@ bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
 
   // reset track counter to 0, and fill in the last tracks end time
   m_iTrack = 0;
-  if (totalTracks >= 0)
+  if (totalTracks >= 0) {
     m_tracks[totalTracks].iEndTime = 0;
-  else
+  } else {
     CLog::Log(LOGERROR, "No INDEX 01 tags in CUE file!");
+}
 
-  if ( totalTracks == numberFiles )
+  if ( totalTracks == numberFiles ) {
     m_bOneFilePerTrack = true;
+}
 
   return (totalTracks >= 0);
 }

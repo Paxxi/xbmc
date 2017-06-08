@@ -153,10 +153,10 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
     return LoadDll(sName, bLoadSymbols);
   }
 #ifdef TARGET_POSIX
-  else if (strcmp(sName, "xbmc.so") == 0)
+  else if (strcmp(sName, "xbmc.so") == 0) {
     return LoadDll(sName, bLoadSymbols);
 #endif
-  else if (sCurrentDir)
+  } else if (sCurrentDir)
   { // in the path of the parent dll?
     std::string strPath=sCurrentDir;
     strPath+=sName;
@@ -198,8 +198,9 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
   }
 
   // can't find it in any of our paths - could be a system dll
-  if ((pDll = LoadDll(sName, bLoadSymbols)) != nullptr)
+  if ((pDll = LoadDll(sName, bLoadSymbols)) != nullptr) {
     return pDll;
+}
 
   CLog::Log(LOGDEBUG, "Dll %s was not found in path", sName);
   return nullptr;
@@ -207,8 +208,9 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
 
 void DllLoaderContainer::ReleaseModule(LibraryLoader*& pDll)
 {
-  if (!pDll)
+  if (!pDll) {
     return;
+}
   if (pDll->IsSystemDll())
   {
     CLog::Log(LOGFATAL, "%s is a system dll and should never be released", pDll->GetName());
@@ -229,8 +231,9 @@ void DllLoaderContainer::ReleaseModule(LibraryLoader*& pDll)
       delete pDll;
       pDll=nullptr;
     }
-    else
+    else {
       CLog::Log(LOGINFO, "%s has symbols loaded and can never be unloaded", pDll->GetName());
+}
   }
 #ifdef LOGALL
   else

@@ -58,10 +58,11 @@ void CGUIResizeControl::Process(unsigned int currentTime, CDirtyRegionList &dirt
   {
     unsigned int alphaCounter = m_frameCounter + 2;
     unsigned int alphaChannel;
-    if ((alphaCounter % 128) >= 64)
+    if ((alphaCounter % 128) >= 64) {
       alphaChannel = alphaCounter % 64;
-    else
+    } else {
       alphaChannel = 63 - (alphaCounter % 64);
+}
 
     alphaChannel += 192;
     if (SetAlpha( (unsigned char)alphaChannel ))

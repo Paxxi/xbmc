@@ -61,8 +61,9 @@ std::string CDirectoryNodeSeasons::GetLocalizedName() const
 bool CDirectoryNodeSeasons::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

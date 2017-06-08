@@ -152,8 +152,9 @@ void CExternalPlayer::Process()
       mainFile = url.GetHostName();
       archiveContent = url.GetFileName();
     }
-    if (url.IsProtocol("musicdb"))
+    if (url.IsProtocol("musicdb")) {
       mainFile = CMusicDatabaseFile::TranslateUrl(url);
+}
     if (url.IsProtocol("bluray"))
     {
       CURL base(url.GetHostName());
@@ -162,8 +163,9 @@ void CExternalPlayer::Process()
         mainFile = base.GetHostName(); /* image file */
         archiveContent = base.GetFileName();
       }
-      else
+      else {
         mainFile = URIUtils::AddFileToFolder(base.Get(), url.GetFileName());
+}
     }
   }
 
@@ -208,8 +210,9 @@ void CExternalPlayer::Process()
         {
           int iLength = regExp.GetFindLen();
           mainFile = mainFile.substr(0, iStart) + regExp.GetReplaceString(strRep) + mainFile.substr(iStart + iLength);
-          if (!bGlobal)
+          if (!bGlobal) {
             break;
+}
         }
         CLog::Log(LOGINFO, "%s: File matched:'%s' (RE='%s',Rep='%s') new filename:'%s'.", __FUNCTION__, strMatch.c_str(), strPat.c_str(), strRep.c_str(), mainFile.c_str());
         if (bStop) break;
@@ -467,8 +470,9 @@ BOOL CExternalPlayer::ExecuteAppLinux(const char* strSwitches)
 
   int ret = system(strSwitches);
 
-  if (remoteUsed)
+  if (remoteUsed) {
     CInputManager::GetInstance().EnableRemoteControl();
+}
 
   if (ret != 0)
   {
@@ -637,8 +641,9 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   }
 
   bool bHideCursor;
-  if (XMLUtils::GetBoolean(pConfig, "hidecursor", bHideCursor) && bHideCursor)
+  if (XMLUtils::GetBoolean(pConfig, "hidecursor", bHideCursor) && bHideCursor) {
     m_warpcursor = WARP_BOTTOM_RIGHT;
+}
 
   std::string warpCursor;
   if (XMLUtils::GetString(pConfig, "warpcursor", warpCursor) && !warpCursor.empty())

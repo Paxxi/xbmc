@@ -39,17 +39,19 @@ CGUIDialogCache::CGUIDialogCache(DWORD dwDelay, const std::string& strHeader, co
 
   m_pDlg = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
 
-  if (!m_pDlg)
+  if (!m_pDlg) {
     return;
+}
 
   /* if progress dialog is already running, take it over */
   if( m_pDlg->IsDialogRunning() )
     dwDelay = 0;
 
-  if(dwDelay == 0)
+  if(dwDelay == 0) {
     OpenDialog();    
-  else
+  } else {
     m_endtime.Set((unsigned int)dwDelay);
+}
 
   Create(true);
 }
@@ -118,16 +120,18 @@ bool CGUIDialogCache::OnFileCallback(void* pContext, int ipercent, float avgSpee
     m_pDlg->SetPercentage(ipercent);
   }
 
-  if( IsCanceled() ) 
+  if( IsCanceled() ) { 
     return false;
-  else
+  } else {
     return true;
+}
 }
 
 void CGUIDialogCache::Process()
 {
-  if (!m_pDlg)
+  if (!m_pDlg) {
     return;
+}
 
   while( true )
   {
@@ -166,14 +170,16 @@ void CGUIDialogCache::Process()
 
 void CGUIDialogCache::ShowProgressBar(bool bOnOff) 
 {
-  if (m_pDlg)
+  if (m_pDlg) {
     m_pDlg->ShowProgressBar(bOnOff);
+}
 }
 
 void CGUIDialogCache::SetPercentage(int iPercentage) 
 { 
-  if (m_pDlg)
+  if (m_pDlg) {
     m_pDlg->SetPercentage(iPercentage);
+}
 }
 
 bool CGUIDialogCache::IsCanceled() const

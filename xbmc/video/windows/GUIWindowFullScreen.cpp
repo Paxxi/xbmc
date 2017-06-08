@@ -164,8 +164,9 @@ bool CGUIWindowFullScreen::OnAction(const CAction &action)
         g_application.m_pPlayer->SetRenderViewMode(CViewModeSettings::GetNextQuickCycleViewMode(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode));
 #endif
       }
-      else
+      else {
         m_viewModeChanged = true;
+}
       m_dwShowViewModeTimeout = XbmcThreads::SystemClockMillis();
     }
     return true;
@@ -307,16 +308,18 @@ EVENT_RESULT CGUIWindowFullScreen::OnMouseEvent(const CPoint &point, const CMous
   {
     return g_application.OnAction(CAction(ACTION_ANALOG_SEEK_BACK, 0.5f)) ? EVENT_RESULT_HANDLED : EVENT_RESULT_UNHANDLED;
   }
-  if (event.m_id >= ACTION_GESTURE_NOTIFY && event.m_id <= ACTION_GESTURE_END) // gestures
+  if (event.m_id >= ACTION_GESTURE_NOTIFY && event.m_id <= ACTION_GESTURE_END) { // gestures
     return EVENT_RESULT_UNHANDLED;
+}
   return EVENT_RESULT_UNHANDLED;
 }
 
 void CGUIWindowFullScreen::FrameMove()
 {
   float playspeed = g_application.m_pPlayer->GetPlaySpeed();
-  if (playspeed < 0.75 || playspeed > 1.55)
+  if (playspeed < 0.75 || playspeed > 1.55) {
     g_infoManager.SetDisplayAfterSeek();
+}
 
   if (!g_application.m_pPlayer->HasPlayer())
     return;

@@ -164,19 +164,22 @@ bool CAddonInstaller::Cancel(const std::string &addonID)
 
 bool CAddonInstaller::InstallModal(const std::string &addonID, ADDON::AddonPtr &addon, bool promptForInstall /* = true */)
 {
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return false;
+}
 
   // we assume that addons that are enabled don't get to this routine (i.e. that GetAddon() has been called)
-  if (CAddonMgr::GetInstance().GetAddon(addonID, addon, ADDON_UNKNOWN, false))
+  if (CAddonMgr::GetInstance().GetAddon(addonID, addon, ADDON_UNKNOWN, false)) {
     return false; // addon is installed but disabled, and the user has specifically activated something that needs
+}
                   // the addon - should we enable it?
 
   // check we have it available
   CAddonDatabase database;
   database.Open();
-  if (!database.GetAddon(addonID, addon))
+  if (!database.GetAddon(addonID, addon)) {
     return false;
+}
 
   // if specified ask the user if he wants it installed
   if (promptForInstall)
@@ -188,8 +191,9 @@ bool CAddonInstaller::InstallModal(const std::string &addonID, ADDON::AddonPtr &
     }
   }
 
-  if (!InstallOrUpdate(addonID, false, true))
+  if (!InstallOrUpdate(addonID, false, true)) {
     return false;
+}
 
   return CAddonMgr::GetInstance().GetAddon(addonID, addon);
 }
@@ -252,10 +256,11 @@ bool CAddonInstaller::DoInstall(const AddonPtr &addon, const RepositoryPtr& repo
   lock.Leave();
 
   bool result = false;
-  if (modal)
+  if (modal) {
     result = installJob->DoModal();
-  else
+  } else {
     result = installJob->DoWork();
+}
   delete installJob;
 
   lock.Enter();
@@ -269,8 +274,9 @@ bool CAddonInstaller::DoInstall(const AddonPtr &addon, const RepositoryPtr& repo
 
 bool CAddonInstaller::InstallFromZip(const std::string &path)
 {
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return false;
+}
 
   CLog::Log(LOGDEBUG, "CAddonInstaller: installing from zip '%s'", CURL::GetRedacted(path).c_str());
 
@@ -308,8 +314,9 @@ bool CAddonInstaller::CheckDependencies(const AddonPtr &addon, std::pair<std::st
   std::vector<std::string> preDeps;
   preDeps.push_back(addon->ID());
   CAddonDatabase localDB;
-  if (!database)
+  if (!database) {
     database = &localDB;
+}
 
   return CheckDependencies(addon, preDeps, *database, failedDep);
 }
@@ -377,8 +384,9 @@ void CAddonInstaller::PrunePackageCache()
   std::map<std::string,CFileItemList*> packs;
   int64_t size = EnumeratePackageFolder(packs);
   int64_t limit = (int64_t)g_advancedSettings.m_addonPackageFolderSize * 1024 * 1024;
-  if (size < limit)
+  if (size < limit) {
     return;
+}
 
   // Prune packages
   // 1. Remove the largest packages, leaving at least 2 for each add-on
@@ -489,8 +497,9 @@ CAddonInstallJob::CAddonInstallJob(const AddonPtr &addon, const AddonPtr &repo,
 bool CAddonInstallJob::GetAddonWithHash(const std::string& addonID, RepositoryPtr& repo,
     ADDON::AddonPtr& addon, std::string& hash)
 {
-  if (!CAddonMgr::GetInstance().FindInstallableById(addonID, addon))
+  if (!CAddonMgr::GetInstance().FindInstallableById(addonID, addon)) {
     return false;
+}
 
   AddonPtr tmp;
   if (!CAddonMgr::GetInstance().GetAddon(addon->Origin(), tmp, ADDON_REPOSITORY))
@@ -723,8 +732,9 @@ bool CAddonInstallJob::Install(const std::string &installFrom, const AddonPtr& r
         // recall install on purpose in case prior installation failed
         if (CAddonInstaller::GetInstance().HasJob(addonID))
         {
-          while (CAddonInstaller::GetInstance().HasJob(addonID))
+          while (CAddonInstaller::GetInstance().HasJob(addonID)) {
             Sleep(50);
+}
 
           if (!CAddonMgr::GetInstance().IsAddonInstalled(addonID))
           {
@@ -881,6 +891,7 @@ void CAddonUnInstallJob::ClearFavourites()
     }
   }
 
-  if (bSave)
+  if (bSave) {
     CServiceBroker::GetFavouritesService().Save(items);
+}
 }

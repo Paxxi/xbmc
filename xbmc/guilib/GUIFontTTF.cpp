@@ -66,15 +66,17 @@ public:
 
   virtual ~CFreeTypeLibrary()
   {
-    if (m_library)
+    if (m_library) {
       FT_Done_FreeType(m_library);
+}
   }
 
   FT_Face GetFont(const std::string &filename, float size, float aspect, XUTILS::auto_buffer& memoryBuf)
   {
     // don't have it yet - create it
-    if (!m_library)
+    if (!m_library) {
       FT_Init_FreeType(&m_library);
+}
     if (!m_library)
     {
       CLog::Log(LOGERROR, "Unable to initialize freetype library");
@@ -97,8 +99,9 @@ public:
       // in case of win32: always load file into memory as filename is in UTF-8,
       //                   but freetype expect filename in ANSI encoding
       XFILE::CFile f;
-      if (f.LoadFile(realFile, memoryBuf) <= 0)
+      if (f.LoadFile(realFile, memoryBuf) <= 0) {
         return nullptr;
+}
       if (FT_New_Memory_Face(m_library, (const FT_Byte*)memoryBuf.get(), memoryBuf.size(), 0, &face) != 0)
         return nullptr;
     }
@@ -125,12 +128,14 @@ public:
   
   FT_Stroker GetStroker()
   {
-    if (!m_library)
+    if (!m_library) {
       return nullptr;
+}
 
     FT_Stroker stroker;
-    if (FT_Stroker_New(m_library, &stroker))
+    if (FT_Stroker_New(m_library, &stroker)) {
       return nullptr;
+}
 
     return stroker;
   };
@@ -249,8 +254,9 @@ bool CGUIFontTTFBase::Load(const std::string& strFilename, float height, float a
   // for reference tracking these fonts
   m_face = g_freeTypeLibrary.GetFont(strFilename, height, aspect, m_fontFileInMemory);
 
-  if (!m_face)
+  if (!m_face) {
     return false;
+}
 
   /*
    the values used are described below
@@ -280,15 +286,17 @@ bool CGUIFontTTFBase::Load(const std::string& strFilename, float height, float a
      aligning with the bordered font by utilising GetTextBaseLine()
      */
     FT_Pos strength = FT_MulFix( m_face->units_per_EM, m_face->size->metrics.y_scale) / 12;
-    if (strength < 128)
+    if (strength < 128) {
       strength = 128;
+}
 
     cellDescender -= strength;
     cellAscender  += strength;
 
     m_stroker = g_freeTypeLibrary.GetStroker();
-    if (m_stroker)
+    if (m_stroker) {
       FT_Stroker_Set(m_stroker, strength, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND, 0);
+}
   }
 
   // scale to pixel sizing, rounding so that maximal extent is obtained
@@ -344,11 +352,13 @@ void CGUIFontTTFBase::Begin()
 
 void CGUIFontTTFBase::End()
 {
-  if (m_nestedBeginCount == 0)
+  if (m_nestedBeginCount == 0) {
     return;
+}
 
-  if (--m_nestedBeginCount > 0)
+  if (--m_nestedBeginCount > 0) {
     return;
+}
 
   LastEnd();
 }
@@ -400,8 +410,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
     }
     else if ( alignment & XBFONT_JUSTIFIED )
     {
-      if ( maxPixelWidth <= 0.0f )
+      if ( maxPixelWidth <= 0.0f ) {
         alignment &= ~XBFONT_JUSTIFIED;
+}
     }
 
     // calculate sizing information
@@ -413,11 +424,13 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
       // Get the extent of this line
       float w = GetTextWidthInternal( text.begin(), text.end() );
 
-      if ( alignment & XBFONT_TRUNCATED && w > maxPixelWidth + 0.5f ) // + 0.5f due to rounding issues
+      if ( alignment & XBFONT_TRUNCATED && w > maxPixelWidth + 0.5f ) { // + 0.5f due to rounding issues
         w = maxPixelWidth;
+}
 
-      if ( alignment & XBFONT_CENTER_X)
+      if ( alignment & XBFONT_CENTER_X) {
         w *= 0.5f;
+}
       // Offset this line's starting position
       startX -= w;
     }
@@ -438,8 +451,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
           linePixels += ch->advance;
         }
       }
-      if (numSpaces > 0)
+      if (numSpaces > 0) {
         spacePerSpaceCharacter = (maxPixelWidth - linePixels) / numSpaces;
+}
     }
 
     float cursorX = 0; // current position along the line
@@ -448,8 +462,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
     // are not currently cached and cause the texture to be enlarged, which
     // would invalidate the texture coordinates.
     std::queue<Character> characters;
-    if (alignment & XBFONT_TRUNCATED)
+    if (alignment & XBFONT_TRUNCATED) {
       GetCharacter(L'.');
+}
     for (vecText::const_iterator pos = text.begin(); pos != text.end(); ++pos)
     {
       Character *ch = GetCharacter(*pos);
@@ -462,8 +477,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
       characters.push(*ch);
 
       if (maxPixelWidth > 0 &&
-          cursorX + ((alignment & XBFONT_TRUNCATED) ? ch->advance + 3 * m_ellipsesWidth : 0) > maxPixelWidth)
+          cursorX + ((alignment & XBFONT_TRUNCATED) ? ch->advance + 3 * m_ellipsesWidth : 0) > maxPixelWidth) {
         break;
+}
       cursorX += ch->advance;
     }
     cursorX = 0;
@@ -493,8 +509,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
           // Yup. Let's draw the ellipses, then bail
           // Perhaps we should really bail to the next line in this case??
           Character *period = GetCharacter(L'.');
-          if (!period)
+          if (!period) {
             break;
+}
 
           for (int i = 0; i < 3; i++)
           {
@@ -504,8 +521,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
           break;
         }
       }
-      else if (maxPixelWidth > 0 && cursorX > maxPixelWidth)
+      else if (maxPixelWidth > 0 && cursorX > maxPixelWidth) {
         break;  // exceeded max allowed width - stop rendering
+}
 
       RenderCharacter(startX + cursorX, startY, ch, color, !scrolling, *tempVertices);
       if ( alignment & XBFONT_JUSTIFIED )
@@ -515,8 +533,9 @@ void CGUIFontTTFBase::DrawTextInternal(float x, float y, const vecColors &colors
         else
           cursorX += ch->advance;
       }
-      else
+      else {
         cursorX += ch->advance;
+}
       characters.pop();
     }
     if (hardwareClipping)
@@ -590,8 +609,9 @@ float CGUIFontTTFBase::GetTextHeight(float lineSpacing, int numLines) const
 
 float CGUIFontTTFBase::GetLineHeight(float lineSpacing) const
 {
-  if (m_face)
+  if (m_face) {
     return lineSpacing * m_face->size->metrics.height / 64.0f;
+}
   return 0.0f;
 }
 
@@ -608,8 +628,9 @@ CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
   character_t style = (chr & 0x7000000) >> 24;
 
   // ignore linebreaks
-  if (letter == L'\r')
+  if (letter == L'\r') {
     return nullptr;
+}
 
   // quick access to ascii chars
   if (letter < 255)
@@ -627,12 +648,13 @@ CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
   while (low <= high)
   {
     int mid = (low + high) >> 1;
-    if (ch > m_char[mid].letterAndStyle)
+    if (ch > m_char[mid].letterAndStyle) {
       low = mid + 1;
-    else if (ch < m_char[mid].letterAndStyle)
+    } else if (ch < m_char[mid].letterAndStyle) {
       high = mid - 1;
-    else
+    } else {
       return &m_char[mid];
+}
   }
   // if we get to here, then low is where we should insert the new character
 
@@ -700,22 +722,26 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
     return false;
   }
   // make bold if applicable
-  if (style & FONT_STYLE_BOLD)
+  if (style & FONT_STYLE_BOLD) {
     SetGlyphStrength(m_face->glyph, GLYPH_STRENGTH_BOLD);
+}
   // and italics if applicable
-  if (style & FONT_STYLE_ITALICS)
+  if (style & FONT_STYLE_ITALICS) {
     ObliqueGlyph(m_face->glyph);
+}
   // and light if applicable
-  if (style & FONT_STYLE_LIGHT)
+  if (style & FONT_STYLE_LIGHT) {
     SetGlyphStrength(m_face->glyph, GLYPH_STRENGTH_LIGHT);
+}
   // grab the glyph
   if (FT_Get_Glyph(m_face->glyph, &glyph))
   {
     CLog::Log(LOGDEBUG, "%s Failed to get glyph %x", __FUNCTION__, letter);
     return false;
   }
-  if (m_stroker)
+  if (m_stroker) {
     FT_Glyph_StrokeBorder(&glyph, m_stroker, 0, 1);
+}
   // render the glyph
   if (FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, nullptr, 1))
   {
@@ -728,8 +754,9 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
 
   if (!isEmptyGlyph)
   {
-    if (bitGlyph->left < 0)
+    if (bitGlyph->left < 0) {
       m_posX += -bitGlyph->left;
+}
 
     // check we have enough room for the character.
     // cast-fest is here to avoid warnings due to freeetype version differences (signedness of width).
@@ -737,8 +764,9 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
     { // no space - gotta drop to the next line (which means creating a new texture and copying it across)
       m_posX = 0;
       m_posY += GetTextureLineHeight();
-      if (bitGlyph->left < 0)
+      if (bitGlyph->left < 0) {
         m_posX += -bitGlyph->left;
+}
 
       if(m_posY + GetTextureLineHeight() >= m_textureHeight)
       {
@@ -953,8 +981,9 @@ void CGUIFontTTFBase::RenderCharacter(float posX, float posY, const Character *c
 void CGUIFontTTFBase::ObliqueGlyph(FT_GlyphSlot slot)
 {
   /* only oblique outline glyphs */
-  if ( slot->format != FT_GLYPH_FORMAT_OUTLINE )
+  if ( slot->format != FT_GLYPH_FORMAT_OUTLINE ) {
     return;
+}
 
   /* we don't touch the advance width */
 
@@ -975,8 +1004,9 @@ void CGUIFontTTFBase::ObliqueGlyph(FT_GlyphSlot slot)
 // Embolden code - original taken from freetype2 (ftsynth.c)
 void CGUIFontTTFBase::SetGlyphStrength(FT_GlyphSlot slot, int glyphStrength)
 {
-  if ( slot->format != FT_GLYPH_FORMAT_OUTLINE )
+  if ( slot->format != FT_GLYPH_FORMAT_OUTLINE ) {
     return;
+}
 
   /* some reasonable strength */
   FT_Pos strength = FT_MulFix( m_face->units_per_EM,
@@ -990,11 +1020,13 @@ void CGUIFontTTFBase::SetGlyphStrength(FT_GlyphSlot slot, int glyphStrength)
   FT_Pos dx = bbox_after.xMax - bbox_before.xMax;
   FT_Pos dy = bbox_after.yMax - bbox_before.yMax;
 
-  if ( slot->advance.x )
+  if ( slot->advance.x ) {
     slot->advance.x += dx;
+}
 
-  if ( slot->advance.y )
+  if ( slot->advance.y ) {
     slot->advance.y += dy;
+}
 
   slot->metrics.width        += dx;
   slot->metrics.height       += dy;

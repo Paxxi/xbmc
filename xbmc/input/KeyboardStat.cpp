@@ -83,16 +83,21 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym) const
   XBMCKEYTABLE keytable;
 
   modifiers = 0;
-  if (keysym.mod & XBMCKMOD_CTRL)
+  if (keysym.mod & XBMCKMOD_CTRL) {
     modifiers |= CKey::MODIFIER_CTRL;
-  if (keysym.mod & XBMCKMOD_SHIFT)
+}
+  if (keysym.mod & XBMCKMOD_SHIFT) {
     modifiers |= CKey::MODIFIER_SHIFT;
-  if (keysym.mod & XBMCKMOD_ALT)
+}
+  if (keysym.mod & XBMCKMOD_ALT) {
     modifiers |= CKey::MODIFIER_ALT;
-  if (keysym.mod & XBMCKMOD_SUPER)
+}
+  if (keysym.mod & XBMCKMOD_SUPER) {
     modifiers |= CKey::MODIFIER_SUPER;
-  if (keysym.mod & XBMCKMOD_META)
+}
+  if (keysym.mod & XBMCKMOD_META) {
     modifiers |= CKey::MODIFIER_META;
+}
 
   CLog::Log(LOGDEBUG, "Keyboard: scancode: 0x%02x, sym: 0x%04x, unicode: 0x%04x, modifier: 0x%x", keysym.scancode, keysym.sym, keysym.unicode, keysym.mod);
 
@@ -134,10 +139,11 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym) const
     // Occasionally we get non-printing keys that have a non-zero value in
     // the keysym.unicode. Check for this here and replace any rogue unicode
     // values.
-    if (keytable.unicode == 0 && unicode != 0)
+    if (keytable.unicode == 0 && unicode != 0) {
       unicode = 0;
-    else if (keysym.unicode > 32 && keysym.unicode < 128)
+    } else if (keysym.unicode > 32 && keysym.unicode < 128) {
       ascii = unicode & 0x7f;
+}
   }
 
   // The keysym.sym is unknown ...
@@ -145,23 +151,25 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym) const
   {
     if (!vkey && !ascii)
     {
-      if (keysym.mod & XBMCKMOD_LSHIFT) vkey = 0xa0;
-      else if (keysym.mod & XBMCKMOD_RSHIFT) vkey = 0xa1;
-      else if (keysym.mod & XBMCKMOD_LALT) vkey = 0xa4;
-      else if (keysym.mod & XBMCKMOD_RALT) vkey = 0xa5;
-      else if (keysym.mod & XBMCKMOD_LCTRL) vkey = 0xa2;
-      else if (keysym.mod & XBMCKMOD_RCTRL) vkey = 0xa3;
-      else if (keysym.unicode > 32 && keysym.unicode < 128)
+      if (keysym.mod & XBMCKMOD_LSHIFT) { vkey = 0xa0;
+      } else if (keysym.mod & XBMCKMOD_RSHIFT) { vkey = 0xa1;
+      } else if (keysym.mod & XBMCKMOD_LALT) { vkey = 0xa4;
+      } else if (keysym.mod & XBMCKMOD_RALT) { vkey = 0xa5;
+      } else if (keysym.mod & XBMCKMOD_LCTRL) { vkey = 0xa2;
+      } else if (keysym.mod & XBMCKMOD_RCTRL) { vkey = 0xa3;
+      } else if (keysym.unicode > 32 && keysym.unicode < 128) {
         // only TRUE ASCII! (Otherwise XBMC crashes! No unicode not even latin 1!)
         ascii = (char)(keysym.unicode & 0xff);
+}
     }
   }
 
   if (keysym == m_lastKeysym)
   {
     held = XbmcThreads::SystemClockMillis() - m_lastKeyTime;
-    if (held > HOLD_THRESHOLD)
+    if (held > HOLD_THRESHOLD) {
       modifiers |= CKey::MODIFIER_LONG;
+}
   }
 
   // For all shift-X keys except shift-A to shift-Z and shift-F1 to shift-F24 the
@@ -170,9 +178,11 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym) const
   // The A-Z keys are exempted because shift-A-Z is used for navigation in lists.
   // The function keys are exempted because function keys have no shifted value and
   // the Nyxboard remote uses keys like Shift-F3 for some buttons.
-  if (modifiers == CKey::MODIFIER_SHIFT)
-    if ((unicode < 'A' || unicode > 'Z') && (unicode < 'a' || unicode > 'z') && (vkey < XBMCVK_F1 || vkey > XBMCVK_F24))
+  if (modifiers == CKey::MODIFIER_SHIFT) {
+    if ((unicode < 'A' || unicode > 'Z') && (unicode < 'a' || unicode > 'z') && (vkey < XBMCVK_F1 || vkey > XBMCVK_F24)) {
       modifiers = 0;
+}
+}
 
   // Create and return a CKey
 

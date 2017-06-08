@@ -32,8 +32,9 @@ CDirectoryNodeRecentlyAddedMusicVideos::CDirectoryNodeRecentlyAddedMusicVideos(c
 bool CDirectoryNodeRecentlyAddedMusicVideos::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
   
   bool bSuccess=videodatabase.GetRecentlyAddedMusicVideosNav(BuildPath(), items);
 

@@ -104,9 +104,9 @@ bool CGUIDialogSelect::OnMessage(CGUIMessage& message)
           if (iSelected >= 0 && iSelected < m_vecList->Size())
           {
             CFileItemPtr item(m_vecList->Get(iSelected));
-            if (m_multiSelection)
+            if (m_multiSelection) {
               item->Select(!item->IsSelected());
-            else
+            } else
             {
               for (int i = 0 ; i < m_vecList->Size() ; i++)
                 m_vecList->Get(i)->Select(false);
@@ -120,8 +120,9 @@ bool CGUIDialogSelect::OnMessage(CGUIMessage& message)
       {
         m_selectedItem = nullptr;
         m_bButtonPressed = true;
-        if (m_multiSelection)
+        if (m_multiSelection) {
           m_bConfirmed = true;
+}
         Close();
       }
       else if (iControl == CONTROL_CANCEL_BUTTON)
@@ -138,10 +139,11 @@ bool CGUIDialogSelect::OnMessage(CGUIMessage& message)
       {
         if (m_vecList->IsEmpty())
         {
-          if (m_bButtonEnabled)
+          if (m_bButtonEnabled) {
             SET_CONTROL_FOCUS(CONTROL_EXTRA_BUTTON, 0);
-          else
+          } else {
             SET_CONTROL_FOCUS(CONTROL_CANCEL_BUTTON, 0);
+}
           return true;
         }
         if (m_viewControl.GetCurrentControl() != message.GetControlId())
@@ -321,16 +323,18 @@ void CGUIDialogSelect::OnInitWindow()
   SET_CONTROL_LABEL(CONTROL_NUMBER_OF_ITEMS, StringUtils::Format("%i %s",
       m_vecList->Size(), g_localizeStrings.Get(127).c_str()));
   
-  if (m_multiSelection)
+  if (m_multiSelection) {
     EnableButton(true, 186);
+}
 
   if (m_bButtonEnabled)
   {
     SET_CONTROL_LABEL(CONTROL_EXTRA_BUTTON, g_localizeStrings.Get(m_buttonLabel));
     SET_CONTROL_VISIBLE(CONTROL_EXTRA_BUTTON);
   }
-  else
+  else {
     SET_CONTROL_HIDDEN(CONTROL_EXTRA_BUTTON);
+}
 
   SET_CONTROL_LABEL(CONTROL_CANCEL_BUTTON, g_localizeStrings.Get(222));
 

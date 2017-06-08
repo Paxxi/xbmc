@@ -47,8 +47,9 @@ bool InternalWrite(TWriter& writer, const CVariant &value)
     return writer.String(value.c_str(), value.size());
 
   case CVariant::VariantTypeArray:
-    if (!writer.StartArray())
+    if (!writer.StartArray()) {
       return false;
+}
 
     for (CVariant::const_iterator_array itr = value.begin_array(); itr != value.end_array(); ++itr)
     {
@@ -59,8 +60,9 @@ bool InternalWrite(TWriter& writer, const CVariant &value)
     return writer.EndArray(value.size());
 
   case CVariant::VariantTypeObject:
-    if (!writer.StartObject())
+    if (!writer.StartObject()) {
       return false;
+}
 
     for (CVariant::const_iterator_map itr = value.begin_map(); itr != value.end_map(); ++itr)
     {

@@ -61,8 +61,9 @@ bool CDBusMessage::AppendArgument(const char **arrayString, unsigned int length)
   DBusMessageIter sub;
   bool success = dbus_message_iter_open_container(&m_args, DBUS_TYPE_ARRAY, DBUS_TYPE_STRING_AS_STRING, &sub);
 
-  for (unsigned int i = 0; i < length && success; i++)
+  for (unsigned int i = 0; i < length && success; i++) {
     success &= dbus_message_iter_append_basic(&sub, DBUS_TYPE_STRING, &arrayString[i]);
+}
 
   success &= dbus_message_iter_close_container(&m_args, &sub);
 
@@ -97,8 +98,9 @@ DBusMessage *CDBusMessage::Send(DBusBusType type)
 
   DBusMessage *returnMessage = Send(con, &error);
 
-  if (dbus_error_is_set(&error))
+  if (dbus_error_is_set(&error)) {
     CLog::Log(LOGERROR, "DBus: Error %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
   dbus_connection_unref(con);
@@ -113,10 +115,11 @@ bool CDBusMessage::SendAsync(DBusBusType type)
   DBusConnection *con = dbus_bus_get(type, &error);
 
   bool result;
-  if (con && m_message)
+  if (con && m_message) {
     result = dbus_connection_send(con, m_message, nullptr);
-  else
+  } else {
     result = false;
+}
 
   dbus_error_free (&error);
   dbus_connection_unref(con);
@@ -127,8 +130,9 @@ DBusMessage *CDBusMessage::Send(DBusConnection *con, DBusError *error)
 {
   if (con && m_message)
   {
-    if (m_reply)
+    if (m_reply) {
       dbus_message_unref(m_reply);
+}
 
     m_reply = dbus_connection_send_with_reply_and_block(con, m_message, -1, error);
   }
@@ -138,17 +142,20 @@ DBusMessage *CDBusMessage::Send(DBusConnection *con, DBusError *error)
 
 void CDBusMessage::Close()
 {
-  if (m_message)
+  if (m_message) {
     dbus_message_unref(m_message);
+}
 
-  if (m_reply)
+  if (m_reply) {
     dbus_message_unref(m_reply);
+}
 }
 
 void CDBusMessage::PrepareArgument()
 {
-  if (!m_haveArgs)
+  if (!m_haveArgs) {
     dbus_message_iter_init_append(m_message, &m_args);
+}
 
   m_haveArgs = true;
 }

@@ -84,15 +84,17 @@ bool CScraperUrl::ParseElement(const TiXmlElement* element)
   url.m_url = element->FirstChild()->Value();
   url.m_spoof = XMLUtils::GetAttribute(element, "spoof");
   const char* szPost=element->Attribute("post");
-  if (szPost && stricmp(szPost,"yes") == 0)
+  if (szPost && stricmp(szPost,"yes") == 0) {
     url.m_post = true;
-  else
+  } else {
     url.m_post = false;
+}
   const char* szIsGz=element->Attribute("gzip");
-  if (szIsGz && stricmp(szIsGz,"yes") == 0)
+  if (szIsGz && stricmp(szIsGz,"yes") == 0) {
     url.m_isgz = true;
-  else
+  } else {
     url.m_isgz = false;
+}
   url.m_cache = XMLUtils::GetAttribute(element, "cache");
 
   const char* szType = element->Attribute("type");
@@ -102,8 +104,9 @@ bool CScraperUrl::ParseElement(const TiXmlElement* element)
   {
     url.m_type = URL_TYPE_SEASON;
     const char* szSeason = element->Attribute("season");
-    if (szSeason)
+    if (szSeason) {
       url.m_season = atoi(szSeason);
+}
   }
   url.m_aspect = XMLUtils::GetAttribute(element, "aspect");
 
@@ -234,8 +237,9 @@ bool CScraperUrl::Get(const SUrlEntry& scrURL, std::string& strHTML, XFILE::CCur
 
   std::string mimeType(http.GetMimeType());
   CMime::EFileType ftype = CMime::GetFileTypeFromMime(mimeType);
-  if (ftype == CMime::FileTypeUnknown)
+  if (ftype == CMime::FileTypeUnknown) {
     ftype = CMime::GetFileTypeFromContent(strHTML);
+}
 
   if (ftype == CMime::FileTypeZip || ftype == CMime::FileTypeGZip)
   {
@@ -247,8 +251,9 @@ bool CScraperUrl::Get(const SUrlEntry& scrURL, std::string& strHTML, XFILE::CCur
       strHTML = strBuffer;
       CLog::Log(LOGDEBUG, "%s: Archive \"%s\" was unpacked in memory", __FUNCTION__, scrURL.m_url.c_str());
     }
-    else
-      CLog::Log(LOGWARNING, "%s: \"%s\" looks like archive, but cannot be unpacked", __FUNCTION__, scrURL.m_url.c_str());
+    else {
+      CLog
+}::Log(LOGWARNING, "%s: \"%s\" looks like archive, but cannot be unpacked", __FUNCTION__, scrURL.m_url.c_str());
   }
 
   std::string reportedCharset(http.GetServerReportedCharset());
@@ -327,8 +332,9 @@ bool CScraperUrl::ParseEpisodeGuide(std::string strUrls)
     TiXmlElement *link = docHandle.FirstChild("episodeguide").Element();
     if (link->FirstChildElement("url"))
     {
-      for (link = link->FirstChildElement("url"); link; link = link->NextSiblingElement("url"))
+      for (link = link->FirstChildElement("url"); link; link = link->NextSiblingElement("url")) {
         ParseElement(link);
+}
     }
     else if (link->FirstChild() && link->FirstChild()->Value())
       ParseElement(link);
@@ -344,10 +350,12 @@ void CScraperUrl::AddElement(std::string url, std::string aspect, std::string re
   TiXmlElement thumb("thumb");
   thumb.SetAttribute("spoof", referrer);
   thumb.SetAttribute("cache", cache);
-  if (post)
+  if (post) {
     thumb.SetAttribute("post", "yes");
-  if (isgz)
+}
+  if (isgz) {
     thumb.SetAttribute("gzip", "yes");
+}
   if (season >= 0)
   {
     thumb.SetAttribute("season", StringUtils::Format("%i", season));
@@ -368,8 +376,9 @@ void CScraperUrl::AddElement(std::string url, std::string aspect, std::string re
     nUrl.m_type = URL_TYPE_SEASON;
     nUrl.m_season = season;
   }
-  else
+  else {
     nUrl.m_type = URL_TYPE_GENERAL;
+}
   
   nUrl.m_aspect = aspect;
 

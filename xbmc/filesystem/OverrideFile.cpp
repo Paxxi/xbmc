@@ -45,8 +45,9 @@ bool COverrideFile::Open(const CURL& url)
 
 bool COverrideFile::OpenForWrite(const CURL& url, bool bOverWrite /* = false */)
 {
-  if (!m_writable)
+  if (!m_writable) {
     return false;
+}
 
   std::string strFileName = TranslatePath(url);
 
@@ -55,8 +56,9 @@ bool COverrideFile::OpenForWrite(const CURL& url, bool bOverWrite /* = false */)
 
 bool COverrideFile::Delete(const CURL& url)
 {
-  if (!m_writable)
+  if (!m_writable) {
     return false;
+}
 
   std::string strFileName = TranslatePath(url);
 
@@ -79,8 +81,9 @@ int COverrideFile::Stat(const CURL& url, struct __stat64* buffer)
 
 bool COverrideFile::Rename(const CURL& url, const CURL& urlnew)
 {
-  if (!m_writable)
+  if (!m_writable) {
     return false;
+}
 
   std::string strFileName = TranslatePath(url);
   std::string strFileName2 = TranslatePath(urlnew);

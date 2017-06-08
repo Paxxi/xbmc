@@ -220,8 +220,9 @@ char* CLibcdio::GetDeviceFileName()
         s_defaultDevice = strdup(::cdio_get_arg(p_cdio, "source"));
         ::cdio_destroy(p_cdio);
       }
-      else
+      else {
         s_defaultDevice = strdup("");
+}
     }
   }
   return s_defaultDevice;
@@ -291,11 +292,13 @@ INT CCdIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == nullptr )
+  if ( cdio == nullptr ) {
     return -1;
+}
 
-  if ( ::cdio_read_mode1_sector( cdio, lpczBuffer, dwSector, false ) == 0 )
+  if ( ::cdio_read_mode1_sector( cdio, lpczBuffer, dwSector, false ) == 0 ) {
     return dwSector;
+}
 
   return -1;
 }
@@ -305,11 +308,13 @@ INT CCdIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuff
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == nullptr )
+  if ( cdio == nullptr ) {
     return -1;
+}
 
-  if ( ::cdio_read_mode2_sector( cdio, lpczBuffer, dwSector, false ) == 0 )
+  if ( ::cdio_read_mode2_sector( cdio, lpczBuffer, dwSector, false ) == 0 ) {
     return dwSector;
+}
 
   return -1;
 }
@@ -319,11 +324,13 @@ INT CCdIoSupport::ReadSectorCDDA(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffe
   CSingleLock lock(*m_cdio);
 
   CdIo* cdio = (CdIo*) hDevice;
-  if ( cdio == nullptr )
+  if ( cdio == nullptr ) {
     return -1;
+}
 
-  if ( ::cdio_read_audio_sector( cdio, lpczBuffer, dwSector ) == 0 )
+  if ( ::cdio_read_audio_sector( cdio, lpczBuffer, dwSector ) == 0 ) {
     return dwSector;
+}
 
   return -1;
 }
@@ -334,8 +341,9 @@ VOID CCdIoSupport::CloseCDROM(HANDLE hDevice)
 
   CdIo* cdio = (CdIo*) hDevice;
 
-  if ( cdio == nullptr )
+  if ( cdio == nullptr ) {
     return ;
+}
 
   ::cdio_destroy( cdio );
 }
@@ -483,14 +491,16 @@ int CCdIoSupport::ReadBlock(int superblock, uint32_t offset, uint8_t bufnum, tra
   if (::cdio_get_track_green(cdio, track_num))
   {
     if (0 < ::cdio_read_mode2_sector(cdio, buffer[bufnum],
-                                   offset + superblock, false))
+                                   offset + superblock, false)) {
       return -1;
+}
   }
   else
   {
     if (0 < ::cdio_read_mode1_sector(cdio, buffer[bufnum],
-                                   offset + superblock, false))
+                                   offset + superblock, false)) {
       return -1;
+}
   }
 
   return 0;
@@ -647,8 +657,9 @@ void CCdIoSupport::GetCdTextInfo(xbmc_cdtext_t &xcdt, int trackNum)
   cdtext_t *pcdtext = (cdtext_t *)::cdio_get_cdtext(cdio, trackNum);
 #endif 
   
-  if (pcdtext == nullptr)
+  if (pcdtext == nullptr) {
     return ;
+}
 
 #if defined (LIBCDIO_VERSION_NUM) && (LIBCDIO_VERSION_NUM > 83)
   for (int i=0; i < MAX_CDTEXT_FIELDS; i++) 
@@ -668,10 +679,11 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
   CSingleLock lock(*m_cdio);
 
   char* source_name;
-  if(cDeviceFileName == nullptr)
+  if(cDeviceFileName == nullptr) {
     source_name = m_cdio->GetDeviceFileName();
-  else
+  } else {
     source_name = cDeviceFileName;
+}
 
   cdio = ::cdio_open(source_name, DRIVER_UNKNOWN);
   if (cdio == nullptr)
@@ -743,8 +755,9 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
       ti.nMins = temp2 / (60 * 75);    // calculate the number of minutes
       temp2 %= 60 * 75;                // calculate the left-over frames
       ti.nSecs = temp2 / 75;           // calculate the number of seconds
-      if ( -1 == m_nFirstAudio)
+      if ( -1 == m_nFirstAudio) {
         m_nFirstAudio = i;
+}
 
       // Make sure that we have the Disc related info available
       if (i == 1)
@@ -760,8 +773,9 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
     else
     {
       m_nNumData++;
-      if ( -1 == m_nFirstData)
+      if ( -1 == m_nFirstData) {
         m_nFirstData = i;
+}
     }
     ti.nfsInfo = FS_NO_DATA;
     ti.ms_offset = 0;
@@ -773,8 +787,9 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
 
     info->SetTrackInformation( i, ti );
     /* skip to leadout? */
-    if (i == m_nNumTracks)
+    if (i == m_nNumTracks) {
       i = CDIO_CDROM_LEADOUT_TRACK;
+}
   }
 
   info->SetCddbDiscId( CddbDiscId() );
@@ -801,9 +816,9 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
     if (m_nStartTrack > 100 /* 100 is just a guess */)
     {
       m_nFs = GuessFilesystem(0, 1);
-      if ((m_nFs & FS_MASK) != FS_UNKNOWN)
+      if ((m_nFs & FS_MASK) != FS_UNKNOWN) {
         m_nFs |= HIDDEN_TRACK;
-      else
+      } else
       {
         m_nFs &= ~FS_MASK; /* del filesystem info */
         CLog::Log(LOGDEBUG, "Oops: %i unused sectors at start, but hidden track check failed.", m_nStartTrack);
@@ -848,12 +863,14 @@ CCdInfo* CCdIoSupport::GetCdInfo(char* cDeviceFileName)
       m_nStartTrack = (i == 1) ? 0 : ::cdio_msf_to_lsn(&msf);
 
       /* Save the start of the data area */
-      if (i == m_nFirstData)
+      if (i == m_nFirstData) {
         m_nDataStart = m_nStartTrack;
+}
 
       /* Skip tracks which belong to the current walked session */
-      if (m_nStartTrack < m_nDataStart + m_nIsofsSize)
+      if (m_nStartTrack < m_nDataStart + m_nIsofsSize) {
         continue;
+}
 
       m_nFs = GuessFilesystem(m_nStartTrack, i);
       trackinfo ti;
@@ -904,8 +921,9 @@ int CCdIoSupport::CddbDecDigitSum(int n)
   {
     ret += n % 10;
     n = n / 10;
-    if (!n)
+    if (!n) {
       return ret;
+}
   }
 }
 

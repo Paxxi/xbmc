@@ -149,8 +149,9 @@ void CScriptInvocationManager::RegisterLanguageInvocationHandler(ILanguageInvoca
   }
 
   // automatically initialize the invocation handler if it's a new one
-  if (!known)
+  if (!known) {
     invocationHandler->Initialize();
+}
 }
 
 void CScriptInvocationManager::RegisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler, const std::set<std::string> &extensions)
@@ -164,8 +165,9 @@ void CScriptInvocationManager::RegisterLanguageInvocationHandler(ILanguageInvoca
 
 void CScriptInvocationManager::UnregisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler)
 {
-  if (invocationHandler == nullptr)
+  if (invocationHandler == nullptr) {
     return;
+}
 
   CSingleLock lock(m_critSection);
   //  get all extensions of the given language invoker
@@ -294,8 +296,9 @@ int CScriptInvocationManager::ExecuteSync(const std::string &script, LanguageInv
 
 bool CScriptInvocationManager::Stop(int scriptId, bool wait /* = false */)
 {
-  if (scriptId < 0)
+  if (scriptId < 0) {
     return false;
+}
 
   CSingleLock lock(m_critSection);
   CLanguageInvokerThreadPtr invokerThread = getInvokerThread(scriptId).thread;
@@ -340,8 +343,9 @@ bool CScriptInvocationManager::IsRunning(const std::string& scriptPath) const
 
 void CScriptInvocationManager::OnScriptEnded(int scriptId)
 {
-  if (scriptId < 0)
+  if (scriptId < 0) {
     return;
+}
 
   CSingleLock lock(m_critSection);
   LanguageInvokerThreadMap::iterator script = m_scripts.find(scriptId);
@@ -351,8 +355,9 @@ void CScriptInvocationManager::OnScriptEnded(int scriptId)
 
 CScriptInvocationManager::LanguageInvokerThread CScriptInvocationManager::getInvokerThread(int scriptId) const
 {
-  if (scriptId < 0)
+  if (scriptId < 0) {
     return LanguageInvokerThread();
+}
 
   LanguageInvokerThreadMap::const_iterator script = m_scripts.find(scriptId);
   if (script == m_scripts.end())

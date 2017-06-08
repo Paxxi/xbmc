@@ -46,8 +46,9 @@ void CBitstreamReader::SkipBits(int nbits)
   buffer += offbits / 8;
   offbits %= 8;
 
-  if (buffer > (start + length))
+  if (buffer > (start + length)) {
     oflow = 1;
+}
 }
 
 uint32_t CBitstreamReader::GetBits(int nbits)
@@ -59,16 +60,18 @@ uint32_t CBitstreamReader::GetBits(int nbits)
   buf = buffer;
   nbytes = (offbits + nbits) / 8;
 
-  if (((offbits + nbits) % 8) > 0)
+  if (((offbits + nbits) % 8) > 0) {
     nbytes++;
+}
 
   if ((buf + nbytes) > (start + length))
   {
     oflow = 1;
     return 0;
   }
-  for (i = 0; i<nbytes; i++)
+  for (i = 0; i<nbytes; i++) {
     ret += buf[i] << ((nbytes - i - 1) * 8);
+}
 
   i = (4 - nbytes) * 8 + offbits;
 
@@ -79,23 +82,25 @@ uint32_t CBitstreamReader::GetBits(int nbits)
 
 const uint8_t* find_start_code(const uint8_t *p, const uint8_t *end, uint32_t *state)
 {
-  if (p >= end)
+  if (p >= end) {
     return end;
+}
 
   for (int i = 0; i < 3; i++)
   {
     uint32_t tmp = *state << 8;
     *state = tmp + *(p++);
-    if (tmp == 0x100 || p == end)
+    if (tmp == 0x100 || p == end) {
       return p;
+}
   }
 
   while (p < end)
   {
-    if (p[-1] > 1) p += 3;
-    else if (p[-2]) p += 2;
-    else if (p[-3] | (p[-1] - 1)) p++;
-    else {
+    if (p[-1] > 1) { p += 3;
+    } else if (p[-2]) { p += 2;
+    } else if (p[-3] | (p[-1] - 1)) { p++;
+    } else {
       p++;
       break;
     }

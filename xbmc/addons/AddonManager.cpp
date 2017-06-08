@@ -82,11 +82,13 @@ static cp_extension_t* GetFirstExtPoint(const cp_plugin_info_t* addon, TYPE type
   for (unsigned int i = 0; i < addon->num_extensions; ++i)
   {
     cp_extension_t* ext = &addon->extensions[i];
-    if (strcmp(ext->ext_point_id, "kodi.addon.metadata") == 0 || strcmp(ext->ext_point_id, "xbmc.addon.metadata") == 0)
+    if (strcmp(ext->ext_point_id, "kodi.addon.metadata") == 0 || strcmp(ext->ext_point_id, "xbmc.addon.metadata") == 0) {
       continue;
+}
 
-    if (type == ADDON_UNKNOWN)
+    if (type == ADDON_UNKNOWN) {
       return ext;
+}
 
     if (type == CAddonInfo::TranslateType(ext->ext_point_id))
       return ext;
@@ -104,16 +106,19 @@ AddonPtr CAddonMgr::Factory(const cp_plugin_info_t* plugin, TYPE type)
 
 bool CAddonMgr::Factory(const cp_plugin_info_t* plugin, TYPE type, CAddonBuilder& builder)
 {
-  if (!plugin || !plugin->identifier)
+  if (!plugin || !plugin->identifier) {
     return false;
+}
 
-  if (!PlatformSupportsAddon(plugin))
+  if (!PlatformSupportsAddon(plugin)) {
     return false;
+}
 
   cp_extension_t* ext = GetFirstExtPoint(plugin, type);
 
-  if (ext == nullptr && type != ADDON_UNKNOWN)
+  if (ext == nullptr && type != ADDON_UNKNOWN) {
     return false; // no extension point satisfies the type requirement
+}
 
   if (ext)
   {
@@ -164,8 +169,9 @@ void CAddonMgr::FillCpluffMetadata(const cp_plugin_info_t* plugin, CAddonBuilder
   }
 
   auto metadata = CAddonMgr::GetInstance().GetExtension(plugin, "xbmc.addon.metadata");
-  if (!metadata)
+  if (!metadata) {
     metadata = CAddonMgr::GetInstance().GetExtension(plugin, "kodi.addon.metadata");
+}
 
   if (plugin->plugin_path && strcmp(plugin->plugin_path, "") != 0)
   {
@@ -294,8 +300,9 @@ IAddonMgrCallback* CAddonMgr::GetCallbackForType(TYPE type)
 
 bool CAddonMgr::RegisterAddonMgrCallback(const TYPE type, IAddonMgrCallback* cb)
 {
-  if (cb == nullptr)
+  if (cb == nullptr) {
     return false;
+}
 
   m_managers.erase(type);
   m_managers[type] = cb;
@@ -567,8 +574,9 @@ bool CAddonMgr::FindInstallableById(const std::string& addonId, AddonPtr& result
 bool CAddonMgr::GetAddonsInternal(const TYPE &type, VECADDONS &addons, bool enabledOnly)
 {
   CSingleLock lock(m_critSection);
-  if (!m_cp_context)
+  if (!m_cp_context) {
     return false;
+}
 
   std::vector<CAddonBuilder> builders;
   m_database.GetInstalled(builders);
@@ -713,16 +721,18 @@ void CAddonMgr::OnPostUnInstall(const std::string& id)
 bool CAddonMgr::RemoveFromUpdateBlacklist(const std::string& id)
 {
   CSingleLock lock(m_critSection);
-  if (!IsBlacklisted(id))
+  if (!IsBlacklisted(id)) {
     return true;
+}
   return m_database.RemoveAddonFromBlacklist(id) && m_updateBlacklist.erase(id) > 0;
 }
 
 bool CAddonMgr::AddToUpdateBlacklist(const std::string& id)
 {
   CSingleLock lock(m_critSection);
-  if (IsBlacklisted(id))
+  if (IsBlacklisted(id)) {
     return true;
+}
   return m_database.BlacklistAddon(id) && m_updateBlacklist.insert(id).second;
 }
 
@@ -764,8 +774,9 @@ static void ResolveDependencies(const std::string& addonId, std::vector<std::str
 bool CAddonMgr::DisableAddon(const std::string& id)
 {
   CSingleLock lock(m_critSection);
-  if (!CanAddonBeDisabled(id))
+  if (!CanAddonBeDisabled(id)) {
     return false;
+}
   if (m_disabled.find(id) != m_disabled.end())
     return true; //already disabled
   if (!m_database.DisableAddon(id))
@@ -842,8 +853,9 @@ bool CAddonMgr::CanAddonBeDisabled(const std::string& ID)
     return false;
 
   CSingleLock lock(m_critSection);
-  if (IsSystemAddon(ID))
+  if (IsSystemAddon(ID)) {
     return false;
+}
 
   AddonPtr localAddon;
   // can't disable an addon that isn't installed
@@ -931,12 +943,14 @@ std::string CAddonMgr::GetTranslatedString(const cp_cfg_element_t *root, const c
 bool CAddonMgr::PlatformSupportsAddon(const cp_plugin_info_t *plugin)
 {
   auto *metadata = CAddonMgr::GetInstance().GetExtension(plugin, "xbmc.addon.metadata");
-  if (!metadata)
+  if (!metadata) {
     metadata = CAddonMgr::GetInstance().GetExtension(plugin, "kodi.addon.metadata");
+}
 
   // if platforms are not specified, assume supported
-  if (!metadata)
+  if (!metadata) {
     return true;
+}
 
   std::vector<std::string> platforms;
   if (!CAddonMgr::GetInstance().GetExtList(metadata->configuration, "platform", platforms))
@@ -986,8 +1000,9 @@ cp_cfg_element_t *CAddonMgr::GetExtElement(cp_cfg_element_t *base, const char *p
 
 bool CAddonMgr::GetExtElements(cp_cfg_element_t *base, const char *path, ELEMENTS &elements)
 {
-  if (!base || !path)
+  if (!base || !path) {
     return false;
+}
 
   for (unsigned int i = 0; i < base->num_children; i++)
   {
@@ -1001,12 +1016,14 @@ bool CAddonMgr::GetExtElements(cp_cfg_element_t *base, const char *path, ELEMENT
 
 const cp_extension_t *CAddonMgr::GetExtension(const cp_plugin_info_t *props, const char *extension) const
 {
-  if (!props)
+  if (!props) {
     return nullptr;
+}
   for (unsigned int i = 0; i < props->num_extensions; ++i)
   {
-    if (0 == strcmp(props->extensions[i].ext_point_id, extension))
+    if (0 == strcmp(props->extensions[i].ext_point_id, extension)) {
       return &props->extensions[i];
+}
   }
   return nullptr;
 }
@@ -1075,8 +1092,9 @@ bool CAddonMgr::LoadAddonDescription(const std::string &directory, AddonPtr &add
 
   cp_status_t status;
   cp_context_t* context = m_cpluff->create_context(&status);
-  if (!context)
+  if (!context) {
     return false;
+}
 
   auto info = m_cpluff->load_plugin_descriptor_from_memory(context, buffer.get(), buffer.size(), &status);
   if (info)
@@ -1116,8 +1134,9 @@ bool CAddonMgr::AddonsFromRepoXML(const CRepository::DirInfo& repo, const std::s
   // create a context for these addons
   cp_status_t status;
   cp_context_t *context = m_cpluff->create_context(&status);
-  if (!context)
+  if (!context) {
     return false;
+}
 
   // each addon XML should have a UTF-8 declaration
   TiXmlDeclaration decl("1.0", "UTF-8", "");
@@ -1167,8 +1186,9 @@ bool CAddonMgr::StartServices(const bool beforelogin)
   CLog::Log(LOGDEBUG, "ADDON: Starting service addons.");
 
   VECADDONS services;
-  if (!GetAddons(services, ADDON_SERVICE))
+  if (!GetAddons(services, ADDON_SERVICE)) {
     return false;
+}
 
   bool ret = true;
   for (IVECADDONS it = services.begin(); it != services.end(); ++it)
@@ -1193,8 +1213,9 @@ void CAddonMgr::StopServices(const bool onlylogin)
   CLog::Log(LOGDEBUG, "ADDON: Stopping service addons.");
 
   VECADDONS services;
-  if (!GetAddons(services, ADDON_SERVICE))
+  if (!GetAddons(services, ADDON_SERVICE)) {
     return;
+}
 
   for (IVECADDONS it = services.begin(); it != services.end(); ++it)
   {
@@ -1235,15 +1256,17 @@ bool CAddonMgr::IsCompatible(const IAddon& addon)
 
 int cp_to_clog(cp_log_severity_t lvl)
 {
-  if (lvl >= CP_LOG_ERROR)
+  if (lvl >= CP_LOG_ERROR) {
     return LOGINFO;
+}
   return LOGDEBUG;
 }
 
 cp_log_severity_t clog_to_cp(int lvl)
 {
-  if (lvl >= LOG_LEVEL_DEBUG)
+  if (lvl >= LOG_LEVEL_DEBUG) {
     return CP_LOG_INFO;
+}
   return CP_LOG_ERROR;
 }
 
@@ -1254,10 +1277,11 @@ void cp_fatalErrorHandler(const char *msg)
 
 void cp_logger(cp_log_severity_t level, const char *msg, const char *apid, void *user_data)
 {
-  if(!apid)
+  if(!apid) {
     CLog::Log(cp_to_clog(level), "ADDON: cpluff: '%s'", msg);
-  else
+  } else {
     CLog::Log(cp_to_clog(level), "ADDON: cpluff: '%s' reports '%s'", apid, msg);
+}
 }
 
 } /* namespace ADDON */

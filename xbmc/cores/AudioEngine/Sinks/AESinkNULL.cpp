@@ -88,8 +88,9 @@ double CAESinkNULL::GetCacheTotal()
 unsigned int CAESinkNULL::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
 {
   unsigned int max_frames = (m_sinkbuffer_size - m_sinkbuffer_level) / m_sink_frameSize;
-  if (frames > max_frames)
+  if (frames > max_frames) {
     frames = max_frames;
+}
 
   if (frames)
   {

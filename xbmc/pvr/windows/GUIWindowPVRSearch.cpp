@@ -75,8 +75,9 @@ CGUIWindowPVRSearchBase::CGUIWindowPVRSearchBase(bool bRadio, int id, const std:
 
 void CGUIWindowPVRSearchBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return;
+}
 
   buttons.Add(CONTEXT_BUTTON_CLEAR, 19232); /* Clear search results */
 
@@ -85,8 +86,9 @@ void CGUIWindowPVRSearchBase::GetContextButtons(int itemNumber, CContextButtons 
 
 bool CGUIWindowPVRSearchBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return false;
+}
   CFileItemPtr pItem = m_vecItems->Get(itemNumber);
 
   return OnContextButtonClear(pItem.get(), button) ||
@@ -202,8 +204,9 @@ void CGUIWindowPVRSearchBase::OpenDialogSearch()
 {
   CGUIDialogPVRGuideSearch* dlgSearch = g_windowManager.GetWindow<CGUIDialogPVRGuideSearch>(WINDOW_DIALOG_PVR_GUIDE_SEARCH);
 
-  if (!dlgSearch)
+  if (!dlgSearch) {
     return;
+}
 
   dlgSearch->SetFilterData(&m_searchfilter);
 

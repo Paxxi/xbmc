@@ -50,8 +50,9 @@ bool CJoystickFeature::AcceptsInput(bool bActivation)
 
   if (m_bEnabled)
   {
-    if (m_handler->AcceptsInput())
+    if (m_handler->AcceptsInput()) {
       bAcceptsInput = true;
+}
   }
 
   return bAcceptsInput;
@@ -77,10 +78,11 @@ bool CScalarFeature::OnDigitalMotion(const CDriverPrimitive& source, bool bPress
   if (!AcceptsInput(bPressed))
     return false;
 
-  if (m_inputType == INPUT_TYPE::DIGITAL)
+  if (m_inputType == INPUT_TYPE::DIGITAL) {
     OnDigitalMotion(bPressed);
-  else if (m_inputType == INPUT_TYPE::ANALOG)
+  } else if (m_inputType == INPUT_TYPE::ANALOG) {
     OnAnalogMotion(bPressed ? 1.0f : 0.0f);
+}
 
   return true;
 }
@@ -88,16 +90,18 @@ bool CScalarFeature::OnDigitalMotion(const CDriverPrimitive& source, bool bPress
 bool CScalarFeature::OnAnalogMotion(const CDriverPrimitive& source, float magnitude)
 {
   // Update discrete status
-  if (magnitude != 0.0f && magnitude != 1.0f)
+  if (magnitude != 0.0f && magnitude != 1.0f) {
     m_bDiscrete = false;
+}
 
   if (!AcceptsInput(magnitude != 0.0f))
     return false;
 
-  if (m_inputType == INPUT_TYPE::DIGITAL)
+  if (m_inputType == INPUT_TYPE::DIGITAL) {
     OnDigitalMotion(magnitude >= ANALOG_DIGITAL_THRESHOLD);
-  else if (m_inputType == INPUT_TYPE::ANALOG)
+  } else if (m_inputType == INPUT_TYPE::ANALOG) {
     OnAnalogMotion(magnitude);
+}
 
   return true;
 }
@@ -115,8 +119,9 @@ void CScalarFeature::ProcessMotions()
       if (elapsed < DISCRETE_ANALOG_RAMPUP_TIME_MS)
       {
         magnitude *= static_cast<float>(elapsed) / DISCRETE_ANALOG_RAMPUP_TIME_MS;
-        if (magnitude < DISCRETE_ANALOG_START_VALUE)
+        if (magnitude < DISCRETE_ANALOG_START_VALUE) {
           magnitude = DISCRETE_ANALOG_START_VALUE;
+}
       }
     }
 
@@ -208,8 +213,9 @@ void CScalarFeature::OnAnalogMotion(float magnitude)
   {
     m_analogState = magnitude;
     m_analogEvent = true;
-    if (m_motionStartTimeMs == 0)
+    if (m_motionStartTimeMs == 0) {
       m_motionStartTimeMs = XbmcThreads::SystemClockMillis();
+}
 
     // Log activation/deactivation
     if (m_bDigitalState != bActivated)
@@ -311,10 +317,11 @@ void CAnalogStick::ProcessMotions()
 
     if (bActivated)
     {
-      if (m_motionStartTimeMs == 0)
+      if (m_motionStartTimeMs == 0) {
         m_motionStartTimeMs = XbmcThreads::SystemClockMillis();
-      else
+      } else {
         motionTimeMs = XbmcThreads::SystemClockMillis() - m_motionStartTimeMs;
+}
     }
     else
     {
@@ -351,13 +358,13 @@ bool CAccelerometer::OnAnalogMotion(const CDriverPrimitive& source, float magnit
 
   m_buttonMap->GetAccelerometer(m_name, positiveX, positiveY, positiveZ);
 
-  if (source == positiveX)
+  if (source == positiveX) {
     m_xAxis.SetPositiveDistance(magnitude);
-  else if (source == positiveY)
+  } else if (source == positiveY) {
     m_yAxis.SetPositiveDistance(magnitude);
-  else if (source == positiveZ)
+  } else if (source == positiveZ) {
     m_zAxis.SetPositiveDistance(magnitude);
-  else
+  } else
   {
     // Just in case, avoid sticking
     m_xAxis.Reset();

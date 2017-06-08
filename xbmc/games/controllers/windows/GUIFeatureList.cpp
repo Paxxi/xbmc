@@ -143,8 +143,9 @@ void CGUIFeatureList::Load(const ControllerPtr& controller)
     }
 
     // Just in case
-    if (featureIndex >= MAX_FEATURE_COUNT)
+    if (featureIndex >= MAX_FEATURE_COUNT) {
       break;
+}
   }
 }
 
@@ -175,8 +176,9 @@ void CGUIFeatureList::CleanupButtons()
 {
   m_wizard->Abort(true);
 
-  if (m_guiList)
+  if (m_guiList) {
     m_guiList->ClearAll();
+}
 }
 
 std::vector<CGUIFeatureList::FeatureGroup> CGUIFeatureList::GetFeatureGroups(const std::vector<CControllerFeature>& features)

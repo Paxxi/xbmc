@@ -54,8 +54,9 @@ int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &pa
 int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &path, ADDON::AddonPtr &addon)
 {
   // determine the addon and addon's path
-  if (!ResolveAddon(url, addon, path))
+  if (!ResolveAddon(url, addon, path)) {
     return MHD_HTTP_NOT_FOUND;
+}
   
   if (XFILE::CDirectory::Exists(path))
   {
@@ -72,8 +73,9 @@ int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &pa
     }
   }
 
-  if (!XFILE::CFile::Exists(path))
+  if (!XFILE::CFile::Exists(path)) {
     return MHD_HTTP_NOT_FOUND;
+}
 
   return MHD_HTTP_OK;
 }

@@ -83,10 +83,12 @@ public:
   void Run() override override
   {
     waiting = true;
-    if (timeout == -1)
+    if (timeout == -1) { {
       result = event.wait();
-    else
+    } } else { {
       result = event.wait((unsigned int)timeout);
+}
+}
     waiting = false;
   }
 };

@@ -80,8 +80,9 @@ bool CPlayerController::OnAction(const CAction &action)
           else
             sub = StringUtils::Format("%s - %s", lang.c_str(), info.name.c_str());
         }
-        else
-          sub = g_localizeStrings.Get(1223);
+        else {
+          sub 
+}= g_localizeStrings.Get(1223);
         CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info,
                                               g_localizeStrings.Get(287), sub, DisplTime, false, MsgTime);
         return true;
@@ -127,8 +128,9 @@ bool CPlayerController::OnAction(const CAction &action)
           else
             sub = StringUtils::Format("%s - %s", lang.c_str(), info.name.c_str());
         }
-        else
-          sub = g_localizeStrings.Get(1223);
+        else {
+          sub 
+}= g_localizeStrings.Get(1223);
         CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(287), sub, DisplTime, false, MsgTime);
         return true;
       }
@@ -228,8 +230,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_ZOOM_IN:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount += 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount > 2.f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount > 2.f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount = 2.f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 216, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount, 0.5f, 0.1f, 2.0f);
@@ -239,8 +242,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_ZOOM_OUT:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount -= 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount < 0.5f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount < 0.5f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount = 0.5f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 216, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomZoomAmount, 0.5f, 0.1f, 2.0f);
@@ -250,8 +254,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_INCREASE_PAR:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio += 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio > 2.f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio > 2.f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio = 2.f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 217, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio, 0.5f, 0.1f, 2.0f);
@@ -261,8 +266,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_DECREASE_PAR:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio -= 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio < 0.5f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio < 0.5f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio = 0.5f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 217, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomPixelRatio, 0.5f, 0.1f, 2.0f);
@@ -272,8 +278,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_VSHIFT_UP:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift -= 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift < -2.0f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift < -2.0f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift = -2.0f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 225, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift, -2.0f, 0.1f, 2.0f);
@@ -283,8 +290,9 @@ bool CPlayerController::OnAction(const CAction &action)
       case ACTION_VSHIFT_DOWN:
       {
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift += 0.01f;
-        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift > 2.0f)
+        if (CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift > 2.0f) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift = 2.0f;
+}
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_ViewMode = ViewModeCustom;
         g_application.m_pPlayer->SetRenderViewMode(ViewModeCustom);
         ShowSlider(action.GetID(), 225, CMediaSettings::GetInstance().GetCurrentVideoSettings().m_CustomVerticalShift, -2.0f, 0.1f, 2.0f);
@@ -298,21 +306,24 @@ bool CPlayerController::OnAction(const CAction &action)
         if ((subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE) || (subalign == SUBTITLE_ALIGN_TOP_INSIDE))
         {
           res_info.iSubtitles ++;
-          if (res_info.iSubtitles >= res_info.iHeight)
+          if (res_info.iSubtitles >= res_info.iHeight) {
             res_info.iSubtitles = res_info.iHeight - 1;
+}
 
           ShowSlider(action.GetID(), 274, (float) res_info.iHeight - res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
         }
         else
         {
           res_info.iSubtitles --;
-          if (res_info.iSubtitles < 0)
+          if (res_info.iSubtitles < 0) {
             res_info.iSubtitles = 0;
+}
 
-          if (subalign == SUBTITLE_ALIGN_MANUAL)
+          if (subalign == SUBTITLE_ALIGN_MANUAL) {
             ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
-          else
+          } else {
             ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles - res_info.iHeight, (float) -res_info.iHeight, -1.0f, 0.0f);
+}
         }
         g_graphicsContext.SetResInfo(g_graphicsContext.GetVideoResolution(), res_info);
         return true;
@@ -325,21 +336,24 @@ bool CPlayerController::OnAction(const CAction &action)
         if ((subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE) || (subalign == SUBTITLE_ALIGN_TOP_INSIDE))
         {
           res_info.iSubtitles--;
-          if (res_info.iSubtitles < 0)
+          if (res_info.iSubtitles < 0) {
             res_info.iSubtitles = 0;
+}
 
           ShowSlider(action.GetID(), 274, (float) res_info.iHeight - res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
         }
         else
         {
           res_info.iSubtitles++;
-          if (res_info.iSubtitles >= res_info.iHeight)
+          if (res_info.iSubtitles >= res_info.iHeight) {
             res_info.iSubtitles = res_info.iHeight - 1;
+}
 
-          if (subalign == SUBTITLE_ALIGN_MANUAL)
+          if (subalign == SUBTITLE_ALIGN_MANUAL) {
             ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles, 0.0f, 1.0f, (float) res_info.iHeight);
-          else
+          } else {
             ShowSlider(action.GetID(), 274, (float) res_info.iSubtitles - res_info.iHeight, (float) -res_info.iHeight, -1.0f, 0.0f);
+}
         }
         g_graphicsContext.SetResInfo(g_graphicsContext.GetVideoResolution(), res_info);
         return true;
@@ -351,8 +365,9 @@ bool CPlayerController::OnAction(const CAction &action)
         int subalign = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_SUBTITLES_ALIGN);
 
         subalign++;
-        if (subalign > SUBTITLE_ALIGN_TOP_OUTSIDE)
+        if (subalign > SUBTITLE_ALIGN_TOP_OUTSIDE) {
           subalign = SUBTITLE_ALIGN_MANUAL;
+}
 
         res_info.iSubtitles = res_info.iHeight - 1;
 
@@ -381,10 +396,11 @@ bool CPlayerController::OnAction(const CAction &action)
         float sliderMax = VOLUME_DRC_MAXIMUM / 100.0f;
         float sliderMin = VOLUME_DRC_MINIMUM / 100.0f;
 
-        if (action.GetID() == ACTION_VOLAMP_UP)
+        if (action.GetID() == ACTION_VOLAMP_UP) {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification += 1.0f;
-        else
+        } else {
           CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification -= 1.0f;
+}
 
         CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification =
           std::max(std::min(CMediaSettings::GetInstance().GetCurrentVideoSettings().m_VolumeAmplification, sliderMax), sliderMin);
@@ -415,16 +431,18 @@ bool CPlayerController::OnAction(const CAction &action)
 void CPlayerController::ShowSlider(int action, int label, float value, float min, float delta, float max, bool modal)
 {
   m_sliderAction = action;
-  if (modal)
+  if (modal) {
     CGUIDialogSlider::ShowAndGetInput(g_localizeStrings.Get(label), value, min, delta, max, this);
-  else
+  } else {
     CGUIDialogSlider::Display(label, value, min, delta, max, this);
+}
 }
 
 void CPlayerController::OnSliderChange(void *data, CGUISliderControl *slider)
 {
-  if (!slider)
+  if (!slider) {
     return;
+}
 
   if (m_sliderAction == ACTION_ZOOM_OUT || m_sliderAction == ACTION_ZOOM_IN ||
       m_sliderAction == ACTION_INCREASE_PAR || m_sliderAction == ACTION_DECREASE_PAR ||

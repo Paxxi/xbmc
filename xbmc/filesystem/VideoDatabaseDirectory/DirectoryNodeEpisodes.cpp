@@ -33,15 +33,17 @@ CDirectoryNodeEpisodes::CDirectoryNodeEpisodes(const std::string& strName, CDire
 bool CDirectoryNodeEpisodes::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);
 
   int season = (int)params.GetSeason();
-  if (season == -2)
+  if (season == -2) {
     season = -1;
+}
 
   bool bSuccess=videodatabase.GetEpisodesNav(BuildPath(), items, params.GetGenreId(), params.GetYear(), params.GetActorId(), params.GetDirectorId(), params.GetTvShowId(), season);
 

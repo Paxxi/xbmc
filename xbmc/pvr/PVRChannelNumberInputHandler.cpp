@@ -49,8 +49,9 @@ void CPVRChannelNumberInputHandler::OnTimeout()
 
 void CPVRChannelNumberInputHandler::AppendChannelNumberDigit(int iDigit)
 {
-  if (iDigit < 0 || iDigit > 9)
+  if (iDigit < 0 || iDigit > 9) {
     return;
+}
 
   CSingleLock lock(m_mutex);
 

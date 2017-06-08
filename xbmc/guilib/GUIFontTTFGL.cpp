@@ -60,8 +60,9 @@ bool CGUIFontTTFGL::FirstBegin()
 {
   if (m_textureStatus == TEXTURE_REALLOCATED)
   {
-    if (glIsTexture(m_nTexture))
+    if (glIsTexture(m_nTexture)) {
       g_TextureManager.ReleaseHwTexture(m_nTexture);
+}
     m_textureStatus = TEXTURE_VOID;
   }
 
@@ -316,8 +317,9 @@ CBaseTexture* CGUIFontTTFGL::ReallocTexture(unsigned int& newHeight)
   m_textureScaleY = 1.0f / m_textureHeight;
   m_textureWidth = newTexture->GetWidth();
   m_textureScaleX = 1.0f / m_textureWidth;
-  if (m_textureHeight < newHeight)
+  if (m_textureHeight < newHeight) {
     CLog::Log(LOGWARNING, "%s: allocated new texture with height of %d, requested %d", __FUNCTION__, m_textureHeight, newHeight);
+}
   m_staticCache.Flush();
   m_dynamicCache.Flush();
 
@@ -393,8 +395,9 @@ void CGUIFontTTFGL::DeleteHardwareTexture()
 {
   if (m_textureStatus != TEXTURE_VOID)
   {
-    if (glIsTexture(m_nTexture))
+    if (glIsTexture(m_nTexture)) {
       g_TextureManager.ReleaseHwTexture(m_nTexture);
+}
 
     m_textureStatus = TEXTURE_VOID;
     m_updateY1 = m_updateY2 = 0;

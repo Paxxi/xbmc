@@ -50,8 +50,9 @@ unsigned char get_internal_from_G2 (unsigned char g2_char)
 // G3: Future Characters and Icon Expansion
 unsigned char get_internal_from_G3 (unsigned char g3_char)
 {
-    if (g3_char==0xa0) // The "CC" (closed captions) sign
+    if (g3_char==0xa0) { // The "CC" (closed captions) sign
         return 0x06;
+}
     // Rest unmapped, so we return a blank space
     return 0x20;
 }
@@ -185,35 +186,45 @@ void printTVtoBuf (cc708_service_decoder *decoder)
   decoder->textlen = 0;
   for (auto & i : decoder->tv.chars)
   {
-    for (int j=0;j<210;j++)
+    for (int j=0;j<210;j++) {
       if (i[j] != ' ')
       {
         empty=0;
         break;
       }
-    if (!empty)
+}
+    if (!empty) {
       break;
+}
   }
-  if (empty)
+  if (empty) {
     return; // Nothing to write
+}
 
   for (auto & i : decoder->tv.chars)
   {
     int empty=1;
-    for (int j=0;j<210;j++)
-      if (i[j] != ' ')
+    for (int j=0;j<210;j++) {
+      if (i[j] != ' ') {
         empty=0;
+}
+}
     if (!empty)
     {
       int f,l; // First,last used char
-      for (f=0;f<210;f++)
-        if (i[f] != ' ')
+      for (f=0;f<210;f++) {
+        if (i[f] != ' ') {
           break;
-      for (l=209;l>0;l--)
-        if (i[l]!=' ')
+}
+}
+      for (l=209;l>0;l--) {
+        if (i[l]!=' ') {
           break;
-      for (int j=f;j<=l;j++)
+}
+}
+      for (int j=f;j<=l;j++) {
         decoder->text[decoder->textlen++] = i[j];
+}
       decoder->text[decoder->textlen++] = '\r';
       decoder->text[decoder->textlen++] = '\n';
     }
@@ -233,8 +244,9 @@ void updateScreen (cc708_service_decoder *decoder)
   int visible=0;
   for (auto & window : decoder->windows)
   {
-    if (window.is_defined && window.visible && !window.is_empty)
+    if (window.is_defined && window.visible && !window.is_empty) {
       wnd[visible++]=&window;
+}
   }
   qsort (wnd,visible,sizeof (e708Window *),compWindowsPriorities);
 
@@ -284,10 +296,12 @@ void updateScreen (cc708_service_decoder *decoder)
     default: // Shouldn't happen, but skip the window just in case
       continue;
     }
-    if (top<0)
+    if (top<0) {
       top=0;
-    if (left<0)
+}
+    if (left<0) {
       left=0;
+}
     int copyrows=top + wnd[i]->row_count >= I708_SCREENGRID_ROWS ?
         I708_SCREENGRID_ROWS - top : wnd[i]->row_count;
     int copycols=left + wnd[i]->col_count >= I708_SCREENGRID_COLUMNS ?
@@ -317,23 +331,26 @@ Note: EXT1 not included */
 //! @todo This code is completely untested due to lack of samples. Just following specs!
 int handle_708_C2 (cc708_service_decoder *decoder, unsigned char *data, int data_length)
 {
-  if (data[0]<=0x07) // 00-07...
+  if (data[0]<=0x07) { // 00-07...
     return 1; // ... Single-byte control bytes (0 additional bytes)
-  else if (data[0]<=0x0f) // 08-0F ...
+  } else if (data[0]<=0x0f) { // 08-0F ...
     return 2; // ..two-byte control codes (1 additional byte)
-  else if (data[0]<=0x17)  // 10-17 ...
+  } else if (data[0]<=0x17) {  // 10-17 ...
     return 3; // ..three-byte control codes (2 additional bytes)
+}
   return 4; // 18-1F => four-byte control codes (3 additional bytes)
 }
 
 int handle_708_C3 (cc708_service_decoder *decoder, unsigned char *data, int data_length)
 {
-  if (data[0]<0x80 || data[0]>0x9F)
+  if (data[0]<0x80 || data[0]>0x9F) {
     ;//ccx_common_logging.fatal_ftn (CCX_COMMON_EXIT_BUG_BUG, "Entry in handle_708_C3 with an out of range value.");
-  if (data[0]<=0x87) // 80-87...
+}
+  if (data[0]<=0x87) { // 80-87...
     return 5; // ... Five-byte control bytes (4 additional bytes)
-  else if (data[0]<=0x8F) // 88-8F ...
+  } else if (data[0]<=0x8F) { // 88-8F ...
     return 6; // ..Six-byte control codes (5 additional byte)
+}
   // If here, then 90-9F ...
 
   // These are variable length commands, that can even span several segments
@@ -386,23 +403,27 @@ void process_cr (cc708_service_decoder *decoder)
   {
   case pd_left_to_right:
     decoder->windows[decoder->current_window].pen_column=0;
-    if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count)
+    if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count) {
       decoder->windows[decoder->current_window].pen_row++;
+}
     break;
   case pd_right_to_left:
     decoder->windows[decoder->current_window].pen_column=decoder->windows[decoder->current_window].col_count;
-    if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count)
+    if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count) {
       decoder->windows[decoder->current_window].pen_row++;
+}
     break;
   case pd_top_to_bottom:
     decoder->windows[decoder->current_window].pen_row=0;
-    if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count)
+    if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count) {
       decoder->windows[decoder->current_window].pen_column++;
+}
     break;
   case pd_bottom_to_top:
     decoder->windows[decoder->current_window].pen_row=decoder->windows[decoder->current_window].row_count;
-    if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count)
+    if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count) {
       decoder->windows[decoder->current_window].pen_column++;
+}
     break;
   }
 
@@ -417,9 +438,10 @@ void process_cr (cc708_service_decoder *decoder)
 int handle_708_C0 (cc708_service_decoder *decoder, unsigned char *data, int data_length)
 {
   const char *name=COMMANDS_C0[data[0]];
-  if (name==nullptr)
+  if (name==nullptr) {
     name="Reserved";
-  int len=-1;
+  
+}int len=-1;
   // These commands have a known length even if they are reserved.
   if (/* data[0]>=0x00 && */ data[0]<=0xF) // Comment to silence warning
   {
@@ -468,8 +490,9 @@ int handle_708_C0 (cc708_service_decoder *decoder, unsigned char *data, int data
 void process_character (cc708_service_decoder *decoder, unsigned char internal_char)
 {
   if (decoder->current_window==-1 ||
-      !decoder->windows[decoder->current_window].is_defined) // Writing to a non existing window, skipping
+      !decoder->windows[decoder->current_window].is_defined) { // Writing to a non existing window, skipping
     return;
+}
   switch (internal_char)
   {
   default:
@@ -482,20 +505,24 @@ void process_character (cc708_service_decoder *decoder, unsigned char internal_c
     switch (decoder->windows[decoder->current_window].attribs.print_dir)
     {
     case pd_left_to_right:
-      if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count)
+      if (decoder->windows[decoder->current_window].pen_column+1 < decoder->windows[decoder->current_window].col_count) {
         decoder->windows[decoder->current_window].pen_column++;
+}
       break;
     case pd_right_to_left:
-      if (decoder->windows->pen_column>0)
+      if (decoder->windows->pen_column>0) {
         decoder->windows[decoder->current_window].pen_column--;
+}
       break;
     case pd_top_to_bottom:
-      if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count)
+      if (decoder->windows[decoder->current_window].pen_row+1 < decoder->windows[decoder->current_window].row_count) {
         decoder->windows[decoder->current_window].pen_row++;
+}
       break;
     case pd_bottom_to_top:
-      if (decoder->windows[decoder->current_window].pen_row>0)
+      if (decoder->windows[decoder->current_window].pen_row>0) {
         decoder->windows[decoder->current_window].pen_row--;
+}
       break;
     }
     break;
@@ -524,8 +551,9 @@ int handle_708_G1 (cc708_service_decoder *decoder, unsigned char *data, int data
   ------------------------------------------------------- */
 void handle_708_CWx_SetCurrentWindow (cc708_service_decoder *decoder, int new_window)
 {
-  if (decoder->windows[new_window].is_defined)
+  if (decoder->windows[new_window].is_defined) {
     decoder->current_window=new_window;
+}
 }
 
 void clearWindowText(e708Window *window)
@@ -542,15 +570,16 @@ void clearWindowText(e708Window *window)
 
 void clearWindow (cc708_service_decoder *decoder, int window)
 {
-  if (decoder->windows[window].is_defined)
+  if (decoder->windows[window].is_defined) {
     clearWindowText(&decoder->windows[window]);
+}
 }
 
 void handle_708_CLW_ClearWindows (cc708_service_decoder *decoder, int windows_bitmap)
 {
-  if (windows_bitmap==0)
+  if (windows_bitmap==0) {
     ;//ccx_common_logging.debug_ftn(CCX_DMT_708, "None\n");
-  else
+  } else
   {
     for (int i=0; i<8; i++)
     {
@@ -565,9 +594,9 @@ void handle_708_CLW_ClearWindows (cc708_service_decoder *decoder, int windows_bi
 
 void handle_708_DSW_DisplayWindows (cc708_service_decoder *decoder, int windows_bitmap)
 {
-  if (windows_bitmap==0)
+  if (windows_bitmap==0) {
     ;//ccx_common_logging.debug_ftn(CCX_DMT_708, "None\n");
-  else
+  } else
   {
     int changes=0;
     for (auto & window : decoder->windows)
@@ -582,16 +611,17 @@ void handle_708_DSW_DisplayWindows (cc708_service_decoder *decoder, int windows_
       }
       windows_bitmap>>=1;
     }
-    if (changes)
+    if (changes) {
       updateScreen (decoder);
+}
   }
 }
 
 void handle_708_HDW_HideWindows (cc708_service_decoder *decoder, int windows_bitmap)
 {
-  if (windows_bitmap==0)
+  if (windows_bitmap==0) {
     ;//ccx_common_logging.debug_ftn(CCX_DMT_708, "None\n");
-  else
+  } else
   {
     int changes=0;
     for (auto & window : decoder->windows)
@@ -607,16 +637,17 @@ void handle_708_HDW_HideWindows (cc708_service_decoder *decoder, int windows_bit
       }
       windows_bitmap>>=1;
     }
-    if (changes)
+    if (changes) {
       updateScreen (decoder);
+}
   }
 }
 
 void handle_708_TGW_ToggleWindows (cc708_service_decoder *decoder, int windows_bitmap)
 {
-  if (windows_bitmap==0)
+  if (windows_bitmap==0) {
     ;//ccx_common_logging.debug_ftn(CCX_DMT_708, "None\n");
-  else
+  } else
   {
     for (auto & window : decoder->windows)
     {
@@ -653,8 +684,9 @@ void handle_708_DFx_DefineWindow (cc708_service_decoder *decoder, int window, un
   col_count++; // These increments seems to be needed but no documentation
   row_count++; // backs it up
 
-  if (anchor_vertical > I708_SCREENGRID_ROWS)
+  if (anchor_vertical > I708_SCREENGRID_ROWS) {
     anchor_vertical = I708_SCREENGRID_ROWS;
+}
 
   decoder->windows[window].priority=priority;
   decoder->windows[window].col_lock=col_lock;
@@ -685,8 +717,9 @@ void handle_708_DFx_DefineWindow (cc708_service_decoder *decoder, int window, un
         {
           decoder->windows[window].is_defined=0;
           decoder->current_window=-1;
-          for (int j=0;j<i;j++)
+          for (int j=0;j<i;j++) {
             free (decoder->windows[window].rows[j]);
+}
           return; //! @todo Warn somehow
         }
       }
@@ -757,23 +790,25 @@ void deleteWindow (cc708_service_decoder *decoder, int window)
 void handle_708_DLW_DeleteWindows (cc708_service_decoder *decoder, int windows_bitmap)
 {
   int changes=0;
-  if (windows_bitmap==0)
+  if (windows_bitmap==0) {
     ; //ccx_common_logging.debug_ftn(CCX_DMT_708, "None\n");
-  else
+  } else
   {
     for (int i=0; i<8; i++)
     {
       if (windows_bitmap & 1)
       {
-        if (decoder->windows[i].is_defined && decoder->windows[i].visible && !decoder->windows[i].is_empty)
+        if (decoder->windows[i].is_defined && decoder->windows[i].visible && !decoder->windows[i].is_empty) {
           changes=1;
+}
         deleteWindow (decoder, i);
       }
       windows_bitmap>>=1;
     }
   }
-  if (changes)
+  if (changes) {
     updateScreen (decoder);
+}
 
 }
 
@@ -955,8 +990,9 @@ void process_service_block (cc708_service_decoder *decoder, unsigned char *data,
         used=handle_708_C1 (decoder,data+i,data_length-i);
       }
       // Group C2
-      else
+      else {
         used=handle_708_G1 (decoder,data+i,data_length-i);
+}
       if (used==-1)
       {
         //! @todo Not sure if a local reset is going to be helpful here.
@@ -993,13 +1029,15 @@ void process_service_block (cc708_service_decoder *decoder, unsigned char *data,
 bool check_current_packet_complete (cc708_service_decoder *decoders)
 {
   int len = decoders[0].parent->m_current_packet[0] & 0x3F; // 6 least significants bits
-  if (decoders[0].parent->m_current_packet_length == 0)
+  if (decoders[0].parent->m_current_packet_length == 0) {
     return false;
+}
 
-  if (len==0) // This is well defined in EIA-708; no magic.
+  if (len==0) { // This is well defined in EIA-708; no magic.
     len=128;
-  else
+  } else {
     len=len*2;
+}
 
   // Note that len here is the length including the header
   if (decoders[0].parent->m_current_packet_length == len) // Is this possible?
@@ -1013,13 +1051,15 @@ void process_current_packet (cc708_service_decoder *decoders)
 {
   int seq = (decoders[0].parent->m_current_packet[0] & 0xC0) >> 6; // Two most significants bits
   int len = decoders[0].parent->m_current_packet[0] & 0x3F; // 6 least significants bits
-  if (decoders[0].parent->m_current_packet_length == 0)
+  if (decoders[0].parent->m_current_packet_length == 0) {
     return;
+}
 
-  if (len==0) // This is well defined in EIA-708; no magic.
+  if (len==0) { // This is well defined in EIA-708; no magic.
     len=128;
-  else
+  } else {
     len=len*2;
+}
   // Note that len here is the length including the header
   if (decoders[0].parent->m_current_packet_length != len) // Is this possible?
   {
@@ -1059,8 +1099,9 @@ void process_current_packet (cc708_service_decoder *decoders)
       break;
     }
 
-    if (service_number>0 && decoders[service_number].inited)
+    if (service_number>0 && decoders[service_number].inited) {
       process_service_block (&decoders[service_number], pos, block_length);
+}
 
     pos+=block_length; // Skip data
   }
@@ -1092,8 +1133,9 @@ void decode_708 (const unsigned char *data, int datalength, cc708_service_decode
     {
     case 0:
       // only use 608 as fallback
-      if (!decoders[0].parent->m_seen708)
+      if (!decoders[0].parent->m_seen708) {
         decode_cc(decoders[0].parent->m_cc608decoder, (uint8_t*)data+i, 3);
+}
       break;
     case 2:
       if (cc_valid==0) // This ends the previous packet if complete

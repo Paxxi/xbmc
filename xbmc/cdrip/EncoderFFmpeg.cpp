@@ -59,8 +59,9 @@ CEncoderFFmpeg::CEncoderFFmpeg():
 
 bool CEncoderFFmpeg::Init(audioenc_callbacks &callbacks)
 {
-  if (!callbacks.opaque || !callbacks.write || !callbacks.seek)
+  if (!callbacks.opaque || !callbacks.write || !callbacks.seek) {
     return false;
+}
 
   m_callbacks = callbacks;
 
@@ -278,8 +279,9 @@ int CEncoderFFmpeg::Encode(int nNumBytesRead, uint8_t* pbtStream)
     /* only write full packets */
     if (m_BufferSize == m_NeededBytes)
     {
-      if (!WriteFrame())
+      if (!WriteFrame()) {
         return 0;
+}
     }
   }
 

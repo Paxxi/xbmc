@@ -93,8 +93,9 @@ bool IHTTPRequestHandler::AddResponseHeader(const std::string &field, const std:
   if (field.empty() || value.empty())
     return false;
 
-  if (!allowMultiple && HasResponseHeader(field))
+  if (!allowMultiple && HasResponseHeader(field)) {
     return false;
+}
 
   m_response.headers.insert(std::make_pair(field, value));
   return true;
@@ -126,20 +127,23 @@ bool IHTTPRequestHandler::AddPostData(const char *data, unsigned int size)
 
 bool IHTTPRequestHandler::GetRequestedRanges(uint64_t totalLength)
 {
-  if (!m_ranged || m_request.webserver == nullptr || m_request.connection == nullptr)
+  if (!m_ranged || m_request.webserver == nullptr || m_request.connection == nullptr) {
     return false;
+}
 
   m_request.ranges.Clear();
-  if (totalLength == 0)
+  if (totalLength == 0) {
     return true;
+}
 
   return HTTPRequestHandlerUtils::GetRequestedRanges(m_request.connection, totalLength, m_request.ranges);
 }
 
 bool IHTTPRequestHandler::GetHostnameAndPort(std::string& hostname, uint16_t &port)
 {
-  if (m_request.webserver == nullptr || m_request.connection == nullptr)
+  if (m_request.webserver == nullptr || m_request.connection == nullptr) {
     return false;
+}
 
   std::string hostnameAndPort = HTTPRequestHandlerUtils::GetRequestHeaderValue(m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_HOST);
   if (hostnameAndPort.empty())
@@ -153,12 +157,14 @@ bool IHTTPRequestHandler::GetHostnameAndPort(std::string& hostname, uint16_t &po
   if (pos != std::string::npos)
   {
     std::string strPort = hostnameAndPort.substr(pos + 1);
-    if (!StringUtils::IsNaturalNumber(strPort))
+    if (!StringUtils::IsNaturalNumber(strPort)) {
       return false;
+}
 
     unsigned long portL = strtoul(strPort.c_str(), NULL, 0);
-    if (portL > std::numeric_limits<uint16_t>::max())
+    if (portL > std::numeric_limits<uint16_t>::max()) {
       return false;
+}
 
     port = static_cast<uint16_t>(portL);
   }

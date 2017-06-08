@@ -164,8 +164,9 @@ void CGUIWindowPVRGuideBase::SetInvalid()
 
 void CGUIWindowPVRGuideBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return;
+}
 
   buttons.Add(CONTEXT_BUTTON_BEGIN, 19063); /* Go to begin */
   buttons.Add(CONTEXT_BUTTON_NOW,   19070); /* Go to now */
@@ -449,8 +450,9 @@ bool CGUIWindowPVRGuideBase::OnMessage(CGUIMessage& message)
 
 bool CGUIWindowPVRGuideBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return false;
+}
   CFileItemPtr pItem = m_vecItems->Get(itemNumber);
 
   return OnContextButtonBegin(pItem.get(), button) ||
@@ -487,16 +489,19 @@ bool CGUIWindowPVRGuideBase::RefreshTimelineItems()
       CDateTime endDate(group->GetLastEPGDate());
       const CDateTime currentDate(CDateTime::GetCurrentDateTime().GetAsUTCDateTime());
 
-      if (!startDate.IsValid())
+      if (!startDate.IsValid()) {
         startDate = currentDate;
+}
 
-      if (!endDate.IsValid() || endDate < startDate)
+      if (!endDate.IsValid() || endDate < startDate) {
         endDate = startDate;
+}
 
       // limit start to linger time
       const CDateTime maxPastDate(currentDate - CDateTimeSpan(0, 0, g_advancedSettings.m_iEpgLingerTime, 0));
-      if (startDate < maxPastDate)
+      if (startDate < maxPastDate) {
         startDate = maxPastDate;
+}
 
       // can be very expensive. never call with lock acquired.
       epgGridContainer->SetTimelineItems(timeline, startDate, endDate);
@@ -622,8 +627,9 @@ void CPVRRefreshTimelineItemsThread::Process()
       KODI::MESSAGING::CApplicationMessenger::GetInstance().SendGUIMessage(m);
     }
 
-    if (m_bStop)
+    if (m_bStop) {
       break;
+}
 
     m_done.Set();
 
@@ -633,10 +639,11 @@ void CPVRRefreshTimelineItemsThread::Process()
     {
       int iCurrentEpgItemsCount = m_pGuideWindow->CurrentDirectory().Size();
 
-      if (iCurrentEpgItemsCount == iLastEpgItemsCount)
+      if (iCurrentEpgItemsCount == iLastEpgItemsCount) {
         iUpdatesWithoutChange++;
-      else
+      } else {
         iUpdatesWithoutChange = 0; // reset
+}
 
       iLastEpgItemsCount = iCurrentEpgItemsCount;
 

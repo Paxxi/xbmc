@@ -46,8 +46,9 @@ CWinSystemX11GLContext::~CWinSystemX11GLContext()
 
 void CWinSystemX11GLContext::PresentRenderImpl(bool rendered)
 {
-  if (rendered)
+  if (rendered) {
     m_pGLContext->SwapBuffers();
+}
   
   if (m_delayDispReset && m_dispResetTimer.IsTimePast())
   {
@@ -199,8 +200,9 @@ bool CWinSystemX11GLContext::RefreshGLContext(bool force)
   }
   bool ret = m_pGLContext->Refresh(force, m_nScreen, m_glWindow, m_newGlContext);
 
-  if (ret && !firstrun)
+  if (ret && !firstrun) {
     return ret;
+}
 
   std::string gpuvendor;
   if (ret)

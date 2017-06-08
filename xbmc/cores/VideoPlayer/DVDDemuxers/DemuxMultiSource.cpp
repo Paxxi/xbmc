@@ -129,13 +129,15 @@ int CDemuxMultiSource::GetStreamLength()
 
 bool CDemuxMultiSource::Open(CDVDInputStream* pInput)
 {
-  if (!pInput)
+  if (!pInput) {
     return false;
+}
 
   m_pInput = dynamic_cast<InputStreamMultiStreams*>(pInput);
 
-  if (!m_pInput)
+  if (!m_pInput) {
     return false;
+}
 
   auto iter = m_pInput->m_InputStreams.begin();
   while (iter != m_pInput->m_InputStreams.end())
@@ -179,10 +181,11 @@ DemuxPacket* CDemuxMultiSource::Read()
   if (packet)
   {
     double readTime = 0;
-    if (packet->dts != DVD_NOPTS_VALUE)
+    if (packet->dts != DVD_NOPTS_VALUE) {
       readTime = packet->dts;
-    else
+    } else {
       readTime = packet->pts;
+}
     m_demuxerQueue.push(std::make_pair(readTime, currentDemuxer));
   }
   else

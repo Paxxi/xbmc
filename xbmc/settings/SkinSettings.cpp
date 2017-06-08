@@ -91,8 +91,9 @@ void CSkinSettings::Reset()
 
 bool CSkinSettings::Load(const TiXmlNode *settings)
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   const TiXmlElement *rootElement = settings->FirstChildElement(XML_SKINSETTINGS);
   
@@ -113,8 +114,9 @@ bool CSkinSettings::Load(const TiXmlNode *settings)
 
 bool CSkinSettings::Save(TiXmlNode *settings) const
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
 

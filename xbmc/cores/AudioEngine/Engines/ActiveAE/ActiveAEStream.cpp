@@ -197,10 +197,11 @@ void CActiveAEStream::RemapBuffer()
 double CActiveAEStream::CalcResampleRatio(double error)
 {
   //reset the integral on big errors, failsafe
-  if (fabs(error) > 1000)
+  if (fabs(error) > 1000) {
     m_resampleIntegral = 0;
-  else if (fabs(error) > 5)
+  } else if (fabs(error) > 5) {
     m_resampleIntegral += error / 1000 / 50;
+}
 
   double proportional = 0.0;
 
@@ -211,8 +212,9 @@ double CActiveAEStream::CalcResampleRatio(double error)
   if (m_pClock)
   {
     clockspeed = m_pClock->GetClockSpeed();
-    if (m_clockSpeed != clockspeed)
+    if (m_clockSpeed != clockspeed) {
       m_resampleIntegral = 0;
+}
     m_clockSpeed = clockspeed;
   }
 
@@ -226,18 +228,20 @@ int CActiveAEStream::GetErrorInterval()
 {
   int ret = m_errorInterval;
   double rr = m_processingBuffers->GetRR();
-  if (rr > 1.02 || rr < 0.98)
+  if (rr > 1.02 || rr < 0.98) {
     ret *= 3;
+}
   return ret;
 }
 
 unsigned int CActiveAEStream::GetSpace()
 {
   CSingleLock lock(m_streamLock);
-  if (m_format.m_dataFormat == AE_FMT_RAW)
+  if (m_format.m_dataFormat == AE_FMT_RAW) {
     return m_streamFreeBuffers;
-  else
+  } else {
     return m_streamFreeBuffers * m_streamSpace;
+}
 }
 
 unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int offset, unsigned int frames, double pts)
@@ -436,8 +440,9 @@ void CActiveAEStream::Drain(bool wait)
         return;
       }
     }
-    else if (!wait)
+    else if (!wait) {
       return;
+}
 
     m_inMsgEvent.WaitMSec(timer.MillisLeft());
   }
@@ -508,15 +513,17 @@ double CActiveAEStream::GetResampleRatio()
 
 void CActiveAEStream::SetResampleRatio(double ratio)
 {
-  if (ratio != m_streamResampleRatio)
+  if (ratio != m_streamResampleRatio) {
     m_activeAE->SetStreamResampleRatio(this, ratio);
+}
   m_streamResampleRatio = ratio;
 }
 
 void CActiveAEStream::SetResampleMode(int mode)
 {
-  if (mode != m_streamResampleMode)
+  if (mode != m_streamResampleMode) {
     m_activeAE->SetStreamResampleMode(this, mode);
+}
   m_streamResampleMode = mode;
 }
 
@@ -527,8 +534,9 @@ void CActiveAEStream::SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_en
 
 void CActiveAEStream::FadeVolume(float from, float target, unsigned int time)
 {
-  if (time == 0 || (m_format.m_dataFormat == AE_FMT_RAW))
+  if (time == 0 || (m_format.m_dataFormat == AE_FMT_RAW)) {
     return;
+}
 
   m_streamFading = true;
   m_activeAE->SetStreamFade(this, from, target, time);
@@ -607,11 +615,13 @@ bool CActiveAEStreamBuffers::HasInputLevel(int level)
 
 bool CActiveAEStreamBuffers::Create(unsigned int totaltime, bool remap, bool upmix, bool normalize, bool useDSP)
 {
-  if (!m_resampleBuffers->Create(totaltime, remap, upmix, normalize))
+  if (!m_resampleBuffers->Create(totaltime, remap, upmix, normalize)) {
     return false;
+}
 
-  if (!m_atempoBuffers->Create(totaltime))
+  if (!m_atempoBuffers->Create(totaltime)) {
     return false;
+}
 
   return true;
 }

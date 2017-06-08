@@ -125,8 +125,9 @@ bool CTextureBundleXBT::HasFile(const std::string& Filename)
   if (m_XBTFReader->GetLastModificationTimestamp() > m_TimeStamp)
   {
     CLog::Log(LOGINFO, "Texture bundle has changed, reloading");
-    if (!OpenBundle())
+    if (!OpenBundle()) {
       return false;
+}
   }
 
   std::string name = Normalize(Filename);
@@ -298,8 +299,9 @@ uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFr
   }
 
   // if the frame isn't packed there's nothing else to be done
-  if (!frame.IsPacked())
+  if (!frame.IsPacked()) {
     return packedBuffer;
+}
 
   auto  unpackedBuffer = new uint8_t[static_cast<size_t>(frame.GetUnpackedSize())];
   if (unpackedBuffer == nullptr)

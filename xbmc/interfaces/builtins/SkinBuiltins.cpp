@@ -136,10 +136,11 @@ static int SelectBool(const std::vector<std::string>& params)
     {
       std::string item = settings[i].second;
       int setting = CSkinSettings::GetInstance().TranslateBool(item);
-      if (i == iItem)
+      if (i == iItem) {
         CSkinSettings::GetInstance().SetBool(setting, true);
-      else
+      } else {
         CSkinSettings::GetInstance().SetBool(setting, false);
+}
     }
     CServiceBroker::GetSettings().Save();
   }
@@ -365,10 +366,11 @@ static int SetTheme(const std::vector<std::string>& params)
   }
 
   int iParam = atoi(params[0].c_str());
-  if (iParam == 0 || iParam == 1)
+  if (iParam == 0 || iParam == 1) {
     iTheme++;
-  else if (iParam == -1)
+  } else if (iParam == -1) {
     iTheme--;
+}
   if (iTheme > (int)vecTheme.size()-1)
     iTheme = -1;
   if (iTheme < -1)

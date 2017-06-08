@@ -77,20 +77,24 @@ void CGUIMultiImage::UpdateVisibility(const CGUIListItem *item)
   // check if we're hidden, and deallocate if so
   if (!IsVisible() && m_visible != DELAYED)
   {
-    if (m_bDynamicResourceAlloc && m_bAllocated)
+    if (m_bDynamicResourceAlloc && m_bAllocated) {
       FreeResources();
+}
     return;
   }
 
   // we are either delayed or visible, so we can allocate our resources
-  if (m_directoryStatus == UNLOADED)
+  if (m_directoryStatus == UNLOADED) {
     LoadDirectory();
+}
 
-  if (!m_bAllocated)
+  if (!m_bAllocated) {
     AllocResources();
+}
 
-  if (m_directoryStatus == LOADED)
+  if (m_directoryStatus == LOADED) {
     OnDirectoryLoaded();
+}
 }
 
 void CGUIMultiImage::UpdateInfo(const CGUIListItem *item)
@@ -126,8 +130,9 @@ void CGUIMultiImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyre
     {
       // check if we should be loading a new image yet
       unsigned int timeToShow = m_timePerImage;
-      if (0 == nextImage) // last image should be paused for a bit longer if that's what the skinner wishes.
+      if (0 == nextImage) { // last image should be paused for a bit longer if that's what the skinner wishes.
         timeToShow += m_timeToPauseAtEnd;
+}
       if (m_imageTimer.IsRunning() && m_imageTimer.GetElapsedMilliseconds() > timeToShow)
       {
         // grab a new image
@@ -182,8 +187,9 @@ void CGUIMultiImage::AllocResources()
   FreeResources();
   CGUIControl::AllocResources();
 
-  if (m_directoryStatus == UNLOADED)
+  if (m_directoryStatus == UNLOADED) {
     LoadDirectory();
+}
 }
 
 void CGUIMultiImage::FreeResources(bool immediately)
@@ -264,8 +270,9 @@ void CGUIMultiImage::OnDirectoryLoaded()
 void CGUIMultiImage::CancelLoading()
 {
   CSingleLock lock(m_section);
-  if (m_directoryStatus == LOADING)
+  if (m_directoryStatus == LOADING) {
     CJobManager::GetInstance().CancelJob(m_jobID);
+}
   m_directoryStatus = UNLOADED;
 }
 

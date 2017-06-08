@@ -51,8 +51,9 @@ void CGUIToggleButtonControl::Process(unsigned int currentTime, CDirtyRegionList
     ProcessToggle(currentTime);
     m_selectButton.DoProcess(currentTime, dirtyregions);
   }
-  else
-    CGUIButtonControl::Process(currentTime, dirtyregions);
+  else {
+    CGUIButtonControl
+}::Process(currentTime, dirtyregions);
 }
 
 void CGUIToggleButtonControl::ProcessToggle(unsigned int currentTime)

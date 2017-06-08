@@ -195,8 +195,10 @@ TEST(TestHttpRanges, GetAll)
   const HttpRanges& ranges_raw_get = ranges.Get();
   ASSERT_EQ(ranges_raw.size(), ranges_raw_get.size());
 
-  for (size_t i = 0; i < ranges_raw.size(); ++i)
+  for (size_t i = 0; i < ranges_raw.size(); ++i) { {
     EXPECT_EQ(ranges_raw.at(i), ranges_raw_get.at(i));
+}
+}
 }
 
 TEST(TestHttpRanges, GetIndex)

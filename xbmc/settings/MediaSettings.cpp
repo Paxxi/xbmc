@@ -79,8 +79,9 @@ CMediaSettings& CMediaSettings::GetInstance()
 
 bool CMediaSettings::Load(const TiXmlNode *settings)
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
   const TiXmlElement *pElement = settings->FirstChildElement("defaultvideosettings");
@@ -204,15 +205,17 @@ void CMediaSettings::OnSettingsLoaded()
 
 bool CMediaSettings::Save(TiXmlNode *settings) const
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
   // default video settings
   TiXmlElement videoSettingsNode("defaultvideosettings");
   TiXmlNode *pNode = settings->InsertEndChild(videoSettingsNode);
-  if (pNode == nullptr)
+  if (pNode == nullptr) {
     return false;
+}
 
   XMLUtils::SetInt(pNode, "interlacemethod", m_defaultVideoSettings.m_InterlaceMethod);
   XMLUtils::SetInt(pNode, "scalingmethod", m_defaultVideoSettings.m_ScalingMethod);
@@ -237,8 +240,9 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
   // default audio settings for dsp addons
   TiXmlElement audioSettingsNode("defaultaudiosettings");
   pNode = settings->InsertEndChild(audioSettingsNode);
-  if (pNode == nullptr)
+  if (pNode == nullptr) {
     return false;
+}
 
   XMLUtils::SetInt(pNode, "masterstreamtype", m_defaultAudioSettings.m_MasterStreamType);
   XMLUtils::SetInt(pNode, "masterstreamtypesel", m_defaultAudioSettings.m_MasterStreamTypeSel);
@@ -260,14 +264,16 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement videosNode("mymusic");
     pNode = settings->InsertEndChild(videosNode);
-    if (pNode == nullptr)
+    if (pNode == nullptr) {
       return false;
+}
   }
 
   TiXmlElement musicPlaylistNode("playlist");
   TiXmlNode *playlistNode = pNode->InsertEndChild(musicPlaylistNode);
-  if (playlistNode == nullptr)
+  if (playlistNode == nullptr) {
     return false;
+}
   XMLUtils::SetBoolean(playlistNode, "repeat", m_musicPlaylistRepeat);
   XMLUtils::SetBoolean(playlistNode, "shuffle", m_musicPlaylistShuffle);
 
@@ -279,8 +285,9 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
   {
     TiXmlElement videosNode("myvideos");
     pNode = settings->InsertEndChild(videosNode);
-    if (pNode == nullptr)
+    if (pNode == nullptr) {
       return false;
+}
   }
 
   XMLUtils::SetInt(pNode, "watchmodemovies", m_watchedModes.find("movies")->second);
@@ -290,8 +297,9 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
 
   TiXmlElement videoPlaylistNode("playlist");
   playlistNode = pNode->InsertEndChild(videoPlaylistNode);
-  if (playlistNode == nullptr)
+  if (playlistNode == nullptr) {
     return false;
+}
   XMLUtils::SetBoolean(playlistNode, "repeat", m_videoPlaylistRepeat);
   XMLUtils::SetBoolean(playlistNode, "shuffle", m_videoPlaylistShuffle);
 

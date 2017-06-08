@@ -56,8 +56,9 @@ const float* CAudioBuffer::Get() const
 
 void CAudioBuffer::Set(const float* psBuffer, int iSize)
 {
-  if (iSize<0)
+  if (iSize<0) {
     return;
+}
   memcpy(m_pBuffer, psBuffer, iSize * sizeof(float));
   for (int i = iSize; i < m_iLen; ++i) m_pBuffer[i] = 0;
 }
@@ -97,10 +98,11 @@ bool CVisualisation::Create(int x, int y, int w, int h, void *device)
 
     m_hasPresets = GetPresets();
 
-    if (GetSubModules())
+    if (GetSubModules()) {
       m_struct.props.submodule = strdup(CSpecialProtocol::TranslatePath(m_submodules.front()).c_str());
-    else
+    } else {
       m_struct.props.submodule = nullptr;
+}
 
     CreateBuffers();
 
@@ -220,8 +222,9 @@ void CVisualisation::OnAudioData(const float* pAudioData, int iAudioDataLength)
     return ;
 
   // FIXME: iAudioDataLength should never be less than 0
-  if (iAudioDataLength<0)
+  if (iAudioDataLength<0) {
     return;
+}
 
   // Save our audio data in the buffers
   std::unique_ptr<CAudioBuffer> pBuffer ( new CAudioBuffer(iAudioDataLength) );
@@ -261,10 +264,12 @@ void CVisualisation::CreateBuffers()
   m_struct.toAddon.GetInfo(&info);
   m_iNumBuffers = info.iSyncDelay + 1;
   m_bWantsFreq = (info.bWantsFreq != 0);
-  if (m_iNumBuffers > MAX_AUDIO_BUFFERS)
+  if (m_iNumBuffers > MAX_AUDIO_BUFFERS) {
     m_iNumBuffers = MAX_AUDIO_BUFFERS;
-  if (m_iNumBuffers < 1)
+}
+  if (m_iNumBuffers < 1) {
     m_iNumBuffers = 1;
+}
 }
 
 void CVisualisation::ClearBuffers()
@@ -305,8 +310,9 @@ bool CVisualisation::UpdateTrack()
       handled = true;
 
     // inform the visualisation of the current track's tag information
-    if ( tag && OnAction( VIS_ACTION_UPDATE_TRACK, (void*)tag ) )
+    if ( tag && OnAction( VIS_ACTION_UPDATE_TRACK, (void*)tag ) ) {
       handled = true;
+}
   }
   return handled;
 }

@@ -41,8 +41,9 @@ CNfoFile::NFOResult CNfoFile::Create(const std::string& strPath,
 {
   m_info = info; // assume we can use these settings
   m_type = ScraperTypeFromContent(info->Content());
-  if (Load(strPath) != 0)
+  if (Load(strPath) != 0) {
     return NO_NFO;
+}
 
   CFileItemList items;
   bool bNfo=false;
@@ -121,12 +122,14 @@ CNfoFile::NFOResult CNfoFile::Create(const std::string& strPath,
 
   // search ..
   int res = -1;
-  for (unsigned int i=0; i<vecScrapers.size(); ++i)
+  for (unsigned int i=0; i<vecScrapers.size(); ++i) {
     if ((res = Scrape(vecScrapers[i])) == 0 || res == 2)
       break;
+}
 
-  if (res == 2)
+  if (res == 2) {
     return ERROR_NFO;
+}
   if (bNfo)
   {
     if (m_scurl.m_url.empty())
@@ -161,8 +164,9 @@ int CNfoFile::Scrape(ScraperPtr& scraper)
   catch (const CScraperError &sce)
   {
     CVideoInfoDownloader::ShowErrorDialog(sce);
-    if (!sce.FAborted())
+    if (!sce.FAborted()) {
       return 2;
+}
   }
 
   if (!m_scurl.m_url.empty())

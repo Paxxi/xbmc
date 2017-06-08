@@ -63,8 +63,9 @@ bool CPictureThumbLoader::LoadItem(CFileItem* pItem)
 bool CPictureThumbLoader::LoadItemCached(CFileItem* pItem)
 {
   if (pItem->m_bIsShareOrDrive
-  ||  pItem->IsParentFolder())
+  ||  pItem->IsParentFolder()) {
     return false;
+}
 
   if (pItem->HasArt("thumb") && m_regenerateThumbs)
   {

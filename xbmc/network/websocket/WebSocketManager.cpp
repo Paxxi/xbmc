@@ -37,8 +37,9 @@
 
 CWebSocket* CWebSocketManager::Handle(const char* data, unsigned int length, std::string &response)
 {
-  if (data == nullptr || length <= 0)
+  if (data == nullptr || length <= 0) {
     return nullptr;
+}
 
   HttpParser header;
   HttpParser::status_t status = header.addBytes(data, length);

@@ -43,8 +43,9 @@ bool CGUILabel::SetScrolling(bool scrolling)
   bool changed = m_scrolling != scrolling;
 
   m_scrolling = scrolling;
-  if (changed)
+  if (changed) {
     m_scrollInfo.Reset();
+}
 
   return changed;
 }
@@ -109,9 +110,9 @@ void CGUILabel::Render()
   color_t color = GetColor();
   bool renderSolid = (m_color == COLOR_DISABLED);
   bool overFlows = (m_renderRect.Width() + 0.5f < m_textLayout.GetTextWidth()); // 0.5f to deal with floating point rounding issues
-  if (overFlows && m_scrolling && !renderSolid)
+  if (overFlows && m_scrolling && !renderSolid) {
     m_textLayout.RenderScrolling(m_renderRect.x1, m_renderRect.y1, m_label.angle, color, m_label.shadowColor, 0, m_renderRect.Width(), m_scrollInfo);
-  else
+  } else
   {
     float posX = m_renderRect.x1;
     float posY = m_renderRect.y1;
@@ -129,8 +130,9 @@ void CGUILabel::Render()
         posY += m_renderRect.Height() * 0.5f;
       align = m_label.align;
     }
-    else
+    else {
       align |= XBFONT_TRUNCATED;
+}
     m_textLayout.Render(posX, posY, m_label.angle, color, m_label.shadowColor, align, m_overflowType == OVER_FLOW_CLIP ? m_textLayout.GetTextWidth() : m_renderRect.Width(), renderSolid);
   }
 }

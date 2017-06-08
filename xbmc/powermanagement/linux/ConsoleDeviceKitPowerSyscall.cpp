@@ -101,10 +101,11 @@ bool CConsoleDeviceKitPowerSyscall::HasDeviceConsoleKit()
 
   consoleKitMessage.Send(con, &error);
 
-  if (!dbus_error_is_set(&error))
+  if (!dbus_error_is_set(&error)) {
     hasConsoleKitManager = true;
-  else
+  } else {
     CLog::Log(LOGDEBUG, "ConsoleKit.Manager: %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
 
@@ -113,10 +114,11 @@ bool CConsoleDeviceKitPowerSyscall::HasDeviceConsoleKit()
 
   deviceKitMessage.Send(con, &error);
 
-  if (!dbus_error_is_set(&error))
+  if (!dbus_error_is_set(&error)) {
     hasDeviceKitPower = true;
-  else
+  } else {
     CLog::Log(LOGDEBUG, "DeviceKit.Power: %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
   dbus_connection_unref(con);
@@ -132,8 +134,9 @@ bool CConsoleDeviceKitPowerSyscall::ConsoleKitMethodCall(const char *method)
   {
     dbus_bool_t boolean = FALSE;
 
-    if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_BOOLEAN, &boolean, DBUS_TYPE_INVALID))
+    if (dbus_message_get_args (reply, nullptr, DBUS_TYPE_BOOLEAN, &boolean, DBUS_TYPE_INVALID)) {
       return boolean;
+}
   }
 
   return false;

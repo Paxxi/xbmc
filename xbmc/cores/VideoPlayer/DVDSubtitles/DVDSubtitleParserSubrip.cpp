@@ -40,8 +40,9 @@ bool CDVDSubtitleParserSubrip::Open(CDVDStreamInfo &hints)
     return false;
 
   CDVDSubtitleTagSami TagConv;
-  if (!TagConv.Init())
+  if (!TagConv.Init()) {
     return false;
+}
 
   char line[1024];
   std::string strLine;

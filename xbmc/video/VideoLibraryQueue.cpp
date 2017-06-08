@@ -59,8 +59,9 @@ void CVideoLibraryQueue::ScanLibrary(const std::string& directory, bool scanAll 
 bool CVideoLibraryQueue::IsScanningLibrary() const
 {
   // check if the library is being cleaned synchronously
-  if (m_cleaning)
+  if (m_cleaning) {
     return true;
+}
 
   // check if the library is being scanned asynchronously
   VideoLibraryJobMap::const_iterator scanningJobs = m_jobs.find("VideoLibraryScanningJob");
@@ -133,8 +134,9 @@ void CVideoLibraryQueue::RefreshItem(CFileItemPtr item, bool ignoreNfo /* = fals
 bool CVideoLibraryQueue::RefreshItemModal(CFileItemPtr item, bool forceRefresh /* = true */, bool refreshAll /* = false */)
 {
   // we can't perform a modal library cleaning if other jobs are running
-  if (IsRunning())
+  if (IsRunning()) {
     return false;
+}
 
   m_modal = true;
   CVideoLibraryRefreshingJob refreshingJob(item, forceRefresh, refreshAll);
@@ -155,8 +157,9 @@ void CVideoLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)
 
 void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
 {
-  if (job == nullptr)
+  if (job == nullptr) {
     return;
+}
 
   CSingleLock lock(m_critical);
   if (!CJobQueue::AddJob(job))
@@ -177,8 +180,9 @@ void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
 
 void CVideoLibraryQueue::CancelJob(CVideoLibraryJob *job)
 {
-  if (job == nullptr)
+  if (job == nullptr) {
     return;
+}
 
   CSingleLock lock(m_critical);
   // remember the job type needed later because the job might be deleted
@@ -188,8 +192,9 @@ void CVideoLibraryQueue::CancelJob(CVideoLibraryJob *job)
     jobType = job->GetType();
 
   // check if the job supports cancellation and cancel it
-  if (job->CanBeCancelled())
+  if (job->CanBeCancelled()) {
     job->Cancel();
+}
 
   // remove the job from the job queue
   CJobQueue::CancelJob(job);

@@ -115,8 +115,9 @@ bool CUDFFile::Exists(const CURL& url)
      return false;
 
   m_hFile = m_udfIsoReaderLocal.OpenFile(url.GetFileName().c_str());
-  if (m_hFile == INVALID_HANDLE_VALUE)
+  if (m_hFile == INVALID_HANDLE_VALUE) {
     return false;
+}
 
   m_udfIsoReaderLocal.CloseFile(m_hFile);
   m_hFile = INVALID_HANDLE_VALUE;

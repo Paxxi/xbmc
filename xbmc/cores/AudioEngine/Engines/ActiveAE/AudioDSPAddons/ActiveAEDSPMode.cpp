@@ -242,13 +242,14 @@ bool CActiveAEDSPMode::SetModePosition(int iModePosition)
 
 bool CActiveAEDSPMode::SupportStreamType(AE_DSP_STREAMTYPE streamType, unsigned int flags)
 {
-       if (streamType == AE_DSP_ASTREAM_BASIC   && (flags & AE_DSP_PRSNT_ASTREAM_BASIC))   return true;
-  else if (streamType == AE_DSP_ASTREAM_MUSIC   && (flags & AE_DSP_PRSNT_ASTREAM_MUSIC))   return true;
-  else if (streamType == AE_DSP_ASTREAM_MOVIE   && (flags & AE_DSP_PRSNT_ASTREAM_MOVIE))   return true;
-  else if (streamType == AE_DSP_ASTREAM_GAME    && (flags & AE_DSP_PRSNT_ASTREAM_GAME))    return true;
-  else if (streamType == AE_DSP_ASTREAM_APP     && (flags & AE_DSP_PRSNT_ASTREAM_APP))     return true;
-  else if (streamType == AE_DSP_ASTREAM_PHONE   && (flags & AE_DSP_PRSNT_ASTREAM_PHONE))   return true;
-  else if (streamType == AE_DSP_ASTREAM_MESSAGE && (flags & AE_DSP_PRSNT_ASTREAM_MESSAGE)) return true;
+       if (streamType == AE_DSP_ASTREAM_BASIC   && (flags & AE_DSP_PRSNT_ASTREAM_BASIC)) {   return true;
+  } else if (streamType == AE_DSP_ASTREAM_MUSIC   && (flags & AE_DSP_PRSNT_ASTREAM_MUSIC)) {   return true;
+  } else if (streamType == AE_DSP_ASTREAM_MOVIE   && (flags & AE_DSP_PRSNT_ASTREAM_MOVIE)) {   return true;
+  } else if (streamType == AE_DSP_ASTREAM_GAME    && (flags & AE_DSP_PRSNT_ASTREAM_GAME)) {    return true;
+  } else if (streamType == AE_DSP_ASTREAM_APP     && (flags & AE_DSP_PRSNT_ASTREAM_APP)) {     return true;
+  } else if (streamType == AE_DSP_ASTREAM_PHONE   && (flags & AE_DSP_PRSNT_ASTREAM_PHONE)) {   return true;
+  } else if (streamType == AE_DSP_ASTREAM_MESSAGE && (flags & AE_DSP_PRSNT_ASTREAM_MESSAGE)) { return true;
+}
   return false;
 }
 
@@ -335,8 +336,9 @@ int CActiveAEDSPMode::AddUpdate(bool force)
   {
     // not changed
     CSingleLock lock(m_critSection);
-    if (!m_bChanged && m_iModeId > 0)
+    if (!m_bChanged && m_iModeId > 0) {
       return m_iModeId;
+}
   }
 
   CActiveAEDSPDatabase *database = nullptr;

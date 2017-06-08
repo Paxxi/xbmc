@@ -67,8 +67,9 @@ int Interface_GUIDialogSelect::open(void* kodiBase, const char *heading, const c
   for (unsigned int i = 0; i < size; ++i)
     dialog->Add(entries[i]);
 
-  if (selected > 0)
+  if (selected > 0) {
     dialog->SetSelected(selected);
+}
   if (autoclose > 0)
     dialog->SetAutoClose(autoclose);
 

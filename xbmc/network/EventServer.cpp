@@ -257,8 +257,9 @@ void CEventServer::ProcessPacket(CAddress& addr, int pSize)
   }
 
   clientToken = packet->ClientToken();
-  if (!clientToken)
+  if (!clientToken) {
     clientToken = addr.ULong(); // use IP if packet doesn't have a token
+}
 
   CSingleLock lock(m_critSection);
 

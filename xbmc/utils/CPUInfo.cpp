@@ -261,17 +261,22 @@ CCPUInfo::CCPUInfo()
 #else
   m_fProcStat = fopen("/proc/stat", "r");
   m_fProcTemperature = fopen("/proc/acpi/thermal_zone/THM0/temperature", "r");
-  if (m_fProcTemperature == nullptr)
+  if (m_fProcTemperature == nullptr) {
     m_fProcTemperature = fopen("/proc/acpi/thermal_zone/THRM/temperature", "r");
-  if (m_fProcTemperature == nullptr)
+}
+  if (m_fProcTemperature == nullptr) {
     m_fProcTemperature = fopen("/proc/acpi/thermal_zone/THR0/temperature", "r");
-  if (m_fProcTemperature == nullptr)
+}
+  if (m_fProcTemperature == nullptr) {
     m_fProcTemperature = fopen("/proc/acpi/thermal_zone/TZ0/temperature", "r");
+}
   // read from the new location of the temperature data on new kernels, 2.6.39, 3.0 etc
-  if (m_fProcTemperature == nullptr)   
+  if (m_fProcTemperature == nullptr) {   
     m_fProcTemperature = fopen("/sys/class/hwmon/hwmon0/temp1_input", "r");
-  if (m_fProcTemperature == nullptr)   
+}
+  if (m_fProcTemperature == nullptr) {   
     m_fProcTemperature = fopen("/sys/class/thermal/thermal_zone0/temp", "r");  // On Raspberry PIs
+}
 
   m_fCPUFreq = fopen ("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq", "r");
   if (!m_fCPUFreq)
@@ -279,8 +284,9 @@ CCPUInfo::CCPUInfo()
     m_cpuInfoForFreq = true;
     m_fCPUFreq = fopen("/proc/cpuinfo", "r");
   }
-  else
+  else {
     m_cpuInfoForFreq = false;
+}
 
 
   FILE* fCPUInfo = fopen("/proc/cpuinfo", "r");
@@ -391,26 +397,27 @@ CCPUInfo::CCPUInfo()
           tok = strtok_r(needle, " ", &save);
           while (tok)
           {
-            if (0 == strcmp(tok, "mmx"))
+            if (0 == strcmp(tok, "mmx")) {
               m_cpuFeatures |= CPU_FEATURE_MMX;
-            else if (0 == strcmp(tok, "mmxext"))
+            } else if (0 == strcmp(tok, "mmxext")) {
               m_cpuFeatures |= CPU_FEATURE_MMX2;
-            else if (0 == strcmp(tok, "sse"))
+            } else if (0 == strcmp(tok, "sse")) {
               m_cpuFeatures |= CPU_FEATURE_SSE;
-            else if (0 == strcmp(tok, "sse2"))
+            } else if (0 == strcmp(tok, "sse2")) {
               m_cpuFeatures |= CPU_FEATURE_SSE2;
-            else if (0 == strcmp(tok, "sse3"))
+            } else if (0 == strcmp(tok, "sse3")) {
               m_cpuFeatures |= CPU_FEATURE_SSE3;
-            else if (0 == strcmp(tok, "ssse3"))
+            } else if (0 == strcmp(tok, "ssse3")) {
               m_cpuFeatures |= CPU_FEATURE_SSSE3;
-            else if (0 == strcmp(tok, "sse4_1"))
+            } else if (0 == strcmp(tok, "sse4_1")) {
               m_cpuFeatures |= CPU_FEATURE_SSE4;
-            else if (0 == strcmp(tok, "sse4_2"))
+            } else if (0 == strcmp(tok, "sse4_2")) {
               m_cpuFeatures |= CPU_FEATURE_SSE42;
-            else if (0 == strcmp(tok, "3dnow"))
+            } else if (0 == strcmp(tok, "3dnow")) {
               m_cpuFeatures |= CPU_FEATURE_3DNOW;
-            else if (0 == strcmp(tok, "3dnowext"))
+            } else if (0 == strcmp(tok, "3dnowext")) {
               m_cpuFeatures |= CPU_FEATURE_3DNOWEXT;
+}
             tok = strtok_r(nullptr, " ", &save);
           }
         }
@@ -462,11 +469,13 @@ CCPUInfo::CCPUInfo()
   ReadCPUFeatures();
 
   // Set MMX2 when SSE is present as SSE is a superset of MMX2 and Intel doesn't set the MMX2 cap
-  if (m_cpuFeatures & CPU_FEATURE_SSE)
+  if (m_cpuFeatures & CPU_FEATURE_SSE) {
     m_cpuFeatures |= CPU_FEATURE_MMX2;
+}
 
-  if (HasNeon())
+  if (HasNeon()) {
     m_cpuFeatures |= CPU_FEATURE_NEON;
+}
 
 }
 
@@ -496,8 +505,9 @@ int CCPUInfo::getUsedPercentage()
 {
   int result = 0;
 
-  if (!m_nextUsedReadTime.IsTimePast())
+  if (!m_nextUsedReadTime.IsTimePast()) {
     return m_lastUsedPercentage;
+}
 
 #if defined(TARGET_DARWIN)
   result = m_pResourceCounter->GetCPUUsage();
@@ -508,8 +518,9 @@ int CCPUInfo::getUsedPercentage()
   unsigned long long idleTicks;
   unsigned long long ioTicks;
 
-  if (!readProcStat(userTicks, niceTicks, systemTicks, idleTicks, ioTicks))
+  if (!readProcStat(userTicks, niceTicks, systemTicks, idleTicks, ioTicks)) {
     return m_lastUsedPercentage;
+}
 
   userTicks -= m_userTicks;
   niceTicks -= m_niceTicks;
@@ -517,8 +528,9 @@ int CCPUInfo::getUsedPercentage()
   idleTicks -= m_idleTicks;
   ioTicks -= m_ioTicks;
 
-  if(userTicks + niceTicks + systemTicks + idleTicks + ioTicks == 0)
+  if(userTicks + niceTicks + systemTicks + idleTicks + ioTicks == 0) {
     return m_lastUsedPercentage;
+}
   result = static_cast<int>(double(userTicks + niceTicks + systemTicks) * 100.0 / double(userTicks + niceTicks + systemTicks + idleTicks + ioTicks) + 0.5);
 
   m_userTicks += userTicks;
@@ -588,8 +600,9 @@ float CCPUInfo::getCPUFrequency()
       fscanf(m_fCPUFreq,"%*s");
     }
 
-    if (cpus > 0)
+    if (cpus > 0) {
       value = avg/cpus;
+}
   }
   return value;
 #endif
@@ -643,17 +656,19 @@ bool CCPUInfo::getTemperature(CTemperature& temperature)
     }
   }
 
-  if (ret != 2)
+  if (ret != 2) {
     return false; 
+}
 #endif
 #endif // TARGET_POSIX
 
-  if (scale == 'C' || scale == 'c')
+  if (scale == 'C' || scale == 'c') {
     temperature = CTemperature::CreateFromCelsius(value);
-  else if (scale == 'F' || scale == 'f')
+  } else if (scale == 'F' || scale == 'f') {
     temperature = CTemperature::CreateFromFahrenheit(value);
-  else
+  } else {
     return false;
+}
   
   return true;
 }
@@ -785,8 +800,9 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
   }
   free(cptimes);
 #else
-  if (m_fProcStat == nullptr)
+  if (m_fProcStat == nullptr) {
     return false;
+}
 
 #ifdef TARGET_ANDROID
   // Just another (vanilla) NDK quirk:
@@ -800,20 +816,23 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
 #endif
 
   char buf[256];
-  if (!fgets(buf, sizeof(buf), m_fProcStat))
+  if (!fgets(buf, sizeof(buf), m_fProcStat)) {
     return false;
+}
 
   int num = sscanf(buf, "cpu %llu %llu %llu %llu %llu %*s\n", &user, &nice, &system, &idle, &io);
-  if (num < 5)
+  if (num < 5) {
     io = 0;
+}
 
   while (fgets(buf, sizeof(buf), m_fProcStat) && num >= 4)
   {
     unsigned long long coreUser, coreNice, coreSystem, coreIdle, coreIO;
     int nCpu=0;
     num = sscanf(buf, "cpu%d %llu %llu %llu %llu %llu %*s\n", &nCpu, &coreUser, &coreNice, &coreSystem, &coreIdle, &coreIO);
-    if (num < 6)
+    if (num < 6) {
       coreIO = 0;
+}
 
     std::map<int, CoreInfo>::iterator iter = m_cores.find(nCpu);
     if (num > 4 && iter != m_cores.end())

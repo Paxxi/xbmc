@@ -38,8 +38,9 @@ CPODocument::~CPODocument() {}
 bool CPODocument::LoadFile(const std::string &pofilename)
 {
   CURL poFileUrl(pofilename);
-  if (!XFILE::CFile::Exists(poFileUrl))
+  if (!XFILE::CFile::Exists(poFileUrl)) {
     return false;
+}
 
   XFILE::CFile file;
   XFILE::auto_buffer buf;

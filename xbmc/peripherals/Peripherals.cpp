@@ -285,8 +285,9 @@ void CPeripherals::CreatePeripheral(CPeripheralBus &bus, const PeripheralScanRes
 {
   PeripheralPtr peripheral;
   PeripheralScanResult mappedResult = result;
-  if (mappedResult.m_busType == PERIPHERAL_BUS_UNKNOWN)
+  if (mappedResult.m_busType == PERIPHERAL_BUS_UNKNOWN) {
     mappedResult.m_busType = bus.Type();
+}
 
   /* check whether there's something mapped in peripherals.xml */
   GetMappingForDevice(bus, mappedResult);
@@ -621,8 +622,9 @@ void CPeripherals::GetSettingsFromMappingsFile(TiXmlElement *xmlNode, std::map<s
 
 void CPeripherals::GetDirectory(const std::string &strPath, CFileItemList &items) const
 {
-  if (!StringUtils::StartsWithNoCase(strPath, "peripherals://"))
+  if (!StringUtils::StartsWithNoCase(strPath, "peripherals://")) {
     return;
+}
 
   std::string strPathCut = strPath.substr(14);
   std::string strBus = strPathCut.substr(0, strPathCut.find('/'));

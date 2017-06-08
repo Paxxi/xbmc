@@ -173,8 +173,9 @@ int CGUIWrappingListContainer::GetSelectedItem() const
 
 bool CGUIWrappingListContainer::SelectItemFromPoint(const CPoint &point)
 {
-  if (!m_focusedLayout || !m_layout)
+  if (!m_focusedLayout || !m_layout) {
     return false;
+}
 
   const float mouse_scroll_speed = 0.05f;
   const float mouse_max_amount = 1.0f;   // max speed: 1 item per frame

@@ -63,11 +63,13 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     if (it->m_name == "allowdtshddecode")
       allowdtshddecode = atoi(it->m_value.c_str()) != 0;
 
-  if (hints.codec == AV_CODEC_ID_DTS && allowdtshddecode)
+  if (hints.codec == AV_CODEC_ID_DTS && allowdtshddecode) {
     pCodec = avcodec_find_decoder_by_name("dcadec");
+}
 
-  if (!pCodec)
+  if (!pCodec) {
     pCodec = avcodec_find_decoder(hints.codec);
+}
 
   if (!pCodec)
   {
@@ -76,15 +78,17 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   }
 
   m_pCodecContext = avcodec_alloc_context3(pCodec);
-  if (!m_pCodecContext)
+  if (!m_pCodecContext) {
     return false;
+}
 
   m_pCodecContext->debug_mv = 0;
   m_pCodecContext->debug = 0;
   m_pCodecContext->workaround_bugs = 1;
 
-  if (pCodec->capabilities & CODEC_CAP_TRUNCATED)
+  if (pCodec->capabilities & CODEC_CAP_TRUNCATED) {
     m_pCodecContext->flags |= CODEC_FLAG_TRUNCATED;
+}
 
   m_matrixEncoding = AV_MATRIX_ENCODING_NONE;
   m_channels = 0;
@@ -94,8 +98,9 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   m_pCodecContext->bit_rate = hints.bitrate;
   m_pCodecContext->bits_per_coded_sample = hints.bitspersample;
 
-  if(m_pCodecContext->bits_per_coded_sample == 0)
+  if(m_pCodecContext->bits_per_coded_sample == 0) {
     m_pCodecContext->bits_per_coded_sample = 16;
+}
 
   if( hints.extradata && hints.extrasize > 0 )
   {
@@ -139,8 +144,9 @@ void CDVDAudioCodecFFmpeg::Dispose()
 
 bool CDVDAudioCodecFFmpeg::AddData(const DemuxPacket &packet)
 {
-  if (!m_pCodecContext)
+  if (!m_pCodecContext) {
     return false;
+}
 
   if (m_eof)
   {
@@ -179,15 +185,17 @@ void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
   frame.format.m_dataFormat = m_format.m_dataFormat;
   frame.format.m_channelLayout = m_format.m_channelLayout;
   frame.framesize = (CAEUtil::DataFormatToBits(frame.format.m_dataFormat) >> 3) * frame.format.m_channelLayout.Count();
-  if(frame.framesize == 0)
+  if(frame.framesize == 0) {
     return;
+}
 
   frame.nb_frames = bytes/frame.framesize;
   frame.framesOut = 0;
   frame.planes = AE_IS_PLANAR(frame.format.m_dataFormat) ? frame.format.m_channelLayout.Count() : 1;
 
-  for (unsigned int i=0; i<frame.planes; i++)
+  for (unsigned int i=0; i<frame.planes; i++) {
     frame.data[i] = data[i];
+}
 
   frame.bits_per_sample = CAEUtil::DataFormatToBits(frame.format.m_dataFormat);
   frame.format.m_sampleRate = m_format.m_sampleRate;
@@ -195,16 +203,18 @@ void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
   frame.audio_service_type = GetAudioServiceType();
   frame.profile = GetProfile();
   // compute duration.
-  if (frame.format.m_sampleRate)
+  if (frame.format.m_sampleRate) {
     frame.duration = ((double)frame.nb_frames * DVD_TIME_BASE) / frame.format.m_sampleRate;
-  else
+  } else {
     frame.duration = 0.0;
+}
 
   int64_t bpts = av_frame_get_best_effort_timestamp(m_pFrame);
-  if(bpts != AV_NOPTS_VALUE)
+  if(bpts != AV_NOPTS_VALUE) {
     frame.pts = (double)bpts * DVD_TIME_BASE / AV_TIME_BASE;
-  else
+  } else {
     frame.pts = DVD_NOPTS_VALUE;
+}
 }
 
 int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
@@ -234,8 +244,9 @@ int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
                            CAEUtil::DataFormatToBits(m_format.m_dataFormat) >> 3;
 
     int planes = av_sample_fmt_is_planar(m_pCodecContext->sample_fmt) ? m_pFrame->channels : 1;
-    for (int i=0; i<planes; i++)
+    for (int i=0; i<planes; i++) {
       dst[i] = m_pFrame->extended_data[i];
+}
 
     return m_pFrame->nb_samples * m_pFrame->channels *
            av_get_bytes_per_sample(m_pCodecContext->sample_fmt);
@@ -257,8 +268,9 @@ int CDVDAudioCodecFFmpeg::GetChannels()
 
 int CDVDAudioCodecFFmpeg::GetSampleRate()
 {
-  if (m_pCodecContext)
+  if (m_pCodecContext) {
     return m_pCodecContext->sample_rate;
+}
   return 0;
 }
 
@@ -285,8 +297,9 @@ enum AEDataFormat CDVDAudioCodecFFmpeg::GetDataFormat()
 
 int CDVDAudioCodecFFmpeg::GetBitRate()
 {
-  if (m_pCodecContext)
+  if (m_pCodecContext) {
     return static_cast<int>(m_pCodecContext->bit_rate);
+}
   return 0;
 }
 
@@ -297,30 +310,34 @@ enum AVMatrixEncoding CDVDAudioCodecFFmpeg::GetMatrixEncoding()
 
 enum AVAudioServiceType CDVDAudioCodecFFmpeg::GetAudioServiceType()
 {
-  if (m_pCodecContext)
+  if (m_pCodecContext) {
     return m_pCodecContext->audio_service_type;
+}
   return AV_AUDIO_SERVICE_TYPE_MAIN;
 }
 
 int CDVDAudioCodecFFmpeg::GetProfile()
 {
-  if (m_pCodecContext)
+  if (m_pCodecContext) {
     return m_pCodecContext->profile;
+}
   return 0;
 }
 
 static unsigned count_bits(int64_t value)
 {
   unsigned bits = 0;
-  for(;value;++bits)
+  for(;value;++bits) {
     value &= value - 1;
+}
   return bits;
 }
 
 void CDVDAudioCodecFFmpeg::BuildChannelMap()
 {
-  if (m_channels == m_pCodecContext->channels && m_layout == m_pCodecContext->channel_layout)
+  if (m_channels == m_pCodecContext->channels && m_layout == m_pCodecContext->channel_layout) {
     return; //nothing to do here
+}
 
   m_channels = m_pCodecContext->channels;
   m_layout   = m_pCodecContext->channel_layout;
@@ -328,9 +345,9 @@ void CDVDAudioCodecFFmpeg::BuildChannelMap()
   int64_t layout;
 
   int bits = count_bits(m_pCodecContext->channel_layout);
-  if (bits == m_pCodecContext->channels)
+  if (bits == m_pCodecContext->channels) {
     layout = m_pCodecContext->channel_layout;
-  else
+  } else
   {
     CLog::Log(LOGINFO, "CDVDAudioCodecFFmpeg::GetChannelMap - FFmpeg reported %d channels, but the layout contains %d ignoring", m_pCodecContext->channels, bits);
     layout = av_get_default_channel_layout(m_pCodecContext->channels);

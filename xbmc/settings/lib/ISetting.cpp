@@ -36,42 +36,51 @@ ISetting::ISetting(const std::string &id, CSettingsManager *settingsManager /* =
   
 bool ISetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   bool value;
-  if (XMLUtils::GetBoolean(node, SETTING_XML_ELM_VISIBLE, value))
+  if (XMLUtils::GetBoolean(node, SETTING_XML_ELM_VISIBLE, value)) {
     m_visible = value;
+}
 
   const TiXmlElement *element = node->ToElement();
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   int iValue = -1;
-  if (element->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &iValue) == TIXML_SUCCESS && iValue > 0)
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &iValue) == TIXML_SUCCESS && iValue > 0) {
     m_label = iValue;
-  if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &iValue) == TIXML_SUCCESS && iValue > 0)
+}
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &iValue) == TIXML_SUCCESS && iValue > 0) {
     m_help = iValue;
+}
 
   const TiXmlNode *requirementNode = node->FirstChild(SETTING_XML_ELM_REQUIREMENT);
-  if (requirementNode == nullptr)
+  if (requirementNode == nullptr) {
     return true;
+}
 
   return m_requirementCondition.Deserialize(requirementNode);
 }
 
 bool ISetting::DeserializeIdentification(const TiXmlNode *node, std::string &identification)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   const TiXmlElement *element = node->ToElement();
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   const char *idAttribute = element->Attribute(SETTING_XML_ATTR_ID);
-  if (idAttribute == nullptr || strlen(idAttribute) <= 0)
+  if (idAttribute == nullptr || strlen(idAttribute) <= 0) {
     return false;
+}
 
   identification = idAttribute;
   return true;

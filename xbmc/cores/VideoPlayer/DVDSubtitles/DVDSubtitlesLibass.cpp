@@ -32,8 +32,9 @@
 
 static void libass_log(int level, const char *fmt, va_list args, void *data)
 {
-  if(level >= 5)
+  if(level >= 5) {
     return;
+}
   std::string log = StringUtils::FormatV(fmt, args);
   CLog::Log(LOGDEBUG, "CDVDSubtitlesLibass: [ass] %s", log.c_str());
 }
@@ -57,8 +58,9 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
   CLog::Log(LOGINFO, "CDVDSubtitlesLibass: Creating ASS library structure");
   m_library  = m_dll.ass_library_init();
-  if(!m_library)
+  if(!m_library) {
     return;
+}
 
   m_dll.ass_set_message_cb(m_library, libass_log, this);
 
@@ -73,8 +75,9 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
   m_renderer = m_dll.ass_renderer_init(m_library);
 
-  if(!m_renderer)
+  if(!m_renderer) {
     return;
+}
 
   //Setting default font to the Arial in \media\fonts (used if FontConfig fails)
   strPath = URIUtils::AddFileToFolder("special://home/media/Fonts/", CServiceBroker::GetSettings().GetString(CSettings::SETTING_SUBTITLES_FONT));
@@ -108,8 +111,9 @@ CDVDSubtitlesLibass::~CDVDSubtitlesLibass()
 bool CDVDSubtitlesLibass::DecodeHeader(char* data, int size)
 {
   CSingleLock lock(m_section);
-  if(!m_library || !data)
+  if(!m_library || !data) {
     return false;
+}
 
   if(!m_track)
   {
@@ -186,8 +190,9 @@ ASS_Event* CDVDSubtitlesLibass::GetEvents()
 int CDVDSubtitlesLibass::GetNrOfEvents()
 {
   CSingleLock lock(m_section);
-  if(!m_track)
+  if(!m_track) {
     return 0;
+}
   return m_track->n_events;
 }
 

@@ -446,8 +446,9 @@ void CUtil::CleanString(const std::string& strFileName,
     {
       char c = strTitleAndYear[i];
 
-      if (c != '.')
+      if (c != '.') {
         initialDots = false;
+}
 
       if ((c == '_') || ((!alreadyContainsSpace) && !initialDots && (c == '.')))
       {
@@ -527,8 +528,9 @@ bool CUtil::IsPVR(const std::string& strFile)
 
 bool CUtil::IsLiveTV(const std::string& strFile)
 {
-  if (StringUtils::StartsWithNoCase(strFile, "pvr://channels"))
+  if (StringUtils::StartsWithNoCase(strFile, "pvr://channels")) {
     return true;
+}
 
   return false;
 }
@@ -596,8 +598,9 @@ std::string CUtil::GetFileMD5(const std::string& strPath)
     while (true)
     {
       ssize_t read = file.Read(temp,1024);
-      if (read <= 0)
+      if (read <= 0) {
         break;
+}
       md5.append(temp,read);
     }
     result = md5.getDigest();
@@ -847,10 +850,10 @@ void CUtil::Stat64ToStat(struct stat *result, struct __stat64 *stat)
   if (stat->st_size <= LONG_MAX)
     result->st_size = (_off_t)stat->st_size;
 #else
-  if (sizeof(stat->st_size) <= sizeof(result->st_size) )
+  if (sizeof(stat->st_size) <= sizeof(result->st_size) ) {
     result->st_size = stat->st_size;
 #endif
-  else
+  } else
   {
     result->st_size = 0;
     CLog::Log(LOGWARNING, "WARNING: File is larger than 32bit stat can handle, file size will be reported as 0 bytes");
@@ -1173,8 +1176,9 @@ int CUtil::GetMatchingSource(const std::string& strPath1, VECSOURCES& VECSOURCES
 
   if (checkURL.IsProtocol("shout"))
     strPath = checkURL.GetHostName();
-  if (checkURL.IsProtocol("plugin"))
+  if (checkURL.IsProtocol("plugin")) {
     return 1;
+}
   if (checkURL.IsProtocol("multipath"))
     strPath = CMultiPathDirectory::GetFirstPath(strPath);
 
@@ -1492,28 +1496,35 @@ bool CUtil::MakeShortenPath(std::string StrInput, std::string& StrOutput, size_t
 bool CUtil::SupportsWriteFileOperations(const std::string& strPath)
 {
   // currently only hd, smb, nfs and dav support delete and rename
-  if (URIUtils::IsHD(strPath))
+  if (URIUtils::IsHD(strPath)) {
     return true;
-  if (URIUtils::IsSmb(strPath))
+}
+  if (URIUtils::IsSmb(strPath)) {
     return true;
-  if (CUtil::IsTVRecording(strPath))
+}
+  if (CUtil::IsTVRecording(strPath)) {
     return CPVRDirectory::SupportsWriteFileOperations(strPath);
-  if (URIUtils::IsNfs(strPath))
+}
+  if (URIUtils::IsNfs(strPath)) {
     return true;
-  if (URIUtils::IsDAV(strPath))
+}
+  if (URIUtils::IsDAV(strPath)) {
     return true;
+}
   if (URIUtils::IsStack(strPath))
     return SupportsWriteFileOperations(CStackDirectory::GetFirstStackedFile(strPath));
-  if (URIUtils::IsMultiPath(strPath))
+  if (URIUtils::IsMultiPath(strPath)) {
     return CMultiPathDirectory::SupportsWriteFileOperations(strPath);
+}
 
   return false;
 }
 
 bool CUtil::SupportsReadFileOperations(const std::string& strPath)
 {
-  if (URIUtils::IsVideoDb(strPath))
+  if (URIUtils::IsVideoDb(strPath)) {
     return false;
+}
 
   return true;
 }
@@ -1688,27 +1699,32 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
       // General sanity checks
 
       // numeral not in LUT
-      if (!digit)
+      if (!digit) {
         return -1;
+}
       
-      while (test > 5)
+      while (test > 5) {
         test /= 10;
+}
       
       // N = 10^n may not precede (N+1) > 10^(N+1)
-      if (test == 1 && digit > last * 10)
+      if (test == 1 && digit > last * 10) {
         return -1;
+}
       
       // N = 5*10^n may not precede (N+1) >= N
-      if (test == 5 && digit >= last) 
+      if (test == 5 && digit >= last) { 
         return -1;
+}
 
       // End general sanity checks
 
       if (last < digit)
       {
         // smaller numerals may not repeat before a larger one
-        if (repeat) 
+        if (repeat) { 
           return -1;
+}
 
         temp_sum += digit;
         
@@ -1723,10 +1739,11 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
       }
       else
       {
-        if (!repeat)
+        if (!repeat) {
           decimal += 2 * last - temp_sum;
-        else
+        } else {
           decimal += temp_sum;
+}
         
         temp_sum = digit;
 
@@ -1736,17 +1753,19 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
       // Post general sanity checks
 
       // numerals may not repeat more than thrice
-      if (repeat == 3)
+      if (repeat == 3) {
         return -1;
+}
 
       last = digit;
       roman_numeral++;
     }
 
-    if (trend)
+    if (trend) {
       decimal += temp_sum;
-    else
+    } else {
       decimal += 2 * last - temp_sum;
+}
   }
   return decimal;
 }
@@ -1801,8 +1820,9 @@ std::string CUtil::ResolveExecutablePath()
   buf[0] = 0;
 
   int ret = readlink(linkname, buf, sizeof(buf) - 1);
-  if (ret != -1)
+  if (ret != -1) {
     buf[ret] = 0;
+}
 
   strExecutablePath = buf;
 #endif
@@ -2124,8 +2144,9 @@ ExternalStreamInfo CUtil::GetExternalStreamDetailsFromFilename(const std::string
   name += g_localizeStrings.Get(21602); // External
   StringUtils::Trim(name);
   info.name = StringUtils::RemoveDuplicatedSpacesAndTabs(name);
-  if (info.flag == 0)
+  if (info.flag == 0) {
     info.flag = CDemuxStream::FLAG_NONE;
+}
 
   CLog::Log(LOGDEBUG, "%s - Language = '%s' / Name = '%s' / Flag = '%u' from %s",
              __FUNCTION__, info.language.c_str(), info.name.c_str(), info.flag, CURL::GetRedacted(associatedFile).c_str());
@@ -2300,8 +2321,9 @@ bool CUtil::CanBindPrivileged()
 {
 #ifdef TARGET_POSIX
 
-  if (geteuid() == 0)
+  if (geteuid() == 0) {
     return true; //root user can always bind to privileged ports
+}
 
 #ifdef HAVE_LIBCAP
 
@@ -2311,8 +2333,9 @@ bool CUtil::CanBindPrivileged()
   if (capabilities)
   {
     cap_flag_value_t value;
-    if (cap_get_flag(capabilities, CAP_NET_BIND_SERVICE, CAP_EFFECTIVE, &value) == 0)
+    if (cap_get_flag(capabilities, CAP_NET_BIND_SERVICE, CAP_EFFECTIVE, &value) == 0) {
       canbind = value;
+}
 
     cap_free(capabilities);
   }
@@ -2336,12 +2359,13 @@ bool CUtil::ValidatePort(int port)
 {
   // check that it's a valid port
 #ifdef TARGET_POSIX
-  if (!CUtil::CanBindPrivileged() && (port < 1024 || port > 65535))
+  if (!CUtil::CanBindPrivileged() && (port < 1024 || port > 65535)) {
     return false;
-  else
+  } else
 #endif
-  if (port <= 0 || port > 65535)
+  if (port <= 0 || port > 65535) {
     return false;
+}
 
   return true;
 }

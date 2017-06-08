@@ -135,9 +135,9 @@ bool CGUIWindowMusicNav::OnMessage(CGUIMessage& message)
       int iControl = message.GetSenderId();
       if (iControl == CONTROL_BTNPARTYMODE)
       {
-        if (g_partyModeManager.IsEnabled())
+        if (g_partyModeManager.IsEnabled()) {
           g_partyModeManager.Disable();
-        else
+        } else
         {
           if (!g_partyModeManager.Enable())
           {
@@ -262,9 +262,9 @@ bool CGUIWindowMusicNav::OnClick(int iItem, const std::string &player /* = "" */
   CFileItemPtr item = m_vecItems->Get(iItem);
   if (StringUtils::StartsWith(item->GetPath(), "musicsearch://"))
   {
-    if (m_searchWithEdit)
+    if (m_searchWithEdit) {
       OnSearchUpdate();
-    else
+    } else
     {
       std::string search(GetProperty("search").asString());
       CGUIKeyboardFactory::ShowAndGetFilter(search, true);
@@ -606,8 +606,9 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       if (StringUtils::StartsWithNoCase(item->GetPath(), "videodb://musicvideos/artists/"))
       {
         long idArtist = m_musicdatabase.GetArtistByName(item->GetLabel());
-        if (idArtist == -1)
+        if (idArtist == -1) {
           return false;
+}
         std::string path = StringUtils::Format("musicdb://artists/%ld/", idArtist);
         CArtist artist;
         m_musicdatabase.GetArtist(idArtist, artist, false);
@@ -623,8 +624,9 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       if (StringUtils::StartsWithNoCase(item->GetPath(), "videodb://musicvideos/albums/"))
       {
         long idAlbum = m_musicdatabase.GetAlbumByName(item->GetLabel());
-        if (idAlbum == -1)
+        if (idAlbum == -1) {
           return false;
+}
         std::string path = StringUtils::Format("musicdb://albums/%ld/", idAlbum);
         CAlbum album;
         m_musicdatabase.GetAlbum(idAlbum, album, false);
@@ -711,9 +713,9 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       CQueryParams params;
       CDirectoryNode::GetDatabaseInfo(item->GetPath(), params);
       CONTENT_TYPE content = CONTENT_ALBUMS;
-      if (params.GetAlbumId() != -1)
+      if (params.GetAlbumId() != -1) {
         path = StringUtils::Format("musicdb://albums/%li/",params.GetAlbumId());
-      else if (params.GetArtistId() != -1)
+      } else if (params.GetArtistId() != -1)
       {
         path = StringUtils::Format("musicdb://artists/%li/",params.GetArtistId());
         content = CONTENT_ARTISTS;

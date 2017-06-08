@@ -447,10 +447,11 @@ bool CGUIWindowFileManager::Update(int iList, const std::string &strDirectory)
   CFileItemList items;
   if (!GetDirectory(iList, m_Directory[iList]->GetPath(), items))
   {
-    if (strDirectory != strOldDirectory && GetDirectory(iList, strOldDirectory, items))
+    if (strDirectory != strOldDirectory && GetDirectory(iList, strOldDirectory, items)) {
       m_Directory[iList]->SetPath(strOldDirectory); // Fallback to old (previous) path)
-    else
-      Update(iList, ""); // Fallback to root
+    } else {
+      Update
+}(iList, ""); // Fallback to root
 
     return false;
   }
@@ -578,8 +579,9 @@ void CGUIWindowFileManager::OnClick(int iList, int iItem)
         return ;
       }
 
-      if ( !HaveDiscOrConnection( strPath, iDriveType ) )
+      if ( !HaveDiscOrConnection( strPath, iDriveType ) ) {
         return ;
+}
     }
     if (!Update(iList, strPath))
       ShowShareErrorMessage(pItem.get());
@@ -642,8 +644,9 @@ void CGUIWindowFileManager::OnStart(CFileItem *pItem, const std::string &player)
   if (pItem->IsPicture())
   {
     CGUIWindowSlideShow *pSlideShow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-    if (!pSlideShow)
+    if (!pSlideShow) {
       return ;
+}
     if (g_application.m_pPlayer->IsPlayingVideo())
       g_application.StopPlaying();
 
@@ -678,8 +681,9 @@ bool CGUIWindowFileManager::HaveDiscOrConnection( std::string& strPath, int iDri
       return false;
     }
   }
-  else
+  else {
     return true;
+}
   return true;
 }
 
@@ -801,8 +805,9 @@ void CGUIWindowFileManager::Refresh(int iList)
   // update the list views
   Update(iList, m_Directory[iList]->GetPath());
 
-  while (nSel > m_vecItems[iList]->Size())
+  while (nSel > m_vecItems[iList]->Size()) {
     nSel--;
+}
 
   CONTROL_SELECT_ITEM(iList + CONTROL_LEFT_LIST, nSel);
 }
@@ -816,19 +821,22 @@ void CGUIWindowFileManager::Refresh()
   Update(0, m_Directory[0]->GetPath());
   Update(1, m_Directory[1]->GetPath());
 
-  while (nSel > (int)m_vecItems[iList]->Size())
+  while (nSel > (int)m_vecItems[iList]->Size()) {
     nSel--;
+}
 
   CONTROL_SELECT_ITEM(iList + CONTROL_LEFT_LIST, nSel);
 }
 
 int CGUIWindowFileManager::GetSelectedItem(int iControl)
 {
-  if (iControl < 0 || iControl > 1 || m_vecItems[iControl]->IsEmpty())
+  if (iControl < 0 || iControl > 1 || m_vecItems[iControl]->IsEmpty()) {
     return -1;
+}
   CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), iControl + CONTROL_LEFT_LIST);
-  if (OnMessage(msg))
+  if (OnMessage(msg)) {
     return (int)msg.GetParam1();
+}
   return -1;
 }
 
@@ -839,8 +847,9 @@ void CGUIWindowFileManager::GoParentFolder(int iList)
   {
     // check for step-below, if, unmount rar
     if (url.GetFileName().empty())
-      if (url.IsProtocol("zip"))
+      if (url.IsProtocol("zip")) {
         g_ZipManager.release(m_Directory[iList]->GetPath()); // release resources
+}
   }
 
   std::string strPath(m_strParentPath[iList]), strOldPath(m_Directory[iList]->GetPath());
@@ -986,10 +995,11 @@ void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven 
     if (CGUIDialogContextMenu::SourcesMenu("files", pItem, posX, posY))
     {
       m_rootDir.SetSources(*CMediaSourceSettings::GetInstance().GetSources("files"));
-      if (m_Directory[1 - list]->IsVirtualDirectoryRoot())
+      if (m_Directory[1 - list]->IsVirtualDirectoryRoot()) {
         Refresh();
-      else
+      } else {
         Refresh(list);
+}
       return ;
     }
     pItem->Select(false);
@@ -1054,16 +1064,21 @@ void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven 
     if (!player.empty())
       OnStart(pItem.get(), player);
   }
-  if (btnid == CONTROL_BTNRENAME)
+  if (btnid == CONTROL_BTNRENAME) {
     OnRename(list);
-  if (btnid == CONTROL_BTNDELETE)
+}
+  if (btnid == CONTROL_BTNDELETE) {
     OnDelete(list);
-  if (btnid == CONTROL_BTNCOPY)
+}
+  if (btnid == CONTROL_BTNCOPY) {
     OnCopy(list);
-  if (btnid == CONTROL_BTNMOVE)
+}
+  if (btnid == CONTROL_BTNMOVE) {
     OnMove(list);
-  if (btnid == CONTROL_BTNNEWFOLDER)
+}
+  if (btnid == CONTROL_BTNNEWFOLDER) {
     OnNewFolder(list);
+}
   if (btnid == CONTROL_BTNCALCSIZE)
   {
     // setup the progress dialog, and show it
@@ -1134,8 +1149,9 @@ int64_t CGUIWindowFileManager::CalculateFolderSize(const std::string &strDirecto
   { // update our progress control
     pProgress->Progress();
     pProgress->SetLine(1, strDirectory);
-    if (pProgress->IsCanceled())
+    if (pProgress->IsCanceled()) {
       return -1;
+}
   }
   // start by calculating the size of the files in this folder...
   int64_t totalSize = 0;
@@ -1182,10 +1198,11 @@ void CGUIWindowFileManager::ShowShareErrorMessage(CFileItem* pItem)
 
   if (url.IsProtocol("smb") && url.GetHostName().empty()) //  smb workgroup
     idMessageText = 15303; // Workgroup not found
-  else if (pItem->m_iDriveType == CMediaSource::SOURCE_TYPE_REMOTE || URIUtils::IsRemote(pItem->GetPath()))
+  else if (pItem->m_iDriveType == CMediaSource::SOURCE_TYPE_REMOTE || URIUtils::IsRemote(pItem->GetPath())) {
     idMessageText = 15301; // Could not connect to network server
-  else
+  } else {
     idMessageText = 15300; // Path not found or invalid
+}
 
   CGUIDialogOK::ShowAndGetInput(CVariant{220}, CVariant{idMessageText});
 }
@@ -1262,8 +1279,9 @@ void CGUIWindowFileManager::SetInitialPath(const std::string &path)
 
         // outside call: check the share for connectivity
         bCheckShareConnectivity = Update(0, m_Directory[0]->GetPath());
-        if(!bCheckShareConnectivity)
+        if(!bCheckShareConnectivity) {
           strCheckSharePath = m_Directory[0]->GetPath();
+}
       }
       else
       {

@@ -130,8 +130,9 @@ void CPVREpgContainer::Clear(bool bClearDb /* = false */)
     NotifyObservers(ObservableMessageEpgContainer);
   }
 
-  if (bThreadRunning)
+  if (bThreadRunning) {
     Start(true);
+}
 }
 
 class CPVREpgContainerStartJob : public CJob
@@ -228,8 +229,9 @@ void CPVREpgContainer::LoadFromDB()
 {
   CSingleLock lock(m_critSection);
 
-  if (m_bLoaded || IgnoreDB())
+  if (m_bLoaded || IgnoreDB()) {
     return;
+}
 
   if (!m_database.IsOpen())
     m_database.Open();
@@ -517,8 +519,9 @@ bool CPVREpgContainer::RemoveOldEntries()
 
 bool CPVREpgContainer::DeleteEpg(const CPVREpg &epg, bool bDeleteFromDatabase /* = false */)
 {
-  if (epg.EpgID() < 0)
+  if (epg.EpgID() < 0) {
     return false;
+}
 
   CSingleLock lock(m_critSection);
 
@@ -550,15 +553,17 @@ void CPVREpgContainer::ShowProgressDialog(bool bUpdating /* = true */)
   if (!m_progressHandle)
   {
     CGUIDialogExtendedProgressBar *progressDialog = g_windowManager.GetWindow<CGUIDialogExtendedProgressBar>(WINDOW_DIALOG_EXT_PROGRESS);
-    if (progressDialog)
+    if (progressDialog) {
       m_progressHandle = progressDialog->GetHandle(bUpdating ? g_localizeStrings.Get(19004) : g_localizeStrings.Get(19250));
+}
   }
 }
 
 void CPVREpgContainer::UpdateProgressDialog(int iCurrent, int iMax, const std::string &strText)
 {
-  if (!m_progressHandle)
+  if (!m_progressHandle) {
     ShowProgressDialog();
+}
 
   if (m_progressHandle)
   {
@@ -587,11 +592,13 @@ void CPVREpgContainer::WaitForUpdateFinish(bool bInterrupt /* = true */)
 {
   {
     CSingleLock lock(m_critSection);
-    if (bInterrupt)
+    if (bInterrupt) {
       m_bPreventUpdates = true;
+}
 
-    if (!m_bIsUpdating)
+    if (!m_bIsUpdating) {
       return;
+}
 
     m_updateEvent.Reset();
   }
@@ -616,14 +623,16 @@ bool CPVREpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
 
   {
     CSingleLock lock(m_critSection);
-    if (m_bIsUpdating || InterruptUpdate())
+    if (m_bIsUpdating || InterruptUpdate()) {
       return false;
+}
     m_bIsUpdating = true;
     pendingUpdates = m_pendingUpdates;
   }
 
-  if (bShowProgress && !bOnlyPending)
+  if (bShowProgress && !bOnlyPending) {
     ShowProgressDialog();
+}
 
   if (!IgnoreDB() && !m_database.IsOpen())
   {
@@ -635,8 +644,9 @@ bool CPVREpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
       m_updateEvent.Set();
     }
 
-    if (bShowProgress && !bOnlyPending)
+    if (bShowProgress && !bOnlyPending) {
       CloseProgressDialog();
+}
 
     return false;
   }
@@ -694,12 +704,14 @@ bool CPVREpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
     CSingleLock lock(m_critSection);
     CDateTime::GetCurrentDateTime().GetAsUTCDateTime().GetAsTime(m_iNextEpgUpdate);
     m_iNextEpgUpdate += g_advancedSettings.m_iEpgUpdateCheckInterval;
-    if (m_pendingUpdates == pendingUpdates)
+    if (m_pendingUpdates == pendingUpdates) {
       m_pendingUpdates = 0;
+}
   }
 
-  if (bShowProgress && !bOnlyPending)
+  if (bShowProgress && !bOnlyPending) {
     CloseProgressDialog();
+}
 
   /* notify observers */
   if (iUpdatedTables > 0)
@@ -762,8 +774,9 @@ int CPVREpgContainer::GetEPGSearch(CFileItemList &results, const CPVREpgSearchFi
   }
 
   /* remove duplicate entries */
-  if (filter.ShouldRemoveDuplicates())
+  if (filter.ShouldRemoveDuplicates()) {
     filter.RemoveDuplicates(results);
+}
 
   return results.Size() - iInitialSize;
 }
@@ -791,8 +804,9 @@ bool CPVREpgContainer::CheckPlayingEvents()
       iNextEpgActiveTagCheck += g_advancedSettings.m_iEpgActiveTagCheckInterval;
 
       /* pvr tags always start on the full minute */
-      if (CServiceBroker::GetPVRManager().IsStarted())
+      if (CServiceBroker::GetPVRManager().IsStarted()) {
         iNextEpgActiveTagCheck -= iNextEpgActiveTagCheck % 60;
+}
 
       bReturn = true;
     }
@@ -816,10 +830,11 @@ bool CPVREpgContainer::CheckPlayingEvents()
 void CPVREpgContainer::SetHasPendingUpdates(bool bHasPendingUpdates /* = true */)
 {
   CSingleLock lock(m_critSection);
-  if (bHasPendingUpdates)
+  if (bHasPendingUpdates) {
     m_pendingUpdates++;
-  else
+  } else {
     m_pendingUpdates = 0;
+}
 }
 
 void CPVREpgContainer::UpdateRequest(int clientID, unsigned int channelID)

@@ -63,8 +63,9 @@ void CMusicFileItemListModifier::AddQueuingFolder(CFileItemList& items)
     return;
 
   // no need for "all" item when only one item
-  if (items.GetObjectCount() <= 1)
+  if (items.GetObjectCount() <= 1) {
     return;
+}
 
   switch (directoryNode->GetChildType())
   {

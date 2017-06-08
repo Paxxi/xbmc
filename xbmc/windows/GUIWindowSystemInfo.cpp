@@ -84,9 +84,9 @@ bool CGUIWindowSystemInfo::OnMessage(CGUIMessage& message)
         ResetLabels();
         m_section = focusedControl;
       }
-      if (m_section >= CONTROL_BT_STORAGE && m_section <= CONTROL_BT_PVR)
+      if (m_section >= CONTROL_BT_STORAGE && m_section <= CONTROL_BT_PVR) {
         SET_CONTROL_HIDDEN(CONTROL_TB_POLICY);
-      else if (m_section == CONTROL_BT_POLICY)
+      } else if (m_section == CONTROL_BT_POLICY)
       {
         SET_CONTROL_LABEL(CONTROL_TB_POLICY, g_infoManager.GetLabel(SYSTEM_PRIVACY_POLICY));
         SET_CONTROL_VISIBLE(CONTROL_TB_POLICY);

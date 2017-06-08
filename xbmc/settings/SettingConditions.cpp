@@ -178,14 +178,15 @@ bool ProfileHasProgramsLocked(const std::string &condition, const std::string &v
 bool ProfileHasSettingsLocked(const std::string &condition, const std::string &value, SettingConstPtr setting, void *data)
 {
   LOCK_LEVEL::SETTINGS_LOCK slValue=LOCK_LEVEL::ALL;
-  if (StringUtils::EqualsNoCase(value, "none"))
+  if (StringUtils::EqualsNoCase(value, "none")) {
     slValue = LOCK_LEVEL::NONE;
-  else if (StringUtils::EqualsNoCase(value, "standard"))
+  } else if (StringUtils::EqualsNoCase(value, "standard")) {
     slValue = LOCK_LEVEL::STANDARD;
-  else if (StringUtils::EqualsNoCase(value, "advanced"))
+  } else if (StringUtils::EqualsNoCase(value, "advanced")) {
     slValue = LOCK_LEVEL::ADVANCED;
-  else if (StringUtils::EqualsNoCase(value, "expert"))
+  } else if (StringUtils::EqualsNoCase(value, "expert")) {
     slValue = LOCK_LEVEL::EXPERT;
+}
   return slValue <= CProfilesManager::GetInstance().GetCurrentProfile().settingsLockLevel();
 }
 
@@ -198,8 +199,9 @@ bool ProfileLockMode(const std::string &condition, const std::string &value, Set
 {
   char *tmp = nullptr;
   LockType lock = (LockType)strtol(value.c_str(), &tmp, 0);
-  if (tmp != nullptr && *tmp != '\0')
+  if (tmp != nullptr && *tmp != '\0') {
     return false;
+}
 
   return CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() == lock;
 }

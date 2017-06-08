@@ -50,9 +50,9 @@ CPVRRecordingsPath::CPVRRecordingsPath(const std::string &strPath)
     m_bRadio  = (m_bValid && (segments.at(2) == "radio"));
     m_bActive = (m_bValid && (segments.at(3) == "active"));
 
-    if (m_bRoot)
+    if (m_bRoot) {
       strVarPath.append("/");
-    else
+    } else
     {
       size_t paramStart = m_path.find(", TV");
       if (paramStart == std::string::npos)

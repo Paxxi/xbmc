@@ -48,15 +48,17 @@ bool CDVDDemuxCDDA::Open(CDVDInputStream* pInput)
 
   Dispose();
 
-  if(!pInput || !pInput->IsStreamType(DVDSTREAM_TYPE_FILE))
+  if(!pInput || !pInput->IsStreamType(DVDSTREAM_TYPE_FILE)) {
     return false;
+}
 
   m_pInput = pInput;
 
   m_stream = new CDemuxStreamAudioCDDA();
 
-  if(!m_stream)
+  if(!m_stream) {
     return false;
+}
 
   m_stream->iSampleRate     = 44100;
   m_stream->iBitsPerSample  = 16;
@@ -86,8 +88,9 @@ void CDVDDemuxCDDA::Reset()
 
 void CDVDDemuxCDDA::Abort()
 {
-  if(m_pInput)
+  if(m_pInput) {
     return m_pInput->Abort();
+}
 }
 
 void CDVDDemuxCDDA::Flush()
@@ -97,15 +100,17 @@ void CDVDDemuxCDDA::Flush()
 #define CDDA_READ_SIZE 4096
 DemuxPacket* CDVDDemuxCDDA::Read()
 {
-  if(!m_pInput)
+  if(!m_pInput) {
     return nullptr;
+}
 
   DemuxPacket* pPacket = CDVDDemuxUtils::AllocateDemuxPacket(CDDA_READ_SIZE);
 
   if (!pPacket)
   {
-    if (m_pInput)
+    if (m_pInput) {
       m_pInput->Close();
+}
     return nullptr;
   }
 
@@ -144,11 +149,13 @@ bool CDVDDemuxCDDA::SeekTime(double time, bool backwards, double* startpts)
 
   // time is in milliseconds
   int64_t seekPos = m_pInput->Seek((((int64_t)time * bytes_per_second / 1000) / clamp_bytes ) * clamp_bytes, SEEK_SET) > 0;
-  if (seekPos > 0)
+  if (seekPos > 0) {
     m_bytes = seekPos;
+}
 
-  if (startpts)
+  if (startpts) {
     *startpts = (double)m_bytes * DVD_TIME_BASE / bytes_per_second;
+}
 
   return seekPos > 0;
 };
@@ -163,8 +170,9 @@ int CDVDDemuxCDDA::GetStreamLength()
 
 CDemuxStream* CDVDDemuxCDDA::GetStream(int iStreamId) const
 {
-  if(iStreamId != 0)
+  if(iStreamId != 0) {
     return nullptr;
+}
 
   return m_stream;
 }

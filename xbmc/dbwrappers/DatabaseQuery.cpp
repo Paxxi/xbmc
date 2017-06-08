@@ -62,12 +62,14 @@ CDatabaseQueryRule::CDatabaseQueryRule()
 
 bool CDatabaseQueryRule::Load(const TiXmlNode *node, const std::string &encoding /* = "UTF-8" */)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   const TiXmlElement *element = node->ToElement();
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   // format is:
   // <rule field="Genre" operator="contains">parameter</rule>
@@ -75,18 +77,21 @@ bool CDatabaseQueryRule::Load(const TiXmlNode *node, const std::string &encoding
   // <value> tags containing a string
   const char *field = element->Attribute("field");
   const char *oper = element->Attribute("operator");
-  if (field == nullptr || oper == nullptr)
+  if (field == nullptr || oper == nullptr) {
     return false;
+}
 
   m_field = TranslateField(field);
   m_operator = TranslateOperator(oper);
 
-  if (m_operator == OPERATOR_TRUE || m_operator == OPERATOR_FALSE)
+  if (m_operator == OPERATOR_TRUE || m_operator == OPERATOR_FALSE) {
     return true;
+}
 
   const TiXmlNode *parameter = element->FirstChild();
-  if (parameter == nullptr)
+  if (parameter == nullptr) {
     return false;
+}
 
   if (parameter->Type() == TiXmlNode::TINYXML_TEXT)
   {
@@ -120,8 +125,9 @@ bool CDatabaseQueryRule::Load(const TiXmlNode *node, const std::string &encoding
       valueNode = valueNode->NextSibling("value");
     }
   }
-  else
+  else {
     return false;
+}
 
   return true;
 }
@@ -135,16 +141,17 @@ bool CDatabaseQueryRule::Load(const CVariant &obj)
   m_field = TranslateField(obj["field"].asString().c_str());
   m_operator = TranslateOperator(obj["operator"].asString().c_str());
 
-  if (m_operator == OPERATOR_TRUE || m_operator == OPERATOR_FALSE)
+  if (m_operator == OPERATOR_TRUE || m_operator == OPERATOR_FALSE) {
     return true;
+}
 
   if (!obj.isMember("value") || (!obj["value"].isString() && !obj["value"].isArray()))
     return false;
 
   const CVariant &value = obj["value"];
-  if (value.isString())
+  if (value.isString()) {
     m_parameter.push_back(value.asString());
-  else if (value.isArray())
+  } else if (value.isArray())
   {
     for (CVariant::const_iterator_array val = value.begin_array(); val != value.end_array(); val++)
     {
@@ -154,8 +161,9 @@ bool CDatabaseQueryRule::Load(const CVariant &obj)
     if (m_parameter.empty())
       m_parameter.push_back("");
   }
-  else
+  else {
     return false;
+}
 
   return true;
 }
@@ -196,8 +204,9 @@ bool CDatabaseQueryRule::Save(CVariant &obj) const
 
 CDatabaseQueryRule::SEARCH_OPERATOR CDatabaseQueryRule::TranslateOperator(const char *oper)
 {
-  for (unsigned int i = 0; i < NUM_OPERATORS; i++)
+  for (unsigned int i = 0; i < NUM_OPERATORS; i++) {
     if (StringUtils::EqualsNoCase(oper, operators[i].string)) return operators[i].op;
+}
   return OPERATOR_CONTAINS;
 }
 
@@ -258,8 +267,9 @@ std::string CDatabaseQueryRule::FormatParameter(const std::string &operatorStrin
     }
     parameter = " IN (" + parameter + ")";
   }
-  else
-    parameter = db.PrepareSQL(operatorString.c_str(), ValidateParameter(param).c_str());
+  else {
+    parameter 
+}= db.PrepareSQL(operatorString.c_str(), ValidateParameter(param).c_str());
 
   if (GetFieldType(m_field) == DATE_FIELD)
   {
@@ -454,8 +464,9 @@ std::string CDatabaseQueryRuleCombination::GetWhereClause(const CDatabase &db, c
 
 bool CDatabaseQueryRuleCombination::Load(const CVariant &obj, const IDatabaseQueryRuleFactory *factory)
 {
-  if (!obj.isObject() && !obj.isArray())
+  if (!obj.isObject() && !obj.isArray()) {
     return false;
+}
   
   CVariant child;
   if (obj.isObject())
@@ -473,8 +484,9 @@ bool CDatabaseQueryRuleCombination::Load(const CVariant &obj, const IDatabaseQue
     else
       return false;
   }
-  else
+  else {
     child = obj;
+}
 
   for (CVariant::const_iterator_array it = child.begin_array(); it != child.end_array(); it++)
   {

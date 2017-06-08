@@ -68,8 +68,9 @@ CScraperParser &CScraperParser::operator=(const CScraperParser &parser)
       m_document = new CXBMCTinyXML(*parser.m_document);
       LoadFromXML();
     }
-    else
+    else {
       m_scraper = nullptr;
+}
   }
   return *this;
 }
@@ -94,13 +95,15 @@ bool CScraperParser::Load(const std::string& strXMLFile)
 
   m_document = new CXBMCTinyXML();
 
-  if (!m_document)
+  if (!m_document) {
     return false;
+}
 
   m_strFile = strXMLFile;
 
-  if (m_document->LoadFile(strXMLFile))
+  if (m_document->LoadFile(strXMLFile)) {
     return LoadFromXML();
+}
 
   delete m_document;
   m_document = nullptr;
@@ -109,8 +112,9 @@ bool CScraperParser::Load(const std::string& strXMLFile)
 
 bool CScraperParser::LoadFromXML()
 {
-  if (!m_document)
+  if (!m_document) {
     return false;
+}
 
   m_pRootElement = m_document->RootElement();
   std::string strValue = m_pRootElement->ValueStr();
@@ -120,24 +124,27 @@ bool CScraperParser::LoadFromXML()
     if (pChildElement)
     {
       m_isNoop = false;
-      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding")))
+      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding"))) {
         m_SearchStringEncoding = "UTF-8";
-    }
+    
+}}
 
     pChildElement = m_pRootElement->FirstChildElement("CreateArtistSearchUrl");
     if (pChildElement)
     {
       m_isNoop = false;
-      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding")))
+      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding"))) {
         m_SearchStringEncoding = "UTF-8";
-    }
+    
+}}
     pChildElement = m_pRootElement->FirstChildElement("CreateAlbumSearchUrl");
     if (pChildElement)
     {
       m_isNoop = false;
-      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding")))
+      if (!(m_SearchStringEncoding = pChildElement->Attribute("SearchStringEncoding"))) {
         m_SearchStringEncoding = "UTF-8";
-    }
+    
+}}
 
     return true;
   }
@@ -200,20 +207,23 @@ void CScraperParser::ParseExpression(const std::string& input, std::string& dest
   {
     bool bInsensitive=true;
     const char* sensitive = pExpression->Attribute("cs");
-    if (sensitive)
-      if (stricmp(sensitive,"yes") == 0)
+    if (sensitive) {
+      if (stricmp(sensitive,"yes") == 0) {
         bInsensitive=false; // match case sensitive
+}
+}
 
     CRegExp::utf8Mode eUtf8 = CRegExp::autoUtf8;
     const char* const strUtf8 = pExpression->Attribute("utf8");
     if (strUtf8)
     {
-      if (stricmp(strUtf8, "yes") == 0)
+      if (stricmp(strUtf8, "yes") == 0) {
         eUtf8 = CRegExp::forceUtf8;
-      else if (stricmp(strUtf8, "no") == 0)
+      } else if (stricmp(strUtf8, "no") == 0) {
         eUtf8 = CRegExp::asciiOnly;
-      else if (stricmp(strUtf8, "auto") == 0)
+      } else if (stricmp(strUtf8, "auto") == 0) {
         eUtf8 = CRegExp::autoUtf8;
+}
     }
 
     CRegExp reg(bInsensitive, eUtf8);
@@ -232,9 +242,11 @@ void CScraperParser::ParseExpression(const std::string& input, std::string& dest
 
     bool bRepeat = false;
     const char* szRepeat = pExpression->Attribute("repeat");
-    if (szRepeat)
-      if (stricmp(szRepeat,"yes") == 0)
+    if (szRepeat) {
+      if (stricmp(szRepeat,"yes") == 0) {
         bRepeat = true;
+}
+}
 
     const char* szClear = pExpression->Attribute("clear");
     if (szClear)
@@ -349,8 +361,9 @@ void CScraperParser::ParseXSLT(const std::string& input, std::string& dest, TiXm
     strXslt << *pSheet;
     ReplaceBuffers(strXslt);
 
-    if (!xsltUtils.SetInput(input))
+    if (!xsltUtils.SetInput(input)) {
       CLog::Log(LOGDEBUG, "could not parse input XML");
+}
 
     if (!xsltUtils.SetStylesheet(strXslt))
       CLog::Log(LOGDEBUG, "could not parse stylesheet XML");
@@ -394,13 +407,14 @@ void CScraperParser::ParseNext(TiXmlElement* element)
   while (pReg)
   {
     TiXmlElement* pChildReg = FirstChildScraperElement(pReg);
-    if (pChildReg)
+    if (pChildReg) {
       ParseNext(pChildReg);
-    else
+    } else
     {
       TiXmlElement* pChildReg = pReg->FirstChildElement("clear");
-      if (pChildReg)
+      if (pChildReg) {
         ParseNext(pChildReg);
+}
     }
 
     int iDest = 1;
@@ -408,8 +422,9 @@ void CScraperParser::ParseNext(TiXmlElement* element)
     const char* szDest = pReg->Attribute("dest");
     if (szDest && strlen(szDest))
     {
-      if (szDest[strlen(szDest)-1] == '+')
+      if (szDest[strlen(szDest)-1] == '+') {
         bAppend = true;
+}
 
       iDest = atoi(szDest);
     }
@@ -421,8 +436,9 @@ void CScraperParser::ParseNext(TiXmlElement* element)
       strInput = szInput;
       ReplaceBuffers(strInput);
     }
-    else
-      strInput = m_param[0];
+    else {
+      strInput 
+}= m_param[0];
 
     const char* szConditional = pReg->Attribute("conditional");
     bool bExecute = true;
@@ -451,9 +467,10 @@ void CScraperParser::ParseNext(TiXmlElement* element)
 #endif
           ParseExpression(strInput, m_param[iDest - 1],pReg,bAppend);
       }
-      else
+      else {
         CLog::Log(LOGERROR,"CScraperParser::ParseNext: destination buffer "
                            "out of bounds, skipping expression");
+}
     }
     pReg = NextSiblingScraperElement(pReg);
   }
@@ -476,8 +493,9 @@ const std::string CScraperParser::Parse(const std::string& strTag,
   std::string tmp = m_param[iResult-1];
 
   const char* szClearBuffers = pChildElement->Attribute("clearbuffers");
-  if (!szClearBuffers || stricmp(szClearBuffers,"no") != 0)
+  if (!szClearBuffers || stricmp(szClearBuffers,"no") != 0) {
     ClearBuffers();
+}
 
   return tmp;
 }
@@ -587,8 +605,9 @@ void CScraperParser::ClearBuffers()
 
 void CScraperParser::GetBufferParams(bool* result, const char* attribute, bool defvalue)
 {
-  for (int iBuf=0;iBuf<MAX_SCRAPER_BUFFERS;++iBuf)
+  for (int iBuf=0;iBuf<MAX_SCRAPER_BUFFERS;++iBuf) {
     result[iBuf] = defvalue;
+}
   if (attribute)
   {
     std::vector<std::string> vecBufs;
@@ -596,8 +615,9 @@ void CScraperParser::GetBufferParams(bool* result, const char* attribute, bool d
     for (size_t nToken=0; nToken < vecBufs.size(); nToken++)
     {
       int index = atoi(vecBufs[nToken].c_str())-1;
-      if (index < MAX_SCRAPER_BUFFERS)
+      if (index < MAX_SCRAPER_BUFFERS) {
         result[index] = !defvalue;
+}
     }
   }
 }

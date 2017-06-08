@@ -90,14 +90,16 @@ static bool FindDeviceWait(CUPnP* upnp, const char* uuid, PLT_DeviceDataReferenc
             break;
 
         // fail right away if device not found and upnp client was already running
-        if (client_started)
+        if (client_started) {
             return false;
+}
 
         // otherwise check if we've waited long enough without success
         NPT_TimeStamp now;
         NPT_System::GetCurrentTimeStamp(now);
-        if (now > watchdog)
+        if (now > watchdog) {
             return false;
+}
 
         // sleep a bit and try again
         NPT_System::Sleep(NPT_TimeInterval((double)1));
@@ -113,9 +115,10 @@ const char*
 CUPnPDirectory::GetFriendlyName(const CURL& url)
 {
     NPT_String path = url.Get().c_str();
-    if (!path.EndsWith("/")) path += "/";
+    if (!path.EndsWith("/")) { path += "/";
 
-    if (path.Left(7).Compare("upnp://", true) != 0) {
+    
+}if (path.Left(7).Compare("upnp://", true) != 0) {
         return nullptr;
     } else if (path.Compare("upnp://", true) == 0) {
         return "UPnP Media Servers (Auto-Discover)";
@@ -123,8 +126,9 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
 
     // look for nextslash
     int next_slash = path.Find('/', 7);
-    if (next_slash == -1)
+    if (next_slash == -1) {
         return nullptr;
+}
 
     NPT_String uuid = path.SubString(7, next_slash-7);
     NPT_String object_id = path.SubString(next_slash+1, path.GetLength()-next_slash-2);
@@ -142,12 +146,14 @@ CUPnPDirectory::GetFriendlyName(const CURL& url)
 +---------------------------------------------------------------------*/
 bool CUPnPDirectory::GetResource(const CURL& path, CFileItem &item)
 {
-    if(!path.IsProtocol("upnp"))
+    if(!path.IsProtocol("upnp")) {
       return false;
+}
 
     CUPnP* upnp = CUPnP::GetInstance();
-    if(!upnp)
+    if(!upnp) {
         return false;
+}
 
     std::string uuid   = path.GetHostName();
     std::string object = path.GetFileName();
@@ -216,10 +222,11 @@ CUPnPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
             ++device;
         }
     } else {
-        if (!path.EndsWith("/")) path += "/";
+        if (!path.EndsWith("/")) { path += "/";
 
         // look for nextslash
-        int next_slash = path.Find('/', 7);
+        
+}int next_slash = path.Find('/', 7);
 
         NPT_String uuid = (next_slash==-1)?path.SubString(7):path.SubString(7, next_slash-7);
         NPT_String object_id = (next_slash==-1)?"":path.SubString(next_slash+1);

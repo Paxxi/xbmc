@@ -68,8 +68,9 @@ bool CActiveAEFilter::SetTempo(float tempo)
     return true;
   }
 
-  if (!CreateFilterGraph())
+  if (!CreateFilterGraph()) {
     return false;
+}
 
   if (!CreateAtempoFilter())
   {
@@ -183,14 +184,17 @@ void CActiveAEFilter::CloseFilter()
     m_pFilterCtxOut = nullptr;
   }
 
-  if (m_pOutFrame)
+  if (m_pOutFrame) {
     av_frame_free(&m_pOutFrame);
+}
 
-  if (m_pConvertFrame)
+  if (m_pConvertFrame) {
     av_frame_free(&m_pConvertFrame);
+}
 
-  if (m_pConvertCtx)
+  if (m_pConvertCtx) {
     swr_free(&m_pConvertCtx);
+}
 
   m_SamplesIn = 0;
   m_SamplesOut = 0;
@@ -213,8 +217,9 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
   if (src_samples)
   {
     AVFrame *frame = av_frame_alloc();
-    if (!frame)
+    if (!frame) {
       return -1;
+}
 
     int channels = av_get_channel_layout_nb_channels(m_channelLayout);
 
@@ -271,8 +276,9 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
     {
       result = av_buffersink_get_frame(m_pFilterCtxOut, outFrame);
       m_filterEof = true;
-      if (result < 0)
+      if (result < 0) {
         return 0;
+}
     }
     else if (result < 0)
     {
@@ -338,10 +344,11 @@ bool CActiveAEFilter::NeedData()
 
 bool CActiveAEFilter::IsActive()
 {
-  if (m_pFilterGraph)
+  if (m_pFilterGraph) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 int CActiveAEFilter::GetBufferedSamples()

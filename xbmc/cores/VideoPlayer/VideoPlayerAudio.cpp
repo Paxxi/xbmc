@@ -94,8 +94,9 @@ bool CVideoPlayerAudio::OpenStream(CDVDStreamInfo hints)
 
   CLog::Log(LOGNOTICE, "Finding audio codec for: %i", hints.codec);
   bool allowpassthrough = !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_VIDEOPLAYER_USEDISPLAYASCLOCK);
-  if (hints.realtime)
+  if (hints.realtime) {
     allowpassthrough = false;
+}
 
   CAEStreamInfo::DataType streamType = m_audioSink.GetPassthroughStreamType(hints.codec, hints.samplerate);
   CDVDAudioCodec* codec = CDVDFactoryCodec::CreateAudioCodec(hints, m_processInfo,
@@ -148,8 +149,9 @@ void CVideoPlayerAudio::OpenStream(CDVDStreamInfo &hints, CDVDAudioCodec* codec)
   m_setsynctype = SYNC_DISCON;
   if (CServiceBroker::GetSettings().GetBool(CSettings::SETTING_VIDEOPLAYER_USEDISPLAYASCLOCK))
     m_setsynctype = SYNC_RESAMPLE;
-  else if (hints.realtime)
+  else if (hints.realtime) {
     m_setsynctype = SYNC_RESAMPLE;
+}
 
   m_prevsynctype = -1;
 
@@ -533,13 +535,15 @@ void CVideoPlayerAudio::SetSyncType(bool passthrough)
 {
   //set the synctype from the gui
   m_synctype = m_setsynctype;
-  if (passthrough && m_synctype == SYNC_RESAMPLE)
+  if (passthrough && m_synctype == SYNC_RESAMPLE) {
     m_synctype = SYNC_DISCON;
+}
 
   //if SetMaxSpeedAdjust returns false, it means no video is played and we need to use clock feedback
   double maxspeedadjust = 0.0;
-  if (m_synctype == SYNC_RESAMPLE)
+  if (m_synctype == SYNC_RESAMPLE) {
     maxspeedadjust = m_maxspeedadjust;
+}
 
   m_pClock->SetMaxSpeedAdjust(maxspeedadjust);
 

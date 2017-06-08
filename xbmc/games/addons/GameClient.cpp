@@ -201,8 +201,9 @@ bool CGameClient::IsExtensionValid(const std::string& strExtension) const
   if (strExtension.empty())
     return false;
 
-  if (SupportsAllExtensions())
+  if (SupportsAllExtensions()) {
     return true;
+}
 
   return m_extensions.find(NormalizeExtension(strExtension)) != m_extensions.end();
 }
@@ -217,8 +218,9 @@ bool CGameClient::Initialize()
 
   // Ensure directory exists for savestates
   std::string savestatesDir = URIUtils::AddFileToFolder(CProfilesManager::GetInstance().GetSavestatesFolder(), ID());
-  if (!CDirectory::Exists(savestatesDir))
+  if (!CDirectory::Exists(savestatesDir)) {
     CDirectory::Create(savestatesDir);
+}
 
   m_libraryProps.InitializeProperties();
 
@@ -254,8 +256,9 @@ void CGameClient::Unload()
 
 bool CGameClient::OpenFile(const CFileItem& file, IGameAudioCallback* audio, IGameVideoCallback* video)
 {
-  if (audio == nullptr || video == nullptr)
+  if (audio == nullptr || video == nullptr) {
     return false;
+}
 
   // Check if we should open in standalone mode
   if (file.GetPath().empty())
@@ -292,8 +295,9 @@ bool CGameClient::OpenFile(const CFileItem& file, IGameAudioCallback* audio, IGa
     return false;
   }
 
-  if (!InitializeGameplay(file.GetPath(), audio, video))
+  if (!InitializeGameplay(file.GetPath(), audio, video)) {
     return false;
+}
 
   return true;
 }
@@ -337,11 +341,13 @@ bool CGameClient::InitializeGameplay(const std::string& gamePath, IGameAudioCall
     m_video           = video;
     m_inputRateHandle = CServiceBroker::GetPeripherals().SetEventScanRate(INPUT_SCAN_RATE);
 
-    if (m_bSupportsKeyboard)
+    if (m_bSupportsKeyboard) {
       OpenKeyboard();
+}
 
-    if (m_bSupportsMouse)
+    if (m_bSupportsMouse) {
       OpenMouse();
+}
 
     m_inGameSaves.reset(new CGameClientInGameSaves(this, &m_struct.toAddon));
     m_inGameSaves->Load();
@@ -392,8 +398,9 @@ bool CGameClient::LoadGameInfo()
   try { bSuccess = LogError(m_struct.toAddon.GetGameInfo(&av_info), "GetGameInfo()"); }
   catch (...) { LogException("GetGameInfo()"); }
 
-  if (!bSuccess)
+  if (!bSuccess) {
     return false;
+}
 
   GAME_REGION region;
   try { region = m_struct.toAddon.GetRegion(); }
@@ -421,8 +428,9 @@ void CGameClient::NotifyError(GAME_ERROR error)
 {
   std::string missingResource;
 
-  if (error == GAME_ERROR_RESTRICTED)
+  if (error == GAME_ERROR_RESTRICTED) {
     missingResource = GetMissingResource();
+}
 
   if (!missingResource.empty())
   {
@@ -517,11 +525,13 @@ void CGameClient::CloseFile()
 
   ClearPorts();
 
-  if (m_bSupportsKeyboard)
+  if (m_bSupportsKeyboard) {
     CloseKeyboard();
+}
 
-  if (m_bSupportsMouse)
+  if (m_bSupportsMouse) {
     CloseMouse();
+}
 
   m_bIsPlaying = false;
   m_gamePath.clear();
@@ -550,8 +560,9 @@ void CGameClient::RunFrame()
 
 bool CGameClient::OpenPixelStream(GAME_PIXEL_FORMAT format, unsigned int width, unsigned int height, GAME_VIDEO_ROTATION rotation)
 {
-  if (!m_video)
+  if (!m_video) {
     return false;
+}
 
   AVPixelFormat pixelFormat = CGameClientTranslator::TranslatePixelFormat(format);
   if (pixelFormat == AV_PIX_FMT_NONE)
@@ -581,8 +592,9 @@ bool CGameClient::OpenPixelStream(GAME_PIXEL_FORMAT format, unsigned int width, 
 
 bool CGameClient::OpenVideoStream(GAME_VIDEO_CODEC codec)
 {
-  if (!m_video)
+  if (!m_video) {
     return false;
+}
 
   AVCodecID videoCodec = CGameClientTranslator::TranslateVideoCodec(codec);
   if (videoCodec == AV_CODEC_ID_NONE)
@@ -596,8 +608,9 @@ bool CGameClient::OpenVideoStream(GAME_VIDEO_CODEC codec)
 
 bool CGameClient::OpenPCMStream(GAME_PCM_FORMAT format, const GAME_AUDIO_CHANNEL* channelMap)
 {
-  if (!m_audio || channelMap == nullptr)
+  if (!m_audio || channelMap == nullptr) {
     return false;
+}
 
   AEDataFormat pcmFormat = CGameClientTranslator::TranslatePCMFormat(format);
   if (pcmFormat == AE_FMT_INVALID)
@@ -623,8 +636,9 @@ bool CGameClient::OpenPCMStream(GAME_PCM_FORMAT format, const GAME_AUDIO_CHANNEL
 
 bool CGameClient::OpenAudioStream(GAME_AUDIO_CODEC codec, const GAME_AUDIO_CHANNEL* channelMap)
 {
-  if (!m_audio)
+  if (!m_audio) {
     return false;
+}
 
   AVCodecID audioCodec = CGameClientTranslator::TranslateAudioCodec(codec);
   if (audioCodec == AV_CODEC_ID_NONE)
@@ -654,14 +668,16 @@ void CGameClient::AddStreamData(GAME_STREAM_TYPE stream, const uint8_t* data, un
   {
   case GAME_STREAM_AUDIO:
   {
-    if (m_audio)
+    if (m_audio) {
       m_audio->AddData(data, size);
+}
     break;
   }
   case GAME_STREAM_VIDEO:
   {
-    if (m_video)
+    if (m_video) {
       m_video->AddData(data, size);
+}
     break;
   }
   default:
@@ -675,14 +691,16 @@ void CGameClient::CloseStream(GAME_STREAM_TYPE stream)
   {
   case GAME_STREAM_AUDIO:
   {
-    if (m_audio)
+    if (m_audio) {
       m_audio->CloseStream();
+}
     break;
   }
   case GAME_STREAM_VIDEO:
   {
-    if (m_video)
+    if (m_video) {
       m_video->CloseStream();
+}
     break;
   }
   default:
@@ -754,8 +772,9 @@ bool CGameClient::OpenPort(unsigned int port)
 
     // If keyboard input is being captured by this add-on, force the port type to PERIPHERAL_JOYSTICK
     PERIPHERALS::PeripheralType device = PERIPHERALS::PERIPHERAL_UNKNOWN;
-    if (m_bSupportsKeyboard)
+    if (m_bSupportsKeyboard) {
       device = PERIPHERALS::PERIPHERAL_JOYSTICK;
+}
 
     CServiceBroker::GetGameServices().PortManager().OpenPort(m_ports[port].get(), this, port, device);
 
@@ -965,8 +984,9 @@ void CGameClient::cb_close_game(void* kodiInstance)
 int CGameClient::cb_open_pixel_stream(void* kodiInstance, GAME_PIXEL_FORMAT format, unsigned int width, unsigned int height, GAME_VIDEO_ROTATION rotation)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return -1;
+}
 
   return gameClient->OpenPixelStream(format, width, height, rotation) ? 0 : -1;
 }
@@ -974,8 +994,9 @@ int CGameClient::cb_open_pixel_stream(void* kodiInstance, GAME_PIXEL_FORMAT form
 int CGameClient::cb_open_video_stream(void* kodiInstance, GAME_VIDEO_CODEC codec)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return -1;
+}
 
   return gameClient->OpenVideoStream(codec) ? 0 : -1;
 }
@@ -983,8 +1004,9 @@ int CGameClient::cb_open_video_stream(void* kodiInstance, GAME_VIDEO_CODEC codec
 int CGameClient::cb_open_pcm_stream(void* kodiInstance, GAME_PCM_FORMAT format, const GAME_AUDIO_CHANNEL* channel_map)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return -1;
+}
 
   return gameClient->OpenPCMStream(format, channel_map) ? 0 : -1;
 }
@@ -992,8 +1014,9 @@ int CGameClient::cb_open_pcm_stream(void* kodiInstance, GAME_PCM_FORMAT format, 
 int CGameClient::cb_open_audio_stream(void* kodiInstance, GAME_AUDIO_CODEC codec, const GAME_AUDIO_CHANNEL* channel_map)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return -1;
+}
 
   return gameClient->OpenAudioStream(codec, channel_map) ? 0 : -1;
 }
@@ -1001,8 +1024,9 @@ int CGameClient::cb_open_audio_stream(void* kodiInstance, GAME_AUDIO_CODEC codec
 void CGameClient::cb_add_stream_data(void* kodiInstance, GAME_STREAM_TYPE stream, const uint8_t* data, unsigned int size)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return;
+}
 
   gameClient->AddStreamData(stream, data, size);
 }
@@ -1010,8 +1034,9 @@ void CGameClient::cb_add_stream_data(void* kodiInstance, GAME_STREAM_TYPE stream
 void CGameClient::cb_close_stream(void* kodiInstance, GAME_STREAM_TYPE stream)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return;
+}
 
   gameClient->CloseStream(stream);
 }
@@ -1019,8 +1044,9 @@ void CGameClient::cb_close_stream(void* kodiInstance, GAME_STREAM_TYPE stream)
 void CGameClient::cb_enable_hardware_rendering(void* kodiInstance, const game_hw_info *hw_info)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return;
+}
 
   //! @todo
 }
@@ -1028,8 +1054,9 @@ void CGameClient::cb_enable_hardware_rendering(void* kodiInstance, const game_hw
 uintptr_t CGameClient::cb_hw_get_current_framebuffer(void* kodiInstance)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return 0;
+}
 
   //! @todo
   return 0;
@@ -1038,8 +1065,9 @@ uintptr_t CGameClient::cb_hw_get_current_framebuffer(void* kodiInstance)
 game_proc_address_t CGameClient::cb_hw_get_proc_address(void* kodiInstance, const char *sym)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return nullptr;
+}
 
   //! @todo
   return nullptr;
@@ -1048,8 +1076,9 @@ game_proc_address_t CGameClient::cb_hw_get_proc_address(void* kodiInstance, cons
 void CGameClient::cb_render_frame(void* kodiInstance)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return;
+}
 
   //! @todo
 }
@@ -1057,8 +1086,9 @@ void CGameClient::cb_render_frame(void* kodiInstance)
 bool CGameClient::cb_open_port(void* kodiInstance, unsigned int port)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return false;
+}
 
   return gameClient->OpenPort(port);
 }
@@ -1066,8 +1096,9 @@ bool CGameClient::cb_open_port(void* kodiInstance, unsigned int port)
 void CGameClient::cb_close_port(void* kodiInstance, unsigned int port)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return;
+}
 
   gameClient->ClosePort(port);
 }
@@ -1075,11 +1106,13 @@ void CGameClient::cb_close_port(void* kodiInstance, unsigned int port)
 bool CGameClient::cb_input_event(void* kodiInstance, const game_input_event* event)
 {
   CGameClient *gameClient = static_cast<CGameClient*>(kodiInstance);
-  if (!gameClient)
+  if (!gameClient) {
     return false;
+}
 
-  if (event == nullptr)
+  if (event == nullptr) {
     return false;
+}
 
   return gameClient->ReceiveInputEvent(*event);
 }

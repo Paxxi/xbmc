@@ -40,12 +40,14 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
 
 bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, CFileItemList &groupedItems, CFileItemList &ungroupedItems, GroupAttribute groupAttributes /* = GroupAttributeNone */)
 {
-  if (groupBy == GroupByNone)
+  if (groupBy == GroupByNone) {
     return false;
+}
 
   // nothing to do if there are no items to group
-  if (items.Size() <= 0)
+  if (items.Size() <= 0) {
     return true;
+}
 
   SetMap setMap;
   for (int index = 0; index < items.Size(); index++)
@@ -115,21 +117,25 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
         }
 
         // handle year
-        if (movieInfo->GetYear() > setInfo->GetYear())
+        if (movieInfo->GetYear() > setInfo->GetYear()) {
           setInfo->SetYear(movieInfo->GetYear());
+}
 
         // handle lastplayed
-        if (movieInfo->m_lastPlayed.IsValid() && movieInfo->m_lastPlayed > setInfo->m_lastPlayed)
+        if (movieInfo->m_lastPlayed.IsValid() && movieInfo->m_lastPlayed > setInfo->m_lastPlayed) {
           setInfo->m_lastPlayed = movieInfo->m_lastPlayed;
+}
 
         // handle dateadded
-        if (movieInfo->m_dateAdded.IsValid() && movieInfo->m_dateAdded > setInfo->m_dateAdded)
+        if (movieInfo->m_dateAdded.IsValid() && movieInfo->m_dateAdded > setInfo->m_dateAdded) {
           setInfo->m_dateAdded = movieInfo->m_dateAdded;
+}
 
         // handle playcount/watched
         setInfo->SetPlayCount(setInfo->GetPlayCount() + movieInfo->GetPlayCount());
-        if (movieInfo->GetPlayCount() > 0)
+        if (movieInfo->GetPlayCount() > 0) {
           iWatched++;
+}
 
         //accumulate the path for a multipath construction
         CFileItem video(movieInfo->m_basePath, false);
@@ -159,8 +165,9 @@ bool GroupUtils::Group(GroupBy groupBy, const std::string &baseDir, const CFileI
 bool GroupUtils::GroupAndMix(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, CFileItemList &groupedItemsMixed, GroupAttribute groupAttributes /* = GroupAttributeNone */)
 {
   CFileItemList ungroupedItems;
-  if (!Group(groupBy, baseDir, items, groupedItemsMixed, ungroupedItems, groupAttributes))
+  if (!Group(groupBy, baseDir, items, groupedItemsMixed, ungroupedItems, groupAttributes)) {
     return false;
+}
 
   // add all the ungrouped items as well
   groupedItemsMixed.Append(ungroupedItems);

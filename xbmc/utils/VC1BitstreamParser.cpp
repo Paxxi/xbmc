@@ -78,12 +78,14 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
   for (;;)
   {
     buf = find_start_code(buf, buf_end, &state);
-    if (buf >= buf_end)
+    if (buf >= buf_end) {
       break;
+}
     if (buf[-1] == VC1_SEQUENCE)
     {
-      if (m_Profile != VC1_PROFILE_NOPROFILE)
+      if (m_Profile != VC1_PROFILE_NOPROFILE) {
         return false;
+}
       CBitstreamReader br(buf, buf_end - buf);
       // Read the profile
       m_Profile = static_cast<uint8_t>(br.ReadBits(2));
@@ -97,34 +99,40 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
         br.SkipBits(22);
 
         m_SimpleSkipBits = 2;
-        if (br.ReadBits(1)) //rangered
+        if (br.ReadBits(1)) { //rangered
           ++m_SimpleSkipBits;
+}
 
         m_MaxBFrames = br.ReadBits(3);
 
         br.SkipBits(2); // quantizer
-        if (br.ReadBits(1)) //finterpflag
+        if (br.ReadBits(1)) { //finterpflag
           ++m_SimpleSkipBits;
+}
       }
-      if (sequence_only)
+      if (sequence_only) {
         return true;
+}
     }
     else if (buf[-1] == VC1_FRAME)
     {
       CBitstreamReader br(buf, buf_end - buf);
 
-      if (sequence_only)
+      if (sequence_only) {
         return false;
+}
       if (m_Profile == VC1_PROFILE_ADVANCED)
       {
         uint8_t fcm;
         if (m_AdvInterlace) {
           fcm = br.ReadBits(1);
-          if (fcm)
+          if (fcm) {
             fcm = br.ReadBits(1) + 1;
+}
         }
-        else
+        else {
           fcm = VC1_FRAME_PROGRESSIVE;
+}
         if (fcm == VC1_FIELD_INTERLACE) {
           uint8_t pic = br.ReadBits(3);
           return pic == 0x00 || pic == 0x01;
@@ -146,14 +154,17 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
             pic = br.ReadBits(1);
             return pic != 0;
           }
-          else
+          else {
             return false;
+}
         }
-        else
+        else {
           return pic != 0;
+}
       }
-      else
+      else {
         break;
+}
     }
   }
   return false;

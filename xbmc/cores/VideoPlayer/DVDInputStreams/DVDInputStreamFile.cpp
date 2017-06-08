@@ -49,8 +49,9 @@ bool CDVDInputStreamFile::Open()
     return false;
 
   m_pFile = new CFile();
-  if (!m_pFile)
+  if (!m_pFile) {
     return false;
+}
 
   unsigned int flags = READ_TRUNCATED | READ_BITRATE | READ_CHUNKED;
   
@@ -77,8 +78,9 @@ bool CDVDInputStreamFile::Open()
     }
   }
 
-  if (!(flags & READ_CACHED))
+  if (!(flags & READ_CACHED)) {
     flags |= READ_NO_CACHE; // Make sure CFile honors our no-cache hint
+}
 
   std::string content = m_item.GetMimeType();
 
@@ -124,12 +126,14 @@ int CDVDInputStreamFile::Read(uint8_t* buf, int buf_size)
 
   ssize_t ret = m_pFile->Read(buf, buf_size);
 
-  if (ret < 0)
+  if (ret < 0) {
     return -1; // player will retry read in case of error until playback is stopped
+}
 
   /* we currently don't support non completing reads */
-  if (ret == 0) 
+  if (ret == 0) { 
     m_eof = true;
+}
 
   return (int)ret;
 }
@@ -138,8 +142,9 @@ int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
 {
   if(!m_pFile) return -1;
 
-  if(whence == SEEK_POSSIBLE)
+  if(whence == SEEK_POSSIBLE) {
     return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
+}
 
   int64_t ret = m_pFile->Seek(offset, whence);
 
@@ -151,36 +156,41 @@ int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
 
 int64_t CDVDInputStreamFile::GetLength()
 {
-  if (m_pFile)
+  if (m_pFile) {
     return m_pFile->GetLength();
+}
   return 0;
 }
 
 bool CDVDInputStreamFile::GetCacheStatus(XFILE::SCacheStatus *status)
 {
-  if(m_pFile && m_pFile->IoControl(IOCTRL_CACHE_STATUS, status) >= 0)
+  if(m_pFile && m_pFile->IoControl(IOCTRL_CACHE_STATUS, status) >= 0) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 BitstreamStats CDVDInputStreamFile::GetBitstreamStats() const
 {
-  if (!m_pFile)
+  if (!m_pFile) {
     return m_stats; // dummy return. defined in CDVDInputStream
+}
 
-  if(m_pFile->GetBitstreamStats())
+  if(m_pFile->GetBitstreamStats()) {
     return *m_pFile->GetBitstreamStats();
-  else
+  } else {
     return m_stats;
+}
 }
 
 int CDVDInputStreamFile::GetBlockSize()
 {
-  if(m_pFile)
+  if(m_pFile) {
     return m_pFile->GetChunkSize();
-  else
+  } else {
     return 0;
+}
 }
 
 void CDVDInputStreamFile::SetReadRate(unsigned rate)
@@ -188,6 +198,7 @@ void CDVDInputStreamFile::SetReadRate(unsigned rate)
   // Increase requested rate by 10%:
   unsigned maxrate = (unsigned) (1.1 * rate);
 
-  if(m_pFile->IoControl(IOCTRL_CACHE_SETRATE, &maxrate) >= 0)
+  if(m_pFile->IoControl(IOCTRL_CACHE_SETRATE, &maxrate) >= 0) {
     CLog::Log(LOGDEBUG, "CDVDInputStreamFile::SetReadRate - set cache throttle rate to %u bytes per second", maxrate);
+}
 }

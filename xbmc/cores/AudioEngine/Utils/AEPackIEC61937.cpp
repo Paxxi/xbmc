@@ -27,8 +27,9 @@
 
 inline void SwapEndian(uint16_t *dst, uint16_t *src, unsigned int size)
 {
-  for (unsigned int i = 0; i < size; ++i, ++dst, ++src)
+  for (unsigned int i = 0; i < size; ++i, ++dst, ++src) {
     *dst = ((*src & 0xFF00) >> 8) | ((*src & 0x00FF) << 8);
+}
 }
 
 int CAEPackIEC61937::PackAC3(uint8_t *data, unsigned int size, uint8_t *dest)
@@ -99,8 +100,9 @@ int CAEPackIEC61937::PackDTS_2048(uint8_t *data, unsigned int size, uint8_t *des
 
 int CAEPackIEC61937::PackTrueHD(uint8_t *data, unsigned int size, uint8_t *dest)
 {
-  if (size == 0)
+  if (size == 0) {
     return OUT_FRAMESTOBYTES(TRUEHD_FRAME_SIZE);
+}
 
   assert(size <= OUT_FRAMESTOBYTES(TRUEHD_FRAME_SIZE));
   struct IEC61937Packet *packet = (struct IEC61937Packet*)dest;
@@ -202,8 +204,9 @@ int CAEPackIEC61937::PackDTS(uint8_t *data, unsigned int size, uint8_t *dest, bo
 
   if (data == NULL)
     data = dataTo;
-  else if (!byteSwapNeeded)
+  else if (!byteSwapNeeded) {
     memcpy(dataTo, data, size);
+}
 
   if (byteSwapNeeded)
   {
@@ -211,8 +214,9 @@ int CAEPackIEC61937::PackDTS(uint8_t *data, unsigned int size, uint8_t *dest, bo
     SwapEndian((uint16_t*)dataTo, (uint16_t*)data, size >> 1);
   }
   
-  if (size != frameSize)
+  if (size != frameSize) {
     memset(packet->m_data + size, 0, frameSize - IEC61937_DATA_OFFSET - size);
+}
 
   return frameSize;
 }
@@ -223,8 +227,9 @@ int CAEPackIEC61937::PackPause(uint8_t *dest, unsigned int millis, unsigned int 
   double periodInTime = (double)rep_period / samplerate * 1000;
   int periodsNeeded = millis / periodInTime;
   int maxPeriods = MAX_IEC61937_PACKET / periodInBytes;
-  if (periodsNeeded > maxPeriods)
+  if (periodsNeeded > maxPeriods) {
     periodsNeeded = maxPeriods;
+}
   uint16_t gap = encodedRate * millis / 1000;
 
   struct IEC61937Packet *packet = (struct IEC61937Packet*)dest;

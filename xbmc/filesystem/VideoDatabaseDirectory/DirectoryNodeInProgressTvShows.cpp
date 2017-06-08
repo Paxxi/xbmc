@@ -45,8 +45,9 @@ std::string CDirectoryNodeInProgressTvShows::GetLocalizedName() const
 bool CDirectoryNodeInProgressTvShows::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
   
   bool bSuccess=videodatabase.GetInProgressTvShowsNav(BuildPath(), items);
 

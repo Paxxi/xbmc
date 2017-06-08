@@ -43,8 +43,9 @@ CXRandR::CXRandR(bool query)
 {
   m_bInit = false;
   m_numScreens = 1;
-  if (query)
+  if (query) {
     Query();
+}
 }
 
 bool CXRandR::Query(bool force, bool ignoreoff)
@@ -55,8 +56,9 @@ bool CXRandR::Query(bool force, bool ignoreoff)
 
   m_bInit = true;
 
-  if (getenv("KODI_BIN_HOME") == nullptr)
+  if (getenv("KODI_BIN_HOME") == nullptr) {
     return false;
+}
 
   m_outputs.clear();
   // query all screens
@@ -64,8 +66,9 @@ bool CXRandR::Query(bool force, bool ignoreoff)
   bool success = false;
   for(unsigned int screennum=0; screennum<m_numScreens; ++screennum)
   {
-    if(Query(force, screennum, ignoreoff))
+    if(Query(force, screennum, ignoreoff)) {
       success = true;
+}
   }
   return success;
 }
@@ -125,11 +128,13 @@ bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
     {
       xoutput.isRotated = true;
     }
-    else
+    else {
       xoutput.isRotated = false;
+}
 
-    if (!xoutput.isConnected)
+    if (!xoutput.isConnected) {
        continue;
+}
 
     bool hascurrent = false;
     for (TiXmlElement* mode = output->FirstChildElement("mode"); mode; mode = mode->NextSiblingElement("mode"))
@@ -143,8 +148,9 @@ bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
       xmode.isPreferred = (strcasecmp(mode->Attribute("preferred"), "true") == 0);
       xmode.isCurrent = (strcasecmp(mode->Attribute("current"), "true") == 0);
       xoutput.modes.push_back(xmode);
-      if (xmode.isCurrent)
+      if (xmode.isCurrent) {
         hascurrent = true;
+}
     }
     if (hascurrent || !ignoreoff)
       m_outputs.push_back(xoutput);
@@ -157,8 +163,9 @@ bool CXRandR::Query(bool force, int screennum, bool ignoreoff)
 bool CXRandR::TurnOffOutput(const std::string& name)
 {
   XOutput *output = GetOutput(name);
-  if (!output)
+  if (!output) {
     return false;
+}
 
   std::string cmd;
   std::string appname = CCompileInfo::GetAppName();
@@ -172,11 +179,13 @@ bool CXRandR::TurnOffOutput(const std::string& name)
   }
 
   int status = system(cmd.c_str());
-  if (status == -1)
+  if (status == -1) {
     return false;
+}
 
-  if (WEXITSTATUS(status) != 0)
+  if (WEXITSTATUS(status) != 0) {
     return false;
+}
 
   return true;
 }
@@ -184,12 +193,14 @@ bool CXRandR::TurnOffOutput(const std::string& name)
 bool CXRandR::TurnOnOutput(const std::string& name)
 {
   XOutput *output = GetOutput(name);
-  if (!output)
+  if (!output) {
     return false;
+}
 
   XMode mode = GetCurrentMode(output->name);
-  if (mode.isCurrent)
+  if (mode.isCurrent) {
     return true;
+}
 
   // get preferred mode
   for (unsigned int j = 0; j < m_outputs.size(); j++)
@@ -207,21 +218,25 @@ bool CXRandR::TurnOnOutput(const std::string& name)
     }
   }
 
-  if (!mode.isPreferred)
+  if (!mode.isPreferred) {
     return false;
+}
 
-  if (!SetMode(*output, mode))
+  if (!SetMode(*output, mode)) {
     return false;
+}
 
   XbmcThreads::EndTime timeout(5000);
   while (!timeout.IsTimePast())
   {
-    if (!Query(true))
+    if (!Query(true)) {
       return false;
+}
 
     output = GetOutput(name);
-    if (output && output->h > 0)
+    if (output && output->h > 0) {
       return true;
+}
 
     Sleep(200);
   }
@@ -329,19 +344,22 @@ bool CXRandR::SetMode(XOutput output, XMode mode)
   StringUtils::ToLower(appname);
   char cmd[255];
 
-  if (getenv("KODI_BIN_HOME"))
+  if (getenv("KODI_BIN_HOME")) {
     snprintf(cmd, sizeof(cmd), "%s/%s-xrandr --screen %d --output %s --mode %s", 
                getenv("KODI_BIN_HOME"),appname.c_str(),
                outputFound.screen, outputFound.name.c_str(), modeFound.id.c_str());
-  else
+  } else {
     return false;
+}
   CLog::Log(LOGINFO, "XRANDR: %s", cmd);
   int status = system(cmd);
-  if (status == -1)
+  if (status == -1) {
     return false;
+}
 
-  if (WEXITSTATUS(status) != 0)
+  if (WEXITSTATUS(status) != 0) {
     return false;
+}
 
   return true;
 }

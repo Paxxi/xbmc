@@ -52,8 +52,9 @@ void CBackgroundInfoLoader::Run()
         CFileItemPtr pItem = *iter;
 
         // Ask the callback if we should abort
-        if ((m_pProgressCallback && m_pProgressCallback->Abort()) || m_bStop)
+        if ((m_pProgressCallback && m_pProgressCallback->Abort()) || m_bStop) {
           break;
+}
 
         try
         {
@@ -72,8 +73,9 @@ void CBackgroundInfoLoader::Run()
         CFileItemPtr pItem = *iter;
 
         // Ask the callback if we should abort
-        if ((m_pProgressCallback && m_pProgressCallback->Abort()) || m_bStop)
+        if ((m_pProgressCallback && m_pProgressCallback->Abort()) || m_bStop) {
           break;
+}
 
         try
         {
@@ -101,8 +103,9 @@ void CBackgroundInfoLoader::Load(CFileItemList& items)
 {
   StopThread();
 
-  if (items.IsEmpty())
+  if (items.IsEmpty()) {
     return;
+}
 
   CSingleLock lock(m_lock);
 

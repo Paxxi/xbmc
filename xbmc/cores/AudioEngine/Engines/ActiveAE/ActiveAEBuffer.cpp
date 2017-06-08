@@ -38,8 +38,9 @@ CSoundPacket::CSoundPacket(SampleConfig conf, int samples) : config(std::move(co
 
 CSoundPacket::~CSoundPacket()
 {
-  if (data)
+  if (data) {
     CActiveAE::FreeSoundSample(data);
+}
 }
 
 CSampleBuffer::CSampleBuffer() : pkt(nullptr), pool(nullptr)
@@ -63,8 +64,9 @@ CSampleBuffer* CSampleBuffer::Acquire()
 void CSampleBuffer::Return()
 {
   refCount--;
-  if (pool && refCount <= 0)
+  if (pool && refCount <= 0) {
     pool->ReturnBuffer(this);
+}
 }
 
 CActiveAEBufferPool::CActiveAEBufferPool(AEAudioFormat format)
@@ -187,8 +189,9 @@ bool CActiveAEBufferPoolResample::Create(unsigned int totaltime, bool remap, boo
   m_stereoUpmix = upmix;
 
   m_normalize = true;
-  if ((m_format.m_channelLayout.Count() < m_inputFormat.m_channelLayout.Count() && !normalize))
+  if ((m_format.m_channelLayout.Count() < m_inputFormat.m_channelLayout.Count() && !normalize)) {
     m_normalize = false;
+}
 
   if (m_inputFormat.m_channelLayout != m_format.m_channelLayout ||
       m_inputFormat.m_sampleRate != m_format.m_sampleRate ||
@@ -262,8 +265,9 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
   {
     if (m_changeResampler)
     {
-      if (m_changeResampler)
+      if (m_changeResampler) {
         ChangeResampler();
+}
       return true;
     }
     while(!m_inputSamples.empty())
@@ -281,15 +285,17 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
   else if (m_procSample || !m_freeSamples.empty())
   {
     int free_samples;
-    if (m_procSample)
+    if (m_procSample) {
       free_samples = m_procSample->pkt->max_nb_samples - m_procSample->pkt->nb_samples;
-    else
+    } else {
       free_samples = m_format.m_frames;
+}
 
     bool skipInput = false;
     // avoid that ffmpeg resample buffer grows too large
-    if (!m_resampler->WantsNewSamples(free_samples) && !m_empty)
+    if (!m_resampler->WantsNewSamples(free_samples) && !m_empty) {
       skipInput = true;
+}
 
     bool hasInput = !m_inputSamples.empty();
 
@@ -305,8 +311,9 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
         in = m_inputSamples.front();
         m_inputSamples.pop_front();
       }
-      else
+      else {
         in = nullptr;
+}
 
       int start = m_procSample->pkt->nb_samples *
                   m_procSample->pkt->bytes_per_sample *
@@ -338,10 +345,11 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
       {
         if (!timestamp)
         {
-          if (in->timestamp)
+          if (in->timestamp) {
             m_lastSamplePts = in->timestamp;
-          else
+          } else {
             in->pkt_start_offset = 0;
+}
         }
         else
         {
@@ -379,12 +387,14 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
           m_procSample->Return();
           busy = false;
         }
-        else
-          m_outputSamples.push_back(m_procSample);
+        else {
+          m_outputSamples
+}.push_back(m_procSample);
 
         m_procSample = nullptr;
-        if (m_changeResampler)
+        if (m_changeResampler) {
           ChangeResampler();
+}
       }
       // some methods like encode require completely filled packets
       else if (!m_fillPackets || (m_procSample->pkt->nb_samples == m_procSample->pkt->max_nb_samples))
@@ -393,8 +403,9 @@ bool CActiveAEBufferPoolResample::ResampleBuffers(int64_t timestamp)
         m_procSample = nullptr;
       }
 
-      if (in)
+      if (in) {
         in->Return();
+}
     }
   }
   return busy;
@@ -422,8 +433,9 @@ float CActiveAEBufferPoolResample::GetDelay()
   float delay = 0;
   std::deque<CSampleBuffer*>::iterator itBuf;
 
-  if (m_procSample)
+  if (m_procSample) {
     delay += (float)m_procSample->pkt->nb_samples / m_procSample->pkt->config.sample_rate;
+}
 
   for(itBuf=m_inputSamples.begin(); itBuf!=m_inputSamples.end(); ++itBuf)
   {
@@ -461,8 +473,9 @@ void CActiveAEBufferPoolResample::Flush()
     m_outputSamples.front()->Return();
     m_outputSamples.pop_front();
   }
-  if (m_resampler)
+  if (m_resampler) {
     ChangeResampler();
+}
 }
 
 void CActiveAEBufferPoolResample::SetDrain(bool drain)
@@ -539,8 +552,9 @@ bool CActiveAEBufferPoolAtempo::ProcessBuffers()
   {
     if (m_changeFilter)
     {
-      if (m_changeFilter)
+      if (m_changeFilter) {
         ChangeFilter();
+}
       return true;
     }
     while(!m_inputSamples.empty())
@@ -573,8 +587,9 @@ bool CActiveAEBufferPoolAtempo::ProcessBuffers()
         in = m_inputSamples.front();
         m_inputSamples.pop_front();
       }
-      else
+      else {
         in = nullptr;
+}
 
       int start = m_procSample->pkt->nb_samples *
                   m_procSample->pkt->bytes_per_sample *
@@ -605,10 +620,11 @@ bool CActiveAEBufferPoolAtempo::ProcessBuffers()
 
       if (in)
       {
-        if (in->timestamp)
+        if (in->timestamp) {
           m_lastSamplePts = in->timestamp;
-        else
+        } else {
           in->pkt_start_offset = 0;
+}
 
         // pts of last sample we added to the buffer
         m_lastSamplePts += (in->pkt->nb_samples-in->pkt_start_offset) * 1000 / m_format.m_sampleRate;
@@ -640,8 +656,9 @@ bool CActiveAEBufferPoolAtempo::ProcessBuffers()
           m_procSample->Return();
           busy = false;
         }
-        else
-          m_outputSamples.push_back(m_procSample);
+        else {
+          m_outputSamples
+}.push_back(m_procSample);
 
         m_procSample = nullptr;
 
@@ -657,8 +674,9 @@ bool CActiveAEBufferPoolAtempo::ProcessBuffers()
         m_procSample = nullptr;
       }
 
-      if (in)
+      if (in) {
         in->Return();
+}
     }
   }
   return busy;
@@ -689,8 +707,9 @@ float CActiveAEBufferPoolAtempo::GetDelay()
 {
   float delay = 0;
 
-  if (m_procSample)
+  if (m_procSample) {
     delay += (float)m_procSample->pkt->nb_samples / m_procSample->pkt->config.sample_rate;
+}
 
   for (auto &buf : m_inputSamples)
   {
@@ -713,13 +732,15 @@ float CActiveAEBufferPoolAtempo::GetDelay()
 
 void CActiveAEBufferPoolAtempo::SetTempo(float tempo)
 {
-  if (tempo > 2.0)
+  if (tempo > 2.0) {
     tempo = 2.0;
-  else if (tempo < 0.5)
+  } else if (tempo < 0.5) {
     tempo = 0.5;
+}
 
-  if (tempo != m_tempo)
+  if (tempo != m_tempo) {
     m_changeFilter = true;
+}
 
   m_tempo = tempo;
 }
@@ -737,6 +758,7 @@ void CActiveAEBufferPoolAtempo::FillBuffer()
 void CActiveAEBufferPoolAtempo::SetDrain(bool drain)
 {
   m_drain = drain;
-  if (!m_drain)
+  if (!m_drain) {
     m_changeFilter = true;
+}
 }

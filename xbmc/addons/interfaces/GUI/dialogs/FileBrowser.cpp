@@ -162,8 +162,9 @@ bool Interface_GUIDialogFileBrowser::show_and_get_file_list(void* kodiBase, cons
     for (unsigned int i = 0; i < *entries; ++i)
       (*file_list)[i] = strdup(pathsInt[i].c_str());
   }
-  else
+  else {
     *entries = 0;
+}
   return bRet;
 }
 
@@ -250,8 +251,9 @@ bool Interface_GUIDialogFileBrowser::show_and_get_image_list(void* kodiBase, con
     for (unsigned int i = 0; i < *entries; ++i)
       (*file_list)[i] = strdup(pathsInt[i].c_str());
   }
-  else
+  else {
     *entries = 0;
+}
   return bRet;
 }
 
@@ -266,13 +268,15 @@ void Interface_GUIDialogFileBrowser::clear_file_list(void* kodiBase, char*** fil
 
   if (*file_list)
   {
-    for (unsigned int i = 0; i < entries; ++i)
+    for (unsigned int i = 0; i < entries; ++i) {
       free((*file_list)[i]);
+}
     free(*file_list);
     *file_list = nullptr;
   }
-  else
-    CLog::Log(LOGERROR, "Interface_GUIDialogFileBrowser::%s - invalid handler data (file_list='%p') on addon '%s'", __FUNCTION__, file_list, addon->ID().c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "Interface_GUIDialogFileBrowser::%s - invalid handler data (file_list='%p') on addon '%s'", __FUNCTION__, file_list, addon->ID().c_str());
 }
 
 void Interface_GUIDialogFileBrowser::GetVECShares(VECSOURCES& vecShares, const std::string& strShares, const std::string& strPath)

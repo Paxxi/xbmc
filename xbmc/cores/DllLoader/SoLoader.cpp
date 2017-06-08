@@ -35,14 +35,16 @@ SoLoader::SoLoader(const std::string &so, bool bGlobal) : LibraryLoader(so)
 
 SoLoader::~SoLoader()
 {
-  if (m_bLoaded)
+  if (m_bLoaded) {
     Unload();
+}
 }
 
 bool SoLoader::Load()
 {
-  if (m_soHandle != nullptr)
+  if (m_soHandle != nullptr) {
     return true;
+}
 
   std::string strFileName= CSpecialProtocol::TranslatePath(GetFileName());
   if (strFileName == "xbmc.so")
@@ -79,9 +81,10 @@ void SoLoader::Unload()
     CAndroidDyload temp;
     if (temp.Close(m_soHandle) != 0)
 #else
-    if (dlclose(m_soHandle) != 0)
+    if (dlclose(m_soHandle) != 0) {
 #endif
        CLog::Log(LOGERROR, "Unable to unload %s, reason: %s", GetName(), dlerror());
+}
   }
   m_bLoaded = false;
   m_soHandle = nullptr;
@@ -91,16 +94,18 @@ int SoLoader::ResolveExport(const char* symbol, void** f, bool logging)
 {
   if (!m_bLoaded && !Load())
   {
-    if (logging)
+    if (logging) {
       CLog::Log(LOGWARNING, "Unable to resolve: %s %s, reason: so not loaded", GetName(), symbol);
+}
     return 0;
   }
 
   void* s = dlsym(m_soHandle, symbol);
   if (!s)
   {
-    if (logging)
+    if (logging) {
       CLog::Log(LOGWARNING, "Unable to resolve: %s %s, reason: %s", GetName(), symbol, dlerror());
+}
     return 0;
   }
 

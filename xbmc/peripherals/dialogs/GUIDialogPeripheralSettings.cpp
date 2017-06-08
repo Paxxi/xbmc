@@ -62,11 +62,13 @@ bool CGUIDialogPeripheralSettings::OnMessage(CGUIMessage &message)
 
 void CGUIDialogPeripheralSettings::SetFileItem(const CFileItem *item)
 {
-  if (item == nullptr)
+  if (item == nullptr) {
     return;
+}
 
-  if (m_item != nullptr)
+  if (m_item != nullptr) {
     delete m_item;
+}
 
   m_item = new CFileItem(*item);
 }
@@ -89,8 +91,9 @@ void CGUIDialogPeripheralSettings::OnSettingChanged(std::shared_ptr<const CSetti
 
 void CGUIDialogPeripheralSettings::Save()
 {
-  if (m_item == nullptr || m_initialising)
+  if (m_item == nullptr || m_initialising) {
     return;
+}
 
   PeripheralPtr peripheral = CServiceBroker::GetPeripherals().GetByPath(m_item->GetPath());
   if (!peripheral)
@@ -101,15 +104,17 @@ void CGUIDialogPeripheralSettings::Save()
 
 void CGUIDialogPeripheralSettings::OnResetSettings()
 {
-  if (m_item == nullptr)
+  if (m_item == nullptr) {
     return;
+}
 
   PeripheralPtr peripheral = CServiceBroker::GetPeripherals().GetByPath(m_item->GetPath());
   if (!peripheral)
     return;
 
-  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{10041}, CVariant{10042}))
+  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{10041}, CVariant{10042})) {
     return;
+}
 
   // reset the settings in the peripheral
   peripheral->ResetDefaultSettings();

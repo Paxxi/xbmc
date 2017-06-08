@@ -96,8 +96,9 @@ void CAEBitstreamPacker::Pack(CAEStreamInfo &info, uint8_t* data, int size)
 void CAEBitstreamPacker::PackPause(CAEStreamInfo &info, unsigned int millis, bool iecBursts)
 {
   // re-use last buffer
-  if (m_pauseDuration == millis)
+  if (m_pauseDuration == millis) {
     return;
+}
 
   switch (info.m_type)
   {
@@ -227,8 +228,9 @@ void CAEBitstreamPacker::PackEAC3(CAEStreamInfo &info, uint8_t* data, int size)
   {
     /* multiple frames needed to achieve 6 blocks as required by IEC 61937-3:2007 */
 
-    if (m_eac3 == nullptr)
+    if (m_eac3 == nullptr) {
       m_eac3 = new uint8_t[EAC3_MAX_BURST_PAYLOAD_SIZE];
+}
 
     unsigned int newsize = m_eac3Size + size;
     bool overrun = newsize > EAC3_MAX_BURST_PAYLOAD_SIZE;
@@ -263,10 +265,11 @@ unsigned int CAEBitstreamPacker::GetOutputRate(CAEStreamInfo &info)
     case CAEStreamInfo::STREAM_TYPE_TRUEHD:
       if (info.m_sampleRate == 48000 ||
           info.m_sampleRate == 96000 ||
-          info.m_sampleRate == 192000)
+          info.m_sampleRate == 192000) {
         rate = 192000;
-      else
+      } else {
         rate = 176400;
+}
       break;
     case CAEStreamInfo::STREAM_TYPE_DTS_512:
     case CAEStreamInfo::STREAM_TYPE_DTS_1024:

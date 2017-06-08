@@ -162,12 +162,13 @@ int CPlayerCoreFactory::GetPlayerIndex(const std::string& strCoreName) const
   {
     // Dereference "*default*player" aliases
     std::string strRealCoreName;
-    if (StringUtils::EqualsNoCase(strCoreName, "audiodefaultplayer"))
+    if (StringUtils::EqualsNoCase(strCoreName, "audiodefaultplayer")) {
       strRealCoreName = g_advancedSettings.m_audioDefaultPlayer;
-    else if (StringUtils::EqualsNoCase(strCoreName, "videodefaultplayer"))
+    } else if (StringUtils::EqualsNoCase(strCoreName, "videodefaultplayer")) {
       strRealCoreName = g_advancedSettings.m_videoDefaultPlayer;
-    else
+    } else {
       strRealCoreName = strCoreName;
+}
 
     for(size_t i = 0; i < m_vecPlayerConfigs.size(); i++)
     {

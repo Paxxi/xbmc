@@ -52,8 +52,9 @@ bool CDbUrl::FromString(const std::string &dbUrl)
   m_url.Parse(dbUrl);
   m_valid = parse();
 
-  if (!m_valid)
+  if (!m_valid) {
     Reset();
+}
 
   return m_valid;
 }
@@ -68,8 +69,9 @@ void CDbUrl::AppendPath(const std::string &subPath)
 
 void CDbUrl::AddOption(const std::string &key, const char *value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();
@@ -77,8 +79,9 @@ void CDbUrl::AddOption(const std::string &key, const char *value)
 
 void CDbUrl::AddOption(const std::string &key, const std::string &value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();
@@ -86,8 +89,9 @@ void CDbUrl::AddOption(const std::string &key, const std::string &value)
 
 void CDbUrl::AddOption(const std::string &key, int value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();
@@ -95,8 +99,9 @@ void CDbUrl::AddOption(const std::string &key, int value)
 
 void CDbUrl::AddOption(const std::string &key, float value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();
@@ -104,8 +109,9 @@ void CDbUrl::AddOption(const std::string &key, float value)
 
 void CDbUrl::AddOption(const std::string &key, double value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();
@@ -113,8 +119,9 @@ void CDbUrl::AddOption(const std::string &key, double value)
 
 void CDbUrl::AddOption(const std::string &key, bool value)
 {
-  if (!validateOption(key, value))
+  if (!validateOption(key, value)) {
     return;
+}
   
   CUrlOptions::AddOption(key, value);
   updateOptions();

@@ -62,8 +62,9 @@ static const char *get_mountpoint(const char *devnode)
         c2 += 4;
         continue;
       }
-      if (c1 != c2)
+      if (c1 != c2) {
         *c1 = *c2;
+}
       ++c2;
     }
     *c1 = *c2;
@@ -127,8 +128,9 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
     const char *name = udev_list_entry_get_name(u_list_ent);
     struct udev *context = udev_enumerate_get_udev(u_enum);
     struct udev_device *device = udev_device_new_from_syspath(context, name);
-    if (device == nullptr)
+    if (device == nullptr) {
       continue;
+}
 
     // filter out devices that are not mounted
     const char *mountpoint = get_mountpoint(udev_device_get_devnode(device));
@@ -179,13 +181,15 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
     share.m_ignore = true;
     if (isRemovable)
     {
-      if (optical)
+      if (optical) {
         share.m_iDriveType = CMediaSource::SOURCE_TYPE_DVD;
-      else
+      } else {
         share.m_iDriveType = CMediaSource::SOURCE_TYPE_REMOVABLE;
+}
     }
-    else
+    else {
       share.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
+}
 
     disks.push_back(share);
     udev_device_unref(device);
@@ -210,8 +214,9 @@ bool CUDevProvider::Eject(const std::string& mountpath)
   std::string cmd = "umount \"" + mountpath + "\"";
   int status = system(cmd.c_str());
 
-  if (status == 0)
+  if (status == 0) {
     return true;
+}
 
   return false;
 }
@@ -233,14 +238,16 @@ bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
   // non-blocking, check the file descriptor for received data
   struct timeval tv = {0};
   int count = select(udev_monitor_get_fd(m_udevMon) + 1, &readfds, nullptr, nullptr, &tv);
-  if (count < 0)
+  if (count < 0) {
     return false;
+}
 
   if (FD_ISSET(udev_monitor_get_fd(m_udevMon), &readfds))
   {
 		struct udev_device *dev = udev_monitor_receive_device(m_udevMon);
-    if (!dev)
+    if (!dev) {
       return false;
+}
 
     const char *action  = udev_device_get_action(dev);
     if (action)

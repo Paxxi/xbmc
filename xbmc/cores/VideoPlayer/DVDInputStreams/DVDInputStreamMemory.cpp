@@ -34,8 +34,9 @@ CDVDInputStreamMemory::~CDVDInputStreamMemory()
 
 bool CDVDInputStreamMemory::IsEOF()
 {
-  if(m_iDataPos >= m_iDataSize)
+  if(m_iDataPos >= m_iDataSize) {
     return true;
+}
 
   return false;
 }
@@ -80,8 +81,9 @@ int64_t CDVDInputStreamMemory::Seek(int64_t offset, int whence)
   {
     case SEEK_CUR:
     {
-      if ((m_iDataPos + offset) > m_iDataSize) return -1;
-      else m_iDataPos += (int)offset;
+      if ((m_iDataPos + offset) > m_iDataSize) { return -1;
+      } else { m_iDataPos += (int)offset;
+}
       break;
     }
     case SEEK_END:
@@ -91,8 +93,9 @@ int64_t CDVDInputStreamMemory::Seek(int64_t offset, int whence)
     }
     case SEEK_SET:
     {
-      if (offset > m_iDataSize || offset < 0) return -1;
-      else m_iDataPos = (int)offset;
+      if (offset > m_iDataSize || offset < 0) { return -1;
+      } else { m_iDataPos = (int)offset;
+}
       break;
     }
     default:

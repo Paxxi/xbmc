@@ -124,8 +124,9 @@ EmuFileObject* CEmuFileWrapper::RegisterFileObject(XFILE::CFile* pFile)
 void CEmuFileWrapper::UnRegisterFileObjectByDescriptor(int fd)
 {
   int i = fd - FILE_WRAPPER_OFFSET;
-  if (! (i >= 0 && i < MAX_EMULATED_FILES))
+  if (! (i >= 0 && i < MAX_EMULATED_FILES)) {
     return;
+}
 
   if (!m_files[i].used)
     return;

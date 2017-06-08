@@ -79,8 +79,9 @@ CAddonDll::~CAddonDll()
 
 bool CAddonDll::LoadDll()
 {
-  if (m_pDll)
+  if (m_pDll) {
     return true;
+}
 
   std::string strFileName;
   std::string strAltFileName;
@@ -188,24 +189,28 @@ ADDON_STATUS CAddonDll::Create(ADDON_TYPE type, void* funcTable, void* info)
   /* ensure that a previous instance is destroyed */
   Destroy();
 
-  if (!funcTable)
+  if (!funcTable) {
     return ADDON_STATUS_PERMANENT_FAILURE;
+}
 
   CLog::Log(LOGDEBUG, "ADDON: Dll Initializing - %s", Name().c_str());
   m_initialized = false;
 
-  if (!LoadDll())
+  if (!LoadDll()) {
     return ADDON_STATUS_PERMANENT_FAILURE;
+}
 
   /* Check requested instance version on add-on */
-  if (!CheckAPIVersion(type))
+  if (!CheckAPIVersion(type)) {
     return ADDON_STATUS_PERMANENT_FAILURE;
+}
 
   /* Check versions about global parts on add-on (parts used on all types) */
   for (unsigned int id = ADDON_GLOBAL_MAIN; id <= ADDON_GLOBAL_MAX; ++id)
   {
-    if (!CheckAPIVersion(id))
+    if (!CheckAPIVersion(id)) {
       return ADDON_STATUS_PERMANENT_FAILURE;
+}
   }
 
   /* Load add-on function table (written by add-on itself) */
@@ -226,10 +231,11 @@ ADDON_STATUS CAddonDll::Create(ADDON_TYPE type, void* funcTable, void* info)
   {
     m_needsavedsettings = (status == ADDON_STATUS_NEED_SAVEDSETTINGS) ? true : false;
     status = TransferSettings();
-    if (status == ADDON_STATUS_OK)
+    if (status == ADDON_STATUS_OK) {
       m_initialized = true;
-    else
-      new CAddonStatusHandler(ID(), status, "", false);
+    } else {
+      new 
+}CAddonStatusHandler(ID(), status, "", false);
   }
   else
   { // Addon failed initialization
@@ -262,14 +268,16 @@ ADDON_STATUS CAddonDll::Create(KODI_HANDLE firstKodiInstance)
   /* Check versions about global parts on add-on (parts used on all types) */
   for (unsigned int id = ADDON_GLOBAL_MAIN; id <= ADDON_GLOBAL_MAX; ++id)
   {
-    if (!CheckAPIVersion(id))
+    if (!CheckAPIVersion(id)) {
       return ADDON_STATUS_PERMANENT_FAILURE;
+}
   }
 
   /* Allocate the helper function class to allow crosstalk over
      helper add-on headers */
-  if (!InitInterface(firstKodiInstance))
+  if (!InitInterface(firstKodiInstance)) {
     return ADDON_STATUS_PERMANENT_FAILURE;
+}
 
   /* Call Create to make connections, initializing data or whatever is
      needed to become the AddOn running */
@@ -281,10 +289,11 @@ ADDON_STATUS CAddonDll::Create(KODI_HANDLE firstKodiInstance)
   else if ((status == ADDON_STATUS_NEED_SETTINGS) || (status == ADDON_STATUS_NEED_SAVEDSETTINGS))
   {
     m_needsavedsettings = (status == ADDON_STATUS_NEED_SAVEDSETTINGS);
-    if ((status = TransferSettings()) == ADDON_STATUS_OK)
+    if ((status = TransferSettings()) == ADDON_STATUS_OK) {
       m_initialized = true;
-    else
-      new CAddonStatusHandler(ID(), status, "", false);
+    } else {
+      new 
+}CAddonStatusHandler(ID(), status, "", false);
   }
   else
   { // Addon failed initialization
@@ -322,8 +331,9 @@ void CAddonDll::Destroy()
         sprintf (str_value, "%i", i);
         ADDON_STATUS status = m_pDll->SetSetting((const char*)&str_id, (void*)&str_value);
 
-        if (status == ADDON_STATUS_UNKNOWN)
+        if (status == ADDON_STATUS_UNKNOWN) {
           break;
+}
 
         if (strcmp(str_id,"###End") != 0) UpdateSetting(str_id, str_value);
       }
@@ -353,14 +363,17 @@ ADDON_STATUS CAddonDll::CreateInstance(ADDON_TYPE instanceType, const std::strin
 {
   ADDON_STATUS status = ADDON_STATUS_OK;
 
-  if (!m_initialized)
+  if (!m_initialized) {
     status = Create(instance);
-  if (status != ADDON_STATUS_OK)
+}
+  if (status != ADDON_STATUS_OK) {
     return status;
+}
 
   /* Check version of requested instance type */
-  if (!CheckAPIVersion(instanceType))
+  if (!CheckAPIVersion(instanceType)) {
     return ADDON_STATUS_PERMANENT_FAILURE;
+}
 
   KODI_HANDLE addonInstance;
   status = m_interface.toAddon->create_instance(instanceType, instanceID.c_str(), instance, &addonInstance, parentInstance);
@@ -399,8 +412,9 @@ void CAddonDll::SaveSettings()
 {
   // must save first, as TransferSettings() reloads saved settings!
   CAddon::SaveSettings();
-  if (m_initialized)
+  if (m_initialized) {
     TransferSettings();
+}
 }
 
 std::string CAddonDll::GetSetting(const std::string& key)
@@ -567,12 +581,15 @@ void CAddonDll::DeInitInterface()
   Interface_AudioEngine::DeInit(&m_interface);
   Interface_General::DeInit(&m_interface);
 
-  if (m_interface.libBasePath)
+  if (m_interface.libBasePath) {
     free((char*)m_interface.libBasePath);
-  if (m_interface.toKodi)
+}
+  if (m_interface.toKodi) {
     free((char*)m_interface.toKodi);
-  if (m_interface.toAddon)
+}
+  if (m_interface.toAddon) {
     free((char*)m_interface.toAddon);
+}
   m_interface = {nullptr};
 }
 
@@ -730,8 +747,9 @@ bool CAddonDll::set_setting(void* kodiBase, const char* settingName, const char*
 
 void CAddonDll::free_string(void* kodiBase, char* str)
 {
-  if (str)
+  if (str) {
     free(str);
+}
 }
 
 //@}

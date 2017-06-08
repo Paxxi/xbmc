@@ -128,18 +128,19 @@ bool InfoExpression::InfoAssociativeGroup::Evaluate(const CGUIListItem *item)
 
 InfoExpression::operator_t InfoExpression::GetOperator(char ch)
 {
-  if (ch == '[')
+  if (ch == '[') {
     return OPERATOR_LB;
-  else if (ch == ']')
+  } else if (ch == ']') {
     return OPERATOR_RB;
-  else if (ch == '!')
+  } else if (ch == '!') {
     return OPERATOR_NOT;
-  else if (ch == '+')
+  } else if (ch == '+') {
     return OPERATOR_AND;
-  else if (ch == '|')
+  } else if (ch == '|') {
     return OPERATOR_OR;
-  else
+  } else {
     return OPERATOR_NONE;
+}
 }
 
 void InfoExpression::OperatorPop(std::stack<operator_t> &operator_stack, bool &invert, std::stack<InfoSubexpressionPtr> &nodes)
@@ -233,9 +234,9 @@ bool InfoExpression::Parse(const std::string &expression)
         CLog::Log(LOGERROR, "Misplaced %c", c);
         return false;
       }
-      if (c == '[')
+      if (c == '[') {
         bracket_count++;
-      else if (c == ']' && bracket_count-- == 0)
+      } else if (c == ']' && bracket_count-- == 0)
       {
         CLog::Log(LOGERROR, "Unmatched ]");
         return false;
@@ -266,11 +267,13 @@ bool InfoExpression::Parse(const std::string &expression)
         operator_stack.pop(); // remove the matching left-bracket
       else
         operator_stack.push(op);
-      if (op == OPERATOR_NOT)
+      if (op == OPERATOR_NOT) {
         invert = !invert;
+}
 
-      if (c == '+' || c == '|')
+      if (c == '+' || c == '|') {
         after_binaryoperator = true;
+}
       // Skip trailing whitespace - don't want it to count as an operand if that's all there is
       while (isspace((unsigned char)(c=*s))) s++;
     }

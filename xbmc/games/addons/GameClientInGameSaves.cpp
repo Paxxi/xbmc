@@ -59,8 +59,9 @@ void CGameClientInGameSaves::Save()
 std::string CGameClientInGameSaves::GetPath(GAME_MEMORY memoryType)
 {
   std::string path = URIUtils::AddFileToFolder(CProfilesManager::GetInstance().GetSavestatesFolder(), INGAME_SAVES_DIRECTORY);
-  if (!XFILE::CDirectory::Exists(path))
+  if (!XFILE::CDirectory::Exists(path)) {
     XFILE::CDirectory::Create(path);
+}
 
   // Append save game filename
   std::string gamePath = URIUtils::GetFileName(m_gameClient->GetGamePath());

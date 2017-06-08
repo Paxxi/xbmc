@@ -142,8 +142,9 @@ static int PlayerControl(const std::vector<std::string>& params)
     if (g_application.m_pPlayer->IsPlaying() && !g_application.m_pPlayer->IsPaused())
     {
       float playSpeed = g_application.m_pPlayer->GetPlaySpeed();
-      if (playSpeed >= 0.75 && playSpeed <= 1.55)
+      if (playSpeed >= 0.75 && playSpeed <= 1.55) {
         playSpeed = 1;
+}
 
       if (paramlow == "rewind" && playSpeed == 1) // Enables Rewinding
         playSpeed *= -2;
@@ -152,14 +153,16 @@ static int PlayerControl(const std::vector<std::string>& params)
       else if (paramlow == "forward" && playSpeed < 1) //goes up a notch if you're RWing
       {
         playSpeed /= 2;
-        if (playSpeed == -1)
+        if (playSpeed == -1) {
           playSpeed = 1;
+}
       }
       else
         playSpeed *= 2;
 
-      if (playSpeed > 32 || playSpeed < -32)
+      if (playSpeed > 32 || playSpeed < -32) {
         playSpeed = 1;
+}
 
       g_application.m_pPlayer->SetPlaySpeed(playSpeed);
     }
@@ -223,9 +226,10 @@ static int PlayerControl(const std::vector<std::string>& params)
       offset = params[0].substr(15);
       StringUtils::TrimRight(offset, ")");
       float offsetpercent = (float) atof(offset.c_str());
-      if (offsetpercent < 0 || offsetpercent > 100)
+      if (offsetpercent < 0 || offsetpercent > 100) {
         CLog::Log(LOGERROR,"PlayerControl(seekpercentage(n)) argument, %f, must be 0-100", offsetpercent);
-      else if (g_application.m_pPlayer->IsPlaying())
+      } else { if 
+}(g_application.m_pPlayer->IsPlaying())
         g_application.SeekPercentage(offsetpercent);
     }
   }
@@ -255,10 +259,11 @@ static int PlayerControl(const std::vector<std::string>& params)
         context = PARTYMODECONTEXT_UNKNOWN;
       }
     }
-    if (g_partyModeManager.IsEnabled())
+    if (g_partyModeManager.IsEnabled()) {
       g_partyModeManager.Disable();
-    else
-      g_partyModeManager.Enable(context, strXspPath);
+    } else {
+      g_partyModeManager
+}.Enable(context, strXspPath);
   }
   else if (paramlow == "random" || paramlow == "randomoff" || paramlow == "randomon")
   {
@@ -308,15 +313,17 @@ static int PlayerControl(const std::vector<std::string>& params)
       state = PLAYLIST::REPEAT_ONE;
     else if (paramlow == "repeatoff")
       state = PLAYLIST::REPEAT_NONE;
-    else if (previous_state == PLAYLIST::REPEAT_NONE)
+    else if (previous_state == PLAYLIST::REPEAT_NONE) {
       state = PLAYLIST::REPEAT_ALL;
-    else if (previous_state == PLAYLIST::REPEAT_ALL)
+    } else if (previous_state == PLAYLIST::REPEAT_ALL) {
       state = PLAYLIST::REPEAT_ONE;
-    else
+    } else {
       state = PLAYLIST::REPEAT_NONE;
+}
 
-    if (state == previous_state)
+    if (state == previous_state) {
       return 0;
+}
 
     // check to see if we should notify the user
     bool notify = (params.size() == 2 && StringUtils::EqualsNoCase(params[1], "notify"));
@@ -429,8 +436,9 @@ static int PlayMedia(const std::vector<std::string>& params)
 
   if ( askToResume == true )
   {
-    if ( CGUIWindowVideoBase::ShowResumeMenu(item) == false )
+    if ( CGUIWindowVideoBase::ShowResumeMenu(item) == false ) {
       return false;
+}
   }
   if (item.m_bIsFolder)
   {
@@ -445,8 +453,9 @@ static int PlayMedia(const std::vector<std::string>& params)
       containsMusic |= !isVideo;
       containsVideo |= isVideo;
 
-      if (containsMusic && containsVideo)
+      if (containsMusic && containsVideo) {
         break;
+}
     }
 
     std::unique_ptr<CGUIViewState> state(CGUIViewState::GetViewState(containsVideo ? WINDOW_VIDEO_NAV : WINDOW_MUSIC_NAV, items));

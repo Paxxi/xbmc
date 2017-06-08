@@ -72,8 +72,9 @@ void CProfile::setDate()
 
 void CProfile::Load(const TiXmlNode *node, int nextIdProfile)
 {
-  if (!XMLUtils::GetInt(node, "id", m_id))
+  if (!XMLUtils::GetInt(node, "id", m_id)) {
     m_id = nextIdProfile; 
+}
 
   XMLUtils::GetString(node, "name", m_name);
   XMLUtils::GetPath(node, "directory", m_directory);

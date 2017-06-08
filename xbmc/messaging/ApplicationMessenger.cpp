@@ -129,8 +129,9 @@ int CApplicationMessenger::SendMsg(ThreadMessage&& message, bool wait)
   }
 
 
-  if (m_bStop)
+  if (m_bStop) {
     return -1;
+}
 
   ThreadMessage* msg = new ThreadMessage(std::move(message));
   

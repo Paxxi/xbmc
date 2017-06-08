@@ -100,9 +100,10 @@ CRepository::CRepository(CAddonInfo addonInfo, DirList dirs)
 bool CRepository::GetAddonHash(const AddonPtr& addon, std::string& checksum) const
 {
   DirList::const_iterator it;
-  for (it = m_dirs.begin();it != m_dirs.end(); ++it)
+  for (it = m_dirs.begin();it != m_dirs.end(); ++it) {
     if (URIUtils::PathHasParent(addon->Path(), it->datadir, true))
       break;
+}
 
   if (it != m_dirs.end())
   {
@@ -127,8 +128,9 @@ bool CRepository::GetAddonHash(const AddonPtr& addon, std::string& checksum) con
 bool CRepository::FetchChecksum(const std::string& url, std::string& checksum) noexcept
 {
   CFile file;
-  if (!file.Open(url))
+  if (!file.Open(url)) {
     return false;
+}
 
   // we intentionally avoid using file.GetLength() for
   // Transfer-Encoding: chunked servers.
@@ -137,8 +139,9 @@ bool CRepository::FetchChecksum(const std::string& url, std::string& checksum) n
   int read;
   while ((read = file.Read(temp, sizeof(temp))) > 0)
     ss.write(temp, read);
-  if (read <= -1)
+  if (read <= -1) {
     return false;
+}
   checksum = ss.str();
   return true;
 }

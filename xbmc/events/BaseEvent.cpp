@@ -102,10 +102,12 @@ std::string CBaseEvent::VariantToLocalizedString(const CVariant& variant)
   if (variant.isString())
     return variant.asString();
 
-  if (variant.isInteger() && variant.asInteger() > 0)
+  if (variant.isInteger() && variant.asInteger() > 0) {
     return g_localizeStrings.Get(static_cast<uint32_t>(variant.asInteger()));
-  if (variant.isUnsignedInteger() && variant.asUnsignedInteger() > 0)
+}
+  if (variant.isUnsignedInteger() && variant.asUnsignedInteger() > 0) {
     return g_localizeStrings.Get(static_cast<uint32_t>(variant.asUnsignedInteger()));
+}
 
   return "";
 }

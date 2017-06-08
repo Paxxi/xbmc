@@ -124,8 +124,9 @@ static uint32_t nal_bs_read(nal_bitstream *bs, int n)
   uint32_t res = 0;
   int shift;
 
-  if (n == 0)
+  if (n == 0) {
     return res;
+}
 
   // fill up the cache if we need to
   while (bs->head < n)
@@ -156,14 +157,16 @@ next_byte:
   }
 
   // bring the required bits down and truncate
-  if ((shift = bs->head - n) > 0)
+  if ((shift = bs->head - n) > 0) {
     res = static_cast<uint32_t>(bs->cache >> shift);
-  else
+  } else {
     res = static_cast<uint32_t>(bs->cache);
+}
 
   // mask out required bits
-  if (n < 32)
+  if (n < 32) {
     res &= (1 << n) - 1;
+}
   bs->head = shift;
 
   return res;
@@ -179,8 +182,9 @@ static int nal_bs_read_ue(nal_bitstream *bs)
 {
   int i = 0;
 
-  while (nal_bs_read(bs, 1) == 0 && !nal_bs_eos(bs) && i < 31)
+  while (nal_bs_read(bs, 1) == 0 && !nal_bs_eos(bs) && i < 31) {
     i++;
+}
 
   return ((1 << i) - 1 + nal_bs_read(bs, i));
 }
@@ -191,8 +195,9 @@ static const uint8_t* avc_find_startcode_internal(const uint8_t *p, const uint8_
 
   for (end -= 3; p < a && p < end; p++)
   {
-    if (p[0] == 0 && p[1] == 0 && p[2] == 1)
+    if (p[0] == 0 && p[1] == 0 && p[2] == 1) {
       return p;
+}
   }
 
   for (end -= 3; p < end; p += 4)
@@ -202,25 +207,30 @@ static const uint8_t* avc_find_startcode_internal(const uint8_t *p, const uint8_
     {
       if (p[1] == 0)
       {
-        if (p[0] == 0 && p[2] == 1)
+        if (p[0] == 0 && p[2] == 1) {
           return p;
-        if (p[2] == 0 && p[3] == 1)
+}
+        if (p[2] == 0 && p[3] == 1) {
           return p+1;
+}
       }
       if (p[3] == 0)
       {
-        if (p[2] == 0 && p[4] == 1)
+        if (p[2] == 0 && p[4] == 1) {
           return p+2;
-        if (p[4] == 0 && p[5] == 1)
+}
+        if (p[4] == 0 && p[5] == 1) {
           return p+3;
+}
       }
     }
   }
 
   for (end += 3; p < end; p++)
   {
-    if (p[0] == 0 && p[1] == 0 && p[2] == 1)
+    if (p[0] == 0 && p[1] == 0 && p[2] == 1) {
       return p;
+}
   }
 
   return end + 3;
@@ -229,8 +239,9 @@ static const uint8_t* avc_find_startcode_internal(const uint8_t *p, const uint8_
 static const uint8_t* avc_find_startcode(const uint8_t *p, const uint8_t *end)
 {
   const uint8_t *out = avc_find_startcode_internal(p, end);
-  if (p<out && out<end && !out[-1])
+  if (p<out && out<end && !out[-1]) {
     out--;
+}
   return out;
 }
 
@@ -276,8 +287,9 @@ void CBitstreamParser::Close()
 
 bool CBitstreamParser::CanStartDecode(const uint8_t *buf, int buf_size)
 {
-  if (!buf)
+  if (!buf) {
     return false;
+}
 
   bool rtn = false;
   uint32_t state = -1;
@@ -301,8 +313,9 @@ bool CBitstreamParser::CanStartDecode(const uint8_t *buf, int buf_size)
     case AVC_NAL_SEI:
       buf_begin = buf - 1;
       buf = find_start_code(buf, buf_end, &state) - 4;
-      if (has_sei_recovery_point(buf_begin, buf))
+      if (has_sei_recovery_point(buf_begin, buf)) {
         rtn = true;
+}
       break;
     case AVC_NAL_SPS:
       rtn = true;
@@ -365,8 +378,9 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
           m_convert_bitstream = BitstreamConvertInitAVC(m_extradata, m_extrasize);
           return true;
         }
-        else
+        else {
           CLog::Log(LOGINFO, "CBitstreamConverter::Open Invalid avcC");
+}
       }
       else
       {
@@ -380,8 +394,9 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
             // video content is from x264 or from bytestream h264 (AnnexB format)
             // NAL reformating to bitstream format needed
             AVIOContext *pb;
-            if (avio_open_dyn_buf(&pb) < 0)
+            if (avio_open_dyn_buf(&pb) < 0) {
               return false;
+}
             m_convert_bytestream = true;
             // create a valid avcC atom data from ffmpeg's extradata
             isom_write_avcc(pb, in_extradata, in_extrasize);
@@ -452,8 +467,9 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
           m_convert_bitstream = BitstreamConvertInitHEVC(m_extradata, m_extrasize);
           return true;
         }
-        else
+        else {
           CLog::Log(LOGINFO, "CBitstreamConverter::Open Invalid hvcC");
+}
       }
       else
       {
@@ -501,15 +517,18 @@ bool CBitstreamConverter::Open(enum AVCodecID codec, uint8_t *in_extradata, int 
 
 void CBitstreamConverter::Close()
 {
-  if (m_sps_pps_context.sps_pps_data)
+  if (m_sps_pps_context.sps_pps_data) {
     av_free(m_sps_pps_context.sps_pps_data), m_sps_pps_context.sps_pps_data = nullptr;
+}
 
-  if (m_convertBuffer)
+  if (m_convertBuffer) {
     av_free(m_convertBuffer), m_convertBuffer = nullptr;
+}
   m_convertSize = 0;
 
-  if (m_extradata)
+  if (m_extradata) {
     av_free(m_extradata), m_extradata = nullptr;
+}
   m_extrasize = 0;
 
   m_inputSize = 0;
@@ -604,8 +623,9 @@ bool CBitstreamConverter::Convert(uint8_t *pData, int iSize)
 
           // convert demuxer packet from 3 byte NAL sizes to 4 byte
           AVIOContext *pb;
-          if (avio_open_dyn_buf(&pb) < 0)
+          if (avio_open_dyn_buf(&pb) < 0) {
             return false;
+}
 
           uint32_t nal_size;
           uint8_t *end = pData + iSize;
@@ -632,33 +652,37 @@ bool CBitstreamConverter::Convert(uint8_t *pData, int iSize)
 
 uint8_t *CBitstreamConverter::GetConvertBuffer() const
 {
-  if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr)
+  if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr) {
     return m_convertBuffer;
-  else
+  } else {
     return m_inputBuffer;
+}
 }
 
 int CBitstreamConverter::GetConvertSize() const
 {
-  if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr)
+  if((m_convert_bitstream || m_convert_bytestream || m_convert_3byteTo4byteNALSize) && m_convertBuffer != nullptr) {
     return m_convertSize;
-  else
+  } else {
     return m_inputSize;
+}
 }
 
 uint8_t *CBitstreamConverter::GetExtraData() const
 {
-  if(m_convert_bitstream)
+  if(m_convert_bitstream) {
     return m_sps_pps_context.sps_pps_data;
-  else
+  } else {
     return m_extradata;
+}
 }
 int CBitstreamConverter::GetExtraSize() const
 {
-  if(m_convert_bitstream)
+  if(m_convert_bitstream) {
     return m_sps_pps_context.size;
-  else
+  } else {
     return m_extrasize;
+}
 }
 
 void CBitstreamConverter::ResetStartDecode()
@@ -681,8 +705,9 @@ bool CBitstreamConverter::BitstreamConvertInitAVC(void *in_extradata, int in_ext
   m_sps_pps_context.sps_pps_data = nullptr;
 
   // nothing to filter
-  if (!in_extradata || in_extrasize < 6)
+  if (!in_extradata || in_extrasize < 6) {
     return false;
+}
 
   uint16_t unit_size;
   uint32_t total_size = 0;
@@ -732,18 +757,22 @@ pps:
     if (!unit_nb && !sps_done++)
     {
       unit_nb = *extradata++;   // number of pps unit(s)
-      if (unit_nb)
+      if (unit_nb) {
         pps_seen = 1;
+}
     }
   }
 
-  if (out)
+  if (out) {
     memset(out + total_size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+}
 
-  if (!sps_seen)
+  if (!sps_seen) {
       CLog::Log(LOGDEBUG, "SPS NALU missing or invalid. The resulting stream may not play");
-  if (!pps_seen)
+}
+  if (!pps_seen) {
       CLog::Log(LOGDEBUG, "PPS NALU missing or invalid. The resulting stream may not play");
+}
 
   m_sps_pps_context.sps_pps_data = out;
   m_sps_pps_context.size = total_size;
@@ -759,8 +788,9 @@ bool CBitstreamConverter::BitstreamConvertInitHEVC(void *in_extradata, int in_ex
   m_sps_pps_context.sps_pps_data = nullptr;
 
   // nothing to filter
-  if (!in_extradata || in_extrasize < 23)
+  if (!in_extradata || in_extrasize < 23) {
     return false;
+}
 
   uint16_t unit_nb, unit_size;
   uint32_t total_size = 0;
@@ -820,13 +850,16 @@ bool CBitstreamConverter::BitstreamConvertInitHEVC(void *in_extradata, int in_ex
     }
   }
 
-  if (out)
+  if (out) {
     memset(out + total_size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+}
 
-  if (!sps_seen)
+  if (!sps_seen) {
       CLog::Log(LOGDEBUG, "SPS NALU missing or invalid. The resulting stream may not play");
-  if (!pps_seen)
+}
+  if (!pps_seen) {
       CLog::Log(LOGDEBUG, "PPS NALU missing or invalid. The resulting stream may not play");
+}
 
   m_sps_pps_context.sps_pps_data = out;
   m_sps_pps_context.size = total_size;
@@ -908,11 +941,13 @@ bool CBitstreamConverter::BitstreamConvert(uint8_t* pData, int iSize, uint8_t **
 
   do
   {
-    if (buf + m_sps_pps_context.length_size > buf_end)
+    if (buf + m_sps_pps_context.length_size > buf_end) {
       goto fail;
+}
 
-    for (nal_size = 0, i = 0; i < m_sps_pps_context.length_size; i++)
+    for (nal_size = 0, i = 0; i < m_sps_pps_context.length_size; i++) {
       nal_size = (nal_size << 8) | buf[i];
+}
 
     buf += m_sps_pps_context.length_size;
     if (m_codec == AV_CODEC_ID_H264)
@@ -924,15 +959,18 @@ bool CBitstreamConverter::BitstreamConvert(uint8_t* pData, int iSize, uint8_t **
         unit_type = (*buf >> 1) & 0x3f;
     }
 
-    if (buf + nal_size > buf_end || nal_size <= 0)
+    if (buf + nal_size > buf_end || nal_size <= 0) {
       goto fail;
+}
 
     // Don't add sps/pps if the unit already contain them
-    if (m_sps_pps_context.first_idr && (unit_type == nal_sps || unit_type == nal_pps))
+    if (m_sps_pps_context.first_idr && (unit_type == nal_sps || unit_type == nal_pps)) {
       m_sps_pps_context.idr_sps_pps_seen = 1;
+}
 
-    if (!m_start_decode && (unit_type == nal_sps || IsIDR(unit_type) || (unit_type == nal_sei && has_sei_recovery_point(buf, buf + nal_size))))
+    if (!m_start_decode && (unit_type == nal_sps || IsIDR(unit_type) || (unit_type == nal_sei && has_sei_recovery_point(buf, buf + nal_size)))) {
       m_start_decode = true;
+}
 
     // prepend only to the first access unit of an IDR picture, if no sps/pps already present
     if (m_sps_pps_context.first_idr && IsIDR(unit_type) && !m_sps_pps_context.idr_sps_pps_seen)
@@ -976,11 +1014,13 @@ void CBitstreamConverter::BitstreamAllocAndCopy( uint8_t **poutbuf, int *poutbuf
 
   *poutbuf_size += sps_pps_size + in_size + nal_header_size;
   tmp = av_realloc(*poutbuf, *poutbuf_size);
-  if (!tmp)
+  if (!tmp) {
     return;
+}
   *poutbuf = (uint8_t*)tmp;
-  if (sps_pps)
+  if (sps_pps) {
     memcpy(*poutbuf + offset, sps_pps, sps_pps_size);
+}
 
   memcpy(*poutbuf + sps_pps_size + nal_header_size + offset, in, in_size);
   if (!offset)
@@ -1006,8 +1046,9 @@ const int CBitstreamConverter::avc_parse_nal_units(AVIOContext *pb, const uint8_
 
   for (;;) {
     while (nal_start < end && !*(nal_start++));
-    if (nal_start == end)
+    if (nal_start == end) {
       break;
+}
 
     nal_end = avc_find_startcode(nal_start, end);
     avio_wb32(pb, nal_end - nal_start);
@@ -1022,8 +1063,9 @@ const int CBitstreamConverter::avc_parse_nal_units_buf(const uint8_t *buf_in, ui
 {
   AVIOContext *pb;
   int ret = avio_open_dyn_buf(&pb);
-  if (ret < 0)
+  if (ret < 0) {
     return ret;
+}
 
   avc_parse_nal_units(pb, buf_in, *size);
 
@@ -1045,8 +1087,9 @@ const int CBitstreamConverter::isom_write_avcc(AVIOContext *pb, const uint8_t *d
       uint8_t *sps=nullptr, *pps=nullptr;
 
       int ret = avc_parse_nal_units_buf(data, &buf, &len);
-      if (ret < 0)
+      if (ret < 0) {
         return ret;
+}
       start = buf;
       end = buf + len;
 
@@ -1070,8 +1113,9 @@ const int CBitstreamConverter::isom_write_avcc(AVIOContext *pb, const uint8_t *d
         }
         buf += size;
       }
-      if (!sps || !pps || sps_size < 4 || sps_size > UINT16_MAX || pps_size > UINT16_MAX)
+      if (!sps || !pps || sps_size < 4 || sps_size > UINT16_MAX || pps_size > UINT16_MAX) {
         assert(0);
+}
 
       avio_w8(pb, 1); /* version */
       avio_w8(pb, sps[1]); /* profile */
@@ -1106,8 +1150,9 @@ bool CBitstreamConverter::mpeg2_sequence_header(const uint8_t *data, const uint3
   // and return the width, height, aspect ratio and frame rate if changed.
   bool changed = false;
 
-  if (!data)
+  if (!data) {
     return changed;
+}
 
   const uint8_t *p = data;
   const uint8_t *end = p + size;
@@ -1251,8 +1296,9 @@ void CBitstreamConverter::parseh264_sps(const uint8_t *sps, const uint32_t sps_s
       sps_info.profile_idc == 86)
   {
     sps_info.chroma_format_idc                    = nal_bs_read_ue(&bs);
-    if (sps_info.chroma_format_idc == 3)
+    if (sps_info.chroma_format_idc == 3) {
       sps_info.separate_colour_plane_flag         = nal_bs_read(&bs, 1);
+}
     sps_info.bit_depth_luma_minus8                = nal_bs_read_ue(&bs);
     sps_info.bit_depth_chroma_minus8              = nal_bs_read_ue(&bs);
     sps_info.qpprime_y_zero_transform_bypass_flag = nal_bs_read(&bs, 1);
@@ -1292,8 +1338,9 @@ void CBitstreamConverter::parseh264_sps(const uint8_t *sps, const uint32_t sps_s
   sps_info.pic_height_in_map_units_minus1 = nal_bs_read_ue(&bs);
 
   sps_info.frame_mbs_only_flag            = nal_bs_read(&bs, 1);
-  if (!sps_info.frame_mbs_only_flag)
+  if (!sps_info.frame_mbs_only_flag) {
     sps_info.mb_adaptive_frame_field_flag = nal_bs_read(&bs, 1);
+}
 
   sps_info.direct_8x8_inference_flag      = nal_bs_read(&bs, 1);
 

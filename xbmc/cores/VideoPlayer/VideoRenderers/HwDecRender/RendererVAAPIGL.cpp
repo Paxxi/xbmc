@@ -44,10 +44,11 @@ bool CRendererVAAPI::Configure(unsigned int width, unsigned int height, unsigned
                                float fps, unsigned flags, ERenderFormat format, void *hwPic, unsigned int orientation)
 {
   VAAPI::CVaapiRenderPicture *vaapi = static_cast<VAAPI::CVaapiRenderPicture*>(hwPic);
-  if (vaapi->textureY)
+  if (vaapi->textureY) {
     m_isVAAPIBuffer = true;
-  else
+  } else {
     m_isVAAPIBuffer = false;
+}
 
   return CLinuxRendererGL::Configure(width, height, d_width, d_height,
                                      fps, flags, format, hwPic, orientation);
@@ -56,8 +57,9 @@ bool CRendererVAAPI::Configure(unsigned int width, unsigned int height, unsigned
 bool CRendererVAAPI::ConfigChanged(void *hwPic)
 {
   VAAPI::CVaapiRenderPicture *vaapi = static_cast<VAAPI::CVaapiRenderPicture*>(hwPic);
-  if (vaapi->textureY && !m_isVAAPIBuffer)
+  if (vaapi->textureY && !m_isVAAPIBuffer) {
     return true;
+}
 
   return false;
 }
@@ -67,8 +69,9 @@ void CRendererVAAPI::AddVideoPictureHW(VideoPicture &picture, int index)
   VAAPI::CVaapiRenderPicture *vaapi = static_cast<VAAPI::CVaapiRenderPicture*>(picture.hwPic);
   YUVBUFFER &buf = m_buffers[index];
   VAAPI::CVaapiRenderPicture *pic = vaapi->Acquire();
-  if (buf.hwDec)
+  if (buf.hwDec) {
     ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
+}
   buf.hwDec = pic;
 
   if (!m_isVAAPIBuffer)
@@ -81,8 +84,9 @@ void CRendererVAAPI::AddVideoPictureHW(VideoPicture &picture, int index)
 void CRendererVAAPI::ReleaseBuffer(int idx)
 {
   YUVBUFFER &buf = m_buffers[idx];
-  if (buf.hwDec)
+  if (buf.hwDec) {
     ((VAAPI::CVaapiRenderPicture*)buf.hwDec)->Release();
+}
   buf.hwDec = nullptr;
 }
 
@@ -91,10 +95,11 @@ CRenderInfo CRendererVAAPI::GetRenderInfo()
   CRenderInfo info;
   info.formats = m_formats;
   info.max_buffer_size = NUM_BUFFERS;
-  if (!m_isVAAPIBuffer)
+  if (!m_isVAAPIBuffer) {
     info.optimal_buffer_size = 4;
-  else
+  } else {
     info.optimal_buffer_size = 5;
+}
   return info;
 }
 
@@ -112,10 +117,11 @@ EShaderFormat CRendererVAAPI::GetShaderFormat(ERenderFormat renderFormat)
 {
   EShaderFormat ret = SHADER_NONE;
 
-  if (m_isVAAPIBuffer)
+  if (m_isVAAPIBuffer) {
     ret = SHADER_NV12_RRG;
-  else
+  } else {
     ret = SHADER_NV12;
+}
 
   return ret;
 }

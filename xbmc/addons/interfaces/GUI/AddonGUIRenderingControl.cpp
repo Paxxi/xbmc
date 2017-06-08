@@ -65,15 +65,17 @@ void CGUIAddonRenderingControl::Stop()
     CBStop(m_clientHandle);
   }
   m_refCount--;
-  if (m_refCount <= 0)
+  if (m_refCount <= 0) {
     delete this;
+}
 }
 
 void CGUIAddonRenderingControl::Delete()
 {
   m_refCount--;
-  if (m_refCount <= 0)
+  if (m_refCount <= 0) {
     delete this;
+}
 }
 
 bool CGUIAddonRenderingControl::IsDirty()

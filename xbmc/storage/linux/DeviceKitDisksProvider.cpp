@@ -130,8 +130,9 @@ bool CDeviceKitDiskDevice::Mount()
 
     return m_isMounted;
   }
-  else
-    CLog::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to mount %s", toString().c_str());
+  else {
+    CLog
+}::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to mount %s", toString().c_str());
 
   return false;
 }
@@ -146,13 +147,15 @@ bool CDeviceKitDiskDevice::UnMount()
     message.AppendArgument(array, 0);
 
     DBusMessage *reply = message.SendSystem();
-    if (reply)
+    if (reply) {
       m_isMountedByUs = m_isMounted = false;
+}
 
     return !m_isMounted;
   }
-  else
-    CLog::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to unmount %s", toString().c_str());
+  else {
+    CLog
+}::Log(LOGDEBUG, "DeviceKit.Disks: Is not able to unmount %s", toString().c_str());
 
   return false;
 }
@@ -165,12 +168,13 @@ CMediaSource CDeviceKitDiskDevice::ToMediaShare()
     source.strName = StringUtils::Format("%.1f GB %s", m_PartitionSizeGiB, g_localizeStrings.Get(155).c_str());
   else
     source.strName = m_Label;
-  if (m_isOptical)
+  if (m_isOptical) {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_DVD;
-  else if (m_isSystemInternal)
+  } else if (m_isSystemInternal) {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
-  else
+  } else {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_REMOVABLE;
+}
   source.m_ignore = true;
   return source;
 }
@@ -278,12 +282,13 @@ bool CDeviceKitDisksProvider::PumpDriveChangeEvents(IStorageEventsCallback *call
       if (dbus_message_get_args (msg, nullptr, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
       {
         result = true;
-        if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceAdded"))
+        if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceAdded")) {
           DeviceAdded(object, callback);
-        else if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceRemoved"))
+        } else if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceRemoved")) {
           DeviceRemoved(object, callback);
-        else if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceChanged"))
+        } else if (dbus_message_is_signal(msg, "org.freedesktop.DeviceKit.Disks", "DeviceChanged")) {
           DeviceChanged(object, callback);
+}
       }
       dbus_message_unref(msg);
     }
@@ -300,17 +305,20 @@ bool CDeviceKitDisksProvider::HasDeviceKitDisks()
   dbus_error_init (&error);
   DBusConnection *con = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
 
-  if (con)
+  if (con) {
     message.Send(con, &error);
+}
 
-  if (!dbus_error_is_set(&error))
+  if (!dbus_error_is_set(&error)) {
     hasDeviceKitDisks = true;
-  else
+  } else {
     CLog::Log(LOGDEBUG, "DeviceKit.Disks: %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
-  if (con)
+  if (con) {
     dbus_connection_unref(con);
+}
 
   return hasDeviceKitDisks;
 }

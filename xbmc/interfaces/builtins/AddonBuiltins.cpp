@@ -264,8 +264,9 @@ static int SetDefaultAddon(const std::vector<std::string>& params)
   std::string addonID;
   TYPE type = CAddonInfo::TranslateType(params[0]);
   bool allowNone = false;
-  if (type == ADDON_VIZ)
+  if (type == ADDON_VIZ) {
     allowNone = true;
+}
 
   if (type != ADDON_UNKNOWN && 
       CGUIWindowAddonBrowser::SelectAddonID(type,addonID,allowNone))

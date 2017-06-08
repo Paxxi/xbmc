@@ -129,8 +129,9 @@ bool CPVRTimers::Update()
 {
   {
     CSingleLock lock(m_critSection);
-    if (m_bIsUpdating)
+    if (m_bIsUpdating) {
       return false;
+}
     m_bIsUpdating = true;
   }
 
@@ -145,10 +146,12 @@ bool CPVRTimers::IsRecording() const
 {
   CSingleLock lock(m_critSection);
 
-  for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it)
-    for (VecTimerInfoTag::const_iterator timerIt = it->second.begin(); timerIt != it->second.end(); ++timerIt)
+  for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it) {
+    for (VecTimerInfoTag::const_iterator timerIt = it->second.begin(); timerIt != it->second.end(); ++timerIt) {
       if ((*timerIt)->IsRecording())
         return true;
+}
+}
 
   return false;
 }
@@ -546,10 +549,12 @@ int CPVRTimers::AmountActiveRadioRecordings() const
 bool CPVRTimers::HasActiveTimers() const
 {
   CSingleLock lock(m_critSection);
-  for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it)
-    for (VecTimerInfoTag::const_iterator timerIt = it->second.begin(); timerIt != it->second.end(); ++timerIt)
+  for (MapTags::const_iterator it = m_tags.begin(); it != m_tags.end(); ++it) {
+    for (VecTimerInfoTag::const_iterator timerIt = it->second.begin(); timerIt != it->second.end(); ++timerIt) {
       if ((*timerIt)->IsActive() && !(*timerIt)->IsTimerRule())
         return true;
+}
+}
 
   return false;
 }
@@ -868,8 +873,9 @@ CFileItemPtr CPVRTimers::GetTimerRule(const CFileItemPtr &item) const
 
 void CPVRTimers::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  if (msg == ObservableMessageEpgContainer)
+  if (msg == ObservableMessageEpgContainer) {
     CServiceBroker::GetPVRManager().TriggerTimersUpdate();
+}
 }
 
 CDateTime CPVRTimers::GetNextEventTime() const
@@ -909,8 +915,9 @@ CDateTime CPVRTimers::GetNextEventTime() const
       const CDateTimeSpan oneDay(1,0,0,0);
       dailywakeuptime += oneDay;
     }
-    if (!wakeuptime.IsValid() || dailywakeuptime < wakeuptime)
+    if (!wakeuptime.IsValid() || dailywakeuptime < wakeuptime) {
       wakeuptime = dailywakeuptime;
+}
   }
 
   const CDateTime retVal(wakeuptime);

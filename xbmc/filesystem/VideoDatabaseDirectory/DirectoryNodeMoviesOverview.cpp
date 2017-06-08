@@ -73,8 +73,9 @@ bool CDirectoryNodeMoviesOverview::GetContent(CFileItemList& items) const
     if (i == 6)
     {
       CVideoDatabase db;
-      if (db.Open() && !db.HasSets())
+      if (db.Open() && !db.HasSets()) {
         continue;
+}
     }
 
     CVideoDbUrl itemUrl = videoUrl;

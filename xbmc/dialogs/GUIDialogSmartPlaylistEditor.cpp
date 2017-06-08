@@ -103,49 +103,51 @@ bool CGUIDialogSmartPlaylistEditor::OnMessage(CGUIMessage& message)
     {
       int iControl = message.GetSenderId();
       int iAction = message.GetParam1();
-      if (iControl == CONTROL_RULE_LIST && (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK))
+      if (iControl == CONTROL_RULE_LIST && (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)) {
         OnRuleList(GetSelectedItem());
-      else if (iControl == CONTROL_RULE_ADD)
+      } else if (iControl == CONTROL_RULE_ADD) {
         OnRuleAdd();
-      else if (iControl == CONTROL_RULE_EDIT)
+      } else if (iControl == CONTROL_RULE_EDIT) {
         OnRuleList(GetSelectedItem());
-      else if (iControl == CONTROL_RULE_REMOVE)
+      } else if (iControl == CONTROL_RULE_REMOVE) {
         OnRuleRemove(GetSelectedItem());
-      else if (iControl == CONTROL_NAME)
+      } else if (iControl == CONTROL_NAME) {
         OnName();
-      else if (iControl == CONTROL_OK)
+      } else if (iControl == CONTROL_OK) {
         OnOK();
-      else if (iControl == CONTROL_CANCEL)
+      } else if (iControl == CONTROL_CANCEL) {
         OnCancel();
-      else if (iControl == CONTROL_MATCH)
+      } else if (iControl == CONTROL_MATCH) {
         OnMatch();
-      else if (iControl == CONTROL_LIMIT)
+      } else if (iControl == CONTROL_LIMIT) {
         OnLimit();
-      else if (iControl == CONTROL_ORDER_FIELD)
+      } else if (iControl == CONTROL_ORDER_FIELD) {
         OnOrder();
-      else if (iControl == CONTROL_ORDER_DIRECTION)
+      } else if (iControl == CONTROL_ORDER_DIRECTION) {
         OnOrderDirection();
-      else if (iControl == CONTROL_TYPE)
+      } else if (iControl == CONTROL_TYPE) {
         OnType();
-      else if (iControl == CONTROL_GROUP_BY)
+      } else if (iControl == CONTROL_GROUP_BY) {
         OnGroupBy();
-      else if (iControl == CONTROL_GROUP_MIXED)
+      } else if (iControl == CONTROL_GROUP_MIXED) {
         OnGroupMixed();
-      else if (iControl == CONTROL_RULE_LIST && (iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_RIGHT_CLICK))
+      } else if (iControl == CONTROL_RULE_LIST && (iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_RIGHT_CLICK)) {
         OnPopupMenu(GetSelectedItem());
-      else
-        return CGUIDialog::OnMessage(message);
+      } else {
+        return 
+}CGUIDialog::OnMessage(message);
       return true;
     }
     break;
   case GUI_MSG_FOCUSED:
     if (message.GetControlId() == CONTROL_RULE_REMOVE ||
-        message.GetControlId() == CONTROL_RULE_EDIT)
+        message.GetControlId() == CONTROL_RULE_EDIT) {
       HighlightItem(GetSelectedItem());
-    else
+    } else
     {
-      if (message.GetControlId() == CONTROL_RULE_LIST)
+      if (message.GetControlId() == CONTROL_RULE_LIST) {
         UpdateRuleControlButtons();
+}
 
       HighlightItem(-1);
     }
@@ -166,11 +168,11 @@ bool CGUIDialogSmartPlaylistEditor::OnMessage(CGUIMessage& message)
         {
           m_path = startupList;
 
-          if (party == 1)
+          if (party == 1) {
             m_mode = "partymusic";
-          else if (party == 2)
+          } else if (party == 2) {
             m_mode = "partyvideo";
-          else
+          } else
           {
             PLAYLIST_TYPE type = ConvertType(m_playlist.GetType());
             if (type == TYPE_SONGS || type == TYPE_ALBUMS || type == TYPE_ARTISTS)
@@ -208,8 +210,9 @@ void CGUIDialogSmartPlaylistEditor::OnPopupMenu(int item)
   // unhighlight the item
   m_ruleLabels->Get(item)->Select(false);
 
-  if (button == 1)
+  if (button == 1) {
     OnRuleRemove(item);
+}
 }
 
 void CGUIDialogSmartPlaylistEditor::OnRuleList(int item)
@@ -514,9 +517,10 @@ void CGUIDialogSmartPlaylistEditor::OnDeinitWindow(int nextWindowID)
 
 CGUIDialogSmartPlaylistEditor::PLAYLIST_TYPE CGUIDialogSmartPlaylistEditor::ConvertType(const std::string &type)
 {
-  for (const auto & type : types)
+  for (const auto & type : types) {
     if (type == types[i].string)
       return type.type;
+}
   assert(false);
   return TYPE_SONGS;
 }
@@ -593,10 +597,11 @@ void CGUIDialogSmartPlaylistEditor::OnRuleRemove(int item)
   m_playlist.m_ruleCombination.m_rules.erase(m_playlist.m_ruleCombination.m_rules.begin() + item);
 
   UpdateButtons();
-  if (item >= m_ruleLabels->Size())
+  if (item >= m_ruleLabels->Size()) {
     HighlightItem(m_ruleLabels->Size() - 1);
-  else
+  } else {
     HighlightItem(item);
+}
 }
 
 void CGUIDialogSmartPlaylistEditor::OnRuleAdd()

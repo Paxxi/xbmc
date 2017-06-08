@@ -43,8 +43,9 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const std::string &method, ITranspor
   CVariant installed = parameterObject["installed"];
 
   // ignore the "content" parameter if the type is specified but not a plugin or script
-  if (addonType != ADDON_UNKNOWN && addonType != ADDON_PLUGIN && addonType != ADDON_SCRIPT)
+  if (addonType != ADDON_UNKNOWN && addonType != ADDON_PLUGIN && addonType != ADDON_SCRIPT) {
     content = CPluginSource::UNKNOWN;
+}
 
   if (addonType >= ADDON_VIDEO && addonType <= ADDON_EXECUTABLE)
   {
@@ -73,8 +74,9 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const std::string &method, ITranspor
       break;
     }
   }
-  else
-    addonTypes.push_back(addonType);
+  else {
+    addonTypes
+}.push_back(addonType);
 
   VECADDONS addons;
   for (std::vector<TYPE>::const_iterator typeIt = addonTypes.begin(); typeIt != addonTypes.end(); ++typeIt)
@@ -84,15 +86,18 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const std::string &method, ITranspor
     {
       if (!enabled.isBoolean()) //All
       {
-        if (!installed.isBoolean() || installed.asBoolean())
+        if (!installed.isBoolean() || installed.asBoolean()) {
           CAddonMgr::GetInstance().GetInstalledAddons(typeAddons);
-        if (!installed.isBoolean() || (installed.isBoolean() && !installed.asBoolean()))
+}
+        if (!installed.isBoolean() || (installed.isBoolean() && !installed.asBoolean())) {
           CAddonMgr::GetInstance().GetInstallableAddons(typeAddons);
+}
       }
-      else if (enabled.asBoolean() && (!installed.isBoolean() || installed.asBoolean())) //Enabled
+      else if (enabled.asBoolean() && (!installed.isBoolean() || installed.asBoolean())) { //Enabled
         CAddonMgr::GetInstance().GetAddons(typeAddons);
-      else if (!installed.isBoolean() || installed.asBoolean())
+      } else if (!installed.isBoolean() || installed.asBoolean()) {
         CAddonMgr::GetInstance().GetDisabledAddons(typeAddons);
+}
     }
     else
     {
@@ -301,8 +306,9 @@ void CAddonsOperations::FillDetails(AddonPtr addon, const CVariant& fields, CVar
       object[field] = addonInfo[field];
   }
   
-  if (append)
+  if (append) {
     result.append(object);
-  else
+  } else {
     result = object;
+}
 }

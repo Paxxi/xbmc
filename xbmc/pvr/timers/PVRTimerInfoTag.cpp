@@ -123,8 +123,9 @@ CPVRTimerInfoTag::CPVRTimerInfoTag(const PVR_TIMER &timer, const CPVRChannelPtr 
   m_FirstDay(timer.firstDay + g_advancedSettings.m_iPVRTimeCorrection),
   m_iEpgUid(timer.iEpgUid)
 {
-  if (m_iClientIndex == PVR_TIMER_NO_CLIENT_INDEX)
+  if (m_iClientIndex == PVR_TIMER_NO_CLIENT_INDEX) {
     CLog::Log(LOGERROR, "%s: invalid client index supplied by client %d (must be > 0)!", __FUNCTION__, m_iClientId);
+}
 
   if (CServiceBroker::GetPVRManager().Clients()->SupportsTimers(m_iClientId))
   {
@@ -142,15 +143,17 @@ CPVRTimerInfoTag::CPVRTimerInfoTag(const PVR_TIMER &timer, const CPVRChannelPtr 
       unsigned int iMustHave    = PVR_TIMER_TYPE_ATTRIBUTE_NONE;
       unsigned int iMustNotHave = PVR_TIMER_TYPE_FORBIDS_NEW_INSTANCES;
 
-      if (timer.iEpgUid == PVR_TIMER_NO_EPG_UID && timer.iWeekdays != PVR_WEEKDAY_NONE)
+      if (timer.iEpgUid == PVR_TIMER_NO_EPG_UID && timer.iWeekdays != PVR_WEEKDAY_NONE) {
         iMustHave |= PVR_TIMER_TYPE_IS_REPEATING;
-      else
+      } else {
         iMustNotHave |= PVR_TIMER_TYPE_IS_REPEATING;
+}
 
-      if (timer.iEpgUid == PVR_TIMER_NO_EPG_UID)
+      if (timer.iEpgUid == PVR_TIMER_NO_EPG_UID) {
         iMustHave |= PVR_TIMER_TYPE_IS_MANUAL;
-      else
+      } else {
         iMustNotHave |= PVR_TIMER_TYPE_IS_MANUAL;
+}
 
       CPVRTimerTypePtr type(CPVRTimerType::CreateFromAttributes(iMustHave, iMustNotHave, m_iClientId));
 
@@ -243,20 +246,27 @@ void CPVRTimerInfoTag::Serialize(CVariant &value) const
   value["firstday"] = m_FirstDay.IsValid() ? m_FirstDay.GetAsDBDate() : "";
 
   CVariant weekdays(CVariant::VariantTypeArray);
-  if (m_iWeekdays & PVR_WEEKDAY_MONDAY)
+  if (m_iWeekdays & PVR_WEEKDAY_MONDAY) {
     weekdays.push_back("monday");
-  if (m_iWeekdays & PVR_WEEKDAY_TUESDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_TUESDAY) {
     weekdays.push_back("tuesday");
-  if (m_iWeekdays & PVR_WEEKDAY_WEDNESDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_WEDNESDAY) {
     weekdays.push_back("wednesday");
-  if (m_iWeekdays & PVR_WEEKDAY_THURSDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_THURSDAY) {
     weekdays.push_back("thursday");
-  if (m_iWeekdays & PVR_WEEKDAY_FRIDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_FRIDAY) {
     weekdays.push_back("friday");
-  if (m_iWeekdays & PVR_WEEKDAY_SATURDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_SATURDAY) {
     weekdays.push_back("saturday");
-  if (m_iWeekdays & PVR_WEEKDAY_SUNDAY)
+}
+  if (m_iWeekdays & PVR_WEEKDAY_SUNDAY) {
     weekdays.push_back("sunday");
+}
   value["weekdays"] = weekdays;
 
   value["priority"] = m_iPriority;
@@ -393,24 +403,24 @@ std::string CPVRTimerInfoTag::GetStatus() const
   CSingleLock lock(m_critSection);
   if (URIUtils::PathEquals(m_strFileNameAndPath, CPVRTimersPath::PATH_ADDTIMER))
     strReturn = g_localizeStrings.Get(19026);
-  else if (m_state == PVR_TIMER_STATE_CANCELLED || m_state == PVR_TIMER_STATE_ABORTED)
+  else if (m_state == PVR_TIMER_STATE_CANCELLED || m_state == PVR_TIMER_STATE_ABORTED) {
     strReturn = g_localizeStrings.Get(13106);
-  else if (m_state == PVR_TIMER_STATE_RECORDING)
+  } else if (m_state == PVR_TIMER_STATE_RECORDING) {
     strReturn = g_localizeStrings.Get(19162);
-  else if (m_state == PVR_TIMER_STATE_CONFLICT_OK)
+  } else if (m_state == PVR_TIMER_STATE_CONFLICT_OK) {
     strReturn = g_localizeStrings.Get(19275);
-  else if (m_state == PVR_TIMER_STATE_CONFLICT_NOK)
+  } else if (m_state == PVR_TIMER_STATE_CONFLICT_NOK) {
     strReturn = g_localizeStrings.Get(19276);
-  else if (m_state == PVR_TIMER_STATE_ERROR)
+  } else if (m_state == PVR_TIMER_STATE_ERROR) {
     strReturn = g_localizeStrings.Get(257);
-  else if (m_state == PVR_TIMER_STATE_DISABLED)
+  } else if (m_state == PVR_TIMER_STATE_DISABLED) {
     strReturn = g_localizeStrings.Get(13106);
-  else if (m_state == PVR_TIMER_STATE_COMPLETED)
+  } else if (m_state == PVR_TIMER_STATE_COMPLETED) {
     if (m_bHasChildRecording)
       strReturn = g_localizeStrings.Get(19162); // "Recording active"
     else
       strReturn = g_localizeStrings.Get(19256); // "Completed"
-  else if (m_state == PVR_TIMER_STATE_SCHEDULED || m_state == PVR_TIMER_STATE_NEW)
+  } else if (m_state == PVR_TIMER_STATE_SCHEDULED || m_state == PVR_TIMER_STATE_NEW)
   {
     if (m_bHasChildRecording)
       strReturn = g_localizeStrings.Get(19162); // "Recording active"
@@ -452,27 +462,27 @@ std::string CPVRTimerInfoTag::GetWeekdaysString(unsigned int iWeekdays, bool bEp
 {
   std::string strReturn;
 
-  if (iWeekdays == PVR_WEEKDAY_NONE)
+  if (iWeekdays == PVR_WEEKDAY_NONE) {
     return strReturn;
-  else if (iWeekdays == PVR_WEEKDAY_ALLDAYS)
+  } else if (iWeekdays == PVR_WEEKDAY_ALLDAYS) {
     strReturn = bEpgBased
               ? g_localizeStrings.Get(807)  // "Any day"
               : g_localizeStrings.Get(808); // "Every day"
-  else if (iWeekdays == PVR_WEEKDAY_MONDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_MONDAY) {
     strReturn = g_localizeStrings.Get(831); // "Mondays"
-  else if (iWeekdays == PVR_WEEKDAY_TUESDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_TUESDAY) {
     strReturn = g_localizeStrings.Get(832); // "Tuesdays"
-  else if (iWeekdays == PVR_WEEKDAY_WEDNESDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_WEDNESDAY) {
     strReturn = g_localizeStrings.Get(833); // "Wednesdays"
-  else if (iWeekdays == PVR_WEEKDAY_THURSDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_THURSDAY) {
     strReturn = g_localizeStrings.Get(834); // "Thursdays"
-  else if (iWeekdays == PVR_WEEKDAY_FRIDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_FRIDAY) {
     strReturn = g_localizeStrings.Get(835); // "Fridays"
-  else if (iWeekdays == PVR_WEEKDAY_SATURDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_SATURDAY) {
     strReturn = g_localizeStrings.Get(836); // "Saturdays"
-  else if (iWeekdays == PVR_WEEKDAY_SUNDAY)
+  } else if (iWeekdays == PVR_WEEKDAY_SUNDAY) {
     strReturn = g_localizeStrings.Get(837); // "Sundays"
-  else
+  } else
   {
     // Any other combination. Assemble custom string.
     if (iWeekdays & PVR_WEEKDAY_MONDAY)
@@ -537,8 +547,9 @@ bool CPVRTimerInfoTag::DeleteFromClient(bool bForce /* = false */) const
   if (error == PVR_ERROR_RECORDING_RUNNING)
   {
     // recording running. ask the user if it should be deleted anyway
-    if (HELPERS::ShowYesNoDialogText(CVariant{122}, CVariant{19122}) != DialogResponse::YES)
+    if (HELPERS::ShowYesNoDialogText(CVariant{122}, CVariant{19122}) != DialogResponse::YES) {
       return false;
+}
 
     error = CServiceBroker::GetPVRManager().Clients()->DeleteTimer(*this, true);
   }
@@ -563,8 +574,9 @@ bool CPVRTimerInfoTag::RenameOnClient(const std::string &strNewName)
   PVR_ERROR error = CServiceBroker::GetPVRManager().Clients()->RenameTimer(*this, strNewName);
   if (error != PVR_ERROR_NO_ERROR)
   {
-    if (error == PVR_ERROR_NOT_IMPLEMENTED)
+    if (error == PVR_ERROR_NOT_IMPLEMENTED) {
       return UpdateOnClient();
+}
 
     DisplayError(error);
     return false;
@@ -669,14 +681,15 @@ bool CPVRTimerInfoTag::UpdateOnClient()
 
 void CPVRTimerInfoTag::DisplayError(PVR_ERROR err) const
 {
-  if (err == PVR_ERROR_SERVER_ERROR)
+  if (err == PVR_ERROR_SERVER_ERROR) {
     CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19111}); /* print info dialog "Server error!" */
-  else if (err == PVR_ERROR_REJECTED)
+  } else if (err == PVR_ERROR_REJECTED) {
     CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19109}); /* print info dialog "Couldn't save timer!" */
-  else if (err == PVR_ERROR_ALREADY_PRESENT)
+  } else if (err == PVR_ERROR_ALREADY_PRESENT) {
     CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19067}); /* print info dialog */
-  else
+  } else {
     CGUIDialogOK::ShowAndGetInput(CVariant{19033}, CVariant{19110}); /* print info dialog "Unknown error!" */
+}
 }
 
 int CPVRTimerInfoTag::ChannelNumber() const
@@ -908,10 +921,11 @@ void CPVRTimerInfoTag::GetNotificationText(std::string &strText) const
       stringID = 19224; // Recording aborted
     break;
   case PVR_TIMER_STATE_SCHEDULED:
-    if (IsTimerRule())
+    if (IsTimerRule()) {
       stringID = 19058; // Timer enabled
-    else
+    } else {
       stringID = 19225; // Recording scheduled
+}
     break;
   case PVR_TIMER_STATE_RECORDING:
     stringID = 19226; // Recording started
@@ -949,10 +963,11 @@ std::string CPVRTimerInfoTag::GetDeletedNotificationText() const
     break;
   case PVR_TIMER_STATE_SCHEDULED:
   default:
-    if (IsTimerRule())
+    if (IsTimerRule()) {
       stringID = 828; // Timer rule deleted
-    else
+    } else {
       stringID = 19228; // Timer deleted
+}
   }
 
   return StringUtils::Format("%s: '%s'", g_localizeStrings.Get(stringID).c_str(), m_strTitle.c_str());
@@ -981,8 +996,9 @@ CPVREpgInfoTagPtr CPVRTimerInfoTag::GetEpgInfoTag(bool bCreate /* = true */) con
             time_t endTime = 0;
 
             StartAsUTC().GetAsTime(startTime);
-            if (startTime > 0)
+            if (startTime > 0) {
               EndAsUTC().GetAsTime(endTime);
+}
 
             if (startTime > 0 && endTime > 0)
             {

@@ -33,8 +33,9 @@ CDirectoryNodeTitleMusicVideos::CDirectoryNodeTitleMusicVideos(const std::string
 bool CDirectoryNodeTitleMusicVideos::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

@@ -63,46 +63,53 @@ bool ILanguageInvoker::IsStopping() const
 
 void ILanguageInvoker::pulseGlobalEvent()
 {
-  if (m_invocationHandler)
+  if (m_invocationHandler) {
     m_invocationHandler->PulseGlobalEvent();
+}
 }
 
 bool ILanguageInvoker::onExecutionInitialized()
 {
-  if (m_invocationHandler == nullptr)
+  if (m_invocationHandler == nullptr) {
     return false;
+}
 
   return m_invocationHandler->OnScriptInitialized(this);
 }
 
 void ILanguageInvoker::onAbortRequested()
 {
-  if (m_invocationHandler)
+  if (m_invocationHandler) {
     m_invocationHandler->OnScriptAbortRequested(this);
+}
 }
 
 void ILanguageInvoker::onExecutionFailed()
 {
-  if (m_invocationHandler)
+  if (m_invocationHandler) {
     m_invocationHandler->OnScriptEnded(this);
+}
 }
 
 void ILanguageInvoker::onExecutionDone()
 {
-  if (m_invocationHandler)
+  if (m_invocationHandler) {
     m_invocationHandler->OnScriptEnded(this);
+}
 }
 
 void ILanguageInvoker::onExecutionFinalized()
 {
-  if (m_invocationHandler)
+  if (m_invocationHandler) {
     m_invocationHandler->OnScriptFinalized(this);
+}
 }
 
 void ILanguageInvoker::setState(InvokerState state)
 {
-  if (state <= m_state)
+  if (state <= m_state) {
     return;
+}
 
   m_state = state;
 }

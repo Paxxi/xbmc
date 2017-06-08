@@ -223,8 +223,9 @@ bool CPVRChannelGroup::SetChannelNumber(const CPVRChannelPtr &channel, unsigned 
 
 bool CPVRChannelGroup::MoveChannel(unsigned int iOldChannelNumber, unsigned int iNewChannelNumber, bool bSaveInDb /* = true */)
 {
-  if (iOldChannelNumber == iNewChannelNumber)
+  if (iOldChannelNumber == iNewChannelNumber) {
     return true;
+}
 
   bool bReturn(false);
   CSingleLock lock(m_critSection);
@@ -237,8 +238,9 @@ bool CPVRChannelGroup::MoveChannel(unsigned int iOldChannelNumber, unsigned int 
     return bReturn;
 
   /* new channel number out of range */
-  if (iNewChannelNumber < 1)
+  if (iNewChannelNumber < 1) {
     return bReturn;
+}
 
   if (iNewChannelNumber > m_sortedMembers.size())
     iNewChannelNumber = m_sortedMembers.size();
@@ -253,10 +255,11 @@ bool CPVRChannelGroup::MoveChannel(unsigned int iOldChannelNumber, unsigned int 
 
   m_bChanged = true;
 
-  if (bSaveInDb)
+  if (bSaveInDb) {
     bReturn = Persist();
-  else
+  } else {
     bReturn = true;
+}
 
   CLog::Log(LOGNOTICE, "CPVRChannelGroup - %s - %s channel '%s' moved to channel number '%d'",
       __FUNCTION__, (m_bRadio ? "radio" : "tv"), entry.channel->ChannelName().c_str(), iNewChannelNumber);
@@ -274,8 +277,9 @@ void CPVRChannelGroup::SearchAndSetChannelIcons(bool bUpdateDb /* = false */)
   CFileItemList fileItemList;
   XFILE::CDirectory::GetDirectory(iconPath, fileItemList, ".jpg|.png|.tbn");
 
-  if (fileItemList.IsEmpty())
+  if (fileItemList.IsEmpty()) {
     return;
+}
 
   CGUIDialogProgressBarHandle* dlgProgressHandle = CServiceBroker::GetPVRManager().ShowProgressDialog(g_localizeStrings.Get(19286)); // Searching for channel icons
 
@@ -332,8 +336,9 @@ void CPVRChannelGroup::SearchAndSetChannelIcons(bool bUpdateDb /* = false */)
     //! @todo start channel icon scraper here if nothing was found
   }
 
-  if (dlgProgressHandle)
+  if (dlgProgressHandle) {
     dlgProgressHandle->MarkFinished();
+}
 }
 
 /********** sort methods **********/
@@ -357,22 +362,25 @@ struct sortByChannelNumber
 {
   bool operator()(const PVRChannelGroupMember &channel1, const PVRChannelGroupMember &channel2) const
   {
-    if (channel1.iChannelNumber == channel2.iChannelNumber)
+    if (channel1.iChannelNumber == channel2.iChannelNumber) {
       return channel1.iSubChannelNumber < channel2.iSubChannelNumber;
+}
     return channel1.iChannelNumber < channel2.iChannelNumber;
   }
 };
 
 bool CPVRChannelGroup::SortAndRenumber()
 {
-  if (PreventSortAndRenumber())
+  if (PreventSortAndRenumber()) {
     return true;
+}
 
   CSingleLock lock(m_critSection);
-  if (m_bUsingBackendChannelOrder)
+  if (m_bUsingBackendChannelOrder) {
     SortByClientChannelNumber();
-  else
+  } else {
     SortByChannelNumber();
+}
 
   bool bReturn = Renumber();
   ResetChannelNumberCache();
@@ -754,8 +762,9 @@ bool CPVRChannelGroup::RemoveFromGroup(const CPVRChannelPtr &channel)
   }
 
   // no need to renumber if nothing was removed
-  if (bReturn)
+  if (bReturn) {
     Renumber();
+}
 
   return bReturn;
 }
@@ -825,8 +834,9 @@ bool CPVRChannelGroup::SetGroupName(const std::string &strGroupName, bool bSaveI
 //    SetChanged();
 
     /* persist the changes */
-    if (bSaveInDb)
+    if (bSaveInDb) {
       Persist();
+}
 
     bReturn = true;
   }
@@ -842,12 +852,14 @@ bool CPVRChannelGroup::Persist()
   CSingleLock lock(m_critSection);
 
   /* only persist if the group has changes and is fully loaded or never has been saved before */
-  if (!HasChanges() || (!m_bLoaded && m_iGroupId != -1))
+  if (!HasChanges() || (!m_bLoaded && m_iGroupId != -1)) {
     return bReturn;
+}
 
   // Mark newly created groups as loaded so future updates will also be persisted...
-  if (m_iGroupId == -1)
+  if (m_iGroupId == -1) {
     m_bLoaded = true;
+}
 
   if (database)
   {
@@ -872,8 +884,9 @@ bool CPVRChannelGroup::Renumber()
   unsigned int iChannelNumber(0);
   bool bUseBackendChannelNumbers(CServiceBroker::GetSettings().GetBool(CSettings::SETTING_PVRMANAGER_USEBACKENDCHANNELNUMBERS) && CServiceBroker::GetPVRManager().Clients()->EnabledClientAmount() == 1);
 
-  if (PreventSortAndRenumber())
+  if (PreventSortAndRenumber()) {
     return true;
+}
 
   CSingleLock lock(m_critSection);
 
@@ -916,8 +929,9 @@ bool CPVRChannelGroup::Renumber()
 void CPVRChannelGroup::ResetChannelNumberCache()
 {
   CSingleLock lock(m_critSection);
-  if (!m_bSelectedGroup)
+  if (!m_bSelectedGroup) {
     return;
+}
 
   /* set all channel numbers on members of this group */
   CPVRChannelPtr channel;
@@ -1073,14 +1087,16 @@ CDateTime CPVRChannelGroup::GetEPGDate(EpgDateType epgDateType) const
       {
         case EPG_FIRST_DATE:
           epgDate = epg->GetFirstDate();
-          if (epgDate.IsValid() && (!date.IsValid() || epgDate < date))
+          if (epgDate.IsValid() && (!date.IsValid() || epgDate < date)) {
             date = epgDate;
+}
           break;
 
         case EPG_LAST_DATE:
           epgDate = epg->GetLastDate();
-          if (epgDate.IsValid() && (!date.IsValid() || epgDate > date))
+          if (epgDate.IsValid() && (!date.IsValid() || epgDate > date)) {
             date = epgDate;
+}
           break;
       }
     }
@@ -1106,8 +1122,9 @@ int CPVRChannelGroup::GroupID() const
 
 void CPVRChannelGroup::SetGroupID(int iGroupId)
 {
-  if (iGroupId >= 0)
+  if (iGroupId >= 0) {
     m_iGroupId = iGroupId;
+}
 }
 
 void CPVRChannelGroup::SetGroupType(int iGroupType)
@@ -1166,8 +1183,9 @@ void CPVRChannelGroup::SetPreventSortAndRenumber(bool bPreventSortAndRenumber /*
 
 bool CPVRChannelGroup::UpdateChannel(const CFileItem &item, bool bHidden, bool bEPGEnabled, bool bParentalLocked, int iEPGSource, int iChannelNumber, const std::string &strChannelName, const std::string &strIconPath, const std::string &strStreamURL, bool bUserSetIcon)
 {
-  if (!item.HasPVRChannelInfoTag())
+  if (!item.HasPVRChannelInfoTag()) {
     return false;
+}
 
   CSingleLock lock(m_critSection);
 

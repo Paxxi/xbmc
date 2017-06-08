@@ -107,8 +107,9 @@ int CPVRClients::GetClientId(const std::string& strId) const
 bool CPVRClients::GetClient(int iClientId, PVR_CLIENT &addon) const
 {
   bool bReturn(false);
-  if (iClientId <= PVR_INVALID_CLIENT_ID)
+  if (iClientId <= PVR_INVALID_CLIENT_ID) {
     return bReturn;
+}
 
   CSingleLock lock(m_critSection);
 
@@ -199,17 +200,18 @@ bool CPVRClients::HasEnabledClients() const
 bool CPVRClients::StopClient(const AddonPtr &client, bool bRestart)
 {
   /* stop playback if needed */
-  if (IsPlaying())
+  if (IsPlaying()) {
     CApplicationMessenger::GetInstance().SendMsg(TMSG_MEDIA_STOP);
+}
 
   CSingleLock lock(m_critSection);
   int iId = GetClientId(client);
   PVR_CLIENT mappedClient;
   if (GetClient(iId, mappedClient))
   {
-    if (bRestart)
+    if (bRestart) {
       mappedClient->ReCreate();
-    else
+    } else
     {
       const auto it = m_clientMap.find(iId);
       if (it != m_clientMap.end())
@@ -354,8 +356,9 @@ int CPVRClients::GetPlayingClientID() const
 {
   CSingleLock lock(m_critSection);
 
-  if (m_bIsPlayingLiveTV || m_bIsPlayingRecording)
+  if (m_bIsPlayingLiveTV || m_bIsPlayingRecording) {
     return m_playingClientId;
+}
   return -EINVAL;
 }
 
@@ -490,8 +493,9 @@ PVR_ERROR CPVRClients::AddTimer(const CPVRTimerInfoTag &timer)
   if (GetCreatedClient(timer.m_iClientId, client))
     error = client->AddTimer(timer);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot add timer to client '%d': %s",__FUNCTION__, timer.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -504,8 +508,9 @@ PVR_ERROR CPVRClients::UpdateTimer(const CPVRTimerInfoTag &timer)
   if (GetCreatedClient(timer.m_iClientId, client))
     error = client->UpdateTimer(timer);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot update timer on client '%d': %s",__FUNCTION__, timer.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -529,8 +534,9 @@ PVR_ERROR CPVRClients::RenameTimer(const CPVRTimerInfoTag &timer, const std::str
   if (GetCreatedClient(timer.m_iClientId, client))
     error = client->RenameTimer(timer, strNewName);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot rename timer on client '%d': %s",__FUNCTION__, timer.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -570,8 +576,9 @@ PVR_ERROR CPVRClients::GetTimerTypes(CPVRTimerTypes& results, int iClientId) con
   if (GetCreatedClient(iClientId, client))
     error = client->GetTimerTypes(results);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot get timer types from client '%d': %s",__FUNCTION__, iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -604,8 +611,9 @@ PVR_ERROR CPVRClients::RenameRecording(const CPVRRecording &recording)
   if (GetCreatedClient(recording.m_iClientId, client))
     error = client->RenameRecording(recording);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot rename recording on client '%d': %s",__FUNCTION__, recording.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -618,8 +626,9 @@ PVR_ERROR CPVRClients::DeleteRecording(const CPVRRecording &recording)
   if (GetCreatedClient(recording.m_iClientId, client))
     error = client->DeleteRecording(recording);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot delete recording from client '%d': %s",__FUNCTION__, recording.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -628,15 +637,17 @@ PVR_ERROR CPVRClients::UndeleteRecording(const CPVRRecording &recording)
 {
   PVR_ERROR error(PVR_ERROR_UNKNOWN);
 
-  if (!recording.IsDeleted())
+  if (!recording.IsDeleted()) {
     return error;
+}
 
   PVR_CLIENT client;
   if (GetCreatedClient(recording.m_iClientId, client))
     error = client->UndeleteRecording(recording);
 
-  if (error != PVR_ERROR_NO_ERROR)
+  if (error != PVR_ERROR_NO_ERROR) {
     CLog::Log(LOGERROR, "PVR - %s - cannot undelete recording from client '%d': %s",__FUNCTION__, recording.m_iClientId, CPVRClient::ToString(error));
+}
 
   return error;
 }
@@ -845,8 +856,9 @@ PVR_ERROR CPVRClients::GetChannelGroupMembers(CPVRChannelGroup *group)
 
 bool CPVRClients::HasMenuHooks(int iClientID, PVR_MENUHOOK_CAT cat)
 {
-  if (iClientID < 0)
+  if (iClientID < 0) {
     iClientID = GetPlayingClientID();
+}
 
   PVR_CLIENT client;
   return (GetCreatedClient(iClientID, client) && client->HasMenuHooks(cat));
@@ -1364,8 +1376,9 @@ void CPVRClients::ConnectionStateChange(CPVRClient *client, std::string &strConn
       bError = false;
       iMsg = 36034; // Connection established
       if (client->GetPreviousConnectionState() == PVR_CONNECTION_STATE_UNKNOWN ||
-          client->GetPreviousConnectionState() == PVR_CONNECTION_STATE_CONNECTING)
+          client->GetPreviousConnectionState() == PVR_CONNECTION_STATE_CONNECTING) {
         bNotify = false;
+}
       break;
     case PVR_CONNECTION_STATE_DISCONNECTED:
       iMsg = 36030; // Connection lost

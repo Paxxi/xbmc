@@ -65,7 +65,7 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
   bool dstHasRR = false;
   bool dstHasBC = false;
 
-  for (unsigned int c = 0; c < rhs.m_channelCount; ++c)
+  for (unsigned int c = 0; c < rhs.m_channelCount; ++c) {
     switch(rhs.m_channels[c])
     {
       case AE_CH_SL: dstHasSL = true; break;
@@ -76,6 +76,7 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
       default:
         break;
     }
+}
 
   CAEChannelInfo newInfo;
   for (unsigned int i = 0; i < m_channelCount; ++i)
@@ -92,40 +93,48 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
     }
 
     bool found = false;
-    for (unsigned int c = 0; c < rhs.m_channelCount; ++c)
+    for (unsigned int c = 0; c < rhs.m_channelCount; ++c) {
       if (m_channels[i] == rhs.m_channels[c])
       {
         found = true;
         break;
       }
+}
 
-    if (found)
+    if (found) {
       newInfo += m_channels[i];
+}
   }
 
   /* we need to ensure we end up with rear or side channels for downmix to work */
-  if (srcHasSL && !dstHasSL && dstHasRL && !newInfo.HasChannel(AE_CH_BL))
+  if (srcHasSL && !dstHasSL && dstHasRL && !newInfo.HasChannel(AE_CH_BL)) {
     newInfo += AE_CH_BL;
-  if (srcHasSR && !dstHasSR && dstHasRR && !newInfo.HasChannel(AE_CH_BR))
+}
+  if (srcHasSR && !dstHasSR && dstHasRR && !newInfo.HasChannel(AE_CH_BR)) {
     newInfo += AE_CH_BR;
-  if (srcHasRL && !dstHasRL && dstHasSL && !newInfo.HasChannel(AE_CH_SL))
+}
+  if (srcHasRL && !dstHasRL && dstHasSL && !newInfo.HasChannel(AE_CH_SL)) {
     newInfo += AE_CH_SL;
-  if (srcHasRR && !dstHasRR && dstHasSR && !newInfo.HasChannel(AE_CH_SR))
+}
+  if (srcHasRR && !dstHasRR && dstHasSR && !newInfo.HasChannel(AE_CH_SR)) {
     newInfo += AE_CH_SR;
+}
 
   // mix back center if not available in destination layout
   // prefer mixing into backs if available
   if (srcHasBC && !dstHasBC)
   {
-    if (dstHasRL && !newInfo.HasChannel(AE_CH_BL))
+    if (dstHasRL && !newInfo.HasChannel(AE_CH_BL)) {
       newInfo += AE_CH_BL;
-    else if (dstHasSL && !newInfo.HasChannel(AE_CH_SL))
+    } else if (dstHasSL && !newInfo.HasChannel(AE_CH_SL)) {
       newInfo += AE_CH_SL;
+}
 
-    if (dstHasRR && !newInfo.HasChannel(AE_CH_BR))
+    if (dstHasRR && !newInfo.HasChannel(AE_CH_BR)) {
       newInfo += AE_CH_BR;
-    else if (dstHasSR && !newInfo.HasChannel(AE_CH_SR))
+    } else if (dstHasSR && !newInfo.HasChannel(AE_CH_SR)) {
       newInfo += AE_CH_SR;
+}
   }
 
   *this = newInfo;
@@ -134,14 +143,16 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
 void CAEChannelInfo::Reset()
 {
   m_channelCount = 0;
-  for (auto & m_channel : m_channels)
+  for (auto & m_channel : m_channels) {
     m_channel = AE_CH_NULL;
+}
 }
 
 CAEChannelInfo& CAEChannelInfo::operator=(const CAEChannelInfo& rhs)
 {
-  if (this == &rhs)
+  if (this == &rhs) {
     return *this;
+}
 
   /* clone the information */
   m_channelCount = rhs.m_channelCount;
@@ -153,8 +164,9 @@ CAEChannelInfo& CAEChannelInfo::operator=(const CAEChannelInfo& rhs)
 CAEChannelInfo& CAEChannelInfo::operator=(const enum AEChannel* rhs)
 {
   Reset();
-  if (rhs == nullptr)
+  if (rhs == nullptr) {
     return *this;
+}
 
   while (m_channelCount < AE_CH_MAX && rhs[m_channelCount] != AE_CH_NULL)
   {
@@ -193,13 +205,16 @@ CAEChannelInfo& CAEChannelInfo::operator=(const enum AEStdChLayout rhs)
 bool CAEChannelInfo::operator==(const CAEChannelInfo& rhs) const
 {
   /* if the channel count doesnt match, no need to check further */
-  if (m_channelCount != rhs.m_channelCount)
+  if (m_channelCount != rhs.m_channelCount) {
     return false;
+}
 
   /* make sure the channel order is the same */
-  for (unsigned int i = 0; i < m_channelCount; ++i)
-    if (m_channels[i] != rhs.m_channels[i])
+  for (unsigned int i = 0; i < m_channelCount; ++i) {
+    if (m_channels[i] != rhs.m_channels[i]) {
       return false;
+}
+}
 
   return true;
 }
@@ -223,13 +238,16 @@ CAEChannelInfo& CAEChannelInfo::operator-=(const enum AEChannel& rhs)
   assert(rhs > AE_CH_NULL && rhs < AE_CH_MAX);
 
   unsigned int i = 0;
-  while(i < m_channelCount && m_channels[i] != rhs)
+  while(i < m_channelCount && m_channels[i] != rhs) {
     i++;
-  if (i >= m_channelCount)
+}
+  if (i >= m_channelCount) {
     return *this; // Channel not found
+}
 
-  for(; i < m_channelCount-1; i++)
+  for(; i < m_channelCount-1; i++) {
     m_channels[i] = m_channels[i+1];
+}
 
   m_channels[i] = AE_CH_NULL;
   m_channelCount--;
@@ -293,9 +311,11 @@ const char* CAEChannelInfo::GetChName(const enum AEChannel ch)
 
 bool CAEChannelInfo::HasChannel(const enum AEChannel ch) const
 {
-  for (unsigned int i = 0; i < m_channelCount; ++i)
-    if (m_channels[i] == ch)
+  for (unsigned int i = 0; i < m_channelCount; ++i) {
+    if (m_channels[i] == ch) {
       return true;
+}
+}
   return false;
 }
 
@@ -303,8 +323,9 @@ bool CAEChannelInfo::ContainsChannels(const CAEChannelInfo& rhs) const
 {
   for (unsigned int i = 0; i < rhs.m_channelCount; ++i)
   {
-    if (!HasChannel(rhs.m_channels[i]))
+    if (!HasChannel(rhs.m_channels[i])) {
       return false;
+}
   }
   return true;
 }
@@ -369,7 +390,9 @@ int CAEChannelInfo::BestMatch(const std::vector<CAEChannelInfo>& dsts, int* scor
 
 void CAEChannelInfo::AddMissingChannels(const CAEChannelInfo& rhs)
 {
-  for (unsigned int i = 0; i < rhs.Count(); i++)
-    if (!HasChannel(rhs[i]))
+  for (unsigned int i = 0; i < rhs.Count(); i++) {
+    if (!HasChannel(rhs[i])) {
       *this += rhs[i];
+}
+}
 }

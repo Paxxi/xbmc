@@ -169,8 +169,9 @@ int CUPowerSyscall::BatteryLevel()
     }
   }
 
-  if(nBatteryCount)
+  if(nBatteryCount) {
     batteryLevel = subCapacity / (double)nBatteryCount;
+}
 
   return (int) batteryLevel;
 }
@@ -216,10 +217,11 @@ bool CUPowerSyscall::HasUPower()
 
   deviceKitMessage.Send(con, &error);
 
-  if (!dbus_error_is_set(&error))
+  if (!dbus_error_is_set(&error)) {
     hasUPower = true;
-  else
+  } else {
     CLog::Log(LOGDEBUG, "UPower: %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
   dbus_connection_unref(con);
@@ -239,19 +241,21 @@ bool CUPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
     if (msg)
     {
       result = true;
-      if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Sleeping"))
+      if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Sleeping")) {
         callback->OnSleep();
-      else if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Resuming"))
+      } else if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Resuming")) {
         callback->OnWake();
-      else if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Changed"))
+      } else if (dbus_message_is_signal(msg, "org.freedesktop.UPower", "Changed"))
       {
         bool lowBattery = m_lowBattery;
         UpdateCapabilities();
-        if (m_lowBattery && !lowBattery)
+        if (m_lowBattery && !lowBattery) {
           callback->OnLowBattery();
+}
       }
-      else
+      else {
         CLog::Log(LOGDEBUG, "UPower: Received an unknown signal %s", dbus_message_get_member(msg));
+}
 
       dbus_message_unref(msg);
     }

@@ -70,8 +70,9 @@ bool CCDDARipJob::DoWork()
 
   // if we are ripping to a samba share, rip it to hd first and then copy it it the share
   CFileItem file(m_output, false);
-  if (file.IsRemote())
+  if (file.IsRemote()) {
     m_output = SetupTempFile();
+}
   
   if (m_output.empty())
   {
@@ -138,11 +139,11 @@ bool CCDDARipJob::DoWork()
     CLog::Log(LOGWARNING, "User Cancelled CDDA Rip");
     CFile::Delete(m_output);
   }
-  else if (result == 1)
+  else if (result == 1) {
     CLog::Log(LOGERROR, "CDDARipper: Error ripping %s", m_input.c_str());
-  else if (result < 0)
+  } else if (result < 0) {
     CLog::Log(LOGERROR, "CDDARipper: Error encoding %s", m_input.c_str());
-  else
+  } else
   {
     CLog::Log(LOGINFO, "Finished ripping %s", m_input.c_str());
     if (m_eject)
@@ -167,8 +168,9 @@ int CCDDARipJob::RipChunk(CFile& reader, CEncoder* encoder, int& percent)
   int result = reader.Read(stream, 1024);
 
   // return if rip is done or on some kind of error
-  if (result <= 0)
+  if (result <= 0) {
     return 1;
+}
 
   // encode data
   int encres=encoder->Encode(result, stream);
@@ -176,8 +178,9 @@ int CCDDARipJob::RipChunk(CFile& reader, CEncoder* encoder, int& percent)
   // Get progress indication
   percent = static_cast<int>(reader.GetPosition()*100/reader.GetLength());
 
-  if (reader.GetPosition() == reader.GetLength())
+  if (reader.GetPosition() == reader.GetLength()) {
     return 2;
+}
 
   return -(1-encres);
 }
@@ -203,8 +206,9 @@ CEncoder* CCDDARipJob::SetupEncoder(CFile& reader)
       encoder = new CEncoder(enc);
     }
   }
-  if (!encoder)
+  if (!encoder) {
     return nullptr;
+}
 
   // we have to set the tags before we init the Encoder
   std::string strTrack = StringUtils::Format("%li", strtol(m_input.substr(13, m_input.size() - 13 - 5).c_str(),NULL,10));
@@ -241,10 +245,12 @@ std::string CCDDARipJob::SetupTempFile()
 #else
   int fd;
   strncpy(tmp, CSpecialProtocol::TranslatePath("special://temp/riptrackXXXXXX").c_str(), MAX_PATH);
-  if ((fd = mkstemp(tmp)) == -1)
+  if ((fd = mkstemp(tmp)) == -1) {
    tmp[0] = '\0'; 
-  if (fd != -1)
+  
+}if (fd != -1) {
     close(fd);
+}
 #endif
   return tmp;
 }

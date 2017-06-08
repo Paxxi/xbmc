@@ -85,18 +85,21 @@ void CSlideShowPic::Close()
 void CSlideShowPic::Reset(DISPLAY_EFFECT dispEffect, TRANSITION_EFFECT transEffect)
 {
   CSingleLock lock(m_textureAccess);
-  if (m_pImage)
+  if (m_pImage) {
     SetTexture_Internal(m_iSlideNumber, m_pImage, dispEffect, transEffect);
-  else
+  } else {
     Close();
+}
 }
 
 bool CSlideShowPic::DisplayEffectNeedChange(DISPLAY_EFFECT newDispEffect) const
 {
-  if (m_displayEffect == newDispEffect)
+  if (m_displayEffect == newDispEffect) {
     return false;
-  if (newDispEffect == EFFECT_RANDOM && m_displayEffect != EFFECT_NONE && m_displayEffect != EFFECT_NO_TIMEOUT)
+}
+  if (newDispEffect == EFFECT_RANDOM && m_displayEffect != EFFECT_NONE && m_displayEffect != EFFECT_NO_TIMEOUT) {
     return false;
+}
   return true;
 }
 
@@ -132,13 +135,15 @@ void CSlideShowPic::SetTexture_Internal(int iSlideNumber, CBaseTexture* pTexture
   // initialize our display effect
   if (dispEffect == EFFECT_RANDOM)
   {
-    if (((m_fWidth / m_fHeight) > 1.9) || ((m_fHeight / m_fWidth) > 1.9))
+    if (((m_fWidth / m_fHeight) > 1.9) || ((m_fHeight / m_fWidth) > 1.9)) {
       m_displayEffect = EFFECT_PANORAMA;
-    else
+    } else {
       m_displayEffect = (DISPLAY_EFFECT)((rand() % (EFFECT_RANDOM - 1)) + 1);
+}
   }
-  else
+  else {
     m_displayEffect = dispEffect;
+}
 
   // the +1's make sure it actually occurs
   float fadeTime = 0.2f;
@@ -182,8 +187,9 @@ void CSlideShowPic::SetTexture_Internal(int iSlideNumber, CBaseTexture* pTexture
       m_iTotalFrames = m_transitionStart.length + m_transitionEnd.length + iFrames;
 
       m_fPosX = 0.5f - (fScreenWidth / fScreenHeight) * (m_fHeight / m_fWidth) * 0.5f;
-      if (rand() % 2)
+      if (rand() % 2) {
         m_fPosX = -m_fPosX;
+}
       m_fVelocityX = -m_fPosX * 2.0f / m_iTotalFrames;
     }
     else
@@ -192,8 +198,9 @@ void CSlideShowPic::SetTexture_Internal(int iSlideNumber, CBaseTexture* pTexture
       m_iTotalFrames = m_transitionStart.length + m_transitionEnd.length + iFrames;
 
       m_fPosY = 0.5f - (fScreenHeight / fScreenWidth) * (m_fWidth / m_fHeight) * 0.5f;
-      if (rand() % 2)
+      if (rand() % 2) {
         m_fPosY = -m_fPosY;
+}
       m_fVelocityY = -m_fPosY * 2.0f / m_iTotalFrames;
     }
   }
@@ -236,19 +243,21 @@ void CSlideShowPic::SetOriginalSize(int iOriginalWidth, int iOriginalHeight, boo
 int CSlideShowPic::GetOriginalWidth()
 {
   int iAngle = (int)(m_fAngle / 90.0f + 0.4f);
-  if (iAngle % 2)
+  if (iAngle % 2) {
     return m_iOriginalHeight;
-  else
+  } else {
     return m_iOriginalWidth;
+}
 }
 
 int CSlideShowPic::GetOriginalHeight()
 {
   int iAngle = (int)(m_fAngle / 90.0f + 0.4f);
-  if (iAngle % 2)
+  if (iAngle % 2) {
     return m_iOriginalWidth;
-  else
+  } else {
     return m_iOriginalHeight;
+}
 }
 
 void CSlideShowPic::UpdateTexture(CBaseTexture* pTexture)
@@ -335,10 +344,12 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
       }
       else
       {
-        if (m_transitionTemp.type == TRANSITION_ROTATE)
+        if (m_transitionTemp.type == TRANSITION_ROTATE) {
           m_fAngle += m_fTransitionAngle;
-        if (m_transitionTemp.type == TRANSITION_ZOOM)
+}
+        if (m_transitionTemp.type == TRANSITION_ZOOM) {
           m_fZoomAmount += m_fTransitionZoom;
+}
       }
     }
   }
@@ -426,8 +437,9 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     */
     m_iCounter++;
   }
-  if (m_iCounter > m_transitionEnd.start + m_transitionEnd.length)
+  if (m_iCounter > m_transitionEnd.start + m_transitionEnd.length) {
     m_bIsFinished = true;
+}
 
   RESOLUTION_INFO info = g_graphicsContext.GetResInfo();
 
@@ -469,29 +481,35 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   // work out if we should be compensating the zoom to minimize blackbars
   // we should compute this based on the % of black bars on screen perhaps??
   //! @todo change m_displayEffect != EFFECT_NO_TIMEOUT to whether we're running the slideshow
-  if (m_displayEffect != EFFECT_NO_TIMEOUT && fScreenRatio < fSourceAR * fComp && fSourceAR < fScreenRatio * fComp)
+  if (m_displayEffect != EFFECT_NO_TIMEOUT && fScreenRatio < fSourceAR * fComp && fSourceAR < fScreenRatio * fComp) {
     bFillScreen = true;
-  if ((!bFillScreen && fScreenWidth*fPixelRatio > fScreenHeight*fSourceAR) || (bFillScreen && fScreenWidth*fPixelRatio < fScreenHeight*fSourceAR))
+}
+  if ((!bFillScreen && fScreenWidth*fPixelRatio > fScreenHeight*fSourceAR) || (bFillScreen && fScreenWidth*fPixelRatio < fScreenHeight*fSourceAR)) {
     fScaleNorm = fScreenHeight / (m_fHeight * fPixelRatio);
+}
   bFillScreen = false;
-  if (m_displayEffect != EFFECT_NO_TIMEOUT && fScreenRatio < fSourceInvAR * fComp && fSourceInvAR < fScreenRatio * fComp)
+  if (m_displayEffect != EFFECT_NO_TIMEOUT && fScreenRatio < fSourceInvAR * fComp && fSourceInvAR < fScreenRatio * fComp) {
     bFillScreen = true;
-  if ((!bFillScreen && fScreenWidth*fPixelRatio > fScreenHeight*fSourceInvAR) || (bFillScreen && fScreenWidth*fPixelRatio < fScreenHeight*fSourceInvAR))
+}
+  if ((!bFillScreen && fScreenWidth*fPixelRatio > fScreenHeight*fSourceInvAR) || (bFillScreen && fScreenWidth*fPixelRatio < fScreenHeight*fSourceInvAR)) {
     fScaleInv = fScreenHeight / (m_fWidth * fPixelRatio);
+}
 
   float fScale = si * si * (fScaleInv - fScaleNorm) + fScaleNorm;
   // scale if we need to due to the effect we're using
   if (m_displayEffect == EFFECT_PANORAMA)
   {
-    if (m_fWidth > m_fHeight)
+    if (m_fWidth > m_fHeight) {
       fScale *= m_fWidth / fScreenWidth * fScreenHeight / m_fHeight;
-    else
+    } else {
       fScale *= m_fHeight / fScreenHeight * fScreenWidth / m_fWidth;
+}
   }
   if (m_displayEffect == EFFECT_FLOAT)
     fScale *= (1.0f + g_advancedSettings.m_slideshowPanAmount * m_iTotalFrames * 0.0001f);
-  if (m_displayEffect == EFFECT_ZOOM)
+  if (m_displayEffect == EFFECT_ZOOM) {
     fScale *= m_fPosZ;
+}
   // zoom image
   fScale *= m_fZoomAmount;
 
@@ -524,21 +542,27 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     m_bCanMoveVertically   = (h >= fScreenHeight);
     if (w >= fScreenWidth)
     { // must have no black bars
-      if (minx + m_fZoomLeft*w > fOffsetX)
+      if (minx + m_fZoomLeft*w > fOffsetX) {
         m_fZoomLeft = (fOffsetX - minx) / w;
-      if (maxx + m_fZoomLeft*w < fOffsetX + fScreenWidth)
+}
+      if (maxx + m_fZoomLeft*w < fOffsetX + fScreenWidth) {
         m_fZoomLeft = (fScreenWidth + fOffsetX - maxx) / w;
-      for (float & i : x)
+}
+      for (float & i : x) {
         i += w * m_fZoomLeft;
+}
     }
     if (h >= fScreenHeight)
     { // must have no black bars
-      if (miny + m_fZoomTop*h > fOffsetY)
+      if (miny + m_fZoomTop*h > fOffsetY) {
         m_fZoomTop = (fOffsetY - miny) / h;
-      if (maxy + m_fZoomTop*h < fOffsetY + fScreenHeight)
+}
+      if (maxy + m_fZoomTop*h < fOffsetY + fScreenHeight) {
         m_fZoomTop = (fScreenHeight + fOffsetY - maxy) / h;
-      for (float & i : y)
+}
+      for (float & i : y) {
         i += m_fZoomTop * h;
+}
     }
   }
   // add offset from display effects
@@ -589,14 +613,16 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   float by[4];
   for (int i = 0; i < 4; i++)
   {
-    if (sx[i] > 0)
+    if (sx[i] > 0) {
       bx[i] = sx[i] + 1;
-    else
+    } else {
       bx[i] = sx[i] - 1;
-    if (sy[i] > 0)
+}
+    if (sy[i] > 0) {
       by[i] = sy[i] + 1;
-    else
+    } else {
       by[i] = sy[i] - 1;
+}
     sx[i] += fSmallX;
     sy[i] += fSmallY;
     bx[i] += fSmallX;
@@ -612,10 +638,11 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   // now we must render the wireframe image of the view window
   // work out the direction of the top of pic vector
   float scale;
-  if (fabs(x[1] - x[0]) > fabs(x[3] - x[0]))
+  if (fabs(x[1] - x[0]) > fabs(x[3] - x[0])) {
     scale = (sx[1] - sx[0]) / (x[1] - x[0]);
-  else
+  } else {
     scale = (sx[3] - sx[0]) / (x[3] - x[0]);
+}
   float ox[4];
   float oy[4];
   ox[0] = (fOffsetX - x[0]) * scale + sx[0];
@@ -660,30 +687,34 @@ bool CSlideShowPic::StartTransition()
 
 void CSlideShowPic::Pause(bool bPause)
 {
-  if (!m_bDrawNextImage)
+  if (!m_bDrawNextImage) {
     m_bPause = bPause;
+}
 }
 
 void CSlideShowPic::SetInSlideshow(bool slideshow)
 {
-  if (slideshow && m_displayEffect == EFFECT_NO_TIMEOUT)
+  if (slideshow && m_displayEffect == EFFECT_NO_TIMEOUT) {
     m_displayEffect = EFFECT_NONE;
+}
 }
 
 int CSlideShowPic::GetTransitionTime(int iType) const
 {
-  if (iType == 0) // start transition
+  if (iType == 0) { // start transition
     return m_transitionStart.length;
-  else // iType == 1 // end transition
+  } else { // iType == 1 // end transition
     return m_transitionEnd.length;
+}
 }
 
 void CSlideShowPic::SetTransitionTime(int iType, int iTime)
 {
-  if (iType == 0) // start transition
+  if (iType == 0) { // start transition
     m_transitionStart.length = iTime;
-  else // iType == 1 // end transition
+  } else { // iType == 1 // end transition
     m_transitionEnd.length = iTime;
+}
 }
 
 void CSlideShowPic::Rotate(float fRotateAngle, bool immediate /* = false */)
@@ -883,8 +914,9 @@ void CSlideShowPic::Render(float *x, float *y, CBaseTexture* pTexture, color_t c
       glTexEnvi (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA , GL_PREVIOUS);
     }
   }
-  else
+  else {
     glDisable(GL_TEXTURE_2D);
+}
   glPolygonMode(GL_FRONT_AND_BACK, pTexture ? GL_FILL : GL_LINE);
 
   glBegin(GL_QUADS);

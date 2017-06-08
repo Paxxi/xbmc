@@ -57,13 +57,15 @@ extern "C" HMODULE __stdcall dllLoadLibraryExtended(LPCSTR lib_file, LPCSTR sour
 
   /* extract name */
   const char* p = strrchr(lib_file, PATH_SEPARATOR_CHAR);
-  if (p)
+  if (p) {
     strcpy(libname, p+1);
-  else
+  } else {
     strcpy(libname, lib_file);
+}
 
-  if( libname[0] == '\0' )
+  if( libname[0] == '\0' ) {
     return nullptr;
+}
 
   /* extract path */
   getpath(libpath, lib_file);
@@ -77,27 +79,31 @@ extern "C" HMODULE __stdcall dllLoadLibraryExtended(LPCSTR lib_file, LPCSTR sour
       getpath(libpath, sourcedll);
 
       /* mplayer has all it's dlls in a codecs subdirectory */
-      if (strstr(sourcedll, "mplayer.dll"))
+      if (strstr(sourcedll, "mplayer.dll")) {
         strcat(libpath, "codecs\\");
+}
     }
   }
 
   /* if we still don't have a path, use default path */
-  if( libpath[0] == '\0' )
+  if( libpath[0] == '\0' ) {
     strcpy(libpath, DEFAULT_DLLPATH);
+}
 
   /* msdn docs state */
   /* "If no file name extension is specified in the lpFileName parameter, the default library extension .dll is appended.  */
   /* However, the file name string can include a trailing point character (.) to indicate that the module name has no extension." */
-  if( strrchr(libname, '.') == nullptr )
+  if( strrchr(libname, '.') == nullptr ) {
     strcat(libname, ".dll");
-  else if( libname[strlen(libname)-1] == '.' )
+  } else if( libname[strlen(libname)-1] == '.' ) {
     libname[strlen(libname)-1] = '\0';
 
-  dll = DllLoaderContainer::LoadModule(libname, libpath);
+  
+}dll = DllLoaderContainer::LoadModule(libname, libpath);
 
-  if (dll)
+  if (dll) {
     return (HMODULE)dll->GetHModule();
+}
 
   CLog::Log(LOGERROR, "LoadLibrary('%s') failed", libname);
   return nullptr;
@@ -180,8 +186,9 @@ extern "C" FARPROC __stdcall dllGetProcAddress(HMODULE hModule, LPCSTR function)
 
       /* add to tracklist if we are tracking this source dll */
       DllTrackInfo* track = tracker_get_dlltrackinfo(loc);
-      if( track )
+      if( track ) {
         tracker_dll_data_track(track->pDll, (uintptr_t)address);
+}
 
       CLog::Log(LOGDEBUG, "%s - created dummy function %s!%s",__FUNCTION__, dll->GetName(), ordinal);
     }
@@ -230,8 +237,9 @@ extern "C" HMODULE WINAPI dllGetModuleHandleA(LPCSTR lpModuleName)
   If this parameter is NULL, GetModuleHandle returns a handle to the file used to create the calling process (.exe file).
   */
 
-  if( lpModuleName == nullptr )
+  if( lpModuleName == nullptr ) {
     return nullptr;
+}
 
   auto  strModuleName = new char[strlen(lpModuleName) + 5];
   strcpy(strModuleName, lpModuleName);

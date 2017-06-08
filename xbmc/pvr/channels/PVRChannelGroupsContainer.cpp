@@ -48,8 +48,9 @@ CPVRChannelGroupsContainer::~CPVRChannelGroupsContainer(void)
 bool CPVRChannelGroupsContainer::Update(bool bChannelsOnly /* = false */)
 {
   CSingleLock lock(m_critSection);
-  if (m_bIsUpdating)
+  if (m_bIsUpdating) {
     return false;
+}
   m_bIsUpdating = true;
   m_bUpdateChannelsOnly = bChannelsOnly;
   lock.Leave();

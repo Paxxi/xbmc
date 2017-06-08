@@ -250,11 +250,13 @@ void CGUIDialogPVRGuideInfo::OnInitWindow()
     bHideAddTimer = false;
   }
 
-  if (bHideRecord)
+  if (bHideRecord) {
     SET_CONTROL_HIDDEN(CONTROL_BTN_RECORD);
+}
 
-  if (bHideAddTimer)
+  if (bHideAddTimer) {
     SET_CONTROL_HIDDEN(CONTROL_BTN_ADD_TIMER);
+}
 }
 
 void CGUIDialogPVRGuideInfo::ShowFor(const CFileItemPtr& item)

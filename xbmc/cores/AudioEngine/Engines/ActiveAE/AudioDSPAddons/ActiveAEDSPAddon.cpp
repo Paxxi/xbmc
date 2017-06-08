@@ -125,8 +125,9 @@ void CActiveAEDSPAddon::ResetProperties(int iClientId /* = AE_DSP_INVALID_ADDON_
 ADDON_STATUS CActiveAEDSPAddon::Create(int iClientId)
 {
   ADDON_STATUS status(ADDON_STATUS_UNKNOWN);
-  if (iClientId <= AE_DSP_INVALID_ADDON_ID)
+  if (iClientId <= AE_DSP_INVALID_ADDON_ID) {
     return status;
+}
 
   /* ensure that a previous instance is destroyed */
   Destroy();
@@ -153,8 +154,9 @@ bool CActiveAEDSPAddon::DllLoaded() const
 void CActiveAEDSPAddon::Destroy()
 {
   /* reset 'ready to use' to false */
-  if (!m_bReadyToUse)
+  if (!m_bReadyToUse) {
     return;
+}
   m_bReadyToUse = false;
 
   CLog::Log(LOGDEBUG, "ActiveAE DSP - %s - destroying audio dsp add-on '%s'", __FUNCTION__, GetFriendlyName().c_str());
@@ -262,8 +264,9 @@ AE_DSP_MENUHOOKS *CActiveAEDSPAddon::GetMenuHooks()
 
 void CActiveAEDSPAddon::CallMenuHook(const AE_DSP_MENUHOOK &hook, AE_DSP_MENUHOOK_DATA &hookData)
 {
-  if (!m_bReadyToUse || hookData.category == AE_DSP_MENUHOOK_UNKNOWN)
+  if (!m_bReadyToUse || hookData.category == AE_DSP_MENUHOOK_UNKNOWN) {
     return;
+}
 
   m_struct.toAddon.MenuHook(hook, hookData);
 }
@@ -271,8 +274,9 @@ void CActiveAEDSPAddon::CallMenuHook(const AE_DSP_MENUHOOK &hook, AE_DSP_MENUHOO
 AE_DSP_ERROR CActiveAEDSPAddon::StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STREAM_PROPERTIES* pProperties, ADDON_HANDLE handle)
 {
   AE_DSP_ERROR retVal = m_struct.toAddon.StreamCreate(addonSettings, pProperties, handle);
-  if (retVal == AE_DSP_ERROR_NO_ERROR)
+  if (retVal == AE_DSP_ERROR_NO_ERROR) {
     m_isInUse = true;
+}
   LogError(retVal, __FUNCTION__);
 
   return retVal;
@@ -288,10 +292,11 @@ void CActiveAEDSPAddon::StreamDestroy(const ADDON_HANDLE handle)
 bool CActiveAEDSPAddon::StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE type, unsigned int addon_mode_id, int unique_db_mode_id)
 {
   AE_DSP_ERROR retVal = m_struct.toAddon.StreamIsModeSupported(handle, type, addon_mode_id, unique_db_mode_id);
-  if (retVal == AE_DSP_ERROR_NO_ERROR)
+  if (retVal == AE_DSP_ERROR_NO_ERROR) {
     return true;
-  else if (retVal != AE_DSP_ERROR_IGNORE_ME)
+  } else if (retVal != AE_DSP_ERROR_IGNORE_ME) {
     LogError(retVal, __FUNCTION__);
+}
 
   return false;
 }
@@ -376,8 +381,9 @@ std::string CActiveAEDSPAddon::MasterProcessGetStreamInfoString(const ADDON_HAND
 {
   std::string strReturn;
 
-  if (!m_bReadyToUse)
+  if (!m_bReadyToUse) {
     return strReturn;
+}
 
   strReturn = m_struct.toAddon.MasterProcessGetStreamInfoString(handle);
   return strReturn;

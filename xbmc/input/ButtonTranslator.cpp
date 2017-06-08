@@ -524,9 +524,10 @@ void CButtonTranslator::AddDevice(std::string& strDevice)
 {
   // Only add the device if it isn't already in the list
   std::list<std::string>::iterator it;
-  for (it = m_deviceList.begin(); it != m_deviceList.end(); ++it)
+  for (it = m_deviceList.begin(); it != m_deviceList.end(); ++it) {
     if (*it == strDevice)
       return;
+}
 
   // Add the device
   m_deviceList.push_back(strDevice);
@@ -540,9 +541,10 @@ void CButtonTranslator::RemoveDevice(std::string& strDevice)
 {
   // Find the device
   std::list<std::string>::iterator it;
-  for (it = m_deviceList.begin(); it != m_deviceList.end(); ++it)
+  for (it = m_deviceList.begin(); it != m_deviceList.end(); ++it) {
     if (*it == strDevice)
       break;
+}
   if (it == m_deviceList.end())
     return;
 
@@ -628,8 +630,9 @@ bool CButtonTranslator::Load(bool AlwaysLoad)
   else
     CLog::Log(LOGDEBUG, "CButtonTranslator::Load - no userdata %s found, skipping", REMOTEMAP);
 
-  if (!success)
+  if (!success) {
     CLog::Log(LOGERROR, "CButtonTranslator::Load - unable to load remote map %s", REMOTEMAP);
+}
   // don't return false - it is to only indicate a fatal error (which this is not)
 #endif
 
@@ -670,10 +673,11 @@ bool CButtonTranslator::LoadKeymap(const std::string &keymapPath)
       const char *szWindow = pWindow->Value();
       if (szWindow)
       {
-        if (strcmpi(szWindow, "global") == 0)
+        if (strcmpi(szWindow, "global") == 0) {
           windowID = -1;
-        else
-          windowID = TranslateWindow(szWindow);
+        } else {
+          windowID 
+}= TranslateWindow(szWindow);
       }
       MapWindowActions(pWindow, windowID);
     }
@@ -719,8 +723,9 @@ bool CButtonTranslator::LoadLircMap(const std::string &lircmapPath)
       if (szRemote)
       {
         TiXmlAttribute* pAttr = pRemote->ToElement()->FirstAttribute();
-        if (pAttr)
+        if (pAttr) {
           MapRemote(pRemote, pAttr->Value());
+}
       }
     }
     pRemote = pRemote->NextSibling();
@@ -814,11 +819,13 @@ bool CButtonTranslator::TranslateCustomControllerString(int windowId, const std:
   if (action == 0)
   {
     int fallbackWindow = GetFallbackWindow(windowId);
-    if (fallbackWindow > -1)
+    if (fallbackWindow > -1) {
       action = GetCustomControllerActionCode(fallbackWindow, buttonId, wmap, strAction);
+}
     // still no valid action? use global map
-    if (action == 0)
+    if (action == 0) {
       action = GetCustomControllerActionCode(-1, buttonId, wmap, strAction);
+}
   }
   
   return (action > 0);
@@ -828,8 +835,9 @@ bool CButtonTranslator::TranslateCustomControllerString(int windowId, const std:
 bool CButtonTranslator::TranslateTouchAction(int window, int touchAction, int touchPointers, int &action, std::string &actionString)
 {
   action = 0;
-  if (touchPointers <= 0)
+  if (touchPointers <= 0) {
     touchPointers = 1;
+}
 
   touchAction += touchPointers - 1;
   touchAction |= KEY_TOUCH;
@@ -838,10 +846,12 @@ bool CButtonTranslator::TranslateTouchAction(int window, int touchAction, int to
   if (action <= 0)
   {
     int fallbackWindow = GetFallbackWindow(window);
-    if (fallbackWindow > -1)
+    if (fallbackWindow > -1) {
       action = GetTouchActionCode(fallbackWindow, touchAction, actionString);
-    if (action <= 0)
+}
+    if (action <= 0) {
       action = GetTouchActionCode(-1, touchAction, actionString);
+}
   }
 
   return action > 0;
@@ -882,12 +892,14 @@ int CButtonTranslator::GetFallbackWindow(int windowID)
 {
   for (auto fallbackWindow : fallbackWindows)
   {
-    if (fallbackWindow.origin == windowID)
+    if (fallbackWindow.origin == windowID) {
       return fallbackWindow.target;
+}
   }
   // for addon windows use WINDOW_ADDON_START because id is dynamic
-  if (windowID > WINDOW_ADDON_START && windowID <= WINDOW_ADDON_END)
+  if (windowID > WINDOW_ADDON_START && windowID <= WINDOW_ADDON_END) {
     return WINDOW_ADDON_START;
+}
 
   return -1;
 }
@@ -947,8 +959,9 @@ bool CButtonTranslator::HasLongpressMapping(int window, const CKey &key)
   {
     // first check if we have a fallback for the window
     int fallbackWindow = GetFallbackWindow(window);
-    if (fallbackWindow > -1 && HasLongpressMapping(fallbackWindow, key))
+    if (fallbackWindow > -1 && HasLongpressMapping(fallbackWindow, key)) {
       return true;
+}
 
     // fallback to default section
     return HasLongpressMapping(-1, key);
@@ -976,9 +989,9 @@ unsigned int CButtonTranslator::GetHoldTimeMs(int window, const CKey &key, bool 
     {
       //! @todo Refactor fallback logic
       int fallbackWindow = GetFallbackWindow(window);
-      if (fallbackWindow > -1)
+      if (fallbackWindow > -1) {
         holdtimeMs = GetHoldTimeMs(fallbackWindow, key, false);
-      else
+      } else
       {
         // still no valid action? use global map
         holdtimeMs = GetHoldTimeMs(-1, key, false);
@@ -989,9 +1002,9 @@ unsigned int CButtonTranslator::GetHoldTimeMs(int window, const CKey &key, bool 
   {
     //! @todo Refactor fallback logic
     int fallbackWindow = GetFallbackWindow(window);
-    if (fallbackWindow > -1)
+    if (fallbackWindow > -1) {
       holdtimeMs = GetHoldTimeMs(fallbackWindow, key, false);
-    else
+    } else
     {
       // still no valid action? use global map
       holdtimeMs = GetHoldTimeMs(-1, key, false);
@@ -1040,8 +1053,9 @@ int CButtonTranslator::GetActionCode(int window, const CKey &key, std::string &s
 void CButtonTranslator::MapAction(uint32_t buttonCode, const char *szAction, unsigned int holdtimeMs, buttonMap &map)
 {
   int action = ACTION_NONE;
-  if (!TranslateActionString(szAction, action) || !buttonCode)
+  if (!TranslateActionString(szAction, action) || !buttonCode) {
     return;   // no valid action, or an invalid buttoncode
+}
 
   // have a valid action, and a valid button - map it.
   // check to see if we've already got this (button,action) pair defined
@@ -1093,8 +1107,9 @@ void CButtonTranslator::MapCustomControllerActions(int windowID, TiXmlNode *pCus
     {
       buttonMap[id] = action;
     }
-    else
+    else {
       CLog::Log(LOGERROR, "Error reading customController map element, Invalid id: %d", id);
+}
     
     pButton = pButton->NextSiblingElement();
   }
@@ -1106,8 +1121,9 @@ void CButtonTranslator::MapCustomControllerActions(int windowID, TiXmlNode *pCus
 
 void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
 {
-  if (!pWindow || windowID == WINDOW_INVALID) 
+  if (!pWindow || windowID == WINDOW_INVALID) { 
     return;
+}
 
   TiXmlNode* pDevice;
 
@@ -1258,8 +1274,9 @@ int CButtonTranslator::TranslateWindow(const std::string &window)
   {
     // allow a full window id or a delta id
     int iWindow = atoi(strWindow.c_str());
-    if (iWindow > WINDOW_INVALID)
+    if (iWindow > WINDOW_INVALID) {
       return iWindow;
+}
     return WINDOW_HOME + iWindow;
   }
 
@@ -1276,8 +1293,9 @@ int CButtonTranslator::TranslateWindow(const std::string &window)
 
 uint32_t CButtonTranslator::TranslateGamepadString(const char *szButton)
 {
-  if (!szButton) 
+  if (!szButton) { 
     return 0;
+}
   uint32_t buttonCode = 0;
   std::string strButton = szButton;
   StringUtils::ToLower(strButton);
@@ -1315,8 +1333,9 @@ uint32_t CButtonTranslator::TranslateGamepadString(const char *szButton)
 
 uint32_t CButtonTranslator::TranslateRemoteString(const char *szButton)
 {
-  if (!szButton) 
+  if (!szButton) { 
     return 0;
+}
   uint32_t buttonCode = 0;
   std::string strButton = szButton;
   StringUtils::ToLower(strButton);
@@ -1392,13 +1411,15 @@ uint32_t CButtonTranslator::TranslateRemoteString(const char *szButton)
 
 uint32_t CButtonTranslator::TranslateUniversalRemoteString(const char *szButton)
 {
-  if (!szButton || strlen(szButton) < 4 || strnicmp(szButton, "obc", 3)) 
+  if (!szButton || strlen(szButton) < 4 || strnicmp(szButton, "obc", 3)) { 
     return 0;
+}
   const char *szCode = szButton + 3;
   // Button Code is 255 - OBC (Original Button Code) of the button
   uint32_t buttonCode = 255 - atol(szCode);
-  if (buttonCode > 255) 
+  if (buttonCode > 255) { 
     buttonCode = 0;
+}
   return buttonCode;
 }
 
@@ -1429,8 +1450,9 @@ uint32_t CButtonTranslator::TranslateKeyboardButton(TiXmlElement *pButton)
   uint32_t button_id = 0;
   const char *szButton = pButton->Value();
 
-  if (!szButton) 
+  if (!szButton) { 
     return 0;
+}
   const std::string strKey = szButton;
   if (strKey == "key")
   {
@@ -1440,10 +1462,11 @@ uint32_t CButtonTranslator::TranslateKeyboardButton(TiXmlElement *pButton)
       const char *str = strID.c_str();
       char *endptr;
       long int id = strtol(str, &endptr, 0);
-      if (endptr - str != (int)strlen(str) || id <= 0 || id > 0x00FFFFFF)
+      if (endptr - str != (int)strlen(str) || id <= 0 || id > 0x00FFFFFF) {
         CLog::Log(LOGDEBUG, "%s - invalid key id %s", __FUNCTION__, strID.c_str());
-      else
+      } else {
         button_id = (uint32_t) id;
+}
     }
     else
       CLog::Log(LOGERROR, "Keyboard Translator: `key' button has no id");
@@ -1555,8 +1578,9 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
     return ACTION_NONE;
 
   const char *szAction = pButton->FirstChild()->Value();
-  if (szAction == nullptr)
+  if (szAction == nullptr) {
     return ACTION_NONE;
+}
 
   std::string strTouchCommand = szButton;
   StringUtils::ToLower(strTouchCommand);
@@ -1585,21 +1609,24 @@ uint32_t CButtonTranslator::TranslateTouchCommand(TiXmlElement *pButton, CButton
   if (attrVal != nullptr)
   {
     int pointers = (int)strtol(attrVal, nullptr, 0);
-    if (pointers >= 1)
+    if (pointers >= 1) {
       actionId += pointers - 1;
+}
   }
 
   action.strID = szAction;
-  if (!TranslateActionString(szAction, action.id) || action.id <= ACTION_NONE)
+  if (!TranslateActionString(szAction, action.id) || action.id <= ACTION_NONE) {
     return ACTION_NONE;
+}
 
   return actionId | KEY_TOUCH;
 }
 
 void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 {
-  if (pTouch == nullptr)
+  if (pTouch == nullptr) {
     return;
+}
 
   buttonMap map;
   // check if there already is a touch map for the window ID
@@ -1614,8 +1641,9 @@ void CButtonTranslator::MapTouchActions(int windowID, TiXmlNode *pTouch)
 
   uint32_t actionId = 0;
   TiXmlElement *pTouchElem = pTouch->ToElement();
-  if (pTouchElem == nullptr)
+  if (pTouchElem == nullptr) {
     return;
+}
 
   TiXmlElement *pButton = pTouchElem->FirstChildElement();
   while (pButton != nullptr)
@@ -1660,8 +1688,9 @@ uint32_t CButtonTranslator::TranslateJoystickCommand(const TiXmlElement *pButton
   holdtimeMs = 0;
 
   const char *szButton = pButton->Value();
-  if (!szButton)
+  if (!szButton) {
     return 0;
+}
 
   uint32_t buttonCode = 0;
   std::string strButton = szButton;

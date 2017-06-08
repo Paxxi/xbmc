@@ -54,8 +54,9 @@ CProgressJob::~CProgressJob()
 
 bool CProgressJob::ShouldCancel(unsigned int progress, unsigned int total) const
 {
-  if (IsCancelled())
+  if (IsCancelled()) {
     return true;
+}
 
   SetProgress(progress, total);
 
@@ -71,8 +72,9 @@ bool CProgressJob::DoModal()
   {
     m_progressDialog = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
 
-    if (m_progressDialog == nullptr)
+    if (m_progressDialog == nullptr) {
       return false;
+}
   }
 
   m_modal = true;
@@ -111,12 +113,13 @@ void CProgressJob::ShowProgressDialog() const
 
 void CProgressJob::SetTitle(const std::string &title)
 {
-  if (!m_updateInformation)
+  if (!m_updateInformation) {
     return;
+}
 
-  if (m_progress != nullptr)
+  if (m_progress != nullptr) {
     m_progress->SetTitle(title);
-  else if (m_progressDialog != nullptr)
+  } else if (m_progressDialog != nullptr)
   {
     m_progressDialog->SetHeading(CVariant{title});
 
@@ -126,12 +129,13 @@ void CProgressJob::SetTitle(const std::string &title)
 
 void CProgressJob::SetText(const std::string &text)
 {
-  if (!m_updateInformation)
+  if (!m_updateInformation) {
     return;
+}
 
-  if (m_progress != nullptr)
+  if (m_progress != nullptr) {
     m_progress->SetText(text);
-  else if (m_progressDialog != nullptr)
+  } else if (m_progressDialog != nullptr)
   {
     m_progressDialog->SetText(CVariant{text});
 
@@ -141,12 +145,13 @@ void CProgressJob::SetText(const std::string &text)
 
 void CProgressJob::SetProgress(float percentage) const
 {
-  if (!m_updateProgress)
+  if (!m_updateProgress) {
     return;
+}
 
-  if (m_progress != nullptr)
+  if (m_progress != nullptr) {
     m_progress->SetPercentage(percentage);
-  else if (m_progressDialog != nullptr)
+  } else if (m_progressDialog != nullptr)
   {
     ShowProgressDialog();
 
@@ -163,13 +168,15 @@ void CProgressJob::SetProgress(float percentage) const
 
 void CProgressJob::SetProgress(int currentStep, int totalSteps) const
 {
-  if (!m_updateProgress)
+  if (!m_updateProgress) {
     return;
+}
 
-  if (m_progress != nullptr)
+  if (m_progress != nullptr) {
     m_progress->SetProgress(currentStep, totalSteps);
-  else if (m_progressDialog != nullptr)
+  } else if (m_progressDialog != nullptr) {
     SetProgress((static_cast<float>(currentStep) * 100.0f) / totalSteps);
+}
 }
 
 void CProgressJob::MarkFinished()
@@ -190,8 +197,9 @@ void CProgressJob::MarkFinished()
 
 bool CProgressJob::IsCancelled() const
 {
-  if (m_progressDialog != nullptr)
+  if (m_progressDialog != nullptr) {
     return m_progressDialog->IsCanceled();
+}
 
   return false;
 }

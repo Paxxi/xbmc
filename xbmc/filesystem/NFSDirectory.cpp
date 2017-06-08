@@ -304,8 +304,9 @@ bool CNFSDirectory::Create(const CURL& url2)
   CURL url(folderName); 
   folderName = "";
   
-  if(!gNfsConnection.Connect(url,folderName))
+  if(!gNfsConnection.Connect(url,folderName)) {
     return false;
+}
   
   ret = gNfsConnection.GetImpl()->nfs_mkdir(gNfsConnection.GetNfsContext(), folderName.c_str());
 
@@ -325,8 +326,9 @@ bool CNFSDirectory::Remove(const CURL& url2)
   CURL url(folderName);
   folderName = "";
   
-  if(!gNfsConnection.Connect(url,folderName))
+  if(!gNfsConnection.Connect(url,folderName)) {
     return false;
+}
   
   ret = gNfsConnection.GetImpl()->nfs_rmdir(gNfsConnection.GetNfsContext(), folderName.c_str());
 
@@ -348,8 +350,9 @@ bool CNFSDirectory::Exists(const CURL& url2)
   CURL url(folderName);
   folderName = "";
   
-  if(!gNfsConnection.Connect(url,folderName))
+  if(!gNfsConnection.Connect(url,folderName)) {
     return false;
+}
   
   NFSSTAT info;
   ret = gNfsConnection.GetImpl()->nfs_stat(gNfsConnection.GetNfsContext(), folderName.c_str(), &info);

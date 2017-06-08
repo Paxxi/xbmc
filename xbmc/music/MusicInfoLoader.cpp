@@ -72,20 +72,23 @@ void CMusicInfoLoader::OnLoaderStart()
 
   m_databaseHits = m_tagReads = 0;
 
-  if (m_pProgressCallback)
+  if (m_pProgressCallback) {
     m_pProgressCallback->SetProgressMax(m_pVecItems->GetFileCount());
+}
 
   m_musicDatabase.Open();
 
-  if (m_thumbLoader)
+  if (m_thumbLoader) {
     m_thumbLoader->OnLoaderStart();
+}
 }
 
 bool CMusicInfoLoader::LoadAdditionalTagInfo(CFileItem* pItem)
 {
   if (!pItem || (pItem->m_bIsFolder && !pItem->IsAudio()) ||
-      pItem->IsPlayList() || pItem->IsNFO() || pItem->IsInternetStream())
+      pItem->IsPlayList() || pItem->IsNFO() || pItem->IsInternetStream()) {
     return false;
+}
 
   if (pItem->GetProperty("hasfullmusictag") == "true")
     return false; // already have the information
@@ -99,12 +102,14 @@ bool CMusicInfoLoader::LoadAdditionalTagInfo(CFileItem* pItem)
     CArtist artist;
     CMusicDatabase database;
     database.Open();
-    if (database.GetArtist(param.GetArtistId(), artist, false))
+    if (database.GetArtist(param.GetArtistId(), artist, false)) {
       CMusicDatabase::SetPropertiesFromArtist(*pItem,artist);
+}
 
     CAlbum album;
-    if (database.GetAlbum(param.GetAlbumId(), album, false))
+    if (database.GetAlbum(param.GetAlbumId(), album, false)) {
       CMusicDatabase::SetPropertiesFromAlbum(*pItem,album);
+}
 
     path = pItem->GetMusicInfoTag()->GetURL();
   }
@@ -137,8 +142,9 @@ bool CMusicInfoLoader::LoadItem(CFileItem* pItem)
 bool CMusicInfoLoader::LoadItemCached(CFileItem* pItem)
 {
   if ((pItem->m_bIsFolder && !pItem->IsAudio()) ||
-       pItem->IsPlayList() || pItem->IsNFO() || pItem->IsInternetStream())
+       pItem->IsPlayList() || pItem->IsNFO() || pItem->IsInternetStream()) {
     return false;
+}
 
   // Get thumb for item
   m_thumbLoader->LoadItem(pItem);
@@ -148,12 +154,14 @@ bool CMusicInfoLoader::LoadItemCached(CFileItem* pItem)
 
 bool CMusicInfoLoader::LoadItemLookup(CFileItem* pItem)
 {
-  if (m_pProgressCallback && !pItem->m_bIsFolder)
+  if (m_pProgressCallback && !pItem->m_bIsFolder) {
     m_pProgressCallback->SetProgressAdvance();
+}
 
   if ((pItem->m_bIsFolder && !pItem->IsAudio()) || pItem->IsPlayList() ||
-       pItem->IsNFO() || pItem->IsInternetStream())
+       pItem->IsNFO() || pItem->IsInternetStream()) {
     return false;
+}
 
   if (!pItem->HasMusicInfoTag() || !pItem->GetMusicInfoTag()->Loaded())
   {
@@ -233,13 +241,15 @@ void CMusicInfoLoader::OnLoaderFinish()
   // Save loaded items to HD
   if (!m_strCacheFileName.empty())
     SaveCache(m_strCacheFileName, *m_pVecItems);
-  else if (!m_bStop && (m_databaseHits > 1 || m_tagReads > 0))
+  else if (!m_bStop && (m_databaseHits > 1 || m_tagReads > 0)) {
     m_pVecItems->Save();
+}
 
   m_musicDatabase.Close();
 
-  if (m_thumbLoader)
+  if (m_thumbLoader) {
     m_thumbLoader->OnLoaderFinish();
+}
 }
 
 void CMusicInfoLoader::UseCacheOnHD(const std::string& strFileName)
@@ -272,8 +282,9 @@ void CMusicInfoLoader::SaveCache(const std::string& strFileName, CFileItemList& 
 {
   int iSize = items.Size();
 
-  if (iSize <= 0)
+  if (iSize <= 0) {
     return ;
+}
 
   CFile file;
 

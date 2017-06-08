@@ -46,12 +46,14 @@ CVideoInfoTag CVideoDatabaseFile::GetVideoTag(const CURL& url)
   long idDb = atol(strFileName.c_str());
   
   VIDEODB_CONTENT_TYPE type = GetType(url);
-  if (type == VIDEODB_CONTENT_UNKNOWN)
+  if (type == VIDEODB_CONTENT_UNKNOWN) {
     return tag;
+}
   
   CVideoDatabase videoDatabase;
-  if (!videoDatabase.Open())
+  if (!videoDatabase.Open()) {
     return tag;
+}
   
   tag = videoDatabase.GetDetailsByTypeAndId(type, idDb);
   

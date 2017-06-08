@@ -86,8 +86,9 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
 {
   CExclusiveLock lock(m_critical);
   CExclusiveLock settingsLock(m_settingsCritical);
-  if (m_initialized || root == nullptr)
+  if (m_initialized || root == nullptr) {
     return false;
+}
 
   if (!StringUtils::EqualsNoCase(root->ValueStr(), SETTING_XML_ROOT))
   {
@@ -97,8 +98,9 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
 
   // try to get and check the version
   uint32_t version = ParseVersion(root);
-  if (version == 0)
+  if (version == 0) {
     CLog::Log(LOGWARNING, "CSettingsManager: missing " SETTING_XML_ROOT_VERSION " attribute");
+}
 
   if (version < MinimumSupportedVersion)
   {
@@ -183,11 +185,13 @@ bool CSettingsManager::Save(TiXmlNode *root) const
 {
   CSharedLock lock(m_critical);
   CSharedLock settingsLock(m_settingsCritical);
-  if (!m_initialized || root == nullptr)
+  if (!m_initialized || root == nullptr) {
     return false;
+}
 
-  if (!OnSettingsSaving())
+  if (!OnSettingsSaving()) {
     return false;
+}
 
   // save the current version
   TiXmlElement* rootElement = root->ToElement();
@@ -219,8 +223,9 @@ bool CSettingsManager::Save(TiXmlNode *root) const
 void CSettingsManager::Unload()
 {
   CExclusiveLock lock(m_settingsCritical);
-  if (!m_loaded)
+  if (!m_loaded) {
     return;
+}
 
   // needs to be set before calling CSetting::Reset() to avoid calls to
   // OnSettingChanging() and OnSettingChanged()
@@ -258,8 +263,9 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, const std::string &set
 {
   updated = false;
 
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   SettingPtr setting = GetSetting(settingId);
   if (setting == NULL)
@@ -271,8 +277,9 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, const std::string &set
 void CSettingsManager::SetInitialized()
 {
   CExclusiveLock lock(m_settingsCritical);
-  if (m_initialized)
+  if (m_initialized) {
     return;
+}
 
   m_initialized = true;
 
@@ -438,8 +445,9 @@ void CSettingsManager::RegisterSettingControl(const std::string &controlType, IS
 
 void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler)
 {
-  if (settingsHandler == nullptr)
+  if (settingsHandler == nullptr) {
     return;
+}
 
   CExclusiveLock lock(m_critical);
   if (find(m_settingsHandlers.begin(), m_settingsHandlers.end(), settingsHandler) == m_settingsHandlers.end())
@@ -448,8 +456,9 @@ void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler
 
 void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandler)
 {
-  if (settingsHandler == nullptr)
+  if (settingsHandler == nullptr) {
     return;
+}
 
   CExclusiveLock lock(m_critical);
   SettingsHandlers::iterator it = find(m_settingsHandlers.begin(), m_settingsHandlers.end(), settingsHandler);
@@ -460,8 +469,9 @@ void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandl
 void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
 {
   CExclusiveLock lock(m_critical);
-  if (subSettings == nullptr)
+  if (subSettings == nullptr) {
     return;
+}
 
   m_subSettings.insert(subSettings);
 }
@@ -469,8 +479,9 @@ void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
 void CSettingsManager::UnregisterSubSettings(ISubSettings *subSettings)
 {
   CExclusiveLock lock(m_critical);
-  if (subSettings == nullptr)
+  if (subSettings == nullptr) {
     return;
+}
 
   m_subSettings.erase(subSettings);
 }
@@ -754,8 +765,9 @@ void CSettingsManager::AddCondition(const std::string &identifier, SettingCondit
   
 bool CSettingsManager::Serialize(TiXmlNode *parent) const
 {
-  if (parent == nullptr)
+  if (parent == nullptr) {
     return false;
+}
 
   CSharedLock lock(m_settingsCritical);
 
@@ -798,8 +810,9 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
     if (it->second.setting->IsDefault())
     {
       TiXmlElement *settingElem = settingNode->ToElement();
-      if (settingElem != nullptr)
+      if (settingElem != nullptr) {
         settingElem->SetAttribute(SETTING_XML_ELM_DEFAULT, "true");
+}
     }
 
     TiXmlText value(it->second.setting->ToString());
@@ -838,8 +851,9 @@ bool CSettingsManager::OnSettingChanging(std::shared_ptr<const CSetting> setting
     return false;
 
   CSharedLock lock(m_settingsCritical);
-  if (!m_loaded)
+  if (!m_loaded) {
     return true;
+}
 
   SettingMap::const_iterator settingIt = FindSetting(setting->GetId());
   if (settingIt == m_settings.end())
@@ -953,10 +967,11 @@ void CSettingsManager::OnSettingPropertyChanged(std::shared_ptr<const CSetting> 
   // check the changed property and if it may have an influence on the
   // children of the setting
   SettingDependencyType dependencyType = SettingDependencyTypeNone;
-  if (StringUtils::EqualsNoCase(propertyName, "enabled"))
+  if (StringUtils::EqualsNoCase(propertyName, "enabled")) {
     dependencyType = SettingDependencyTypeEnable;
-  else if (StringUtils::EqualsNoCase(propertyName, "visible"))
+  } else if (StringUtils::EqualsNoCase(propertyName, "visible")) {
     dependencyType = SettingDependencyTypeVisible;
+}
 
   if (dependencyType != SettingDependencyTypeNone)
   {
@@ -967,19 +982,19 @@ void CSettingsManager::OnSettingPropertyChanged(std::shared_ptr<const CSetting> 
 
 SettingPtr CSettingsManager::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = NULL */) const
 {
-  if (StringUtils::EqualsNoCase(settingType, "boolean"))
+  if (StringUtils::EqualsNoCase(settingType, "boolean")) {
     return std::make_shared<CSettingBool>(settingId, const_cast<CSettingsManager*>(this));
-  else if (StringUtils::EqualsNoCase(settingType, "integer"))
+  } else if (StringUtils::EqualsNoCase(settingType, "integer")) {
     return std::make_shared<CSettingInt>(settingId, const_cast<CSettingsManager*>(this));
-  else if (StringUtils::EqualsNoCase(settingType, "number"))
+  } else if (StringUtils::EqualsNoCase(settingType, "number")) {
     return std::make_shared<CSettingNumber>(settingId, const_cast<CSettingsManager*>(this));
-  else if (StringUtils::EqualsNoCase(settingType, "string"))
+  } else if (StringUtils::EqualsNoCase(settingType, "string")) {
     return std::make_shared<CSettingString>(settingId, const_cast<CSettingsManager*>(this));
-  else if (StringUtils::EqualsNoCase(settingType, "action"))
+  } else if (StringUtils::EqualsNoCase(settingType, "action")) {
     return std::make_shared<CSettingAction>(settingId, const_cast<CSettingsManager*>(this));
-  else if (StringUtils::EqualsNoCase(settingType, "reference"))
+  } else if (StringUtils::EqualsNoCase(settingType, "reference")) {
     return std::make_shared<CSettingReference>(settingId, const_cast<CSettingsManager*>(this));
-  else if (settingType.size() > 6 &&
+  } else if (settingType.size() > 6 &&
            StringUtils::StartsWith(settingType, "list[") &&
            StringUtils::EndsWith(settingType, "]"))
   {
@@ -1095,13 +1110,15 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, SettingPtr setting, bo
   if (!categoryTag.empty())
   {
     categoryNode = node->FirstChild(categoryTag);
-    if (categoryNode == nullptr)
+    if (categoryNode == nullptr) {
       return false;
+}
   }
 
   const TiXmlElement *settingElement = categoryNode->FirstChildElement(settingTag);
-  if (settingElement == nullptr)
+  if (settingElement == nullptr) {
     return false;
+}
 
   // check if the default="true" attribute is set for the value
   const char *isDefaultAttribute = settingElement->Attribute(SETTING_XML_ELM_DEFAULT);
@@ -1148,13 +1165,15 @@ bool CSettingsManager::UpdateSetting(const TiXmlNode *node, SettingPtr setting, 
     if (!categoryTag.empty())
     {
       categoryNode = node->FirstChild(categoryTag);
-      if (categoryNode == nullptr)
+      if (categoryNode == nullptr) {
         return false;
+}
     }
 
     oldSettingNode = categoryNode->FirstChild(settingTag);
-    if (oldSettingNode == nullptr)
+    if (oldSettingNode == nullptr) {
       return false;
+}
 
     if (setting->FromString(oldSettingNode->FirstChild() != NULL ? oldSettingNode->FirstChild()->ValueStr() : StringUtils::Empty))
       updated = true;

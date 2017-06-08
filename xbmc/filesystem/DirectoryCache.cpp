@@ -94,8 +94,9 @@ bool CDirectoryCache::GetDirectory(const std::string& strPath, CFileItemList &it
 
 void CDirectoryCache::SetDirectory(const std::string& strPath, const CFileItemList &items, DIR_CACHE_TYPE cacheType)
 {
-  if (cacheType == DIR_CACHE_NEVER)
+  if (cacheType == DIR_CACHE_NEVER) {
     return; // nothing to do
+}
 
   // caches the given directory using a copy of the items, rather than the items
   // themselves.  The reason we do this is because there is often some further

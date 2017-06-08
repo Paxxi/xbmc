@@ -154,8 +154,9 @@ INT CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, LPSTR lpczBuffer)
     while (read(fd, lpczBuffer, MODE1_DATA_SIZE) < 0)
     {
       // read was interrupted - try again
-      if (errno == EINTR)
+      if (errno == EINTR) {
         continue;
+}
 
       // error reading sector
       CLog::Log(LOGERROR, "CD: ReadSector Request to read sector %d\n", (int)dwSector);

@@ -72,15 +72,17 @@ void Init()
 
 void CWinEvents::MessagePush(XBMC_Event* ev)
 {
-  if (!g_init)
+  if (!g_init) {
     Init();
+}
   g_imp.MessagePush(ev);
 }
 
 bool CWinEvents::MessagePump()
 {
-  if (!g_init)
+  if (!g_init) {
     Init();
+}
   return g_imp.MessagePump();
 }
 

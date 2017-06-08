@@ -128,8 +128,9 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
         }
       }
     }
-    if (CFile::Exists(dest))
+    if (CFile::Exists(dest)) {
       CFile::Delete(dest);
+}
     if (!newFile.OpenForWrite(dest, true))  // overwrite always
     {
       file.Close();
@@ -152,8 +153,8 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
       g_application.ResetScreenSaver();
 
       iRead = file.Read(buffer.get(), iBufferSize);
-      if (iRead == 0) break;
-      else if (iRead < 0)
+      if (iRead == 0) { break;
+      } else if (iRead < 0)
       {
         CLog::Log(LOGERROR, "%s - Failed read from file %s", __FUNCTION__, url.GetRedacted().c_str());
         llFileSize = (uint64_t)-1;
@@ -165,8 +166,9 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
       while(iWrite < iRead)
       {
         ssize_t iWrite2 = newFile.Write(buffer.get() + iWrite, iRead - iWrite);
-        if(iWrite2 <=0)
+        if(iWrite2 <=0) {
           break;
+}
         iWrite+=iWrite2;
       }
 
@@ -188,8 +190,9 @@ bool CFile::Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCall
 
         float averageSpeed = llPos / end;
         int ipercent = 0;
-        if(llFileSize)
+        if(llFileSize) {
           ipercent = 100 * llPos / llFileSize;
+}
 
         if(!pCallback->OnFileCallback(pContext, ipercent, averageSpeed))
         {
@@ -287,8 +290,9 @@ bool CFile::Open(const CURL& file, const unsigned int flags)
 
     if (!g_directoryCache.FileExists(url2.Get(), bPathInCache) )
     {
-      if (bPathInCache)
+      if (bPathInCache) {
         return false;
+}
     }
 
     if (!(m_flags & READ_NO_CACHE))
@@ -302,16 +306,18 @@ bool CFile::Open(const CURL& file, const unsigned int flags)
         // for internet stream, if it contains multiple stream, file cache need handle it specially.
         m_pFile = new CFileCache(m_flags);
 
-        if (!m_pFile)
+        if (!m_pFile) {
           return false;
+}
 
         return m_pFile->Open(url);
       }
     }
     m_pFile = CFileFactory::CreateLoader(url);
 
-    if (!m_pFile)
+    if (!m_pFile) {
       return false;
+}
 
     try
     {
@@ -429,8 +435,9 @@ bool CFile::Exists(const CURL& file, bool bUseCache /* = true */)
       bool bPathInCache;
       if (g_directoryCache.FileExists(url.Get(), bPathInCache))
         return true;
-      if (bPathInCache)
+      if (bPathInCache) {
         return false;
+}
     }
 
     std::unique_ptr<IFile> pFile(CFileFactory::CreateLoader(url));
@@ -460,8 +467,9 @@ bool CFile::Exists(const CURL& file, bool bUseCache /* = true */)
             bool bPathInCache;
             if (g_directoryCache.FileExists(pNewUrl->Get(), bPathInCache))
               return true;
-            if (bPathInCache)
+            if (bPathInCache) {
               return false;
+}
           }
           return pImp->Exists(*pNewUrl);
         }
@@ -480,8 +488,9 @@ bool CFile::Exists(const CURL& file, bool bUseCache /* = true */)
 
 int CFile::Stat(struct __stat64 *buffer)
 {
-  if (!buffer)
+  if (!buffer) {
     return -1;
+}
 
   if (!m_pFile)
   {
@@ -501,8 +510,9 @@ int CFile::Stat(const std::string& strFileName, struct __stat64* buffer)
 
 int CFile::Stat(const CURL& file, struct __stat64* buffer)
 {
-  if (!buffer)
+  if (!buffer) {
     return -1;
+}
 
   CURL url(URIUtils::SubstitutePath(file));
 
@@ -631,8 +641,9 @@ void CFile::Close()
 {
   try
   {
-    if (m_pFile)
+    if (m_pFile) {
       m_pFile->Close();
+}
 
     SAFE_DELETE(m_pBuffer);
     SAFE_DELETE(m_pFile);
@@ -649,8 +660,9 @@ void CFile::Flush()
 {
   try
   {
-    if (m_pFile)
+    if (m_pFile) {
       m_pFile->Flush();
+}
   }
   XBMCCOMMONS_HANDLE_UNCHECKED
   catch(...)
@@ -663,8 +675,9 @@ void CFile::Flush()
 //*********************************************************************************************
 int64_t CFile::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_pFile)
+  if (!m_pFile) {
     return -1;
+}
 
   if (m_pBuffer)
   {
@@ -691,8 +704,9 @@ int64_t CFile::Seek(int64_t iFilePosition, int iWhence)
 //*********************************************************************************************
 int CFile::Truncate(int64_t iSize)
 {
-  if (!m_pFile)
+  if (!m_pFile) {
     return -1;
+}
   
   try
   {
@@ -711,8 +725,9 @@ int64_t CFile::GetLength()
 {
   try
   {
-    if (m_pFile)
+    if (m_pFile) {
       return m_pFile->GetLength();
+}
     return 0;
   }
   XBMCCOMMONS_HANDLE_UNCHECKED
@@ -726,8 +741,9 @@ int64_t CFile::GetLength()
 //*********************************************************************************************
 int64_t CFile::GetPosition() const
 {
-  if (!m_pFile)
+  if (!m_pFile) {
     return -1;
+}
 
   if (m_pBuffer)
     return m_pBuffer->pubseekoff(0, std::ios_base::cur);
@@ -748,8 +764,9 @@ int64_t CFile::GetPosition() const
 //*********************************************************************************************
 bool CFile::ReadString(char *szLine, int iLineLength)
 {
-  if (!m_pFile || !szLine)
+  if (!m_pFile || !szLine) {
     return false;
+}
 
   if (m_pBuffer)
   {
@@ -786,8 +803,9 @@ bool CFile::ReadString(char *szLine, int iLineLength)
     }
 
     // if we have no space for terminating character we failed
-    if(iLineLength==0)
+    if(iLineLength==0) {
       return false;
+}
 
     *szLine = 0;
 
@@ -928,16 +946,18 @@ bool CFile::SetHidden(const CURL& file, bool hidden)
 int CFile::IoControl(EIoControl request, void* param)
 {
   int result = -1;
-  if (m_pFile == nullptr)
+  if (m_pFile == nullptr) {
     return -1;
+}
   result = m_pFile->IoControl(request, param);
 
   if(result == -1 && request == IOCTRL_SEEK_POSSIBLE)
   {
-    if(m_pFile->GetLength() >= 0 && m_pFile->Seek(0, SEEK_CUR) >= 0)
+    if(m_pFile->GetLength() >= 0 && m_pFile->Seek(0, SEEK_CUR) >= 0) {
       return 1;
-    else
+    } else {
       return 0;
+}
   }
 
   return result;
@@ -945,8 +965,9 @@ int CFile::IoControl(EIoControl request, void* param)
 
 int CFile::GetChunkSize()
 {
-  if (m_pFile)
+  if (m_pFile) {
     return m_pFile->GetChunkSize();
+}
   return 0;
 }
 
@@ -978,8 +999,9 @@ ssize_t CFile::LoadFile(const CURL& file, auto_buffer& outputBuffer)
 
   outputBuffer.clear();
 
-  if (!Open(file, READ_TRUNCATED))
+  if (!Open(file, READ_TRUNCATED)) {
     return 0;
+}
 
   /*
   GetLength() will typically return values that fall into three cases:
@@ -1025,8 +1047,9 @@ ssize_t CFile::LoadFile(const CURL& file, auto_buffer& outputBuffer)
       return -1;
     }
     total_read += read;
-    if (!read)
+    if (!read) {
       break;
+}
   }
 
   outputBuffer.resize(total_read);
@@ -1036,8 +1059,9 @@ ssize_t CFile::LoadFile(const CURL& file, auto_buffer& outputBuffer)
 
 double CFile::GetDownloadSpeed()
 {
-  if (m_pFile)
+  if (m_pFile) {
     return m_pFile->GetDownloadSpeed();
+}
   return 0.0f;
 }
 
@@ -1204,8 +1228,9 @@ int64_t CFileStream::GetLength()
 
 void CFileStream::Close()
 {
-  if(!m_file)
+  if(!m_file) {
     return;
+}
 
   m_buffer.Detach();
   SAFE_DELETE(m_file);

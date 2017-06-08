@@ -213,10 +213,12 @@ bool CPicture::CacheTexture(uint8_t *pixels, uint32_t width, uint32_t height, ui
   CPictureScalingAlgorithm::Algorithm scalingAlgorithm /* = CPictureScalingAlgorithm::NoAlgorithm */)
 {
   // if no max width or height is specified, don't resize
-  if (dest_width == 0)
+  if (dest_width == 0) {
     dest_width = width;
-  if (dest_height == 0)
+}
+  if (dest_height == 0) {
     dest_height = height;
+}
   if (scalingAlgorithm == CPictureScalingAlgorithm::NoAlgorithm)
     scalingAlgorithm = g_advancedSettings.m_imageScalingAlgorithm;
 
@@ -330,10 +332,11 @@ bool CPicture::CreateTiledThumb(const std::vector<std::string> &files, const std
 void CPicture::GetScale(unsigned int width, unsigned int height, unsigned int &out_width, unsigned int &out_height)
 {
   float aspect = (float)width / height;
-  if ((unsigned int)(out_width / aspect + 0.5f) > out_height)
+  if ((unsigned int)(out_width / aspect + 0.5f) > out_height) {
     out_width = (unsigned int)(out_height * aspect + 0.5f);
-  else
+  } else {
     out_height = (unsigned int)(out_width / aspect + 0.5f);
+}
 }
 
 bool CPicture::ScaleImage(uint8_t *in_pixels, unsigned int in_width, unsigned int in_height, unsigned int in_pitch,
@@ -463,8 +466,9 @@ bool CPicture::Rotate90CCW(uint32_t *&pixels, unsigned int &width, unsigned int 
 bool CPicture::Rotate270CCW(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
   auto dest = new uint32_t[width * height * 4];
-  if (!dest)
+  if (!dest) {
     return false;
+}
 
   unsigned int d_height = width, d_width = height;
   for (unsigned int y = 0; y < d_height; y++)
@@ -487,8 +491,9 @@ bool CPicture::Rotate270CCW(uint32_t *&pixels, unsigned int &width, unsigned int
 bool CPicture::Transpose(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
   auto dest = new uint32_t[width * height * 4];
-  if (!dest)
+  if (!dest) {
     return false;
+}
 
   unsigned int d_height = width, d_width = height;
   for (unsigned int y = 0; y < d_height; y++)
@@ -511,8 +516,9 @@ bool CPicture::Transpose(uint32_t *&pixels, unsigned int &width, unsigned int &h
 bool CPicture::TransposeOffAxis(uint32_t *&pixels, unsigned int &width, unsigned int &height)
 {
   auto dest = new uint32_t[width * height * 4];
-  if (!dest)
+  if (!dest) {
     return false;
+}
 
   unsigned int d_height = width, d_width = height;
   for (unsigned int y = 0; y < d_height; y++)

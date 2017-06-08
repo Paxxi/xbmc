@@ -46,8 +46,9 @@ CGUIDialogGamepad::~CGUIDialogGamepad(void)
 void CGUIDialogGamepad::OnInitWindow()
 {
   // hide all controls
-  for (int i = 0; i < DIALOG_MAX_CHOICES; ++i)
+  for (int i = 0; i < DIALOG_MAX_CHOICES; ++i) {
     SET_CONTROL_HIDDEN(CONTROL_CHOICES_START + i);
+}
   SET_CONTROL_HIDDEN(CONTROL_PROGRESS_BAR);
 
   CGUIDialogBoxBase::OnInitWindow();
@@ -122,10 +123,11 @@ bool CGUIDialogGamepad::OnAction(const CAction &action)
       m_iRetries--;
 
       // don't clean up if the calling code wants the bad user input
-      if (m_bUserInputCleanup)
+      if (m_bUserInputCleanup) {
         m_strUserInput = "";
-      else
+      } else {
         m_bUserInputCleanup = true;
+}
 
       m_bHideInputChars = true;
       Close();

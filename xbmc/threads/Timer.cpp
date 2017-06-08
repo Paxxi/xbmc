@@ -38,8 +38,9 @@ CTimer::~CTimer()
 
 bool CTimer::Start(uint32_t timeout, bool interval /* = false */)
 {
-  if (m_callback == nullptr || timeout == 0 || IsRunning())
+  if (m_callback == nullptr || timeout == 0 || IsRunning()) {
     return false;
+}
 
   m_timeout = timeout;
   m_interval = interval;
@@ -50,8 +51,9 @@ bool CTimer::Start(uint32_t timeout, bool interval /* = false */)
 
 bool CTimer::Stop(bool wait /* = false */)
 {
-  if (!IsRunning())
+  if (!IsRunning()) {
     return false;
+}
 
   m_bStop = true;
   m_eventTimeout.Set();
@@ -69,8 +71,9 @@ void CTimer::RestartAsync(uint32_t timeout)
 
 bool CTimer::Restart()
 {
-  if (!IsRunning())
+  if (!IsRunning()) {
     return false;
+}
 
   Stop(true);
   return Start(m_timeout, m_interval);
@@ -83,8 +86,9 @@ float CTimer::GetElapsedSeconds() const
 
 float CTimer::GetElapsedMilliseconds() const
 {
-  if (!IsRunning())
+  if (!IsRunning()) {
     return 0.0f;
+}
 
   return (float)(XbmcThreads::SystemClockMillis() - (m_endTime - m_timeout));
 }

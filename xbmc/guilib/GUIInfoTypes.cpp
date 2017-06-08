@@ -77,8 +77,9 @@ CGUIInfoColor &CGUIInfoColor::operator=(const CGUIInfoColor &color)
 
 bool CGUIInfoColor::Update()
 {
-  if (!m_info)
+  if (!m_info) {
     return false; // no infolabel
+}
 
   // Expand the infolabel, and then convert it to a color
   std::string infoLabel(g_infoManager.GetLabel(m_info));
@@ -88,8 +89,9 @@ bool CGUIInfoColor::Update()
     m_color = color;
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 void CGUIInfoColor::Parse(const std::string &label, int context)
@@ -112,8 +114,9 @@ void CGUIInfoColor::Parse(const std::string &label, int context)
     label2 = label.substr(6, label.length()-7);
 
   m_info = g_infoManager.TranslateString(label2);
-  if (!m_info)
+  if (!m_info) {
     m_color = g_colorManager.GetColor(label);
+}
 }
 
 CGUIInfoLabel::CGUIInfoLabel() : m_dirty(false)
@@ -359,8 +362,9 @@ void CGUIInfoLabel::Parse(const std::string &label, int context)
             if (info == 0) // skinner didn't define this conditional label!
               CLog::Log(LOGWARNING, "Label Formating: $VAR[%s] is not defined", params[0].c_str());
           }
-          else
-            info = g_infoManager.TranslateString(params[0]);
+          else {
+            info 
+}= g_infoManager.TranslateString(params[0]);
           std::string prefix, postfix;
           if (params.size() > 1)
             prefix = params[1];

@@ -46,8 +46,9 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
   URIUtils::AddSlashAtEnd(strRoot);
 
   // Scan active disc if not done before
-  if (!m_isoReader.IsScanned())
+  if (!m_isoReader.IsScanned()) {
     m_isoReader.Scan();
+}
 
   WIN32_FIND_DATA wfd;
   HANDLE hFind;
@@ -70,8 +71,9 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
   }
 
   hFind = m_isoReader.FindFirstFile((char*)strSearchMask.c_str(), &wfd);
-  if (hFind == nullptr)
+  if (hFind == nullptr) {
     return false;
+}
 
   do
   {
@@ -124,8 +126,9 @@ bool CISO9660Directory::GetDirectory(const CURL& url, CFileItemList &items)
 bool CISO9660Directory::Exists(const CURL& url)
 {
   CFileItemList items;
-  if (GetDirectory(url,items))
+  if (GetDirectory(url,items)) {
     return true;
+}
 
   return false;
 }

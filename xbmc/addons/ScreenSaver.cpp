@@ -64,21 +64,24 @@ CScreenSaver::~CScreenSaver()
 
 bool CScreenSaver::Start()
 {
-  if (m_struct.toAddon.Start)
+  if (m_struct.toAddon.Start) {
     return m_struct.toAddon.Start(&m_struct);
+}
   return false;
 }
 
 void CScreenSaver::Stop()
 {
-  if (m_struct.toAddon.Stop)
+  if (m_struct.toAddon.Stop) {
     m_struct.toAddon.Stop(&m_struct);
+}
 }
 
 void CScreenSaver::Render()
 {
-  if (m_struct.toAddon.Render)
+  if (m_struct.toAddon.Render) {
     m_struct.toAddon.Render(&m_struct);
+}
 }
 
 } /* namespace ADDON */

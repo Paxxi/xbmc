@@ -131,9 +131,10 @@ void CBackgroundPicLoader::Process()
       }
     }
   }
-  if (count > 0)
+  if (count > 0) {
     CLog::Log(LOGDEBUG, "Time for loading %u images: %u ms, average %u ms",
               count, totalTime, totalTime / count);
+}
 }
 
 void CBackgroundPicLoader::LoadPic(int iPic, int iSlideNumber, const std::string &strFileName, const int maxWidth, const int maxHeight)
@@ -404,8 +405,9 @@ void CGUIWindowSlideShow::Process(unsigned int currentTime, CDirtyRegionList &re
   if (bSlideShow && m_slides.at(m_iCurrentSlide)->HasProperty("unplayable"))
   {
     m_iNextSlide    = GetNextSlide();
-    if (m_iCurrentSlide == m_iNextSlide)
+    if (m_iCurrentSlide == m_iNextSlide) {
       return;
+}
     m_iCurrentSlide = m_iNextSlide;
     m_iNextSlide    = GetNextSlide();
   }
@@ -519,8 +521,9 @@ void CGUIWindowSlideShow::Process(unsigned int currentTime, CDirtyRegionList &re
 
   if (m_slides.at(m_iCurrentSlide)->IsVideo() && bSlideShow)
   {
-    if (!PlayVideo())
+    if (!PlayVideo()) {
       return;
+}
     bSlideShow = false;
   }
   
@@ -718,12 +721,13 @@ EVENT_RESULT CGUIWindowSlideShow::OnMouseEvent(const CPoint &point, const CMouse
       // "snap" to nearest of 0, 90, 180 and 270 if the
       // difference in angle is +/-10 degrees
       float reminder = fmodf(m_fRotate, 90.0f);
-      if (fabs(reminder) < ROTATION_SNAP_RANGE)
+      if (fabs(reminder) < ROTATION_SNAP_RANGE) {
         Rotate(-reminder);
-      else if (reminder > 90.0f - ROTATION_SNAP_RANGE)
+      } else if (reminder > 90.0f - ROTATION_SNAP_RANGE) {
         Rotate(90.0f - reminder);
-      else if (-reminder > 90.0f - ROTATION_SNAP_RANGE)
+      } else if (-reminder > 90.0f - ROTATION_SNAP_RANGE) {
         Rotate(-90.0f - reminder);
+}
     }
 
     m_fInitialZoom = 0.0f;
@@ -845,10 +849,11 @@ bool CGUIWindowSlideShow::OnAction(const CAction &action)
     {
       bool swipeOnLeft = action.GetAmount() < g_graphicsContext.GetWidth() / 2.0f;
       bool swipeUp = action.GetID() == ACTION_GESTURE_SWIPE_UP;
-      if (swipeUp == swipeOnLeft)
+      if (swipeUp == swipeOnLeft) {
         Rotate(90.0f);
-      else
+      } else {
         Rotate(-90.0f);
+}
     }
     break;
 
@@ -893,8 +898,9 @@ bool CGUIWindowSlideShow::OnAction(const CAction &action)
 
 void CGUIWindowSlideShow::RenderErrorMessage()
 {
-  if (!m_bErrorMessage)
+  if (!m_bErrorMessage) {
     return ;
+}
 
   const CGUIControl *control = GetControl(LABEL_ROW1);
   if (nullptr == control || control->GetControlType() != CGUIControl::GUICONTROL_LABEL)
@@ -952,14 +958,18 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
       bool bPause = false;
       if (iParams > 0)
       {
-        if ((iParams & 1) == 1)
+        if ((iParams & 1) == 1) {
           bRecursive = true;
-        if ((iParams & 2) == 2)
+}
+        if ((iParams & 2) == 2) {
           bRandom = true;
-        if ((iParams & 4) == 4)
+}
+        if ((iParams & 4) == 4) {
           bNotRandom = true;
-        if ((iParams & 8) == 8)
+}
+        if ((iParams & 8) == 8) {
           bPause = true;
+}
       }
       RunSlideShow(strFolder, bRecursive, bRandom, bNotRandom, beginSlidePath, !bPause);
     }
@@ -975,8 +985,9 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
         if (m_bPlayingVideo)
         {
           m_bPlayingVideo = false;
-          if (m_bSlideShow)
+          if (m_bSlideShow) {
             m_bPause = true;
+}
         }
       }
       break;
@@ -989,8 +1000,9 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
           if (m_bSlideShow)
           {
             m_bPause = false;
-            if (m_iCurrentSlide == m_iNextSlide)
+            if (m_iCurrentSlide == m_iNextSlide) {
               break;
+}
             m_Image[m_iCurrentPic].Close();
             m_iCurrentPic = 1 - m_iCurrentPic;
             m_iCurrentSlide = m_iNextSlide;
@@ -1031,18 +1043,20 @@ void CGUIWindowSlideShow::Rotate(float fAngle, bool immediate /* = false */)
 
 void CGUIWindowSlideShow::Zoom(int iZoom)
 {
-  if (iZoom > MAX_ZOOM_FACTOR || iZoom < 1)
+  if (iZoom > MAX_ZOOM_FACTOR || iZoom < 1) {
     return;
+}
 
   ZoomRelative(zoomamount[iZoom - 1]);
 }
 
 void CGUIWindowSlideShow::ZoomRelative(float fZoom, bool immediate /* = false */)
 {
-  if (fZoom < zoomamount[0])
+  if (fZoom < zoomamount[0]) {
     fZoom = zoomamount[0];
-  else if (fZoom > zoomamount[MAX_ZOOM_FACTOR - 1])
+  } else if (fZoom > zoomamount[MAX_ZOOM_FACTOR - 1]) {
     fZoom = zoomamount[MAX_ZOOM_FACTOR - 1];
+}
 
   if (m_Image[m_iCurrentPic].DrawNextImage())
     return;
@@ -1052,13 +1066,15 @@ void CGUIWindowSlideShow::ZoomRelative(float fZoom, bool immediate /* = false */
   // find the nearest zoom factor
   for (unsigned int i = 1; i < MAX_ZOOM_FACTOR; i++)
   {
-    if (m_fZoom > zoomamount[i])
+    if (m_fZoom > zoomamount[i]) {
       continue;
+}
 
-    if (fabs(m_fZoom - zoomamount[i - 1]) < fabs(m_fZoom - zoomamount[i]))
+    if (fabs(m_fZoom - zoomamount[i - 1]) < fabs(m_fZoom - zoomamount[i])) {
       m_iZoomFactor = i;
-    else
+    } else {
       m_iZoomFactor = i + 1;
+}
 
     break;
   }
@@ -1083,15 +1099,17 @@ bool CGUIWindowSlideShow::PlayVideo()
   CLog::Log(LOGDEBUG, "Playing current video slide %s", item->GetPath().c_str());
   m_bPlayingVideo = true;
   PlayBackRet ret = g_application.PlayFile(*item, "");
-  if (ret == PLAYBACK_OK)
+  if (ret == PLAYBACK_OK) {
     return true;
+}
   if (ret == PLAYBACK_FAIL)
   {
     CLog::Log(LOGINFO, "set video %s unplayable", item->GetPath().c_str());
     item->SetProperty("unplayable", true);
   }
-  else if (ret == PLAYBACK_CANCELED)
+  else if (ret == PLAYBACK_CANCELED) {
     m_bPause = true;
+}
   m_bPlayingVideo = false;
   return false;
 }
@@ -1179,8 +1197,9 @@ void CGUIWindowSlideShow::AddFromPath(const std::string &strPath,
       path_set recursivePaths;
       AddItems(strPath, &recursivePaths, method, order, sortAttributes);
     }
-    else
+    else {
       AddItems(strPath, nullptr, method, order, sortAttributes);
+}
   }
 }
 
@@ -1197,13 +1216,15 @@ void CGUIWindowSlideShow::RunSlideShow(const std::string &strPath,
 
   AddFromPath(strPath, bRecursive, method, order, sortAttributes, strExtensions);
 
-  if (!NumSlides())
+  if (!NumSlides()) {
     return;
+}
 
   // mutually exclusive options
   // if both are set, clear both and use the gui setting
-  if (bRandom && bNotRandom)
+  if (bRandom && bNotRandom) {
     bRandom = bNotRandom = false;
+}
 
   // NotRandom overrides the window setting
   if ((!bNotRandom && CServiceBroker::GetSettings().GetBool(CSettings::SETTING_SLIDESHOW_SHUFFLE)) || bRandom)
@@ -1212,9 +1233,9 @@ void CGUIWindowSlideShow::RunSlideShow(const std::string &strPath,
   if (!beginSlidePath.empty())
     Select(beginSlidePath);
 
-  if (startSlideShow)
+  if (startSlideShow) {
     StartSlideShow();
-  else 
+  } else 
   {
     CVariant param;
     param["player"]["speed"] = 0;
@@ -1241,8 +1262,9 @@ void CGUIWindowSlideShow::AddItems(const std::string &strPath, path_set *recursi
   CGUIViewStateWindowPictures viewState(items);
 
   // fetch directory and sort accordingly
-  if (!CDirectory::GetDirectory(strPath, items, viewState.GetExtensions(), DIR_FLAG_NO_FILE_DIRS, true))
+  if (!CDirectory::GetDirectory(strPath, items, viewState.GetExtensions(), DIR_FLAG_NO_FILE_DIRS, true)) {
     return;
+}
 
   items.Sort(method, order, sortAttributes);
 

@@ -89,8 +89,9 @@ static bool LoadPO(const std::string &filename, std::map<uint32_t, LocStr>& stri
     std::string &encoding, uint32_t offset = 0 , bool bSourceLanguage = false)
 {
   CPODocument PODoc;
-  if (!PODoc.LoadFile(filename))
+  if (!PODoc.LoadFile(filename)) {
     return false;
+}
 
   int counter = 0;
 
@@ -107,10 +108,11 @@ static bool LoadPO(const std::string &filename, std::map<uint32_t, LocStr>& stri
         if (bStrInMem && (strings[id + offset].strOriginal.empty() ||
                           PODoc.GetMsgid() == strings[id + offset].strOriginal))
           continue;
-        else if (bStrInMem)
+        else if (bStrInMem) {
           CLog::Log(LOGDEBUG,
               "POParser: id:%i was recently re-used in the English string file, which is not yet "
                   "changed in the translated file. Using the English string instead", id);
+}
         strings[id + offset].strTranslated = PODoc.GetMsgid();
         counter++;
       }
@@ -164,8 +166,9 @@ static bool LoadStr2Mem(const std::string &pathname_in, const std::string &langu
       exists = XFILE::CDirectory::Exists(pathname);
     }
 
-    if (!exists)
+    if (!exists) {
       return false;
+}
   }
 
   bool useSourceLang = StringUtils::EqualsNoCase(language, LANGUAGE_DEFAULT) || StringUtils::EqualsNoCase(language, LANGUAGE_OLD_DEFAULT);

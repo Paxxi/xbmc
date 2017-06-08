@@ -134,8 +134,9 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
 
     bool bHasData = false;
     int nMillisLeft = nWaitMillis;
-    if (nMillisLeft < 0)
+    if (nMillisLeft < 0) {
       nMillisLeft = 5*60*1000; // arbitrary. 5 min.
+}
 
     do
     {
@@ -149,8 +150,9 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
     lock.Enter();
     DecRef();
     
-    if (!m_bOpen)
+    if (!m_bOpen) {
       return -1;
+}
     
     if (bHasData)
     {
@@ -168,8 +170,9 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
 bool Pipe::Write(const char *buf, int nSize, int nWaitMillis)
 {
   CSingleLock lock(m_lock);
-  if (!m_bOpen)
+  if (!m_bOpen) {
     return false;
+}
   bool bOk = false;
   int writeSize = m_buffer.getMaxWriteSize();
   if (writeSize > nSize)
@@ -314,8 +317,9 @@ XFILE::Pipe *PipesManager::OpenPipe(const std::string &name)
 void         PipesManager::ClosePipe(XFILE::Pipe *pipe)
 {
   CSingleLock lock(m_lock);
-  if (!pipe)
+  if (!pipe) {
     return ;
+}
   
   pipe->DecRef();
   if (pipe->RefCount() == 0)

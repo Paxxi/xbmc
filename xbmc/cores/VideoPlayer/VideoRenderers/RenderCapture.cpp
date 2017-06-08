@@ -46,9 +46,9 @@ CRenderCaptureBase::~CRenderCaptureBase()
 
 bool CRenderCaptureBase::UseOcclusionQuery()
 {
-  if (m_flags & CAPTUREFLAG_IMMEDIATELY)
+  if (m_flags & CAPTUREFLAG_IMMEDIATELY) {
     return false;
-  else if ((g_advancedSettings.m_videoCaptureUseOcclusionQuery == 0) ||
+  } else if ((g_advancedSettings.m_videoCaptureUseOcclusionQuery == 0) ||
            (g_advancedSettings.m_videoCaptureUseOcclusionQuery == -1 &&
             g_Windowing.GetRenderQuirks() & RENDER_QUIRKS_BROKEN_OCCLUSION_QUERY))
     return false;
@@ -175,8 +175,9 @@ void CRenderCaptureGL::BeginRender()
 
     if (m_flags & CAPTUREFLAG_CONTINUOUS)
     {
-      if (!m_occlusionQuerySupported)
+      if (!m_occlusionQuerySupported) {
         CLog::Log(LOGWARNING, "CRenderCaptureGL: GL_ARB_occlusion_query not supported, performance might suffer");
+}
       if (!g_Windowing.IsExtSupported("GL_ARB_pixel_buffer_object"))
         CLog::Log(LOGWARNING, "CRenderCaptureGL: GL_ARB_pixel_buffer_object not supported, performance might suffer");
       if (UseOcclusionQuery())
@@ -189,14 +190,16 @@ void CRenderCaptureGL::BeginRender()
 #ifndef HAS_GLES
   if (m_asyncSupported)
   {
-    if (!m_pbo)
+    if (!m_pbo) {
       glGenBuffersARB(1, &m_pbo);
+}
 
     if (UseOcclusionQuery() && m_occlusionQuerySupported)
     {
       //generate an occlusion query if we don't have one
-      if (!m_query)
+      if (!m_query) {
         glGenQueriesARB(1, &m_query);
+}
     }
     else
     {
@@ -209,8 +212,9 @@ void CRenderCaptureGL::BeginRender()
     }
 
     //start the occlusion query
-    if (m_query)
+    if (m_query) {
       glBeginQueryARB(GL_SAMPLES_PASSED_ARB, m_query);
+}
 
     //allocate data on the pbo and pixel buffer
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
@@ -241,13 +245,15 @@ void CRenderCaptureGL::EndRender()
   {
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
 
-    if (m_query)
+    if (m_query) {
       glEndQueryARB(GL_SAMPLES_PASSED_ARB);
+}
 
-    if (m_flags & CAPTUREFLAG_IMMEDIATELY)
+    if (m_flags & CAPTUREFLAG_IMMEDIATELY) {
       PboToBuffer();
-    else
-      SetState(CAPTURESTATE_NEEDSREADOUT);
+    } else {
+      SetState
+}(CAPTURESTATE_NEEDSREADOUT);
   }
   else
 #endif
@@ -280,11 +286,13 @@ void CRenderCaptureGL::ReadOut()
     //so it can be mapped and read without a busy wait
 
     GLuint readout = 1;
-    if (m_query)
+    if (m_query) {
       glGetQueryObjectuivARB(m_query, GL_QUERY_RESULT_AVAILABLE_ARB, &readout);
+}
 
-    if (readout)
+    if (readout) {
       PboToBuffer();
+}
   }
 #endif
 }

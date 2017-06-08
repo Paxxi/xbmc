@@ -85,11 +85,13 @@ bool CDVDDemuxClient::Open(CDVDInputStream* pInput)
 
   m_pInput = pInput;
   m_IDemux = dynamic_cast<CDVDInputStream::IDemux*>(m_pInput);
-  if (!m_IDemux)
+  if (!m_IDemux) {
     return false;
+}
 
-  if (!m_IDemux->OpenDemux())
+  if (!m_IDemux->OpenDemux()) {
     return false;
+}
 
   RequestStreams();
 
@@ -120,14 +122,16 @@ void CDVDDemuxClient::Reset()
 
 void CDVDDemuxClient::Abort()
 {
-  if (m_IDemux)
+  if (m_IDemux) {
     m_IDemux->AbortDemux();
+}
 }
 
 void CDVDDemuxClient::Flush()
 {
-  if (m_IDemux)
+  if (m_IDemux) {
     m_IDemux->FlushDemux();
+}
 
   m_displayTime = 0;
   m_dtsAtDisplayTime = DVD_NOPTS_VALUE;
@@ -138,17 +142,20 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
   bool change = false;
 
   CDemuxStream* st = GetStream(pkt->iStreamId);
-  if (st == nullptr)
+  if (st == nullptr) {
     return change;
+}
 
-  if (st->ExtraSize)
+  if (st->ExtraSize) {
     return change;
+}
 
   CDemuxStreamClientInternal* stream = dynamic_cast<CDemuxStreamClientInternal*>(st);
 
   if (stream == nullptr ||
-     stream->m_parser == nullptr)
+     stream->m_parser == nullptr) {
     return change;
+}
 
   if (stream->m_context == nullptr)
   {
@@ -176,8 +183,9 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
     int len = stream->m_parser->parser->split(stream->m_context, pkt->pData, pkt->iSize);
     if (len > 0 && len < FF_MAX_EXTRADATA_SIZE)
     {
-      if (st->ExtraData)
+      if (st->ExtraData) {
         delete[] (uint8_t*)st->ExtraData;
+}
       st->changes++;
       st->disabled = false;
       st->ExtraSize = len;
@@ -269,16 +277,18 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
         break;
     }
   }
-  else
+  else {
     CLog::Log(LOGDEBUG, "%s - parser returned error %d", __FUNCTION__, len);
+}
 
   return change;
 }
 
 DemuxPacket* CDVDDemuxClient::Read()
 {
-  if (!m_IDemux)
+  if (!m_IDemux) {
     return nullptr;
+}
 
   if (m_packet)
     return m_packet.release();

@@ -524,8 +524,9 @@ namespace XBMCAddon
               type = value;
               item->GetMusicInfoTag()->SetType(value);
             }
-            else
-              CLog::Log(LOGWARNING, "Invalid media type \"%s\"", value.c_str());
+            else {
+              CLog
+}::Log(LOGWARNING, "Invalid media type \"%s\"", value.c_str());
           }
         }
         auto& musictag = *item->GetMusicInfoTag();

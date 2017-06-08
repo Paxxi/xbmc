@@ -36,7 +36,8 @@ void Endian_Swap16_buf(uint16_t *dst, uint16_t *src, int w)
     dst[i + 7] = Endian_Swap16(src[i + 7]);
   }
 
-  for (; i < w; i++)
+  for (; i < w; i++) {
     dst[i + 0] = Endian_Swap16(src[i + 0]);
+}
 }
 

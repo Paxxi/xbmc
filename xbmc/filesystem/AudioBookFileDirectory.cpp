@@ -37,10 +37,11 @@ static int cfile_file_read(void *h, uint8_t* buf, int size)
 static int64_t cfile_file_seek(void *h, int64_t pos, int whence)
 {
   CFile* pFile = static_cast<CFile*>(h);
-  if(whence == AVSEEK_SIZE)
+  if(whence == AVSEEK_SIZE) {
     return pFile->GetLength();
-  else
+  } else {
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
+}
 }
 
 CAudioBookFileDirectory::CAudioBookFileDirectory() :
@@ -62,8 +63,9 @@ CAudioBookFileDirectory::~CAudioBookFileDirectory(void)
 bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
                                            CFileItemList &items)
 {
-  if (!m_fctx && !ContainsFiles(url))
+  if (!m_fctx && !ContainsFiles(url)) {
     return true;
+}
 
   std::string title;
   std::string author;
@@ -146,8 +148,9 @@ bool CAudioBookFileDirectory::Exists(const CURL& url)
 bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
 {
   CFile file;
-  if (!file.Open(url))
+  if (!file.Open(url)) {
     return false;
+}
 
   uint8_t* buffer = (uint8_t*)av_malloc(32768);
   m_ioctx = avio_alloc_context(buffer, 32768, 0, &file, cfile_file_read,
@@ -156,8 +159,9 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
   m_fctx = avformat_alloc_context();
   m_fctx->pb = m_ioctx;
 
-  if (file.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr) == 0)
+  if (file.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr) == 0) {
     m_ioctx->seekable = 0;
+}
 
   m_ioctx->max_packet_size = 32768;
 
@@ -167,8 +171,9 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
   bool contains = false;
   if (avformat_open_input(&m_fctx, url.Get().c_str(), iformat, nullptr) < 0)
   {
-    if (m_fctx)
+    if (m_fctx) {
       avformat_close_input(&m_fctx);
+}
     av_free(m_ioctx->buffer);
     av_free(m_ioctx);
     return false;

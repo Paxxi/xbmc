@@ -316,8 +316,9 @@ std::string BySeason(SortAttribute attributes, const SortItem &values)
 {
   int season = (int)values.at(FieldSeason).asInteger();
   const CVariant &specialSeason = values.at(FieldSeasonSpecialSort);
-  if (!specialSeason.isNull())
+  if (!specialSeason.isNull()) {
     season = (int)specialSeason.asInteger();
+}
 
   return StringUtils::Format("%i %s", season, ByLabel(attributes, values).c_str());
 }
@@ -828,16 +829,18 @@ const SortUtils::SortPreparator& SortUtils::getPreparator(SortBy sortBy)
 
 SortUtils::Sorter SortUtils::getSorter(SortOrder sortOrder, SortAttribute attributes)
 {
-  if (attributes & SortAttributeIgnoreFolders)
+  if (attributes & SortAttributeIgnoreFolders) {
     return sortOrder == SortOrderDescending ? SorterIgnoreFoldersDescending : SorterIgnoreFoldersAscending;
+}
 
   return sortOrder == SortOrderDescending ? SorterDescending : SorterAscending;
 }
 
 SortUtils::SorterIndirect SortUtils::getSorterIndirect(SortOrder sortOrder, SortAttribute attributes)
 {
-  if (attributes & SortAttributeIgnoreFolders)
+  if (attributes & SortAttributeIgnoreFolders) {
     return sortOrder == SortOrderDescending ? SorterIndirectIgnoreFoldersDescending : SorterIndirectIgnoreFoldersAscending;
+}
 
   return sortOrder == SortOrderDescending ? SorterIndirectDescending : SorterIndirectAscending;
 }

@@ -86,8 +86,9 @@ bool CInputStream::Create()
 void CInputStream::SaveSettings()
 {
   CAddon::SaveSettings();
-  if (!m_bIsChild)
+  if (!m_bIsChild) {
     UpdateConfig();
+}
 }
 
 void CInputStream::CheckConfig()
@@ -100,8 +101,9 @@ void CInputStream::CheckConfig()
     hasConfig = it != m_configMap.end();
   }
 
-  if (!m_bIsChild && !hasConfig)
+  if (!m_bIsChild && !hasConfig) {
     UpdateConfig();
+}
 }
 
 void CInputStream::UpdateConfig()
@@ -130,8 +132,9 @@ void CInputStream::UpdateConfig()
     config.m_parentBusy = it->second.m_parentBusy;
 
   config.m_ready = true;
-  if (status == ADDON_STATUS_PERMANENT_FAILURE)
+  if (status == ADDON_STATUS_PERMANENT_FAILURE) {
     config.m_ready = false;
+}
 
   m_configMap[ID()] = config;
 }
@@ -230,8 +233,9 @@ bool CInputStream::Open(CFileItem &fileitem)
   props.m_profileFolder = profileFolder.c_str();
 
   bool ret = m_struct.toAddon.Open(props);
-  if (ret)
+  if (ret) {
     m_caps = m_struct.toAddon.GetCapabilities();
+}
 
   UpdateStreams();
   return ret;
@@ -282,14 +286,16 @@ void CInputStream::UpdateStreams()
   for (unsigned int i=0; i<streamIDs.m_streamCount; i++)
   {
     INPUTSTREAM_INFO stream = m_struct.toAddon.GetStream(streamIDs.m_streamIds[i]);
-    if (stream.m_streamType == INPUTSTREAM_INFO::TYPE_NONE)
+    if (stream.m_streamType == INPUTSTREAM_INFO::TYPE_NONE) {
       continue;
+}
 
     std::string codecName(stream.m_codecName);
     StringUtils::ToLower(codecName);
     AVCodec *codec = avcodec_find_decoder_by_name(codecName.c_str());
-    if (!codec)
+    if (!codec) {
       continue;
+}
 
     CDemuxStream *demuxStream;
 
@@ -322,8 +328,9 @@ void CInputStream::UpdateStreams()
       //! @todo needs identifier in INPUTSTREAM_INFO
       continue;
     }
-    else
+    else {
       continue;
+}
 
     demuxStream->codec = codec->id;
     demuxStream->codecName = stream.m_codecInternalName;
@@ -337,8 +344,9 @@ void CInputStream::UpdateStreams()
     {
       demuxStream->ExtraData = new uint8_t[stream.m_ExtraSize];
       demuxStream->ExtraSize = stream.m_ExtraSize;
-      for (unsigned int j=0; j<stream.m_ExtraSize; j++)
+      for (unsigned int j=0; j<stream.m_ExtraSize; j++) {
         demuxStream->ExtraData[j] = stream.m_ExtraData[j];
+}
     }
 
     m_streams[demuxStream->uniqueId] = demuxStream;

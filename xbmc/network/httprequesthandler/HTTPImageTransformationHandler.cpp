@@ -79,8 +79,9 @@ CHTTPImageTransformationHandler::CHTTPImageTransformationHandler(const HTTPReque
 
   // determine the last modified date
   struct __stat64 statBuffer;
-  if (imageFile.Stat(pathToUrl, &statBuffer) != 0)
+  if (imageFile.Stat(pathToUrl, &statBuffer) != 0) {
     return;
+}
 
   struct tm *time;
 #ifdef HAVE_LOCALTIME_R
@@ -89,8 +90,9 @@ CHTTPImageTransformationHandler::CHTTPImageTransformationHandler(const HTTPReque
 #else
   time = localtime((time_t *)&statBuffer.st_mtime);
 #endif
-  if (time == nullptr)
+  if (time == nullptr) {
     return;
+}
 
   m_lastModified = *time;
 }
@@ -182,8 +184,9 @@ int CHTTPImageTransformationHandler::HandleRequest()
 
 bool CHTTPImageTransformationHandler::GetLastModifiedDate(CDateTime &lastModified) const
 {
-  if (!m_lastModified.IsValid())
+  if (!m_lastModified.IsValid()) {
     return false;
+}
 
   lastModified = m_lastModified;
   return true;

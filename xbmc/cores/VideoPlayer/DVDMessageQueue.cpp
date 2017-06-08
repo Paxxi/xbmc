@@ -123,8 +123,9 @@ MsgQueueReturnCode CDVDMessageQueue::Put(CDVDMsg* pMsg, int priority, bool front
   if (priority > 0)
   {
     int prio = priority;
-    if (!front)
+    if (!front) {
       prio++;
+}
 
     auto it = std::find_if(m_prioMessages.begin(), m_prioMessages.end(),
                            [prio](const DVDMessageListItem &item){
@@ -153,10 +154,11 @@ MsgQueueReturnCode CDVDMessageQueue::Put(CDVDMsg* pMsg, int priority, bool front
     if (packet)
     {
       m_iDataSize += packet->iSize;
-      if (front)
+      if (front) {
         UpdateTimeFront();
-      else
+      } else {
         UpdateTimeBack();
+}
     }
   }
 
@@ -224,8 +226,9 @@ MsgQueueReturnCode CDVDMessageQueue::Get(CDVDMsg** pMsg, unsigned int iTimeoutIn
     }
   }
 
-  if (m_bAbortRequest)
+  if (m_bAbortRequest) {
     return MSGQ_ABORT;
+}
 
   return (MsgQueueReturnCode)ret;
 }
@@ -240,13 +243,15 @@ void CDVDMessageQueue::UpdateTimeFront()
       DemuxPacket* packet = ((CDVDMsgDemuxerPacket*)item.message)->GetPacket();
       if (packet)
       {
-        if (packet->dts != DVD_NOPTS_VALUE)
+        if (packet->dts != DVD_NOPTS_VALUE) {
           m_TimeFront = packet->dts;
-        else if (packet->pts != DVD_NOPTS_VALUE)
+        } else if (packet->pts != DVD_NOPTS_VALUE) {
           m_TimeFront = packet->pts;
+}
 
-        if (m_TimeBack == DVD_NOPTS_VALUE)
+        if (m_TimeBack == DVD_NOPTS_VALUE) {
           m_TimeBack = m_TimeFront;
+}
       }
     }
   }
@@ -262,13 +267,15 @@ void CDVDMessageQueue::UpdateTimeBack()
       DemuxPacket* packet = ((CDVDMsgDemuxerPacket*)item.message)->GetPacket();
       if (packet)
       {
-        if (packet->dts != DVD_NOPTS_VALUE)
+        if (packet->dts != DVD_NOPTS_VALUE) {
           m_TimeBack = packet->dts;
-        else if (packet->pts != DVD_NOPTS_VALUE)
+        } else if (packet->pts != DVD_NOPTS_VALUE) {
           m_TimeBack = packet->pts;
+}
 
-        if (m_TimeFront == DVD_NOPTS_VALUE)
+        if (m_TimeFront == DVD_NOPTS_VALUE) {
           m_TimeFront = m_TimeBack;
+}
       }
     }
   }
@@ -278,8 +285,9 @@ unsigned CDVDMessageQueue::GetPacketCount(CDVDMsg::Message type)
 {
   CSingleLock lock(m_section);
 
-  if (!m_bInitialized)
+  if (!m_bInitialized) {
     return 0;
+}
 
   unsigned count = 0;
   for (const auto &item : m_messages)
@@ -319,10 +327,12 @@ int CDVDMessageQueue::GetLevel() const
 {
   CSingleLock lock(m_section);
 
-  if (m_iDataSize > m_iMaxDataSize)
+  if (m_iDataSize > m_iMaxDataSize) {
     return 100;
-  if (m_iDataSize == 0)
+}
+  if (m_iDataSize == 0) {
     return 0;
+}
 
   if (IsDataBased())
   {
@@ -345,10 +355,11 @@ int CDVDMessageQueue::GetTimeSize() const
 {
   CSingleLock lock(m_section);
 
-  if (IsDataBased())
+  if (IsDataBased()) {
     return 0;
-  else
+  } else {
     return (int)((m_TimeFront - m_TimeBack) / DVD_TIME_BASE);
+}
 }
 
 bool CDVDMessageQueue::IsDataBased() const

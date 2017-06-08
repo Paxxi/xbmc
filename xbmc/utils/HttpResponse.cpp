@@ -52,10 +52,11 @@ void CHttpResponse::SetContent(const char* data, unsigned int length)
 {
   m_content = data;
 
-  if (m_content == nullptr)
+  if (m_content == nullptr) {
     m_contentLength = 0;
-  else
+  } else {
     m_contentLength = length;
+}
 }
 
 unsigned int CHttpResponse::Create(char *&response)

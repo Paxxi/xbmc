@@ -216,10 +216,12 @@ void CAlbum::MergeScrapedAlbum(const CAlbum& source, bool override /* = true */)
     genre = source.genre;
   if ((override && !source.strAlbum.empty()) || strAlbum.empty())
     strAlbum = source.strAlbum;
-  if ((override && source.iYear > 0) || iYear == 0)
+  if ((override && source.iYear > 0) || iYear == 0) {
     iYear = source.iYear;
-  if (override)
+}
+  if (override) {
     bCompilation = source.bCompilation;
+}
   //  iTimesPlayed = source.iTimesPlayed; // times played is derived from songs
 
   if ((override && !source.strArtistSort.empty()) || strArtistSort.empty())
@@ -396,8 +398,9 @@ bool CAlbum::operator<(const CAlbum &a) const
 bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
 {
   if (!album) return false;
-  if (!append)
+  if (!append) {
     Reset();
+}
 
   XMLUtils::GetString(album,              "title", strAlbum);
   XMLUtils::GetString(album, "musicBrainzAlbumID", strMusicBrainzAlbumID);
@@ -422,10 +425,12 @@ bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
     float rating = 0;
     float max_rating = 10;
     XMLUtils::GetFloat(album, "rating", rating);
-    if (rElement->QueryFloatAttribute("max", &max_rating) == TIXML_SUCCESS && max_rating>=1)
+    if (rElement->QueryFloatAttribute("max", &max_rating) == TIXML_SUCCESS && max_rating>=1) {
       rating *= (10.f / max_rating); // Normalise the Rating to between 0 and 10 
-    if (rating > 10.f)
+}
+    if (rating > 10.f) {
       rating = 10.f;
+}
     fRating = rating;
   }
   const TiXmlElement* userrating = album->FirstChildElement("userrating");
@@ -434,10 +439,12 @@ bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
     float rating = 0;
     float max_rating = 10;
     XMLUtils::GetFloat(album, "userrating", rating);
-    if (userrating->QueryFloatAttribute("max", &max_rating) == TIXML_SUCCESS && max_rating >= 1)
+    if (userrating->QueryFloatAttribute("max", &max_rating) == TIXML_SUCCESS && max_rating >= 1) {
       rating *= (10.f / max_rating); // Normalise the Rating to between 0 and 10
-    if (rating > 10.f)
+}
+    if (rating > 10.f) {
       rating = 10.f;
+}
     iUserrating = MathUtils::round_int(rating);
   }
   XMLUtils::GetInt(album, "votes", iVotes);
@@ -525,16 +532,18 @@ bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
       XMLUtils::GetString(node,   "musicBrainzTrackID",   song.strMusicBrainzTrackID);
       XMLUtils::GetInt(node, "position", song.iTrack);
 
-      if (song.iTrack == 0)
+      if (song.iTrack == 0) {
         bIncrement = true;
+}
 
       XMLUtils::GetString(node,"title",song.strTitle);
       std::string strDur;
       XMLUtils::GetString(node,"duration",strDur);
       song.iDuration = StringUtils::TimeStringToSeconds(strDur);
 
-      if (bIncrement)
+      if (bIncrement) {
         song.iTrack = song.iTrack + 1;
+}
 
       infoSongs.push_back(song);
     }
@@ -587,12 +596,14 @@ bool CAlbum::Save(TiXmlNode *node, const std::string &tag, const std::string& st
   XMLUtils::SetString(album,        "path", strPath);
 
   auto* rating = XMLUtils::SetFloat(album, "rating", fRating);
-  if (rating)
+  if (rating) {
     rating->ToElement()->SetAttribute("max", 10);
+}
 
   auto* userrating = XMLUtils::SetInt(album, "userrating", iUserrating);
-  if (userrating)
+  if (userrating) {
     userrating->ToElement()->SetAttribute("max", 10);
+}
 
   XMLUtils::SetInt(album,           "votes", iVotes);
   XMLUtils::SetInt(album,           "year", iYear);

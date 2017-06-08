@@ -516,8 +516,9 @@ NPT_File::GetInfo(const char* path, NPT_FileInfo* info)
     struct __stat64 stat_buffer = {0};
     int result;
 
-    if (!info)
+    if (!info) {
       return NPT_FAILURE;
+}
 
     NPT_SetMemory(info, 0, sizeof(*info));
 

@@ -251,10 +251,12 @@ static int XBMCKeyTableSize = sizeof(XBMCKeyTable)/sizeof(XBMCKEYTABLE);
 bool KeyTableLookupName(const char* keyname, XBMCKEYTABLE* keytable)
 {
   // If the name being searched for is null or "" there will be no match
-  if (!keyname)
+  if (!keyname) {
     return false;
-  if (keyname[0] == '\0')
+}
+  if (keyname[0] == '\0') {
     return false;
+}
 
   // We need the button name to be in lowercase
   std::string lkeyname = keyname;
@@ -277,8 +279,9 @@ bool KeyTableLookupName(const char* keyname, XBMCKEYTABLE* keytable)
 bool KeyTableLookupSym(uint16_t sym, XBMCKEYTABLE* keytable)
 {
   // If the sym being searched for is zero there will be no match
-  if (sym == 0)
+  if (sym == 0) {
     return false;
+}
 
   // Look up the sym in XBMCKeyTable
   for (int i = 0; i < XBMCKeyTableSize; i++)
@@ -295,8 +298,9 @@ bool KeyTableLookupSym(uint16_t sym, XBMCKEYTABLE* keytable)
 bool KeyTableLookupUnicode(uint16_t unicode, XBMCKEYTABLE* keytable)
 {
   // If the unicode being searched for is zero there will be no match
-  if (unicode == 0)
+  if (unicode == 0) {
     return false;
+}
 
   // Look up the unicode in XBMCKeyTable
   for (int i = 0; i < XBMCKeyTableSize; i++)
@@ -314,8 +318,9 @@ bool KeyTableLookupSymAndUnicode(uint16_t sym, uint16_t unicode, XBMCKEYTABLE* k
 {
   // If the sym being searched for is zero there will be no match (the
   // unicode can be zero if the sym is non-zero)
-  if (sym == 0)
+  if (sym == 0) {
     return false;
+}
 
   // Look up the sym and unicode in XBMCKeyTable
   for (int i = 0; i < XBMCKeyTableSize; i++)
@@ -332,8 +337,9 @@ bool KeyTableLookupSymAndUnicode(uint16_t sym, uint16_t unicode, XBMCKEYTABLE* k
 bool KeyTableLookupVKeyName(uint32_t vkey, XBMCKEYTABLE* keytable)
 {
   // If the vkey being searched for is zero there will be no match
-  if (vkey == 0)
+  if (vkey == 0) {
     return false;
+}
 
   // Look up the vkey in XBMCKeyTable
   for (int i = 0; i < XBMCKeyTableSize; i++)

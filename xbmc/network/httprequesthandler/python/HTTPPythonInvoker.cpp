@@ -36,8 +36,9 @@ CHTTPPythonInvoker::~CHTTPPythonInvoker()
 
 void CHTTPPythonInvoker::onAbort()
 {
-  if (m_request == nullptr)
+  if (m_request == nullptr) {
     return;
+}
 
   m_internalError = true;
   m_request->responseType = HTTPError;
@@ -46,8 +47,9 @@ void CHTTPPythonInvoker::onAbort()
 
 void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */, const std::string& exceptionValue /* = "" */, const std::string& exceptionTraceback /* = "" */)
 {
-  if (m_request == nullptr)
+  if (m_request == nullptr) {
     return;
+}
 
   m_internalError = true;
   m_request->responseType = HTTPMemoryDownloadNoFreeCopy;

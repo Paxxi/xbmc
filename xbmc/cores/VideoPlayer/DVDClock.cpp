@@ -109,10 +109,11 @@ void CDVDClock::Pause(bool pause)
 
   if (pause && !m_paused)
   {
-    if (!m_pauseClock)
+    if (!m_pauseClock) {
       m_speedAfterPause = m_systemFrequency * DVD_PLAYSPEED_NORMAL / m_systemUsed;
-    else
+    } else {
       m_speedAfterPause = DVD_PLAYSPEED_PAUSE;
+}
 
     SetSpeed(DVD_PLAYSPEED_PAUSE);
     m_paused = true;
@@ -192,16 +193,18 @@ double CDVDClock::ErrorAdjust(double error, const char* log)
     // Correct if aufio is more than 20ms ahead or more then
     // 27ms behind. In a worst case scenario we switch from
     // 20ms ahead to 21ms behind (for fps of 23.976)
-    if (error > 0.02 * DVD_TIME_BASE)
+    if (error > 0.02 * DVD_TIME_BASE) {
       adjustment = m_frameTime;
-    else if (error < -0.027 * DVD_TIME_BASE)
+    } else if (error < -0.027 * DVD_TIME_BASE) {
       adjustment = -m_frameTime;
-    else
+    } else {
       adjustment = 0;
+}
   }
 
-  if (adjustment == 0)
+  if (adjustment == 0) {
     return 0;
+}
 
   Discontinuity(clock+adjustment, absolute);
 
@@ -214,8 +217,9 @@ void CDVDClock::Discontinuity(double clock, double absolute)
 {
   CSingleLock lock(m_critSection);
   m_startClock = AbsoluteToSystem(absolute);
-  if(m_pauseClock)
+  if(m_pauseClock) {
     m_pauseClock = m_startClock;
+}
   m_iDisc = clock;
   m_bReset = false;
   m_systemAdjust = 0;
@@ -233,16 +237,18 @@ void CDVDClock::SetMaxSpeedAdjust(double speed)
 int CDVDClock::UpdateFramerate(double fps, double* interval /*= NULL*/)
 {
   //sent with fps of 0 means we are not playing video
-  if(fps == 0.0)
+  if(fps == 0.0) {
     return -1;
+}
 
   m_frameTime = 1/fps * DVD_TIME_BASE;
 
   //check if the videoreferenceclock is running, will return -1 if not
   double rate = m_videoRefClock->GetRefreshRate(interval);
 
-  if (rate <= 0)
+  if (rate <= 0) {
     return -1;
+}
 
   CSingleLock lock(m_speedsection);
 
@@ -252,8 +258,9 @@ int CDVDClock::UpdateFramerate(double fps, double* interval /*= NULL*/)
   if (m_maxspeedadjust > 0.05)
   {
     if (weight / MathUtils::round_int(weight) < 1.0 + m_maxspeedadjust / 100.0
-    &&  weight / MathUtils::round_int(weight) > 1.0 - m_maxspeedadjust / 100.0)
+    &&  weight / MathUtils::round_int(weight) > 1.0 - m_maxspeedadjust / 100.0) {
       weight = MathUtils::round_int(weight);
+}
   }
   double speed = rate / (fps * weight);
   lock.Leave();
@@ -286,8 +293,9 @@ double CDVDClock::SystemToPlaying(int64_t system)
   {
     m_startClock = system;
     m_systemUsed = m_systemFrequency;
-    if(m_pauseClock)
+    if(m_pauseClock) {
       m_pauseClock = m_startClock;
+}
     m_iDisc = 0;
     m_systemAdjust = 0;
     m_speedAdjust = 0;
@@ -295,10 +303,11 @@ double CDVDClock::SystemToPlaying(int64_t system)
     m_bReset = false;
   }
   
-  if (m_pauseClock)
+  if (m_pauseClock) {
     current = m_pauseClock;
-  else
+  } else {
     current = system;
+}
 
   return DVD_TIME_BASE * (double)(current - m_startClock + m_systemAdjust) / m_systemUsed + m_iDisc;
 }

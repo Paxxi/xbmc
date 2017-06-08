@@ -34,11 +34,13 @@ CVideoInfo::CVideoInfo(MediaType mediaType)
 
 bool CVideoInfo::IsVisible(const CFileItem& item) const
 {
-  if (!item.HasVideoInfoTag())
+  if (!item.HasVideoInfoTag()) {
     return false;
+}
 
-  if (item.IsPVRRecording())
+  if (item.IsPVRRecording()) {
     return false; // pvr recordings have its own implementation for this
+}
 
   return item.GetVideoInfoTag()->m_type == m_mediaType;
 }
@@ -51,18 +53,21 @@ bool CVideoInfo::Execute(const CFileItemPtr& item) const
 
 bool CMarkWatched::IsVisible(const CFileItem& item) const
 {
-  if (item.IsDeleted()) // e.g. trashed pvr recording
+  if (item.IsDeleted()) { // e.g. trashed pvr recording
     return false;
+}
 
   if (item.m_bIsFolder) //Only allow db content and recording folders to be updated recursively
   {
-    if (item.HasVideoInfoTag())
+    if (item.HasVideoInfoTag()) {
       return item.IsVideoDb();
-    else
+    } else {
       return CUtil::IsTVRecording(item.GetPath());
+}
   }
-  else if (!item.HasVideoInfoTag())
+  else if (!item.HasVideoInfoTag()) {
     return false;
+}
 
   return item.GetVideoInfoTag()->GetPlayCount() == 0;
 }
@@ -75,18 +80,21 @@ bool CMarkWatched::Execute(const CFileItemPtr& item) const
 
 bool CMarkUnWatched::IsVisible(const CFileItem& item) const
 {
-  if (item.IsDeleted()) // e.g. trashed pvr recording
+  if (item.IsDeleted()) { // e.g. trashed pvr recording
     return false;
+}
 
   if (item.m_bIsFolder) //Only allow db content and recording folders to be updated recursively
   {
-    if (item.HasVideoInfoTag())
+    if (item.HasVideoInfoTag()) {
       return item.IsVideoDb();
-    else
+    } else {
       return CUtil::IsTVRecording(item.GetPath());
+}
   }
-  else if (!item.HasVideoInfoTag())
+  else if (!item.HasVideoInfoTag()) {
     return false;
+}
 
   return item.GetVideoInfoTag()->GetPlayCount() > 0;
 }
@@ -105,8 +113,9 @@ std::string CResume::GetLabel(const CFileItem& item) const
 bool CResume::IsVisible(const CFileItem& itemIn) const
 {
   CFileItem item(itemIn.GetItemToPlay());
-  if (item.IsDeleted()) // e.g. trashed pvr recording
+  if (item.IsDeleted()) { // e.g. trashed pvr recording
     return false;
+}
 
   return CGUIWindowVideoBase::HasResumeItemOffset(&item);
 }
@@ -130,8 +139,9 @@ bool CResume::Execute(const CFileItemPtr& itemIn) const
 {
   CFileItem item(itemIn->GetItemToPlay());
 #ifdef HAS_DVD_DRIVE
-  if (item.IsDVD() || item.IsCDDA())
+  if (item.IsDVD() || item.IsCDDA()) {
     return MEDIA_DETECT::CAutorun::PlayDisc(item.GetPath(), true, false);
+}
 #endif
 
   item.m_lStartOffset = STARTOFFSET_RESUME;
@@ -152,11 +162,13 @@ std::string CPlay::GetLabel(const CFileItem& itemIn) const
 bool CPlay::IsVisible(const CFileItem& itemIn) const
 {
   CFileItem item(itemIn.GetItemToPlay());
-  if (item.IsDeleted()) // e.g. trashed pvr recording
+  if (item.IsDeleted()) { // e.g. trashed pvr recording
     return false;
+}
 
-  if (item.m_bIsFolder)
+  if (item.m_bIsFolder) {
     return false; //! @todo implement
+}
 
   return item.IsVideo() || item.IsLiveTV() || item.IsDVD() || item.IsCDDA();
 }
@@ -165,8 +177,9 @@ bool CPlay::Execute(const CFileItemPtr& itemIn) const
 {
   CFileItem item(itemIn->GetItemToPlay());
 #ifdef HAS_DVD_DRIVE
-  if (item.IsDVD() || item.IsCDDA())
+  if (item.IsDVD() || item.IsCDDA()) {
     return MEDIA_DETECT::CAutorun::PlayDisc(item.GetPath(), true, true);
+}
 #endif
   SetPathAndPlay(item);
   return true;

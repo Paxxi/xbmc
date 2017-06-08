@@ -106,8 +106,9 @@ void CGUIAudioManager::PlayActionSound(const CAction& action)
   CSingleLock lock(m_cs);
 
   // it's not possible to play gui sounds when passthrough is active
-  if (!m_bEnabled)
+  if (!m_bEnabled) {
     return;
+}
 
   actionSoundMap::iterator it = m_actionSoundMap.find(action.GetID());
   if (it == m_actionSoundMap.end())
@@ -124,8 +125,9 @@ void CGUIAudioManager::PlayWindowSound(int id, WINDOW_SOUND event)
   CSingleLock lock(m_cs);
 
   // it's not possible to play gui sounds when passthrough is active
-  if (!m_bEnabled)
+  if (!m_bEnabled) {
     return;
+}
 
   windowSoundMap::iterator it=m_windowSoundMap.find(id);
   if (it==m_windowSoundMap.end())
@@ -143,8 +145,9 @@ void CGUIAudioManager::PlayWindowSound(int id, WINDOW_SOUND event)
     break;
   }
 
-  if (!sound)
+  if (!sound) {
     return;
+}
 
   sound->Play();
 }
@@ -155,8 +158,9 @@ void CGUIAudioManager::PlayPythonSound(const std::string& strFileName, bool useC
   CSingleLock lock(m_cs);
 
   // it's not possible to play gui sounds when passthrough is active
-  if (!m_bEnabled)
+  if (!m_bEnabled) {
     return;
+}
 
   // If we already loaded the sound, just play it
   pythonSoundsMap::iterator itsb=m_pythonSounds.find(strFileName);
@@ -176,8 +180,9 @@ void CGUIAudioManager::PlayPythonSound(const std::string& strFileName, bool useC
   }
 
   IAESound *sound = LoadSound(strFileName);
-  if (!sound)
+  if (!sound) {
     return;
+}
 
   m_pythonSounds.insert(std::pair<const std::string, IAESound*>(strFileName, sound));
   sound->Play();
@@ -287,8 +292,9 @@ bool CGUIAudioManager::Load()
 
       TiXmlNode* pFileNode = pAction->FirstChild("file");
       std::string strFile;
-      if (pFileNode && pFileNode->FirstChild())
+      if (pFileNode && pFileNode->FirstChild()) {
         strFile += pFileNode->FirstChild()->Value();
+}
 
       if (id > 0 && !strFile.empty())
       {
@@ -344,8 +350,9 @@ IAESound* CGUIAudioManager::LoadSound(const std::string &filename)
   }
 
   IAESound *sound = CServiceBroker::GetActiveAE().MakeSound(filename);
-  if (!sound)
+  if (!sound) {
     return nullptr;
+}
 
   CSoundInfo info;
   info.usage = 1;
@@ -384,8 +391,9 @@ void CGUIAudioManager::FreeSoundAllUsage(IAESound *sound)
 // \brief Load a window node of the config file (sounds.xml)
 IAESound* CGUIAudioManager::LoadWindowSound(TiXmlNode* pWindowNode, const std::string& strIdentifier)
 {
-  if (!pWindowNode)
+  if (!pWindowNode) {
     return nullptr;
+}
 
   TiXmlNode* pFileNode = pWindowNode->FirstChild(strIdentifier);
   if (pFileNode && pFileNode->FirstChild())

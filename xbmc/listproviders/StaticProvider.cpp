@@ -44,8 +44,9 @@ CStaticListProvider::CStaticListProvider(const TiXmlElement *element, int parent
   if (XMLUtils::GetInt(element, "default", m_defaultItem))
   {
     const char *always = element->FirstChildElement("default")->Attribute("always");
-    if (always && strnicmp(always, "true", 4) == 0)
+    if (always && strnicmp(always, "true", 4) == 0) {
       m_defaultAlways = true;
+}
   }
 }
 
@@ -65,9 +66,9 @@ CStaticListProvider::~CStaticListProvider()
 bool CStaticListProvider::Update(bool forceRefresh)
 {
   bool changed = forceRefresh;
-  if (!m_updateTime)
+  if (!m_updateTime) {
     m_updateTime = CTimeUtils::GetFrameTime();
-  else if (CTimeUtils::GetFrameTime() - m_updateTime > 1000)
+  } else if (CTimeUtils::GetFrameTime() - m_updateTime > 1000)
   {
     m_updateTime = CTimeUtils::GetFrameTime();
     for (std::vector<CGUIStaticItemPtr>::iterator i = m_items.begin(); i != m_items.end(); ++i)

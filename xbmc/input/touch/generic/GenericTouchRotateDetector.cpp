@@ -33,11 +33,13 @@ CGenericTouchRotateDetector::CGenericTouchRotateDetector(ITouchActionHandler *ha
 
 bool CGenericTouchRotateDetector::OnTouchDown(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   m_pointers[index] = pointer;
   m_angle = 0.0f;
@@ -46,11 +48,13 @@ bool CGenericTouchRotateDetector::OnTouchDown(unsigned int index, const Pointer 
 
 bool CGenericTouchRotateDetector::OnTouchUp(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   // after lifting the primary pointer, the secondary pointer will
   // become the primary pointer in the next event
@@ -62,19 +66,22 @@ bool CGenericTouchRotateDetector::OnTouchUp(unsigned int index, const Pointer &p
 
   m_pointers[index].reset();
 
-  if (!m_pointers[0].valid() && !m_pointers[1].valid())
+  if (!m_pointers[0].valid() && !m_pointers[1].valid()) {
     m_done = true;
+}
 
   return true;
 }
 
 bool CGenericTouchRotateDetector::OnTouchMove(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   // update the internal pointers
   m_pointers[index] = pointer;
@@ -83,8 +90,9 @@ bool CGenericTouchRotateDetector::OnTouchMove(unsigned int index, const Pointer 
   Pointer& secondaryPointer = m_pointers[1];
 
   if (!primaryPointer.valid() || !secondaryPointer.valid() ||
-     (!primaryPointer.moving && !secondaryPointer.moving))
+     (!primaryPointer.moving && !secondaryPointer.moving)) {
     return false;
+}
 
   CVector last = primaryPointer.last - secondaryPointer.last;
   CVector current = primaryPointer.current - secondaryPointer.current;
@@ -103,10 +111,11 @@ bool CGenericTouchRotateDetector::OnTouchMove(unsigned int index, const Pointer 
       // calculate the direction of the rotation using the
       // z-component of the cross-product of last and current
       float direction = last.x * current.y - current.x * last.y;
-      if (direction < 0.0f)
+      if (direction < 0.0f) {
         m_angle -= angle;
-      else
+      } else {
         m_angle += angle;
+}
 
       OnRotate(centerX, centerY, m_angle);
     }
@@ -117,11 +126,13 @@ bool CGenericTouchRotateDetector::OnTouchMove(unsigned int index, const Pointer 
 
 bool CGenericTouchRotateDetector::OnTouchUpdate(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
   
-  if (m_done)
+  if (m_done) {
     return true;
+}
   
   // update the internal pointers
   m_pointers[index] = pointer;

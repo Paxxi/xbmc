@@ -48,10 +48,12 @@ void AEDelayStatus::SetDelay(double d)
 double AEDelayStatus::GetDelay()
 {
   double d = 0;
-  if (tick)
+  if (tick) {
     d = (double)(CurrentHostCounter() - tick) / CurrentHostFrequency();
-  if (d > maxcorrection)
+}
+  if (d > maxcorrection) {
     d = maxcorrection;
+}
 
   return delay - d;
 }
@@ -62,8 +64,9 @@ CAEChannelInfo CAEUtil::GuessChLayout(const unsigned int channels)
     "This method should really never be used, please fix the code that called this");
 
   CAEChannelInfo result;
-  if (channels < 1 || channels > 8)
+  if (channels < 1 || channels > 8) {
     return result;
+}
 
   switch (channels)
   {
@@ -82,10 +85,11 @@ CAEChannelInfo CAEUtil::GuessChLayout(const unsigned int channels)
 
 const char* CAEUtil::GetStdChLayoutName(const enum AEStdChLayout layout)
 {
-  if (layout < 0 || layout >= AE_CH_LAYOUT_MAX)
+  if (layout < 0 || layout >= AE_CH_LAYOUT_MAX) {
     return "UNKNOWN";
 
-  static const char* layouts[AE_CH_LAYOUT_MAX] =
+  
+}static const char* layouts[AE_CH_LAYOUT_MAX] =
   {
     "1.0",
     "2.0", "2.1", "3.0", "3.1", "4.0",
@@ -97,8 +101,9 @@ const char* CAEUtil::GetStdChLayoutName(const enum AEStdChLayout layout)
 
 const unsigned int CAEUtil::DataFormatToBits(const enum AEDataFormat dataFormat)
 {
-  if (dataFormat < 0 || dataFormat >= AE_FMT_MAX)
+  if (dataFormat < 0 || dataFormat >= AE_FMT_MAX) {
     return 0;
+}
 
   static const unsigned int formats[AE_FMT_MAX] =
   {
@@ -142,20 +147,23 @@ const unsigned int CAEUtil::DataFormatToBits(const enum AEDataFormat dataFormat)
 const unsigned int CAEUtil::DataFormatToUsedBits(const enum AEDataFormat dataFormat)
 {
   if (dataFormat == AE_FMT_S24BE4 || dataFormat == AE_FMT_S24LE4 ||
-      dataFormat == AE_FMT_S24NE4 || dataFormat == AE_FMT_S24NE4MSB)
+      dataFormat == AE_FMT_S24NE4 || dataFormat == AE_FMT_S24NE4MSB) {
     return 24;
-  else
+  } else {
     return DataFormatToBits(dataFormat);
+}
 }
 
 const unsigned int CAEUtil::DataFormatToDitherBits(const enum AEDataFormat dataFormat)
 {
-  if (dataFormat == AE_FMT_S24NE4MSB)
+  if (dataFormat == AE_FMT_S24NE4MSB) {
     return 8;
-  if (dataFormat == AE_FMT_S24NE3)
+}
+  if (dataFormat == AE_FMT_S24NE3) {
     return -8;
-  else
+  } else {
     return 0;
+}
 }
 
 const char* CAEUtil::StreamTypeToStr(const enum CAEStreamInfo::DataType dataType)
@@ -188,10 +196,11 @@ const char* CAEUtil::StreamTypeToStr(const enum CAEStreamInfo::DataType dataType
 
 const char* CAEUtil::DataFormatToStr(const enum AEDataFormat dataFormat)
 {
-  if (dataFormat < 0 || dataFormat >= AE_FMT_MAX)
+  if (dataFormat < 0 || dataFormat >= AE_FMT_MAX) {
     return "UNKNOWN";
 
-  static const char *formats[AE_FMT_MAX] =
+  
+}static const char *formats[AE_FMT_MAX] =
   {
     "AE_FMT_U8",
 
@@ -254,9 +263,9 @@ void CAEUtil::SSEMulArray(float *data, const float mul, uint32_t count)
   if (even != count)
   {
     uint32_t odd = count - even;
-    if (odd == 1)
+    if (odd == 1) {
       data[0] *= mul;
-    else
+    } else
     {
       __m128 to;
       if (odd == 2)
@@ -302,9 +311,9 @@ void CAEUtil::SSEMulAddArray(float *data, float *add, const float mul, uint32_t 
   if (even != count)
   {
     uint32_t odd = count - even;
-    if (odd == 1)
+    if (odd == 1) {
       data[0] += add[0] * mul;
-    else
+    } else
     {
       __m128 ad;
       __m128 to;
@@ -338,10 +347,11 @@ inline float CAEUtil::SoftClamp(const float x)
        It is based on the pade-approximation of the tanh function with tweaked coefficients.
        See: http://www.musicdsp.org/showone.php?id=238
     */
-    if (x < -3.0f)
+    if (x < -3.0f) {
       return -1.0f;
-    else if (x >  3.0f)
+    } else if (x >  3.0f) {
       return 1.0f;
+}
     float y = x * x;
     return x * (27.0f + y) / (27.0f + 9.0f * y);
 #else
@@ -401,9 +411,9 @@ void CAEUtil::ClampArray(float *data, uint32_t count)
   if (even != count)
   {
     uint32_t odd = count - even;
-    if (odd == 1)
+    if (odd == 1) {
       data[0] = SoftClamp(data[0]);
-    else
+    } else
     {
       __m128 dt;
       __m128 tmp;
@@ -455,10 +465,12 @@ bool CAEUtil::S16NeedsByteSwap(AEDataFormat in, AEDataFormat out)
     AE_FMT_S16LE;
 #endif
 
-  if (in == AE_FMT_S16NE || (in == AE_FMT_RAW))
+  if (in == AE_FMT_S16NE || (in == AE_FMT_RAW)) {
     in = nativeFormat;
-  if (out == AE_FMT_S16NE || (out == AE_FMT_RAW))
+}
+  if (out == AE_FMT_S16NE || (out == AE_FMT_RAW)) {
     out = nativeFormat;
+}
 
   return in != out;
 }
@@ -555,10 +567,11 @@ AVSampleFormat CAEUtil::GetAVSampleFormat(AEDataFormat format)
       return AV_SAMPLE_FMT_U8;
     default:
     {
-      if (AE_IS_PLANAR(format))
+      if (AE_IS_PLANAR(format)) {
         return AV_SAMPLE_FMT_FLTP;
-      else
+      } else {
         return AV_SAMPLE_FMT_FLT;
+}
     }
   }
 }

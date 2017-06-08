@@ -171,8 +171,9 @@ DemuxPacket* CDVDDemuxVobsub::Read()
     return nullptr;
 
   DemuxPacket *packet = m_Demuxer->Read();
-  if(!packet)
+  if(!packet) {
     return nullptr;
+}
 
   packet->iStreamId = current->id;
   packet->pts = current->pts;
@@ -197,11 +198,13 @@ bool CDVDDemuxVobsub::ParseDelay(SState& state, char* line)
 	  line++;
 	  negative = true;
   }
-  if(sscanf(line, "%d:%d:%d:%d", &h, &m, &s, &ms) != 4)
+  if(sscanf(line, "%d:%d:%d:%d", &h, &m, &s, &ms) != 4) {
     return false;
+}
   state.delay = h*3600.0 + m*60.0 + s + ms*0.001;
-  if(negative)
+  if(negative) {
 	  state.delay *= -1;
+}
   return true;
 }
 
@@ -221,8 +224,9 @@ bool CDVDDemuxVobsub::ParseId(SState& state, char* line)
     while(*line == ' ') line++;
     stream->uniqueId = atoi(line);
   }
-  else
-    stream->uniqueId = -1;
+  else {
+    stream
+}->uniqueId = -1;
 
   stream->codec = AV_CODEC_ID_DVD_SUBTITLE;
   stream->uniqueId = m_Streams.size();
@@ -242,15 +246,17 @@ bool CDVDDemuxVobsub::ParseExtra(SState& state, char* line)
 
 bool CDVDDemuxVobsub::ParseTimestamp(SState& state, char* line)
 {
-  if(state.id < 0)
+  if(state.id < 0) {
     return false;
+}
 
   int h,m,s,ms;
   STimestamp timestamp;
 
   while(*line == ' ') line++;
-  if(sscanf(line, "%d:%d:%d:%d, filepos:%" PRIx64, &h, &m, &s, &ms, &timestamp.pos) != 5)
+  if(sscanf(line, "%d:%d:%d:%d, filepos:%" PRIx64, &h, &m, &s, &ms, &timestamp.pos) != 5) {
     return false;
+}
 
   timestamp.id  = state.id;
   timestamp.pts = DVD_SEC_TO_TIME(state.delay + h*3600.0 + m*60.0 + s + ms*0.001);

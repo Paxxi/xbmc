@@ -46,16 +46,18 @@ bool CDVDSubtitleParserSami::Open(CDVDStreamInfo &hints)
   char line[1024];
 
   CRegExp reg(true);
-  if (!reg.RegComp("<SYNC START=([0-9]+)>"))
+  if (!reg.RegComp("<SYNC START=([0-9]+)>")) {
     return false;
+}
 
   std::string strFileName;
   std::string strClassID;
   strFileName = URIUtils::GetFileName(m_filename);
 
   CDVDSubtitleTagSami TagConv;
-  if (!TagConv.Init())
+  if (!TagConv.Init()) {
     return false;
+}
   TagConv.LoadHead(m_pStream.get());
   if (TagConv.m_Langclass.size() >= 2)
   {

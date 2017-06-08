@@ -95,8 +95,9 @@ bool CNetworkInterfaceLinux::IsWireless()
 #else
   struct iwreq wrq;
    strcpy(wrq.ifr_name, m_interfaceName.c_str());
-   if (ioctl(m_network->GetSocket(), SIOCGIWNAME, &wrq) < 0)
+   if (ioctl(m_network->GetSocket(), SIOCGIWNAME, &wrq) < 0) {
       return false;
+}
 #endif
 
    return true;
@@ -106,8 +107,9 @@ bool CNetworkInterfaceLinux::IsEnabled()
 {
    struct ifreq ifr;
    strcpy(ifr.ifr_name, m_interfaceName.c_str());
-   if (ioctl(m_network->GetSocket(), SIOCGIFFLAGS, &ifr) < 0)
+   if (ioctl(m_network->GetSocket(), SIOCGIFFLAGS, &ifr) < 0) {
       return false;
+}
 
    return ((ifr.ifr_flags & IFF_UP) == IFF_UP);
 }
@@ -118,14 +120,16 @@ bool CNetworkInterfaceLinux::IsConnected()
    int zero = 0;
    memset(&ifr,0,sizeof(struct ifreq));
    strcpy(ifr.ifr_name, m_interfaceName.c_str());
-   if (ioctl(m_network->GetSocket(), SIOCGIFFLAGS, &ifr) < 0)
+   if (ioctl(m_network->GetSocket(), SIOCGIFFLAGS, &ifr) < 0) {
       return false;
+}
 
    // ignore loopback
    int iRunning = ( (ifr.ifr_flags & IFF_RUNNING) && (!(ifr.ifr_flags & IFF_LOOPBACK)));
 
-   if (ioctl(m_network->GetSocket(), SIOCGIFADDR, &ifr) < 0)
+   if (ioctl(m_network->GetSocket(), SIOCGIFADDR, &ifr) < 0) {
       return false;
+}
 
    // return only interfaces which has ip address
    return iRunning && (0 != memcmp(ifr.ifr_addr.sa_data+sizeof(short), &zero, sizeof(int)));
@@ -559,8 +563,9 @@ bool CNetworkLinux::PingHost(unsigned long remote_ip, unsigned int timeout_ms)
   // 1 no reply
   // else some error
 
-  if (result < 0 || result > 1)
+  if (result < 0 || result > 1) {
     CLog::Log(LOGERROR, "Ping fail : status = %d, errno = %d : '%s'", status, errno, cmd_line);
+}
 
   return result == 0;
 }
@@ -646,9 +651,11 @@ bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, std::strin
     (uint8_t) res->sa_data[0], (uint8_t) res->sa_data[1], (uint8_t) res->sa_data[2], 
     (uint8_t) res->sa_data[3], (uint8_t) res->sa_data[4], (uint8_t) res->sa_data[5]);
 
-  for (int i=0; i<6; ++i)
-    if (res->sa_data[i])
+  for (int i=0; i<6; ++i) {
+    if (res->sa_data[i]) {
       return true;
+}
+}
 
   return false;
 }

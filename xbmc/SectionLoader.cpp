@@ -61,8 +61,9 @@ LibraryLoader *CSectionLoader::LoadDLL(const std::string &dllname, bool bDelayUn
   // ok, now load the dll
   CLog::Log(LOGDEBUG, "SECTION:LoadDLL(%s)\n", dllname.c_str());
   LibraryLoader* pDll = DllLoaderContainer::LoadModule(dllname.c_str(), NULL, bLoadSymbols);
-  if (!pDll)
+  if (!pDll) {
     return nullptr;
+}
 
   CDll newDLL;
   newDLL.m_strDllName = dllname;
@@ -88,13 +89,14 @@ void CSectionLoader::UnloadDLL(const std::string &dllname)
       dll.m_lReferenceCount--;
       if (0 == dll.m_lReferenceCount)
       {
-        if (dll.m_bDelayUnload)
+        if (dll.m_bDelayUnload) {
           dll.m_unloadDelayStartTick = XbmcThreads::SystemClockMillis();
-        else
+        } else
         {
           CLog::Log(LOGDEBUG,"SECTION:UnloadDll(%s)", dllname.c_str());
-          if (dll.m_pDll)
+          if (dll.m_pDll) {
             DllLoaderContainer::ReleaseModule(dll.m_pDll);
+}
           g_sectionLoader.m_vecLoadedDLLs.erase(g_sectionLoader.m_vecLoadedDLLs.begin() + i);
         }
 
@@ -116,8 +118,9 @@ void CSectionLoader::UnloadDelayed()
     {
       CLog::Log(LOGDEBUG,"SECTION:UnloadDelayed(DLL: %s)", dll.m_strDllName.c_str());
 
-      if (dll.m_pDll)
+      if (dll.m_pDll) {
         DllLoaderContainer::ReleaseModule(dll.m_pDll);
+}
       g_sectionLoader.m_vecLoadedDLLs.erase(g_sectionLoader.m_vecLoadedDLLs.begin() + i);
       return;
     }

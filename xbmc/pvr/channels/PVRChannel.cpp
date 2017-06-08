@@ -168,8 +168,9 @@ CPVREpgPtr CPVRChannel::GetEPG() const
   int iEpgId(-1);
   {
     CSingleLock lock(m_critSection);
-    if (!m_bIsHidden && m_bEPGEnabled && m_iEpgId > 0)
+    if (!m_bIsHidden && m_bEPGEnabled && m_iEpgId > 0) {
       iEpgId = m_iEpgId;
+}
   }
 
   return iEpgId > 0 ? CServiceBroker::GetPVRManager().EpgContainer().GetById(iEpgId) : CPVREpgPtr();
@@ -234,8 +235,9 @@ bool CPVRChannel::Persist()
   {
     // not changed
     CSingleLock lock(m_critSection);
-    if (!m_bChanged && m_iChannelId > 0)
+    if (!m_bChanged && m_iChannelId > 0) {
       return true;
+}
   }
 
   const CPVRDatabasePtr database(CServiceBroker::GetPVRManager().GetTVDatabase());
@@ -385,8 +387,9 @@ bool CPVRChannel::SetLastWatched(time_t iLastWatched)
   {
     CSingleLock lock(m_critSection);
 
-    if (m_iLastWatched != iLastWatched)
+    if (m_iLastWatched != iLastWatched) {
       m_iLastWatched = iLastWatched;
+}
   }
 
   const CPVRDatabasePtr database(CServiceBroker::GetPVRManager().GetTVDatabase());
@@ -482,18 +485,19 @@ void CPVRChannel::UpdateEncryptionName()
   std::string strName(g_localizeStrings.Get(13205)); /* Unknown */
   CSingleLock lock(m_critSection);
 
-  if (     m_iClientEncryptionSystem == 0x0000)
+  if (     m_iClientEncryptionSystem == 0x0000) {
     strName = g_localizeStrings.Get(19013); /* Free To Air */
-  else if (m_iClientEncryptionSystem >= 0x0001 &&
-           m_iClientEncryptionSystem <= 0x009F)
+  } else if (m_iClientEncryptionSystem >= 0x0001 &&
+           m_iClientEncryptionSystem <= 0x009F) {
     strName = g_localizeStrings.Get(19014); /* Fixed */
-  else if (m_iClientEncryptionSystem >= 0x00A0 &&
-           m_iClientEncryptionSystem <= 0x00A1)
+  } else if (m_iClientEncryptionSystem >= 0x00A0 &&
+           m_iClientEncryptionSystem <= 0x00A1) {
     strName = g_localizeStrings.Get(338); /* Analog */
-  else if (m_iClientEncryptionSystem >= 0x00A2 &&
-           m_iClientEncryptionSystem <= 0x00FF)
+  } else if (m_iClientEncryptionSystem >= 0x00A2 &&
+           m_iClientEncryptionSystem <= 0x00FF) {
     strName = g_localizeStrings.Get(19014); /* Fixed */
-  else if (m_iClientEncryptionSystem >= 0x0100 &&
+  } else { if 
+}(m_iClientEncryptionSystem >= 0x0100 &&
            m_iClientEncryptionSystem <= 0x01FF)
     strName = "SECA Mediaguard";
   else if (m_iClientEncryptionSystem == 0x0464)
@@ -636,8 +640,9 @@ bool CPVRChannel::SetEPGEnabled(bool bEPGEnabled)
     m_bChanged = true;
 
     /* clear the previous EPG entries if needed */
-    if (!m_bEPGEnabled && m_bEPGCreated)
+    if (!m_bEPGEnabled && m_bEPGCreated) {
       ClearEPG();
+}
 
     return true;
   }
@@ -659,8 +664,9 @@ bool CPVRChannel::SetEPGScraper(const std::string &strScraper)
     m_bChanged = true;
 
     /* clear the previous EPG entries if needed */
-    if (bCleanEPG && m_bEPGEnabled && m_bEPGCreated)
+    if (bCleanEPG && m_bEPGEnabled && m_bEPGCreated) {
       ClearEPG();
+}
 
     return true;
   }
@@ -683,11 +689,11 @@ void CPVRChannel::SetCachedSubChannelNumber(unsigned int iSubChannelNumber)
 void CPVRChannel::ToSortable(SortItem& sortable, Field field) const
 {
   CSingleLock lock(m_critSection);
-  if (field == FieldChannelName)
+  if (field == FieldChannelName) {
     sortable[FieldChannelName] = m_strChannelName;
-  else if (field == FieldChannelNumber)
+  } else if (field == FieldChannelNumber) {
     sortable[FieldChannelNumber] = m_iCachedChannelNumber;
-  else if (field == FieldLastPlayed)
+  } else if (field == FieldLastPlayed)
   {
     const CDateTime lastWatched(m_iLastWatched);
     sortable[FieldLastPlayed] = lastWatched.IsValid() ? lastWatched.GetAsDBDateTime() : StringUtils::Empty;

@@ -73,8 +73,9 @@ void CGUIDialogSeekBar::FrameMove()
     ? lrintf(g_application.GetPercentage())
     : (unsigned int)g_infoManager.GetSeekPercent());
 
-  if (percent != m_lastPercent)
+  if (percent != m_lastPercent) {
     CONTROL_SELECT_ITEM(POPUP_SEEK_PROGRESS, m_lastPercent = percent);
+}
 
   CGUIDialog::FrameMove();
 }

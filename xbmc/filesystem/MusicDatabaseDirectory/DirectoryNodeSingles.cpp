@@ -32,8 +32,9 @@ CDirectoryNodeSingles::CDirectoryNodeSingles(const std::string& strName, CDirect
 bool CDirectoryNodeSingles::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   bool bSuccess = musicdatabase.GetSongsFullByWhere(BuildPath(), CDatabase::Filter(), items, SortDescription(), true);
 

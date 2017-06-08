@@ -159,8 +159,9 @@ bool CActiveAEDSPDatabase::DeleteAddonModes(int addonId)
 bool CActiveAEDSPDatabase::DeleteMode(const CActiveAEDSPMode &mode)
 {
   /* invalid mode */
-  if (mode.ModeID() <= 0)
+  if (mode.ModeID() <= 0) {
     return false;
+}
 
   CLog::Log(LOGDEBUG, "Audio DSP - %s - deleting mode '%s' from the database", __FUNCTION__, mode.AddonModeName().c_str());
 
@@ -204,8 +205,9 @@ bool CActiveAEDSPDatabase::AddUpdateMode(CActiveAEDSPMode &mode)
 
   try
   {
-    if (mode.IsInternal())
+    if (mode.IsInternal()) {
       return false;
+}
 
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
@@ -481,8 +483,9 @@ void CActiveAEDSPDatabase::SplitPath(const std::string& strFileNameAndPath, std:
     strPath = url.GetWithoutFilename();
     strFileName = strFileNameAndPath;
   }
-  else
+  else {
     URIUtils::Split(strFileNameAndPath,strPath, strFileName);
+}
 }
 
 /********** Audio DSP add-on methods **********/

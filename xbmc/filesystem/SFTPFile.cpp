@@ -99,8 +99,9 @@ CSFTPSession::CSFTPSession(const std::string &host, unsigned int port, const std
 {
   CLog::Log(LOGINFO, "SFTPSession: Creating new session on host '%s:%d'", host.c_str(), port);
   CSingleLock lock(m_critSect);
-  if (!Connect(host, port, username, password))
+  if (!Connect(host, port, username, password)) {
     Disconnect();
+}
 
   m_LastActive = XbmcThreads::SystemClockMillis();
 }
@@ -123,11 +124,13 @@ sftp_file CSFTPSession::CreateFileHandle(const std::string &file)
       sftp_file_set_blocking(handle);
       return handle;
     }
-    else
-      CLog::Log(LOGERROR, "SFTPSession: Was connected but couldn't create filehandle for '%s'", file.c_str());
+    else {
+      CLog
+}::Log(LOGERROR, "SFTPSession: Was connected but couldn't create filehandle for '%s'", file.c_str());
   }
-  else
-    CLog::Log(LOGERROR, "SFTPSession: Not connected and can't create file handle for '%s'", file.c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "SFTPSession: Not connected and can't create file handle for '%s'", file.c_str());
 
   return nullptr;
 }
@@ -151,8 +154,9 @@ bool CSFTPSession::GetDirectory(const std::string &base, const std::string &fold
       dir = sftp_opendir(m_sftp_session, CorrectPath(folder).c_str());
 
       //Doing as little work as possible within the critical section
-      if (!dir)
+      if (!dir) {
         sftp_error = sftp_get_error(m_sftp_session);
+}
     }
 
     if (!dir)
@@ -190,8 +194,9 @@ bool CSFTPSession::GetDirectory(const std::string &base, const std::string &fold
             CSingleLock lock(m_critSect);
             sftp_attributes_free(attributes);
             attributes = sftp_stat(m_sftp_session, CorrectPath(localPath).c_str());
-            if (attributes == nullptr)
+            if (attributes == nullptr) {
               continue;
+}
           }
 
           CFileItemPtr pItem(new CFileItem);
@@ -222,8 +227,9 @@ bool CSFTPSession::GetDirectory(const std::string &base, const std::string &fold
             sftp_attributes_free(attributes);
           }
         }
-        else
+        else {
           read = false;
+}
       }
 
       {
@@ -234,8 +240,9 @@ bool CSFTPSession::GetDirectory(const std::string &base, const std::string &fold
       return true;
     }
   }
-  else
-    CLog::Log(LOGERROR, "SFTPSession: Not connected, can't list directory '%s'", folder.c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "SFTPSession: Not connected, can't list directory '%s'", folder.c_str());
 
   return false;
 }
@@ -500,11 +507,13 @@ bool CSFTPSession::Connect(const std::string &host, unsigned int port, const std
 
 void CSFTPSession::Disconnect()
 {
-  if (m_sftp_session)
+  if (m_sftp_session) {
     sftp_free(m_sftp_session);
+}
 
-  if (m_session)
+  if (m_session) {
     ssh_disconnect(m_session);
+}
 
   m_sftp_session = nullptr;
   m_session = nullptr;
@@ -629,12 +638,13 @@ int64_t CSFTPFile::Seek(int64_t iFilePosition, int iWhence)
   if (m_session && m_sftp_handle)
   {
     uint64_t position = 0;
-    if (iWhence == SEEK_SET)
+    if (iWhence == SEEK_SET) {
       position = iFilePosition;
-    else if (iWhence == SEEK_CUR)
+    } else if (iWhence == SEEK_CUR) {
       position = GetPosition() + iFilePosition;
-    else if (iWhence == SEEK_END)
+    } else if (iWhence == SEEK_END) {
       position = GetLength() + iFilePosition;
+}
 
     if (m_session->Seek(m_sftp_handle, position) == 0)
       return GetPosition();
@@ -704,9 +714,9 @@ int CSFTPFile::Stat(struct __stat64* buffer)
 int64_t CSFTPFile::GetLength()
 {
   struct __stat64 buffer;
-  if (Stat(&buffer) != 0)
+  if (Stat(&buffer) != 0) {
     return 0;
-  else
+  } else
   {
     int64_t length = buffer.st_size;
     return length;
@@ -724,8 +734,9 @@ int64_t CSFTPFile::GetPosition()
 
 int CSFTPFile::IoControl(EIoControl request, void* param)
 {
-  if(request == IOCTRL_SEEK_POSSIBLE)
+  if(request == IOCTRL_SEEK_POSSIBLE) {
     return 1;
+}
 
   return -1;
 }

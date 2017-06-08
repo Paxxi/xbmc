@@ -132,16 +132,18 @@ void CGUIRSSControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyre
       }
     }
 
-    if(m_dirty)
+    if(m_dirty) {
       dirty = true;
+}
     m_dirty = false;
 
     if (m_label.font)
     {
-      if ( m_stopped )
+      if ( m_stopped ) {
         m_scrollInfo.SetSpeed(0);
-      else
-        m_scrollInfo.SetSpeed(m_label.scrollSpeed * (m_rtl ? -1 : 1));
+      } else {
+        m_scrollInfo
+}.SetSpeed(m_label.scrollSpeed * (m_rtl ? -1 : 1));
 
       if(m_label.font->UpdateScrollInfo(m_feed, m_scrollInfo))
         dirty = true;

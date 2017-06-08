@@ -84,8 +84,9 @@ JSONRPC_STATUS CPlaylistOperations::GetItems(const std::string &method, ITranspo
 
     case PLAYLIST_PICTURE:
       slideshow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-      if (slideshow)
+      if (slideshow) {
         slideshow->GetSlideShowContents(list);
+}
       break;
   }
 
@@ -116,8 +117,9 @@ JSONRPC_STATUS CPlaylistOperations::Add(const std::string &method, ITransportLay
   if (playlist == PLAYLIST_PICTURE)
   {
     slideshow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-    if (slideshow == nullptr)
+    if (slideshow == nullptr) {
       return FailedToExecute;
+}
   }
 
   CFileItemList list;
@@ -157,8 +159,9 @@ JSONRPC_STATUS CPlaylistOperations::Add(const std::string &method, ITransportLay
 JSONRPC_STATUS CPlaylistOperations::Insert(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   int playlist = GetPlaylist(parameterObject["playlistid"]);
-  if (playlist == PLAYLIST_PICTURE)
+  if (playlist == PLAYLIST_PICTURE) {
     return FailedToExecute;
+}
 
   CFileItemList list;
   if (!HandleItemsParameter(playlist, parameterObject["item"], list))
@@ -176,12 +179,14 @@ JSONRPC_STATUS CPlaylistOperations::Insert(const std::string &method, ITransport
 JSONRPC_STATUS CPlaylistOperations::Remove(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   int playlist = GetPlaylist(parameterObject["playlistid"]);
-  if (playlist == PLAYLIST_PICTURE)
+  if (playlist == PLAYLIST_PICTURE) {
     return FailedToExecute;
+}
   
   int position = (int)parameterObject["position"].asInteger();
-  if (g_playlistPlayer.GetCurrentPlaylist() == playlist && g_playlistPlayer.GetCurrentSong() == position)
+  if (g_playlistPlayer.GetCurrentPlaylist() == playlist && g_playlistPlayer.GetCurrentSong() == position) {
     return InvalidParams;
+}
 
   CApplicationMessenger::GetInstance().SendMsg(TMSG_PLAYLISTPLAYER_REMOVE, playlist, position);
 
@@ -202,8 +207,9 @@ JSONRPC_STATUS CPlaylistOperations::Clear(const std::string &method, ITransportL
 
     case PLAYLIST_PICTURE:
       slideshow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-      if (!slideshow)
+      if (!slideshow) {
         return FailedToExecute;
+}
       CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_SLIDESHOW, -1, static_cast<void*>(new CAction(ACTION_STOP)));
       slideshow->Reset();
       break;
@@ -216,8 +222,9 @@ JSONRPC_STATUS CPlaylistOperations::Clear(const std::string &method, ITransportL
 JSONRPC_STATUS CPlaylistOperations::Swap(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
 {
   int playlist = GetPlaylist(parameterObject["playlistid"]);
-  if (playlist == PLAYLIST_PICTURE)
+  if (playlist == PLAYLIST_PICTURE) {
     return FailedToExecute;
+}
 
   auto tmpVec = new std::vector<int>();
   tmpVec->push_back(static_cast<int>(parameterObject["position1"].asInteger()));
@@ -231,8 +238,9 @@ JSONRPC_STATUS CPlaylistOperations::Swap(const std::string &method, ITransportLa
 int CPlaylistOperations::GetPlaylist(const CVariant &playlist)
 {
   int playlistid = (int)playlist.asInteger();
-  if (playlistid > PLAYLIST_NONE && playlistid <= PLAYLIST_PICTURE)
+  if (playlistid > PLAYLIST_NONE && playlistid <= PLAYLIST_PICTURE) {
     return playlistid;
+}
 
   return PLAYLIST_NONE;
 }
@@ -280,10 +288,11 @@ JSONRPC_STATUS CPlaylistOperations::GetPropertyValue(int playlist, const std::st
 
       case PLAYLIST_PICTURE:
         slideshow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-        if (slideshow)
+        if (slideshow) {
           result = slideshow->NumSlides();
-        else
+        } else {
           result = 0;
+}
         break;
 
       default:

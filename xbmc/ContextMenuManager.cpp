@@ -231,7 +231,8 @@ bool CONTEXTMENU::LoopFrom(const IContextMenuItem& menu, const CFileItemPtr& fil
 {
   if (!fileItem)
     return false;
-  if (menu.IsGroup())
+  if (menu.IsGroup()) {
     return ShowFor(fileItem, static_cast<const CContextMenuItem&>(menu));
+}
   return menu.Execute(fileItem);
 }

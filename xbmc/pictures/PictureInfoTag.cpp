@@ -142,8 +142,9 @@ void CPictureInfoTag::Archive(CArchive& ar)
     m_exifInfo.CommentsCharset = EXIF_COMMENT_CHARSET_CONVERTED; // Store and restore the comment charset converted
     GetStringFromArchive(ar, m_exifInfo.Description, sizeof(m_exifInfo.Description));
     GetStringFromArchive(ar, m_exifInfo.DateTime, sizeof(m_exifInfo.DateTime));
-    for (int & DateTimeOffset : m_exifInfo.DateTimeOffsets)
+    for (int & DateTimeOffset : m_exifInfo.DateTimeOffsets) {
       ar >> DateTimeOffset;
+}
     ar >> m_exifInfo.DigitalZoomRatio;
     ar >> m_exifInfo.Distance;
     ar >> m_exifInfo.ExposureBias;
@@ -350,20 +351,24 @@ const std::string CPictureInfoTag::GetInfo(int info) const
     }
     break;
   case SLIDE_EXIF_LONG_DATE_TIME:
-    if (m_dateTimeTaken.IsValid())
+    if (m_dateTimeTaken.IsValid()) {
       value = m_dateTimeTaken.GetAsLocalizedDateTime(true);
+}
     break;
   case SLIDE_EXIF_DATE_TIME:
-    if (m_dateTimeTaken.IsValid())
+    if (m_dateTimeTaken.IsValid()) {
       value = m_dateTimeTaken.GetAsLocalizedDateTime();
+}
     break;
   case SLIDE_EXIF_LONG_DATE:
-    if (m_dateTimeTaken.IsValid())
+    if (m_dateTimeTaken.IsValid()) {
       value = m_dateTimeTaken.GetAsLocalizedDate(true);
+}
     break;
   case SLIDE_EXIF_DATE:
-    if (m_dateTimeTaken.IsValid())
+    if (m_dateTimeTaken.IsValid()) {
       value = m_dateTimeTaken.GetAsLocalizedDate();
+}
     break;
   case SLIDE_EXIF_DESCRIPTION:
     value = m_exifInfo.Description;
@@ -470,8 +475,9 @@ const std::string CPictureInfoTag::GetInfo(int info) const
           case 0x5f: value = "Yes (Auto, red eye reduction mode, return light detected)";        break;
         }
       }
-      else
-        value = m_exifInfo.FlashUsed == 0x18 ? "No (Auto)" : "No";
+      else {
+        value 
+}= m_exifInfo.FlashUsed == 0x18 ? "No (Auto)" : "No";
     }
     break;
   case SLIDE_EXIF_WHITE_BALANCE:
@@ -952,66 +958,67 @@ const std::string CPictureInfoTag::GetInfo(int info) const
 
 int CPictureInfoTag::TranslateString(const std::string &info)
 {
-  if (StringUtils::EqualsNoCase(info, "filename")) return SLIDE_FILE_NAME;
-  else if (StringUtils::EqualsNoCase(info, "path")) return SLIDE_FILE_PATH;
-  else if (StringUtils::EqualsNoCase(info, "filesize")) return SLIDE_FILE_SIZE;
-  else if (StringUtils::EqualsNoCase(info, "filedate")) return SLIDE_FILE_DATE;
-  else if (StringUtils::EqualsNoCase(info, "slideindex")) return SLIDE_INDEX;
-  else if (StringUtils::EqualsNoCase(info, "resolution")) return SLIDE_RESOLUTION;
-  else if (StringUtils::EqualsNoCase(info, "slidecomment")) return SLIDE_COMMENT;
-  else if (StringUtils::EqualsNoCase(info, "colour")) return SLIDE_COLOUR;
-  else if (StringUtils::EqualsNoCase(info, "process")) return SLIDE_PROCESS;
-  else if (StringUtils::EqualsNoCase(info, "exiftime")) return SLIDE_EXIF_DATE_TIME;
-  else if (StringUtils::EqualsNoCase(info, "exifdate")) return SLIDE_EXIF_DATE;
-  else if (StringUtils::EqualsNoCase(info, "longexiftime")) return SLIDE_EXIF_LONG_DATE_TIME;
-  else if (StringUtils::EqualsNoCase(info, "longexifdate")) return SLIDE_EXIF_LONG_DATE;
-  else if (StringUtils::EqualsNoCase(info, "exifdescription")) return SLIDE_EXIF_DESCRIPTION;
-  else if (StringUtils::EqualsNoCase(info, "cameramake")) return SLIDE_EXIF_CAMERA_MAKE;
-  else if (StringUtils::EqualsNoCase(info, "cameramodel")) return SLIDE_EXIF_CAMERA_MODEL;
-  else if (StringUtils::EqualsNoCase(info, "exifcomment")) return SLIDE_EXIF_COMMENT;
-  else if (StringUtils::EqualsNoCase(info, "exifsoftware")) return SLIDE_EXIF_SOFTWARE;
-  else if (StringUtils::EqualsNoCase(info, "aperture")) return SLIDE_EXIF_APERTURE;
-  else if (StringUtils::EqualsNoCase(info, "focallength")) return SLIDE_EXIF_FOCAL_LENGTH;
-  else if (StringUtils::EqualsNoCase(info, "focusdistance")) return SLIDE_EXIF_FOCUS_DIST;
-  else if (StringUtils::EqualsNoCase(info, "exposure")) return SLIDE_EXIF_EXPOSURE;
-  else if (StringUtils::EqualsNoCase(info, "exposuretime")) return SLIDE_EXIF_EXPOSURE_TIME;
-  else if (StringUtils::EqualsNoCase(info, "exposurebias")) return SLIDE_EXIF_EXPOSURE_BIAS;
-  else if (StringUtils::EqualsNoCase(info, "exposuremode")) return SLIDE_EXIF_EXPOSURE_MODE;
-  else if (StringUtils::EqualsNoCase(info, "flashused")) return SLIDE_EXIF_FLASH_USED;
-  else if (StringUtils::EqualsNoCase(info, "whitebalance")) return SLIDE_EXIF_WHITE_BALANCE;
-  else if (StringUtils::EqualsNoCase(info, "lightsource")) return SLIDE_EXIF_LIGHT_SOURCE;
-  else if (StringUtils::EqualsNoCase(info, "meteringmode")) return SLIDE_EXIF_METERING_MODE;
-  else if (StringUtils::EqualsNoCase(info, "isoequivalence")) return SLIDE_EXIF_ISO_EQUIV;
-  else if (StringUtils::EqualsNoCase(info, "digitalzoom")) return SLIDE_EXIF_DIGITAL_ZOOM;
-  else if (StringUtils::EqualsNoCase(info, "ccdwidth")) return SLIDE_EXIF_CCD_WIDTH;
-  else if (StringUtils::EqualsNoCase(info, "orientation")) return SLIDE_EXIF_ORIENTATION;
-  else if (StringUtils::EqualsNoCase(info, "supplementalcategories")) return SLIDE_IPTC_SUP_CATEGORIES;
-  else if (StringUtils::EqualsNoCase(info, "keywords")) return SLIDE_IPTC_KEYWORDS;
-  else if (StringUtils::EqualsNoCase(info, "caption")) return SLIDE_IPTC_CAPTION;
-  else if (StringUtils::EqualsNoCase(info, "author")) return SLIDE_IPTC_AUTHOR;
-  else if (StringUtils::EqualsNoCase(info, "headline")) return SLIDE_IPTC_HEADLINE;
-  else if (StringUtils::EqualsNoCase(info, "specialinstructions")) return SLIDE_IPTC_SPEC_INSTR;
-  else if (StringUtils::EqualsNoCase(info, "category")) return SLIDE_IPTC_CATEGORY;
-  else if (StringUtils::EqualsNoCase(info, "byline")) return SLIDE_IPTC_BYLINE;
-  else if (StringUtils::EqualsNoCase(info, "bylinetitle")) return SLIDE_IPTC_BYLINE_TITLE;
-  else if (StringUtils::EqualsNoCase(info, "credit")) return SLIDE_IPTC_CREDIT;
-  else if (StringUtils::EqualsNoCase(info, "source")) return SLIDE_IPTC_SOURCE;
-  else if (StringUtils::EqualsNoCase(info, "copyrightnotice")) return SLIDE_IPTC_COPYRIGHT_NOTICE;
-  else if (StringUtils::EqualsNoCase(info, "objectname")) return SLIDE_IPTC_OBJECT_NAME;
-  else if (StringUtils::EqualsNoCase(info, "city")) return SLIDE_IPTC_CITY;
-  else if (StringUtils::EqualsNoCase(info, "state")) return SLIDE_IPTC_STATE;
-  else if (StringUtils::EqualsNoCase(info, "country")) return SLIDE_IPTC_COUNTRY;
-  else if (StringUtils::EqualsNoCase(info, "transmissionreference")) return SLIDE_IPTC_TX_REFERENCE;
-  else if (StringUtils::EqualsNoCase(info, "iptcdate")) return SLIDE_IPTC_DATE;
-  else if (StringUtils::EqualsNoCase(info, "urgency")) return SLIDE_IPTC_URGENCY;
-  else if (StringUtils::EqualsNoCase(info, "countrycode")) return SLIDE_IPTC_COUNTRY_CODE;
-  else if (StringUtils::EqualsNoCase(info, "referenceservice")) return SLIDE_IPTC_REF_SERVICE;
-  else if (StringUtils::EqualsNoCase(info, "latitude")) return SLIDE_EXIF_GPS_LATITUDE;
-  else if (StringUtils::EqualsNoCase(info, "longitude")) return SLIDE_EXIF_GPS_LONGITUDE;
-  else if (StringUtils::EqualsNoCase(info, "altitude")) return SLIDE_EXIF_GPS_ALTITUDE;
-  else if (StringUtils::EqualsNoCase(info, "timecreated")) return SLIDE_IPTC_TIMECREATED;
-  else if (StringUtils::EqualsNoCase(info, "sublocation")) return SLIDE_IPTC_SUBLOCATION;
-  else if (StringUtils::EqualsNoCase(info, "imagetype")) return SLIDE_IPTC_IMAGETYPE;
+  if (StringUtils::EqualsNoCase(info, "filename")) { return SLIDE_FILE_NAME;
+  } else if (StringUtils::EqualsNoCase(info, "path")) { return SLIDE_FILE_PATH;
+  } else if (StringUtils::EqualsNoCase(info, "filesize")) { return SLIDE_FILE_SIZE;
+  } else if (StringUtils::EqualsNoCase(info, "filedate")) { return SLIDE_FILE_DATE;
+  } else if (StringUtils::EqualsNoCase(info, "slideindex")) { return SLIDE_INDEX;
+  } else if (StringUtils::EqualsNoCase(info, "resolution")) { return SLIDE_RESOLUTION;
+  } else if (StringUtils::EqualsNoCase(info, "slidecomment")) { return SLIDE_COMMENT;
+  } else if (StringUtils::EqualsNoCase(info, "colour")) { return SLIDE_COLOUR;
+  } else if (StringUtils::EqualsNoCase(info, "process")) { return SLIDE_PROCESS;
+  } else if (StringUtils::EqualsNoCase(info, "exiftime")) { return SLIDE_EXIF_DATE_TIME;
+  } else if (StringUtils::EqualsNoCase(info, "exifdate")) { return SLIDE_EXIF_DATE;
+  } else if (StringUtils::EqualsNoCase(info, "longexiftime")) { return SLIDE_EXIF_LONG_DATE_TIME;
+  } else if (StringUtils::EqualsNoCase(info, "longexifdate")) { return SLIDE_EXIF_LONG_DATE;
+  } else if (StringUtils::EqualsNoCase(info, "exifdescription")) { return SLIDE_EXIF_DESCRIPTION;
+  } else if (StringUtils::EqualsNoCase(info, "cameramake")) { return SLIDE_EXIF_CAMERA_MAKE;
+  } else if (StringUtils::EqualsNoCase(info, "cameramodel")) { return SLIDE_EXIF_CAMERA_MODEL;
+  } else if (StringUtils::EqualsNoCase(info, "exifcomment")) { return SLIDE_EXIF_COMMENT;
+  } else if (StringUtils::EqualsNoCase(info, "exifsoftware")) { return SLIDE_EXIF_SOFTWARE;
+  } else if (StringUtils::EqualsNoCase(info, "aperture")) { return SLIDE_EXIF_APERTURE;
+  } else if (StringUtils::EqualsNoCase(info, "focallength")) { return SLIDE_EXIF_FOCAL_LENGTH;
+  } else if (StringUtils::EqualsNoCase(info, "focusdistance")) { return SLIDE_EXIF_FOCUS_DIST;
+  } else if (StringUtils::EqualsNoCase(info, "exposure")) { return SLIDE_EXIF_EXPOSURE;
+  } else if (StringUtils::EqualsNoCase(info, "exposuretime")) { return SLIDE_EXIF_EXPOSURE_TIME;
+  } else if (StringUtils::EqualsNoCase(info, "exposurebias")) { return SLIDE_EXIF_EXPOSURE_BIAS;
+  } else if (StringUtils::EqualsNoCase(info, "exposuremode")) { return SLIDE_EXIF_EXPOSURE_MODE;
+  } else if (StringUtils::EqualsNoCase(info, "flashused")) { return SLIDE_EXIF_FLASH_USED;
+  } else if (StringUtils::EqualsNoCase(info, "whitebalance")) { return SLIDE_EXIF_WHITE_BALANCE;
+  } else if (StringUtils::EqualsNoCase(info, "lightsource")) { return SLIDE_EXIF_LIGHT_SOURCE;
+  } else if (StringUtils::EqualsNoCase(info, "meteringmode")) { return SLIDE_EXIF_METERING_MODE;
+  } else if (StringUtils::EqualsNoCase(info, "isoequivalence")) { return SLIDE_EXIF_ISO_EQUIV;
+  } else if (StringUtils::EqualsNoCase(info, "digitalzoom")) { return SLIDE_EXIF_DIGITAL_ZOOM;
+  } else if (StringUtils::EqualsNoCase(info, "ccdwidth")) { return SLIDE_EXIF_CCD_WIDTH;
+  } else if (StringUtils::EqualsNoCase(info, "orientation")) { return SLIDE_EXIF_ORIENTATION;
+  } else if (StringUtils::EqualsNoCase(info, "supplementalcategories")) { return SLIDE_IPTC_SUP_CATEGORIES;
+  } else if (StringUtils::EqualsNoCase(info, "keywords")) { return SLIDE_IPTC_KEYWORDS;
+  } else if (StringUtils::EqualsNoCase(info, "caption")) { return SLIDE_IPTC_CAPTION;
+  } else if (StringUtils::EqualsNoCase(info, "author")) { return SLIDE_IPTC_AUTHOR;
+  } else if (StringUtils::EqualsNoCase(info, "headline")) { return SLIDE_IPTC_HEADLINE;
+  } else if (StringUtils::EqualsNoCase(info, "specialinstructions")) { return SLIDE_IPTC_SPEC_INSTR;
+  } else if (StringUtils::EqualsNoCase(info, "category")) { return SLIDE_IPTC_CATEGORY;
+  } else if (StringUtils::EqualsNoCase(info, "byline")) { return SLIDE_IPTC_BYLINE;
+  } else if (StringUtils::EqualsNoCase(info, "bylinetitle")) { return SLIDE_IPTC_BYLINE_TITLE;
+  } else if (StringUtils::EqualsNoCase(info, "credit")) { return SLIDE_IPTC_CREDIT;
+  } else if (StringUtils::EqualsNoCase(info, "source")) { return SLIDE_IPTC_SOURCE;
+  } else if (StringUtils::EqualsNoCase(info, "copyrightnotice")) { return SLIDE_IPTC_COPYRIGHT_NOTICE;
+  } else if (StringUtils::EqualsNoCase(info, "objectname")) { return SLIDE_IPTC_OBJECT_NAME;
+  } else if (StringUtils::EqualsNoCase(info, "city")) { return SLIDE_IPTC_CITY;
+  } else if (StringUtils::EqualsNoCase(info, "state")) { return SLIDE_IPTC_STATE;
+  } else if (StringUtils::EqualsNoCase(info, "country")) { return SLIDE_IPTC_COUNTRY;
+  } else if (StringUtils::EqualsNoCase(info, "transmissionreference")) { return SLIDE_IPTC_TX_REFERENCE;
+  } else if (StringUtils::EqualsNoCase(info, "iptcdate")) { return SLIDE_IPTC_DATE;
+  } else if (StringUtils::EqualsNoCase(info, "urgency")) { return SLIDE_IPTC_URGENCY;
+  } else if (StringUtils::EqualsNoCase(info, "countrycode")) { return SLIDE_IPTC_COUNTRY_CODE;
+  } else if (StringUtils::EqualsNoCase(info, "referenceservice")) { return SLIDE_IPTC_REF_SERVICE;
+  } else if (StringUtils::EqualsNoCase(info, "latitude")) { return SLIDE_EXIF_GPS_LATITUDE;
+  } else if (StringUtils::EqualsNoCase(info, "longitude")) { return SLIDE_EXIF_GPS_LONGITUDE;
+  } else if (StringUtils::EqualsNoCase(info, "altitude")) { return SLIDE_EXIF_GPS_ALTITUDE;
+  } else if (StringUtils::EqualsNoCase(info, "timecreated")) { return SLIDE_IPTC_TIMECREATED;
+  } else if (StringUtils::EqualsNoCase(info, "sublocation")) { return SLIDE_IPTC_SUBLOCATION;
+  } else if (StringUtils::EqualsNoCase(info, "imagetype")) { return SLIDE_IPTC_IMAGETYPE;
+}
   return 0;
 }
 

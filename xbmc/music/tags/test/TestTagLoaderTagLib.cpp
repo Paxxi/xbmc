@@ -166,8 +166,10 @@ TEST_F(TestCTagLoaderTagLib, SetGenre)
 
   CTagLoaderTagLib::SetGenre(tag2, named_genre);
   EXPECT_EQ(3u, tag2.GetGenre().size());
-  for(int i = 0; i < 3; i++)
+  for(int i = 0; i < 3; i++) { {
     EXPECT_EQ(names[i], tag2.GetGenre()[i]);
+}
+}
 
 }
 

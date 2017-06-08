@@ -66,10 +66,11 @@ void CGUIWindowTestPatternGL::DrawCheckers(int top, int left, int bottom, int ri
   {
     for (int x = left; x <= right; x += 2)
     {
-      if (y % 2 == 0)
+      if (y % 2 == 0) {
         glVertex2d(x, y);
-      else
+      } else {
         glVertex2d(x+1, y);
+}
     }
   }
   glEnd();
@@ -80,11 +81,13 @@ void CGUIWindowTestPatternGL::DrawBouncingRectangle(int top, int left, int botto
   m_bounceX += m_bounceDirectionX;
   m_bounceY += m_bounceDirectionY;
 
-  if ((m_bounceDirectionX == 1 && m_bounceX + TEST_PATTERNS_BOUNCE_SQUARE_SIZE == right) || (m_bounceDirectionX == -1 && m_bounceX == left))
+  if ((m_bounceDirectionX == 1 && m_bounceX + TEST_PATTERNS_BOUNCE_SQUARE_SIZE == right) || (m_bounceDirectionX == -1 && m_bounceX == left)) {
     m_bounceDirectionX = -m_bounceDirectionX;
+}
 
-  if ((m_bounceDirectionY == 1 && m_bounceY + TEST_PATTERNS_BOUNCE_SQUARE_SIZE == bottom) || (m_bounceDirectionY == -1 && m_bounceY == top))
+  if ((m_bounceDirectionY == 1 && m_bounceY + TEST_PATTERNS_BOUNCE_SQUARE_SIZE == bottom) || (m_bounceDirectionY == -1 && m_bounceY == top)) {
     m_bounceDirectionY = -m_bounceDirectionY;
+}
 
   glColor3f(m_white, m_white, m_white);
   glRecti(m_bounceX, m_bounceY, m_bounceX + TEST_PATTERNS_BOUNCE_SQUARE_SIZE, m_bounceY + TEST_PATTERNS_BOUNCE_SQUARE_SIZE);
@@ -151,17 +154,19 @@ void CGUIWindowTestPatternGL::DrawContrastBrightnessPattern(int top, int left, i
   glRecti(x12p, y62p, x37p, y87p);
 
   // draw inner circles
-  if (m_blinkFrame < TEST_PATTERNS_BLINK_CYCLE / 2)
+  if (m_blinkFrame < TEST_PATTERNS_BLINK_CYCLE / 2) {
     glColor3f(m_black + 0.05f, m_black + 0.05f, m_black + 0.05f);
-  else
+  } else {
     glColor3f(0.0f, 0.0f, 0.0f); //BTB
+}
   DrawCircle(x25p, y75p, (y37p - y12p) / 3);
   DrawCircle(x75p, y25p, (y37p - y12p) / 3);
 
-  if (m_blinkFrame < TEST_PATTERNS_BLINK_CYCLE / 2)
+  if (m_blinkFrame < TEST_PATTERNS_BLINK_CYCLE / 2) {
     glColor3f(m_white - 0.05f, m_white - 0.05f, m_white - 0.05f);
-  else
+  } else {
     glColor3f(1.0f, 1.0f, 1.0f); //WTW
+}
   DrawCircle(x25p, y25p, (y37p - y12p) / 3);
   DrawCircle(x75p, y75p, (y37p - y12p) / 3);
 }

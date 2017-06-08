@@ -65,8 +65,9 @@ bool CTextSearch::Search(const std::string &strHaystack) const
       break;
     }
   }
-  if (!bFound)
+  if (!bFound) {
     return false;
+}
 
   /* check whether all of the AND terms match and return false if one of them wasn't found */
   for (unsigned int iAndPtr = 0; iAndPtr < m_AND.size(); iAndPtr++)

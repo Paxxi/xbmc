@@ -157,8 +157,9 @@ int CPVRRecordings::Load()
 void CPVRRecordings::Update()
 {
   CSingleLock lock(m_critSection);
-  if (m_bIsUpdating)
+  if (m_bIsUpdating) {
     return;
+}
   m_bIsUpdating = true;
   lock.Leave();
 
@@ -300,8 +301,9 @@ bool CPVRRecordings::GetDirectory(const std::string& strPath, CFileItemList &ite
     // Get the directory structure if in non-flatten mode
     // Deleted view is always flatten. So only for an active view
     std::string strDirectory(recPath.GetUnescapedDirectoryPath());
-    if (!recPath.IsDeleted() && bGrouped)
+    if (!recPath.IsDeleted() && bGrouped) {
       GetSubDirectories(recPath, &items);
+}
 
     // get all files of the current directory or recursively all files starting at the current directory if in flatten mode
     for (const auto recording : m_recordings)
@@ -571,8 +573,9 @@ bool CPVRRecordings::ChangeRecordingsPlayCount(const CFileItemPtr &item, int cou
 
 bool CPVRRecordings::MarkWatched(const CFileItemPtr &item, bool bWatched)
 {
-  if (bWatched)
+  if (bWatched) {
     return IncrementRecordingsPlayCount(item);
-  else
+  } else {
     return SetRecordingsPlayCount(item, 0);
+}
 }

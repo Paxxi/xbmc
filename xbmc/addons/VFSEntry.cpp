@@ -285,8 +285,9 @@ static void VFSDirEntriesToCFileItemList(int num_entries,
           item->SetLabelPreformatted(true);
         else
           item->SetLabelPreformatted(false);
-      } else
-        item->SetProperty(entries[i].properties[j].name,
+      } else {
+        item
+}->SetProperty(entries[i].properties[j].name,
                           entries[i].properties[j].val);
     }
     items.Add(item);
@@ -332,8 +333,9 @@ bool CVFSEntry::ContainsFiles(const CURL& url, CFileItemList& items)
   char rootpath[1024];
   rootpath[0] = 0;
   void* ctx = m_struct.toAddon.ContainsFiles(&url2.url, &entries, &num_entries, rootpath);
-  if (!ctx)
+  if (!ctx) {
     return false;
+}
 
   VFSDirEntriesToCFileItemList(num_entries, entries, items);
   m_struct.toAddon.FreeDirectory(ctx);
@@ -398,8 +400,9 @@ ssize_t CVFSEntryIFileWrapper::Write(void* lpBuf, size_t uiBufSize)
 
 int64_t CVFSEntryIFileWrapper::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_context)
+  if (!m_context) {
     return 0;
+}
 
   return m_addon->Seek(m_context, iFilePosition, iWhence);
 }
@@ -415,32 +418,36 @@ void CVFSEntryIFileWrapper::Close()
 
 int64_t CVFSEntryIFileWrapper::GetPosition()
 {
-  if (!m_context)
+  if (!m_context) {
     return 0;
+}
 
   return m_addon->GetPosition(m_context);
 }
 
 int CVFSEntryIFileWrapper::GetChunkSize()
 {
-  if (!m_context)
+  if (!m_context) {
     return 0;
+}
 
   return m_addon->GetChunkSize(m_context);
 }
 
 int64_t CVFSEntryIFileWrapper::GetLength()
 {
-  if (!m_context)
+  if (!m_context) {
     return 0;
+}
 
   return m_addon->GetLength(m_context);
 }
 
 int CVFSEntryIFileWrapper::IoControl(XFILE::EIoControl request, void* param)
 {
-  if (!m_context)
+  if (!m_context) {
     return 0;
+}
 
   return m_addon->IoControl(m_context, request, param);
 }

@@ -86,24 +86,27 @@ void CGUILabelControl::UpdateInfo(const CGUIListItem *item)
     colors.push_back(m_label.GetLabelInfo().textColor);
     colors.push_back(m_label.GetLabelInfo().disabledColor);
     color_t select = m_label.GetLabelInfo().selectedColor;
-    if (!select)
+    if (!select) {
       select = 0xFFFF0000;
+}
     colors.push_back(select);
     colors.push_back(0xFF000000);
     for (unsigned int i = 0; i < utf16.size(); i++)
     {
       unsigned int ch = utf16[i];
-      if ((m_startSelection < m_endSelection) && (m_startSelection <= i && i < m_endSelection))
+      if ((m_startSelection < m_endSelection) && (m_startSelection <= i && i < m_endSelection)) {
         ch |= (2 << 16);
-      else if ((m_startHighlight < m_endHighlight) && (i < m_startHighlight || i >= m_endHighlight))
+      } else if ((m_startHighlight < m_endHighlight) && (i < m_startHighlight || i >= m_endHighlight)) {
         ch |= (1 << 16);
+}
       text.push_back(ch);
     }
     if (m_bShowCursor && m_iCursorPos >= 0 && (unsigned int)m_iCursorPos <= utf16.size())
     {
       unsigned int ch = L'|';
-      if ((++m_dwCounter % 50) <= 25)
+      if ((++m_dwCounter % 50) <= 25) {
         ch |= (3 << 16);
+}
       text.insert(text.begin() + m_iCursorPos, ch);
     }
     changed |= m_label.SetMaxRect(m_posX, m_posY, GetMaxWidth(), m_height);
@@ -210,8 +213,9 @@ bool CGUILabelControl::OnMessage(CGUIMessage& message)
       return true;
     }
   }
-  if (message.GetMessage() == GUI_MSG_REFRESH_TIMER)
+  if (message.GetMessage() == GUI_MSG_REFRESH_TIMER) {
     UpdateInfo();
+}
 
   return CGUIControl::OnMessage(message);
 }

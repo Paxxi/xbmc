@@ -147,8 +147,9 @@ void CLabelFormatter::FormatLabel(CFileItem *item) const
   std::string maskedLabel = GetContent(0, item);
   if (!maskedLabel.empty())
     item->SetLabel(maskedLabel);
-  else if (!item->m_bIsFolder && m_hideFileExtensions)
+  else if (!item->m_bIsFolder && m_hideFileExtensions) {
     item->RemoveExtension();
+}
 }
 
 void CLabelFormatter::FormatLabel2(CFileItem *item) const
@@ -194,8 +195,9 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
   case 'B':
     if (music && music->GetAlbum().size())
       value = music->GetAlbum();
-    else if (movie)
+    else if (movie) {
       value = movie->m_strAlbum;
+}
     break;
   case 'G':
     if (music && music->GetGenre().size())
@@ -204,13 +206,15 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
       value = StringUtils::Join(movie->m_genre, g_advancedSettings.m_videoItemSeparator);
     break;
   case 'Y':
-    if (music)
+    if (music) {
       value = music->GetYearString();
+}
     if (movie)
     {
-      if (movie->m_firstAired.IsValid())
+      if (movie->m_firstAired.IsValid()) {
         value = movie->m_firstAired.GetAsLocalizedDate();
-      else if (movie->HasYear())
+      } else { if 
+}(movie->HasYear())
         value = StringUtils::Format("%i", movie->GetYear());
     }
     break;
@@ -228,23 +232,28 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
   case 'D':
     { // duration
       int nDuration=0;
-      if (music)
+      if (music) {
         nDuration = music->GetDuration();
-      if (movie)
+}
+      if (movie) {
         nDuration = movie->GetDuration();
-      if (nDuration > 0)
+}
+      if (nDuration > 0) {
         value = StringUtils::SecondsToTimeString(nDuration, (nDuration >= 3600) ? TIME_FORMAT_H_MM_SS : TIME_FORMAT_MM_SS);
-      else if (item->m_dwSize > 0)
+      } else if (item->m_dwSize > 0) {
         value = StringUtils::SizeToString(item->m_dwSize);
+}
     }
     break;
   case 'I': // size
-    if( (item->m_bIsFolder && item->m_dwSize != 0) || item->m_dwSize >= 0 )
+    if( (item->m_bIsFolder && item->m_dwSize != 0) || item->m_dwSize >= 0 ) {
       value = StringUtils::SizeToString(item->m_dwSize);
+}
     break;
   case 'J': // date
-    if (item->m_dateTime.IsValid())
+    if (item->m_dateTime.IsValid()) {
       value = item->m_dateTime.GetAsLocalizedDate();
+}
     break;
   case 'Q': // time
     if (item->m_dateTime.IsValid())
@@ -281,8 +290,9 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
     }
     break;
   case 'P':
-    if (movie) // tvshow production code
+    if (movie) { // tvshow production code
       value = movie->m_strProductionCode;
+}
     break;
   case 'H':
     if (movie && movie->m_iEpisode > 0)
@@ -322,20 +332,25 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
                                  g_localizeStrings.Get(music->GetListeners() == 1 ? 20454 : 20455).c_str());
     break;
   case 'a': // Date Added
-    if (movie && movie->m_dateAdded.IsValid())
+    if (movie && movie->m_dateAdded.IsValid()) {
       value = movie->m_dateAdded.GetAsLocalizedDate();
-    if (music && music->GetDateAdded().IsValid())
+}
+    if (music && music->GetDateAdded().IsValid()) {
       value = music->GetDateAdded().GetAsLocalizedDate();
+}
     break;
   case 'd': // date and time
-    if (item->m_dateTime.IsValid())
+    if (item->m_dateTime.IsValid()) {
       value = item->m_dateTime.GetAsLocalizedDateTime();
+}
     break;
   case 'p': // Last played
-    if (movie && movie->m_lastPlayed.IsValid())
+    if (movie && movie->m_lastPlayed.IsValid()) {
       value = movie->m_lastPlayed.GetAsLocalizedDate();
-    if (music && music->GetLastPlayed().IsValid())
+}
+    if (music && music->GetLastPlayed().IsValid()) {
       value = music->GetLastPlayed().GetAsLocalizedDate();
+}
     break;
   case 'r': // userrating
     if (movie && movie->m_iUserRating != 0)
@@ -344,8 +359,9 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
       value = StringUtils::Format("%i", music->GetUserrating());
     break;
   case 't': // Date Taken
-    if (pic && pic->GetDateTimeTaken().IsValid())
+    if (pic && pic->GetDateTimeTaken().IsValid()) {
       value = pic->GetDateTimeTaken().GetAsLocalizedDate();
+}
     break;
   case 's': // Addon status
     if (item->HasProperty("Addon.Status"))

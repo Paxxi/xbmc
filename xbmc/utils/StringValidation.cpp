@@ -50,9 +50,10 @@ bool StringValidation::IsTime(const std::string &input, void *data)
     if (bits.size() > 3)
       return false;
 
-    for (std::vector<std::string>::const_iterator i = bits.begin(); i != bits.end(); ++i)
+    for (std::vector<std::string>::const_iterator i = bits.begin(); i != bits.end(); ++i) {
       if (!IsPositiveInteger(*i, NULL))
         return false;
+}
 
     return true;
   }

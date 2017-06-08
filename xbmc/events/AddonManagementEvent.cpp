@@ -59,8 +59,9 @@ std::string CAddonManagementEvent::GetExecutionLabel() const
 
 bool CAddonManagementEvent::Execute() const
 {
-  if (!CanExecute())
+  if (!CanExecute()) {
     return false;
+}
 
   CFileItemPtr addonItem = XFILE::CAddonsDirectory::FileItemFromAddon(m_addon, URIUtils::AddFileToFolder("addons://", m_addon->ID()));
   if (addonItem == nullptr)

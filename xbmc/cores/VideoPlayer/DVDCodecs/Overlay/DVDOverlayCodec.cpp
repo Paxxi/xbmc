@@ -23,8 +23,9 @@
 
 void CDVDOverlayCodec::GetAbsoluteTimes(double &starttime, double &stoptime, DemuxPacket *pkt, bool &replace, double offset/* = 0.0*/)
 {
-  if (!pkt)
+  if (!pkt) {
     return;
+}
 
   double duration = 0.0;
   double pts = starttime;
@@ -32,15 +33,17 @@ void CDVDOverlayCodec::GetAbsoluteTimes(double &starttime, double &stoptime, Dem
   // we assume pts from packet is better than what
   // decoder gives us, only take duration
   // from decoder if available
-  if(stoptime > starttime)
+  if(stoptime > starttime) {
     duration = stoptime - starttime;
-  else if(pkt->duration != DVD_NOPTS_VALUE)
+  } else if(pkt->duration != DVD_NOPTS_VALUE) {
     duration = pkt->duration;
+}
 
-  if     (pkt->pts != DVD_NOPTS_VALUE)
+  if     (pkt->pts != DVD_NOPTS_VALUE) {
     pts = pkt->pts;
-  else if(pkt->dts != DVD_NOPTS_VALUE)
+  } else if(pkt->dts != DVD_NOPTS_VALUE) {
     pts = pkt->dts;
+}
 
   starttime = pts + offset;
   if(duration)

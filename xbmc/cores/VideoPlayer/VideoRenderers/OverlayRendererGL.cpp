@@ -137,17 +137,19 @@ static void LoadTexture(GLenum target
                 , externalFormat, GL_UNSIGNED_BYTE
                 , pixelData);
 
-  if(height < height2)
+  if(height < height2) {
     glTexSubImage2D( target, 0
                    , 0, height, width, 1
                    , externalFormat, GL_UNSIGNED_BYTE
                    , (unsigned char*)pixelData + stride * (height-1));
+}
 
-  if(width  < width2)
+  if(width  < width2) {
     glTexSubImage2D( target, 0
                    , width, 0, 1, height
                    , externalFormat, GL_UNSIGNED_BYTE
                    , (unsigned char*)pixelData + bytesPerPixel * (width-1));
+}
 
 #ifndef HAS_GLES
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
@@ -200,8 +202,9 @@ COverlayTextureGL::COverlayTextureGL(CDVDOverlayImage* o)
             , &m_u, &m_v
             , false
             , rgba);
-  if((BYTE*)rgba != o->data)
+  if((BYTE*)rgba != o->data) {
     free(rgba);
+}
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisable(GL_TEXTURE_2D);
@@ -301,8 +304,9 @@ COverlayGlyphGL::COverlayGlyphGL(ASS_Image* images, int width, int height)
   m_texture = 0;
 
   SQuads quads;
-  if(!convert_quad(images, quads))
+  if(!convert_quad(images, quads)) {
     return;
+}
 
   glGenTextures(1, &m_texture);
   glEnable(GL_TEXTURE_2D);
@@ -402,8 +406,9 @@ COverlayGlyphGL::~COverlayGlyphGL()
 
 void COverlayGlyphGL::Render(SRenderState& state)
 {
-  if ((m_texture == 0) || (m_count == 0))
+  if ((m_texture == 0) || (m_count == 0)) {
     return;
+}
 
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_BLEND);
@@ -509,10 +514,11 @@ void COverlayTextureGL::Render(SRenderState& state)
   glEnable(GL_BLEND);
 
   glBindTexture(GL_TEXTURE_2D, m_texture);
-  if(m_pma)
+  if(m_pma) {
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-  else
+  } else {
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+}
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

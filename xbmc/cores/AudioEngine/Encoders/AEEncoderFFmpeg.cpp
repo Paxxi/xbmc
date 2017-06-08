@@ -51,8 +51,9 @@ CAEEncoderFFmpeg::~CAEEncoderFFmpeg()
 
 bool CAEEncoderFFmpeg::IsCompatible(const AEAudioFormat& format)
 {
-  if (!m_CodecCtx)
+  if (!m_CodecCtx) {
     return false;
+}
 
   bool match = (
     format.m_dataFormat == m_CurrentFormat.m_dataFormat &&
@@ -113,12 +114,14 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
   }
 
   /* check we got the codec */
-  if (!codec)
+  if (!codec) {
     return false;
+}
 
   m_CodecCtx = avcodec_alloc_context3(codec);
-  if (!m_CodecCtx)
+  if (!m_CodecCtx) {
     return false;
+}
 
   m_CodecCtx->bit_rate = m_BitRate;
   m_CodecCtx->sample_rate = format.m_sampleRate;
@@ -145,10 +148,11 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
         case AV_SAMPLE_FMT_S16: hasS16    = true; break;
         case AV_SAMPLE_FMT_U8 : hasU8     = true; break;
         case AV_SAMPLE_FMT_FLTP:
-          if (allow_planar_input)
+          if (allow_planar_input) {
             hasFloatP  = true;
-          else
+          } else {
             hasUnknownFormat = true;
+}
           break;
         case AV_SAMPLE_FMT_NONE: return false;
         default: hasUnknownFormat = true; break;
@@ -261,16 +265,18 @@ int CAEEncoderFFmpeg::Encode(uint8_t *in, int in_size, uint8_t *out, int out_siz
   int got_output;
   AVFrame *frame;
 
-  if (!m_CodecCtx)
+  if (!m_CodecCtx) {
     return 0;
+}
 
   /* allocate the input frame
    * sadly, we have to alloc/dealloc it everytime since we have no guarantee the
    * data argument will be constant over iterated calls and the frame needs to
    * setup pointers inside data */
   frame = av_frame_alloc();
-  if (!frame)
+  if (!frame) {
     return 0;
+}
 
   frame->nb_samples = m_CodecCtx->frame_size;
   frame->format = m_CodecCtx->sample_fmt;
@@ -317,12 +323,14 @@ int CAEEncoderFFmpeg::GetData(uint8_t **data)
 
 double CAEEncoderFFmpeg::GetDelay(unsigned int bufferSize)
 {
-  if (!m_CodecCtx)
+  if (!m_CodecCtx) {
     return 0;
+}
 
   int frames = m_CodecCtx->delay;
-  if (m_BufferSize)
+  if (m_BufferSize) {
     frames += m_NeededFrames;
+}
 
   return ((double)frames + ((double)bufferSize * m_OutputRatio)) * m_SampleRateMul;
 }

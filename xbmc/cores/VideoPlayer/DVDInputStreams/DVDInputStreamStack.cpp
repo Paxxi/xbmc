@@ -136,14 +136,15 @@ int64_t CDVDInputStreamStack::Seek(int64_t offset, int whence)
 {
   int64_t pos, len;
 
-  if     (whence == SEEK_SET)
+  if     (whence == SEEK_SET) {
     pos = offset;
-  else if(whence == SEEK_CUR)
+  } else if(whence == SEEK_CUR) {
     pos = offset + m_pos;
-  else if(whence == SEEK_END)
+  } else if(whence == SEEK_END) {
     pos = offset + m_length;
-  else
+  } else {
     return -1;
+}
 
   len = 0;
   for(TSegVec::iterator it = m_files.begin(); it != m_files.end(); ++it)

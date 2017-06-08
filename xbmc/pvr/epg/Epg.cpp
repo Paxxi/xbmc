@@ -119,8 +119,9 @@ void CPVREpg::SetUpdatePending(bool bUpdatePending /* = true */)
     m_bUpdatePending = bUpdatePending;
   }
 
-  if (bUpdatePending)
+  if (bUpdatePending) {
     CServiceBroker::GetPVRManager().EpgContainer().SetHasPendingUpdates(true);
+}
 }
 
 void CPVREpg::ForceUpdate()
@@ -409,8 +410,9 @@ CDateTime CPVREpg::GetLastScanTime()
 
 bool CPVREpg::UpdateEntry(const EPG_TAG *data, bool bUpdateDatabase /* = false */)
 {
-  if (!data)
+  if (!data) {
     return false;
+}
 
   CPVREpgInfoTagPtr tag(new CPVREpgInfoTag(*data));
   return UpdateEntry(tag, bUpdateDatabase);
@@ -514,12 +516,14 @@ bool CPVREpg::Update(const time_t start, const time_t end, int iUpdateTime, bool
   bool bUpdate(false);
 
   /* load the entries from the db first */
-  if (!m_bLoaded && !CServiceBroker::GetPVRManager().EpgContainer().IgnoreDB())
+  if (!m_bLoaded && !CServiceBroker::GetPVRManager().EpgContainer().IgnoreDB()) {
     Load();
+}
 
   /* clean up if needed */
-  if (m_bLoaded)
+  if (m_bLoaded) {
     Cleanup();
+}
 
   /* get the last update time from the database */
   CDateTime lastScanTime = GetLastScanTime();
@@ -537,11 +541,13 @@ bool CPVREpg::Update(const time_t start, const time_t end, int iUpdateTime, bool
     lastScanTime.GetAsTime(iLastUpdate);
     bUpdate = (iNow > iLastUpdate + iUpdateTime);
   }
-  else
+  else {
     bUpdate = true;
+}
 
-  if (bUpdate)
+  if (bUpdate) {
     bGrabSuccess = LoadFromClients(start, end);
+}
 
   if (bGrabSuccess)
   {
@@ -551,8 +557,9 @@ bool CPVREpg::Update(const time_t start, const time_t end, int iUpdateTime, bool
       CServiceBroker::GetPVRManager().ResetPlayingTag();
     m_bLoaded = true;
   }
-  else
-    CLog::Log(LOGERROR, "EPG - %s - failed to update table '%s'", __FUNCTION__, Name().c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "EPG - %s - failed to update table '%s'", __FUNCTION__, Name().c_str());
 
   CSingleLock lock(m_critSection);
   m_bUpdatePending = false;
@@ -576,8 +583,9 @@ int CPVREpg::Get(CFileItemList &results, const CPVREpgSearchFilter &filter) cons
 {
   int iInitialSize = results.Size();
 
-  if (!HasValidEntries())
+  if (!HasValidEntries()) {
     return -1;
+}
 
   CSingleLock lock(m_critSection);
 
@@ -611,8 +619,9 @@ bool CPVREpg::Persist()
     if (m_iEpgID <= 0 || m_bChanged)
     {
       int iId = database->Persist(*this, m_iEpgID > 0);
-      if (iId > 0)
+      if (iId > 0) {
         m_iEpgID = iId;
+}
     }
 
     for (std::map<int, CPVREpgInfoTagPtr>::iterator it = m_deletedTags.begin(); it != m_deletedTags.end(); ++it)
@@ -621,8 +630,9 @@ bool CPVREpg::Persist()
     for (std::map<int, CPVREpgInfoTagPtr>::iterator it = m_changedTags.begin(); it != m_changedTags.end(); ++it)
       it->second->Persist(false);
 
-    if (m_bUpdateLastScanTime)
+    if (m_bUpdateLastScanTime) {
       database->PersistLastEpgScanTime(m_iEpgID, true);
+}
 
     m_deletedTags.clear();
     m_changedTags.clear();

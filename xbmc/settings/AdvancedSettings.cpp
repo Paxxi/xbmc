@@ -108,8 +108,9 @@ void CAdvancedSettings::OnSettingChanged(std::shared_ptr<const CSetting> setting
 
 void CAdvancedSettings::Initialize()
 {
-  if (m_initialized)
+  if (m_initialized) {
     return;
+}
 
   m_audioHeadRoom = 0;
   m_ac3Gain = 12.0f;
@@ -640,11 +641,12 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
         bool fpsCorrect     = (override.fpsmin > 0.0f && override.fpsmax >= override.fpsmin);
         bool refreshCorrect = (override.refreshmin > 0.0f && override.refreshmax >= override.refreshmin);
 
-        if (fpsCorrect && refreshCorrect)
+        if (fpsCorrect && refreshCorrect) {
           m_videoAdjustRefreshOverrides.push_back(override);
-        else
+        } else {
           CLog::Log(LOGWARNING, "Ignoring malformed refreshrate override, fpsmin:%f fpsmax:%f refreshmin:%f refreshmax:%f",
               override.fpsmin, override.fpsmax, override.refreshmin, override.refreshmax);
+}
 
         pRefreshOverride = pRefreshOverride->NextSiblingElement("override");
       }
@@ -670,11 +672,12 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
           fallback.refreshmax = refreshmax;
         }
 
-        if (fallback.refreshmin > 0.0f && fallback.refreshmax >= fallback.refreshmin)
+        if (fallback.refreshmin > 0.0f && fallback.refreshmax >= fallback.refreshmin) {
           m_videoAdjustRefreshOverrides.push_back(fallback);
-        else
+        } else {
           CLog::Log(LOGWARNING, "Ignoring malformed refreshrate fallback, fpsmin:%f fpsmax:%f refreshmin:%f refreshmax:%f",
               fallback.fpsmin, fallback.fpsmax, fallback.refreshmin, fallback.refreshmax);
+}
 
         pRefreshFallback = pRefreshFallback->NextSiblingElement("fallback");
       }
@@ -717,10 +720,11 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
         if (XMLUtils::GetFloat(pRefreshVideoLatency, "delay", delay, -600.0f, 600.0f))
           videolatency.delay = delay;
 
-        if (videolatency.refreshmin > 0.0f && videolatency.refreshmax >= videolatency.refreshmin)
+        if (videolatency.refreshmin > 0.0f && videolatency.refreshmax >= videolatency.refreshmin) {
           m_videoRefreshLatency.push_back(videolatency);
-        else
+        } else {
           CLog::Log(LOGWARNING, "Ignoring malformed display latency <refresh> entry, min:%f max:%f", videolatency.refreshmin, videolatency.refreshmax);
+}
 
         pRefreshVideoLatency = pRefreshVideoLatency->NextSiblingElement("refresh");
       }
@@ -974,8 +978,9 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
 
   //tv stacking regexps
   TiXmlElement* pTVStacking = pRootElement->FirstChildElement("tvshowmatching");
-  if (pTVStacking)
+  if (pTVStacking) {
     GetCustomTVRegexps(pTVStacking, m_tvshowEnumRegExps);
+}
 
   //tv multipart enumeration regexp
   XMLUtils::GetString(pRootElement, "tvmultipartmatching", m_tvshowMultiPartEnumRegExp);
@@ -1241,17 +1246,19 @@ void CAdvancedSettings::GetCustomTVRegexps(TiXmlElement *pRootElement, SETTINGS_
     int iAction = 0; // overwrite
     // for backward compatibility
     const char* szAppend = pElement->Attribute("append");
-    if ((szAppend && stricmp(szAppend, "yes") == 0))
+    if ((szAppend && stricmp(szAppend, "yes") == 0)) {
       iAction = 1;
+}
     // action takes precedence if both attributes exist
     const char* szAction = pElement->Attribute("action");
     if (szAction)
     {
       iAction = 0; // overwrite
-      if (stricmp(szAction, "append") == 0)
+      if (stricmp(szAction, "append") == 0) {
         iAction = 1; // append
-      else if (stricmp(szAction, "prepend") == 0)
+      } else if (stricmp(szAction, "prepend") == 0) {
         iAction = 2; // prepend
+}
     }
     if (iAction == 0)
       settings.clear();
@@ -1358,8 +1365,9 @@ float CAdvancedSettings::GetDisplayLatency(float refreshrate)
   for (int i = 0; i < (int) m_videoRefreshLatency.size(); i++)
   {
     RefreshVideoLatency& videolatency = m_videoRefreshLatency[i];
-    if (refreshrate >= videolatency.refreshmin && refreshrate <= videolatency.refreshmax)
+    if (refreshrate >= videolatency.refreshmin && refreshrate <= videolatency.refreshmax) {
       delay = videolatency.delay / 1000.0f;
+}
   }
 
   return delay; // in seconds
@@ -1385,8 +1393,9 @@ void CAdvancedSettings::SetDebugMode(bool debug)
 
 bool CAdvancedSettings::CanLogComponent(int component) const
 {
-  if (!m_extraLogEnabled || component <= 0)
+  if (!m_extraLogEnabled || component <= 0) {
     return false;
+}
 
   return ((m_extraLogLevels & component) == component);
 }

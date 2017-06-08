@@ -78,10 +78,11 @@ char* Interface_Network::get_ip_address(void* kodiBase)
 
   std::string titleIP;
   CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-  if (iface)
+  if (iface) {
     titleIP = iface->GetCurrentIPAddress();
-  else
-    titleIP = "127.0.0.1";
+  } else {
+    titleIP 
+}= "127.0.0.1";
 
   char* buffer = nullptr;
   if (!titleIP.empty())

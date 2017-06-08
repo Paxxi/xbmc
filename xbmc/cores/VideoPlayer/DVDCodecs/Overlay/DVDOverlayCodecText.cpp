@@ -35,33 +35,39 @@ CDVDOverlayCodecText::CDVDOverlayCodecText() : CDVDOverlayCodec("Text Subtitle D
 
 CDVDOverlayCodecText::~CDVDOverlayCodecText()
 {
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 bool CDVDOverlayCodecText::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
 {
   m_bIsSSA = (hints.codec == AV_CODEC_ID_SSA);
-  if(hints.codec == AV_CODEC_ID_TEXT || hints.codec == AV_CODEC_ID_SSA)
+  if(hints.codec == AV_CODEC_ID_TEXT || hints.codec == AV_CODEC_ID_SSA) {
     return true;
-  if(hints.codec == AV_CODEC_ID_SUBRIP)
+}
+  if(hints.codec == AV_CODEC_ID_SUBRIP) {
     return true;
+}
   return false;
 }
 
 void CDVDOverlayCodecText::Dispose()
 {
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 int CDVDOverlayCodecText::Decode(DemuxPacket *pPacket)
 {
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 
-  if(!pPacket)
+  if(!pPacket) {
     return OC_ERROR;
+}
   
   uint8_t *data = pPacket->pData;
   int      size = pPacket->iSize;
@@ -80,8 +86,9 @@ int CDVDOverlayCodecText::Decode(DemuxPacket *pPacket)
     int nFieldCount = 8;
     while (nFieldCount > 0 && start < end)
     {
-      if (*start == ',')
+      if (*start == ',') {
         nFieldCount--;
+}
 
       start++;
       p++;
@@ -97,15 +104,17 @@ int CDVDOverlayCodecText::Decode(DemuxPacket *pPacket)
     {
       if(p>start)
       {
-        if(Taginit)
+        if(Taginit) {
           TagConv.ConvertLine(m_pOverlay, start, p-start);
-        else
+        } else {
           m_pOverlay->AddElement(new CDVDOverlayText::CElementText(start, p-start));
+}
       }
       start = p+1;
 
-      while(*p != '}' && p<end)
+      while(*p != '}' && p<end) {
         p++;
+}
 
       char* override = (char*)malloc(p-start + 1);
       memcpy(override, start, p-start);
@@ -124,22 +133,25 @@ int CDVDOverlayCodecText::Decode(DemuxPacket *pPacket)
       TagConv.ConvertLine(m_pOverlay, start, p-start);
       TagConv.CloseTag(m_pOverlay);
     }
-    else
+    else {
       m_pOverlay->AddElement(new CDVDOverlayText::CElementText(start, p-start));
+}
   }
   return OC_OVERLAY;
 }
 
 void CDVDOverlayCodecText::Reset()
 {
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 void CDVDOverlayCodecText::Flush()
 {
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 CDVDOverlay* CDVDOverlayCodecText::GetOverlay()

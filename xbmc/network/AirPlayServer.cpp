@@ -172,8 +172,9 @@ void CAirPlayServer::Announce(AnnouncementFlag flag, const char *sender, const c
       if (data.isMember("player") && data["player"].isMember("playerid"))
         shouldRestoreVolume = (data["player"]["playerid"] != PLAYLIST_PICTURE);
 
-      if (shouldRestoreVolume)
+      if (shouldRestoreVolume) {
         restoreVolume();
+}
 
       ServerInstance->AnnounceToClients(EVENT_STOPPED);
     }
@@ -200,8 +201,9 @@ bool CAirPlayServer::StartServer(int port, bool nonlocal)
     ServerInstance->Create();
     return true;
   }
-  else
+  else {
     return false;
+}
 }
 
 bool CAirPlayServer::SetCredentials(bool usePassword, const std::string& password)
@@ -264,8 +266,9 @@ void CAirPlayServer::StopServer(bool bWait)
 
 bool CAirPlayServer::IsRunning()
 {
-  if (ServerInstance == nullptr)
+  if (ServerInstance == nullptr) {
     return false;
+}
 
   return ((CThread*)ServerInstance)->IsRunning();
 }
@@ -430,8 +433,9 @@ bool CAirPlayServer::Initialize()
 {
   Deinitialize();
   
-  if ((m_ServerSocket = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "AIRPLAY")) == INVALID_SOCKET)
+  if ((m_ServerSocket = CreateTCPServerSocket(m_port, !m_nonlocal, 10, "AIRPLAY")) == INVALID_SOCKET) {
     return false;
+}
   
   CLog::Log(LOGINFO, "AIRPLAY Server: Successfully initialized");
   return true;

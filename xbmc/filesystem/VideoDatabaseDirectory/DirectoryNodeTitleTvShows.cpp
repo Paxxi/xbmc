@@ -46,8 +46,9 @@ std::string CDirectoryNodeTitleTvShows::GetLocalizedName() const
 bool CDirectoryNodeTitleTvShows::GetContent(CFileItemList& items) const
 {
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

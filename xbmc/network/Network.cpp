@@ -43,8 +43,9 @@ using namespace KODI::MESSAGING;
 /* slightly modified in_ether taken from the etherboot project (http://sourceforge.net/projects/etherboot) */
 bool in_ether (const char *bufp, unsigned char *addr)
 {
-  if (strlen(bufp) != 17)
+  if (strlen(bufp) != 17) {
     return false;
+}
 
   char c;
   const char *orig;
@@ -59,40 +60,45 @@ bool in_ether (const char *bufp, unsigned char *addr)
     val = 0;
     c = *bufp++;
 
-    if (isdigit(c))
+    if (isdigit(c)) {
       val = c - '0';
-    else if (c >= 'a' && c <= 'f')
+    } else if (c >= 'a' && c <= 'f') {
       val = c - 'a' + 10;
-    else if (c >= 'A' && c <= 'F')
+    } else if (c >= 'A' && c <= 'F') {
       val = c - 'A' + 10;
-    else
+    } else {
       return false;
+}
 
     val <<= 4;
     c = *bufp;
-    if (isdigit(c))
+    if (isdigit(c)) {
       val |= c - '0';
-    else if (c >= 'a' && c <= 'f')
+    } else if (c >= 'a' && c <= 'f') {
       val |= c - 'a' + 10;
-    else if (c >= 'A' && c <= 'F')
+    } else if (c >= 'A' && c <= 'F') {
       val |= c - 'A' + 10;
-    else if (c == ':' || c == '-' || c == 0)
+    } else if (c == ':' || c == '-' || c == 0) {
       val >>= 4;
-    else
+    } else {
       return false;
+}
 
-    if (c != 0)
+    if (c != 0) {
       bufp++;
+}
 
     *ptr++ = (unsigned char) (val & 0377);
     i++;
 
-    if (*bufp == ':' || *bufp == '-')
+    if (*bufp == ':' || *bufp == '-') {
       bufp++;
+}
   }
 
-  if (bufp - orig != 17)
+  if (bufp - orig != 17) {
     return false;
+}
 
   return true;
 }
@@ -102,13 +108,14 @@ int NetworkAccessPoint::getQuality() const
   // Cisco dBm lookup table (partially nonlinear)
   // Source: "Converting Signal Strength Percentage to dBm Values, 2002"
   int quality;
-  if (m_dBm >= -10) quality = 100;
-  else if (m_dBm >= -20) quality = 85 + (m_dBm + 20);
-  else if (m_dBm >= -30) quality = 77 + (m_dBm + 30);
-  else if (m_dBm >= -60) quality = 48 + (m_dBm + 60);
-  else if (m_dBm >= -98) quality = 13 + (m_dBm + 98);
-  else if (m_dBm >= -112) quality = 1 + (m_dBm + 112);
-  else quality = 0;
+  if (m_dBm >= -10) { quality = 100;
+  } else if (m_dBm >= -20) { quality = 85 + (m_dBm + 20);
+  } else if (m_dBm >= -30) { quality = 77 + (m_dBm + 30);
+  } else if (m_dBm >= -60) { quality = 48 + (m_dBm + 60);
+  } else if (m_dBm >= -98) { quality = 13 + (m_dBm + 98);
+  } else if (m_dBm >= -112) { quality = 1 + (m_dBm + 112);
+  } else { quality = 0;
+}
   return quality;
 }
 
@@ -130,8 +137,9 @@ int NetworkAccessPoint::FreqToChannel(float frequency)
   int mod_chan = (int)(frequency / 1000000 + 0.5f);
   for (unsigned int i = 0; i < sizeof(IEEE80211Freq) / sizeof(int); ++i)
   {
-    if (IEEE80211Freq[i] == mod_chan)
+    if (IEEE80211Freq[i] == mod_chan) {
       return IEEE80211Ch[i];
+}
   }
   return 0; // unknown
 }
@@ -154,10 +162,12 @@ int CNetwork::ParseHex(char *str, unsigned char *addr)
    while (*str)
    {
       int tmp;
-      if (str[1] == 0)
+      if (str[1] == 0) {
          return -1;
-      if (sscanf(str, "%02x", (unsigned int *)&tmp) != 1)
+}
+      if (sscanf(str, "%02x", (unsigned int *)&tmp) != 1) {
          return -1;
+}
       addr[len] = tmp;
       len++;
       str += 2;
@@ -169,8 +179,9 @@ int CNetwork::ParseHex(char *str, unsigned char *addr)
 bool CNetwork::GetHostName(std::string& hostname)
 {
   char hostName[128];
-  if (gethostname(hostName, sizeof(hostName)))
+  if (gethostname(hostName, sizeof(hostName))) {
     return false;
+}
 
 #ifdef TARGET_WINDOWS
   std::string hostStr;
@@ -194,8 +205,9 @@ bool CNetwork::IsLocalHost(const std::string& hostname)
 
   std::string myhostname;
   if (GetHostName(myhostname)
-      && StringUtils::EqualsNoCase(hostname, myhostname))
+      && StringUtils::EqualsNoCase(hostname, myhostname)) {
     return true;
+}
 
   std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
   std::vector<CNetworkInterface*>::const_iterator iter = ifaces.begin();
@@ -329,12 +341,15 @@ bool CNetwork::WakeOnLan(const char* mac)
  
   // Build the magic packet (6 x 0xff + 16 x MAC address)
   ptr = buf;
-  for (i = 0; i < 6; i++)
+  for (i = 0; i < 6; i++) {
     *ptr++ = 0xff;
+}
 
-  for (j = 0; j < 16; j++)
-    for (i = 0; i < 6; i++)
+  for (j = 0; j < 16; j++) {
+    for (i = 0; i < 6; i++) {
       *ptr++ = ethaddr[i];
+}
+}
  
   // Send the magic packet
   if (sendto (packet, (char *)buf, 102, 0, (struct sockaddr *)&saddr, sizeof (saddr)) < 0)
@@ -360,21 +375,23 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
   int result = fcntl(soc, F_SETFL, fcntl(soc, F_GETFL) | O_NONBLOCK);
 #endif
 
-  if (result != 0)
+  if (result != 0) {
     return "set non-blocking option failed";
 
-  result = connect(soc, (struct sockaddr *)&addr, sizeof(addr)); // non-blocking connect, will fail ..
+  
+}result = connect(soc, (struct sockaddr *)&addr, sizeof(addr)); // non-blocking connect, will fail ..
 
   if (result < 0)
   {
 #ifdef TARGET_WINDOWS
     if (WSAGetLastError() != WSAEWOULDBLOCK)
 #else
-    if (errno != EINPROGRESS)
+    if (errno != EINPROGRESS) {
 #endif
       return "unexpected connect fail";
 
-    { // wait for connect to complete
+    
+}{ // wait for connect to complete
       fd_set wset;
       FD_ZERO(&wset); 
       FD_SET(soc, &wset); 
@@ -382,24 +399,28 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
       result = select(FD_SETSIZE, nullptr, &wset, nullptr, &timeOut);
     }
 
-    if (result < 0)
+    if (result < 0) {
       return "select fail";
 
-    if (result == 0) // timeout
+    
+}if (result == 0) { // timeout
       return ""; // no error
 
-    { // verify socket connection state
+    
+}{ // verify socket connection state
       int err_code = -1;
       socklen_t code_len = sizeof (err_code);
 
       result = getsockopt(soc, SOL_SOCKET, SO_ERROR, (char*) &err_code, &code_len);
 
-      if (result != 0)
+      if (result != 0) {
         return "getsockopt fail";
 
-      if (err_code != 0)
+      
+}if (err_code != 0) {
         return ""; // no error, just not connected
-    }
+    
+}}
   }
 
   if (tryRead)
@@ -417,20 +438,23 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
       result = recv(soc, message, sizeof(message), 0);
     }
 
-    if (result == 0)
+    if (result == 0) {
       return ""; // no reply yet
 
-    if (result < 0)
+    
+}if (result < 0) {
       return "recv fail";
-  }
+  
+}}
 
   return nullptr; // success
 }
 
 bool CNetwork::PingHost(unsigned long ipaddr, unsigned short port, unsigned int timeOutMs, bool readability_check)
 {
-  if (port == 0) // use icmp ping
+  if (port == 0) { // use icmp ping
     return PingHost (ipaddr, timeOutMs);
+}
 
   struct sockaddr_in addr; 
   addr.sin_family = AF_INET; 
@@ -503,10 +527,11 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
     addr.ss_family = AF_INET6;
     s6 = (struct sockaddr_in6 *) &addr;
     s6->sin6_port = htons(port);
-    if (bindLocal)
+    if (bindLocal) {
       s6->sin6_addr = in6addr_loopback;
-    else
+    } else {
       s6->sin6_addr = in6addr_any;
+}
 
     if (bind( sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) < 0)
     {
@@ -526,10 +551,11 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
     addr.ss_family = AF_INET;
     s4 = (struct sockaddr_in *) &addr;
     s4->sin_port = htons(port);
-    if (bindLocal)
+    if (bindLocal) {
       s4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-    else
+    } else {
       s4->sin_addr.s_addr = htonl(INADDR_ANY);
+}
 
     if (bind( sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) < 0)
     {
@@ -557,12 +583,14 @@ int CreateTCPServerSocket(const int port, const bool bindLocal, const int backlo
 void CNetwork::WaitForNet()
 {
   const int timeout = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_POWERMANAGEMENT_WAITFORNETWORK);
-  if (timeout <= 0)
+  if (timeout <= 0) {
     return; // wait for network is disabled
+}
 
   // check if we have at least one network interface to wait for
-  if (!IsAvailable())
+  if (!IsAvailable()) {
     return;
+}
 
   CLog::Log(LOGNOTICE, "%s: Waiting for a network interface to come up (Timeout: %d s)", __FUNCTION__, timeout);
 
@@ -571,8 +599,9 @@ void CNetwork::WaitForNet()
 
   for(int i=0; i < numMaxTries; ++i)
   {
-    if (i > 0)
+    if (i > 0) {
       Sleep(intervalMs);
+}
 
     if (IsConnected())
     {

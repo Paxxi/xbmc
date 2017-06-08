@@ -192,10 +192,11 @@ CDateTime CFileUtils::GetModificationDate(const std::string& strFileNameAndPath,
       // Prefer the modification time if it's valid
       if (!bUseLatestDate)
       {
-        if (buffer.st_mtime != 0 && (time_t)buffer.st_mtime <= now)
+        if (buffer.st_mtime != 0 && (time_t)buffer.st_mtime <= now) {
           addedTime = (time_t)buffer.st_mtime;
-        else
+        } else {
           addedTime = (time_t)buffer.st_ctime;
+}
       }
       // Use the newer of the creation and modification time
       else
@@ -216,8 +217,9 @@ CDateTime CFileUtils::GetModificationDate(const std::string& strFileNameAndPath,
 #else
         time = localtime(&addedTime);
 #endif
-        if (time)
+        if (time) {
           dateAdded = *time;
+}
       }
     }
   }

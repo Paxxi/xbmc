@@ -200,9 +200,10 @@ void CGUIWindowPictures::OnPrepareFileItems(CFileItemList& items)
 {
   CGUIMediaWindow::OnPrepareFileItems(items);
 
-  for (int i=0;i<items.Size();++i )
+  for (int i=0;i<items.Size();++i ) {
     if (StringUtils::EqualsNoCase(items[i]->GetLabel(), "folder.jpg"))
       items.Remove(i);
+}
 
   if (items.GetFolderCount() == items.Size() || !CServiceBroker::GetSettings().GetBool(CSettings::SETTING_PICTURES_USETAGS))
     return;
@@ -326,8 +327,9 @@ bool CGUIWindowPictures::ShowPicture(int iItem, bool startSlideShow)
     return false;
 
   CGUIWindowSlideShow *pSlideShow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-  if (!pSlideShow)
+  if (!pSlideShow) {
     return false;
+}
   if (g_application.m_pPlayer->IsPlayingVideo())
     g_application.StopPlaying();
 
@@ -344,14 +346,15 @@ bool CGUIWindowPictures::ShowPicture(int iItem, bool startSlideShow)
     }
   }
 
-  if (pSlideShow->NumSlides() == 0)
+  if (pSlideShow->NumSlides() == 0) {
     return false;
+}
 
   pSlideShow->Select(strPicture);
 
-  if (startSlideShow)
+  if (startSlideShow) {
     pSlideShow->StartSlideShow();
-  else 
+  } else 
   {
     CVariant param;
     param["player"]["speed"] = 1;
@@ -560,8 +563,9 @@ void CGUIWindowPictures::LoadPlayList(const std::string& strPlayList)
   {
     // set up slideshow
     CGUIWindowSlideShow *pSlideShow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-    if (!pSlideShow)
+    if (!pSlideShow) {
       return;
+}
     if (g_application.m_pPlayer->IsPlayingVideo())
       g_application.StopPlaying();
 

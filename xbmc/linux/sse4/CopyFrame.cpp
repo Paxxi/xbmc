@@ -55,8 +55,9 @@ void copy_frame( void * pSrc, void * pDest, void * pCacheBlock,
   for( y = 0; y < height; y += rowsPerBlock  )
   {
     //  ROWS LEFT TO COPY AT END
-    if( y + rowsPerBlock > height )
+    if( y + rowsPerBlock > height ) {
       rowsPerBlock = height - y;
+}
 
     pCache = (__m128i *)pCacheBlock;
 

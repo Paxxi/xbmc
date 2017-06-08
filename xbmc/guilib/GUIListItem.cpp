@@ -185,8 +185,9 @@ const std::string& CGUIListItem::GetIconImage() const
 void CGUIListItem::SetOverlayImage(GUIIconOverlay icon, bool bOnOff)
 {
   GUIIconOverlay newIcon = (bOnOff) ? GUIIconOverlay((int)(icon)+1) : icon;
-  if (m_overlayIcon == newIcon)
+  if (m_overlayIcon == newIcon) {
     return;
+}
   m_overlayIcon = newIcon;
   SetInvalid();
 }

@@ -68,8 +68,10 @@ TEST_P(TestVideoInfoScanner, EnumerateEpisodeItem)
   EPISODELIST result;
   ASSERT_TRUE(scanner.EnumerateEpisodeItem(&item, result));
   EXPECT_EQ(expected.size(), result.size());
-  for (size_t i = 0; i < expected.size(); i++)
+  for (size_t i = 0; i < expected.size(); i++) { {
     EXPECT_EQ(expected[i], result[i]);
+}
+}
 }
 
 INSTANTIATE_TEST_CASE_P(VideoInfoScanner, TestVideoInfoScanner, ValuesIn(TestData));

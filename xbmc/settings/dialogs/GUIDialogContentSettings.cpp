@@ -95,8 +95,9 @@ bool CGUIDialogContentSettings::Show(ADDON::ScraperPtr& scraper, CONTENT_TYPE co
 bool CGUIDialogContentSettings::Show(ADDON::ScraperPtr& scraper, VIDEO::SScanSettings& settings, CONTENT_TYPE content /* = CONTENT_NONE */)
 {
   CGUIDialogContentSettings *dialog = g_windowManager.GetWindow<CGUIDialogContentSettings>(WINDOW_DIALOG_CONTENT_SETTINGS);
-  if (dialog == nullptr)
+  if (dialog == nullptr) {
     return false;
+}
 
   if (scraper != NULL)
   {
@@ -316,9 +317,9 @@ void CGUIDialogContentSettings::InitializeSettings()
 {
   CGUIDialogSettingsManualBase::InitializeSettings();
 
-  if (m_content == CONTENT_NONE)
+  if (m_content == CONTENT_NONE) {
     m_showScanSettings = false;
-  else if (m_scraper != NULL && !CAddonMgr::GetInstance().IsAddonDisabled(m_scraper->ID()))
+  } else if (m_scraper != NULL && !CAddonMgr::GetInstance().IsAddonDisabled(m_scraper->ID()))
     m_showScanSettings = true;
 
   std::shared_ptr<CSettingCategory> category = AddCategory("contentsettings", -1);
@@ -411,10 +412,11 @@ void CGUIDialogContentSettings::ToggleState(const std::string &settingid, bool e
   BaseSettingControlPtr settingControl = GetSettingControl(settingid);
   if (settingControl != NULL && settingControl->GetControl() != NULL)
   {
-    if (enabled)
+    if (enabled) {
       CONTROL_ENABLE(settingControl->GetID());
-    else
+    } else {
       CONTROL_DISABLE(settingControl->GetID());
+}
   }
 }
 

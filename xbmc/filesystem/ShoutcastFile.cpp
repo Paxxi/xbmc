@@ -85,8 +85,9 @@ bool CShoutcastFile::Open(const CURL& url)
   }
   m_fileCharset = m_file.GetServerReportedCharset();
   m_metaint = atoi(m_file.GetHttpHeader().GetValue("icy-metaint").c_str());
-  if (!m_metaint)
+  if (!m_metaint) {
     m_metaint = -1;
+}
   m_buffer = new char[16*255];
   m_tagPos = 1;
   m_tagChange.Set();
@@ -188,16 +189,18 @@ void CShoutcastFile::ReadTruncated(char* buf2, int size)
 
 int CShoutcastFile::IoControl(EIoControl control, void* payload)
 {
-  if (control == IOCTRL_SET_CACHE)
+  if (control == IOCTRL_SET_CACHE) {
     m_cacheReader = (CFileCache*)payload;
+}
 
   return IFile::IoControl(control, payload);
 }
 
 void CShoutcastFile::Process()
 {
-  if (!m_cacheReader)
+  if (!m_cacheReader) {
     return;
+}
 
   while (!m_bStop)
   {

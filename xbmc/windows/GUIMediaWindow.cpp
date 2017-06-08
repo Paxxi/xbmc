@@ -107,8 +107,9 @@ bool CGUIMediaWindow::Load(TiXmlElement *pRootElement)
 {
   bool retVal = CGUIWindow::Load(pRootElement);
 
-  if (!retVal)
+  if (!retVal) {
     return false;
+}
 
   // configure our view control
   m_viewControl.Reset();
@@ -172,8 +173,9 @@ bool CGUIMediaWindow::OnAction(const CAction &action)
   if (CGUIWindow::OnAction(action))
     return true;
 
-  if (action.GetID() == ACTION_FILTER)
+  if (action.GetID() == ACTION_FILTER) {
     return Filter();
+}
 
   // live filtering
   if (action.GetID() == ACTION_FILTER_CLEAR)
@@ -211,8 +213,9 @@ bool CGUIMediaWindow::OnBack(int actionID)
       !URIUtils::PathEquals(m_vecItems->GetPath(), GetRootPath(), true) &&
      (!URIUtils::PathEquals(m_vecItems->GetPath(), m_startDirectory, true) || (m_canFilterAdvanced && filterUrl.HasOption("filter"))))
   {
-    if (GoParentFolder())
+    if (GoParentFolder()) {
       return true;
+}
   }
   return CGUIWindow::OnBack(actionID);
 }
@@ -255,8 +258,9 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
           OnMessage(msg);
           viewMode = m_viewControl.GetViewModeNumber(msg.GetParam1());
         }
-        else
-          viewMode = m_viewControl.GetNextViewMode();
+        else {
+          viewMode 
+}= m_viewControl.GetNextViewMode();
 
         if (m_guiState.get())
           m_guiState->SaveViewAsControl(viewMode);
@@ -277,9 +281,9 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
           UpdateFileList();
         return true;
       }
-      else if (iControl == CONTROL_BTN_FILTER)
+      else if (iControl == CONTROL_BTN_FILTER) {
         return Filter(false);
-      else if (m_viewControl.HasControl(iControl))  // list/thumb control
+      } else if (m_viewControl.HasControl(iControl))  // list/thumb control
       {
         int iItem = m_viewControl.GetSelectedItem();
         int iAction = message.GetParam1();
@@ -401,15 +405,16 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         // check if this is meant for advanced filtering
         if (message.GetParam2() != 10)
         {
-          if (message.GetParam2() == 1) // append
+          if (message.GetParam2() == 1) { // append
             filter += message.GetStringParam();
-          else if (message.GetParam2() == 2)
+          } else if (message.GetParam2() == 2)
           { // delete
             if (filter.size())
               filter.erase(filter.size() - 1);
           }
-          else
-            filter = message.GetStringParam();
+          else {
+            filter 
+}= message.GetStringParam();
         }
         OnFilterItems(filter);
         UpdateButtons();
@@ -631,8 +636,9 @@ void CGUIMediaWindow::FormatItemLabels(CFileItemList &items, const LABEL_MASKS &
       fileFormatter.FormatLabels(pItem.get());
   }
 
-  if (items.GetSortMethod() == SortByLabel)
+  if (items.GetSortMethod() == SortByLabel) {
     items.ClearSortState();
+}
 }
 
 /*!
@@ -671,8 +677,9 @@ bool CGUIMediaWindow::GetDirectory(const std::string &strDirectory, CFileItemLis
             CURL::GetRedacted(strDirectory).c_str());
   CLog::Log(LOGDEBUG,"  ParentPath = [%s]", CURL::GetRedacted(strParentPath).c_str());
 
-  if (pathToUrl.IsProtocol("plugin"))
+  if (pathToUrl.IsProtocol("plugin")) {
     CAddonMgr::GetInstance().UpdateLastUsed(pathToUrl.GetHostName());
+}
 
   // see if we can load a previously cached folder
   CFileItemList cachedItems(strDirectory);
@@ -819,12 +826,13 @@ bool CGUIMediaWindow::Update(const std::string &strDirectory, bool updateFilterP
   int showLabel = 0;
   if (URIUtils::PathEquals(path, GetRootPath()))
   {
-    if (iWindow == WINDOW_PICTURES)
+    if (iWindow == WINDOW_PICTURES) {
       showLabel = 997;
-    else if (iWindow == WINDOW_FILES)
+    } else if (iWindow == WINDOW_FILES) {
       showLabel = 1026;
-    else if (iWindow == WINDOW_GAMES)
+    } else if (iWindow == WINDOW_GAMES) {
       showLabel = 35250; // "Add games..."
+}
   }
   if (m_vecItems->IsPath("sources://video/"))
     showLabel = 999;
@@ -950,14 +958,17 @@ bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
   {
     if (CProfilesManager::GetInstance().IsMasterProfile())
     {
-      if (!g_passwordManager.IsMasterLockUnlocked(true))
+      if (!g_passwordManager.IsMasterLockUnlocked(true)) {
         return false;
+}
     }
-    else if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteSources() && !g_passwordManager.IsProfileLockUnlocked())
+    else if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteSources() && !g_passwordManager.IsProfileLockUnlocked()) {
       return false;
+}
 
-    if (OnAddMediaSource())
+    if (OnAddMediaSource()) {
       Refresh(true);
+}
 
     return true;
   }
@@ -994,9 +1005,10 @@ bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
     if ( pItem->m_bIsShareOrDrive )
     {
       const std::string& strLockType=m_guiState->GetLockType();
-      if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE)
+      if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE) {
         if (!strLockType.empty() && !g_passwordManager.IsItemUnlocked(pItem.get(), strLockType))
             return true;
+}
 
       if (!HaveDiscOrConnection(pItem->GetPath(), pItem->m_iDriveType))
         return true;
@@ -1032,8 +1044,9 @@ bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
     }
 
     CFileItem directory(*pItem);
-    if (!Update(directory.GetPath()))
+    if (!Update(directory.GetPath())) {
       ShowShareErrorMessage(&directory);
+}
 
     return true;
   }
@@ -1138,18 +1151,20 @@ bool CGUIMediaWindow::HaveDiscOrConnection(const std::string& strPath, int iDriv
  */
 void CGUIMediaWindow::ShowShareErrorMessage(CFileItem* pItem) const
 {
-  if (!pItem->m_bIsShareOrDrive)
+  if (!pItem->m_bIsShareOrDrive) {
     return;
+}
 
   int idMessageText = 0;
   CURL url(pItem->GetPath());
 
   if (url.IsProtocol("smb") && url.GetHostName().empty()) //  smb workgroup
     idMessageText = 15303; // Workgroup not found
-  else if (pItem->m_iDriveType == CMediaSource::SOURCE_TYPE_REMOTE || URIUtils::IsRemote(pItem->GetPath()))
+  else if (pItem->m_iDriveType == CMediaSource::SOURCE_TYPE_REMOTE || URIUtils::IsRemote(pItem->GetPath())) {
     idMessageText = 15301; // Could not connect to network server
-  else
+  } else {
     idMessageText = 15300; // Path not found or invalid
+}
 
   CGUIDialogOK::ShowAndGetInput(CVariant{220}, CVariant{idMessageText});
 }
@@ -1537,9 +1552,11 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
   if (item->IsPlayList())
     item->m_bIsFolder = false;
 
-  if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && CProfilesManager::GetInstance().GetCurrentProfile().filesLocked())
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
+  if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && CProfilesManager::GetInstance().GetCurrentProfile().filesLocked()) {
+    if (!g_passwordManager.IsMasterLockUnlocked(true)) {
       return;
+}
+}
 
   if (!CFileUtils::DeleteItem(item))
     return;
@@ -1551,9 +1568,11 @@ void CGUIMediaWindow::OnRenameItem(int iItem)
 {
   if ( iItem < 0 || iItem >= m_vecItems->Size()) return;
 
-  if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && CProfilesManager::GetInstance().GetCurrentProfile().filesLocked())
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
+  if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && CProfilesManager::GetInstance().GetCurrentProfile().filesLocked()) {
+    if (!g_passwordManager.IsMasterLockUnlocked(true)) {
       return;
+}
+}
 
   if (!CFileUtils::RenameFile(m_vecItems->Get(iItem)->GetPath()))
     return;
@@ -1633,8 +1652,9 @@ bool CGUIMediaWindow::OnPopupMenu(int itemIdx)
 {
   auto InRange = [](int i, std::pair<int, int> range){ return i >= range.first && i < range.second; };
 
-  if (itemIdx < 0 || itemIdx >= m_vecItems->Size())
+  if (itemIdx < 0 || itemIdx >= m_vecItems->Size()) {
     return false;
+}
 
   auto item = m_vecItems->Get(itemIdx);
   if (!item)
@@ -1755,8 +1775,9 @@ bool CGUIMediaWindow::WaitForNetwork() const
     return true;
 
   CGUIDialogProgress *progress = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
-  if (!progress)
+  if (!progress) {
     return true;
+}
 
   CURL url(m_vecItems->GetPath());
   progress->SetHeading(CVariant{1040}); // Loading Directory
@@ -1926,8 +1947,9 @@ void CGUIMediaWindow::OnFilterItems(const std::string &filter)
 bool CGUIMediaWindow::GetFilteredItems(const std::string &filter, CFileItemList &items)
 {
   bool result = false;
-  if (m_canFilterAdvanced)
+  if (m_canFilterAdvanced) {
     result = GetAdvanceFilteredItems(items);
+}
 
   std::string trimmedFilter(filter);
   StringUtils::TrimLeft(trimmedFilter);
@@ -2025,8 +2047,9 @@ bool CGUIMediaWindow::GetAdvanceFilteredItems(CFileItemList &items)
     }
   }
 
-  if (resultItems.Size() > 0)
+  if (resultItems.Size() > 0) {
     CLog::Log(LOGWARNING, "CGUIMediaWindow::GetAdvanceFilteredItems(): %d unknown items", resultItems.Size());
+}
 
   items.ClearItems();
   items.Append(filteredItems);
@@ -2075,8 +2098,9 @@ bool CGUIMediaWindow::Filter(bool advanced /* = true */)
     }
   }
   // advanced filtering
-  else
-    CGUIDialogMediaFilter::ShowAndEditMediaFilter(m_strFilterPath, m_filter);
+  else {
+    CGUIDialogMediaFilter
+}::ShowAndEditMediaFilter(m_strFilterPath, m_filter);
 
   return true;
 }

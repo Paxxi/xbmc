@@ -114,8 +114,9 @@ void CALSADeviceMonitor::FDEventCallback(int id, int fd, short revents, void *da
     const char* action = udev_device_get_action(device);
     const char* soundInitialized = udev_device_get_property_value(device, "SOUND_INITIALIZED");
 
-    if (!action || !soundInitialized)
+    if (!action || !soundInitialized) {
       continue;
+}
 
     /* cardX devices emit a "change" event when ready (i.e. all subdevices added) */
     if (strcmp(action, "change") == 0)

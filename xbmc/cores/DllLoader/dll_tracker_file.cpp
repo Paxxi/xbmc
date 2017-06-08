@@ -83,10 +83,11 @@ extern "C" void tracker_file_free_all(DllTrackInfo* pInfo)
       CLog::Log(LOGDEBUG, "%s", file->name);
       free(file->name);
 
-      if (file->type == FILE_XBMC_OPEN) dll_close(file->handle);
-      else if (file->type == FILE_XBMC_FOPEN) dll_fclose((FILE*)file->handle);
-      else if (file->type == FILE_OPEN) close(file->handle);
-      else if (file->type == FILE_FOPEN) fclose((FILE*)file->handle);
+      if (file->type == FILE_XBMC_OPEN) { dll_close(file->handle);
+      } else if (file->type == FILE_XBMC_FOPEN) { dll_fclose((FILE*)file->handle);
+      } else if (file->type == FILE_OPEN) { close(file->handle);
+      } else if (file->type == FILE_FOPEN) { fclose((FILE*)file->handle);
+}
 
       delete file;
     }
@@ -136,8 +137,9 @@ extern "C"
 
     tracker_file_free(loc, (uintptr_t)stream, FILE_XBMC_FOPEN);
     stream = dll_freopen(path, mode, stream);
-    if (stream)
+    if (stream) {
       tracker_file_track(loc, (uintptr_t)stream, FILE_XBMC_FOPEN, path);
+}
     return stream;
   }
 

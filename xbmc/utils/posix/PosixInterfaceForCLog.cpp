@@ -46,15 +46,17 @@ CPosixInterfaceForCLog::~CPosixInterfaceForCLog()
 
 bool CPosixInterfaceForCLog::OpenLogFile(const std::string &logFilename, const std::string &backupOldLogToFilename)
 {
-  if (m_file)
+  if (m_file) {
     return false; // file was already opened
+}
 
   (void)remove(backupOldLogToFilename.c_str()); // if it's failed, try to continue
   (void)rename(logFilename.c_str(), backupOldLogToFilename.c_str()); // if it's failed, try to continue
 
   m_file = (FILEWRAP*)fopen(logFilename.c_str(), "wb");
-  if (!m_file)
+  if (!m_file) {
     return false; // error, can't open log file
+}
 
   static const unsigned char BOM[3] = { 0xEF, 0xBB, 0xBF };
   (void)fwrite(BOM, sizeof(BOM), 1, m_file); // write BOM, ignore possible errors
@@ -73,8 +75,9 @@ void CPosixInterfaceForCLog::CloseLogFile()
 
 bool CPosixInterfaceForCLog::WriteStringToLog(const std::string &logString)
 {
-  if (!m_file)
+  if (!m_file) {
     return false;
+}
 
   const bool ret = (fwrite(logString.data(), logString.size(), 1, m_file) == 1) &&
                    (fwrite("\n", 1, 1, m_file) == 1);

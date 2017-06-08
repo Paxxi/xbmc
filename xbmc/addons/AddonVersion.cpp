@@ -74,28 +74,33 @@ namespace ADDON
       char *next_a, *next_b;
       long int num_a = strtol(a, &next_a, 10);
       long int num_b = strtol(b, &next_b, 10);
-      if (num_a != num_b)
+      if (num_a != num_b) {
         return num_a < num_b ? -1 : 1;
+}
 
       a = next_a;
       b = next_b;
     }
-    if (!*a && !*b)
+    if (!*a && !*b) {
       return 0;
-    if (*a)
+}
+    if (*a) {
       return *a == '~' ? -1 : 1;
-    else
+    } else {
       return *b == '~' ? 1 : -1;
+}
   }
 
   bool AddonVersion::operator<(const AddonVersion& other) const
   {
-    if (mEpoch != other.mEpoch)
+    if (mEpoch != other.mEpoch) {
       return mEpoch < other.mEpoch;
+}
 
     int result = CompareComponent(mUpstream.c_str(), other.mUpstream.c_str());
-    if (result)
+    if (result) {
       return (result < 0);
+}
 
     return (CompareComponent(mRevision.c_str(), other.mRevision.c_str()) < 0);
   }

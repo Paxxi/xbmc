@@ -87,10 +87,11 @@ void CDetectDVDMedia::Process()
 #if !defined(TARGET_DARWIN)
   //Before entering loop make sure we actually have a CDrom drive
   CdIo_t *p_cdio = m_cdio->cdio_open(NULL, DRIVER_DEVICE);
-  if (p_cdio == nullptr)
+  if (p_cdio == nullptr) {
     return;
-  else
-    m_cdio->cdio_destroy(p_cdio);
+  } else {
+    m_cdio
+}->cdio_destroy(p_cdio);
 #endif
 
   while (( !m_bStop ))
@@ -196,8 +197,9 @@ VOID CDetectDVDMedia::UpdateDvdrom()
             g_windowManager.SendThreadMessage( msg );
             // Tell the application object that a new Cd is inserted
             // So autorun can be started.
-            if ( !m_bStartup )
+            if ( !m_bStartup ) {
               m_bAutorun = true;
+}
           }
           return ;
         }
@@ -248,15 +250,16 @@ void CDetectDVDMedia::DetectMediaType()
   }
   else
   {
-    if (m_pCdInfo->IsUDF(1))
+    if (m_pCdInfo->IsUDF(1)) {
       strNewUrl = "D:\\";
-    else if (m_pCdInfo->IsAudio(1))
+    } else if (m_pCdInfo->IsAudio(1))
     {
       strNewUrl = "cdda://local/";
       bCDDA = true;
     }
-    else
-      strNewUrl = "D:\\";
+    else {
+      strNewUrl 
+}= "D:\\";
   }
 
   if (m_pCdInfo->IsISOUDF(1))
@@ -315,8 +318,9 @@ DWORD CDetectDVDMedia::GetTrayState()
 #ifdef TARGET_POSIX
 
   char* dvdDevice = m_cdio->GetDeviceFileName();
-  if (strlen(dvdDevice) == 0)
+  if (strlen(dvdDevice) == 0) {
     return DRIVE_NONE;
+}
 
 #ifndef USING_CDIO78
 
@@ -381,10 +385,11 @@ DWORD CDetectDVDMedia::GetTrayState()
     switch(status)
     {
     case 0: //closed
-      if (discmode==CDIO_DISC_MODE_NO_INFO || discmode==CDIO_DISC_MODE_ERROR)
+      if (discmode==CDIO_DISC_MODE_NO_INFO || discmode==CDIO_DISC_MODE_ERROR) {
         m_dwTrayState = TRAY_CLOSED_NO_MEDIA;
-      else
+      } else {
         m_dwTrayState = TRAY_CLOSED_MEDIA_PRESENT;
+}
       break;
 
     case 1: //open
@@ -394,8 +399,9 @@ DWORD CDetectDVDMedia::GetTrayState()
     laststatus = status;
     m_cdio->cdio_destroy(cdio);
   }
-  else
+  else {
     return DRIVE_NOT_READY;
+}
 
 #endif // USING_CDIO78
 #endif // TARGET_POSIX

@@ -41,13 +41,15 @@ struct FeatureTypeEqual
 
   bool operator()(const CControllerFeature& feature) const
   {
-    if (type == FEATURE_TYPE::UNKNOWN)
+    if (type == FEATURE_TYPE::UNKNOWN) {
       return true; // Match all feature types
+}
 
     if (type == FEATURE_TYPE::SCALAR && feature.Type() == FEATURE_TYPE::SCALAR)
     {
-      if (inputType == INPUT_TYPE::UNKNOWN)
+      if (inputType == INPUT_TYPE::UNKNOWN) {
         return true; // Match all input types
+}
 
       return inputType == feature.InputType();
     }
@@ -81,8 +83,9 @@ bool CControllerLayout::Deserialize(const TiXmlElement* pElement, const CControl
 {
   Reset();
 
-  if (!pElement)
+  if (!pElement) {
     return false;
+}
 
   // Label
   std::string strLabel = XMLUtils::GetAttribute(pElement, LAYOUT_XML_ATTR_LAYOUT_LABEL);

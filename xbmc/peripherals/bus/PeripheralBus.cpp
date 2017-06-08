@@ -286,10 +286,11 @@ void CPeripheralBus::TriggerDeviceScan()
     bNeedsPolling = m_bNeedsPolling;
   }
 
-  if (bNeedsPolling)
+  if (bNeedsPolling) {
     m_triggerEvent.Set();
-  else
+  } else {
     ScanForDevices();
+}
 }
 
 bool CPeripheralBus::HasPeripheral(const std::string &strLocation) const

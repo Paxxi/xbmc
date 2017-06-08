@@ -80,8 +80,9 @@ bool CSMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   lock.Leave(); // OpenDir is locked
   int fd = OpenDir(url, strAuth);
-  if (fd < 0)
+  if (fd < 0) {
     return false;
+}
 
   URIUtils::AddSlashAtEnd(strRoot);
   URIUtils::AddSlashAtEnd(strAuth);
@@ -121,11 +122,13 @@ bool CSMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       int64_t lTimeDate = 0;
       bool hidden = false;
 
-      if(StringUtils::EndsWith(strFile, "$") && aDir.type == SMBC_FILE_SHARE )
+      if(StringUtils::EndsWith(strFile, "$") && aDir.type == SMBC_FILE_SHARE ) {
         continue;
+}
 
-      if (StringUtils::StartsWith(strFile, "."))
+      if (StringUtils::StartsWith(strFile, ".")) {
         hidden = true;
+}
 
       // only stat files that can give proper responses
       if ( aDir.type == SMBC_FILE ||
@@ -151,16 +154,18 @@ bool CSMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
             if (smbc_getxattr(strFullName.c_str(), "system.dos_attr.mode", value, sizeof(value)) > 0)
             {
               long longvalue = strtol(value, nullptr, 16);
-              if (longvalue & SMBC_DOS_MODE_HIDDEN)
+              if (longvalue & SMBC_DOS_MODE_HIDDEN) {
                 hidden = true;
+}
             }
             else
               CLog::Log(LOGERROR, "Getting extended attributes for the share: '%s'\nunix_err:'%x' error: '%s'", CURL::GetRedacted(strFullName).c_str(), errno, strerror(errno));
 
             bIsDir = S_ISDIR(info.st_mode);
             lTimeDate = info.st_mtime;
-            if(lTimeDate == 0) // if modification date is missing, use create date
+            if(lTimeDate == 0) { // if modification date is missing, use create date
               lTimeDate = info.st_ctime;
+}
             iSize = info.st_size;
           }
           else
@@ -258,8 +263,9 @@ int CSMBDirectory::OpenDir(const CURL& url, std::string& strAuth)
 
     if (errno == EACCES)
     {
-      if (m_flags & DIR_FLAG_ALLOW_PROMPT)
+      if (m_flags & DIR_FLAG_ALLOW_PROMPT) {
         RequireAuthentication(urlIn);
+}
       break;
     }
 
@@ -293,8 +299,9 @@ bool CSMBDirectory::Create(const CURL& url2)
 
   int result = smbc_mkdir(strFileName.c_str(), 0);
   bool success = (result == 0 || EEXIST == errno);
-  if(!success)
+  if(!success) {
     CLog::Log(LOGERROR, "%s - Error( %s )", __FUNCTION__, strerror(errno));
+}
 
   return success;
 }

@@ -33,8 +33,9 @@ static int Show(const std::vector<std::string>& params)
   CGUIMessage msg(GUI_MSG_SHOW_PICTURE, 0, 0);
   msg.SetStringParam(params[0]);
   CGUIWindow *pWindow = g_windowManager.GetWindow(WINDOW_SLIDESHOW);
-  if (pWindow)
+  if (pWindow) {
     pWindow->OnMessage(msg);
+}
 
   return 0;
 }
@@ -56,13 +57,13 @@ static int Slideshow(const std::vector<std::string>& params)
   std::string beginSlidePath;
   // leave RecursiveSlideShow command as-is
   unsigned int flags = 0;
-  if (Recursive)
+  if (Recursive) {
     flags |= 1;
 
   // SlideShow(dir[,recursive][,[not]random][,pause][,beginslide="/path/to/start/slide.jpg"])
   // the beginslide value need be escaped (for '"' or '\' in it, by backslash)
   // and then quoted, or not. See CUtil::SplitParams()
-  else
+  } else
   {
     for (unsigned int i = 1 ; i < params.size() ; i++)
     {
@@ -85,8 +86,9 @@ static int Slideshow(const std::vector<std::string>& params)
   strParams.push_back(beginSlidePath);
   msg.SetStringParams(strParams);
   CGUIWindow *pWindow = g_windowManager.GetWindow(WINDOW_SLIDESHOW);
-  if (pWindow)
+  if (pWindow) {
     pWindow->OnMessage(msg);
+}
 
   return 0;
 }

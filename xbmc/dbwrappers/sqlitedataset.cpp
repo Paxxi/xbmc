@@ -215,8 +215,9 @@ int SqliteDatabase::connect(bool create) {
   {
     disconnect();
     int flags = SQLITE_OPEN_READWRITE;
-    if (create)
+    if (create) {
       flags |= SQLITE_OPEN_CREATE;
+}
     if (sqlite3_open_v2(db_fullpath.c_str(), &conn, flags, NULL)==SQLITE_OK)
     {
       sqlite3_busy_handler(conn, busy_callback, nullptr);
@@ -266,8 +267,9 @@ int SqliteDatabase::create() {
 }
 
 int SqliteDatabase::copy(const char *backup_name) {
-  if (active == false)
+  if (active == false) {
     throw DbErrors("Can't copy database: no active connection...");
+}
 
   CLog::Log(LOGDEBUG, "Copying from %s to %s at %s", db.c_str(), backup_name, host.c_str());
 
@@ -305,8 +307,9 @@ int SqliteDatabase::copy(const char *backup_name) {
 
   (void)sqlite3_close(pFile);
 
-  if( rc != SQLITE_OK )
+  if( rc != SQLITE_OK ) {
     throw DbErrors("Can't copy database. (%d)", rc);
+}
 
   return rc;
 }
@@ -314,8 +317,9 @@ int SqliteDatabase::copy(const char *backup_name) {
 int SqliteDatabase::drop_analytics() {
   // SqliteDatabase::copy used a full database copy, so we have a new version
   // with all the analytics stuff. We should clean database from everything but data
-  if (active == false)
+  if (active == false) {
     throw DbErrors("Can't drop extras database: no active connection...");
+}
 
   char sqlcmd[4096];
   result_set res;
@@ -641,8 +645,9 @@ bool SqliteDataset::query(const std::string &query) {
     std::string qry = query;
     int fs = qry.find("select");
     int fS = qry.find("SELECT");
-    if (!( fs >= 0 || fS >=0))                                 
+    if (!( fs >= 0 || fS >=0)) {                                 
          throw DbErrors("MUST be select SQL!"); 
+}
 
   close();
 
@@ -767,8 +772,9 @@ void SqliteDataset::prev() {
 
 void SqliteDataset::next() {
   Dataset::next();
-  if (!eof()) 
+  if (!eof()) { 
       fill_fields();
+}
 }
 
 void SqliteDataset::free_row()
@@ -801,8 +807,9 @@ int64_t SqliteDataset::lastinsertid()
 
 
 long SqliteDataset::nextid(const char *seq_name) {
-  if (handle()) return db->nextid(seq_name);
-  else return DB_UNEXPECTED_RESULT;
+  if (handle()) { return db->nextid(seq_name);
+  } else { return DB_UNEXPECTED_RESULT;
+}
 }
 
 void SqliteDataset::interrupt() {

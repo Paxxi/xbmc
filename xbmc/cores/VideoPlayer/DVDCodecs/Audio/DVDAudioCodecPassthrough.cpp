@@ -153,8 +153,9 @@ bool CDVDAudioCodecPassthrough::AddData(const DemuxPacket &packet)
 
   if (pData && !m_backlogSize)
   {
-    if (iSize <= 0)
+    if (iSize <= 0) {
       return true;
+}
 
     m_dataSize = m_bufferSize;
     used = m_parser.AddData(pData, iSize, &m_buffer, &m_dataSize);
@@ -174,8 +175,9 @@ bool CDVDAudioCodecPassthrough::AddData(const DemuxPacket &packet)
     used = iSize;
   }
 
-  if (!m_dataSize)
+  if (!m_dataSize) {
     return true;
+}
 
   if (m_dataSize)
   {
@@ -208,8 +210,9 @@ bool CDVDAudioCodecPassthrough::AddData(const DemuxPacket &packet)
       m_dataSize = m_trueHDoffset;
       m_trueHDoffset = 0;
     }
-    else
+    else {
       m_dataSize = 0;
+}
   }
 
   return true;
@@ -220,8 +223,9 @@ void CDVDAudioCodecPassthrough::GetData(DVDAudioFrame &frame)
   frame.nb_frames = GetData(frame.data);
   frame.framesOut = 0;
 
-  if (frame.nb_frames == 0)
+  if (frame.nb_frames == 0) {
     return;
+}
 
   frame.passthrough = true;
   frame.format = m_format;
@@ -234,13 +238,15 @@ void CDVDAudioCodecPassthrough::GetData(DVDAudioFrame &frame)
 
 int CDVDAudioCodecPassthrough::GetData(uint8_t** dst)
 {
-  if (!m_dataSize)
+  if (!m_dataSize) {
     AddData(DemuxPacket(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE));
+}
 
-  if (m_format.m_streamInfo.m_type == CAEStreamInfo::STREAM_TYPE_TRUEHD)
+  if (m_format.m_streamInfo.m_type == CAEStreamInfo::STREAM_TYPE_TRUEHD) {
     *dst = m_trueHDBuffer.get();
-  else
+  } else {
     *dst = m_buffer;
+}
 
   int bytes = m_dataSize;
   m_dataSize = 0;

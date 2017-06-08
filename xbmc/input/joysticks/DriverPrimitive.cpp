@@ -121,8 +121,9 @@ bool CDriverPrimitive::operator<(const CDriverPrimitive& rhs) const
 
 bool CDriverPrimitive::IsValid() const
 {
-  if (m_type == BUTTON || m_type == MOTOR)
+  if (m_type == BUTTON || m_type == MOTOR) {
     return true;
+}
 
   if (m_type == HAT)
   {
@@ -140,22 +141,25 @@ bool CDriverPrimitive::IsValid() const
     {
     case -1:
     {
-      if (m_semiAxisDirection != SEMIAXIS_DIRECTION::POSITIVE)
+      if (m_semiAxisDirection != SEMIAXIS_DIRECTION::POSITIVE) {
         return false;
+}
       maxRange = 2;
       break;
     }
     case 0:
     {
       if (m_semiAxisDirection != SEMIAXIS_DIRECTION::POSITIVE &&
-          m_semiAxisDirection != SEMIAXIS_DIRECTION::NEGATIVE)
+          m_semiAxisDirection != SEMIAXIS_DIRECTION::NEGATIVE) {
         return false;
+}
       break;
     }
     case 1:
     {
-      if (m_semiAxisDirection != SEMIAXIS_DIRECTION::POSITIVE)
+      if (m_semiAxisDirection != SEMIAXIS_DIRECTION::POSITIVE) {
         return false;
+}
       maxRange = 2;
       break;
     }

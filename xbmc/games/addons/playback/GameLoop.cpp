@@ -117,10 +117,11 @@ void CGameLoop::Process()
 
 double CGameLoop::FrameTimeMs() const
 {
-  if (m_speedFactor != 0.0)
+  if (m_speedFactor != 0.0) {
     return 1000.0 / m_fps / std::abs(m_speedFactor);
-  else
+  } else {
     return FOREVER_MS;
+}
 }
 
 double CGameLoop::SleepTimeMs(double nowMs) const

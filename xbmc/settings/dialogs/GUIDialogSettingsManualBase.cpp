@@ -65,8 +65,9 @@ void CGUIDialogSettingsManualBase::SetupView()
 
 CSettingsManager* CGUIDialogSettingsManualBase::GetSettingsManager() const
 {
-  if (m_settingsManager == nullptr)
+  if (m_settingsManager == nullptr) {
     m_settingsManager = new CSettingsManager();
+}
 
   return m_settingsManager;
 }
@@ -1027,10 +1028,11 @@ void CGUIDialogSettingsManualBase::setSettingDetails(std::shared_ptr<CSetting> s
   if (setting == NULL)
     return;
 
-  if (level < 0)
+  if (level < 0) {
     level = SettingLevelBasic;
-  else if (level > SettingLevelExpert)
+  } else if (level > SettingLevelExpert) {
     level = SettingLevelExpert;
+}
 
   setting->SetLevel(static_cast<SettingLevel>(level));
   setting->SetVisible(visible);

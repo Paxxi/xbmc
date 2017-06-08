@@ -66,16 +66,21 @@ bool CColorManager::IsEnabled()
 
 CMS_PRIMARIES videoFlagsToPrimaries(int flags)
 {
-  if (flags & CONF_FLAGS_COLPRI_BT709)
+  if (flags & CONF_FLAGS_COLPRI_BT709) {
     return CMS_PRIMARIES_BT709;
-  if (flags & CONF_FLAGS_COLPRI_170M)
+}
+  if (flags & CONF_FLAGS_COLPRI_170M) {
     return CMS_PRIMARIES_170M;
-  if (flags & CONF_FLAGS_COLPRI_BT470M)
+}
+  if (flags & CONF_FLAGS_COLPRI_BT470M) {
     return CMS_PRIMARIES_BT470M;
-  if (flags & CONF_FLAGS_COLPRI_BT470BG)
+}
+  if (flags & CONF_FLAGS_COLPRI_BT470BG) {
     return CMS_PRIMARIES_BT470BG;
-  if (flags & CONF_FLAGS_COLPRI_240M)
+}
+  if (flags & CONF_FLAGS_COLPRI_240M) {
     return CMS_PRIMARIES_240M;
+}
   return CMS_PRIMARIES_BT709; // default to bt.709
 }
 
@@ -170,8 +175,9 @@ bool CColorManager::GetVideo3dLut(int videoFlags, int *cmsToken, int *clutSize, 
 
 bool CColorManager::CheckConfiguration(int cmsToken, int flags)
 {
-  if (cmsToken != m_curCmsToken)
+  if (cmsToken != m_curCmsToken) {
     return false;
+}
   if (m_curCmsMode != CServiceBroker::GetSettings().GetInt("videoscreen.cmsmode"))
     return false;   // CMS mode has changed
   switch (m_curCmsMode)

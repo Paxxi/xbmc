@@ -100,8 +100,9 @@ NODE_TYPE CMusicDatabaseDirectory::GetDirectoryParentType(const std::string& str
 
   CDirectoryNode* pParentNode=pNode->GetParent();
 
-  if (!pParentNode)
+  if (!pParentNode) {
     return NODE_TYPE_NONE;
+}
 
   return pParentNode->GetChildType();
 }
@@ -125,8 +126,9 @@ void CMusicDatabaseDirectory::ClearDirectoryCache(const std::string& strDirector
 
 bool CMusicDatabaseDirectory::IsAllItem(const std::string& strDirectory)
 {
-  if (StringUtils::EndsWith(strDirectory, "/-1/"))
+  if (StringUtils::EndsWith(strDirectory, "/-1/")) {
     return true;
+}
   return false;
 }
 
@@ -144,8 +146,9 @@ bool CMusicDatabaseDirectory::GetLabel(const std::string& strDirectory, std::str
   CDirectoryNode::GetDatabaseInfo(path, params);
 
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   // get genre
   if (params.GetGenreId() >= 0)

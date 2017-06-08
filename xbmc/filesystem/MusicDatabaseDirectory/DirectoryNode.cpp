@@ -82,8 +82,9 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   }
 
   // Add all the additional URL options to the last node
-  if (pNode)
+  if (pNode) {
     pNode->AddOptions(url.GetOptions());
+}
 
   return pNode;
 }
@@ -254,8 +255,9 @@ NODE_TYPE CDirectoryNode::GetChildType() const
 //  Get the child fileitems of this node
 bool CDirectoryNode::GetChilds(CFileItemList& items)
 {
-  if (CanCache() && items.Load())
+  if (CanCache() && items.Load()) {
     return true;
+}
 
   std::unique_ptr<CDirectoryNode> pNode(CDirectoryNode::CreateNode(GetChildType(), "", this));
 
@@ -266,11 +268,13 @@ bool CDirectoryNode::GetChilds(CFileItemList& items)
     bSuccess=pNode->GetContent(items);
     if (bSuccess)
     {
-      if (CanCache())
+      if (CanCache()) {
         items.SetCacheToDisc(CFileItemList::CACHE_ALWAYS);
+}
     }
-    else
+    else {
       items.Clear();
+}
 
     pNode->RemoveParent();
   }

@@ -76,8 +76,9 @@ void CRenderSystemGL::CheckOpenGLQuirks()
   }
 #endif
 #endif
-  if (StringUtils::EqualsNoCase(m_RenderVendor, "nouveau"))
+  if (StringUtils::EqualsNoCase(m_RenderVendor, "nouveau")) {
     m_renderQuirks |= RENDER_QUIRKS_YV12_PREFERED;
+}
 
   if (StringUtils::EqualsNoCase(m_RenderVendor, "Tungsten Graphics, Inc.")
   ||  StringUtils::EqualsNoCase(m_RenderVendor, "Tungsten Graphics, Inc"))
@@ -88,8 +89,9 @@ void CRenderSystemGL::CheckOpenGLQuirks()
 
       if((major  < 7)
       || (major == 7 && minor  < 7)
-      || (major == 7 && minor == 7 && micro < 1))
+      || (major == 7 && minor == 7 && micro < 1)) {
         m_renderQuirks |= RENDER_QUIRKS_MAJORMEMLEAK_OVERLAYRENDERER;
+}
     }
     else
       CLog::Log(LOGNOTICE, "CRenderSystemGL::CheckOpenGLQuirks - unable to parse mesa version string");
@@ -151,14 +153,16 @@ bool CRenderSystemGL::InitRenderSystem()
     m_RenderRenderer = tmpRenderer;
 
   // grab our capabilities
-  if (IsExtSupported("GL_EXT_texture_compression_s3tc"))
+  if (IsExtSupported("GL_EXT_texture_compression_s3tc")) {
     m_renderCaps |= RENDER_CAPS_DXT;
+}
 
   if (IsExtSupported("GL_ARB_texture_non_power_of_two"))
   {
     m_renderCaps |= RENDER_CAPS_NPOT;
-    if (m_renderCaps & RENDER_CAPS_DXT) 
+    if (m_renderCaps & RENDER_CAPS_DXT) { 
       m_renderCaps |= RENDER_CAPS_DXT_NPOT;
+}
   }
   //Check OpenGL quirks and revert m_renderCaps as needed
   CheckOpenGLQuirks();
@@ -242,28 +246,32 @@ bool CRenderSystemGL::DestroyRenderSystem()
 
 bool CRenderSystemGL::BeginRender()
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return false;
+}
 
   return true;
 }
 
 bool CRenderSystemGL::EndRender()
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return false;
+}
 
   return true;
 }
 
 bool CRenderSystemGL::ClearBuffers(color_t color)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return false;
+}
 
   /* clear is not affected by stipple pattern, so we can only clear on first frame */
-  if(m_stereoMode == RENDER_STEREO_MODE_INTERLACED && m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+  if(m_stereoMode == RENDER_STEREO_MODE_INTERLACED && m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
     return true;
+}
 
   float r = GET_R(color) / 255.0f;
   float g = GET_G(color) / 255.0f;
@@ -292,27 +300,32 @@ void CRenderSystemGL::PresentRender(bool rendered, bool videoLayer)
 {
   SetVSync(true);
 
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   PresentRenderImpl(rendered);
 
-  if (!rendered)
+  if (!rendered) {
     Sleep(40);
+}
 }
 
 void CRenderSystemGL::SetVSync(bool enable)
 {
-  if (m_bVSync == enable && m_bVsyncInit == true)
+  if (m_bVSync == enable && m_bVsyncInit == true) {
     return;
+}
 
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
-  if (enable)
+  if (enable) {
     CLog::Log(LOGINFO, "GL: Enabling VSYNC");
-  else
+  } else {
     CLog::Log(LOGINFO, "GL: Disabling VSYNC");
+}
 
   m_bVSync = enable;
   m_bVsyncInit = true;
@@ -322,8 +335,9 @@ void CRenderSystemGL::SetVSync(bool enable)
 
 void CRenderSystemGL::CaptureStateBlock()
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   glMatrixProject.Push();
   glMatrixModview.Push();
@@ -338,8 +352,9 @@ void CRenderSystemGL::CaptureStateBlock()
 
 void CRenderSystemGL::ApplyStateBlock()
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   glViewport(m_viewPort[0], m_viewPort[1], m_viewPort[2], m_viewPort[3]);
 
@@ -356,8 +371,9 @@ void CRenderSystemGL::ApplyStateBlock()
 
 void CRenderSystemGL::SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   CPoint offset = camera - CPoint(screenWidth*0.5f, screenHeight*0.5f);
 
@@ -406,15 +422,18 @@ bool CRenderSystemGL::TestRender()
 
 void CRenderSystemGL::ApplyHardwareTransform(const TransformMatrix &finalMatrix)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   glMatrixModview.Push();
   GLfloat matrix[4][4];
 
-  for(int i = 0; i < 3; i++)
-    for(int j = 0; j < 4; j++)
+  for(int i = 0; i < 3; i++) {
+    for(int j = 0; j < 4; j++) {
       matrix[j][i] = finalMatrix.m[i][j];
+}
+}
 
   matrix[0][3] = 0.0f;
   matrix[1][3] = 0.0f;
@@ -427,8 +446,9 @@ void CRenderSystemGL::ApplyHardwareTransform(const TransformMatrix &finalMatrix)
 
 void CRenderSystemGL::RestoreHardwareTransform()
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   glMatrixModview.PopLoad();
 }
@@ -449,8 +469,9 @@ void CRenderSystemGL::CalculateMaxTexturesize()
                              &width);
 
     // GMA950 on OS X sets error instead
-    if (width == 0 || (glGetError() != GL_NO_ERROR) )
+    if (width == 0 || (glGetError() != GL_NO_ERROR) ) {
       break;
+}
 
     m_maxTextureSize = width;
     width *= 2;
@@ -481,8 +502,9 @@ void CRenderSystemGL::CalculateMaxTexturesize()
 
 void CRenderSystemGL::GetViewPort(CRect& viewPort)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   viewPort.x1 = m_viewPort[0];
   viewPort.y1 = m_height - m_viewPort[1] - m_viewPort[3];
@@ -492,8 +514,9 @@ void CRenderSystemGL::GetViewPort(CRect& viewPort)
 
 void CRenderSystemGL::SetViewPort(CRect& viewPort)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
 
   glScissor((GLint) viewPort.x1, (GLint) (m_height - viewPort.y1 - viewPort.Height()), (GLsizei) viewPort.Width(), (GLsizei) viewPort.Height());
   glViewport((GLint) viewPort.x1, (GLint) (m_height - viewPort.y1 - viewPort.Height()), (GLsizei) viewPort.Width(), (GLsizei) viewPort.Height());
@@ -505,8 +528,9 @@ void CRenderSystemGL::SetViewPort(CRect& viewPort)
 
 void CRenderSystemGL::SetScissors(const CRect &rect)
 {
-  if (!m_bRenderCreated)
+  if (!m_bRenderCreated) {
     return;
+}
   GLint x1 = MathUtils::round_int(rect.x1);
   GLint y1 = MathUtils::round_int(rect.y1);
   GLint x2 = MathUtils::round_int(rect.x2);
@@ -584,41 +608,46 @@ void CRenderSystemGL::SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW 
 
   if(m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if(m_stereoView == RENDER_STEREO_VIEW_LEFT) {
       glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    } else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
       glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
+}
   }
   if(m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if(m_stereoView == RENDER_STEREO_VIEW_LEFT) {
       glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    } else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
       glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
+}
   }
   if(m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if(m_stereoView == RENDER_STEREO_VIEW_LEFT) {
       glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    } else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
       glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE);
+}
   }
 
   if(m_stereoMode == RENDER_STEREO_MODE_INTERLACED)
   {
     glEnable(GL_POLYGON_STIPPLE);
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if(m_stereoView == RENDER_STEREO_VIEW_LEFT) {
       glPolygonStipple(stipple_3d);
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    } else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
       glPolygonStipple(stipple_3d+4);
+}
   }
 
   if(m_stereoMode == RENDER_STEREO_MODE_HARDWAREBASED)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if(m_stereoView == RENDER_STEREO_VIEW_LEFT) {
       glDrawBuffer(GL_BACK_LEFT);
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    } else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT) {
       glDrawBuffer(GL_BACK_RIGHT);
+}
   }
 
 }

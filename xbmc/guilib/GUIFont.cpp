@@ -49,16 +49,19 @@ float CScrollInfo::GetPixelsPerFrame()
 {
   static const float alphaEMA = 0.05f;
 
-  if (0 == pixelSpeed)
+  if (0 == pixelSpeed) {
     return 0; // not scrolling
+}
   unsigned int currentTime = CTimeUtils::GetFrameTime();
   float delta = m_lastFrameTime ? (float)(currentTime - m_lastFrameTime) : m_averageFrameTime;
-  if (delta > 100)
+  if (delta > 100) {
     delta = 100; // assume a minimum of 10 fps
+}
   m_lastFrameTime = currentTime;
   // do an exponential moving average of the frame time
-  if (delta)
+  if (delta) {
     m_averageFrameTime = m_averageFrameTime + (delta - m_averageFrameTime) * alphaEMA;
+}
   // and multiply by pixel speed (per ms) to get number of pixels to move this frame
   return pixelSpeed * m_averageFrameTime;
 }
@@ -74,8 +77,9 @@ CGUIFont::CGUIFont(const std::string& strFontName, uint32_t style, color_t textC
   m_origHeight = origHeight;
   m_font = font;
 
-  if (m_font)
+  if (m_font) {
     m_font->AddReference();
+}
 }
 
 CGUIFont::~CGUIFont()
@@ -95,8 +99,9 @@ void CGUIFont::DrawText( float x, float y, const vecColors &colors, color_t shad
   if (!m_font) return;
 
   bool clip = maxPixelWidth > 0;
-  if (clip && ClippedRegionIsEmpty(x, y, maxPixelWidth, alignment))
+  if (clip && ClippedRegionIsEmpty(x, y, maxPixelWidth, alignment)) {
     return;
+}
 
   maxPixelWidth = ROUND(maxPixelWidth / g_graphicsContext.GetGUIScaleX());
   vecColors renderColors;
@@ -151,16 +156,19 @@ bool CGUIFont::UpdateScrollInfo(const vecText &text, CScrollInfo &scrollInfo)
   }
   scrollInfo.pixelPos += scrollAmount;
   assert(scrollInfo.m_totalWidth != 0);
-  while (scrollInfo.pixelPos >= scrollInfo.m_totalWidth)
+  while (scrollInfo.pixelPos >= scrollInfo.m_totalWidth) {
     scrollInfo.pixelPos -= scrollInfo.m_totalWidth;
+}
 
-  if (scrollInfo.pixelPos < old.pixelPos)
+  if (scrollInfo.pixelPos < old.pixelPos) {
     ++scrollInfo.m_loopCount;
+}
 
-  if (scrollInfo.pixelPos != old.pixelPos)
+  if (scrollInfo.pixelPos != old.pixelPos) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, color_t shadowColor,
@@ -186,10 +194,11 @@ void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, colo
   float suffixPixelWidth = ROUND((scrollInfo.m_totalWidth - scrollInfo.m_textWidth) / g_graphicsContext.GetGUIScaleX());
 
   float offset;
-  if(scrollInfo.pixelSpeed >= 0)
+  if(scrollInfo.pixelSpeed >= 0) {
     offset = scrollInfo.pixelPos;
-  else
+  } else {
     offset = scrollInfo.m_totalWidth - scrollInfo.pixelPos;
+}
 
   vecColors renderColors;
   for (unsigned int i = 0; i < colors.size(); i++)
@@ -220,19 +229,22 @@ void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, colo
 // remaps unsupported font glpyhs to other suitable ones
 wchar_t CGUIFont::RemapGlyph(wchar_t letter)
 {
-  if (letter == 0x2019 || letter == 0x2018) return 0x0027;  // single quotes
-  else if (letter == 0x201c || letter == 0x201d) return 0x0022;
+  if (letter == 0x2019 || letter == 0x2018) { return 0x0027;  // single quotes
+  } else if (letter == 0x201c || letter == 0x201d) { return 0x0022;
+}
   return 0; // no decent character map
 }
 
 bool CGUIFont::ClippedRegionIsEmpty(float x, float y, float width, uint32_t alignment) const
 {
-  if (alignment & XBFONT_CENTER_X)
+  if (alignment & XBFONT_CENTER_X) {
     x -= width * 0.5f;
-  else if (alignment & XBFONT_RIGHT)
+  } else if (alignment & XBFONT_RIGHT) {
     x -= width;
-  if (alignment & XBFONT_CENTER_Y)
+}
+  if (alignment & XBFONT_CENTER_Y) {
     y -= m_font->GetLineHeight(m_lineSpacing);
+}
 
   return !g_graphicsContext.SetClipRegion(x, y, width, m_font->GetTextHeight(1, 2) * g_graphicsContext.GetGUIScaleY());
 }
@@ -289,11 +301,14 @@ void CGUIFont::End()
 
 void CGUIFont::SetFont(CGUIFontTTFBase *font)
 {
-  if (m_font == font)
+  if (m_font == font) {
     return; // no need to update the font if we already have it
-  if (m_font)
+}
+  if (m_font) {
     m_font->RemoveReference();
+}
   m_font = font;
-  if (m_font)
+  if (m_font) {
     m_font->AddReference();
+}
 }

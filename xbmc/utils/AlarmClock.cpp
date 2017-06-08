@@ -96,10 +96,11 @@ void CAlarmClock::Stop(const std::string& strName, bool bSilent /* false */)
     return;
 
   uint32_t labelAlarmClock;
-  if (StringUtils::EqualsNoCase(strName, "shutdowntimer"))
+  if (StringUtils::EqualsNoCase(strName, "shutdowntimer")) {
     labelAlarmClock = 20144;
-  else
+  } else {
     labelAlarmClock = 13208;
+}
 
   std::string strMessage;
   float       elapsed     = 0.f;

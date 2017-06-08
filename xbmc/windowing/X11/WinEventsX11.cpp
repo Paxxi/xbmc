@@ -194,8 +194,9 @@ CWinEventsX11Imp::~CWinEventsX11Imp()
 
 bool CWinEventsX11Imp::Init(Display *dpy, Window win)
 {
-  if (WinEvents)
+  if (WinEvents) {
     return true;
+}
 
   WinEvents = new CWinEventsX11Imp();
   WinEvents->m_display = dpy;
@@ -258,8 +259,9 @@ bool CWinEventsX11Imp::Init(Display *dpy, Window win)
                                  NULL);
   }
 
-  if (!WinEvents->m_xic)
+  if (!WinEvents->m_xic) {
     CLog::Log(LOGWARNING,"CWinEventsX11::Init - no input method found");
+}
 
   // build Keysym lookup table
   for (unsigned int i = 0; i < sizeof(SymMappingsX11)/(2*sizeof(uint32_t)); ++i)
@@ -281,8 +283,9 @@ bool CWinEventsX11Imp::Init(Display *dpy, Window win)
 
 void CWinEventsX11Imp::Quit()
 {
-  if (!WinEvents)
+  if (!WinEvents) {
     return;
+}
 
   delete WinEvents;
   WinEvents = nullptr;
@@ -290,8 +293,9 @@ void CWinEventsX11Imp::Quit()
 
 bool CWinEventsX11Imp::HasStructureChanged()
 {
-  if (!WinEvents)
+  if (!WinEvents) {
     return false;
+}
 
   bool ret = WinEvents->m_structureChanged;
   WinEvents->m_structureChanged = false;
@@ -300,8 +304,9 @@ bool CWinEventsX11Imp::HasStructureChanged()
 
 void CWinEventsX11Imp::SetXRRFailSafeTimer(int millis)
 {
-  if (!WinEvents)
+  if (!WinEvents) {
     return;
+}
 
   WinEvents->m_xrrFailSafeTimer.Set(millis);
   WinEvents->m_xrrEventPending = true;
@@ -309,8 +314,9 @@ void CWinEventsX11Imp::SetXRRFailSafeTimer(int millis)
 
 bool CWinEventsX11Imp::MessagePump()
 {
-  if (!WinEvents)
+  if (!WinEvents) {
     return false;
+}
 
   bool ret = false;
   XEvent xevent;
@@ -339,8 +345,9 @@ bool CWinEventsX11Imp::MessagePump()
       continue;
     }
 
-    if (XFilterEvent(&xevent, WinEvents->m_window))
+    if (XFilterEvent(&xevent, WinEvents->m_window)) {
       continue;
+}
 
     switch (xevent.type)
     {
@@ -358,20 +365,23 @@ bool CWinEventsX11Imp::MessagePump()
 
       case FocusIn:
       {
-        if (WinEvents->m_xic)
+        if (WinEvents->m_xic) {
           XSetICFocus(WinEvents->m_xic);
+}
         g_application.m_AppFocused = true;
         WinEvents->m_keymodState = 0;
-        if (serial == xevent.xfocus.serial)
+        if (serial == xevent.xfocus.serial) {
           break;
+}
         g_Windowing.NotifyAppFocusChange(g_application.m_AppFocused);
         break;
       }
 
       case FocusOut:
       {
-        if (WinEvents->m_xic)
+        if (WinEvents->m_xic) {
           XUnsetICFocus(WinEvents->m_xic);
+}
         g_application.m_AppFocused = false;
         g_Windowing.NotifyAppFocusChange(g_application.m_AppFocused);
         serial = xevent.xfocus.serial;
@@ -386,8 +396,9 @@ bool CWinEventsX11Imp::MessagePump()
 
       case ConfigureNotify:
       {
-        if (xevent.xconfigure.window != WinEvents->m_window)
+        if (xevent.xconfigure.window != WinEvents->m_window) {
           break;
+}
 
         WinEvents->m_structureChanged = true;
         XBMC_Event newEvent;
@@ -402,8 +413,9 @@ bool CWinEventsX11Imp::MessagePump()
 
       case ClientMessage:
       {
-        if ((unsigned int)xevent.xclient.data.l[0] == WinEvents->m_wmDeleteMessage)
+        if ((unsigned int)xevent.xclient.data.l[0] == WinEvents->m_wmDeleteMessage) {
           if (!g_application.m_bStop) CApplicationMessenger::GetInstance().PostMsg(TMSG_QUIT);
+}
         break;
       }
 
@@ -507,8 +519,9 @@ bool CWinEventsX11Imp::MessagePump()
           if(next_event.type == KeyPress
             && next_event.xkey.window == xevent.xkey.window
             && next_event.xkey.keycode == xevent.xkey.keycode
-            && (next_event.xkey.time - xevent.xkey.time < 2) )
+            && (next_event.xkey.time - xevent.xkey.time < 2) ) {
             continue;
+}
         }
 
         XBMC_Event newEvent;
@@ -538,8 +551,9 @@ bool CWinEventsX11Imp::MessagePump()
 
       case MotionNotify:
       {
-        if (xevent.xmotion.window != WinEvents->m_window)
+        if (xevent.xmotion.window != WinEvents->m_window) {
           break;
+}
         XBMC_Event newEvent;
         memset(&newEvent, 0, sizeof(newEvent));
         newEvent.type = XBMC_MOUSEMOTION;
@@ -694,8 +708,9 @@ XBMCKey CWinEventsX11Imp::LookupXbmcKeySym(KeySym keysym)
   }
 
   // try ascii mappings
-  if (keysym>>8 == 0x00)
+  if (keysym>>8 == 0x00) {
     return (XBMCKey)tolower(keysym & 0xFF);
+}
 
   return (XBMCKey)keysym;
 }

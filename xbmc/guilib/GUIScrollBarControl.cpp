@@ -50,8 +50,9 @@ void GUIScrollBarControl::Process(unsigned int currentTime, CDirtyRegionList &di
 {
   bool changed = false;
 
-  if (m_bInvalidated)
+  if (m_bInvalidated) {
     changed |= UpdateBarSize();
+}
 
   changed |= m_guiBackground.Process(currentTime);
   changed |= m_guiBarNoFocus.Process(currentTime);
@@ -109,31 +110,35 @@ bool GUIScrollBarControl::OnAction(const CAction &action)
   case ACTION_MOVE_LEFT:
     if (m_orientation == HORIZONTAL)
     {
-      if(Move( -1))
+      if(Move( -1)) {
         return true;
+}
     }
     break;
 
   case ACTION_MOVE_RIGHT:
     if (m_orientation == HORIZONTAL)
     {
-      if(Move(1))
+      if(Move(1)) {
         return true;
+}
     }
     break;
   case ACTION_MOVE_UP:
     if (m_orientation == VERTICAL)
     {
-      if(Move(-1))
+      if(Move(-1)) {
         return true;
+}
     }
     break;
 
   case ACTION_MOVE_DOWN:
     if (m_orientation == VERTICAL)
     {
-      if(Move(1))
+      if(Move(1)) {
         return true;
+}
     }
     break;
   }
@@ -142,8 +147,9 @@ bool GUIScrollBarControl::OnAction(const CAction &action)
 
 bool GUIScrollBarControl::Move(int numSteps)
 {
-  if (numSteps < 0 && m_offset == 0) // we are at the beginning - can't scroll up/left anymore
+  if (numSteps < 0 && m_offset == 0) { // we are at the beginning - can't scroll up/left anymore
     return false;
+}
   if (numSteps > 0 && m_offset == std::max(m_numItems - m_pageSize, 0)) // we are at the end - we can't scroll down/right anymore
     return false;
 
@@ -373,7 +379,8 @@ bool GUIScrollBarControl::UpdateColors()
 bool GUIScrollBarControl::IsVisible() const
 {
   // page controls can be optionally disabled if the number of pages is 1
-  if (m_numItems <= m_pageSize && !m_showOnePage)
+  if (m_numItems <= m_pageSize && !m_showOnePage) {
     return false;
+}
   return CGUIControl::IsVisible();
 }

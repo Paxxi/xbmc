@@ -34,12 +34,14 @@ using namespace EVENTPACKET;
 bool CEventPacket::Parse(int datasize, const void *data)
 {
   unsigned char* buf = (unsigned char *)data;
-  if (datasize < HEADER_SIZE || datasize > PACKET_SIZE)
+  if (datasize < HEADER_SIZE || datasize > PACKET_SIZE) {
     return false;
+}
 
   // check signature
-  if (memcmp(data, (const void*)HEADER_SIG, HEADER_SIG_LENGTH) != 0)
+  if (memcmp(data, (const void*)HEADER_SIG, HEADER_SIG_LENGTH) != 0) {
     return false;
+}
 
   buf += HEADER_SIG_LENGTH;
 
@@ -47,14 +49,16 @@ bool CEventPacket::Parse(int datasize, const void *data)
   m_cMajVer = (*buf++);
   m_cMinVer = (*buf++);
 
-  if (m_cMajVer != 2 && m_cMinVer != 0)
+  if (m_cMajVer != 2 && m_cMinVer != 0) {
     return false;
+}
 
   // get packet type
   m_eType = (PacketType)ntohs(*((uint16_t*)buf));
 
-  if (m_eType < (unsigned short)PT_HELO || m_eType >= (unsigned short)PT_LAST)
+  if (m_eType < (unsigned short)PT_HELO || m_eType >= (unsigned short)PT_LAST) {
     return false;
+}
 
   // get packet sequence id
   buf += 2;
@@ -68,8 +72,9 @@ bool CEventPacket::Parse(int datasize, const void *data)
   buf += 4;
   m_iPayloadSize = ntohs(*((uint16_t*)buf));
 
-  if ((m_iPayloadSize + HEADER_SIZE) != (unsigned int)datasize)
+  if ((m_iPayloadSize + HEADER_SIZE) != (unsigned int)datasize) {
     return false;
+}
 
   // get the client's token
   buf += 2;

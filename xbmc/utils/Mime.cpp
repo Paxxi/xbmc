@@ -553,8 +553,9 @@ std::string CMime::GetMimeType(const CURL &url, bool lookup)
   if( url.IsProtocol("shout") || url.IsProtocol("http") || url.IsProtocol("https"))
   {
     // If lookup is false, bail out early to leave mime type empty
-    if (!lookup)
+    if (!lookup) {
       return strMimeType;
+}
 
     std::string strmime;
     XFILE::CCurlFile::GetMimeType(url, strmime);
@@ -573,8 +574,9 @@ std::string CMime::GetMimeType(const CURL &url, bool lookup)
     StringUtils::Trim(strmime);
     strMimeType = strmime;
   }
-  else
+  else {
     strMimeType = GetMimeType(url.GetFileType());
+}
 
   // if it's still empty set to an unknown type
   if (strMimeType.empty())
@@ -588,8 +590,9 @@ CMime::EFileType CMime::GetFileTypeFromMime(const std::string& mimeType)
   // based on http://mimesniff.spec.whatwg.org/
 
   std::string type, subtype;
-  if (!parseMimeType(mimeType, type, subtype))
+  if (!parseMimeType(mimeType, type, subtype)) {
     return FileTypeUnknown;
+}
 
   if (type == "application")
   {
@@ -624,10 +627,12 @@ CMime::EFileType CMime::GetFileTypeFromMime(const std::string& mimeType)
       return FileTypeJpeg;
   }
 
-  if (StringUtils::EndsWith(subtype, "+zip"))
+  if (StringUtils::EndsWith(subtype, "+zip")) {
     return FileTypeZip;
-  if (StringUtils::EndsWith(subtype, "+xml"))
+}
+  if (StringUtils::EndsWith(subtype, "+xml")) {
     return FileTypeXml;
+}
 
   return FileTypeUnknown;
 }
@@ -645,8 +650,9 @@ CMime::EFileType CMime::GetFileTypeFromContent(const std::string& fileContent)
   //! @todo add detection for text types
 
   // check image types
-  if (b[0] == 'B' && b[1] == 'M')
+  if (b[0] == 'B' && b[1] == 'M') {
     return FileTypeBmp;
+}
   if (len >= 6 && b[0] == 'G' && b[1] == 'I' && b[2] == 'F' && b[3] == '8' && (b[4] == '7' || b[4] == '9') && b[5] == 'a')
     return FileTypeGif;
   if (len >= 8 && b[0] == 0x89 && b[1] == 'P' && b[2] == 'N' && b[3] == 'G' && b[4] == 0x0D && b[5] == 0x0A && b[6] == 0x1A && b[7] == 0x0A)

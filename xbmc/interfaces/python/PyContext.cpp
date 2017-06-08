@@ -121,8 +121,9 @@ namespace XBMCAddon
         cur->state = nullptr; // clear the state to indicate we've reacquired the gil
 
         // we clear it only if we created it on this level.
-        if (cur->createdByGilRelease)
+        if (cur->createdByGilRelease) {
           PyContext::leaveContext();
+}
       }
     }
   }

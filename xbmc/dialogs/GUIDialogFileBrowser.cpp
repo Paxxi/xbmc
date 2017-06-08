@@ -258,8 +258,9 @@ bool CGUIDialogFileBrowser::OnMessage(CGUIMessage& message)
             CGUIDialogOK::ShowAndGetInput(CVariant{20069}, CVariant{20072});
         }
       }
-      else if (message.GetSenderId() == CONTROL_FLIP)
+      else if (message.GetSenderId() == CONTROL_FLIP) {
         m_bFlip = !m_bFlip;
+}
     }
     break;
   case GUI_MSG_SETFOCUS:
@@ -333,8 +334,9 @@ void CGUIDialogFileBrowser::ClearFileItems()
 
 void CGUIDialogFileBrowser::OnSort()
 {
-  if (!m_singleList)
+  if (!m_singleList) {
     m_vecItems->Sort(SortByLabel, SortOrderAscending);
+}
 }
 
 void CGUIDialogFileBrowser::Update(const std::string &strDirectory)
@@ -412,12 +414,13 @@ void CGUIDialogFileBrowser::Update(const std::string &strDirectory)
   // some evil stuff don't work with the '/' mask, e.g. shoutcast directory - make sure no files are in there
   if (m_browsingForFolders)
   {
-    for (int i=0;i<m_vecItems->Size();++i)
+    for (int i=0;i<m_vecItems->Size();++i) {
       if (!(*m_vecItems)[i]->m_bIsFolder)
       {
         m_vecItems->Remove(i);
         i--;
       }
+}
   }
 
   // No need to set thumbs
@@ -612,8 +615,9 @@ void CGUIDialogFileBrowser::OnWindowUnload()
 bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VECSOURCES &shares, const std::string &heading, std::string &result, bool* flip, int label)
 {
   auto browser = new CGUIDialogFileBrowser();
-  if (!browser)
+  if (!browser) {
     return false;
+}
   g_windowManager.AddUniqueInstance(browser);
 
   browser->m_browsingForImages = true;
@@ -642,8 +646,9 @@ bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VE
     }
   }
 
-  if (flip)
+  if (flip) {
     *flip = browser->m_bFlip != 0;
+}
 
   g_windowManager.Remove(browser->GetID());
   delete browser;
@@ -682,8 +687,9 @@ bool CGUIDialogFileBrowser::ShowAndGetDirectory(const VECSOURCES &shares, const 
 bool CGUIDialogFileBrowser::ShowAndGetFile(const VECSOURCES &shares, const std::string &mask, const std::string &heading, std::string &path, bool useThumbs /* = false */, bool useFileDirectories /* = false */)
 {
   auto browser = new CGUIDialogFileBrowser();
-  if (!browser)
+  if (!browser) {
     return false;
+}
   g_windowManager.AddUniqueInstance(browser);
 
   browser->m_useFileDirectories = useFileDirectories;
@@ -719,8 +725,9 @@ bool CGUIDialogFileBrowser::ShowAndGetFile(const VECSOURCES &shares, const std::
 bool CGUIDialogFileBrowser::ShowAndGetFile(const std::string &directory, const std::string &mask, const std::string &heading, std::string &path, bool useThumbs /* = false */, bool useFileDirectories /* = false */, bool singleList /* = false */)
 {
   auto browser = new CGUIDialogFileBrowser();
-  if (!browser)
+  if (!browser) {
     return false;
+}
   g_windowManager.AddUniqueInstance(browser);
 
   browser->m_useFileDirectories = useFileDirectories;
@@ -841,8 +848,9 @@ bool CGUIDialogFileBrowser::ShowAndGetSource(std::string &path, bool allowNetwor
   VECSOURCES shares;
   if (!strType.empty())
   {
-    if (additionalShare)
+    if (additionalShare) {
       shares = *additionalShare;
+}
     browser->m_addSourceType = strType;
   }
   else

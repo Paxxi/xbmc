@@ -54,8 +54,9 @@ CPlayList::CPlayList(int id)
 
 void CPlayList::AnnounceRemove(int pos)
 {
-  if (m_id < 0)
+  if (m_id < 0) {
     return;
+}
 
   CVariant data;
   data["playlistid"] = m_id;
@@ -65,8 +66,9 @@ void CPlayList::AnnounceRemove(int pos)
 
 void CPlayList::AnnounceClear()
 {
-  if (m_id < 0)
+  if (m_id < 0) {
     return;
+}
 
   CVariant data;
   data["playlistid"] = m_id;
@@ -75,8 +77,9 @@ void CPlayList::AnnounceClear()
 
 void CPlayList::AnnounceAdd(const CFileItemPtr& item, int pos)
 {
-  if (m_id < 0)
+  if (m_id < 0) {
     return;
+}
 
   CVariant data;
   data["playlistid"] = m_id;
@@ -87,8 +90,9 @@ void CPlayList::AnnounceAdd(const CFileItemPtr& item, int pos)
 void CPlayList::Add(const CFileItemPtr &item, int iPosition, int iOrder)
 {
   int iOldSize = size();
-  if (iPosition < 0 || iPosition >= iOldSize)
+  if (iPosition < 0 || iPosition >= iOldSize) {
     iPosition = iOldSize;
+}
   if (iOrder < 0 || iOrder >= iOldSize)
     item->m_iprogramCount = iOldSize;
   else
@@ -96,24 +100,26 @@ void CPlayList::Add(const CFileItemPtr &item, int iPosition, int iOrder)
 
   // increment the playable counter
   item->ClearProperty("unplayable");
-  if (m_iPlayableItems < 0)
+  if (m_iPlayableItems < 0) {
     m_iPlayableItems = 1;
-  else
+  } else {
     m_iPlayableItems++;
+}
 
   // set 'IsPlayable' property - needed for properly handling plugin:// URLs
   item->SetProperty("IsPlayable", true);
 
   //CLog::Log(LOGDEBUG,"%s item:(%02i/%02i)[%s]", __FUNCTION__, iPosition, item->m_iprogramCount, item->GetPath().c_str());
-  if (iPosition == iOldSize)
+  if (iPosition == iOldSize) {
     m_vecItems.push_back(item);
-  else
+  } else
   {
     ivecItems it = m_vecItems.begin() + iPosition;
     m_vecItems.insert(it, 1, item);
     // correct any duplicate order values
-    if (iOrder < iOldSize)
+    if (iOrder < iOldSize) {
       IncrementOrder(iPosition + 1, iOrder);
+}
   }
   AnnounceAdd(item, iPosition);
 }
@@ -231,8 +237,9 @@ void CPlayList::Clear()
   m_iPlayableItems = -1;
   m_bWasPlayed = false;
 
-  if (announce)
+  if (announce) {
     AnnounceClear();
+}
 }
 
 int CPlayList::size() const
@@ -264,15 +271,17 @@ CFileItemPtr CPlayList::operator[] (int iItem)
 
 void CPlayList::Shuffle(int iPosition)
 {
-  if (size() == 0)
+  if (size() == 0) {
     // nothing to shuffle, just set the flag for later
     m_bShuffled = true;
-  else
+  } else
   {
-    if (iPosition >= size())
+    if (iPosition >= size()) {
       return;
-    if (iPosition < 0)
+}
+    if (iPosition < 0) {
       iPosition = 0;
+}
     CLog::Log(LOGDEBUG,"%s shuffling at pos:%i", __FUNCTION__, iPosition);
 
     ivecItems it = m_vecItems.begin() + iPosition;
@@ -433,8 +442,9 @@ bool CPlayList::Load(const std::string& strFileName)
   m_strBasePath = URIUtils::GetDirectory(strFileName);
 
   CFileStream file;
-  if (!file.Open(strFileName))
+  if (!file.Open(strFileName)) {
     return false;
+}
 
   if (file.GetLength() > 1024*1024)
   {

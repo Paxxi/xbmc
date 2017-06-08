@@ -58,8 +58,9 @@ void CGUITextLayout::SetWrap(bool bWrap)
 
 void CGUITextLayout::Render(float x, float y, float angle, color_t color, color_t shadowColor, uint32_t alignment, float maxWidth, bool solid)
 {
-  if (!m_font)
+  if (!m_font) {
     return;
+}
 
   // set the main text color
   if (m_colors.size())
@@ -82,12 +83,14 @@ void CGUITextLayout::Render(float x, float y, float angle, color_t color, color_
   {
     const CGUIString &string = *i;
     uint32_t align = alignment;
-    if (align & XBFONT_JUSTIFIED && string.m_carriageReturn)
+    if (align & XBFONT_JUSTIFIED && string.m_carriageReturn) {
       align &= ~XBFONT_JUSTIFIED;
-    if (solid)
+}
+    if (solid) {
       m_font->DrawText(x, y, m_colors[0], shadowColor, string.m_text, align, maxWidth);
-    else
+    } else {
       m_font->DrawText(x, y, m_colors, shadowColor, string.m_text, align, maxWidth);
+}
     y += m_font->GetLineHeight();
   }
   m_font->End();
@@ -97,8 +100,9 @@ void CGUITextLayout::Render(float x, float y, float angle, color_t color, color_
 
 bool CGUITextLayout::UpdateScrollinfo(CScrollInfo &scrollInfo)
 {
-  if (!m_font)
+  if (!m_font) {
     return false;
+}
   if (m_lines.empty())
     return false;
 
@@ -108,8 +112,9 @@ bool CGUITextLayout::UpdateScrollinfo(CScrollInfo &scrollInfo)
 
 void CGUITextLayout::RenderScrolling(float x, float y, float angle, color_t color, color_t shadowColor, uint32_t alignment, float maxWidth, const CScrollInfo &scrollInfo)
 {
-  if (!m_font)
+  if (!m_font) {
     return;
+}
 
   // set the main text color
   if (m_colors.size())
@@ -147,8 +152,9 @@ void CGUITextLayout::RenderScrolling(float x, float y, float angle, color_t colo
 
 void CGUITextLayout::RenderOutline(float x, float y, color_t color, color_t outlineColor, uint32_t alignment, float maxWidth)
 {
-  if (!m_font)
+  if (!m_font) {
     return;
+}
 
   // set the outline color
   vecColors outlineColors;
@@ -170,8 +176,9 @@ void CGUITextLayout::RenderOutline(float x, float y, color_t color, color_t outl
     {
       const CGUIString &string = *i;
       uint32_t align = alignment;
-      if (align & XBFONT_JUSTIFIED && string.m_carriageReturn)
+      if (align & XBFONT_JUSTIFIED && string.m_carriageReturn) {
         align &= ~XBFONT_JUSTIFIED;
+}
       // text centered horizontally must be computed using the original font, not the bordered
       // font, as the bordered font will be wider, and thus will end up uncentered.
       //! @todo We should really have a better way to handle text extent - at the moment we assume
@@ -202,8 +209,9 @@ void CGUITextLayout::RenderOutline(float x, float y, color_t color, color_t outl
   {
     const CGUIString &string = *i;
     uint32_t align = alignment;
-    if (align & XBFONT_JUSTIFIED && string.m_carriageReturn)
+    if (align & XBFONT_JUSTIFIED && string.m_carriageReturn) {
       align &= ~XBFONT_JUSTIFIED;
+}
 
     // don't pass maxWidth through to the renderer for the reason above.
     m_font->DrawText(x, y, m_colors, 0, string.m_text, align, 0);
@@ -254,10 +262,11 @@ void CGUITextLayout::UpdateStyled(const vecText &text, const vecColors &colors, 
   m_colors = colors;
 
   // if we need to wrap the text, then do so
-  if (m_wrap && maxWidth > 0)
+  if (m_wrap && maxWidth > 0) {
     WrapText(text, maxWidth);
-  else
-    LineBreakText(text, m_lines);
+  } else {
+    LineBreakText
+}(text, m_lines);
 
   // remove any trailing blank lines
   while (!m_lines.empty() && m_lines.back().m_text.empty())
@@ -496,8 +505,9 @@ void CGUITextLayout::SetMaxHeight(float fHeight)
 
 void CGUITextLayout::WrapText(const vecText &text, float maxWidth)
 {
-  if (!m_font)
+  if (!m_font) {
     return;
+}
 
   int nMaxLines = (m_maxHeight > 0 && m_font->GetLineHeight() > 0)?(int)ceilf(m_maxHeight / m_font->GetLineHeight()):-1;
 
@@ -614,8 +624,9 @@ void CGUITextLayout::CalcTextExtent()
   {
     const CGUIString &string = *i;
     float w = m_font->GetTextWidth(string.m_text);
-    if (w > m_textWidth)
+    if (w > m_textWidth) {
       m_textWidth = w;
+}
   }
   m_textHeight = m_font->GetTextHeight(m_lines.size());
 }

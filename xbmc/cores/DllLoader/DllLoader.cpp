@@ -101,8 +101,9 @@ DllLoader::DllLoader(const char *sDll, bool bTrack, bool bSystemDll, bool bLoadS
 
   /* system dll's are never loaded in any way, so let's just use the pointer */
   /* to this object as their base address */
-  if (m_bSystemDll)
+  if (m_bSystemDll) {
     hModule = (HMODULE)this;
+}
 
 }
 
@@ -139,8 +140,9 @@ DllLoader::~DllLoader()
   ImportDirTable = nullptr;
 
   // hModule points to DllLoader in this case
-  if (m_bSystemDll)
+  if (m_bSystemDll) {
     hModule = nullptr;
+}
 }
 
 int DllLoader::Parse()
@@ -154,10 +156,10 @@ int DllLoader::Parse()
   {
     if (CoffLoader::ParseCoff(fp))
     {
-      if(WindowsHeader)
+      if(WindowsHeader) {
         tracker_dll_set_addr(this, (uintptr_t)hModule,
           (uintptr_t)hModule + WindowsHeader->SizeOfImage - 1);
-      else
+      } else
       {
         uintptr_t iMinAddr = std::numeric_limits<uintptr_t>::max();
         uintptr_t iMaxAddr = 0;
@@ -406,20 +408,23 @@ int DllLoader::ResolveExport(const char *sName, void **pAddr, bool logging)
 
   if (pExport)
   {
-    if (m_bTrack && pExport->track_function)
+    if (m_bTrack && pExport->track_function) {
       *pAddr=(void*)pExport->track_function;
-    else
+    } else {
       *pAddr=(void*)pExport->function;
+}
 
     return 1;
   }
 
   const char* sDllName = strrchr(GetFileName(), '\\');
-  if (sDllName) sDllName += 1;
-  else sDllName = GetFileName();
+  if (sDllName) { sDllName += 1;
+  } else { sDllName = GetFileName();
+}
 
-  if (logging)
+  if (logging) {
     CLog::Log(LOGWARNING, "Unable to resolve: %s %s", sDllName, sName);
+}
   return 0;
 }
 
@@ -429,17 +434,19 @@ int DllLoader::ResolveOrdinal(unsigned long ordinal, void **pAddr)
 
   if (pExport)
   {
-    if (m_bTrack && pExport->track_function)
+    if (m_bTrack && pExport->track_function) {
       *pAddr=(void*)pExport->track_function;
-    else
+    } else {
       *pAddr=(void*)pExport->function;
+}
 
     return 1;
   }
 
   const char* sDllName = strrchr(GetFileName(), '\\');
-  if (sDllName) sDllName += 1;
-  else sDllName = GetFileName();
+  if (sDllName) { sDllName += 1;
+  } else { sDllName = GetFileName();
+}
 
   CLog::Log(LOGWARNING, "Unable to resolve: %s %lu", sDllName, ordinal);
   return 0;
@@ -463,8 +470,9 @@ Export* DllLoader::GetExportByOrdinal(unsigned long ordinal)
     Export* exp = m_pStaticExports;
     while(exp->function || exp->track_function || exp->name)
     {
-      if (ordinal == exp->ordinal)
+      if (ordinal == exp->ordinal) {
         return exp;
+}
       exp++;
     }
   }
@@ -490,8 +498,9 @@ Export* DllLoader::GetExportByFunctionName(const char* sFunctionName)
     Export* exp = m_pStaticExports;
     while(exp->function || exp->track_function || exp->name)
     {
-      if (exp->name && strcmp(sFunctionName, exp->name) == 0)
+      if (exp->name && strcmp(sFunctionName, exp->name) == 0) {
         return exp;
+}
       exp++;
     }
   }
@@ -508,10 +517,11 @@ int DllLoader::ResolveOrdinal(const char *sName, unsigned long ordinal, void **f
     Export* pExp = pDll->GetExportByOrdinal(ordinal);
     if(pExp)
     {
-      if (m_bTrack && pExp->track_function)
+      if (m_bTrack && pExp->track_function) {
         *fixup = (void*)(pExp->track_function);
-      else
+      } else {
         *fixup = (void*)(pExp->function);
+}
 
       return 1;
     }
@@ -529,10 +539,11 @@ int DllLoader::ResolveName(const char *sName, char* sFunction, void **fixup)
     Export* pExp = pDll->GetExportByFunctionName(sFunction);
     if(pExp)
     {
-      if (m_bTrack && pExp->track_function)
+      if (m_bTrack && pExp->track_function) {
         *fixup = (void*)(pExp->track_function);
-      else
+      } else {
         *fixup = (void*)(pExp->function);
+}
       return 1;
     }
   }
@@ -543,8 +554,9 @@ int DllLoader::ResolveName(const char *sName, char* sFunction, void **fixup)
 void DllLoader::AddExport(unsigned long ordinal, void* function, void* track_function)
 {
   ExportEntry* entry = (ExportEntry*)malloc(sizeof(ExportEntry));
-  if (!entry)
+  if (!entry) {
     return;
+}
   entry->exp.function = function;
   entry->exp.ordinal = ordinal;
   entry->exp.track_function = track_function;
@@ -559,8 +571,9 @@ void DllLoader::AddExport(char* sFunctionName, unsigned long ordinal, void* func
   int len = sizeof(ExportEntry);
 
   ExportEntry* entry = (ExportEntry*)malloc(len + strlen(sFunctionName) + 1);
-  if (!entry)
+  if (!entry) {
     return;
+}
   entry->exp.function = function;
   entry->exp.ordinal = ordinal;
   entry->exp.track_function = track_function;
@@ -576,8 +589,9 @@ void DllLoader::AddExport(char* sFunctionName, void* function, void* track_funct
   int len = sizeof(ExportEntry);
 
   ExportEntry* entry = (ExportEntry*)malloc(len + strlen(sFunctionName) + 1);
-  if (!entry)
+  if (!entry) {
     return;
+}
   entry->exp.function = (void*)function;
   entry->exp.ordinal = -1;
   entry->exp.track_function = track_function;
@@ -600,8 +614,9 @@ bool DllLoader::Load()
   LoadSymbols();
 
   // only execute DllMain if no EntryPoint is found
-  if (!EntryAddress)
+  if (!EntryAddress) {
     ResolveExport("DllMain", (void**)&EntryAddress);
+}
 
   // patch some unwanted calls in memory
   if (strstr(GetName(), "QuickTime.qts"))
@@ -690,8 +705,9 @@ bool DllLoader::Load()
       // but the export isn't really needed for normal operation
       // and dll works anyway, so let's ignore it
 
-      if(stricmp(GetName(), "vp7vfw.dll") != 0)
+      if(stricmp(GetName(), "vp7vfw.dll") != 0) {
         return false;
+}
 
 
       CLog::Log(LOGDEBUG, "%s - Ignoring exception during DLL_PROCESS_ATTACH", __FUNCTION__);
@@ -700,8 +716,9 @@ bool DllLoader::Load()
     // init function may have fixed up the export table
     // this is what I expect should happens on PECompact2
     // dll's if export table is compressed.
-    if(!m_pExportHead)
+    if(!m_pExportHead) {
       LoadExports();
+}
   }
 
   return true;
@@ -724,8 +741,9 @@ void DllLoader::Unload()
   CLog::Log(LOGDEBUG, "EntryPoint with DLL_PROCESS_DETACH called - Dll: %s", pDll->GetFileName());
 #endif
 
-  if (m_bUnloadSymbols)
+  if (m_bUnloadSymbols) {
     UnloadSymbols();
+}
 }
 
 // This function is a hack to get symbols loaded for

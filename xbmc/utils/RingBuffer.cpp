@@ -100,8 +100,9 @@ bool CRingBuffer::ReadData(char *buf, unsigned int size)
     memcpy(buf, m_buffer + m_readPtr, size);
     m_readPtr += size;
   }
-  if (m_readPtr == m_size)
+  if (m_readPtr == m_size) {
     m_readPtr = 0;
+}
   m_fillCount -= size;
   return true;
 }
@@ -112,18 +113,21 @@ bool CRingBuffer::ReadData(char *buf, unsigned int size)
 bool CRingBuffer::ReadData(CRingBuffer &rBuf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
-  if (rBuf.getBuffer() == nullptr)
+  if (rBuf.getBuffer() == nullptr) {
     rBuf.Create(size);
+}
 
   bool bOk = size <= rBuf.getMaxWriteSize() && size <= getMaxReadSize();
   if (bOk)
   {
     unsigned int chunksize = std::min(size, m_size - m_readPtr);
     bOk = rBuf.WriteData(&getBuffer()[m_readPtr], chunksize);
-    if (bOk && chunksize < size)
+    if (bOk && chunksize < size) {
       bOk = rBuf.WriteData(&getBuffer()[0], size - chunksize);
-    if (bOk)
+}
+    if (bOk) {
       SkipBytes(size);
+}
   }
 
   return bOk;
@@ -151,8 +155,9 @@ bool CRingBuffer::WriteData(const char *buf, unsigned int size)
     memcpy(m_buffer + m_writePtr, buf, size);
     m_writePtr += size;
   }
-  if (m_writePtr == m_size)
+  if (m_writePtr == m_size) {
     m_writePtr = 0;
+}
   m_fillCount += size;
   return true;
 }
@@ -163,8 +168,9 @@ bool CRingBuffer::WriteData(const char *buf, unsigned int size)
 bool CRingBuffer::WriteData(CRingBuffer &rBuf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
-  if (m_buffer == nullptr)
+  if (m_buffer == nullptr) {
     Create(size);
+}
 
   bool bOk = size <= rBuf.getMaxReadSize() && size <= getMaxWriteSize();
   if (bOk)
@@ -172,8 +178,9 @@ bool CRingBuffer::WriteData(CRingBuffer &rBuf, unsigned int size)
     unsigned int readpos = rBuf.getReadPtr();
     unsigned int chunksize = std::min(size, rBuf.getSize() - readpos);
     bOk = WriteData(&rBuf.getBuffer()[readpos], chunksize);
-    if (bOk && chunksize < size)
+    if (bOk && chunksize < size) {
       bOk = WriteData(&rBuf.getBuffer()[0], size - chunksize);
+}
   }
 
   return bOk;
@@ -202,8 +209,9 @@ bool CRingBuffer::SkipBytes(int skipSize)
   {
     m_readPtr += size;
   }
-  if (m_readPtr == m_size)
+  if (m_readPtr == m_size) {
     m_readPtr = 0;
+}
   m_fillCount -= size;
   return true;
 }

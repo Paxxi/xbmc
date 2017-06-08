@@ -32,16 +32,17 @@ namespace OVERLAY {
 
 static uint32_t build_rgba(int a, int r, int g, int b, bool mergealpha)
 {
-  if(mergealpha)
+  if(mergealpha) {
     return      a        << PIXEL_ASHIFT
          | (r * a / 255) << PIXEL_RSHIFT
          | (g * a / 255) << PIXEL_GSHIFT
          | (b * a / 255) << PIXEL_BSHIFT;
-  else
+  } else {
     return a << PIXEL_ASHIFT
          | r << PIXEL_RSHIFT
          | g << PIXEL_GSHIFT
          | b << PIXEL_BSHIFT;
+}
 }
 
 #define clamp(x) (x) > 255.0 ? 255 : ((x) < 0.0 ? 0 : (int)(x+0.5f))
@@ -59,21 +60,25 @@ uint32_t* convert_rgba(CDVDOverlayImage* o, bool mergealpha)
 {
   uint32_t* rgba = (uint32_t*)malloc(o->width * o->height * sizeof(uint32_t));
 
-  if(!rgba)
+  if(!rgba) {
     return nullptr;
+}
 
   uint32_t palette[256];
   memset(palette, 0, 256 * sizeof(palette[0]));
-  for(int i = 0; i < o->palette_colors; i++)
+  for(int i = 0; i < o->palette_colors; i++) {
     palette[i] = build_rgba((o->palette[i] >> PIXEL_ASHIFT) & 0xff
                           , (o->palette[i] >> PIXEL_RSHIFT) & 0xff
                           , (o->palette[i] >> PIXEL_GSHIFT) & 0xff
                           , (o->palette[i] >> PIXEL_BSHIFT) & 0xff
                           , mergealpha);
+}
 
-  for(int row = 0; row < o->height; row++)
-    for(int col = 0; col < o->width; col++)
+  for(int row = 0; row < o->height; row++) {
+    for(int col = 0; col < o->width; col++) {
       rgba[row * o->width + col] = palette[ o->data[row * o->linesize + col] ];
+}
+}
 
   return rgba;
 }
@@ -84,8 +89,9 @@ uint32_t* convert_rgba(CDVDOverlaySpu* o, bool mergealpha
 {
   uint32_t* rgba = (uint32_t*)malloc(o->width * o->height * sizeof(uint32_t));
 
-  if(!rgba)
+  if(!rgba) {
     return nullptr;
+}
 
   uint32_t palette[8];
   for(int i = 0; i < 4; i++)
@@ -136,9 +142,9 @@ uint32_t* convert_rgba(CDVDOverlaySpu* o, bool mergealpha
 
         if (y >= btn_y_start && y <= btn_y_end)
         {
-          if     ( x <  btn_x_start && x + len >= btn_x_start) // starts outside
+          if     ( x <  btn_x_start && x + len >= btn_x_start) { // starts outside
             draw = btn_x_start - x;
-          else if( x >= btn_x_start && x       <= btn_x_end)   // starts inside
+          } else if( x >= btn_x_start && x       <= btn_x_end)   // starts inside
           {
             color = palette[idx + 4];
             draw  = btn_x_end - x + 1;
@@ -146,24 +152,30 @@ uint32_t* convert_rgba(CDVDOverlaySpu* o, bool mergealpha
         }
         /* make sure we are not requested to draw to far */
         /* that part will be taken care of in next pass */
-        if( draw > len )
+        if( draw > len ) {
           draw = len;
+}
 
         /* calculate cropping */
         if(color & 0xff000000)
         {
-          if(x < min_x)
+          if(x < min_x) {
             min_x = x;
-          if(y < min_y)
+}
+          if(y < min_y) {
             min_y = y;
-          if(x + draw > max_x)
+}
+          if(x + draw > max_x) {
             max_x = x + draw;
-          if(y + 1    > max_y)
+}
+          if(y + 1    > max_y) {
             max_y = y + 1;
+}
         }
 
-        for(int i = 0; i < draw; i++)
+        for(int i = 0; i < draw; i++) {
           trg[x + i] = color;
+}
 
         len -= draw;
         x   += draw;
@@ -187,23 +199,26 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 {
   ASS_Image* img;
 
-  if (!images)
+  if (!images) {
     return false;
+}
 
   // first calculate how many glyph we have and the total x length
 
   for(img = images; img; img = img->next)
   {
     // fully transparent or width or height is 0 -> not displayed
-    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0)
+    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0) {
       continue;
+}
 
     quads.size_x += img->w + 1;
     quads.count++;
   }
 
-  if (quads.count == 0)
+  if (quads.count == 0) {
     return false;
+}
 
   if (quads.size_x > (int)g_Windowing.GetMaxTextureSize())
     quads.size_x = g_Windowing.GetMaxTextureSize();
@@ -215,8 +230,9 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 
   for(img = images; img; img = img->next)
   {
-    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0)
+    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0) {
       continue;
+}
 
     // check if we need to split to new line
     if (curr_x + img->w >= quads.size_x)
@@ -228,8 +244,9 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 
     curr_x += img->w + 1;
 
-    if (img->h > curr_y)
+    if (img->h > curr_y) {
       curr_y = img->h;
+}
   }
 
   quads.size_y += curr_y + 1;
@@ -249,8 +266,9 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 
   for(img = images; img; img = img->next)
   {
-    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0)
+    if((img->color & 0xff) == 0xff || img->w == 0 || img->h == 0) {
       continue;
+}
 
     unsigned int color = img->color;
     unsigned int alpha = (color & 0xff);
@@ -283,13 +301,15 @@ bool convert_quad(ASS_Image* images, SQuads& quads)
 
     v++;
 
-    for(int i=0; i<img->h; i++)
+    for(int i=0; i<img->h; i++) {
       memcpy(data        + quads.size_x * i
            , img->bitmap + img->stride  * i
            , img->w);
+}
 
-    if (img->h > y)
+    if (img->h > y) {
       y = img->h;
+}
 
     curr_x += img->w + 1;
     data   += img->w + 1;

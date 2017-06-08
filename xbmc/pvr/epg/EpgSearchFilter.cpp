@@ -50,12 +50,14 @@ void CPVREpgSearchFilter::Reset()
   m_iMaximumDuration         = EPG_SEARCH_UNSET;
 
   m_startDateTime.SetFromUTCDateTime(CServiceBroker::GetPVRManager().EpgContainer().GetFirstEPGDate());
-  if (!m_startDateTime.IsValid())
+  if (!m_startDateTime.IsValid()) {
     m_startDateTime.SetFromUTCDateTime(CDateTime::GetUTCDateTime()); // default to 'now'
+}
 
   m_endDateTime.SetFromUTCDateTime(CServiceBroker::GetPVRManager().EpgContainer().GetLastEPGDate());
-  if (!m_endDateTime.IsValid())
+  if (!m_endDateTime.IsValid()) {
     m_endDateTime.SetFromUTCDateTime(m_startDateTime + CDateTimeSpan(10, 0, 0, 0)); // default to start + 10 days
+}
 
   m_bIncludeUnknownGenres    = false;
   m_bRemoveDuplicates        = false;
@@ -161,8 +163,9 @@ int CPVREpgSearchFilter::RemoveDuplicates(CFileItemList &results)
 
     for (unsigned int iTagPtr = 0; iTagPtr < iSize; iTagPtr++)
     {
-      if (iResultPtr == iTagPtr)
+      if (iResultPtr == iTagPtr) {
         continue;
+}
 
       const CPVREpgInfoTagPtr epgentry_2(results.Get(iTagPtr)->GetEPGInfoTag());
       if (!epgentry_2)

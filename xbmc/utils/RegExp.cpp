@@ -63,14 +63,17 @@ void CRegExp::InitValues(bool caseless /*= false*/, CRegExp::utf8Mode utf8 /*= a
   m_re          = nullptr;
   m_sd          = nullptr;
   m_iOptions    = PCRE_DOTALL | PCRE_NEWLINE_ANY;
-  if(caseless)
+  if(caseless) {
     m_iOptions |= PCRE_CASELESS;
+}
   if (m_utf8Mode == forceUtf8)
   {
-    if (IsUtf8Supported())
+    if (IsUtf8Supported()) {
       m_iOptions |= PCRE_UTF8;
-    if (AreUnicodePropertiesSupported())
+}
+    if (AreUnicodePropertiesSupported()) {
       m_iOptions |= PCRE_UCP;
+}
   }
 
   m_offset      = 0;
@@ -94,8 +97,9 @@ CRegExp::CRegExp(bool caseless, CRegExp::utf8Mode utf8, const char *re, studyMod
 bool CRegExp::requireUtf8(const std::string& regexp)
 {
   // enable UTF-8 mode if regexp string has UTF-8 multibyte sequences
-  if (CUtf8Utils::checkStrForUtf8(regexp) == CUtf8Utils::utf8string)
+  if (CUtf8Utils::checkStrForUtf8(regexp) == CUtf8Utils::utf8string) {
     return true;
+}
 
   // check for explicit Unicode Properties (\p, \P, \X) and for Unicode character codes (greater than 0xFF) in form \x{hhh..}
   // note: PCRE change meaning of \w, \s, \d (and \W, \S, \D) when Unicode Properties are enabled,
@@ -276,8 +280,9 @@ CRegExp::~CRegExp()
 
 bool CRegExp::RegComp(const char *re, studyMode study /*= NoStudy*/)
 {
-  if (!re)
+  if (!re) {
     return false;
+}
 
   m_offset           = 0;
   m_jitCompiled      = false;
@@ -423,8 +428,9 @@ int CRegExp::PrivateRegFind(size_t bufferLen, const char *str, unsigned int star
 int CRegExp::GetCaptureTotal() const
 {
   int c = -1;
-  if (m_re)
+  if (m_re) {
     pcre_fullinfo(m_re, nullptr, PCRE_INFO_CAPTURECOUNT, &c);
+}
   return c;
 }
 
@@ -480,8 +486,9 @@ std::string CRegExp::GetReplaceString(const std::string& sReplaceExp) const
 
 int CRegExp::GetSubStart(int iSub) const
 {
-  if (!IsValidSubNumber(iSub))
+  if (!IsValidSubNumber(iSub)) {
     return -1;
+}
 
   return m_iOvector[iSub*2] + m_offset;
 }
@@ -493,8 +500,9 @@ int CRegExp::GetSubStart(const std::string& subName) const
 
 int CRegExp::GetSubLength(int iSub) const
 {
-  if (!IsValidSubNumber(iSub))
+  if (!IsValidSubNumber(iSub)) {
     return -1;
+}
 
   return m_iOvector[(iSub*2)+1] - m_iOvector[(iSub*2)];
 }
@@ -526,8 +534,9 @@ bool CRegExp::GetNamedSubPattern(const char* strName, std::string& strMatch) con
 {
   strMatch.clear();
   int iSub = pcre_get_stringnumber(m_re, strName);
-  if (!IsValidSubNumber(iSub))
+  if (!IsValidSubNumber(iSub)) {
     return false;
+}
   strMatch = GetMatch(iSub);
   return true;
 }
@@ -539,17 +548,19 @@ int CRegExp::GetNamedSubPatternNumber(const char* strName) const
 
 void CRegExp::DumpOvector(int iLog /* = LOGDEBUG */)
 {
-  if (iLog < LOGDEBUG || iLog > LOGNONE)
+  if (iLog < LOGDEBUG || iLog > LOGNONE) {
     return;
+}
 
   std::string str = "{";
   int size = GetSubCount(); // past the subpatterns is junk
   for (int i = 0; i <= size; i++)
   {
     std::string t = StringUtils::Format("[%i,%i]", m_iOvector[(i*2)], m_iOvector[(i*2)+1]);
-    if (i != size)
+    if (i != size) {
       t += ",";
-    str += t;
+    
+}str += t;
   }
   str += "}";
   CLog::Log(iLog, "regexp ovector=%s", str.c_str());
@@ -588,8 +599,9 @@ bool CRegExp::IsUtf8Supported()
 {
   if (m_Utf8Supported == -1)
   {
-    if (pcre_config(PCRE_CONFIG_UTF8, &m_Utf8Supported) != 0)
+    if (pcre_config(PCRE_CONFIG_UTF8, &m_Utf8Supported) != 0) {
       m_Utf8Supported = 0;
+}
   }
 
   return m_Utf8Supported == 1;
@@ -600,8 +612,9 @@ bool CRegExp::AreUnicodePropertiesSupported()
 #if defined(PCRE_CONFIG_UNICODE_PROPERTIES) && PCRE_UCP != 0
   if (m_UcpSupported == -1)
   {
-    if (pcre_config(PCRE_CONFIG_UNICODE_PROPERTIES, &m_UcpSupported) != 0)
+    if (pcre_config(PCRE_CONFIG_UNICODE_PROPERTIES, &m_UcpSupported) != 0) {
       m_UcpSupported = 0;
+}
   }
 #endif
 
@@ -640,9 +653,10 @@ bool CRegExp::IsJitSupported()
   if (m_JitSupported == -1)
   {
 #ifdef PCRE_HAS_JIT_CODE
-    if (pcre_config(PCRE_CONFIG_JIT, &m_JitSupported) != 0)
+    if (pcre_config(PCRE_CONFIG_JIT, &m_JitSupported) != 0) {
 #endif
       m_JitSupported = 0;
+}
   }
 
   return m_JitSupported == 1;

@@ -37,10 +37,11 @@ static int vfs_file_read(void *h, uint8_t* buf, int size)
 static int64_t vfs_file_seek(void *h, int64_t pos, int whence)
 {
   CFile* pFile = static_cast<CFile*>(h);
-  if (whence == AVSEEK_SIZE)
+  if (whence == AVSEEK_SIZE) {
     return pFile->GetLength();
-  else
+  } else {
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
+}
 }
 
 CMusicInfoTagLoaderFFmpeg::CMusicInfoTagLoaderFFmpeg()
@@ -55,8 +56,9 @@ bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoT
   tag.SetLoaded(false);
 
   CFile file;
-  if (!file.Open(strFileName))
+  if (!file.Open(strFileName)) {
     return false;
+}
 
   uint8_t* buffer = (uint8_t*)av_malloc(FFMPEG_FILE_BUFFER_SIZE);
   AVIOContext* ioctx = avio_alloc_context(buffer, FFMPEG_FILE_BUFFER_SIZE, 0,
@@ -66,8 +68,9 @@ bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoT
   AVFormatContext* fctx = avformat_alloc_context();
   fctx->pb = ioctx;
 
-  if (file.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr) != 1)
+  if (file.IoControl(IOCTRL_SEEK_POSSIBLE, nullptr) != 1) {
     ioctx->seekable = 0;
+}
 
   ioctx->max_packet_size = FFMPEG_FILE_BUFFER_SIZE;
 
@@ -76,8 +79,9 @@ bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoT
 
   if (avformat_open_input(&fctx, strFileName.c_str(), iformat, NULL) < 0)
   {
-    if (fctx)
+    if (fctx) {
       avformat_close_input(&fctx);
+}
     av_free(ioctx->buffer);
     av_free(ioctx);
     return false;
@@ -100,64 +104,67 @@ bool CMusicInfoTagLoaderFFmpeg::Load(const std::string& strFileName, CMusicInfoT
   */
   auto&& ParseTag = [&tag](AVDictionaryEntry* avtag)
                           { 
-                            if (strcasecmp(avtag->key, "album") == 0)
+                            if (strcasecmp(avtag->key, "album") == 0) {
                               tag.SetAlbum(avtag->value);
-                            else if (strcasecmp(avtag->key, "artist") == 0)
+                            } else if (strcasecmp(avtag->key, "artist") == 0) {
                               tag.SetArtist(avtag->value);
-                            else if (strcasecmp(avtag->key, "album_artist") == 0 || 
-                                     strcasecmp(avtag->key, "album artist") == 0)
+                            } else if (strcasecmp(avtag->key, "album_artist") == 0 || 
+                                     strcasecmp(avtag->key, "album artist") == 0) {
                               tag.SetAlbumArtist(avtag->value);
-                            else if (strcasecmp(avtag->key, "title") == 0)
+                            } else if (strcasecmp(avtag->key, "title") == 0) {
                               tag.SetTitle(avtag->value);
-                            else if (strcasecmp(avtag->key, "genre") == 0)
+                            } else if (strcasecmp(avtag->key, "genre") == 0) {
                               tag.SetGenre(avtag->value);
-                            else if (strcasecmp(avtag->key, "part_number") == 0 || 
-                                     strcasecmp(avtag->key, "track") == 0)
+                            } else if (strcasecmp(avtag->key, "part_number") == 0 || 
+                                     strcasecmp(avtag->key, "track") == 0) {
                               tag.SetTrackNumber(strtol(avtag->value, nullptr, 10));
-                            else if (strcasecmp(avtag->key, "disc") == 0)
+                            } else if (strcasecmp(avtag->key, "disc") == 0) {
                               tag.SetDiscNumber(strtol(avtag->value, nullptr, 10));
-                            else if (strcasecmp(avtag->key, "date") == 0)
+                            } else if (strcasecmp(avtag->key, "date") == 0) {
                               tag.SetYear(strtol(avtag->value, nullptr, 10));
-                            else if (strcasecmp(avtag->key, "compilation") == 0)
+                            } else if (strcasecmp(avtag->key, "compilation") == 0) {
                               tag.SetCompilation((strtol(avtag->value, nullptr, 10) == 0) ? false : true);
-                            else if (strcasecmp(avtag->key, "encoded_by") == 0) {}
-                            else if (strcasecmp(avtag->key, "composer") == 0)
+                            } else if (strcasecmp(avtag->key, "encoded_by") == 0) {}
+                            else if (strcasecmp(avtag->key, "composer") == 0) {
                               tag.AddArtistRole("Composer", avtag->value);
-                            else if (strcasecmp(avtag->key, "performer") == 0) // Conductor or TPE3 tag
+                            } else if (strcasecmp(avtag->key, "performer") == 0) { // Conductor or TPE3 tag
                               tag.AddArtistRole("Conductor", avtag->value);
-                            else if (strcasecmp(avtag->key, "TEXT") == 0)
+                            } else if (strcasecmp(avtag->key, "TEXT") == 0) {
                               tag.AddArtistRole("Lyricist", avtag->value);
-                            else if (strcasecmp(avtag->key, "TPE4") == 0)
+                            } else if (strcasecmp(avtag->key, "TPE4") == 0) {
                               tag.AddArtistRole("Remixer", avtag->value);
-                            else if (strcasecmp(avtag->key, "LABEL") == 0 || 
-                                     strcasecmp(avtag->key, "TPUB") == 0)
+                            } else if (strcasecmp(avtag->key, "LABEL") == 0 || 
+                                     strcasecmp(avtag->key, "TPUB") == 0) {
                               tag.SetRecordLabel(avtag->value);
-                            else if (strcasecmp(avtag->key, "copyright") == 0 || 
+                            } else if (strcasecmp(avtag->key, "copyright") == 0 || 
                                      strcasecmp(avtag->key, "TCOP") == 0) {} // Copyright message
-                            else if (strcasecmp(avtag->key, "TDRC") == 0)
+                            else if (strcasecmp(avtag->key, "TDRC") == 0) {
                               tag.SetYear(strtol(avtag->value, nullptr, 10));
-                            else if (strcasecmp(avtag->key, "TDRL") == 0)
+                            } else if (strcasecmp(avtag->key, "TDRL") == 0) {
                               tag.SetYear(strtol(avtag->value, nullptr, 10));
-                            else if (strcasecmp(avtag->key, "TDTG") == 0) {} // Tagging time
+                            } else if (strcasecmp(avtag->key, "TDTG") == 0) {} // Tagging time
                             else if (strcasecmp(avtag->key, "language") == 0 || 
                                      strcasecmp(avtag->key, "TLAN") == 0) {} // Languages
                             else if (strcasecmp(avtag->key, "mood") == 0 || 
-                                     strcasecmp(avtag->key, "TMOO") == 0)
+                                     strcasecmp(avtag->key, "TMOO") == 0) {
                               tag.SetMood(avtag->value);
-                            else if (strcasecmp(avtag->key, "artist-sort") == 0 || 
+                            } else if (strcasecmp(avtag->key, "artist-sort") == 0 || 
                                      strcasecmp(avtag->key, "TSOP") == 0) {}
                             else if (strcasecmp(avtag->key, "TSO2") == 0) {}  // Album artist sort
                             else if (strcasecmp(avtag->key, "TSOC") == 0) {}  // composer sort
                           };
 
   AVDictionaryEntry* avtag=nullptr;
-  while ((avtag = av_dict_get(fctx->metadata, "", avtag, AV_DICT_IGNORE_SUFFIX)))
+  while ((avtag = av_dict_get(fctx->metadata, "", avtag, AV_DICT_IGNORE_SUFFIX))) {
     ParseTag(avtag);
+}
 
   const AVStream* st = fctx->streams[0];
-  if (st)
-    while ((avtag = av_dict_get(st->metadata, "", avtag, AV_DICT_IGNORE_SUFFIX)))
+  if (st) {
+    while ((avtag = av_dict_get(st->metadata, "", avtag, AV_DICT_IGNORE_SUFFIX))) {
       ParseTag(avtag);
+}
+}
 
   if (!tag.GetTitle().empty())
     tag.SetLoaded(true);

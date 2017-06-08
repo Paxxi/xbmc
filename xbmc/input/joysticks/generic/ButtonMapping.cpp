@@ -108,8 +108,9 @@ bool CAxisDetector::OnMotion(float position)
   if (m_type != AXIS_TYPE::UNKNOWN)
   {
     // Update position if this axis is an anomalous trigger
-    if (m_type == AXIS_TYPE::OFFSET)
+    if (m_type == AXIS_TYPE::OFFSET) {
       position = (position - m_config.center) / m_config.range;
+}
 
     // Reset state if position crosses zero
     if (m_state == AXIS_STATE::MAPPED)
@@ -117,15 +118,17 @@ bool CAxisDetector::OnMotion(float position)
       SEMIAXIS_DIRECTION activatedDir = m_activatedPrimitive.SemiAxisDirection();
       SEMIAXIS_DIRECTION newDir = CJoystickTranslator::PositionToSemiAxisDirection(position);
 
-      if (activatedDir != newDir)
+      if (activatedDir != newDir) {
         m_state = AXIS_STATE::INACTIVE;
+}
     }
 
     // Check if axis has become activated
     if (m_state == AXIS_STATE::INACTIVE)
     {
-      if (std::abs(position) >= AXIS_THRESHOLD)
+      if (std::abs(position) >= AXIS_THRESHOLD) {
         m_state = AXIS_STATE::ACTIVATED;
+}
 
       if (m_state == AXIS_STATE::ACTIVATED)
       {
@@ -149,8 +152,9 @@ void CAxisDetector::ProcessMotion()
     if (m_type == AXIS_TYPE::OFFSET)
     {
       unsigned int elapsedMs = SystemClockMillis() - m_activationTimeMs;
-      if (elapsedMs < TRIGGER_DELAY_MS)
+      if (elapsedMs < TRIGGER_DELAY_MS) {
         bIgnore = true;
+}
     }
 
     if (!bIgnore)
@@ -167,10 +171,11 @@ void CAxisDetector::ProcessMotion()
       // Map primitive
       if (!m_buttonMapping->MapPrimitive(m_activatedPrimitive))
       {
-        if (m_type == AXIS_TYPE::OFFSET)
+        if (m_type == AXIS_TYPE::OFFSET) {
           CLog::Log(LOGDEBUG, "Mapping offset axis %u failed", m_axisIndex);
-        else
+        } else {
           CLog::Log(LOGDEBUG, "Mapping normal axis %u failed", m_axisIndex);
+}
       }
 
       m_state = AXIS_STATE::MAPPED;
@@ -189,26 +194,31 @@ void CAxisDetector::DetectType(float position)
   // Some platforms don't report a value until the axis is first changed.
   // Detection relies on an initial value, so this axis will be disabled until
   // the user begins button mapping again.
-  if (m_config.bLateDiscovery)
+  if (m_config.bLateDiscovery) {
     return;
+}
 
   // Update range if a range of > 1 is observed
-  if (std::abs(position - m_config.center) > 1.0f)
+  if (std::abs(position - m_config.center) > 1.0f) {
     m_config.range = 2;
+}
 
-  if (m_type != AXIS_TYPE::UNKNOWN)
+  if (m_type != AXIS_TYPE::UNKNOWN) {
     return;
+}
 
   if (m_config.bKnown)
   {
-    if (m_config.center == 0)
+    if (m_config.center == 0) {
       m_type = AXIS_TYPE::NORMAL;
-    else
+    } else {
       m_type = AXIS_TYPE::OFFSET;
+}
   }
 
-  if (m_type != AXIS_TYPE::UNKNOWN)
+  if (m_type != AXIS_TYPE::UNKNOWN) {
     return;
+}
 
   if (!m_initialPositionKnown)
   {
@@ -216,8 +226,9 @@ void CAxisDetector::DetectType(float position)
     m_initialPosition = position;
   }
 
-  if (position != m_initialPosition)
+  if (position != m_initialPosition) {
     m_initialPositionChanged = true;
+}
 
   if (m_initialPositionChanged)
   {
@@ -336,15 +347,17 @@ bool CButtonMapping::MapPrimitive(const CDriverPrimitive& primitive)
 
   bool bTimeoutElapsed = true;
 
-  if (m_buttonMapper->NeedsCooldown())
+  if (m_buttonMapper->NeedsCooldown()) {
     bTimeoutElapsed = (now >= m_lastAction + MAPPING_COOLDOWN_MS);
+}
 
   if (bTimeoutElapsed)
   {
     bHandled = m_buttonMapper->MapPrimitive(m_buttonMap, m_actionMap, primitive);
 
-    if (bHandled)
+    if (bHandled) {
       m_lastAction = SystemClockMillis();
+}
   }
   else if (m_buttonMap->IsIgnored(primitive))
   {

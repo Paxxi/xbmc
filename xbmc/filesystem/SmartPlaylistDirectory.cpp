@@ -54,8 +54,9 @@ namespace XFILE
   {
     // Load in the SmartPlaylist and get the WHERE query
     CSmartPlaylist playlist;
-    if (!playlist.Load(url))
+    if (!playlist.Load(url)) {
       return false;
+}
     bool result = GetDirectory(playlist, items);
     if (result)
       items.SetProperty("library.smartplaylist", true);
@@ -179,8 +180,9 @@ namespace XFILE
             else
               return false;
           }
-          else
-            baseDir += group;
+          else {
+            baseDir 
+}+= group;
 
           URIUtils::AddSlashAtEnd(baseDir);
         }
@@ -278,10 +280,11 @@ namespace XFILE
     }
 
     items.SetLabel(playlist.GetName());
-    if (isGrouped)
+    if (isGrouped) {
       items.SetContent(group);
-    else
+    } else {
       items.SetContent(playlist.GetType());
+}
 
     items.SetProperty(PROPERTY_SORT_ORDER, (int)playlist.GetOrder());
     items.SetProperty(PROPERTY_SORT_ASCENDING, playlist.GetOrderDirection() == SortOrderAscending);

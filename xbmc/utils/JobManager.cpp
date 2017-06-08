@@ -32,8 +32,9 @@
 
 bool CJob::ShouldCancel(unsigned int progress, unsigned int total) const
 {
-  if (m_callback)
+  if (m_callback) {
     return m_callback->OnJobProgress(progress, total, this);
+}
   return false;
 }
 
@@ -60,8 +61,9 @@ void CJobWorker::Process()
   {
     // request an item from our manager (this call is blocking)
     CJob *job = m_jobManager->GetNextJob(this);
-    if (!job)
+    if (!job) {
       break;
+}
 
     bool success = false;
     try
@@ -190,8 +192,9 @@ void CJobManager::Restart()
 {
   CSingleLock lock(m_section);
 
-  if (m_running)
+  if (m_running) {
     throw std::logic_error("CJobManager already running");
+}
   m_running = true;
 }
 
@@ -228,13 +231,15 @@ unsigned int CJobManager::AddJob(CJob *job, IJobCallback *callback, CJob::PRIORI
 {
   CSingleLock lock(m_section);
 
-  if (!m_running)
+  if (!m_running) {
     return 0;
+}
 
   // increment the job counter, ensuring 0 (invalid job) is never hit
   m_jobCounter++;
-  if (m_jobCounter == 0)
+  if (m_jobCounter == 0) {
     m_jobCounter++;
+}
 
   // create a work item for this job
   CWorkItem work(job, m_jobCounter, priority, callback);
@@ -290,8 +295,9 @@ CJob *CJobManager::PopJob()
   for (int priority = CJob::PRIORITY_DEDICATED; priority >= CJob::PRIORITY_LOW_PAUSABLE; --priority)
   {
     // Check whether we're pausing pausable jobs
-    if (priority == CJob::PRIORITY_LOW_PAUSABLE && m_pauseJobs)
+    if (priority == CJob::PRIORITY_LOW_PAUSABLE && m_pauseJobs) {
       continue;
+}
 
     if (m_jobQueue[priority].size() && m_processing.size() < GetMaxWorkers(CJob::PRIORITY(priority)))
     {
@@ -324,8 +330,9 @@ bool CJobManager::IsProcessing(const CJob::PRIORITY &priority) const
 {
   CSingleLock lock(m_section);
 
-  if (m_pauseJobs)
+  if (m_pauseJobs) {
     return false;
+}
 
   for(Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
   {
@@ -340,8 +347,9 @@ int CJobManager::IsProcessing(const std::string &type) const
   int jobsMatched = 0;
   CSingleLock lock(m_section);
 
-  if (m_pauseJobs)
+  if (m_pauseJobs) {
     return 0;
+}
 
   for(Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
   {
@@ -358,20 +366,23 @@ CJob *CJobManager::GetNextJob(const CJobWorker *worker)
   {
     // grab a job off the queue if we have one
     CJob *job = PopJob();
-    if (job)
+    if (job) {
       return job;
+}
     // no jobs are left - sleep for 30 seconds to allow new jobs to come in
     lock.Leave();
     bool newJob = m_jobEvent.WaitMSec(30000);
     lock.Enter();
-    if (!newJob)
+    if (!newJob) {
       break;
+}
   }
   // ensure no jobs have come in during the period after
   // timeout and before we held the lock
   CJob *job = PopJob();
-  if (job)
+  if (job) {
     return job;
+}
   // have no jobs
   RemoveWorker(worker);
   return nullptr;
@@ -407,8 +418,9 @@ void CJobManager::OnJobComplete(bool success, CJob *job)
     lock.Leave();
     try
     {
-      if (item.m_callback)
+      if (item.m_callback) {
         item.m_callback->OnJobComplete(item.m_id, success, item.m_job);
+}
     }
     catch (...)
     {
@@ -435,7 +447,8 @@ void CJobManager::RemoveWorker(const CJobWorker *worker)
 unsigned int CJobManager::GetMaxWorkers(CJob::PRIORITY priority)
 {
   static const unsigned int max_workers = 5;
-  if (priority == CJob::PRIORITY_DEDICATED)
+  if (priority == CJob::PRIORITY_DEDICATED) {
     return 10000; // A large number..
+}
   return max_workers - (CJob::PRIORITY_HIGH - priority);
 }

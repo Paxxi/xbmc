@@ -46,8 +46,9 @@ bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
     url.SetFileName(path);
   }
 
-  if (!reader.Open(url))
+  if (!reader.Open(url)) {
     return false;
+}
 
   bool serverNotUseUTF8 = url.GetProtocolOption("utf8") == "0";
 
@@ -64,8 +65,9 @@ bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
       if( parse.getName().length() == 0 )
         continue;
 
-      if( parse.getFlagtrycwd() == 0 && parse.getFlagtryretr() == 0 )
+      if( parse.getFlagtrycwd() == 0 && parse.getFlagtryretr() == 0 ) {
         continue;
+}
 
       /* buffer name */
       std::string name;

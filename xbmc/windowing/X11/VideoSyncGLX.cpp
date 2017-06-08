@@ -216,8 +216,9 @@ void CVideoSyncGLX::Run(std::atomic<bool>& stop)
       CLog::Log(LOGDEBUG, "CVideoReferenceClock: Vblank counter has reset");
 
       //only try reattaching once
-      if (IsReset)
+      if (IsReset) {
         return;
+}
 
       //because of a bug in the nvidia driver, glXWaitVideoSyncSGI breaks when the vblank counter resets
       CLog::Log(LOGDEBUG, "CVideoReferenceClock: Detaching glX context");

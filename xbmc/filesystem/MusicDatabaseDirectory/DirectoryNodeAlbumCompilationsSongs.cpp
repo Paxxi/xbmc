@@ -34,8 +34,9 @@ CDirectoryNodeAlbumCompilationsSongs::CDirectoryNodeAlbumCompilationsSongs(const
 bool CDirectoryNodeAlbumCompilationsSongs::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   CQueryParams params;
   CollectQueryParams(params);

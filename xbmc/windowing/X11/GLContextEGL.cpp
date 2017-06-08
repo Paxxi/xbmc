@@ -102,9 +102,9 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
   {
     vMask.visualid = XVisualIDFromVisual(winAttr.visual);
     vInfo = XGetVisualInfo(m_dpy, VisualScreenMask | VisualIDMask, &vMask, &availableVisuals);
-    if (!vInfo)
+    if (!vInfo) {
       CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", (unsigned) vMask.visualid);
-    else if(!IsSuitableVisual(vInfo))
+    } else if(!IsSuitableVisual(vInfo))
     {
       CLog::Log(LOGWARNING, "Visual 0x%x of the window is not suitable, looking for another one...",
                 (unsigned) vInfo->visualid);
@@ -113,8 +113,9 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
       vInfo = nullptr;
     }
   }
-  else
+  else {
     CLog::Log(LOGWARNING, "Failed to get window attributes");
+}
 
   /* As per glXMakeCurrent documentation, we have to use the same visual as
      m_glWindow. Since that was not suitable for use, we try to use another
@@ -273,16 +274,21 @@ bool CGLContextEGL::IsSuitableVisual(XVisualInfo *vInfo)
   }
   EGLint value;
 
-  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_RED_SIZE, &value) || value < 8)
+  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_RED_SIZE, &value) || value < 8) {
     return false;
-  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_GREEN_SIZE, &value) || value < 8)
+}
+  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_GREEN_SIZE, &value) || value < 8) {
     return false;
-  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_BLUE_SIZE, &value) || value < 8)
+}
+  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_BLUE_SIZE, &value) || value < 8) {
     return false;
-  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_ALPHA_SIZE, &value) || value < 8)
+}
+  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_ALPHA_SIZE, &value) || value < 8) {
     return false;
-  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_DEPTH_SIZE, &value) || value < 24)
+}
+  if (!eglGetConfigAttrib(m_eglDisplay, config, EGL_DEPTH_SIZE, &value) || value < 24) {
     return false;
+}
 
   return true;
 }
@@ -350,8 +356,9 @@ void CGLContextEGL::SetVSync(bool enable)
 
 void CGLContextEGL::SwapBuffers()
 {
-  if ((m_eglDisplay == EGL_NO_DISPLAY) || (m_eglSurface == EGL_NO_SURFACE))
+  if ((m_eglDisplay == EGL_NO_DISPLAY) || (m_eglSurface == EGL_NO_SURFACE)) {
     return;
+}
 
   eglSwapBuffers(m_eglDisplay, m_eglSurface);
 }

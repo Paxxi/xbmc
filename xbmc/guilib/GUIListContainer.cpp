@@ -144,8 +144,9 @@ bool CGUIListContainer::MoveUp(bool wrapAround)
       SetContainerMoving(-1);
     }
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -168,8 +169,9 @@ bool CGUIListContainer::MoveDown(bool wrapAround)
     ScrollToOffset(0);
     SetContainerMoving(1);
   }
-  else
+  else {
     return false;
+}
   return true;
 }
 
@@ -241,8 +243,9 @@ void CGUIListContainer::SelectItem(int item)
 
 int CGUIListContainer::GetCursorFromPoint(const CPoint &point, CPoint *itemPoint) const
 {
-  if (!m_focusedLayout || !m_layout)
+  if (!m_focusedLayout || !m_layout) {
     return -1;
+}
 
   int row = 0;
   float pos = (m_orientation == VERTICAL) ? point.y : point.x;
@@ -268,8 +271,9 @@ bool CGUIListContainer::SelectItemFromPoint(const CPoint &point)
 {
   CPoint itemPoint;
   int row = GetCursorFromPoint(point, &itemPoint);
-  if (row < 0)
+  if (row < 0) {
     return false;
+}
 
   SetCursor(row);
   CGUIListItemLayout *focusedLayout = GetFocusedLayout();

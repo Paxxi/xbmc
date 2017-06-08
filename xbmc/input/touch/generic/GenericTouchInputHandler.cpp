@@ -52,8 +52,9 @@ CGenericTouchInputHandler &CGenericTouchInputHandler::GetInstance()
 
 bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, float y, int64_t time, int32_t pointer /* = 0 */, float size /* = 0.0f */)
 {
-  if (time < 0 || pointer < 0 || pointer >= TOUCH_MAX_POINTERS)
+  if (time < 0 || pointer < 0 || pointer >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
   CSingleLock lock(m_critical);
 
@@ -70,8 +71,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
       triggerDetectors(event, pointer);
 
       setGestureState(TouchGestureUnknown);
-      for (auto & m_pointer : m_pointers)
+      for (auto & m_pointer : m_pointers) {
         m_pointer.reset();
+}
 
       OnTouchAbort();
       break;
@@ -113,8 +115,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
           result = OnMultiTouchDown(x, y, pointer);
           m_holdTimer->Stop(true);
 
-          if (m_gestureState == TouchGestureSingleTouch || m_gestureState == TouchGestureSingleTouchHold)
+          if (m_gestureState == TouchGestureSingleTouch || m_gestureState == TouchGestureSingleTouchHold) {
             m_holdTimer->Start(TOUCH_HOLD_TIMEOUT);
+}
 
           setGestureState(TouchGestureMultiTouchStart);
         }
@@ -132,8 +135,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
     {
       // unexpected event => abort
       if (!m_pointers[pointer].valid() ||
-          m_gestureState == TouchGestureUnknown)
+          m_gestureState == TouchGestureUnknown) {
         break;
+}
 
       triggerDetectors(event, pointer);
 
@@ -159,8 +163,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
                                    velocityX, velocityY);
       }
       // we are in multi-touch
-      else
-        result = OnMultiTouchUp(x, y, pointer);
+      else {
+        result 
+}= OnMultiTouchUp(x, y, pointer);
 
       // If we were in multi touch mode and lifted one pointer
       // we can go into the TouchGestureMultiTouchDone state which will allow
@@ -209,8 +214,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
       // unexpected event => abort
       if (!m_pointers[pointer].valid() ||
           m_gestureState == TouchGestureUnknown ||
-          m_gestureState == TouchGestureMultiTouchDone)
+          m_gestureState == TouchGestureMultiTouchDone) {
         break;
+}
 
       bool moving = false;
       for (auto & m_pointer : m_pointers)
@@ -236,8 +242,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
       if (m_gestureState == TouchGestureSingleTouch)
       {
         // Check if the touch has moved far enough to count as movement
-        if (!m_pointers[pointer].moving)
+        if (!m_pointers[pointer].moving) {
           break;
+}
 
         m_pointers[pointer].last.copy(m_pointers[pointer].down);
         setGestureState(TouchGesturePan);
@@ -273,8 +280,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
         if (moving)
           result = OnMultiTouchMove(x, y,offsetX, offsetY, velocityX, velocityY, pointer);
       }
-      else
+      else {
         break;
+}
 
       return result;
     }
@@ -289,8 +297,9 @@ bool CGenericTouchInputHandler::HandleTouchInput(TouchInput event, float x, floa
 
 bool CGenericTouchInputHandler::UpdateTouchPointer(int32_t pointer, float x, float y, int64_t time, float size /* = 0.0f */)
 {
-  if (pointer < 0 || pointer >= TOUCH_MAX_POINTERS)
+  if (pointer < 0 || pointer >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
   CSingleLock lock(m_critical);
 
@@ -299,8 +308,9 @@ bool CGenericTouchInputHandler::UpdateTouchPointer(int32_t pointer, float x, flo
   m_pointers[pointer].current.x = x;
   m_pointers[pointer].current.y = y;
   m_pointers[pointer].current.time = time;
-  if (size > 0.0f)
+  if (size > 0.0f) {
     m_pointers[pointer].size = size;
+}
 
   // calculate whether the pointer has moved at all
   if (!m_pointers[pointer].moving)
@@ -309,8 +319,9 @@ bool CGenericTouchInputHandler::UpdateTouchPointer(int32_t pointer, float x, flo
     CVector current = m_pointers[pointer].current;
     CVector distance = down - current;
 
-    if (distance.length() > m_pointers[pointer].size)
+    if (distance.length() > m_pointers[pointer].size) {
       m_pointers[pointer].moving = true;
+}
   }
 
   for (std::set<IGenericTouchGestureDetector*>::const_iterator detector = m_detectors.begin(); detector != m_detectors.end(); ++detector)
@@ -321,8 +332,9 @@ bool CGenericTouchInputHandler::UpdateTouchPointer(int32_t pointer, float x, flo
 
 void CGenericTouchInputHandler::saveLastTouch()
 {
-  for (auto & m_pointer : m_pointers)
+  for (auto & m_pointer : m_pointers) {
     m_pointer.last.copy(m_pointer.current);
+}
 }
 
 void CGenericTouchInputHandler::OnTimeout()

@@ -41,8 +41,9 @@ bool CJSONRPC::m_initialized = false;
 
 void CJSONRPC::Initialize()
 {
-  if (m_initialized)
+  if (m_initialized) {
     return;
+}
 
   // Add some types/enums at runtime
   std::vector<std::string> enumList;
@@ -212,8 +213,9 @@ JSONRPC_STATUS CJSONRPC::SetConfiguration(const std::string &method, ITransportL
       flags |= Other;
   }
 
-  if (!client->SetAnnouncementFlags(flags))
+  if (!client->SetAnnouncementFlags(flags)) {
     return BadPermission;
+}
 
   return GetConfiguration(method, transport, client, parameterObject, result);
 }
@@ -264,8 +266,9 @@ std::string CJSONRPC::MethodCall(const std::string &inputString, ITransportLayer
         }
       }
     }
-    else
+    else {
       hasResponse = HandleMethodCall(inputroot, outputroot, transport, client);
+}
   }
   else
   {

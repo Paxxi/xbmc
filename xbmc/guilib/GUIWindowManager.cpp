@@ -500,8 +500,9 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
     }
     else if (!dialog->IsModalDialog())
     { // modeless
-      if (dialog->OnMessage( message ))
+      if (dialog->OnMessage( message )) {
         handled = true;
+}
     }
     lock.Enter();
     if (topWindow > m_activeDialogs.size())
@@ -534,14 +535,16 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
 
 bool CGUIWindowManager::SendMessage(CGUIMessage& message, int window)
 {
-  if (window == 0)
+  if (window == 0) {
     // send to no specified windows.
     return SendMessage(message);
+}
   CGUIWindow* pWindow = GetWindow(window);
-  if(pWindow)
+  if(pWindow) {
     return pWindow->OnMessage(message);
-  else
+  } else {
     return false;
+}
 }
 
 void CGUIWindowManager::AddUniqueInstance(CGUIWindow *window)
@@ -640,8 +643,9 @@ void CGUIWindowManager::PreviousWindow()
   CLog::Log(LOGDEBUG,"CGUIWindowManager::PreviousWindow: Deactivate");
   int currentWindow = GetActiveWindow();
   CGUIWindow *pCurrentWindow = GetWindow(currentWindow);
-  if (!pCurrentWindow)
+  if (!pCurrentWindow) {
     return;     // no windows or window history yet
+}
 
   // check to see whether our current window has a <previouswindow> tag
   if (pCurrentWindow->GetPreviousWindow() != WINDOW_INVALID)
@@ -873,9 +877,9 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
   {
   case TMSG_GUI_DIALOG_OPEN:
   {
-    if (pMsg->lpVoid)
+    if (pMsg->lpVoid) {
       static_cast<CGUIDialog*>(pMsg->lpVoid)->Open(pMsg->strParam);
-    else
+    } else
     {
       CGUIDialog* pDialog = static_cast<CGUIDialog*>(GetWindow(pMsg->param1));
       if (pDialog)
@@ -887,8 +891,9 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
   case TMSG_GUI_WINDOW_CLOSE:
   {
     CGUIWindow *window = static_cast<CGUIWindow *>(pMsg->lpVoid);
-    if (window)
+    if (window) {
       window->Close((pMsg->param1 & 0x1) ? true : false, pMsg->param1, (pMsg->param1 & 0x2) ? true : false);
+}
   }
   break;
 
@@ -928,10 +933,11 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
       else
       {
         CGUIWindow *pWindow = GetWindow(pMsg->param1);
-        if (pWindow)
+        if (pWindow) {
           pWindow->OnAction(*action);
-        else
+        } else {
           CLog::Log(LOGWARNING, "Failed to get window with ID %i to send an action to", pMsg->param1);
+}
       }
       delete action;
     }
@@ -948,16 +954,18 @@ void CGUIWindowManager::OnApplicationMessage(ThreadMessage* pMsg)
     break;
 
   case TMSG_GUI_DIALOG_YESNO:
-    if (!pMsg->lpVoid && pMsg->param1 < 0 && pMsg->param2 < 0)
+    if (!pMsg->lpVoid && pMsg->param1 < 0 && pMsg->param2 < 0) {
       return;
+}
 
     auto dialog = static_cast<CGUIDialogYesNo*>(GetWindow(WINDOW_DIALOG_YES_NO));
-    if (!dialog)
+    if (!dialog) {
       return;
+}
 
-    if (pMsg->lpVoid)
+    if (pMsg->lpVoid) {
       pMsg->SetResult(dialog->ShowAndGetInput(*static_cast<HELPERS::DialogYesNoMessage*>(pMsg->lpVoid)));
-    else
+    } else
     {
       HELPERS::DialogYesNoMessage options;
       options.heading = pMsg->param1;
@@ -987,12 +995,14 @@ bool CGUIWindowManager::OnAction(const CAction &action) const
       if (!dialog->IsAnimating(ANIM_TYPE_WINDOW_CLOSE))
       {
         bool fallThrough = (dialog->GetID() == WINDOW_DIALOG_FULLSCREEN_INFO);
-        if (dialog->OnAction(action))
+        if (dialog->OnAction(action)) {
           return true;
+}
         // dialog didn't want the action - we'd normally return false
         // but for some dialogs we want to drop the actions through
-        if (fallThrough)
+        if (fallThrough) {
           break;
+}
         return false;
       }
       CLog::Log(LOGWARNING, "CGUIWindowManager - %s - ignoring action %i, because topmost modal dialog closing animation is running",
@@ -1005,8 +1015,9 @@ bool CGUIWindowManager::OnAction(const CAction &action) const
   }
   lock.Leave();
   CGUIWindow* window = GetWindow(GetActiveWindow());
-  if (window)
+  if (window) {
     return window->OnAction(action);
+}
   return false;
 }
 
@@ -1023,8 +1034,9 @@ void CGUIWindowManager::Process(unsigned int currentTime)
   m_dirtyregions.clear();
 
   CGUIWindow* pWindow = GetWindow(GetActiveWindow());
-  if (pWindow)
+  if (pWindow) {
     pWindow->DoProcess(currentTime, m_dirtyregions);
+}
 
   // process all dialogs - visibility may change etc.
   for (const auto& entry : m_mapWindows)
@@ -1140,8 +1152,9 @@ void CGUIWindowManager::AfterRender()
   m_tracker.CleanMarkedRegions();
 
   CGUIWindow* pWindow = GetWindow(GetActiveWindow());
-  if (pWindow)
+  if (pWindow) {
     pWindow->AfterRender();
+}
 
   // make copy of vector as we may remove items from it as we go
   auto activeDialogs = m_activeDialogs;
@@ -1175,8 +1188,9 @@ void CGUIWindowManager::FrameMove()
   }
 
   CGUIWindow* pWindow = GetWindow(GetActiveWindow());
-  if (pWindow)
+  if (pWindow) {
     pWindow->FrameMove();
+}
   // update any dialogs - we take a copy of the vector as some dialogs may close themselves
   // during this call
   auto dialogs = m_activeDialogs;
@@ -1191,15 +1205,17 @@ void CGUIWindowManager::FrameMove()
 CGUIDialog* CGUIWindowManager::GetDialog(int id) const
 {
   CGUIWindow *window = GetWindow(id);
-  if (window && window->IsDialog())
+  if (window && window->IsDialog()) {
     return dynamic_cast<CGUIDialog*>(window);
+}
   return nullptr;
 }
 
 CGUIWindow* CGUIWindowManager::GetWindow(int id) const
 {
-  if (id == 0 || id == WINDOW_INVALID)
+  if (id == 0 || id == WINDOW_INVALID) {
     return nullptr;
+}
 
   CSingleLock lock(g_graphicsContext);
 
@@ -1214,8 +1230,9 @@ void CGUIWindowManager::ProcessRenderLoop(bool renderOnly /*= false*/)
   if (g_application.IsCurrentThread() && m_pCallback)
   {
     m_iNested++;
-    if (!renderOnly)
+    if (!renderOnly) {
       m_pCallback->Process();
+}
     m_pCallback->FrameMove(!renderOnly);
     m_pCallback->Render();
     m_iNested--;
@@ -1365,10 +1382,11 @@ void CGUIWindowManager::DispatchThreadMessages()
 
     // XXX: during SendMessage(), there could be a deeper 'xbmc main loop' inited by e.g. doModal
     //      which may loop there and callback to DispatchThreadMessages() multiple times.
-    if (window)
+    if (window) {
       SendMessage( *pMsg, window );
-    else
+    } else {
       SendMessage( *pMsg );
+}
     delete pMsg;
 
     lock.Enter();
@@ -1384,9 +1402,11 @@ int CGUIWindowManager::RemoveThreadMessageByMessageIds(int *pMessageIDList)
   {
     CGUIMessage *pMsg = it->first;
     int *pMsgID;
-    for(pMsgID = pMessageIDList; *pMsgID != 0; ++pMsgID)
-      if (pMsg->GetMessage() == *pMsgID)
+    for(pMsgID = pMessageIDList; *pMsgID != 0; ++pMsgID) {
+      if (pMsg->GetMessage() == *pMsgID) {
         break;
+}
+}
     if (*pMsgID)
     {
       it = m_vecThreadMessages.erase(it);
@@ -1432,10 +1452,10 @@ int CGUIWindowManager::GetActiveWindowID() const
     else if (CServiceBroker::GetPVRManager().IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
       iWin = WINDOW_FULLSCREEN_LIVETV;
     // special casing for numeric seek
-    else if (CSeekHandler::GetInstance().HasTimeCode())
+    else if (CSeekHandler::GetInstance().HasTimeCode()) {
       iWin = WINDOW_VIDEO_TIME_SEEK;
     // check if a game is playing
-    else if (g_application.m_pPlayer->IsPlayingGame())
+    } else if (g_application.m_pPlayer->IsPlayingGame())
       iWin = WINDOW_FULLSCREEN_GAME;
   }
   if (iWin == WINDOW_VISUALISATION)
@@ -1444,8 +1464,9 @@ int CGUIWindowManager::GetActiveWindowID() const
     if (CServiceBroker::GetPVRManager().IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
       iWin = WINDOW_FULLSCREEN_RADIO;
     // special casing for numeric seek
-    else if (CSeekHandler::GetInstance().HasTimeCode())
+    else if (CSeekHandler::GetInstance().HasTimeCode()) {
       iWin = WINDOW_VIDEO_TIME_SEEK;
+}
   }
   // Return the window id
   return iWin;
@@ -1455,8 +1476,9 @@ int CGUIWindowManager::GetActiveWindowID() const
 int CGUIWindowManager::GetFocusedWindow() const
 {
   int dialog = GetTopMostModalDialogID(true);
-  if (dialog != WINDOW_INVALID)
+  if (dialog != WINDOW_INVALID) {
     return dialog;
+}
 
   return GetActiveWindow();
 }
@@ -1626,8 +1648,9 @@ void CGUIWindowManager::ClearWindowHistory()
 void CGUIWindowManager::CloseWindowSync(CGUIWindow *window, int nextWindowID /*= 0*/)
 {
   window->Close(false, nextWindowID);
-  while (window->IsAnimating(ANIM_TYPE_WINDOW_CLOSE))
+  while (window->IsAnimating(ANIM_TYPE_WINDOW_CLOSE)) {
     ProcessRenderLoop(true);
+}
 }
 
 #ifdef _DEBUG

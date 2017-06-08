@@ -96,8 +96,9 @@ CGUIFont* GUIFontManager::LoadTTF(const std::string& strFontName, const std::str
 
   //check if font already exists
   CGUIFont* pFont = GetFont(strFontName, false);
-  if (pFont)
+  if (pFont) {
     return pFont;
+}
 
   if (!sourceRes) // no source res specified, so assume the skin res
     sourceRes = &m_skinResolution;
@@ -111,8 +112,9 @@ CGUIFont* GUIFontManager::LoadTTF(const std::string& strFontName, const std::str
   {
     strPath = URIUtils::AddFileToFolder(g_graphicsContext.GetMediaDir(), "fonts", strFilename);
   }
-  else
-    strPath = strFilename;
+  else {
+    strPath 
+}= strFilename;
 
 #ifdef TARGET_POSIX
   strPath = CSpecialProtocol::TranslatePathConvertCase(strPath);
@@ -170,8 +172,9 @@ CGUIFont* GUIFontManager::LoadTTF(const std::string& strFontName, const std::str
 
 bool GUIFontManager::OnMessage(CGUIMessage &message)
 {
-  if (message.GetMessage() != GUI_MSG_NOTIFY_ALL)
+  if (message.GetMessage() != GUI_MSG_NOTIFY_ALL) {
     return false;
+}
 
   if (message.GetParam1() == GUI_MSG_RENDERER_LOST)
   {
@@ -268,8 +271,9 @@ CGUIFontTTFBase* GUIFontManager::GetFontFile(const std::string& strFileName)
   for (int i = 0; i < (int)m_vecFontFiles.size(); ++i)
   {
     CGUIFontTTFBase* pFont = (CGUIFontTTFBase *)m_vecFontFiles[i];
-    if (StringUtils::EqualsNoCase(pFont->GetFileName(), strFileName))
+    if (StringUtils::EqualsNoCase(pFont->GetFileName(), strFileName)) {
       return pFont;
+}
   }
   return nullptr;
 }
@@ -279,8 +283,9 @@ CGUIFont* GUIFontManager::GetFont(const std::string& strFontName, bool fallback 
   for (int i = 0; i < (int)m_vecFonts.size(); ++i)
   {
     CGUIFont* pFont = m_vecFonts[i];
-    if (StringUtils::EqualsNoCase(pFont->GetFontName(), strFontName))
+    if (StringUtils::EqualsNoCase(pFont->GetFontName(), strFontName)) {
       return pFont;
+}
   }
   // fall back to "font13" if we have none
   if (fallback && !strFontName.empty() && !StringUtils::EqualsNoCase(strFontName, "font13"))

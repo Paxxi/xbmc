@@ -35,12 +35,14 @@ bool CSettingUpdate::operator<(const CSettingUpdate& rhs) const
 
 bool CSettingUpdate::Deserialize(const TiXmlNode *node)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == nullptr)
+  if (elem == nullptr) {
     return false;
+}
   
   const char *strType = elem->Attribute(SETTING_XML_ATTR_TYPE);
   if (strType == NULL || strlen(strType) <= 0 || !setType(strType))
@@ -65,12 +67,13 @@ bool CSettingUpdate::Deserialize(const TiXmlNode *node)
 
 bool CSettingUpdate::setType(const std::string &type)
 {
-  if (StringUtils::EqualsNoCase(type, "change"))
+  if (StringUtils::EqualsNoCase(type, "change")) {
     m_type = SettingUpdateTypeChange;
-  else if (StringUtils::EqualsNoCase(type, "rename"))
+  } else if (StringUtils::EqualsNoCase(type, "rename")) {
     m_type = SettingUpdateTypeRename;
-  else
+  } else {
     return false;
+}
 
   return true;
 }

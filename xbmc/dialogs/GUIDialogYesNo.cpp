@@ -93,8 +93,9 @@ bool CGUIDialogYesNo::ShowAndGetInput(CVariant heading, CVariant line0, CVariant
 bool CGUIDialogYesNo::ShowAndGetInput(CVariant heading, CVariant line0, CVariant line1, CVariant line2, bool &bCanceled, CVariant noLabel, CVariant yesLabel, unsigned int autoCloseTime)
 {
   CGUIDialogYesNo *dialog = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-  if (!dialog)
+  if (!dialog) {
     return false;
+}
 
   dialog->SetHeading(heading);
   dialog->SetLine(0, line0);
@@ -120,8 +121,9 @@ bool CGUIDialogYesNo::ShowAndGetInput(CVariant heading, CVariant text)
 bool CGUIDialogYesNo::ShowAndGetInput(CVariant heading, CVariant text, bool &bCanceled, CVariant noLabel /* = "" */, CVariant yesLabel /* = "" */, unsigned int autoCloseTime)
 {
   CGUIDialogYesNo *dialog = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-  if (!dialog)
+  if (!dialog) {
     return false;
+}
 
   dialog->SetHeading(heading);
   dialog->SetText(text);
@@ -161,17 +163,19 @@ int CGUIDialogYesNo::ShowAndGetInput(const KODI::MESSAGING::HELPERS::DialogYesNo
   }
 
   Open();
-  if (m_bCanceled)
+  if (m_bCanceled) {
     return -1;
+}
   
   return IsConfirmed() ? 1 : 0;
 }
 
 int CGUIDialogYesNo::GetDefaultLabelID(int controlId) const
 {
-  if (controlId == CONTROL_NO_BUTTON)
+  if (controlId == CONTROL_NO_BUTTON) {
     return 106;
-  else if (controlId == CONTROL_YES_BUTTON)
+  } else if (controlId == CONTROL_YES_BUTTON) {
     return 107;
+}
   return CGUIDialogBoxBase::GetDefaultLabelID(controlId);
 }

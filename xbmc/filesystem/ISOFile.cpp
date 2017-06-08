@@ -147,8 +147,9 @@ bool CISOFile::Exists(const CURL& url)
     if (strFName[i] == '/') strFName[i] = '\\';
   }
   m_hFile = m_isoReader.OpenFile((char*)strFName.c_str());
-  if (m_hFile == INVALID_HANDLE_VALUE)
+  if (m_hFile == INVALID_HANDLE_VALUE) {
     return false;
+}
 
   m_isoReader.CloseFile(m_hFile);
   return true;

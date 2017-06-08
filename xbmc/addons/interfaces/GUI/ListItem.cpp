@@ -95,8 +95,9 @@ void Interface_GUIListItem::destroy(void* kodiBase, void* handle)
   }
   
   CFileItemPtr* item = static_cast<CFileItemPtr*>(handle);
-  if (item)
+  if (item) {
     delete item;
+}
 }
 
 char* Interface_GUIListItem::get_label(void* kodiBase, void* handle)

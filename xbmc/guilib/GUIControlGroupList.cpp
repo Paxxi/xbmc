@@ -87,8 +87,9 @@ void CGUIControlGroupList::Process(unsigned int currentTime, CDirtyRegionList &d
     {
       if (IsControlOnScreen(pos, control))
       {
-        if (control->HasFocus())
+        if (control->HasFocus()) {
           m_focusedPosition = index;
+}
         index++;
       }
 
@@ -124,8 +125,9 @@ void CGUIControlGroupList::Render()
         g_graphicsContext.SetOrigin(m_posX + pos - m_scroller.GetValue(), m_posY);
       control->DoRender();
     }
-    if (control->IsVisible())
+    if (control->IsVisible()) {
       pos += Size(control) + m_itemGap;
+}
     g_graphicsContext.RestoreOrigin();
   }
   if (focusedControl)
@@ -152,16 +154,17 @@ bool CGUIControlGroupList::OnMessage(CGUIMessage& message)
       for (iControls it = m_children.begin(); it != m_children.end(); ++it)
       {
         CGUIControl *control = *it;
-        if (!control->IsVisible())
+        if (!control->IsVisible()) {
           continue;
+}
         if (control->GetID() == message.GetControlId())
         {
           // find out whether this is the first or last control
-          if (IsFirstFocusableControl(control))
+          if (IsFirstFocusableControl(control)) {
             ScrollTo(0);
-          else if (IsLastFocusableControl(control))
+          } else if (IsLastFocusableControl(control)) {
             ScrollTo(m_totalSize - Size());
-          else if (offset < m_scroller.GetValue())
+          } else if (offset < m_scroller.GetValue())
             ScrollTo(offset);
           else if (offset + Size(control) > m_scroller.GetValue() + Size())
             ScrollTo(offset + Size(control) - Size());
@@ -181,8 +184,9 @@ bool CGUIControlGroupList::OnMessage(CGUIMessage& message)
       for (iControls it = m_children.begin(); it != m_children.end(); ++it)
       {
         CGUIControl *control = *it;
-        if (!control->IsVisible())
+        if (!control->IsVisible()) {
           continue;
+}
         if (control->GetID() == m_focusedControl)
         {
           if (IsControlOnScreen(offset, control))
@@ -196,8 +200,9 @@ bool CGUIControlGroupList::OnMessage(CGUIMessage& message)
       for (iControls it = m_children.begin(); it != m_children.end(); ++it)
       {
         CGUIControl *control = *it;
-        if (!control->IsVisible())
+        if (!control->IsVisible()) {
           continue;
+}
         if (control->CanFocus() && IsControlOnScreen(offset, control))
         {
           m_focusedControl = control->GetID();
@@ -277,17 +282,21 @@ void CGUIControlGroupList::AddControl(CGUIControl *control, int position /*= -1*
       }
       if (m_orientation == VERTICAL)
       {
-        if (before) // update the DOWN action to point to us
+        if (before) { // update the DOWN action to point to us
           before->SetAction(ACTION_MOVE_DOWN, CGUIAction(control->GetID()));
-        if (after) // update the UP action to point to us
+}
+        if (after) { // update the UP action to point to us
           after->SetAction(ACTION_MOVE_UP, CGUIAction(control->GetID()));
+}
       }
       else
       {
-        if (before) // update the RIGHT action to point to us
+        if (before) { // update the RIGHT action to point to us
           before->SetAction(ACTION_MOVE_RIGHT, CGUIAction(control->GetID()));
-        if (after) // update the LEFT action to point to us
+}
+        if (after) { // update the LEFT action to point to us
           after->SetAction(ACTION_MOVE_LEFT, CGUIAction(control->GetID()));
+}
       }
     }
     // now the control's nav
@@ -310,8 +319,9 @@ void CGUIControlGroupList::AddControl(CGUIControl *control, int position /*= -1*
     }
     control->SetAction(ACTION_NAV_BACK, GetAction(ACTION_NAV_BACK), false);
 
-    if (!m_useControlPositions)
+    if (!m_useControlPositions) {
       control->SetPosition(0,0);
+}
     CGUIControlGroup::AddControl(control, position);
     m_totalSize = GetTotalSize();
   }
@@ -328,24 +338,27 @@ void CGUIControlGroupList::ClearAll()
 
 float CGUIControlGroupList::GetWidth() const
 {
-  if (m_orientation == HORIZONTAL)
+  if (m_orientation == HORIZONTAL) {
     return CLAMP(m_totalSize, m_minSize, m_width);
+}
   return CGUIControlGroup::GetWidth();
 }
 
 float CGUIControlGroupList::GetHeight() const
 {
-  if (m_orientation == VERTICAL)
+  if (m_orientation == VERTICAL) {
     return CLAMP(m_totalSize, m_minSize, m_height);
+}
   return CGUIControlGroup::GetHeight();
 }
 
 void CGUIControlGroupList::SetMinSize(float minWidth, float minHeight)
 {
-  if (m_orientation == VERTICAL)
+  if (m_orientation == VERTICAL) {
     m_minSize = minHeight;
-  else
+  } else {
     m_minSize = minWidth;
+}
 }
 
 float CGUIControlGroupList::Size(const CGUIControl *control) const
@@ -523,8 +536,9 @@ void CGUIControlGroupList::CalculateItemGap()
       }
     }
 
-    if (itemsCount > 0)
+    if (itemsCount > 0) {
       m_itemGap = (Size() - itemsSize) / itemsCount;
+}
   }
 }
 
@@ -532,10 +546,12 @@ float CGUIControlGroupList::GetAlignOffset() const
 {
   if (m_totalSize < Size())
   {
-    if (m_alignment & XBFONT_RIGHT)
+    if (m_alignment & XBFONT_RIGHT) {
       return Size() - m_totalSize;
-    if (m_alignment & (XBFONT_CENTER_X | XBFONT_JUSTIFIED))
+}
+    if (m_alignment & (XBFONT_CENTER_X | XBFONT_JUSTIFIED)) {
       return (Size() - m_totalSize)*0.5f;
+}
   }
   return 0.0f;
 }

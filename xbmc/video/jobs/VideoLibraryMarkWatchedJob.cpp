@@ -44,20 +44,23 @@ CVideoLibraryMarkWatchedJob::~CVideoLibraryMarkWatchedJob()
 
 bool CVideoLibraryMarkWatchedJob::operator==(const CJob* job) const
 {
-  if (strcmp(job->GetType(), GetType()) != 0)
+  if (strcmp(job->GetType(), GetType()) != 0) {
     return false;
+}
 
   const CVideoLibraryMarkWatchedJob* markJob = dynamic_cast<const CVideoLibraryMarkWatchedJob*>(job);
-  if (markJob == nullptr)
+  if (markJob == nullptr) {
     return false;
+}
 
   return m_item->IsSamePath(markJob->m_item.get()) && markJob->m_mark == m_mark;
 }
 
 bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
 {
-  if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases())
+  if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases()) {
     return false;
+}
 
   CFileItemList items;
   items.Add(CFileItemPtr(new CFileItem(*m_item)));
@@ -100,8 +103,9 @@ bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
       db.ClearBookMarksOfFile(path, CBookmark::RESUME);
       db.IncrementPlayCount(*item);
     }
-    else
-      db.SetPlayCount(*item, 0);
+    else {
+      db
+}.SetPlayCount(*item, 0);
   }
 
   db.CommitTransaction();

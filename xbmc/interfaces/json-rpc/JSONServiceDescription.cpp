@@ -378,9 +378,9 @@ bool JSONSchemaTypeDefinition::Parse(const CVariant &value, bool isParameter /* 
             return false;
           }
 
-          if (extendsIndex == 0)
+          if (extendsIndex == 0) {
             extendedType = extendedTypeDef->type;
-          else if (extendedType != extendedTypeDef->type)
+          } else if (extendedType != extendedTypeDef->type)
           {
             extends.clear();
             CLog::Log(LOGDEBUG, "JSONRPC: JSON schema type %s extends multiple JSON schema types of mismatching types", name.c_str());
@@ -627,9 +627,9 @@ bool JSONSchemaTypeDefinition::Parse(const CVariant &value, bool isParameter /* 
       }
     }
 
-    if (ok)
+    if (ok) {
       defaultValue = value["default"];
-    else
+    } else
     {
       // If the type of the default value definition does not
       // match the type of the parameter we have to log this
@@ -942,10 +942,11 @@ JSONRPC_STATUS JSONSchemaTypeDefinition::Check(const CVariant &value, CVariant &
   if ((HasType(type, NumberValue) && value.isDouble()) || (HasType(type, IntegerValue) && value.isInteger()))
   {
     double numberValue;
-    if (value.isDouble())
+    if (value.isDouble()) {
       numberValue = value.asDouble();
-    else
+    } else {
       numberValue = (double)value.asInteger();
+}
     // Check minimum
     if ((exclusiveMinimum && numberValue <= minimum) || (!exclusiveMinimum && numberValue < minimum) ||
     // Check maximum
@@ -1005,9 +1006,9 @@ void JSONSchemaTypeDefinition::Print(bool isParameter, bool isGlobal, bool print
   if (isParameter)
     output["name"] = name;
 
-  if (isGlobal)
+  if (isGlobal) {
     output["id"] = ID;
-  else if (!ID.empty())
+  } else if (!ID.empty())
   {
     output["$ref"] = ID;
     typeReference = true;
@@ -1176,11 +1177,13 @@ void JSONSchemaTypeDefinition::Set(const JSONSchemaTypeDefinitionPtr typeDefinit
   if (!origDescription.empty())
     description = origDescription;
 
-  if (!origOptional)
+  if (!origOptional) {
     optional = origOptional;
+}
 
-  if (!origDefaultValue.isNull())
+  if (!origDefaultValue.isNull()) {
     defaultValue = origDefaultValue;
+}
 
   if (referencedTypeDef.get() != NULL)
     referencedType = referencedTypeDef;
@@ -1335,8 +1338,9 @@ JSONRPC_STATUS JsonRpcMethod::Check(const CVariant &requestParameters, ITranspor
 
       return OK;
     }
-    else
+    else {
       return BadPermission;
+}
   }
   
   return MethodNotFound;
@@ -1383,8 +1387,9 @@ JSONRPC_STATUS JsonRpcMethod::checkParameter(const CVariant &requestParameters, 
 
     // Evaluate the type of the parameter
     JSONRPC_STATUS status = type->Check(parameterValue, outputParameters[type->name], errorData["stack"]);
-    if (status != OK)
+    if (status != OK) {
       return status;
+}
 
     // The parameter was present and valid
     handled++;
@@ -1761,8 +1766,9 @@ JSONRPC_STATUS CJSONServiceDescription::Print(CVariant &result, ITransportLayer 
           methods.add(methodIterator->second);
       }
 
-      if (methods.begin() == methods.end())
+      if (methods.begin() == methods.end()) {
         return InvalidParams;
+}
     }
     else if (filterByType == "type")
     {

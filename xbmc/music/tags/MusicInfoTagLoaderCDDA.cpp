@@ -56,8 +56,9 @@ bool CMusicInfoTagLoaderCDDA::Load(const std::string& strFileName, CMusicInfoTag
 
     // Get information for the inserted disc
     CCdInfo* pCdInfo = g_mediaManager.GetCdInfo();
-    if (pCdInfo == nullptr)
+    if (pCdInfo == nullptr) {
       return bResult;
+}
 
     // Prepare cddb
     Xcddb cddb;

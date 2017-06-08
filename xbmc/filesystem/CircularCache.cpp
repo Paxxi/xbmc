@@ -55,8 +55,9 @@ int CCircularCache::Open()
 #else
   m_buf = new uint8_t[m_size];
 #endif
-  if(m_buf == nullptr)
+  if(m_buf == nullptr) {
     return CACHE_RC_ERROR;
+}
   m_beg = 0;
   m_end = 0;
   m_cur = 0;
@@ -248,8 +249,9 @@ bool CCircularCache::Reset(int64_t pos, bool clearAnyway)
 
 int64_t CCircularCache::CachedDataEndPosIfSeekTo(int64_t iFilePosition)
 {
-  if (IsCachedPosition(iFilePosition))
+  if (IsCachedPosition(iFilePosition)) {
     return m_end;
+}
   return iFilePosition;
 }
 

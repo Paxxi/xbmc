@@ -101,8 +101,9 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
       m_spuData.iSize = 0;
       return nullptr;
     }
-    if (length > iSize) pSPUData->iNeededSize = length;
-    else pSPUData->iNeededSize = iSize;
+    if (length > iSize) { pSPUData->iNeededSize = length;
+    } else { pSPUData->iNeededSize = iSize;
+}
 
     // set presentation time stamp
     pSPUData->pts = pts;
@@ -121,8 +122,9 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
     pSPUData->data = tmpptr;
   }
 
-  if(!pSPUData->data)
+  if(!pSPUData->data) {
     return nullptr; // crap realloc failed, this will have leaked some memory due to odd realloc
+}
 
   // add new data
   memcpy(pSPUData->data + pSPUData->iSize, data, iSize);
@@ -321,8 +323,8 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
       }
     }
     DebugLog("  end off SP_DCSQT");
-    if (*p == CMD_END) p++;
-    else
+    if (*p == CMD_END) { p++;
+    } else
     {
       DebugLog("GetPacket, end off SP_DCSQT, but did not found 0xff (CMD_END)");
     }

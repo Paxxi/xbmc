@@ -79,8 +79,9 @@ bool Xcddb::openSocket()
   {
     CLog::Log(LOGERROR, "Xcddb::openSocket - failed to lookup %s with error %s", m_cddb_ip_address.c_str(), gai_strerror(res));
     res = getaddrinfo("130.179.31.49", service, &hints, &result);
-    if(res)
+    if(res) {
       return false;
+}
   }
 
   for(addr = result; addr; addr = addr->ai_next)
@@ -93,11 +94,13 @@ bool Xcddb::openSocket()
     CLog::Log(LOGDEBUG, "Xcddb::openSocket - connecting to: %s:%s ...", namebuf, portbuf);
 
     fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
-    if(fd == INVALID_SOCKET)
+    if(fd == INVALID_SOCKET) {
       continue;
+}
 
-    if(connect(fd, addr->ai_addr, addr->ai_addrlen) != SOCKET_ERROR)
+    if(connect(fd, addr->ai_addr, addr->ai_addrlen) != SOCKET_ERROR) {
       break;
+}
 
     closesocket(fd);
     fd = INVALID_SOCKET;
@@ -530,16 +533,17 @@ void Xcddb::parseData(const char *buffer)
         }
       }
 
-      if (!found)
+      if (!found) {
         m_strDisk_title = TrimToUTF8(strValue);
+}
     }
     else if (strKeyword == "DYEAR")
       m_strYear = TrimToUTF8(strValue);
     else if (strKeyword== "DGENRE")
       m_strGenre = TrimToUTF8(strValue);
-    else if (StringUtils::StartsWith(strKeyword, "TTITLE"))
+    else if (StringUtils::StartsWith(strKeyword, "TTITLE")) {
       addTitle((strKeyword + "=" + strValue).c_str());
-    else if (strKeyword == "EXTD")
+    } else if (strKeyword == "EXTD")
     {
       std::string strExtd(strValue);
 
@@ -1053,8 +1057,9 @@ bool Xcddb::isCDCached( CCdInfo* pInfo )
 {
   if (cCacheDir.empty())
     return false;
-  if ( pInfo == nullptr )
+  if ( pInfo == nullptr ) {
     return false;
+}
 
   return XFILE::CFile::Exists(GetCacheFile(pInfo->GetCddbDiscId()));
 }

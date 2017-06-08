@@ -79,8 +79,9 @@ void CGUIListItemLayout::Process(CGUIListItem *item, int parentID, unsigned int 
     m_group.SetInvalid();
     m_group.UpdateInfo(fileItem);
     // delete our temporary fileitem
-    if (!item->IsFileItem())
+    if (!item->IsFileItem()) {
       delete fileItem;
+}
   }
 
   // update visibility, and render
@@ -178,10 +179,12 @@ void CGUIListItemLayout::LoadLayout(TiXmlElement *layout, int context, bool focu
     m_condition = g_infoManager.Register(condition, context);
   m_isPlaying.Parse("listitem.isplaying", context);
   // ensure width and height are valid
-  if (!m_width)
+  if (!m_width) {
     m_width = maxWidth;
-  if (!m_height)
+}
+  if (!m_height) {
     m_height = maxHeight;
+}
   m_width = std::max(1.0f, m_width);
   m_height = std::max(1.0f, m_height);
   m_group.SetWidth(m_width);

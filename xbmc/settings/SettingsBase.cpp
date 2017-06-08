@@ -42,8 +42,9 @@ CSettingsBase::~CSettingsBase()
 bool CSettingsBase::Initialize()
 {
   CSingleLock lock(m_critical);
-  if (m_initialized)
+  if (m_initialized) {
     return false;
+}
 
   // register custom setting types
   InitializeSettingTypes();
@@ -56,8 +57,9 @@ bool CSettingsBase::Initialize()
   InitializeConditions();
 
   // load the settings definitions
-  if (!InitializeDefinitions())
+  if (!InitializeDefinitions()) {
     return false;
+}
 
   InitializeVisibility();
   InitializeDefaults();
@@ -89,16 +91,18 @@ bool CSettingsBase::LoadValuesFromXml(const CXBMCTinyXML& xml, bool& updated)
 
 bool CSettingsBase::LoadValuesFromXml(const TiXmlElement* root, bool& updated)
 {
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   return m_settingsManager->Load(root, updated);
 }
 
 bool CSettingsBase::LoadHiddenValuesFromXml(const TiXmlElement* root)
 {
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   std::map<std::string, std::shared_ptr<CSetting>> loadedSettings;
 
@@ -129,8 +133,9 @@ bool CSettingsBase::SaveValuesToXml(CXBMCTinyXML& xml) const
 {
   TiXmlElement rootElement(SETTINGS_XML_ROOT);
   TiXmlNode* xmlRoot = xml.InsertEndChild(rootElement);
-  if (xmlRoot == nullptr)
+  if (xmlRoot == nullptr) {
     return false;
+}
 
   return m_settingsManager->Save(xmlRoot);
 }
@@ -144,8 +149,9 @@ void CSettingsBase::Unload()
 void CSettingsBase::Uninitialize()
 {
   CSingleLock lock(m_critical);
-  if (!m_initialized)
+  if (!m_initialized) {
     return;
+}
 
   // unregister setting option fillers
   UninitializeOptionFillers();
@@ -288,8 +294,9 @@ void CSettingsBase::SetDefaults()
 bool CSettingsBase::InitializeDefinitionsFromXml(const CXBMCTinyXML& xml)
 {
   const TiXmlElement* root = xml.RootElement();
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   return m_settingsManager->Initialize(root);
 }

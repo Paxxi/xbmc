@@ -187,8 +187,9 @@ void CGUIDialogVideoBookmarks::OnPopupMenu(int item)
   // unhighlight the item
   (*m_vecItems)[item]->Select(false);
   
-  if (button == 1)
+  if (button == 1) {
     Delete(item);
+}
 }
 
 void CGUIDialogVideoBookmarks::Delete(int item)
@@ -288,9 +289,9 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
 
     std::string chapterPath = StringUtils::Format("chapter://%s/%i", m_filePath.c_str(), i);
     std::string cachefile = CTextureCache::GetInstance().GetCachedPath(CTextureCache::GetInstance().GetCacheFile(chapterPath)+".jpg");
-    if (XFILE::CFile::Exists(cachefile))
+    if (XFILE::CFile::Exists(cachefile)) {
       item->SetArt("thumb", cachefile);
-    else if (i > m_jobsStarted && CServiceBroker::GetSettings().GetBool(CSettings::SETTING_MYVIDEOS_EXTRACTCHAPTERTHUMBS))
+    } else if (i > m_jobsStarted && CServiceBroker::GetSettings().GetBool(CSettings::SETTING_MYVIDEOS_EXTRACTCHAPTERTHUMBS))
     {
       CFileItem item(m_filePath, false);
       CJob* job = new CThumbExtractor(item, m_filePath, true, chapterPath, pos * 1000, false);
@@ -445,20 +446,22 @@ bool CGUIDialogVideoBookmarks::AddBookmark(CVideoInfoTag* tag)
     {
       bookmark.thumbNailImage.clear();
     }
-    else
+    else {
       CLog::Log(LOGERROR,"CGUIDialogVideoBookmarks: failed to create thumbnail");
+}
 
     g_application.m_pPlayer->RenderCaptureRelease(captureId);
   }
-  else
+  else {
     CLog::Log(LOGERROR,"CGUIDialogVideoBookmarks: failed to create thumbnail 2");
+}
 
   free(pixels);
 
   videoDatabase.Open();
-  if (tag)
+  if (tag) {
     videoDatabase.AddBookMarkForEpisode(*tag, bookmark);
-  else
+  } else
   {
     std::string path = g_application.CurrentFile();
     if (g_application.CurrentFileItem().HasProperty("original_listitem_url") && 

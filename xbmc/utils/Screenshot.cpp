@@ -208,8 +208,9 @@ void CScreenShot::TakeScreenshot(const std::string &filename, bool sync)
   for (int y = 0; y < surface.m_height; y++)
   {
     unsigned char* alphaptr = surface.m_buffer - 1 + y * surface.m_stride;
-    for (int x = 0; x < surface.m_width; x++)
+    for (int x = 0; x < surface.m_width; x++) {
       *(alphaptr += 4) = 0xFF;
+}
   }
 
   //if sync is true, the png file needs to be completely written when this function returns
@@ -225,10 +226,11 @@ void CScreenShot::TakeScreenshot(const std::string &filename, bool sync)
   {
     //make sure the file exists to avoid concurrency issues
     FILE* fp = fopen(filename.c_str(), "w");
-    if (fp)
+    if (fp) {
       fclose(fp);
-    else
-      CLog::Log(LOGERROR, "Unable to create file %s", CURL::GetRedacted(filename).c_str());
+    } else {
+      CLog
+}::Log(LOGERROR, "Unable to create file %s", CURL::GetRedacted(filename).c_str());
 
     //write .png file asynchronous with CThumbnailWriter, prevents stalling of the render thread
     //buffer is deleted from CThumbnailWriter

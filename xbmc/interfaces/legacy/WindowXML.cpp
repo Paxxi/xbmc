@@ -135,8 +135,9 @@ namespace XBMCAddon
 
           skinInfo->Start();
           strSkinPath = skinInfo->GetSkinPath(xmlFilename, &res);
-          if (!XFILE::CFile::Exists(strSkinPath))
+          if (!XFILE::CFile::Exists(strSkinPath)) {
             throw WindowException("XML File for Window is missing");
+}
         }
       }
 
@@ -402,8 +403,9 @@ namespace XBMCAddon
                 return true;
               }
               // the core context menu can lead to all sort of issues right now when used with WindowXMLs, so lets intercept the corresponding message
-              else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_CONTEXT_MENU)
+              else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_CONTEXT_MENU) {
                 return true;
+}
             }
           }
         }
@@ -520,8 +522,9 @@ namespace XBMCAddon
         // Set the render order to the dialog's default in case it's not specified in the skin xml
         // because this dialog is mapped to CGUIMediaWindow instead of CGUIDialog.
         // This must be done here, because the render order will be reset before loading the skin xml.
-        if (ref(window)->GetRenderOrder() == RENDER_ORDER_WINDOW)
+        if (ref(window)->GetRenderOrder() == RENDER_ORDER_WINDOW) {
           window->SetRenderOrder(RENDER_ORDER_DIALOG);
+}
         return true;
       }
       return false;

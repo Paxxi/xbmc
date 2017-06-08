@@ -754,8 +754,9 @@ void CGUIDialogAudioDSPManager::Clear()
 
 void CGUIDialogAudioDSPManager::SaveList()
 {
-  if (!m_bContainsChanges)
+  if (!m_bContainsChanges) {
    return;
+}
 
   /* display the progress dialog */
   CGUIDialogBusy* pDlgBusy = g_windowManager.GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);

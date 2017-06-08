@@ -136,8 +136,9 @@ bool CAESinkSNDIO::ParToAudioFormat(AEAudioFormat& format)
   }
 
   CAEChannelInfo info;
-  for (unsigned int i = 0; i < m_par.pchan; i++)
+  for (unsigned int i = 0; i < m_par.pchan; i++) {
       info += channelMap[i];
+}
   format.m_channelLayout = info;
   format.m_dataFormat = dataFormat;
   format.m_sampleRate = m_par.rate;
@@ -198,11 +199,13 @@ void CAESinkSNDIO::Deinitialize()
 
 void CAESinkSNDIO::Stop()
 {
-  if (!m_hdl)
+  if (!m_hdl) {
     return;
+}
 
-  if (!sio_stop(m_hdl))
+  if (!sio_stop(m_hdl)) {
     CLog::Log(LOGERROR, "CAESinkSNDIO::Stop - Failed");
+}
 
   m_written = m_played = 0;
 }
@@ -234,11 +237,13 @@ unsigned int CAESinkSNDIO::AddPackets(uint8_t **data, unsigned int frames, unsig
 
 void CAESinkSNDIO::Drain()
 {
-  if(!m_hdl)
+  if(!m_hdl) {
     return;
+}
 
-  if (!sio_stop(m_hdl) || !sio_start(m_hdl))
+  if (!sio_stop(m_hdl) || !sio_start(m_hdl)) {
     CLog::Log(LOGERROR, "CAESinkSNDIO::Drain - failed");
+}
 
   m_written = m_played = 0;
 }
@@ -277,13 +282,15 @@ void CAESinkSNDIO::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
     unsigned int maxchan = 0;
     for (unsigned int j = 0; j < SIO_NCHAN; j++)
     {
-      if (conf.pchan & (1 << j))
+      if (conf.pchan & (1 << j)) {
         maxchan = MAX(maxchan, cap.pchan[j]);
+}
     }
 
     maxchan = MIN(maxchan, nitems(channelMap));
-    for (unsigned int j = 0; j < maxchan; j++)
+    for (unsigned int j = 0; j < maxchan; j++) {
       info.m_channels += channelMap[j];
+}
 
     for (unsigned int j = 0; j < SIO_NRATE; j++)
     {

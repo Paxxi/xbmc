@@ -180,20 +180,21 @@ void CURL::Parse(const std::string& strURL1)
      IsProtocol("videodb") ||
      IsProtocol("musicdb") ||
      IsProtocol("androidapp") ||
-     IsProtocol("pvr"))
+     IsProtocol("pvr")) {
     sep = "?";
-  else
+  } else
   if(  IsProtocolEqual(strProtocol2, "http")
     || IsProtocolEqual(strProtocol2, "https")
     || IsProtocolEqual(strProtocol2, "plugin")
     || IsProtocolEqual(strProtocol2, "addons")
-    || IsProtocolEqual(strProtocol2, "rtsp"))
+    || IsProtocolEqual(strProtocol2, "rtsp")) {
     sep = "?;#|";
-  else if(IsProtocolEqual(strProtocol2, "ftp")
-       || IsProtocolEqual(strProtocol2, "ftps"))
+  } else if(IsProtocolEqual(strProtocol2, "ftp")
+       || IsProtocolEqual(strProtocol2, "ftps")) {
     sep = "?;|";
 
-  if(sep)
+  
+}if(sep)
   {
     size_t iOptions = strURL.find_first_of(sep, iPos);
     if (iOptions != std::string::npos)
@@ -503,8 +504,9 @@ std::string CURL::GetWithoutUserDetails(bool redact) const
                         + m_strProtocolOptions.length()
                         + 10;
 
-  if (redact)
+  if (redact) {
     sizeneed += sizeof("USERNAME:PASSWORD@");
+}
 
   strURL.reserve(sizeneed);
 
@@ -528,21 +530,24 @@ std::string CURL::GetWithoutUserDetails(bool redact) const
   {
     std::string strHostName;
 
-    if (URIUtils::HasParentInHostname(*this))
+    if (URIUtils::HasParentInHostname(*this)) {
       strHostName = CURL(m_strHostName).GetWithoutUserDetails();
-    else
+    } else {
       strHostName = m_strHostName;
+}
 
-    if (URIUtils::HasEncodedHostname(*this))
+    if (URIUtils::HasEncodedHostname(*this)) {
       strHostName = Encode(strHostName);
+}
 
     if ( HasPort() )
     {
       protectIPv6(strHostName);
       strURL += strHostName + StringUtils::Format(":%i", m_iPort);
     }
-    else
+    else {
       strURL += strHostName;
+}
 
     strURL += "/";
   }
@@ -597,18 +602,20 @@ std::string CURL::GetWithoutFilename() const
   {
     std::string hostname;
 
-    if( URIUtils::HasEncodedHostname(*this) )
+    if( URIUtils::HasEncodedHostname(*this) ) {
       hostname = Encode(m_strHostName);
-    else
+    } else {
       hostname = m_strHostName;
+}
 
     if (HasPort())
     {
       protectIPv6(hostname);
       strURL += hostname + StringUtils::Format(":%i", m_iPort);
     }
-    else
+    else {
       strURL += hostname;
+}
 
     strURL += "/";
   }
@@ -662,8 +669,8 @@ std::string CURL::Decode(const std::string& strURLData)
   for (unsigned int i = 0; i < strURLData.size(); ++i)
   {
     int kar = (unsigned char)strURLData[i];
-    if (kar == '+') strResult += ' ';
-    else if (kar == '%')
+    if (kar == '+') { strResult += ' ';
+    } else if (kar == '%')
     {
       if (i < strURLData.size() - 2)
       {
@@ -671,9 +678,9 @@ std::string CURL::Decode(const std::string& strURLData)
         strTmp.assign(strURLData.substr(i + 1, 2));
         int dec_num=-1;
         sscanf(strTmp.c_str(), "%x", (unsigned int *)&dec_num);
-        if (dec_num<0 || dec_num>255)
+        if (dec_num<0 || dec_num>255) {
           strResult += kar;
-        else
+        } else
         {
           strResult += (char)dec_num;
           i += 2;
@@ -738,8 +745,9 @@ bool CURL::HasOption(const std::string &key) const
 bool CURL::GetOption(const std::string &key, std::string &value) const
 {
   CVariant valueObj;
-  if (!m_options.GetOption(key, valueObj))
+  if (!m_options.GetOption(key, valueObj)) {
     return false;
+}
 
   value = valueObj.asString();
   return true;
@@ -781,8 +789,9 @@ bool CURL::HasProtocolOption(const std::string &key) const
 bool CURL::GetProtocolOption(const std::string &key, std::string &value) const
 {
   CVariant valueObj;
-  if (!m_protocolOptions.GetOption(key, valueObj))
+  if (!m_protocolOptions.GetOption(key, valueObj)) {
     return false;
+}
   
   value = valueObj.asString();
   return true;

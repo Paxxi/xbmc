@@ -39,8 +39,9 @@ CUtf8Utils::utf8CheckResult CUtf8Utils::checkStrForUtf8(const std::string& str)
     pos += chrLen;
   }
 
-  if (isPlainAscii)
+  if (isPlainAscii) {
     return plainAscii; // only single-byte characters (valid for US-ASCII and for UTF-8)
+}
 
   return utf8string;   // valid UTF-8 with at least one valid UTF-8 multi-byte sequence
 }

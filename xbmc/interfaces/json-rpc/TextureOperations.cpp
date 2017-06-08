@@ -30,8 +30,9 @@ JSONRPC_STATUS CTextureOperations::GetTextures(const std::string &method, ITrans
   CFileItemList listItems;
 
   CTextureDatabase db;
-  if (!db.Open())
+  if (!db.Open()) {
     return InternalError;
+}
 
   CDatabase::Filter dbFilter;
   const CVariant &filter = parameterObject["filter"];
@@ -57,8 +58,9 @@ JSONRPC_STATUS CTextureOperations::GetTextures(const std::string &method, ITrans
 
   // fetch textures from the database
   CVariant items = CVariant(CVariant::VariantTypeArray);
-  if (!db.GetTextures(items, dbFilter))
+  if (!db.GetTextures(items, dbFilter)) {
     return InternalError;
+}
 
   // return only what was asked for, plus textureid
   CVariant prop = parameterObject["properties"];
@@ -97,8 +99,9 @@ JSONRPC_STATUS CTextureOperations::RemoveTexture(const std::string &method, ITra
 {
   int id = (int)parameterObject["textureid"].asInteger();
 
-  if (!CTextureCache::GetInstance().ClearCachedImage(id))
+  if (!CTextureCache::GetInstance().ClearCachedImage(id)) {
     return InvalidParams;
+}
 
   return ACK;
 }

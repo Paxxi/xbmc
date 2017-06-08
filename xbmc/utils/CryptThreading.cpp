@@ -81,8 +81,9 @@ CryptThreadingInitializer::CryptThreadingInitializer()
 #endif
 
   locks = new CCriticalSection*[numlocks];
-  for (int i = 0; i < numlocks; i++)
+  for (int i = 0; i < numlocks; i++) {
     locks[i] = nullptr;
+}
 
 #ifdef HAVE_GCRYPT
 #if GCRYPT_VERSION_NUMBER < 0x010600
@@ -92,8 +93,9 @@ CryptThreadingInitializer::CryptThreadingInitializer()
 #endif
 #endif
 
-  if (!attemptedToSetSSLMTHook)
+  if (!attemptedToSetSSLMTHook) {
     CLog::Log(LOGWARNING, "Could not determine the libcurl security library to set the locking scheme. This may cause problem with multithreaded use of ssl or libraries that depend on it (libcurl).");
+}
   
 }
 

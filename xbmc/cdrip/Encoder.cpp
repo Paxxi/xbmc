@@ -103,20 +103,23 @@ bool CEncoder::FileClose()
 // return total bytes written, or -1 on error
 int CEncoder::FileWrite(const void *pBuffer, uint32_t iBytes)
 {
-  if (!m_file)
+  if (!m_file) {
     return -1;
+}
 
   ssize_t dwBytesWritten = m_file->Write(pBuffer, iBytes);
-  if (dwBytesWritten <= 0)
+  if (dwBytesWritten <= 0) {
     return -1;
+}
 
   return dwBytesWritten;
 }
 
 int64_t CEncoder::FileSeek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_file)
+  if (!m_file) {
     return -1;
+}
   FlushStream();
   return m_file->Seek(iFilePosition, iWhence);
 }

@@ -252,8 +252,9 @@ CArchive& CArchive::operator>>(std::string& str)
   uint32_t iLength = 0;
   *this >> iLength;
 
-  if (iLength > MAX_STRING_SIZE)
+  if (iLength > MAX_STRING_SIZE) {
     throw std::out_of_range("String too large, over 100MB");
+}
 
   auto s = std::unique_ptr<char[]>(new char[iLength]);
   streamin(s.get(), iLength * sizeof(char));
@@ -267,8 +268,9 @@ CArchive& CArchive::operator>>(std::wstring& wstr)
   uint32_t iLength = 0;
   *this >> iLength;
 
-  if (iLength > MAX_STRING_SIZE)
+  if (iLength > MAX_STRING_SIZE) {
     throw std::out_of_range("String too large, over 100MB");
+}
 
   auto p = std::unique_ptr<wchar_t[]>(new wchar_t[iLength]);
   streamin(p.get(), iLength * sizeof(wchar_t));

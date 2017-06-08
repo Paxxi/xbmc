@@ -101,8 +101,9 @@ NODE_TYPE CVideoDatabaseDirectory::GetDirectoryParentType(const std::string& str
 
   CDirectoryNode* pParentNode=pNode->GetParent();
 
-  if (!pParentNode)
+  if (!pParentNode) {
     return NODE_TYPE_NONE;
+}
 
   return pParentNode->GetChildType();
 }
@@ -132,8 +133,9 @@ void CVideoDatabaseDirectory::ClearDirectoryCache(const std::string& strDirector
 
 bool CVideoDatabaseDirectory::IsAllItem(const std::string& strDirectory)
 {
-  if (StringUtils::EndsWith(strDirectory, "/-1/"))
+  if (StringUtils::EndsWith(strDirectory, "/-1/")) {
     return true;
+}
   return false;
 }
 
@@ -151,8 +153,9 @@ bool CVideoDatabaseDirectory::GetLabel(const std::string& strDirectory, std::str
   CDirectoryNode::GetDatabaseInfo(path, params);
 
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return false;
+}
 
   // get genre
   if (params.GetGenreId() != -1)

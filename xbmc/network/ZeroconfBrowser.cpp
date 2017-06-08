@@ -72,8 +72,9 @@ CZeroconfBrowser::~CZeroconfBrowser()
 void CZeroconfBrowser::Start()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(m_started)
+  if(m_started) {
     return;
+}
   m_started = true;
   for(tServices::const_iterator it = m_services.begin(); it != m_services.end(); ++it)
     doAddServiceType(*it);
@@ -82,8 +83,9 @@ void CZeroconfBrowser::Start()
 void CZeroconfBrowser::Stop()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!m_started)
+  if(!m_started) {
     return;
+}
   for(tServices::iterator it = m_services.begin(); it != m_services.end(); ++it)
     RemoveServiceType(*it);
   m_started = false;
@@ -110,8 +112,9 @@ bool CZeroconfBrowser::RemoveServiceType(const std::string& fcr_service_type)
   tServices::iterator ret = m_services.find(fcr_service_type);
   if(ret == m_services.end())
     return false;
-  if(m_started)
+  if(m_started) {
     return doRemoveServiceType(fcr_service_type);
+}
   //not yet started, so its just queued
   return true;
 }

@@ -127,8 +127,9 @@ bool CGUIDialogMusicInfo::OnMessage(CGUIMessage& message)
           CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), iControl);
           g_windowManager.SendMessage(msg);
           int iItem = msg.GetParam1();
-          if (iItem < 0 || iItem >= static_cast<int>(m_albumSongs->Size()))
+          if (iItem < 0 || iItem >= static_cast<int>(m_albumSongs->Size())) {
             break;
+}
           CFileItemPtr item = m_albumSongs->Get(iItem);
           OnSearch(item.get());
           return true;
@@ -314,10 +315,11 @@ void CGUIDialogMusicInfo::OnInitWindow()
   SET_CONTROL_LABEL(CONTROL_BTN_GET_THUMB, 13405);
   SET_CONTROL_LABEL(CONTROL_BTN_GET_FANART, 20413);
 
-  if (m_bArtistInfo)
+  if (m_bArtistInfo) {
     SET_CONTROL_HIDDEN(CONTROL_USERRATING);
-  else
+  } else {
     SET_CONTROL_HIDDEN(CONTROL_BTN_GET_FANART);
+}
 
   CGUIDialog::OnInitWindow();
 }
@@ -388,8 +390,9 @@ void CGUIDialogMusicInfo::OnGetThumb()
     if (database.GetArtistPath(m_artist.idArtist,strArtistPath))
       localThumb = URIUtils::AddFileToFolder(strArtistPath, "folder.jpg");
   }
-  else
-    localThumb = m_albumItem->GetUserMusicThumb();
+  else {
+    localThumb 
+}= m_albumItem->GetUserMusicThumb();
   if (CFile::Exists(localThumb))
   {
     CFileItemPtr item(new CFileItem("thumb://Local", false));
@@ -607,8 +610,9 @@ void CGUIDialogMusicInfo::OnSetUserrating() const
     dialog->Open();
 
     int iItem = dialog->GetSelectedItem();
-    if (iItem < 0)
+    if (iItem < 0) {
       return;
+}
 
     SetUserrating(iItem);
   }

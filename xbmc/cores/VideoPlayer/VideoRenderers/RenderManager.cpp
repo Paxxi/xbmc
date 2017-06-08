@@ -164,17 +164,19 @@ CRenderManager::~CRenderManager()
 void CRenderManager::GetVideoRect(CRect &source, CRect &dest, CRect &view)
 {
   CSingleLock lock(m_statelock);
-  if (m_pRenderer)
+  if (m_pRenderer) {
     m_pRenderer->GetVideoRect(source, dest, view);
+}
 }
 
 float CRenderManager::GetAspectRatio()
 {
   CSingleLock lock(m_statelock);
-  if (m_pRenderer)
+  if (m_pRenderer) {
     return m_pRenderer->GetAspectRatio();
-  else
+  } else {
     return 1.0f;
+}
 }
 
 bool CRenderManager::Configure(VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers)
@@ -278,8 +280,9 @@ bool CRenderManager::Configure()
   if(!m_pRenderer)
   {
     CreateRenderer();
-    if (!m_pRenderer)
+    if (!m_pRenderer) {
       return false;
+}
   }
 
   bool result = m_pRenderer->Configure(m_width, m_height, m_dwidth, m_dheight, m_fps, m_flags, m_format, m_hwPic, m_orientation);
@@ -327,8 +330,9 @@ bool CRenderManager::Configure()
 
     CLog::Log(LOGDEBUG, "CRenderManager::Configure - %d", m_QueueSize);
   }
-  else
+  else {
     m_renderState = STATE_UNCONFIGURED;
+}
 
   m_stateEvent.Set();
   m_playerPort->VideoParamsChange();
@@ -338,30 +342,34 @@ bool CRenderManager::Configure()
 bool CRenderManager::IsConfigured() const
 {
   CSingleLock lock(m_statelock);
-  if (m_renderState == STATE_CONFIGURED)
+  if (m_renderState == STATE_CONFIGURED) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 void CRenderManager::FrameWait(int ms)
 {
   XbmcThreads::EndTime timeout(ms);
   CSingleLock lock(m_presentlock);
-  while(m_presentstep == PRESENT_IDLE && !timeout.IsTimePast())
+  while(m_presentstep == PRESENT_IDLE && !timeout.IsTimePast()) {
     m_presentevent.wait(lock, timeout.MillisLeft());
+}
 }
 
 bool CRenderManager::IsPresenting()
 {
-  if (!IsConfigured())
+  if (!IsConfigured()) {
     return false;
+}
 
   CSingleLock lock(m_presentlock);
-  if (!m_presentTimer.IsTimePast())
+  if (!m_presentTimer.IsTimePast()) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 void CRenderManager::FrameMove()
@@ -371,13 +379,14 @@ void CRenderManager::FrameMove()
   {
     CSingleLock lock(m_statelock);
 
-    if (m_renderState == STATE_UNCONFIGURED)
+    if (m_renderState == STATE_UNCONFIGURED) {
       return;
-    else if (m_renderState == STATE_CONFIGURING)
+    } else if (m_renderState == STATE_CONFIGURING)
     {
       lock.Leave();
-      if (!Configure())
+      if (!Configure()) {
         return;
+}
 
       FrameWait(50);
 
@@ -397,8 +406,9 @@ void CRenderManager::FrameMove()
       m_presentstep = PRESENT_IDLE;
     }
 
-    if (m_presentstep == PRESENT_READY)
+    if (m_presentstep == PRESENT_READY) {
       PrepareNextRender();
+}
 
     if (m_presentstep == PRESENT_FLIP)
     {
@@ -475,8 +485,9 @@ void CRenderManager::UnInit()
 
 bool CRenderManager::Flush()
 {
-  if (!m_pRenderer)
+  if (!m_pRenderer) {
     return true;
+}
 
   if (g_application.IsCurrentThread())
   {
@@ -594,10 +605,11 @@ void CRenderManager::CreateRenderer()
     if (!m_pRenderer)
       m_pRenderer = new CMMALRenderer;
 #endif
-    if (m_pRenderer)
+    if (m_pRenderer) {
       m_pRenderer->PreInit();
-    else
+    } else {
       CLog::Log(LOGERROR, "RenderManager::CreateRenderer: failed to create renderer");
+}
   }
 }
 
@@ -678,8 +690,9 @@ bool CRenderManager::RenderCaptureGetPixels(unsigned int captureId, unsigned int
   m_captureWaitCounter++;
 
   {
-    if (!millis)
+    if (!millis) {
       millis = 1000;
+}
     
     CSingleExit exitlock(m_captCritSect);
     if (!it->second->GetEvent().WaitMSec(millis))
@@ -704,8 +717,9 @@ bool CRenderManager::RenderCaptureGetPixels(unsigned int captureId, unsigned int
 void CRenderManager::ManageCaptures()
 {
   //no captures, return here so we don't do an unnecessary lock
-  if (!m_hasCaptures)
+  if (!m_hasCaptures) {
     return;
+}
 
   CSingleLock lock(m_captCritSect);
 
@@ -782,8 +796,9 @@ void CRenderManager::RemoveCaptures()
 void CRenderManager::SetViewMode(int iViewMode)
 {
   CSingleLock lock(m_statelock);
-  if (m_pRenderer)
+  if (m_pRenderer) {
     m_pRenderer->SetViewMode(iViewMode);
+}
   m_playerPort->VideoParamsChange();
 }
 
@@ -792,11 +807,13 @@ void CRenderManager::FlipPage(volatile std::atomic_bool& bStop, double pts,
 {
   { CSingleLock lock(m_statelock);
 
-    if (bStop)
+    if (bStop) {
       return;
+}
 
-    if (!m_pRenderer)
+    if (!m_pRenderer) {
       return;
+}
   }
 
   EPRESENTMETHOD presentmethod;
@@ -810,22 +827,23 @@ void CRenderManager::FlipPage(volatile std::atomic_bool& bStop, double pts,
   }
   else
   {
-    if (sync == FS_NONE)
+    if (sync == FS_NONE) {
       presentmethod = PRESENT_METHOD_SINGLE;
-    else
+    } else
     {
-      if (interlacemethod == VS_INTERLACEMETHOD_RENDER_BLEND)
+      if (interlacemethod == VS_INTERLACEMETHOD_RENDER_BLEND) {
         presentmethod = PRESENT_METHOD_BLEND;
-      else if (interlacemethod == VS_INTERLACEMETHOD_RENDER_WEAVE)
+      } else if (interlacemethod == VS_INTERLACEMETHOD_RENDER_WEAVE) {
         presentmethod = PRESENT_METHOD_WEAVE;
-      else if (interlacemethod == VS_INTERLACEMETHOD_RENDER_BOB)
+      } else if (interlacemethod == VS_INTERLACEMETHOD_RENDER_BOB) {
         presentmethod = PRESENT_METHOD_BOB;
-      else
+      } else
       {
-        if (!m_pRenderer->WantsDoublePass())
+        if (!m_pRenderer->WantsDoublePass()) {
           presentmethod = PRESENT_METHOD_SINGLE;
-        else
+        } else {
           presentmethod = PRESENT_METHOD_BOB;
+}
       }
     }
   }
@@ -876,8 +894,9 @@ RESOLUTION CRenderManager::GetResolution()
   RESOLUTION res = g_graphicsContext.GetVideoResolution();
 
   CSingleLock lock(m_statelock);
-  if (m_renderState == STATE_UNCONFIGURED)
+  if (m_renderState == STATE_UNCONFIGURED) {
     return res;
+}
 
   if (CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) != ADJUST_REFRESHRATE_OFF)
     res = CResolutionUtils::ChooseBestResolution(m_fps, m_width, CONF_FLAGS_STEREO_MODE_MASK(m_flags) != 0);
@@ -891,31 +910,35 @@ void CRenderManager::Render(bool clear, DWORD flags, DWORD alpha, bool gui)
 
   {
     CSingleLock lock(m_statelock);
-    if (m_renderState != STATE_CONFIGURED)
+    if (m_renderState != STATE_CONFIGURED) {
       return;
+}
   }
 
-  if (!gui && m_pRenderer->IsGuiLayer())
+  if (!gui && m_pRenderer->IsGuiLayer()) {
     return;
+}
 
   if (!gui || m_pRenderer->IsGuiLayer())
   {
     SPresent& m = m_Queue[m_presentsource];
 
-    if( m.presentmethod == PRESENT_METHOD_BOB )
+    if( m.presentmethod == PRESENT_METHOD_BOB ) {
       PresentFields(clear, flags, alpha);
-    else if( m.presentmethod == PRESENT_METHOD_WEAVE )
+    } else if( m.presentmethod == PRESENT_METHOD_WEAVE ) {
       PresentFields(clear, flags | RENDER_FLAG_WEAVE, alpha);
-    else if( m.presentmethod == PRESENT_METHOD_BLEND )
+    } else if( m.presentmethod == PRESENT_METHOD_BLEND ) {
       PresentBlend(clear, flags, alpha);
-    else
+    } else {
       PresentSingle(clear, flags, alpha);
+}
   }
 
   if (gui)
   {
-    if (!m_pRenderer->IsGuiLayer())
+    if (!m_pRenderer->IsGuiLayer()) {
       m_pRenderer->Update();
+}
 
     m_renderedOverlay = m_overlays.HasOverlay(m_presentsource);
     CRect src, dst, view;
@@ -956,13 +979,15 @@ void CRenderManager::Render(bool clear, DWORD flags, DWORD alpha, bool gui)
     if (m_presentstep == PRESENT_FRAME)
     {
       if (m.presentmethod == PRESENT_METHOD_BOB ||
-          m.presentmethod == PRESENT_METHOD_WEAVE)
+          m.presentmethod == PRESENT_METHOD_WEAVE) {
         m_presentstep = PRESENT_FRAME2;
-      else
+      } else {
         m_presentstep = PRESENT_IDLE;
+}
     }
-    else if (m_presentstep == PRESENT_FRAME2)
+    else if (m_presentstep == PRESENT_FRAME2) {
       m_presentstep = PRESENT_IDLE;
+}
 
     if (m_presentstep == PRESENT_IDLE)
     {
@@ -978,15 +1003,17 @@ bool CRenderManager::IsGuiLayer()
 {
   { CSingleLock lock(m_statelock);
 
-    if (!m_pRenderer)
+    if (!m_pRenderer) {
       return false;
+}
 
     if ((m_pRenderer->IsGuiLayer() && IsPresenting()) ||
         m_renderedOverlay || m_overlays.HasOverlay(m_presentsource))
       return true;
 
-    if (m_renderDebug && m_debugTimer.IsTimePast())
+    if (m_renderDebug && m_debugTimer.IsTimePast()) {
       return true;
+}
   }
   return false;
 }
@@ -995,11 +1022,13 @@ bool CRenderManager::IsVideoLayer()
 {
   { CSingleLock lock(m_statelock);
 
-    if (!m_pRenderer)
+    if (!m_pRenderer) {
       return false;
+}
 
-    if (!m_pRenderer->IsGuiLayer())
+    if (!m_pRenderer->IsGuiLayer()) {
       return true;
+}
   }
   return false;
 }
@@ -1009,12 +1038,13 @@ void CRenderManager::PresentSingle(bool clear, DWORD flags, DWORD alpha)
 {
   SPresent& m = m_Queue[m_presentsource];
 
-  if (m.presentfield == FS_BOT)
+  if (m.presentfield == FS_BOT) {
     m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_BOT, alpha);
-  else if (m.presentfield == FS_TOP)
+  } else if (m.presentfield == FS_TOP) {
     m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_TOP, alpha);
-  else
+  } else {
     m_pRenderer->RenderUpdate(clear, flags, alpha);
+}
 }
 
 /* new simpler method of handling interlaced material, *
@@ -1025,17 +1055,19 @@ void CRenderManager::PresentFields(bool clear, DWORD flags, DWORD alpha)
 
   if(m_presentstep == PRESENT_FRAME)
   {
-    if( m.presentfield == FS_BOT)
+    if( m.presentfield == FS_BOT) {
       m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_BOT | RENDER_FLAG_FIELD0, alpha);
-    else
+    } else {
       m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_TOP | RENDER_FLAG_FIELD0, alpha);
+}
   }
   else
   {
-    if( m.presentfield == FS_TOP)
+    if( m.presentfield == FS_TOP) {
       m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_BOT | RENDER_FLAG_FIELD1, alpha);
-    else
+    } else {
       m_pRenderer->RenderUpdate(clear, flags | RENDER_FLAG_TOP | RENDER_FLAG_FIELD1, alpha);
+}
   }
 }
 
@@ -1127,12 +1159,14 @@ int CRenderManager::AddVideoPicture(VideoPicture& pic)
   }
 
   CSingleLock lock(m_datalock);
-  if (!m_pRenderer)
+  if (!m_pRenderer) {
     return -1;
+}
 
   YV12Image image;
-  if (m_pRenderer->GetImage(&image, index) < 0)
+  if (m_pRenderer->GetImage(&image, index) < 0) {
     return -1;
+}
 
   if(pic.format == RENDER_FMT_VDPAU
   || pic.format == RENDER_FMT_CVBREF
@@ -1182,19 +1216,21 @@ void CRenderManager::AddOverlay(CDVDOverlay* o, double pts)
 bool CRenderManager::Supports(ERENDERFEATURE feature)
 {
   CSingleLock lock(m_statelock);
-  if (m_pRenderer)
+  if (m_pRenderer) {
     return m_pRenderer->Supports(feature);
-  else
+  } else {
     return false;
+}
 }
 
 bool CRenderManager::Supports(ESCALINGMETHOD method)
 {
   CSingleLock lock(m_statelock);
-  if (m_pRenderer)
+  if (m_pRenderer) {
     return m_pRenderer->Supports(method);
-  else
+  } else {
     return false;
+}
 }
 
 int CRenderManager::WaitForBuffer(volatile std::atomic_bool&bStop, int timeout)
@@ -1217,8 +1253,9 @@ int CRenderManager::WaitForBuffer(volatile std::atomic_bool&bStop, int timeout)
       presenttime = clock + 0.02;
 
     int sleeptime = static_cast<int>((presenttime - clock) * 1000);
-    if (sleeptime < 0)
+    if (sleeptime < 0) {
       sleeptime = 0;
+}
     sleeptime = std::min(sleeptime, 20);
     m_presentevent.wait(lock, sleeptime);
     DiscardBuffer();
@@ -1273,8 +1310,9 @@ void CRenderManager::PrepareNextRender()
   double renderPts = frameOnScreen + totalLatency;
 
   double nextFramePts = m_Queue[m_queued.front()].pts;
-  if (m_dvdClock.GetClockSpeed() < 0)
+  if (m_dvdClock.GetClockSpeed() < 0) {
     nextFramePts = renderPts;
+}
 
   if (m_clockSync.m_enabled)
   {
@@ -1324,10 +1362,11 @@ void CRenderManager::PrepareNextRender()
     }
 
     int lateframes = static_cast<int>((renderPts - m_Queue[idx].pts) * m_fps / DVD_TIME_BASE);
-    if (lateframes)
+    if (lateframes) {
       m_lateframes += lateframes;
-    else
+    } else {
       m_lateframes = 0;
+}
     
     m_presentstep = PRESENT_FLIP;
     m_discard.push_back(m_presentsource);
@@ -1347,8 +1386,9 @@ void CRenderManager::DiscardBuffer()
   while(!m_queued.empty())
     requeue(m_discard, m_queued);
 
-  if(m_presentstep == PRESENT_READY)
+  if(m_presentstep == PRESENT_READY) {
     m_presentstep = PRESENT_IDLE;
+}
   m_presentevent.notifyAll();
 }
 

@@ -146,8 +146,9 @@ void CRenderer::ReleaseUnused()
       delete it->second;
       it = m_textureCache.erase(it);
     }
-    else
-      ++it;
+    else {
+      ++
+}it;
   }
 }
 
@@ -164,8 +165,9 @@ void CRenderer::Render(int idx)
     if(it->overlay_dvd)
       o = Convert(it->overlay_dvd, it->pts);
 
-    if(!o)
+    if(!o) {
       continue;
+}
  
     render.push_back(o);
   }
@@ -345,9 +347,9 @@ COverlay* CRenderer::Convert(CDVDOverlaySSA* o, double pts)
   // position used to call ass_set_line_position, it's vertical line position of subtitles in percent.
   // value is 0-100: 0 = on the bottom (default), 100 = on top.
   if(subalign == SUBTITLE_ALIGN_TOP_INSIDE
-  || subalign == SUBTITLE_ALIGN_TOP_OUTSIDE)
+  || subalign == SUBTITLE_ALIGN_TOP_OUTSIDE) {
     position = 100.0;
-  else if (subalign == SUBTITLE_ALIGN_MANUAL && g_advancedSettings.m_videoAssFixedWorks)
+  } else if (subalign == SUBTITLE_ALIGN_MANUAL && g_advancedSettings.m_videoAssFixedWorks)
   {
     RESOLUTION_INFO res;
     res = g_graphicsContext.GetResInfo(g_graphicsContext.GetVideoResolution());
@@ -393,9 +395,9 @@ COverlay* CRenderer::Convert(CDVDOverlay* o, double pts)
 {
   COverlay* r = nullptr;
 
-  if(o->IsOverlayType(DVDOVERLAY_TYPE_SSA))
+  if(o->IsOverlayType(DVDOVERLAY_TYPE_SSA)) {
     r = Convert((CDVDOverlaySSA*)o, pts);
-  else if(o->m_textureid)
+  } else if(o->m_textureid)
   {
     std::map<unsigned int, COverlay*>::iterator it = m_textureCache.find(o->m_textureid);
     if (it != m_textureCache.end())
@@ -408,10 +410,11 @@ COverlay* CRenderer::Convert(CDVDOverlay* o, double pts)
   }
 
 #if defined(HAS_GL) || defined(HAS_GLES)
-  if (o->IsOverlayType(DVDOVERLAY_TYPE_IMAGE))
+  if (o->IsOverlayType(DVDOVERLAY_TYPE_IMAGE)) {
     r = new COverlayTextureGL((CDVDOverlayImage*)o);
-  else if(o->IsOverlayType(DVDOVERLAY_TYPE_SPU))
+  } else if(o->IsOverlayType(DVDOVERLAY_TYPE_SPU)) {
     r = new COverlayTextureGL((CDVDOverlaySpu*)o);
+}
 #elif defined(HAS_DX)
   if (o->IsOverlayType(DVDOVERLAY_TYPE_IMAGE))
     r = new COverlayImageDX((CDVDOverlayImage*)o);
@@ -419,8 +422,9 @@ COverlay* CRenderer::Convert(CDVDOverlay* o, double pts)
     r = new COverlayImageDX((CDVDOverlaySpu*)o);
 #endif
 
-  if(!r && o->IsOverlayType(DVDOVERLAY_TYPE_TEXT))
+  if(!r && o->IsOverlayType(DVDOVERLAY_TYPE_TEXT)) {
     r = new COverlayText((CDVDOverlayText*)o);
+}
 
   m_textureCache[m_textureid] = r;
   o->m_textureid = m_textureid;

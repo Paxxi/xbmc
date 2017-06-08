@@ -89,8 +89,9 @@ void CGUIFadeLabelControl::Process(unsigned int currentTime, CDirtyRegionList &d
     m_textLayout.GetTextExtent(width, height);
     float spaceWidth = m_label.font->GetCharWidth(L' ');
     unsigned int numSpaces = (unsigned int)(m_width / spaceWidth) + 1;
-    if (width < m_width) // append spaces for scrolling
+    if (width < m_width) { // append spaces for scrolling
       numSpaces += (unsigned int)((m_width - width) / spaceWidth) + 1;
+}
     m_shortText = (width + m_label.offsetX) < m_width;
     m_scrollInfo.suffix.assign(numSpaces, ' ');
     if (m_resetOnLabelChange)
@@ -118,8 +119,9 @@ void CGUIFadeLabelControl::Process(unsigned int currentTime, CDirtyRegionList &d
         moveToNextLabel = true;
       }
     }
-    else if (m_scrollInfo.pixelPos > m_scrollInfo.m_textWidth)
+    else if (m_scrollInfo.pixelPos > m_scrollInfo.m_textWidth) {
       moveToNextLabel = true;
+}
 
     if(m_scrollInfo.pixelSpeed || m_fadeAnim.GetState() == ANIM_STATE_IN_PROCESS)
       MarkDirtyRegion();
@@ -199,8 +201,9 @@ void CGUIFadeLabelControl::Render()
       posX = m_posX + m_width;
     m_textLayout.Render(posX, posY, 0, m_label.textColor, m_label.shadowColor, m_label.align, m_width);
   }
-  else
-    m_textLayout.RenderScrolling(m_posX, posY, 0, m_label.textColor, m_label.shadowColor, (m_label.align & ~3), m_width, m_scrollInfo);
+  else {
+    m_textLayout
+}.RenderScrolling(m_posX, posY, 0, m_label.textColor, m_label.shadowColor, (m_label.align & ~3), m_width, m_scrollInfo);
   g_graphicsContext.RemoveTransform();
   CGUIControl::Render();
 }

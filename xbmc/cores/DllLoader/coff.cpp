@@ -106,15 +106,18 @@ CoffLoader::~CoffLoader()
 // already loaded into memory
 int CoffLoader::ParseHeaders(void* hModule)
 {
-  if (strncmp((char*)hModule, "MZ", 2) != 0)
+  if (strncmp((char*)hModule, "MZ", 2) != 0) {
     return 0;
+}
 
   int* Offset = (int*)((char*)hModule+0x3c);
-  if (*Offset <= 0)
+  if (*Offset <= 0) {
     return 0;
+}
 
-  if (strncmp((char*)hModule+*Offset, "PE\0\0", 4) != 0)
+  if (strncmp((char*)hModule+*Offset, "PE\0\0", 4) != 0) {
     return 0;
+}
 
   FileHeaderOffset = *Offset + 4;
 
@@ -129,15 +132,17 @@ int CoffLoader::ParseHeaders(void* hModule)
   Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
   SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
-  if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386)
+  if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386) {
     return 0;
+}
 
 #ifdef DUMPING_DATA
   PrintFileHeader(CoffFileHeader);
 #endif
 
-  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) //not an image file, object file maybe
+  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) { //not an image file, object file maybe
     return 0;
+}
 
   // process Option Header
   if (OptionHeader->Magic == OPTMAGIC_PE32P)
@@ -179,29 +184,35 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   char Sig[4];
   rewind(fp);
   memset(Sig, 0, sizeof(Sig));
-  if (!fread(Sig, 1, 2, fp) || strncmp(Sig, "MZ", 2) != 0)
+  if (!fread(Sig, 1, 2, fp) || strncmp(Sig, "MZ", 2) != 0) {
     return 0;
+}
 
-  if (fseek(fp, 0x3c, SEEK_SET) != 0)
+  if (fseek(fp, 0x3c, SEEK_SET) != 0) {
     return 0;
+}
   
   int Offset = 0;
-  if (!fread(&Offset, sizeof(int), 1, fp) || (Offset <= 0))
+  if (!fread(&Offset, sizeof(int), 1, fp) || (Offset <= 0)) {
     return 0;
+}
 
-  if (fseek(fp, Offset, SEEK_SET) != 0)
+  if (fseek(fp, Offset, SEEK_SET) != 0) {
     return 0;
+}
 
   memset(Sig, 0, sizeof(Sig));
-  if (!fread(Sig, 1, 4, fp) || strncmp(Sig, "PE\0\0", 4) != 0)
+  if (!fread(Sig, 1, 4, fp) || strncmp(Sig, "PE\0\0", 4) != 0) {
     return 0;
+}
 
   Offset += 4;
   FileHeaderOffset = Offset;
 
   // Load and process Header
-  if (fseek(fp, FileHeaderOffset + sizeof(COFF_FileHeader_t) + OPTHDR_SIZE, SEEK_SET)) //skip to winows headers
+  if (fseek(fp, FileHeaderOffset + sizeof(COFF_FileHeader_t) + OPTHDR_SIZE, SEEK_SET)) { //skip to winows headers
     return 0;
+}
 
   WindowsHeader_t tempWindowsHeader;
   size_t readcount = fread(&tempWindowsHeader, 1, WINHDR_SIZE, fp);
@@ -216,8 +227,9 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   if (hModule == NULL)
     hModule = VirtualAlloc(GetCurrentProcess(), tempWindowsHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 #endif
-  if (hModule == nullptr)
+  if (hModule == nullptr) {
     return 0;   //memory allocation fails
+}
 
   rewind(fp);
   readcount = fread(hModule, 1, tempWindowsHeader.SizeOfHeaders, fp);
@@ -235,15 +247,17 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
   SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
-  if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386)
+  if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386) {
     return 0;
+}
 
 #ifdef DUMPING_DATA
   PrintFileHeader(CoffFileHeader);
 #endif
 
-  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) //not an image file, object file maybe
+  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) { //not an image file, object file maybe
     return 0;
+}
 
   // process Option Header
   if (OptionHeader->Magic == OPTMAGIC_PE32P)
@@ -282,14 +296,17 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
 int CoffLoader::LoadSymTable(FILE *fp)
 {
   int Offset = ftell(fp);
-  if (Offset < 0)
+  if (Offset < 0) {
     return 0;
+}
 
-  if ( CoffFileHeader->PointerToSymbolTable == 0 )
+  if ( CoffFileHeader->PointerToSymbolTable == 0 ) {
     return 1;
+}
 
-  if (fseek(fp, CoffFileHeader->PointerToSymbolTable /* + CoffBeginOffset*/, SEEK_SET) != 0)
+  if (fseek(fp, CoffFileHeader->PointerToSymbolTable /* + CoffBeginOffset*/, SEEK_SET) != 0) {
     return 0;
+}
 
   auto tmp = new SymbolTable_t[CoffFileHeader->NumberOfSymbols];
   if (!tmp)
@@ -304,8 +321,9 @@ int CoffLoader::LoadSymTable(FILE *fp)
   }
   NumberOfSymbols = CoffFileHeader->NumberOfSymbols;
   SymTable = tmp;
-  if (fseek(fp, Offset, SEEK_SET) != 0)
+  if (fseek(fp, Offset, SEEK_SET) != 0) {
     return 0;
+}
   return 1;
 }
 
@@ -315,19 +333,23 @@ int CoffLoader::LoadStringTable(FILE *fp)
   char *tmp = nullptr;
   
   int Offset = ftell(fp);
-  if (Offset < 0)
+  if (Offset < 0) {
     return 0;
+}
 
-  if ( CoffFileHeader->PointerToSymbolTable == 0 )
+  if ( CoffFileHeader->PointerToSymbolTable == 0 ) {
     return 1;
+}
 
   if (fseek(fp, CoffFileHeader->PointerToSymbolTable +
         CoffFileHeader->NumberOfSymbols * sizeof(SymbolTable_t),
-        SEEK_SET) != 0)
+        SEEK_SET) != 0) {
     return 0;
+}
 
-  if (!fread(&StringTableSize, 1, sizeof(int), fp))
+  if (!fread(&StringTableSize, 1, sizeof(int), fp)) {
     return 0;
+}
   StringTableSize -= 4;
   if (StringTableSize != 0)
   {
@@ -345,8 +367,9 @@ int CoffLoader::LoadStringTable(FILE *fp)
   }
   SizeOfStringTable = StringTableSize;
   StringTable = tmp;
-  if (fseek(fp, Offset, SEEK_SET) != 0)
+  if (fseek(fp, Offset, SEEK_SET) != 0) {
     return 0;
+}
   return 1;
 }
 
@@ -355,8 +378,9 @@ int CoffLoader::LoadSections(FILE *fp)
   NumOfSections = CoffFileHeader->NumberOfSections;
 
   SectionData = new char * [NumOfSections];
-  if ( !SectionData )
+  if ( !SectionData ) {
     return 0;
+}
 
   // Bobbin007: for debug dlls this check always fails
 
@@ -377,11 +401,13 @@ int CoffLoader::LoadSections(FILE *fp)
     SectionHeader_t *ScnHdr = (SectionHeader_t *)(SectionHeader + SctnCnt);
     SectionData[SctnCnt] = ((char*)hModule + ScnHdr->VirtualAddress);
 
-    if (fseek(fp, ScnHdr->PtrToRawData, SEEK_SET) != 0)
+    if (fseek(fp, ScnHdr->PtrToRawData, SEEK_SET) != 0) {
       return 0;
+}
 
-    if (!fread(SectionData[SctnCnt], 1, ScnHdr->SizeOfRawData, fp))
+    if (!fread(SectionData[SctnCnt], 1, ScnHdr->SizeOfRawData, fp)) {
       return 0;
+}
 
 #ifdef DUMPING_DATA
     //debug blocks
@@ -426,16 +452,18 @@ int CoffLoader::RVA2Section(unsigned long RVA)
       {
         if ( RVA < SectionHeader[i + 1].VirtualAddress )
         {
-          if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA )
+          if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA ) {
             printf("Warning! Address outside of Section: %lx!\n", RVA);
+}
           //                    else
           return i;
         }
       }
       else
       {
-        if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA )
+        if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA ) {
           printf("Warning! Address outside of Section: %lx!\n", RVA);
+}
         //                else
         return i;
       }
@@ -463,8 +491,9 @@ unsigned long CoffLoader::Data2RVA(void* address)
 {
   for ( int i = 0; i < CoffFileHeader->NumberOfSections; i++)
   {
-    if(address >= SectionData[i] && address < SectionData[i] + SectionHeader[i].VirtualSize)
+    if(address >= SectionData[i] && address < SectionData[i] + SectionHeader[i].VirtualSize) {
       return (unsigned long)address - (unsigned long)SectionData[i] + SectionHeader[i].VirtualAddress;
+}
   }
 
   // Section wasn't found, so use relative to main load of dll
@@ -475,8 +504,9 @@ char *CoffLoader::GetStringTblIndex(int index)
 {
   char *table = StringTable;
 
-  while (index--)
+  while (index--) {
     table += strlen(table) + 1;
+}
   return table;
 }
 
@@ -537,86 +567,117 @@ void CoffLoader::PrintSymbolTable()
     printf("%03X ", SymIndex);
     printf("%08lX ", SymTable[SymIndex].Value);
 
-    if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_ABSOLUTE)
+    if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_ABSOLUTE) {
       printf("ABS     ");
-    else if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_DEBUG)
+    } else if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_DEBUG) {
       printf("DEBUG   ");
-    else if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_UNDEFINED)
+    } else if (SymTable[SymIndex].SectionNumber == IMAGE_SYM_UNDEFINED) {
       printf("UNDEF   ");
-    else
+    } else
     {
       printf("SECT%d ", SymTable[SymIndex].SectionNumber);
-      if (SymTable[SymIndex].SectionNumber < 10)
+      if (SymTable[SymIndex].SectionNumber < 10) {
         printf(" ");
-      if (SymTable[SymIndex].SectionNumber < 100)
+}
+      if (SymTable[SymIndex].SectionNumber < 100) {
         printf(" ");
+}
     }
 
-    if (SymTable[SymIndex].Type == 0)
+    if (SymTable[SymIndex].Type == 0) {
       printf("notype       ");
-    else
+    } else
     {
       printf("%X         ", SymTable[SymIndex].Type);
-      if (SymTable[SymIndex].Type < 0x10)
+      if (SymTable[SymIndex].Type < 0x10) {
         printf(" ");
-      if (SymTable[SymIndex].Type < 0x100)
+}
+      if (SymTable[SymIndex].Type < 0x100) {
         printf(" ");
-      if (SymTable[SymIndex].Type < 0x1000)
+}
+      if (SymTable[SymIndex].Type < 0x1000) {
         printf(" ");
+}
     }
 
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_END_OF_FUNCTION)
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_END_OF_FUNCTION) {
       printf("End of Function   ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_NULL)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_NULL) {
       printf("Null              ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_AUTOMATIC)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_AUTOMATIC) {
       printf("Automatic         ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_EXTERNAL)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_EXTERNAL) {
       printf("External          ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_STATIC)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_STATIC) {
       printf("Static            ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_REGISTER)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_REGISTER) {
       printf("Register          ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_EXTERNAL_DEF)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_EXTERNAL_DEF) {
       printf("External Def      ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_LABEL)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_LABEL) {
       printf("Label             ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNDEFINED_LABEL)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNDEFINED_LABEL) {
       printf("Undefined Label   ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_STRUCT)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_STRUCT) {
       printf("Member Of Struct  ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_ARGUMENT)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_ARGUMENT) {
       printf("Argument          ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_STRUCT_TAG)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_STRUCT_TAG) {
       printf("Struct Tag        ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_UNION)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_UNION) {
       printf("Member Of Union   ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNION_TAG)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNION_TAG) {
       printf("Union Tag         ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_TYPE_DEFINITION)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_TYPE_DEFINITION) {
       printf("Type Definition  ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNDEFINED_STATIC)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_UNDEFINED_STATIC) {
       printf("Undefined Static  ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_ENUM_TAG)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_ENUM_TAG) {
       printf("Enum Tag          ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_ENUM)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_MEMBER_OF_ENUM) {
       printf("Member Of Enum    ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_REGISTER_PARAM)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_REGISTER_PARAM) {
       printf("Register Param    ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_BIT_FIELD)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_BIT_FIELD) {
       printf("Bit Field         ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_BLOCK)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_BLOCK) {
       printf("Block             ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_FUNCTION)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_FUNCTION) {
       printf("Function          ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_END_OF_STRUCT)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_END_OF_STRUCT) {
       printf("End Of Struct     ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_FILE)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_FILE) {
       printf("File              ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_SECTION)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_SECTION) {
       printf("Section           ");
-    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_WEAK_EXTERNAL)
+}
+    if (SymTable[SymIndex].StorageClass == IMAGE_SYM_CLASS_WEAK_EXTERNAL) {
       printf("Weak External     ");
+}
 
     printf("| %s", GetSymbolName(SymIndex));
 
@@ -640,50 +701,65 @@ void CoffLoader::PrintFileHeader(COFF_FileHeader_t *FileHeader)
   printf("SizeOfOptionHeader:     0x%04X\n", FileHeader->SizeOfOptionHeader);
   printf("Characteristics:        0x%04X\n", FileHeader->Characteristics);
 
-  if (FileHeader->Characteristics & IMAGE_FILE_RELOCS_STRIPPED)
+  if (FileHeader->Characteristics & IMAGE_FILE_RELOCS_STRIPPED) {
     printf("                        IMAGE_FILE_RELOCS_STRIPPED\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE)
+  if (FileHeader->Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) {
     printf("                        IMAGE_FILE_EXECUTABLE_IMAGE\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_LINE_NUMS_STRIPPED)
+  if (FileHeader->Characteristics & IMAGE_FILE_LINE_NUMS_STRIPPED) {
     printf("                        IMAGE_FILE_LINE_NUMS_STRIPPED\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_LOCAL_SYMS_STRIPPED)
+  if (FileHeader->Characteristics & IMAGE_FILE_LOCAL_SYMS_STRIPPED) {
     printf("                        IMAGE_FILE_LOCAL_SYMS_STRIPPED\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_AGGRESSIVE_WS_TRIM)
+  if (FileHeader->Characteristics & IMAGE_FILE_AGGRESSIVE_WS_TRIM) {
     printf("                        IMAGE_FILE_AGGRESSIVE_WS_TRIM\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)
+  if (FileHeader->Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) {
     printf("                        IMAGE_FILE_LARGE_ADDRESS_AWARE\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_16BIT_MACHINE)
+  if (FileHeader->Characteristics & IMAGE_FILE_16BIT_MACHINE) {
     printf("                        IMAGE_FILE_16BIT_MACHINE\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_BYTES_REVERSED_LO)
+  if (FileHeader->Characteristics & IMAGE_FILE_BYTES_REVERSED_LO) {
     printf("                        IMAGE_FILE_BYTES_REVERSED_LO\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_32BIT_MACHINE)
+  if (FileHeader->Characteristics & IMAGE_FILE_32BIT_MACHINE) {
     printf("                        IMAGE_FILE_32BIT_MACHINE\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_DEBUG_STRIPPED)
+  if (FileHeader->Characteristics & IMAGE_FILE_DEBUG_STRIPPED) {
     printf("                        IMAGE_FILE_DEBUG_STRIPPED\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP)
+  if (FileHeader->Characteristics & IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP) {
     printf("                        IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_SYSTEM)
+  if (FileHeader->Characteristics & IMAGE_FILE_SYSTEM) {
     printf("                        IMAGE_FILE_SYSTEM\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_DLL)
+  if (FileHeader->Characteristics & IMAGE_FILE_DLL) {
     printf("                        IMAGE_FILE_DLL\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_UP_SYSTEM_ONLY)
+  if (FileHeader->Characteristics & IMAGE_FILE_UP_SYSTEM_ONLY) {
     printf("                        IMAGE_FILE_UP_SYSTEM_ONLY\n");
+}
 
-  if (FileHeader->Characteristics & IMAGE_FILE_BYTES_REVERSED_HI)
+  if (FileHeader->Characteristics & IMAGE_FILE_BYTES_REVERSED_HI) {
     printf("                        IMAGE_FILE_BYTES_REVERSED_HI\n");
+}
 
   printf("\n");
 }
@@ -748,64 +824,92 @@ void CoffLoader::PrintSection(SectionHeader_t *ScnHdr, char* data)
   printf("Num Relocations:    0x%04X\n", ScnHdr->NumRelocations);
   printf("Num Line Numbers:   0x%04X\n", ScnHdr->NumLineNumbers);
   printf("Characteristics:    0x%08lX\n", ScnHdr->Characteristics);
-  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_CODE)
+  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_CODE) {
     printf("                    IMAGE_SCN_CNT_CODE\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_DATA)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_DATA) {
     printf("                    IMAGE_SCN_CNT_DATA\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_BSS)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_CNT_BSS) {
     printf("                    IMAGE_SCN_CNT_BSS\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_INFO)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_INFO) {
     printf("                    IMAGE_SCN_LNK_INFO\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_REMOVE)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_REMOVE) {
     printf("                    IMAGE_SCN_LNK_REMOVE\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_COMDAT)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_COMDAT) {
     printf("                    IMAGE_SCN_LNK_COMDAT\n");
+}
 
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_1BYTES)
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_1BYTES) {
     printf("                    IMAGE_SCN_ALIGN_1BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_2BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_2BYTES) {
     printf("                    IMAGE_SCN_ALIGN_2BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_4BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_4BYTES) {
     printf("                    IMAGE_SCN_ALIGN_4BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_8BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_8BYTES) {
     printf("                    IMAGE_SCN_ALIGN_8BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_16BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_16BYTES) {
     printf("                    IMAGE_SCN_ALIGN_16BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_32BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_32BYTES) {
     printf("                    IMAGE_SCN_ALIGN_32BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_64BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_64BYTES) {
     printf("                    IMAGE_SCN_ALIGN_64BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_128BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_128BYTES) {
     printf("                    IMAGE_SCN_ALIGN_128BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_256BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_256BYTES) {
     printf("                    IMAGE_SCN_ALIGN_256BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_512BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_512BYTES) {
     printf("                    IMAGE_SCN_ALIGN_512BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_1024BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_1024BYTES) {
     printf("                    IMAGE_SCN_ALIGN_1024BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_2048BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_2048BYTES) {
     printf("                    IMAGE_SCN_ALIGN_2048BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_4096BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_4096BYTES) {
     printf("                    IMAGE_SCN_ALIGN_4096BYTES\n");
-  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_8192BYTES)
+}
+  if ((ScnHdr->Characteristics & IMAGE_SCN_ALIGN_MASK) == IMAGE_SCN_ALIGN_8192BYTES) {
     printf("                    IMAGE_SCN_ALIGN_8192BYTES\n");
+}
 
-  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_NRELOC_OVFL)
+  if (ScnHdr->Characteristics & IMAGE_SCN_LNK_NRELOC_OVFL) {
     printf("                    IMAGE_SCN_LNK_NRELOC_OVFL\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_DISCARDABLE)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_DISCARDABLE) {
     printf("                    IMAGE_SCN_MEM_DISCARDABLE\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_NOT_CACHED)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_NOT_CACHED) {
     printf("                    IMAGE_SCN_MEM_NOT_CACHED\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_NOT_PAGED)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_NOT_PAGED) {
     printf("                    IMAGE_SCN_MEM_NOT_PAGED\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_SHARED)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_SHARED) {
     printf("                    IMAGE_SCN_MEM_SHARED\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_EXECUTE)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_EXECUTE) {
     printf("                    IMAGE_SCN_MEM_EXECUTE\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_READ)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_READ) {
     printf("                    IMAGE_SCN_MEM_READ\n");
-  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_WRITE)
+}
+  if (ScnHdr->Characteristics & IMAGE_SCN_MEM_WRITE) {
     printf("                    IMAGE_SCN_MEM_WRITE\n");
+}
   printf("\n");
 
   // Read the section Data, Relocations, & Line Nums
@@ -819,8 +923,9 @@ void CoffLoader::PrintSection(SectionHeader_t *ScnHdr, char* data)
     printf("\nRAW DATA");
     for (i = 0; i < ScnHdr->VirtualSize; i++)
     {
-      if ((i % 16) == 0)
+      if ((i % 16) == 0) {
         printf("\n  %08X: ", i);
+}
       char ch = data[i];
       printf("%02X ", (unsigned int)ch);
     }
@@ -940,8 +1045,9 @@ int CoffLoader::ParseCoff(FILE *fp)
   }
   if ( !LoadSymTable(fp) ||
        !LoadStringTable(fp) ||
-       !LoadSections(fp) )
+       !LoadSections(fp) ) {
     return 0;
+}
 
   PerformFixups();
 
@@ -960,17 +1066,21 @@ void CoffLoader::PerformFixups()
 
   EntryAddress = (unsigned long)RVA2Data(EntryAddress);
 
-  if( (PVOID)WindowsHeader->ImageBase == hModule )
+  if( (PVOID)WindowsHeader->ImageBase == hModule ) {
     return;
+}
 
-  if ( !Directory )
+  if ( !Directory ) {
     return ;
+}
 
-  if ( NumOfDirectories <= BASE_RELOCATION_TABLE )
+  if ( NumOfDirectories <= BASE_RELOCATION_TABLE ) {
     return ;
+}
 
-  if ( !Directory[BASE_RELOCATION_TABLE].Size )
+  if ( !Directory[BASE_RELOCATION_TABLE].Size ) {
     return ;
+}
 
   FixupDataSize = Directory[BASE_RELOCATION_TABLE].Size;
   FixupData = (char*)RVA2Data(Directory[BASE_RELOCATION_TABLE].RVA);

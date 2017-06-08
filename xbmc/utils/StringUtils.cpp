@@ -245,10 +245,11 @@ std::string StringUtils::FormatV(const char *fmt, va_list args)
     }
     free(cstr);
 #ifndef TARGET_WINDOWS
-    if (nActual > -1)                   // Exactly what we will need (glibc 2.1)
+    if (nActual > -1) {                   // Exactly what we will need (glibc 2.1)
       size = nActual + 1;
-    else                                // Let's try to double the size (glibc 2.0)
+    } else {                                // Let's try to double the size (glibc 2.0)
       size *= 2;
+}
 #else  // TARGET_WINDOWS
     va_copy(argCopy, args);
     size = _vscprintf(fmt, argCopy);
@@ -290,10 +291,11 @@ std::wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
     free(cstr);
 
 #ifndef TARGET_WINDOWS
-    if (nActual > -1)                   // Exactly what we will need (glibc 2.1)
+    if (nActual > -1) {                   // Exactly what we will need (glibc 2.1)
       size = nActual + 1;
-    else                                // Let's try to double the size (glibc 2.0)
+    } else {                                // Let's try to double the size (glibc 2.0)
       size *= 2;
+}
 #else  // TARGET_WINDOWS
     va_copy(argCopy, args);
     size = _vscwprintf(fmt, argCopy);
@@ -310,18 +312,20 @@ std::wstring StringUtils::FormatV(const wchar_t *fmt, va_list args)
 
 int compareWchar (const void* a, const void* b)
 {
-  if (*(wchar_t*)a <  *(wchar_t*)b)
+  if (*(wchar_t*)a <  *(wchar_t*)b) {
     return -1;
-  else if (*(wchar_t*)a >  *(wchar_t*)b)
+  } else if (*(wchar_t*)a >  *(wchar_t*)b) {
     return 1;
+}
   return 0;
 }
 
 wchar_t tolowerUnicode(const wchar_t& c)
 {
   wchar_t* p = (wchar_t*) bsearch (&c, unicode_uppers, sizeof(unicode_uppers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar);
-  if (p)
+  if (p) {
     return *(unicode_lowers + (p - unicode_uppers));
+}
 
   return c;
 }
@@ -329,8 +333,9 @@ wchar_t tolowerUnicode(const wchar_t& c)
 wchar_t toupperUnicode(const wchar_t& c)
 {
   wchar_t* p = (wchar_t*) bsearch (&c, unicode_lowers, sizeof(unicode_lowers) / sizeof(wchar_t), sizeof(wchar_t), compareWchar);
-  if (p)
+  if (p) {
     return *(unicode_uppers + (p - unicode_lowers));
+}
 
   return c;
 }
@@ -401,8 +406,9 @@ bool StringUtils::EqualsNoCase(const char *s1, const char *s2)
   {
     const char c1 = *s1++; // const local variable should help compiler to optimize
     c2 = *s2++;
-    if (c1 != c2 && ::tolower(c1) != ::tolower(c2)) // This includes the possibility that one of the characters is the null-terminator, which implies a string mismatch.
+    if (c1 != c2 && ::tolower(c1) != ::tolower(c2)) { // This includes the possibility that one of the characters is the null-terminator, which implies a string mismatch.
       return false;
+}
   } while (c2 != '\0'); // At this point, we know c1 == c2, so there's no need to test them both.
   return true;
 }
@@ -419,8 +425,9 @@ int StringUtils::CompareNoCase(const char *s1, const char *s2)
   {
     const char c1 = *s1++; // const local variable should help compiler to optimize
     c2 = *s2++;
-    if (c1 != c2 && ::tolower(c1) != ::tolower(c2)) // This includes the possibility that one of the characters is the null-terminator, which implies a string mismatch.
+    if (c1 != c2 && ::tolower(c1) != ::tolower(c2)) { // This includes the possibility that one of the characters is the null-terminator, which implies a string mismatch.
       return ::tolower(c1) - ::tolower(c2);
+}
   } while (c2 != '\0'); // At this point, we know c1 == c2, so there's no need to test them both.
   return 0;
 }
@@ -598,8 +605,9 @@ bool StringUtils::StartsWith(const char *s1, const char *s2)
 {
   while (*s2 != '\0')
   {
-    if (*s1 != *s2)
+    if (*s1 != *s2) {
       return false;
+}
     s1++;
     s2++;
   }
@@ -620,8 +628,9 @@ bool StringUtils::StartsWithNoCase(const char *s1, const char *s2)
 {
   while (*s2 != '\0')
   {
-    if (::tolower(*s1) != ::tolower(*s2))
+    if (::tolower(*s1) != ::tolower(*s2)) {
       return false;
+}
     s1++;
     s2++;
   }
@@ -651,8 +660,9 @@ bool StringUtils::EndsWithNoCase(const std::string &str1, const std::string &str
   const char *s2 = str2.c_str();
   while (*s2 != '\0')
   {
-    if (::tolower(*s1) != ::tolower(*s2))
+    if (::tolower(*s1) != ::tolower(*s2)) {
       return false;
+}
     s1++;
     s2++;
   }
@@ -667,8 +677,9 @@ bool StringUtils::EndsWithNoCase(const std::string &str1, const char *s2)
   const char *s1 = str1.c_str() + str1.size() - len2;
   while (*s2 != '\0')
   {
-    if (::tolower(*s1) != ::tolower(*s2))
+    if (::tolower(*s1) != ::tolower(*s2)) {
       return false;
+}
     s1++;
     s2++;
   }
@@ -854,14 +865,16 @@ int64_t StringUtils::AlphaNumericCompare(const wchar_t *left, const wchar_t *rig
     }
     // do case less comparison
     lc = *l;
-    if (lc >= L'A' && lc <= L'Z')
+    if (lc >= L'A' && lc <= L'Z') {
       lc += L'a'-L'A';
-    rc = *r;
-    if (rc >= L'A' && rc <= L'Z')
+    
+}rc = *r;
+    if (rc >= L'A' && rc <= L'Z') {
       rc += L'a'- L'A';
 
     // ok, do a normal comparison, taking current locale into account. Add special case stuff (eg '(' characters)) in here later
-    if ((cmp_res = coll.compare(&lc, &lc + 1, &rc, &rc + 1)) != 0)
+    
+}if ((cmp_res = coll.compare(&lc, &lc + 1, &rc, &rc + 1)) != 0)
     {
       return cmp_res;
     }
@@ -922,8 +935,9 @@ std::string StringUtils::SecondsToTimeString(long lSeconds, TIME_FORMAT format)
   int mm = lSeconds / 60;
   int ss = lSeconds % 60;
 
-  if (format == TIME_FORMAT_GUESS)
+  if (format == TIME_FORMAT_GUESS) {
     format = (hh >= 1) ? TIME_FORMAT_HH_MM_SS : TIME_FORMAT_MM_SS;
+}
   std::string strHMS;
   if (format & TIME_FORMAT_HH)
     strHMS += StringUtils::Format("%2.2i", hh);
@@ -972,8 +986,9 @@ bool StringUtils::IsInteger(const std::string& str)
 
 int StringUtils::asciidigitvalue(char chr)
 {
-  if (!isasciidigit(chr))
+  if (!isasciidigit(chr)) {
     return -1;
+}
 
   return chr - '0';
 }
@@ -981,12 +996,15 @@ int StringUtils::asciidigitvalue(char chr)
 int StringUtils::asciixdigitvalue(char chr)
 {
   int v = asciidigitvalue(chr);
-  if (v >= 0)
+  if (v >= 0) {
     return v;
-  if (chr >= 'a' && chr <= 'f')
+}
+  if (chr >= 'a' && chr <= 'f') {
     return chr - 'a' + 10;
-  if (chr >= 'A' && chr <= 'F')
+}
+  if (chr >= 'A' && chr <= 'F') {
     return chr - 'A' + 10;
+}
 
   return -1;
 }
@@ -1009,9 +1027,9 @@ std::string StringUtils::SizeToString(int64_t size)
     i++;
   }
 
-  if (!i)
+  if (!i) {
     strLabel = StringUtils::Format("%.0lf B", s);
-  else if (i == ARRAY_SIZE(prefixes))
+  } else if (i == ARRAY_SIZE(prefixes))
   {
     if (s >= 1000.0)
       strLabel = StringUtils::Format(">999.99 %cB", prefixes[i - 1]);
@@ -1056,26 +1074,33 @@ int IsUTF8Letter(const unsigned char *str)
   // unicode -> utf8 table: http://www.utf8-chartable.de/
   // latin characters in unicode: http://en.wikipedia.org/wiki/Latin_characters_in_Unicode
   unsigned char ch = str[0];
-  if (!ch)
+  if (!ch) {
     return -1;
-  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+}
+  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
     return 1;
-  if (!(ch & 0x80))
+}
+  if (!(ch & 0x80)) {
     return -1;
+}
   unsigned char ch2 = str[1];
-  if (!ch2)
+  if (!ch2) {
     return -1;
+}
   // check latin 1 letter table: http://en.wikipedia.org/wiki/C1_Controls_and_Latin-1_Supplement
-  if (ch == 0xC3 && ch2 >= 0x80 && ch2 <= 0xBF && ch2 != 0x97 && ch2 != 0xB7)
+  if (ch == 0xC3 && ch2 >= 0x80 && ch2 <= 0xBF && ch2 != 0x97 && ch2 != 0xB7) {
     return 2;
+}
   // check latin extended A table: http://en.wikipedia.org/wiki/Latin_Extended-A
-  if (ch >= 0xC4 && ch <= 0xC7 && ch2 >= 0x80 && ch2 <= 0xBF)
+  if (ch >= 0xC4 && ch <= 0xC7 && ch2 >= 0x80 && ch2 <= 0xBF) {
     return 2;
+}
   // check latin extended B table: http://en.wikipedia.org/wiki/Latin_Extended-B
   // and International Phonetic Alphabet: http://en.wikipedia.org/wiki/IPA_Extensions_(Unicode_block)
   if (((ch == 0xC8 || ch == 0xC9) && ch2 >= 0x80 && ch2 <= 0xBF)
-      || (ch == 0xCA && ch2 >= 0x80 && ch2 <= 0xAF))
+      || (ch == 0xCA && ch2 >= 0x80 && ch2 <= 0xAF)) {
     return 2;
+}
   return -1;
 }
 
@@ -1134,8 +1159,9 @@ int StringUtils::FindEndBracket(const std::string &str, char opener, char closer
     else if (str[i] == closer)
     {
       blocks--;
-      if (!blocks)
+      if (!blocks) {
         return i;
+}
     }
   }
 

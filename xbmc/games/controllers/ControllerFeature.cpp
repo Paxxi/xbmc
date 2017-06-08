@@ -65,8 +65,9 @@ bool CControllerFeature::Deserialize(const TiXmlElement* pElement,
 {
   Reset();
 
-  if (!pElement)
+  if (!pElement) {
     return false;
+}
 
   std::string strType(pElement->Value());
 

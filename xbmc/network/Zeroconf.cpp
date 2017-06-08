@@ -91,10 +91,11 @@ bool CZeroconf::RemoveService(const std::string& fcr_identifier)
   if(it == m_service_map.end())
     return false;
   m_service_map.erase(it);
-  if(m_started)
+  if(m_started) {
     return doRemoveService(fcr_identifier);
-  else
+  } else {
     return true;
+}
 }
 
 bool CZeroconf::ForceReAnnounceService(const std::string& fcr_identifier)
@@ -121,8 +122,9 @@ bool CZeroconf::Start()
       CServiceBroker::GetSettings().SetBool(CSettings::SETTING_SERVICES_AIRPLAY, false);
     return false;
   }
-  if(m_started)
+  if(m_started) {
     return true;
+}
   m_started = true;
 
   CJobManager::GetInstance().AddJob(new CPublish(m_service_map), nullptr);
@@ -132,8 +134,9 @@ bool CZeroconf::Start()
 void CZeroconf::Stop()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!m_started)
+  if(!m_started) {
     return;
+}
   doStop();
   m_started = false;
 }

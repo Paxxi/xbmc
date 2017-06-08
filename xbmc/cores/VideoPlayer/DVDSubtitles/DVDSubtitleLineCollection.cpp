@@ -58,8 +58,9 @@ void CDVDSubtitleLineCollection::Add(CDVDOverlay* pOverlay)
 
 void CDVDSubtitleLineCollection::Sort()
 {
-  if (!m_pHead || !m_pHead->pNext)
+  if (!m_pHead || !m_pHead->pNext) {
     return;
+}
   
   for (ListElement* p1 = m_pHead; p1->pNext != NULL; p1 = p1->pNext)
   {

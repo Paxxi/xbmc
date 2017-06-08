@@ -174,12 +174,13 @@ void CJSONVariantParserHandler::PushObject(CVariant variant)
   else if (m_parse.empty())
     m_parse.push_back(new CVariant(variant));
 
-  if (variant.isObject())
+  if (variant.isObject()) {
     m_status = PARSE_STATUS::Object;
-  else if (variant.isArray())
+  } else if (variant.isArray()) {
     m_status = PARSE_STATUS::Array;
-  else
+  } else {
     m_status = PARSE_STATUS::Variable;
+}
 }
 
 void CJSONVariantParserHandler::PopObject()
@@ -190,12 +191,13 @@ void CJSONVariantParserHandler::PopObject()
   if (!m_parse.empty())
   {
     variant = m_parse[m_parse.size() - 1];
-    if (variant->isObject())
+    if (variant->isObject()) {
       m_status = PARSE_STATUS::Object;
-    else if (variant->isArray())
+    } else if (variant->isArray()) {
       m_status = PARSE_STATUS::Array;
-    else
+    } else {
       m_status = PARSE_STATUS::Variable;
+}
   }
   else
   {
@@ -208,8 +210,9 @@ void CJSONVariantParserHandler::PopObject()
 
 bool CJSONVariantParser::Parse(const char* json, CVariant& data)
 {
-  if (json == nullptr)
+  if (json == nullptr) {
     return false;
+}
 
   rapidjson::Reader reader;
   rapidjson::StringStream stringStream(json);

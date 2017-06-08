@@ -41,8 +41,9 @@ CThumbnailCache* CThumbnailCache::GetThumbnailCache()
 {
   CSingleLock lock (m_cs);
 
-  if (m_pCacheInstance == nullptr)
+  if (m_pCacheInstance == nullptr) {
     m_pCacheInstance = new CThumbnailCache;
+}
 
   return m_pCacheInstance;
 }

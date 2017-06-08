@@ -40,8 +40,9 @@ void CFFmpegLog::SetLogLevel(int level)
 int CFFmpegLog::GetLogLevel()
 {
   CFFmpegLog* log = CFFmpegLogTls.get();
-  if (!log)
+  if (!log) {
     return -1;
+}
   return log->level;
 }
 
@@ -49,8 +50,9 @@ void CFFmpegLog::ClearLogLevel()
 {
   CFFmpegLog* log = CFFmpegLogTls.get();
   CFFmpegLogTls.set(nullptr);
-  if (log)
+  if (log) {
     delete log;
+}
 }
 
 /* callback for the ffmpeg lock manager */
@@ -64,8 +66,9 @@ int ffmpeg_lockmgr_cb(void **mutex, enum AVLockOp operation)
     {
       *lock = nullptr;
       *lock = new CCriticalSection();
-      if (*lock == nullptr)
+      if (*lock == nullptr) {
         return 1;
+}
       break;
     }
     case AV_LOCK_OBTAIN:
@@ -115,8 +118,9 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
   AVClass* avc= ptr ? *(AVClass**)ptr : nullptr;
 
   int maxLevel = AV_LOG_WARNING;
-  if (CFFmpegLog::GetLogLevel() > 0)
+  if (CFFmpegLog::GetLogLevel() > 0) {
     maxLevel = AV_LOG_INFO;
+}
 
   if (level > maxLevel &&
      !g_advancedSettings.CanLogComponent(LOGFFMPEG))

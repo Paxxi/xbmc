@@ -98,8 +98,9 @@ void CAESinkFactory::ParseDevice(std::string &device, std::string &driver)
     else
       driver.clear();
   }
-  else
-    driver.clear();
+  else {
+    driver
+}.clear();
 }
 
 IAESink *CAESinkFactory::TrySink(std::string &driver, std::string &device, AEAudioFormat &format)
@@ -148,20 +149,22 @@ IAESink *CAESinkFactory::TrySink(std::string &driver, std::string &device, AEAud
 #endif
   }
 
-  if (!sink)
+  if (!sink) {
     return nullptr;
+}
 
   if (sink->Initialize(format, device))
   {
     // do some sanity checks
-    if (format.m_sampleRate == 0)
+    if (format.m_sampleRate == 0) {
       CLog::Log(LOGERROR, "Sink %s:%s returned invalid sample rate", driver.c_str(), device.c_str());
-    else if (format.m_channelLayout.Count() == 0)
+    } else if (format.m_channelLayout.Count() == 0) {
       CLog::Log(LOGERROR, "Sink %s:%s returned invalid channel layout", driver.c_str(), device.c_str());
-    else if (format.m_frames < 256)
+    } else if (format.m_frames < 256) {
       CLog::Log(LOGERROR, "Sink %s:%s returned invalid buffer size: %d", driver.c_str(), device.c_str(), format.m_frames);
-    else
+    } else {
       return sink;
+}
   }
   sink->Deinitialize();
   delete sink;

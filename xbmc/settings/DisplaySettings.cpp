@@ -109,8 +109,9 @@ bool CDisplaySettings::Load(const TiXmlNode *settings)
   CSingleLock lock(m_critical);
   m_calibrations.clear();
 
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   const TiXmlElement *pElement = settings->FirstChildElement("resolutions");
   if (!pElement)
@@ -170,14 +171,16 @@ bool CDisplaySettings::Load(const TiXmlNode *settings)
 
 bool CDisplaySettings::Save(TiXmlNode *settings) const
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   CSingleLock lock(m_critical);
   TiXmlElement xmlRootElement("resolutions");
   TiXmlNode *pRoot = settings->InsertEndChild(xmlRootElement);
-  if (pRoot == nullptr)
+  if (pRoot == nullptr) {
     return false;
+}
 
   // save calibrations
   for (ResolutionInfos::const_iterator it = m_calibrations.begin(); it != m_calibrations.end(); ++it)
@@ -185,8 +188,9 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     // Write the resolution tag
     TiXmlElement resElement("resolution");
     TiXmlNode *pNode = pRoot->InsertEndChild(resElement);
-    if (pNode == nullptr)
+    if (pNode == nullptr) {
       return false;
+}
 
     // Now write each of the pieces of information we need...
     XMLUtils::SetString(pNode, "description", it->strMode);
@@ -201,8 +205,9 @@ bool CDisplaySettings::Save(TiXmlNode *settings) const
     // create the overscan child
     TiXmlElement overscanElement("overscan");
     TiXmlNode *pOverscanNode = pNode->InsertEndChild(overscanElement);
-    if (pOverscanNode == nullptr)
+    if (pOverscanNode == nullptr) {
       return false;
+}
 
     XMLUtils::SetInt(pOverscanNode, "left", it->Overscan.left);
     XMLUtils::SetInt(pOverscanNode, "top", it->Overscan.top);
@@ -270,8 +275,9 @@ bool CDisplaySettings::OnSettingChanging(std::shared_ptr<const CSetting> setting
       int screen = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
 
       // if triggered by a change of screenmode, screen may not have changed
-      if (screen == GetCurrentDisplayMode())
+      if (screen == GetCurrentDisplayMode()) {
         return true;
+}
 
       // get desktop resolution for screen
       newRes = GetResolutionForScreen();
@@ -301,8 +307,9 @@ bool CDisplaySettings::OnSettingChanging(std::shared_ptr<const CSetting> setting
           return false;
         }
       }
-      else
+      else {
         m_resolutionChangeAborted = false;
+}
     }
   }
   else if (settingId == CSettings::SETTING_VIDEOSCREEN_MONITOR)
@@ -322,8 +329,9 @@ bool CDisplaySettings::OnSettingChanging(std::shared_ptr<const CSetting> setting
         return false;
       }
     }
-    else
+    else {
       m_resolutionChangeAborted = false;
+}
 
     return true;
   }
@@ -547,8 +555,9 @@ void CDisplaySettings::UpdateCalibrations()
 
 DisplayMode CDisplaySettings::GetCurrentDisplayMode() const
 {
-  if (GetCurrentResolution() == RES_WINDOW)
+  if (GetCurrentResolution() == RES_WINDOW) {
     return DM_WINDOWED;
+}
 
   return GetCurrentResolutionInfo().iScreen;
 }
@@ -638,8 +647,9 @@ std::string CDisplaySettings::GetStringFromResolution(RESOLUTION resolution, flo
 RESOLUTION CDisplaySettings::GetResolutionForScreen()
 {
   DisplayMode mode = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOSCREEN_SCREEN);
-  if (mode == DM_WINDOWED)
+  if (mode == DM_WINDOWED) {
     return RES_WINDOW;
+}
 
   for (int idx=0; idx < g_Windowing.GetNumScreens(); idx++)
   {

@@ -309,8 +309,9 @@ void CGameClientReversiblePlayback::UpdateMemoryStream()
   if (bRewindEnabled)
   {
     unsigned int rewindBufferSec = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_GAMES_REWINDTIME);
-    if (rewindBufferSec < 10)
+    if (rewindBufferSec < 10) {
       rewindBufferSec = 10; // Sanity check
+}
 
     unsigned int frameCount = MathUtils::round_int(rewindBufferSec * m_gameLoop.FPS());
 

@@ -78,10 +78,12 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
 
   for (unsigned int i = 0; i < sizeof(OverviewChildren) / sizeof(Node); ++i)
   {
-    if (i == 3 && !hasSingles)
+    if (i == 3 && !hasSingles) {
       continue;
-    if (i == 9 && !hasCompilations)
+}
+    if (i == 9 && !hasCompilations) {
       continue;
+}
 
     CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(OverviewChildren[i].label)));
     std::string strDir = StringUtils::Format("%s/", OverviewChildren[i].id.c_str());

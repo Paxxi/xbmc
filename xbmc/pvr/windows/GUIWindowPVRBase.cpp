@@ -107,8 +107,9 @@ void CGUIWindowPVRBase::UnregisterObservers()
 
 void CGUIWindowPVRBase::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  if (msg == ObservableMessageManagerStopped)
+  if (msg == ObservableMessageManagerStopped) {
     ClearData();
+}
 
   if (IsActive())
   {
@@ -264,8 +265,9 @@ bool CGUIWindowPVRBase::CanBeActivated() const
 bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog()
 {
   CGUIDialogSelect *dialog = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
-  if (!dialog)
+  if (!dialog) {
     return false;
+}
 
   CFileItemList options;
   CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetGroupList(&options, true);
@@ -361,8 +363,9 @@ bool CGUIWindowPVRBase::Update(const std::string &strDirectory, bool updateFilte
         oldPath == m_vecItems->GetPath()) // update not due changing into another folder
     {
       // restore selected item if we just deleted one or more items.
-      if (iSelectedItem >= iNewCount)
+      if (iSelectedItem >= iNewCount) {
         iSelectedItem = iNewCount - 1;
+}
 
       m_viewControl.SetSelectedItem(iSelectedItem);
     }

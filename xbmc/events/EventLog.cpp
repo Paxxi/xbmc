@@ -136,10 +136,11 @@ void CEventLog::Add(const EventPtr& eventPtr)
 
 void CEventLog::Add(const EventPtr& eventPtr, bool withNotification, bool withSound /* = true */)
 {
-  if (!withNotification)
+  if (!withNotification) {
     Add(eventPtr);
-  else
+  } else {
     AddWithNotification(eventPtr, withSound);
+}
 }
 
 void CEventLog::AddWithNotification(const EventPtr& eventPtr,

@@ -45,10 +45,11 @@ bool CRendererVDPAU::Configure(unsigned int width, unsigned int height, unsigned
                                float fps, unsigned flags, ERenderFormat format, void *hwPic, unsigned int orientation)
 {
   VDPAU::CVdpauRenderPicture *vdpau = static_cast<VDPAU::CVdpauRenderPicture*>(hwPic);
-  if (vdpau->isYuv)
+  if (vdpau->isYuv) {
     m_isYuv = true;
-  else
+  } else {
     m_isYuv = false;
+}
 
   return CLinuxRendererGL::Configure(width, height, d_width, d_height,
                                      fps, flags, format, hwPic, orientation);
@@ -57,8 +58,9 @@ bool CRendererVDPAU::Configure(unsigned int width, unsigned int height, unsigned
 bool CRendererVDPAU::ConfigChanged(void *hwPic)
 {
   VDPAU::CVdpauRenderPicture *vdpau = static_cast<VDPAU::CVdpauRenderPicture*>(hwPic);
-  if (vdpau->isYuv && !m_isYuv)
+  if (vdpau->isYuv && !m_isYuv) {
     return true;
+}
 
   return false;
 }
@@ -68,16 +70,18 @@ void CRendererVDPAU::AddVideoPictureHW(VideoPicture &picture, int index)
   VDPAU::CVdpauRenderPicture *vdpau = static_cast<VDPAU::CVdpauRenderPicture*>(picture.hwPic);
   YUVBUFFER &buf = m_buffers[index];
   VDPAU::CVdpauRenderPicture *pic = vdpau->Acquire();
-  if (buf.hwDec)
+  if (buf.hwDec) {
     ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
+}
   buf.hwDec = pic;
 }
 
 void CRendererVDPAU::ReleaseBuffer(int idx)
 {
   YUVBUFFER &buf = m_buffers[idx];
-  if (buf.hwDec)
+  if (buf.hwDec) {
     ((VDPAU::CVdpauRenderPicture*)buf.hwDec)->Release();
+}
   buf.hwDec = nullptr;
 }
 
@@ -104,8 +108,9 @@ bool CRendererVDPAU::Supports(ERENDERFEATURE feature)
   else if (feature == RENDERFEATURE_NOISE ||
            feature == RENDERFEATURE_SHARPNESS)
   {
-    if (m_format == RENDER_FMT_VDPAU)
+    if (m_format == RENDER_FMT_VDPAU) {
       return true;
+}
   }
   else if (feature == RENDERFEATURE_STRETCH         ||
            feature == RENDERFEATURE_ZOOM            ||
@@ -113,8 +118,9 @@ bool CRendererVDPAU::Supports(ERENDERFEATURE feature)
            feature == RENDERFEATURE_PIXEL_RATIO     ||
            feature == RENDERFEATURE_POSTPROCESS     ||
            feature == RENDERFEATURE_ROTATION        ||
-           feature == RENDERFEATURE_NONLINSTRETCH)
+           feature == RENDERFEATURE_NONLINSTRETCH) {
     return true;
+}
 
   return false;
 }
@@ -127,12 +133,14 @@ bool CRendererVDPAU::Supports(ESCALINGMETHOD method)
   //nearest neighbor doesn't work on YUY2 and UYVY
   if (method == VS_SCALINGMETHOD_NEAREST &&
       m_format != RENDER_FMT_YUYV422 &&
-      m_format != RENDER_FMT_UYVY422)
+      m_format != RENDER_FMT_UYVY422) {
     return true;
+}
 
   if(method == VS_SCALINGMETHOD_LINEAR
-  || method == VS_SCALINGMETHOD_AUTO)
+  || method == VS_SCALINGMETHOD_AUTO) {
     return true;
+}
 
   if(method == VS_SCALINGMETHOD_CUBIC
   || method == VS_SCALINGMETHOD_LANCZOS2
@@ -145,15 +153,17 @@ bool CRendererVDPAU::Supports(ESCALINGMETHOD method)
     float scaleX = fabs(((float)m_sourceWidth - m_destRect.Width())/m_sourceWidth)*100;
     float scaleY = fabs(((float)m_sourceHeight - m_destRect.Height())/m_sourceHeight)*100;
     int minScale = CServiceBroker::GetSettings().GetInt("videoplayer.hqscalers");
-    if (scaleX < minScale && scaleY < minScale)
+    if (scaleX < minScale && scaleY < minScale) {
       return false;
+}
 
     // spline36 and lanczos3 are only allowed through advancedsettings.xml
     if(method != VS_SCALINGMETHOD_SPLINE36
-        && method != VS_SCALINGMETHOD_LANCZOS3)
+        && method != VS_SCALINGMETHOD_LANCZOS3) {
       return true;
-    else
-      return g_advancedSettings.m_videoEnableHighQualityHwScalers;
+    } else {
+      return 
+}g_advancedSettings.m_videoEnableHighQualityHwScalers;
   }
 
   return false;
@@ -163,8 +173,9 @@ EShaderFormat CRendererVDPAU::GetShaderFormat(ERenderFormat renderFormat)
 {
   EShaderFormat ret = SHADER_NONE;
 
-  if (m_isYuv)
+  if (m_isYuv) {
     ret = SHADER_NV12_RRG;
+}
 
   return ret;
 }
@@ -199,9 +210,9 @@ bool CRendererVDPAU::RenderHook(int idx)
       break;
 
     case RQ_MULTIPASS:
-      if (m_currentField == FIELD_FULL)
+      if (m_currentField == FIELD_FULL) {
         RenderProgressiveWeave(idx, m_currentField);
-      else
+      } else
       {
         RenderToFBO(idx, m_currentField);
         RenderFromFBO();
@@ -225,30 +236,33 @@ bool CRendererVDPAU::RenderHook(int idx)
 
 bool CRendererVDPAU::CreateTexture(int index)
 {
-  if (!m_isYuv)
+  if (!m_isYuv) {
     return CreateVDPAUTexture(index);
-  else if (m_isYuv)
+  } else if (m_isYuv) {
     return CreateVDPAUTexture420(index);
-  else
+  } else {
     return false;
+}
 }
 
 void CRendererVDPAU::DeleteTexture(int index)
 {
-  if (!m_isYuv)
+  if (!m_isYuv) {
     DeleteVDPAUTexture(index);
-  else if (m_isYuv)
+  } else if (m_isYuv) {
     DeleteVDPAUTexture420(index);
+}
 }
 
 bool CRendererVDPAU::UploadTexture(int index)
 {
-  if (!m_isYuv)
+  if (!m_isYuv) {
     return UploadVDPAUTexture(index);
-  else if (m_isYuv)
+  } else if (m_isYuv) {
     return UploadVDPAUTexture420(index);
-  else
+  } else {
     return false;
+}
 }
 
 bool CRendererVDPAU::CreateVDPAUTexture(int index)

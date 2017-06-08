@@ -35,13 +35,15 @@ TagLibVFSStream::TagLibVFSStream(const std::string& strFileName, bool readOnly)
   m_bIsOpen = true;
   if (readOnly)
   {
-    if (!m_file.Open(strFileName))
+    if (!m_file.Open(strFileName)) {
       m_bIsOpen = false;
+}
   }
   else
   {
-    if (!m_file.OpenForWrite(strFileName))
+    if (!m_file.OpenForWrite(strFileName)) {
       m_bIsOpen = false;
+}
   }
   m_strFileName = strFileName;
   m_bIsReadOnly = readOnly || !m_bIsOpen;
@@ -70,10 +72,11 @@ ByteVector TagLibVFSStream::readBlock(TagLib::ulong length)
 {
   ByteVector byteVector(static_cast<TagLib::uint>(length));
   ssize_t read = m_file.Read(byteVector.data(), length);
-  if (read > 0)
+  if (read > 0) {
     byteVector.resize(read);
-  else
+  } else {
     byteVector.clear();
+}
 
   return byteVector;
 }
@@ -125,8 +128,9 @@ void TagLibVFSStream::insert(const ByteVector &data, TagLib::ulong start, TagLib
   // that aren't yet in memory, so this is necessary.
   TagLib::ulong bufferLength = bufferSize();
 
-  while (data.size() - replace > bufferLength)
+  while (data.size() - replace > bufferLength) {
     bufferLength += bufferSize();
+}
 
   // Set where to start the reading and writing.
   long readPosition = start + replace;
@@ -141,8 +145,9 @@ void TagLibVFSStream::insert(const ByteVector &data, TagLib::ulong start, TagLib
   // That's a bit slower than using char *'s so, we're only doing it here.
   seek(readPosition);
   ssize_t bytesRead = m_file.Read(aboutToOverwrite.data(), bufferLength);
-  if (bytesRead <= 0)
+  if (bytesRead <= 0) {
     return; // error
+}
   readPosition += bufferLength;
 
   seek(writePosition);
@@ -160,15 +165,17 @@ void TagLibVFSStream::insert(const ByteVector &data, TagLib::ulong start, TagLib
     // to overwrite.  Appropriately increment the readPosition.
     seek(readPosition);
     bytesRead = m_file.Read(aboutToOverwrite.data(), bufferLength);
-    if (bytesRead <= 0)
+    if (bytesRead <= 0) {
       return; // error
+}
     aboutToOverwrite.resize(bytesRead);
     readPosition += bufferLength;
 
     // Check to see if we just read the last block.  We need to call clear()
     // if we did so that the last write succeeds.
-    if (TagLib::ulong(bytesRead) < bufferLength)
+    if (TagLib::ulong(bytesRead) < bufferLength) {
       clear();
+}
 
     // Seek to the write position and write our buffer.  Increment the
     // writePosition.
@@ -204,16 +211,18 @@ void TagLibVFSStream::removeBlock(TagLib::ulong start, TagLib::ulong length)
   {
     seek(readPosition);
     ssize_t read = m_file.Read(buffer.data(), bufferLength);
-    if (read < 0)
+    if (read < 0) {
       return;// explicit error
+}
 
     bytesRead = static_cast<TagLib::ulong>(read);
     readPosition += bytesRead;
 
     // Check to see if we just read the last block.  We need to call clear()
     // if we did so that the last write succeeds.
-    if(bytesRead < bufferLength)
+    if(bytesRead < bufferLength) {
       clear();
+}
 
     seek(writePosition);
     if (m_file.Write(buffer.data(), bytesRead) != static_cast<ssize_t>(bytesRead))
@@ -252,14 +261,15 @@ void TagLibVFSStream::seek(long offset, Position p)
   if (m_bIsReadOnly && fileLen > 0)
   {
     long startPos;
-    if (p == Beginning)
+    if (p == Beginning) {
       startPos = 0;
-    else if (p == Current)
+    } else if (p == Current) {
       startPos = tell();
-    else if (p == End)
+    } else if (p == End) {
       startPos = fileLen;
-    else
+    } else {
       return; // wrong Position value
+}
 
     // When parsing some broken files, taglib may try to seek above end of file.
     // If underlying VFS does not move I/O pointer in this case, taglib will parse

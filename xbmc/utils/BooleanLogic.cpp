@@ -25,12 +25,14 @@
 
 bool CBooleanLogicValue::Deserialize(const TiXmlNode *node)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   const TiXmlElement *elem = node->ToElement();
-  if (elem == nullptr)
+  if (elem == nullptr) {
     return false;
+}
 
   if (node->FirstChild() != NULL && node->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
     m_value = node->FirstChild()->ValueStr();
@@ -39,9 +41,9 @@ bool CBooleanLogicValue::Deserialize(const TiXmlNode *node)
   const char *strNegated = elem->Attribute("negated");
   if (strNegated != nullptr)
   {
-    if (StringUtils::EqualsNoCase(strNegated, "true"))
+    if (StringUtils::EqualsNoCase(strNegated, "true")) {
       m_negated = true;
-    else if (!StringUtils::EqualsNoCase(strNegated, "false"))
+    } else if (!StringUtils::EqualsNoCase(strNegated, "false"))
     {
       CLog::Log(LOGDEBUG, "CBooleanLogicValue: invalid negated value \"%s\"", strNegated);
       return false;
@@ -59,8 +61,9 @@ CBooleanLogicOperation::~CBooleanLogicOperation()
 
 bool CBooleanLogicOperation::Deserialize(const TiXmlNode *node)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   // check if this is a simple operation with a single value directly expressed
   // in the parent tag
@@ -124,8 +127,9 @@ bool CBooleanLogicOperation::Deserialize(const TiXmlNode *node)
 
 bool CBooleanLogic::Deserialize(const TiXmlNode *node)
 {
-  if (node == nullptr)
+  if (node == nullptr) {
     return false;
+}
 
   if (m_operation == NULL)
   {

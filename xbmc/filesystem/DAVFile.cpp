@@ -61,8 +61,9 @@ bool CDAVFile::Execute(const CURL& url)
   SetRequestHeaders(m_state);
 
   m_lastResponseCode = m_state->Connect(m_bufferSize);
-  if (m_lastResponseCode < 0 || m_lastResponseCode >= 400)
+  if (m_lastResponseCode < 0 || m_lastResponseCode >= 400) {
     return false;
+}
 
   char* efurl;
   if (CURLE_OK == g_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL,&efurl) && efurl)
@@ -97,8 +98,9 @@ bool CDAVFile::Execute(const CURL& url)
           if (rxCode.GetSubCount())
           {
             m_lastResponseCode = atoi(rxCode.GetMatch(1).c_str());
-            if (m_lastResponseCode < 0 || m_lastResponseCode >= 400)
+            if (m_lastResponseCode < 0 || m_lastResponseCode >= 400) {
               return false;
+}
           }
         }
 
@@ -111,8 +113,9 @@ bool CDAVFile::Execute(const CURL& url)
 
 bool CDAVFile::Delete(const CURL& url)
 {
-  if (m_opened)
+  if (m_opened) {
     return false;
+}
 
   CDAVFile dav;
   std::string strRequest = "DELETE";
@@ -133,8 +136,9 @@ bool CDAVFile::Delete(const CURL& url)
 
 bool CDAVFile::Rename(const CURL& url, const CURL& urlnew)
 {
-  if (m_opened)
+  if (m_opened) {
     return false;
+}
 
   CDAVFile dav;
 

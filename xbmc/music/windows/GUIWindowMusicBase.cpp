@@ -299,8 +299,9 @@ void CGUIWindowMusicBase::OnItemInfoAll(int iItem, bool bCurrent /* = false */, 
 /// \param iItem Item in list/thumb control
 void CGUIWindowMusicBase::OnItemInfo(int iItem, bool bShowInfo)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() )
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) {
     return;
+}
 
   CFileItemPtr item = m_vecItems->Get(iItem);
 
@@ -322,8 +323,9 @@ void CGUIWindowMusicBase::OnItemInfo(int iItem, bool bShowInfo)
 void CGUIWindowMusicBase::OnItemInfo(CFileItem *pItem, bool bShowInfo)
 {
   if ((pItem->IsMusicDb() && !pItem->HasMusicInfoTag()) || pItem->IsParentFolder() ||
-       URIUtils::IsSpecial(pItem->GetPath()) || StringUtils::StartsWithNoCase(pItem->GetPath(), "musicsearch://"))
+       URIUtils::IsSpecial(pItem->GetPath()) || StringUtils::StartsWithNoCase(pItem->GetPath(), "musicsearch://")) {
     return; // nothing to do
+}
 
   if (!pItem->m_bIsFolder)
   { // song lookup
@@ -339,10 +341,11 @@ void CGUIWindowMusicBase::OnItemInfo(CFileItem *pItem, bool bShowInfo)
   {
     CQueryParams params;
     CDirectoryNode::GetDatabaseInfo(pItem->GetPath(), params);
-    if (params.GetAlbumId() == -1)
+    if (params.GetAlbumId() == -1) {
       ShowArtistInfo(pItem);
-    else
+    } else {
       ShowAlbumInfo(pItem);
+}
 
     if (m_dlgProgress && bShowInfo)
       m_dlgProgress->Close();
@@ -356,8 +359,9 @@ void CGUIWindowMusicBase::OnItemInfo(CFileItem *pItem, bool bShowInfo)
     if (!m_musicdatabase.GetAlbum(albumID, album))
       return;
     CFileItem item(StringUtils::Format("musicdb://albums/%i/", albumID), album);
-    if (ShowAlbumInfo(&item))
+    if (ShowAlbumInfo(&item)) {
       return;
+}
   }
 
   CLog::Log(LOGINFO, "%s called on a folder containing no songs in the library - nothing can be done", __FUNCTION__);
@@ -383,8 +387,9 @@ void CGUIWindowMusicBase::ShowArtistInfo(const CFileItem *pItem, bool bShowInfo 
     // Check if the entry should be refreshed (Only happens if a user pressed refresh)
     if (refresh)
     {
-      if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases() && !g_passwordManager.bMasterUser)
+      if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases() && !g_passwordManager.bMasterUser) {
         break; // should display a dialog saying no permissions
+}
 
       if (g_application.IsMusicScanning())
       {
@@ -507,9 +512,10 @@ bool CGUIWindowMusicBase::ShowAlbumInfo(const CFileItem *pItem, bool bShowInfo /
         refresh = true;
         continue;
       }
-      else if (pDlgAlbumInfo->HasUpdatedThumb())
+      else if (pDlgAlbumInfo->HasUpdatedThumb()) {
         UpdateThumb(album, album.strPath);
-      else if (pDlgAlbumInfo->NeedsUpdate())
+      } else { if 
+}(pDlgAlbumInfo->NeedsUpdate())
         Refresh(true); // update our file list
 
     }
@@ -525,10 +531,12 @@ void CGUIWindowMusicBase::ShowSongInfo(CFileItem* pItem)
   CGUIDialogSongInfo *dialog = g_windowManager.GetWindow<CGUIDialogSongInfo>(WINDOW_DIALOG_SONG_INFO);
   if (dialog)
   {
-    if (!pItem->IsMusicDb())
+    if (!pItem->IsMusicDb()) {
       pItem->LoadMusicTag();
-    if (!pItem->HasMusicInfoTag())
+}
+    if (!pItem->HasMusicInfoTag()) {
       return;
+}
 
     dialog->SetSong(pItem);
     dialog->Open();
@@ -596,8 +604,9 @@ void CGUIWindowMusicBase::OnQueueItem(int iItem)
   int playlist = g_playlistPlayer.GetCurrentPlaylist();
   if (playlist == PLAYLIST_NONE)
     playlist = g_application.m_pPlayer->GetPreferredPlaylist();
-  if (playlist == PLAYLIST_NONE)
+  if (playlist == PLAYLIST_NONE) {
     playlist = PLAYLIST_MUSIC;
+}
 
   // don't re-queue items from playlist window
   if ( iItem < 0 || iItem >= m_vecItems->Size() || GetID() == WINDOW_MUSIC_PLAYLIST) return ;
@@ -862,8 +871,9 @@ bool CGUIWindowMusicBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
   if (CGUIDialogContextMenu::OnContextButton("music", item, button))
   {
-    if (button == CONTEXT_BUTTON_REMOVE_SOURCE)
+    if (button == CONTEXT_BUTTON_REMOVE_SOURCE) {
       OnRemoveSource(itemNumber);
+}
 
     Update(m_vecItems->GetPath());
     return true;
@@ -1060,8 +1070,9 @@ void CGUIWindowMusicBase::PlayItem(int iItem)
 void CGUIWindowMusicBase::LoadPlayList(const std::string& strPlayList)
 {
   // if partymode is active, we disable it
-  if (g_partyModeManager.IsEnabled())
+  if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Disable();
+}
 
   // load a playlist like .m3u, .pls
   // first get correct factory to load playlist
@@ -1360,9 +1371,9 @@ std::string CGUIWindowMusicBase::GetStartFolder(const std::string &dir)
 void CGUIWindowMusicBase::OnScan(int iItem)
 {
   std::string strPath;
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     strPath = m_vecItems->GetPath();
-  else if (m_vecItems->Get(iItem)->m_bIsFolder)
+  } else if (m_vecItems->Get(iItem)->m_bIsFolder)
     strPath = m_vecItems->Get(iItem)->GetPath();
   else
   { //! @todo MUSICDB - should we allow scanning a single item into the database?

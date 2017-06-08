@@ -254,10 +254,11 @@ char* CAddonCallbacksAddon::TranslateSpecialProtocol(const char *strSource)
 {
   try
   {
-    if (strSource)
+    if (strSource) {
       return strdup(CSpecialProtocol::TranslatePath(strSource).c_str());
-    else
+    } else {
       return nullptr;
+}
   }
   catch (std::exception &e)
   {
@@ -298,8 +299,9 @@ char* CAddonCallbacksAddon::GetLocalizedString(const void* addonData, long dwCod
 char* CAddonCallbacksAddon::GetDVDMenuLanguage(const void* addonData)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return nullptr;
+}
 
   std::string string = g_langInfo.GetDVDMenuLanguage();
 
@@ -315,8 +317,9 @@ void CAddonCallbacksAddon::FreeString(const void* addonData, char* str)
 void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileName, unsigned int flags)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return nullptr;
+}
 
   auto  file = new CFile;
   if (file->Open(strFileName, flags))
@@ -329,8 +332,9 @@ void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileN
 void* CAddonCallbacksAddon::OpenFileForWrite(const void* addonData, const char* strFileName, bool bOverwrite)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return nullptr;
+}
 
   auto  file = new CFile;
   if (file->OpenForWrite(strFileName, bOverwrite))
@@ -356,12 +360,14 @@ ssize_t CAddonCallbacksAddon::ReadFile(const void* addonData, void* file, void* 
 bool CAddonCallbacksAddon::ReadFileString(const void* addonData, void* file, char *szLine, int iLineLength)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return false;
+}
 
   return cfile->ReadString(szLine, iLineLength);
 }
@@ -382,12 +388,14 @@ ssize_t CAddonCallbacksAddon::WriteFile(const void* addonData, void* file, const
 void CAddonCallbacksAddon::FlushFile(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return;
+}
 
   cfile->Flush();
 }
@@ -395,12 +403,14 @@ void CAddonCallbacksAddon::FlushFile(const void* addonData, void* file)
 int64_t CAddonCallbacksAddon::SeekFile(const void* addonData, void* file, int64_t iFilePosition, int iWhence)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return 0;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0;
+}
 
   return cfile->Seek(iFilePosition, iWhence);
 }
@@ -408,12 +418,14 @@ int64_t CAddonCallbacksAddon::SeekFile(const void* addonData, void* file, int64_
 int CAddonCallbacksAddon::TruncateFile(const void* addonData, void* file, int64_t iSize)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return 0;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0;
+}
 
   return cfile->Truncate(iSize);
 }
@@ -421,12 +433,14 @@ int CAddonCallbacksAddon::TruncateFile(const void* addonData, void* file, int64_
 int64_t CAddonCallbacksAddon::GetFilePosition(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return 0;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0;
+}
 
   return cfile->GetPosition();
 }
@@ -434,12 +448,14 @@ int64_t CAddonCallbacksAddon::GetFilePosition(const void* addonData, void* file)
 int64_t CAddonCallbacksAddon::GetFileLength(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return 0;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0;
+}
 
   return cfile->GetLength();
 }
@@ -447,12 +463,14 @@ int64_t CAddonCallbacksAddon::GetFileLength(const void* addonData, void* file)
 double CAddonCallbacksAddon::GetFileDownloadSpeed(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*)addonData;
-  if (!helper)
+  if (!helper) {
     return 0.0f;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0.0f;
+}
 
   return cfile->GetDownloadSpeed();
 }
@@ -460,8 +478,9 @@ double CAddonCallbacksAddon::GetFileDownloadSpeed(const void* addonData, void* f
 void CAddonCallbacksAddon::CloseFile(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return;
+}
 
   CFile* cfile = (CFile*)file;
   if (cfile)
@@ -474,12 +493,14 @@ void CAddonCallbacksAddon::CloseFile(const void* addonData, void* file)
 int CAddonCallbacksAddon::GetFileChunkSize(const void* addonData, void* file)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return 0;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return 0;
+}
 
   return cfile->GetChunkSize();
 }
@@ -487,8 +508,9 @@ int CAddonCallbacksAddon::GetFileChunkSize(const void* addonData, void* file)
 bool CAddonCallbacksAddon::FileExists(const void* addonData, const char *strFileName, bool bUseCache)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   return CFile::Exists(strFileName, bUseCache);
 }
@@ -496,8 +518,9 @@ bool CAddonCallbacksAddon::FileExists(const void* addonData, const char *strFile
 int CAddonCallbacksAddon::StatFile(const void* addonData, const char *strFileName, struct ::__stat64* buffer)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return -1;
+}
 
   return CFile::Stat(strFileName, buffer);
 }
@@ -505,8 +528,9 @@ int CAddonCallbacksAddon::StatFile(const void* addonData, const char *strFileNam
 bool CAddonCallbacksAddon::DeleteFile(const void* addonData, const char *strFileName)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   return CFile::Delete(strFileName);
 }
@@ -514,8 +538,9 @@ bool CAddonCallbacksAddon::DeleteFile(const void* addonData, const char *strFile
 bool CAddonCallbacksAddon::CanOpenDirectory(const void* addonData, const char* strURL)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   CFileItemList items;
   return CDirectory::GetDirectory(strURL, items);
@@ -524,8 +549,9 @@ bool CAddonCallbacksAddon::CanOpenDirectory(const void* addonData, const char* s
 bool CAddonCallbacksAddon::CreateDirectory(const void* addonData, const char *strPath)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   return CDirectory::Create(strPath);
 }
@@ -533,8 +559,9 @@ bool CAddonCallbacksAddon::CreateDirectory(const void* addonData, const char *st
 bool CAddonCallbacksAddon::DirectoryExists(const void* addonData, const char *strPath)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   return CDirectory::Exists(strPath);
 }
@@ -542,8 +569,9 @@ bool CAddonCallbacksAddon::DirectoryExists(const void* addonData, const char *st
 bool CAddonCallbacksAddon::RemoveDirectory(const void* addonData, const char *strPath)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   // Empty directory
   CFileItemList fileItems;
@@ -558,8 +586,9 @@ static void CFileItemListToVFSDirEntries(VFSDirEntry* entries,
                                          unsigned int num_entries,
                                          const CFileItemList& items)
 {
-  if (!entries)
+  if (!entries) {
     return;
+}
 
   int toCopy = std::min(num_entries, (unsigned int)items.Size());
 
@@ -575,8 +604,9 @@ static void CFileItemListToVFSDirEntries(VFSDirEntry* entries,
 bool CAddonCallbacksAddon::GetDirectory(const void* addonData, const char *strPath, const char* mask, VFSDirEntry** items, unsigned int* num_items)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   CFileItemList fileItems;
   if (!CDirectory::GetDirectory(strPath, fileItems, mask, DIR_FLAG_NO_FILE_DIRS))
@@ -600,8 +630,9 @@ bool CAddonCallbacksAddon::GetDirectory(const void* addonData, const char *strPa
 void CAddonCallbacksAddon::FreeDirectory(const void* addonData, VFSDirEntry* items, unsigned int num_items)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*) addonData;
-  if (!helper)
+  if (!helper) {
     return;
+}
 
   for (unsigned int i = 0; i < num_items; ++i)
   {
@@ -614,8 +645,9 @@ void CAddonCallbacksAddon::FreeDirectory(const void* addonData, VFSDirEntry* ite
 void* CAddonCallbacksAddon::CURLCreate(const void* addonData, const char* strURL)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*)addonData;
-  if (!helper)
+  if (!helper) {
     return nullptr;
+}
 
   auto  file = new CFile;
   if (file->CURLCreate(strURL))
@@ -629,12 +661,14 @@ void* CAddonCallbacksAddon::CURLCreate(const void* addonData, const char* strURL
 bool CAddonCallbacksAddon::CURLAddOption(const void* addonData, void* file, XFILE::CURLOPTIONTYPE type, const char* name, const char * value)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*)addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return false;
+}
 
   return cfile->CURLAddOption(type, name, value);
 }
@@ -642,12 +676,14 @@ bool CAddonCallbacksAddon::CURLAddOption(const void* addonData, void* file, XFIL
 bool CAddonCallbacksAddon::CURLOpen(const void* addonData, void* file, unsigned int flags)
 {
   CAddonInterfaces* helper = (CAddonInterfaces*)addonData;
-  if (!helper)
+  if (!helper) {
     return false;
+}
 
   CFile* cfile = (CFile*)file;
-  if (!cfile)
+  if (!cfile) {
     return false;
+}
 
   return cfile->CURLOpen(flags);
 }

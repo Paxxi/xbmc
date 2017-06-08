@@ -47,8 +47,9 @@ bool CDVDOverlayCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &optio
 {
 
   // decoding of this kind of subs does not work reliable
-  if (hints.codec == AV_CODEC_ID_EIA_608)
+  if (hints.codec == AV_CODEC_ID_EIA_608) {
     return false;
+}
 
   AVCodec* pCodec = avcodec_find_decoder(hints.codec);
   if (!pCodec)
@@ -58,8 +59,9 @@ bool CDVDOverlayCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &optio
   }
 
   m_pCodecContext = avcodec_alloc_context3(pCodec);
-  if (!m_pCodecContext)
+  if (!m_pCodecContext) {
     return false;
+}
 
   m_pCodecContext->debug_mv = 0;
   m_pCodecContext->debug = 0;
@@ -132,8 +134,9 @@ void CDVDOverlayCodecFFmpeg::Dispose()
 
 int CDVDOverlayCodecFFmpeg::Decode(DemuxPacket *pPacket)
 {
-  if (!m_pCodecContext || !pPacket)
+  if (!m_pCodecContext || !pPacket) {
     return 1;
+}
 
   int gotsub = 0, len = 0;
 
@@ -155,11 +158,13 @@ int CDVDOverlayCodecFFmpeg::Decode(DemuxPacket *pPacket)
     return OC_ERROR;
   }
 
-  if (len != avpkt.size)
+  if (len != avpkt.size) {
     CLog::Log(LOGWARNING, "%s - avcodec_decode_subtitle didn't consume the full packet", __FUNCTION__);
+}
 
-  if (!gotsub)
+  if (!gotsub) {
     return OC_BUFFER;
+}
 
   double pts_offset = 0.0;
  
@@ -201,8 +206,9 @@ void CDVDOverlayCodecFFmpeg::Flush()
 
 CDVDOverlay* CDVDOverlayCodecFFmpeg::GetOverlay()
 {
-  if(m_SubtitleIndex<0)
+  if(m_SubtitleIndex<0) {
     return nullptr;
+}
 
   if(m_Subtitle.num_rects == 0 && m_SubtitleIndex == 0)
   {
@@ -217,11 +223,13 @@ CDVDOverlay* CDVDOverlayCodecFFmpeg::GetOverlay()
 
   if(m_Subtitle.format == 0)
   {
-    if(m_SubtitleIndex >= (int)m_Subtitle.num_rects)
+    if(m_SubtitleIndex >= (int)m_Subtitle.num_rects) {
       return nullptr;
+}
 
-    if(m_Subtitle.rects[m_SubtitleIndex] == nullptr)
+    if(m_Subtitle.rects[m_SubtitleIndex] == nullptr) {
       return nullptr;
+}
 
     AVSubtitleRect rect = *m_Subtitle.rects[m_SubtitleIndex];
     if (rect.data[0] == NULL)

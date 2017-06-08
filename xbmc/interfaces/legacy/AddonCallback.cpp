@@ -30,10 +30,11 @@ namespace XBMCAddon
   {
     if (callback)
     {
-      if (hasHandler())
+      if (hasHandler()) {
         handler->invokeCallback(callback);
-      else
+      } else {
         callback->executeCallback();
+}
     }
   }
 }

@@ -60,18 +60,23 @@ unsigned int CDDSImage::GetHeight() const
 
 unsigned int CDDSImage::GetFormat() const
 {
-  if (m_desc.pixelFormat.flags & DDPF_RGB)
+  if (m_desc.pixelFormat.flags & DDPF_RGB) {
     return 0; // Not supported
+}
   if (m_desc.pixelFormat.flags & DDPF_FOURCC)
   {
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT1", 4) == 0)
+    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT1", 4) == 0) {
       return XB_FMT_DXT1;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT3", 4) == 0)
+}
+    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT3", 4) == 0) {
       return XB_FMT_DXT3;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT5", 4) == 0)
+}
+    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT5", 4) == 0) {
       return XB_FMT_DXT5;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "ARGB", 4) == 0)
+}
+    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "ARGB", 4) == 0) {
       return XB_FMT_A8R8G8B8;
+}
   }
   return 0;
 }
@@ -90,8 +95,9 @@ bool CDDSImage::ReadFile(const std::string &inputFile)
 {
   // open the file
   CFile file;
-  if (!file.Open(inputFile))
+  if (!file.Open(inputFile)) {
     return false;
+}
 
   // read the header
   uint32_t magic;
@@ -99,13 +105,15 @@ bool CDDSImage::ReadFile(const std::string &inputFile)
     return false;
   if (file.Read(&m_desc, sizeof(m_desc)) != sizeof(m_desc))
     return false;
-  if (!GetFormat())
+  if (!GetFormat()) {
     return false;  // not supported
+}
 
   // allocate our data
   m_data = new unsigned char[m_desc.linearSize];
-  if (!m_data)
+  if (!m_data) {
     return false;
+}
 
   // and read it in
   if (file.Read(m_data, m_desc.linearSize) != m_desc.linearSize)

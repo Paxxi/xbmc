@@ -84,8 +84,9 @@ bool CProgramThumbLoader::LoadItem(CFileItem *pItem)
 
 bool CProgramThumbLoader::LoadItemCached(CFileItem *pItem)
 {
-  if (pItem->IsParentFolder())
+  if (pItem->IsParentFolder()) {
     return false;
+}
 
   return FillThumb(*pItem);
 }

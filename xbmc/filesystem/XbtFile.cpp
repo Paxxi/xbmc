@@ -64,8 +64,9 @@ CXbtFile::~CXbtFile()
 
 bool CXbtFile::Open(const CURL& url)
 {
-  if (m_open)
+  if (m_open) {
     return false;
+}
 
   std::string options = url.GetOptions();
 
@@ -117,24 +118,27 @@ bool CXbtFile::Exists(const CURL& url)
 
 int64_t CXbtFile::GetPosition()
 {
-  if (!m_open)
+  if (!m_open) {
     return -1;
+}
 
   return m_positionTotal;
 }
 
 int64_t CXbtFile::GetLength()
 {
-  if (!m_open)
+  if (!m_open) {
     return -1;
+}
 
   return static_cast<int>(m_xbtfFile.GetUnpackedSize());
 }
 
 int CXbtFile::Stat(struct __stat64 *buffer)
 {
-  if (!m_open)
+  if (!m_open) {
     return -1;
+}
 
   return Stat(m_url, buffer);
 }
@@ -153,16 +157,18 @@ int CXbtFile::Stat(const CURL& url, struct __stat64* buffer)
       return -1;
 
     // stat the XBT file itself
-    if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0)
+    if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0) {
       return -1;
+}
 
     buffer->st_mode = _S_IFDIR;
     return 0;
   }
 
   // stat the XBT file itself
-  if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0)
+  if (XFILE::CFile::Stat(url.GetHostName(), buffer) != 0) {
     return -1;
+}
 
   buffer->st_size = file.GetUnpackedSize();
 
@@ -232,8 +238,9 @@ ssize_t CXbtFile::Read(void* lpBuf, size_t uiBufSize)
 
 int64_t CXbtFile::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_open)
+  if (!m_open) {
     return -1;
+}
 
   int64_t newPosition = m_positionTotal;
   switch (iWhence)
@@ -256,8 +263,9 @@ int64_t CXbtFile::Seek(int64_t iFilePosition, int iWhence)
   }
 
   // can't seek before the beginning or after the end of the file
-  if (newPosition < 0 || newPosition >= GetLength())
+  if (newPosition < 0 || newPosition >= GetLength()) {
     return -1;
+}
 
   // seeking backwards doesn't require additional work
   if (newPosition <= m_positionTotal)
@@ -314,8 +322,9 @@ int64_t CXbtFile::Seek(int64_t iFilePosition, int iWhence)
 uint32_t CXbtFile::GetImageWidth() const
 {
   CXBTFFrame frame;
-  if (!GetFirstFrame(frame))
+  if (!GetFirstFrame(frame)) {
     return false;
+}
 
   return frame.GetWidth();
 }
@@ -323,8 +332,9 @@ uint32_t CXbtFile::GetImageWidth() const
 uint32_t CXbtFile::GetImageHeight() const
 {
   CXBTFFrame frame;
-  if (!GetFirstFrame(frame))
+  if (!GetFirstFrame(frame)) {
     return false;
+}
 
   return frame.GetHeight();
 }
@@ -332,8 +342,9 @@ uint32_t CXbtFile::GetImageHeight() const
 uint32_t CXbtFile::GetImageFormat() const
 {
   CXBTFFrame frame;
-  if (!GetFirstFrame(frame))
+  if (!GetFirstFrame(frame)) {
     return false;
+}
 
   return frame.GetFormat();
 }
@@ -341,16 +352,18 @@ uint32_t CXbtFile::GetImageFormat() const
 bool CXbtFile::HasImageAlpha() const
 {
   CXBTFFrame frame;
-  if (!GetFirstFrame(frame))
+  if (!GetFirstFrame(frame)) {
     return false;
+}
 
   return frame.HasAlpha();
 }
 
 bool CXbtFile::GetFirstFrame(CXBTFFrame& frame) const
 {
-  if (!m_open)
+  if (!m_open) {
     return false;
+}
 
   const auto& frames = m_xbtfFile.GetFrames();
   if (frames.empty())
@@ -370,8 +383,9 @@ bool CXbtFile::GetReader(const CURL& url, CXBTFReaderPtr& reader)
 
 bool CXbtFile::GetReaderAndFile(const CURL& url, CXBTFReaderPtr& reader, CXBTFFile& file)
 {
-  if (!GetReader(url, reader))
+  if (!GetReader(url, reader)) {
     return false;
+}
 
   CURL xbtUrl(url);
   xbtUrl.SetOptions("");

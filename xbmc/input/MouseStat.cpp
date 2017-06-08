@@ -146,17 +146,19 @@ void CMouseStat::HandleEvent(XBMC_Event& newEvent)
   {
     // The bClick array is set true if CButtonState::Update spots a click
     // i.e. a button down followed by a button up.
-    if (bClick[button])
+    if (bClick[button]) {
       m_Key = KEY_MOUSE_CLICK + button;
     // The bDoubleClick array is set true if CButtonState::Update spots a
     // button down within double_click_time (500ms) of the last click
-    else if (bDoubleClick[button])
+    } else if (bDoubleClick[button]) {
       m_Key = KEY_MOUSE_DOUBLE_CLICK + button;
-    else if (bLongClick[button])
+    } else if (bLongClick[button]) {
       m_Key = KEY_MOUSE_LONG_CLICK + button;
+}
 
-    if (m_Key != KEY_MOUSE_NOOP)
+    if (m_Key != KEY_MOUSE_NOOP) {
       break;
+}
   }
 
   if (m_Key == KEY_MOUSE_NOOP)
@@ -194,24 +196,27 @@ void CMouseStat::HandleEvent(XBMC_Event& newEvent)
     }
 
     // dz is +1 on wheel up and -1 on wheel down
-    else if (m_mouseState.dz > 0)
+    else if (m_mouseState.dz > 0) {
       m_Key = KEY_MOUSE_WHEEL_UP;
-    else if (m_mouseState.dz < 0)
+    } else if (m_mouseState.dz < 0) {
       m_Key = KEY_MOUSE_WHEEL_DOWN;
 
     // Check for a mouse move that isn't a drag, ignoring messages with no movement at all
-    else if (newEvent.type == XBMC_MOUSEMOTION && (m_mouseState.dx || m_mouseState.dy))
+    } else if (newEvent.type == XBMC_MOUSEMOTION && (m_mouseState.dx || m_mouseState.dy)) {
       m_Key = KEY_MOUSE_MOVE;
+}
   }
 
   // activate the mouse pointer if we have an action or the mouse has moved far enough
   if ((MovedPastThreshold() && m_Key == KEY_MOUSE_MOVE) ||
-      (m_Key != KEY_MOUSE_NOOP && m_Key != KEY_MOUSE_MOVE))
+      (m_Key != KEY_MOUSE_NOOP && m_Key != KEY_MOUSE_MOVE)) {
     SetActive();
+}
 
   // reset the mouse state if nothing is held down
-  if (bNothingDown)
+  if (bNothingDown) {
     SetState(MOUSE_STATE_NORMAL);
+}
 }
 
 void CMouseStat::SetResolution(int maxX, int maxY, float speedX, float speedY)
@@ -238,8 +243,9 @@ void CMouseStat::SetActive(bool active /*=true*/)
 // IsActive - returns true if we have been active in the last MOUSE_ACTIVE_LENGTH period
 bool CMouseStat::IsActive()
 {
-  if (m_mouseState.active && (CTimeUtils::GetFrameTime() - m_lastActiveTime > MOUSE_ACTIVE_LENGTH))
+  if (m_mouseState.active && (CTimeUtils::GetFrameTime() - m_lastActiveTime > MOUSE_ACTIVE_LENGTH)) {
     SetActive(false);
+}
   return (m_mouseState.active && IsEnabled());
 }
 
@@ -293,8 +299,9 @@ CMouseStat::CButtonState::BUTTON_ACTION CMouseStat::CButtonState::Update(unsigne
 {
   if (m_state == STATE_IN_DRAG)
   {
-    if (down)
+    if (down) {
       return MB_DRAG;
+}
     m_state = STATE_RELEASED;
     return MB_DRAG_END;
   }
@@ -350,8 +357,9 @@ CMouseStat::CButtonState::BUTTON_ACTION CMouseStat::CButtonState::Update(unsigne
   }
   else if (m_state == STATE_IN_DOUBLE_IGNORE)
   {
-    if (!down)
+    if (!down) {
       m_state = STATE_RELEASED;
+}
   }
 
   return MB_NONE;

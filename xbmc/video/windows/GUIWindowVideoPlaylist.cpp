@@ -164,12 +164,13 @@ bool CGUIWindowVideoPlaylist::OnMessage(CGUIMessage& message)
       {
         // increment repeat state
         PLAYLIST::REPEAT_STATE state = g_playlistPlayer.GetRepeat(PLAYLIST_VIDEO);
-        if (state == PLAYLIST::REPEAT_NONE)
+        if (state == PLAYLIST::REPEAT_NONE) {
           g_playlistPlayer.SetRepeat(PLAYLIST_VIDEO, PLAYLIST::REPEAT_ALL);
-        else if (state == PLAYLIST::REPEAT_ALL)
+        } else if (state == PLAYLIST::REPEAT_ALL) {
           g_playlistPlayer.SetRepeat(PLAYLIST_VIDEO, PLAYLIST::REPEAT_ONE);
-        else
+        } else {
           g_playlistPlayer.SetRepeat(PLAYLIST_VIDEO, PLAYLIST::REPEAT_NONE);
+}
 
         // save settings
         CMediaSettings::GetInstance().SetVideoPlaylistRepeat(g_playlistPlayer.GetRepeat(PLAYLIST_VIDEO) == PLAYLIST::REPEAT_ALL);
@@ -228,10 +229,11 @@ bool CGUIWindowVideoPlaylist::MoveCurrentPlayListItem(int iItem, int iAction, bo
 {
   int iSelected = iItem;
   int iNew = iSelected;
-  if (iAction == ACTION_MOVE_ITEM_UP)
+  if (iAction == ACTION_MOVE_ITEM_UP) {
     iNew--;
-  else
+  } else {
     iNew++;
+}
 
   // is the currently playing item affected?
   bool bFixCurrentSong = false;
@@ -246,10 +248,11 @@ bool CGUIWindowVideoPlaylist::MoveCurrentPlayListItem(int iItem, int iAction, bo
     if (bFixCurrentSong)
     {
       int iCurrentSong = g_playlistPlayer.GetCurrentSong();
-      if (iSelected == iCurrentSong)
+      if (iSelected == iCurrentSong) {
         iCurrentSong = iNew;
-      else if (iNew == iCurrentSong)
+      } else if (iNew == iCurrentSong) {
         iCurrentSong = iSelected;
+}
       g_playlistPlayer.SetCurrentSong(iCurrentSong);
     }
 
@@ -313,8 +316,9 @@ void CGUIWindowVideoPlaylist::UpdateButtons()
 
   // update buttons
   CONTROL_DESELECT(CONTROL_BTNSHUFFLE);
-  if (g_playlistPlayer.IsShuffled(PLAYLIST_VIDEO))
+  if (g_playlistPlayer.IsShuffled(PLAYLIST_VIDEO)) {
     CONTROL_SELECT(CONTROL_BTNSHUFFLE);
+}
 
   // update repeat button
   int iRepeat = 595 + g_playlistPlayer.GetRepeat(PLAYLIST_VIDEO);
@@ -326,9 +330,9 @@ void CGUIWindowVideoPlaylist::UpdateButtons()
 bool CGUIWindowVideoPlaylist::OnPlayMedia(int iItem, const std::string &player)
 {
   if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) return false;
-  if (g_partyModeManager.IsEnabled())
+  if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Play(iItem);
-  else
+  } else
   {
     CFileItemPtr pItem = m_vecItems->Get(iItem);
     std::string strPath = pItem->GetPath();
@@ -397,8 +401,9 @@ void CGUIWindowVideoPlaylist::GetContextButtons(int itemNumber, CContextButtons 
   int itemPlaying = g_playlistPlayer.GetCurrentSong();
   if (m_movingFrom >= 0)
   {
-    if (itemNumber != m_movingFrom && (!g_partyModeManager.IsEnabled() || itemNumber > itemPlaying))
+    if (itemNumber != m_movingFrom && (!g_partyModeManager.IsEnabled() || itemNumber > itemPlaying)) {
       buttons.Add(CONTEXT_BUTTON_MOVE_HERE, 13252);         // move item here
+}
     buttons.Add(CONTEXT_BUTTON_CANCEL_MOVE, 13253);
 
   }
@@ -424,15 +429,19 @@ void CGUIWindowVideoPlaylist::GetContextButtons(int itemNumber, CContextButtons 
       else
         buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14076);     // Add To Favourites;
     }
-    if (itemNumber > (g_partyModeManager.IsEnabled() ? 1 : 0))
+    if (itemNumber > (g_partyModeManager.IsEnabled() ? 1 : 0)) {
       buttons.Add(CONTEXT_BUTTON_MOVE_ITEM_UP, 13332);
-    if (itemNumber + 1 < m_vecItems->Size())
+}
+    if (itemNumber + 1 < m_vecItems->Size()) {
       buttons.Add(CONTEXT_BUTTON_MOVE_ITEM_DOWN, 13333);
-    if (!g_partyModeManager.IsEnabled() || itemNumber != itemPlaying)
+}
+    if (!g_partyModeManager.IsEnabled() || itemNumber != itemPlaying) {
       buttons.Add(CONTEXT_BUTTON_MOVE_ITEM, 13251);
+}
 
-    if (itemNumber != itemPlaying)
+    if (itemNumber != itemPlaying) {
       buttons.Add(CONTEXT_BUTTON_DELETE, 15015);
+}
   }
   if (g_partyModeManager.IsEnabled())
   {
@@ -472,8 +481,9 @@ bool CGUIWindowVideoPlaylist::OnContextButton(int itemNumber, CONTEXT_BUTTON but
     return true;
 
   case CONTEXT_BUTTON_MOVE_HERE:
-    if (m_movingFrom >= 0)
+    if (m_movingFrom >= 0) {
       MoveItem(m_movingFrom, itemNumber);
+}
     m_movingFrom = -1;
     return true;
 
@@ -546,11 +556,12 @@ void CGUIWindowVideoPlaylist::MoveItem(int iStart, int iDest)
   while (i != iDest)
   {
     // try to swap adjacent items
-    if (MoveCurrentPlayListItem(i, iAction, false))
+    if (MoveCurrentPlayListItem(i, iAction, false)) {
       i = i + (1 * iDirection);
     // we hit currently playing song, so abort
-    else
+    } else {
       break;
+}
   }
   Refresh();
 }

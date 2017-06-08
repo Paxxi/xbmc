@@ -99,9 +99,9 @@ CGUIWindowVideoBase::~CGUIWindowVideoBase()
 
 bool CGUIWindowVideoBase::OnAction(const CAction &action)
 {
-  if (action.GetID() == ACTION_SCAN_ITEM)
+  if (action.GetID() == ACTION_SCAN_ITEM) {
     return OnContextButton(m_viewControl.GetSelectedItem(),CONTEXT_BUTTON_SCAN);
-  else if (action.GetID() == ACTION_SHOW_PLAYLIST)
+  } else if (action.GetID() == ACTION_SHOW_PLAYLIST)
   {
     if (g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_VIDEO ||
         g_playlistPlayer.GetPlaylist(PLAYLIST_VIDEO).size() > 0)
@@ -371,13 +371,14 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItemPtr item, const ScraperPtr &info2, b
     *item->GetVideoInfoTag() = movieDetails;
     pDlgInfo->SetMovie(item.get());
     pDlgInfo->Open();
-    if (pDlgInfo->HasUpdatedUserrating())
+    if (pDlgInfo->HasUpdatedUserrating()) {
       return true;
+}
     needsRefresh = pDlgInfo->NeedRefresh();
-    if (!needsRefresh)
+    if (!needsRefresh) {
       return pDlgInfo->HasUpdatedThumb();
     // check if the item in the video info dialog has changed and if so, get the new item
-    else if (pDlgInfo->GetCurrentListItem() != NULL)
+    } else if (pDlgInfo->GetCurrentListItem() != NULL)
     {
       item = pDlgInfo->GetCurrentListItem();
 
@@ -387,8 +388,9 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItemPtr item, const ScraperPtr &info2, b
   }
 
   // quietly return if Internet lookups are disabled
-  if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases() && !g_passwordManager.bMasterUser)
+  if (!CProfilesManager::GetInstance().GetCurrentProfile().canWriteDatabases() && !g_passwordManager.bMasterUser) {
     return false;
+}
 
   if (!info)
     return false;
@@ -427,8 +429,9 @@ void CGUIWindowVideoBase::OnQueueItem(int iItem)
   int playlist = g_playlistPlayer.GetCurrentPlaylist();
   if (playlist == PLAYLIST_NONE)
     playlist = g_application.m_pPlayer->GetPreferredPlaylist();
-  if (playlist == PLAYLIST_NONE)
+  if (playlist == PLAYLIST_NONE) {
     playlist = PLAYLIST_VIDEO;
+}
 
   // don't re-queue items from playlist window
   if ( iItem < 0 || iItem >= m_vecItems->Size() || GetID() == WINDOW_VIDEO_PLAYLIST ) return ;
@@ -559,8 +562,9 @@ void CGUIWindowVideoBase::AddItemToPlayList(const CFileItemPtr &pItem, CFileItem
 void CGUIWindowVideoBase::GetResumeItemOffset(const CFileItem *item, int& startoffset, int& partNumber)
 {
   // do not resume Live TV and 'deleted' items (e.g. trashed pvr recordings)
-  if (item->IsLiveTV() || item->IsDeleted())
+  if (item->IsLiveTV() || item->IsDeleted()) {
     return;
+}
 
   startoffset = 0;
   partNumber = 0;
@@ -575,8 +579,9 @@ void CGUIWindowVideoBase::GetResumeItemOffset(const CFileItem *item, int& starto
     {
       CBookmark bookmark;
       std::string strPath = item->GetPath();
-      if ((item->IsVideoDb() || item->IsDVD()) && item->HasVideoInfoTag())
+      if ((item->IsVideoDb() || item->IsDVD()) && item->HasVideoInfoTag()) {
         strPath = item->GetVideoInfoTag()->m_strFileNameAndPath;
+}
 
       CVideoDatabase db;
       if (!db.Open())
@@ -608,8 +613,9 @@ bool CGUIWindowVideoBase::OnClick(int iItem, const std::string &player)
 
 bool CGUIWindowVideoBase::OnSelect(int iItem)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return false;
+}
 
   CFileItemPtr item = m_vecItems->Get(iItem);
 
@@ -658,8 +664,9 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action, std::string player
       choices.Add(SELECT_ACTION_INFO, 22081); // Info
       choices.Add(SELECT_ACTION_MORE, 22082); // More
       int value = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-      if (value < 0)
+      if (value < 0) {
         return true;
+}
 
       return OnFileAction(iItem, value, player);
     }
@@ -667,8 +674,9 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action, std::string player
   case SELECT_ACTION_PLAY_OR_RESUME:
     return OnResumeItem(iItem, player);
   case SELECT_ACTION_INFO:
-    if (OnItemInfo(iItem))
+    if (OnItemInfo(iItem)) {
       return true;
+}
     break;
   case SELECT_ACTION_MORE:
     OnPopupMenu(iItem);
@@ -677,8 +685,9 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action, std::string player
     item->m_lStartOffset = STARTOFFSET_RESUME;
     break;
   case SELECT_ACTION_PLAYPART:
-    if (!OnPlayStackPart(iItem))
+    if (!OnPlayStackPart(iItem)) {
       return false;
+}
     break;
   case SELECT_ACTION_PLAY:
   default:
@@ -689,8 +698,9 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action, std::string player
 
 bool CGUIWindowVideoBase::OnItemInfo(int iItem) 
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return false;
+}
 
   CFileItemPtr item = m_vecItems->Get(iItem);
 
@@ -772,10 +782,12 @@ bool CGUIWindowVideoBase::ShowResumeMenu(CFileItem &item)
       choices.Add(1, resumeString);
       choices.Add(2, 12021); // Play from beginning
       int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-      if (retVal < 0)
+      if (retVal < 0) {
         return false; // don't do anything
-      if (retVal == 1)
+}
+      if (retVal == 1) {
         item.m_lStartOffset = STARTOFFSET_RESUME;
+}
     }
   }
   return true;
@@ -801,8 +813,9 @@ bool CGUIWindowVideoBase::OnResumeItem(int iItem, const std::string &player)
     choices.Add(SELECT_ACTION_RESUME, resumeString);
     choices.Add(SELECT_ACTION_PLAY, 12021);   // Play from beginning
     int value = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-    if (value < 0)
+    if (value < 0) {
       return true;
+}
     return OnFileAction(iItem, value, player);
   }
 
@@ -885,16 +898,18 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
 
 bool CGUIWindowVideoBase::OnPlayStackPart(int iItem)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return false;
+}
 
   CFileItemPtr stack = m_vecItems->Get(iItem);
   std::string path(stack->GetPath());
   if (stack->IsVideoDb())
     path = stack->GetVideoInfoTag()->m_strFileNameAndPath;
 
-  if (!URIUtils::IsStack(path))
+  if (!URIUtils::IsStack(path)) {
     return false;
+}
 
   CFileItemList parts;
   CDirectory::GetDirectory(path, parts);
@@ -926,10 +941,11 @@ bool CGUIWindowVideoBase::OnPlayStackPart(int iItem)
         choices.Add(SELECT_ACTION_RESUME, resumeString);
         choices.Add(SELECT_ACTION_PLAY, 12021);   // Play from beginning
         int value = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-        if (value == SELECT_ACTION_RESUME)
+        if (value == SELECT_ACTION_RESUME) {
           GetResumeItemOffset(parts[selectedFile].get(), stack->m_lStartOffset, stack->m_lStartPartNumber);
-        else if (value != SELECT_ACTION_PLAY)
+        } else if (value != SELECT_ACTION_PLAY) {
           return false; // if not selected PLAY, then we changed our mind so return
+}
       }
       stack->m_lStartPartNumber = selectedFile + 1;
     }
@@ -942,8 +958,9 @@ bool CGUIWindowVideoBase::OnPlayStackPart(int iItem)
         if (m_database.GetStackTimes(path,times))
           stack->m_lStartOffset = times[selectedFile - 1] * 75;
       }
-      else
-        stack->m_lStartOffset = 0;
+      else {
+        stack
+}->m_lStartOffset = 0;
     }
 
 
@@ -972,8 +989,9 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         CGUIMediaWindow::OnClick(itemNumber);
         return true;
       }
-      else
+      else {
         return false;
+}
     }
   case CONTEXT_BUTTON_QUEUE_ITEM:
     OnQueueItem(itemNumber);
@@ -1003,8 +1021,9 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         if (selectAction != SELECT_ACTION_PLAY_OR_RESUME &&
             selectAction != SELECT_ACTION_RESUME &&
             selectAction != SELECT_ACTION_PLAY &&
-            selectAction != SELECT_ACTION_PLAYPART)
+            selectAction != SELECT_ACTION_PLAYPART) {
           selectAction = SELECT_ACTION_PLAY_OR_RESUME;
+}
         return OnFileAction(itemNumber, selectAction, player);
       }
       return true;
@@ -1065,8 +1084,9 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
 bool CGUIWindowVideoBase::OnPlayMedia(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() )
+  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) {
     return false;
+}
 
   CFileItemPtr pItem = m_vecItems->Get(iItem);
 
@@ -1100,8 +1120,9 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem, const std::string &player)
     CPVRRecordingsPath path(item.GetPath());
     if (path.IsValid() && path.IsActive())
     {
-      if (!CServiceBroker::GetPVRManager().IsStarted())
+      if (!CServiceBroker::GetPVRManager().IsStarted()) {
         return false;
+}
 
       /* For recordings we check here for a available stream URL */
       CFileItemPtr tag = CServiceBroker::GetPVRManager().Recordings()->GetByPath(item.GetPath());
@@ -1167,8 +1188,9 @@ bool CGUIWindowVideoBase::OnPlayAndQueueMedia(const CFileItemPtr &item, std::str
 {
   // Get the current playlist and make sure it is not shuffled
   int iPlaylist = m_guiState->GetPlaylist();
-  if (iPlaylist != PLAYLIST_NONE && g_playlistPlayer.IsShuffled(iPlaylist))
+  if (iPlaylist != PLAYLIST_NONE && g_playlistPlayer.IsShuffled(iPlaylist)) {
      g_playlistPlayer.SetShuffle(iPlaylist, false);
+}
 
   CFileItemPtr movieItem(new CFileItem(*item));
 
@@ -1190,8 +1212,9 @@ void CGUIWindowVideoBase::PlayMovie(const CFileItem *item, const std::string &pl
 
 void CGUIWindowVideoBase::OnDeleteItem(int iItem)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size())
+  if ( iItem < 0 || iItem >= m_vecItems->Size()) {
     return;
+}
 
   OnDeleteItem(m_vecItems->Get(iItem));
 
@@ -1207,8 +1230,9 @@ void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
   if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE &&
       CProfilesManager::GetInstance().GetCurrentProfile().filesLocked())
   {
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
+    if (!g_passwordManager.IsMasterLockUnlocked(true)) {
       return;
+}
   }
 
   if ((CServiceBroker::GetSettings().GetBool(CSettings::SETTING_FILELISTS_ALLOWFILEDELETION) ||
@@ -1220,8 +1244,9 @@ void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
 void CGUIWindowVideoBase::LoadPlayList(const std::string& strPlayList, int iPlayList /* = PLAYLIST_VIDEO */)
 {
   // if partymode is active, we disable it
-  if (g_partyModeManager.IsEnabled())
+  if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Disable();
+}
 
   // load a playlist like .m3u, .pls
   // first get correct factory to load playlist
@@ -1409,8 +1434,9 @@ bool CGUIWindowVideoBase::CanContainFilter(const std::string &strDirectory) cons
 
 void CGUIWindowVideoBase::AddToDatabase(int iItem)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return;
+}
 
   CFileItemPtr pItem = m_vecItems->Get(iItem);
   if (pItem->IsParentFolder() || pItem->m_bIsFolder)
@@ -1427,8 +1453,9 @@ void CGUIWindowVideoBase::AddToDatabase(int iItem)
 
   // pick genre
   CGUIDialogSelect* pSelect = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
-  if (!pSelect)
+  if (!pSelect) {
     return;
+}
 
   pSelect->SetHeading(CVariant{530}); // Select Genre
   pSelect->Reset();
@@ -1440,10 +1467,11 @@ void CGUIWindowVideoBase::AddToDatabase(int iItem)
   pSelect->Open();
   std::string strGenre;
   int iSelected = pSelect->GetSelectedItem();
-  if (iSelected >= 0)
+  if (iSelected >= 0) {
     strGenre = items[iSelected]->GetLabel();
-  else if (!pSelect->IsButtonPressed())
+  } else if (!pSelect->IsButtonPressed()) {
     return;
+}
 
   // enter new genre string
   if (strGenre.empty())
@@ -1513,8 +1541,9 @@ void CGUIWindowVideoBase::OnSearch()
     pDlgSelect->Open();
 
     int iItem = pDlgSelect->GetSelectedItem();
-    if (iItem < 0)
+    if (iItem < 0) {
       return;
+}
 
     OnSearchItemFound(items[iItem].get());
   }
@@ -1543,10 +1572,11 @@ void CGUIWindowVideoBase::OnSearchItemFound(const CFileItem* pSelItem)
 
     strPath = pSelItem->GetPath();
     CURL url(strPath);
-    if (pSelItem->IsSmb() && !URIUtils::HasSlashAtEnd(strPath))
+    if (pSelItem->IsSmb() && !URIUtils::HasSlashAtEnd(strPath)) {
       strPath += "/";
 
-    for (int i = 0; i < m_vecItems->Size(); i++)
+    
+}for (int i = 0; i < m_vecItems->Size(); i++)
     {
       CFileItemPtr pItem = m_vecItems->Get(i);
       if (pItem->GetPath() == strPath)
@@ -1585,8 +1615,9 @@ void CGUIWindowVideoBase::OnSearchItemFound(const CFileItem* pSelItem)
 
 int CGUIWindowVideoBase::GetScraperForItem(CFileItem *item, ADDON::ScraperPtr &info, SScanSettings& settings)
 {
-  if (!item)
+  if (!item) {
     return 0;
+}
 
   if (m_vecItems->IsPlugin() || m_vecItems->IsRSS())
   {
@@ -1621,8 +1652,9 @@ std::string CGUIWindowVideoBase::GetStartFolder(const std::string &dir)
 
 void CGUIWindowVideoBase::AppendAndClearSearchItems(CFileItemList &searchItems, const std::string &prependLabel, CFileItemList &results)
 {
-  if (!searchItems.Size())
+  if (!searchItems.Size()) {
     return;
+}
 
   searchItems.Sort(SortByLabel, SortOrderAscending, CServiceBroker::GetSettings().GetBool(CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING) ? SortAttributeIgnoreArticle : SortAttributeNone);
   for (int i = 0; i < searchItems.Size(); i++)
@@ -1679,8 +1711,9 @@ void CGUIWindowVideoBase::OnAssignContent(const std::string &path)
     }
     else if (info != info2)
     {
-      if (OnUnAssignContent(path, 20442, 20443))
+      if (OnUnAssignContent(path, 20442, 20443)) {
         bScan = true;
+}
     }
     db.SetScraperForPath(path, info, settings);
   }

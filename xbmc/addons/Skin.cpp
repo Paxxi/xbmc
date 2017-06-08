@@ -57,15 +57,17 @@ namespace ADDON
 
 bool CSkinSetting::Serialize(TiXmlElement* parent) const
 {
-  if (parent == nullptr)
+  if (parent == nullptr) {
     return false;
+}
 
   TiXmlElement setting(XML_SETTING);
   setting.SetAttribute(XML_ATTR_ID, name.c_str());
   setting.SetAttribute(XML_ATTR_TYPE, GetType());
 
-  if (!SerializeSetting(&setting))
+  if (!SerializeSetting(&setting)) {
     return false;
+}
 
   parent->InsertEndChild(setting);
 
@@ -74,8 +76,9 @@ bool CSkinSetting::Serialize(TiXmlElement* parent) const
 
 bool CSkinSetting::Deserialize(const TiXmlElement* element)
 {
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   name = XMLUtils::GetAttribute(element, XML_ATTR_ID);
 
@@ -101,8 +104,9 @@ bool CSkinSettingString::Deserialize(const TiXmlElement* element)
 
 bool CSkinSettingString::SerializeSetting(TiXmlElement* element) const
 {
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   TiXmlText xmlValue(value);
   element->InsertEndChild(xmlValue);
@@ -125,8 +129,9 @@ bool CSkinSettingBool::Deserialize(const TiXmlElement* element)
 
 bool CSkinSettingBool::SerializeSetting(TiXmlElement* element) const
 {
-  if (element == nullptr)
+  if (element == nullptr) {
     return false;
+}
 
   TiXmlText xmlValue(value ? "true" : "false");
   element->InsertEndChild(xmlValue);

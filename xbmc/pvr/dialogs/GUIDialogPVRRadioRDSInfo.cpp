@@ -272,10 +272,11 @@ bool CGUIDialogPVRRadioRDSInfo::OnMessage(CGUIMessage& message)
           textbox->SetInfo(m_LabelInfoHoroscope);
         }
       }
-      if (m_InfoPresent)
+      if (m_InfoPresent) {
         SET_CONTROL_VISIBLE(CONTROL_INFO_LIST);
-      else
+      } else {
         SET_CONTROL_HIDDEN(CONTROL_INFO_LIST);
+}
     }
   }
 
@@ -404,10 +405,11 @@ void CGUIDialogPVRRadioRDSInfo::OnInitWindow()
     }
   }
 
-  if (m_InfoPresent)
+  if (m_InfoPresent) {
     SET_CONTROL_VISIBLE(CONTROL_INFO_LIST);
-  else
+  } else {
     SET_CONTROL_HIDDEN(CONTROL_INFO_LIST);
+}
 }
 
 void CGUIDialogPVRRadioRDSInfo::OnDeinitWindow(int nextWindowID)

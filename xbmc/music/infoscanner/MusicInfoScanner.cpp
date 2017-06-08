@@ -96,8 +96,9 @@ void CMusicInfoScanner::Process()
     {
       CGUIDialogExtendedProgressBar* dialog =
         g_windowManager.GetWindow<CGUIDialogExtendedProgressBar>(WINDOW_DIALOG_EXT_PROGRESS);
-      if (dialog)
+      if (dialog) {
         m_handle = dialog->GetHandle(g_localizeStrings.Get(314));
+}
     }
 
     // check if we only need to perform a cleaning
@@ -118,8 +119,9 @@ void CMusicInfoScanner::Process()
     {
       CLog::Log(LOGDEBUG, "%s - Starting scan", __FUNCTION__);
 
-      if (m_handle)
+      if (m_handle) {
         m_handle->SetTitle(g_localizeStrings.Get(505));
+}
 
       // Reset progress vars
       m_currentItem=0;
@@ -172,8 +174,9 @@ void CMusicInfoScanner::Process()
 
           m_musicDatabase.CleanupOrphanedItems();
 
-          if (m_handle)
+          if (m_handle) {
             m_handle->SetTitle(g_localizeStrings.Get(331));
+}
 
           m_musicDatabase.Compress(false);
         }
@@ -265,8 +268,9 @@ void CMusicInfoScanner::Process()
   CGUIMessage msg(GUI_MSG_SCAN_FINISHED, 0, 0, 0);
   g_windowManager.SendThreadMessage(msg);
   
-  if (m_handle)
+  if (m_handle) {
     m_handle->MarkFinished();
+}
   m_handle = nullptr;
 }
 
@@ -325,9 +329,9 @@ void CMusicInfoScanner::FetchAlbumInfo(const std::string& strDirectory,
   }
   else
   {
-    if (URIUtils::IsMusicDb(strDirectory))
+    if (URIUtils::IsMusicDb(strDirectory)) {
       CDirectory::GetDirectory(strDirectory,items);
-    else if (StringUtils::EndsWith(strDirectory, ".xsp"))
+    } else if (StringUtils::EndsWith(strDirectory, ".xsp"))
     {
       CURL url(strDirectory);
       CSmartPlaylistDirectory dir;
@@ -375,9 +379,9 @@ void CMusicInfoScanner::FetchArtistInfo(const std::string& strDirectory,
   }
   else
   {
-    if (URIUtils::IsMusicDb(strDirectory))
+    if (URIUtils::IsMusicDb(strDirectory)) {
       CDirectory::GetDirectory(strDirectory,items);
-    else if (StringUtils::EndsWith(strDirectory, ".xsp"))
+    } else if (StringUtils::EndsWith(strDirectory, ".xsp"))
     {
       CURL url(strDirectory);
       CSmartPlaylistDirectory dir;
@@ -425,8 +429,9 @@ void CMusicInfoScanner::Stop(bool wait /* = false*/)
 void CMusicInfoScanner::CleanDatabase(bool showProgress /* = true */)
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return;
+}
 
   musicdatabase.Cleanup(showProgress);
   musicdatabase.Close();
@@ -492,8 +497,9 @@ bool CMusicInfoScanner::DoScan(const std::string& strDirectory)
     // and then scan in the new information
     if (RetrieveMusicInfo(strDirectory, items) > 0)
     {
-      if (m_handle)
+      if (m_handle) {
         OnDirectoryScanned(strDirectory);
+}
     }
 
     // save information about this folder
@@ -507,8 +513,9 @@ bool CMusicInfoScanner::DoScan(const std::string& strDirectory)
     // updated the dialog with our progress
     if (m_handle)
     {
-      if (m_itemCount>0)
+      if (m_itemCount>0) {
         m_handle->SetPercentage(m_currentItem/(float)m_itemCount*100);
+}
       OnDirectoryScanned(strDirectory);
     }
   }
@@ -561,8 +568,9 @@ INFO_RET CMusicInfoScanner::ScanTags(const CFileItemList& items, CFileItemList& 
         pLoader->Load(pItem->GetPath(), tag);
     }
 
-    if (m_handle && m_itemCount>0)
+    if (m_handle && m_itemCount>0) {
       m_handle->SetPercentage(m_currentItem / (float)m_itemCount * 100);
+}
 
     if (!tag.Loaded() && !pItem->HasCueDocument())
     {
@@ -618,9 +626,10 @@ void CMusicInfoScanner::FileItemsToAlbums(CFileItemList& items, VECALBUMS& album
     if (!tag.GetMusicBrainzAlbumID().empty())
     {
       VECALBUMS::iterator it;
-      for (it = albums.begin(); it != albums.end(); ++it)
+      for (it = albums.begin(); it != albums.end(); ++it) {
         if (it->strMusicBrainzAlbumID == tag.GetMusicBrainzAlbumID())
           break;
+}
 
       if (it == albums.end())
       {
@@ -694,8 +703,9 @@ void CMusicInfoScanner::FileItemsToAlbums(CFileItemList& items, VECALBUMS& album
         !StringUtils::EqualsNoCase(artist, various)) // 3a
         compilation = false;
     }
-    else if (hasAlbumArtist) // 3b
+    else if (hasAlbumArtist) { // 3b
       compilation = false;
+}
 
     //Such a compilation album is stored with the localized value for "various artists" as the album artist
     if (compilation)
@@ -784,8 +794,9 @@ int CMusicInfoScanner::RetrieveMusicInfo(const std::string& strDirectory, CFileI
     m_needsCleanup = true;
 
   CFileItemList scannedItems;
-  if (ScanTags(items, scannedItems) == INFO_CANCELLED || scannedItems.Size() == 0)
+  if (ScanTags(items, scannedItems) == INFO_CANCELLED || scannedItems.Size() == 0) {
     return 0;
+}
 
   VECALBUMS albums;
   FileItemsToAlbums(scannedItems, albums, &songsMap);
@@ -889,8 +900,9 @@ int CMusicInfoScanner::RetrieveMusicInfo(const std::string& strDirectory, CFileI
     numAdded += album->songs.size();
   }
 
-  if (m_handle)
+  if (m_handle) {
     m_handle->SetTitle(g_localizeStrings.Get(505));
+}
 
   return numAdded;
 }
@@ -934,8 +946,9 @@ void CMusicInfoScanner::FindArtForAlbums(VECALBUMS &albums, const std::string &p
           singleArt = false;
           break;
         }
-        if (!art)
+        if (!art) {
           art = &song;
+}
       }
     }
 
@@ -1207,8 +1220,9 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
             item.m_idepth = i; // use this to hold the index of the album in the scraper
             pDlg->Add(item);
           }
-          if (relevance > .99f) // we're so close, no reason to search further
+          if (relevance > .99f) { // we're so close, no reason to search further
             break;
+}
         }
 
         if (pDialog && bestRelevance < THRESHOLD)
@@ -1219,8 +1233,9 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
           // and wait till user selects one
           if (pDlg->GetSelectedItem() < 0)
           { // none chosen
-            if (!pDlg->IsButtonPressed())
+            if (!pDlg->IsButtonPressed()) {
               return INFO_CANCELLED;
+}
 
             // manual button pressed
             std::string strNewAlbum = album.strAlbum;
@@ -1255,15 +1270,17 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
                                             album.strAlbum,
                                             info.GetAlbum().GetAlbumArtistString(),
                                             album.GetAlbumArtistString());
-        if (relevance < THRESHOLD)
+        if (relevance < THRESHOLD) {
           return INFO_NOT_FOUND;
+}
 
         iSelectedAlbum = 0;
       }
     }
 
-    if (iSelectedAlbum < 0)
+    if (iSelectedAlbum < 0) {
       return INFO_NOT_FOUND;
+}
 
   }
 
@@ -1278,8 +1295,9 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
     Sleep(1);
   }
 
-  if (!scraper.Succeeded())
+  if (!scraper.Succeeded()) {
     return INFO_ERROR;
+}
 
   albumInfo = scraper.GetAlbum(iSelectedAlbum);
   
@@ -1358,8 +1376,9 @@ INFO_RET CMusicInfoScanner::DownloadArtistInfo(const CArtist& artist, const ADDO
       scraper.SetScraperInfo(nfoReaderScraper);
       scraper.GetArtists().push_back(artistNfo);
     }
-    else
-      CLog::Log(LOGERROR,"Unable to find an url in nfo file: %s", strNfo.c_str());
+    else {
+      CLog
+}::Log(LOGERROR,"Unable to find an url in nfo file: %s", strNfo.c_str());
   }
 
   if (!scraper.GetArtistCount())
@@ -1415,8 +1434,9 @@ INFO_RET CMusicInfoScanner::DownloadArtistInfo(const CArtist& artist, const ADDO
           // and wait till user selects one
           if (pDlg->GetSelectedItem() < 0)
           { // none chosen
-            if (!pDlg->IsButtonPressed())
+            if (!pDlg->IsButtonPressed()) {
               return INFO_CANCELLED;
+}
 
             // manual button pressed
             std::string strNewArtist = artist.strArtist;
@@ -1437,8 +1457,9 @@ INFO_RET CMusicInfoScanner::DownloadArtistInfo(const CArtist& artist, const ADDO
         }
       }
     }
-    else
+    else {
       return INFO_NOT_FOUND;
+}
   }
 
   scraper.LoadArtistInfo(iSelectedArtist, artist.strArtist);
@@ -1452,8 +1473,9 @@ INFO_RET CMusicInfoScanner::DownloadArtistInfo(const CArtist& artist, const ADDO
     Sleep(1);
   }
 
-  if (!scraper.Succeeded())
+  if (!scraper.Succeeded()) {
     return INFO_ERROR;
+}
 
   artistInfo = scraper.GetArtist(iSelectedArtist);
 
@@ -1475,8 +1497,9 @@ bool CMusicInfoScanner::ResolveMusicBrainz(const std::string &strMusicBrainzID, 
   }
   catch (const ADDON::CScraperError &sce)
   {
-    if (sce.FAborted())
+    if (sce.FAborted()) {
       return false;
+}
   }
 
   if (!musicBrainzURL.m_url.empty())

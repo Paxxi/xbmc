@@ -59,8 +59,9 @@ std::string CMediaLibraryEvent::GetExecutionLabel() const
 
 bool CMediaLibraryEvent::Execute() const
 {
-  if (!CanExecute())
+  if (!CanExecute()) {
     return false;
+}
 
   int windowId = -1;
   std::string path = m_mediaPath;
@@ -114,8 +115,9 @@ bool CMediaLibraryEvent::Execute() const
     windowId = WINDOW_MUSIC_NAV;
   }
 
-  if (windowId < 0)
+  if (windowId < 0) {
     return false;
+}
 
   std::vector<std::string> params;
   params.push_back(path);

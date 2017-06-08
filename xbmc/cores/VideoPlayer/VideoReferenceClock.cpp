@@ -120,8 +120,9 @@ void CVideoReferenceClock::Process()
       m_pVideoSync.reset();
     }
 
-    if (!SetupSuccess)
+    if (!SetupSuccess) {
       break;
+}
   }
 }
 
@@ -130,9 +131,10 @@ void CVideoReferenceClock::UpdateClock(int NrVBlanks, bool CheckMissed)
 {
   if (CheckMissed) //set to true from the vblank run function, set to false from Wait and GetTime
   {
-    if (NrVBlanks < m_MissedVblanks) //if this is true the vblank detection in the run function is wrong
+    if (NrVBlanks < m_MissedVblanks) { //if this is true the vblank detection in the run function is wrong
       CLog::Log(LOGDEBUG, "CVideoReferenceClock: detected %i vblanks, missed %i, refreshrate might have changed",
                 NrVBlanks, m_MissedVblanks);
+}
 
     NrVBlanks -= m_MissedVblanks; //subtract the vblanks we missed
     m_MissedVblanks = 0;
@@ -192,8 +194,9 @@ int64_t CVideoReferenceClock::GetTime(bool interpolated /* = true*/)
 
       //make sure the clock doesn't go backwards
       int64_t intTime = m_CurrTime + static_cast<int64_t>(elapsed);
-      if (intTime > m_LastIntTime)
+      if (intTime > m_LastIntTime) {
         m_LastIntTime = intTime;
+}
 
       return m_LastIntTime;
     }
@@ -227,10 +230,11 @@ double CVideoReferenceClock::GetSpeed()
   CSingleLock SingleLock(m_CritSection);
 
   //VideoPlayer needs to know the speed for the resampler
-  if (m_UseVblank)
+  if (m_UseVblank) {
     return m_ClockSpeed;
-  else
+  } else {
     return 1.0;
+}
 }
 
 void CVideoReferenceClock::UpdateRefreshrate()
@@ -249,13 +253,15 @@ double CVideoReferenceClock::GetRefreshRate(double* interval /*= NULL*/)
 
   if (m_UseVblank)
   {
-    if (interval)
+    if (interval) {
       *interval = m_ClockSpeed / m_RefreshRate;
+}
 
     return m_RefreshRate;
   }
-  else
+  else {
     return -1;
+}
 }
 
 #define MAXVBLANKDELAY 13LL

@@ -197,8 +197,9 @@ IInputHandler* CPortManager::AssignToPort(const PeripheralPtr& device, bool chec
   }
 
   // If joystick requested a port but wasn't mapped, try again without checking port numbers
-  if (checkPortNumber && bPortRequested)
+  if (checkPortNumber && bPortRequested) {
     return AssignToPort(device, false);
+}
 
   return nullptr;
 }

@@ -106,10 +106,11 @@ void SetFlacArt(FLAC::File *flacFile, EmbeddedArt *art, CMusicInfoTag &tag)
   for (List<FLAC::Picture *>::ConstIterator i = pictures.begin(); i != pictures.end(); ++i)
   {
     FLAC::Picture *picture = *i;
-    if (picture->type() == FLAC::Picture::FrontCover)
+    if (picture->type() == FLAC::Picture::FrontCover) {
       cover[0] = picture;
-    else // anything else is taken as second priority
+    } else { // anything else is taken as second priority
       cover[1] = picture;
+}
   }
   for (auto & i : cover)
   {
@@ -257,8 +258,9 @@ int CTagLoaderTagLib::POPMtoXBMC(int popm)
   if (popm < 160) return 6;
   if (popm < 196) return 7;
   if (popm < 224) return 8;
-  if (popm < 255) return 9;
-  else return 10;
+  if (popm < 255) { return 9;
+  } else { return 10;
+}
 }
 
 template<>
@@ -1105,8 +1107,9 @@ void CTagLoaderTagLib::AddArtistInstrument(CMusicInfoTag &tag, const std::vector
 bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, const std::string& fallbackFileExtension, MUSIC_INFO::EmbeddedArt *art /* = NULL */)
 {
   // Dont try to read the tags for streams & shoutcast  
-  if (URIUtils::IsInternetStream(strFileName))
+  if (URIUtils::IsInternetStream(strFileName)) {
     return false;
+}
 
   std::string strExtension = URIUtils::GetExtension(strFileName);
   StringUtils::TrimLeft(strExtension, ".");
@@ -1209,48 +1212,50 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
   Ogg::XiphComment *xiph = nullptr;
   Tag *generic = nullptr;
 
-  if (apeFile)
+  if (apeFile) {
     ape = apeFile->APETag(false);
-  else if (asfFile)
+  } else if (asfFile) {
     asf = asfFile->tag();
-  else if (flacFile)
+  } else if (flacFile)
   {
     xiph = flacFile->xiphComment(false);
     id3v2 = flacFile->ID3v2Tag(false);
   }
-  else if (mp4File)
+  else if (mp4File) {
     mp4 = mp4File->tag();
-  else if (mpegFile)
+  } else if (mpegFile)
   {
     id3v1 = mpegFile->ID3v1Tag(false);
     id3v2 = mpegFile->ID3v2Tag(false);
     ape = mpegFile->APETag(false);
   }
-  else if (oggFlacFile)
+  else if (oggFlacFile) {
     xiph = dynamic_cast<Ogg::XiphComment *>(oggFlacFile->tag());
-  else if (oggVorbisFile)
+  } else if (oggVorbisFile) {
     xiph = dynamic_cast<Ogg::XiphComment *>(oggVorbisFile->tag());
-  else if (oggOpusFile)
+  } else if (oggOpusFile) {
     xiph = dynamic_cast<Ogg::XiphComment *>(oggOpusFile->tag());
-  else if (ttaFile)
+  } else if (ttaFile) {
     id3v2 = ttaFile->ID3v2Tag(false);
-  else if (aiffFile)
+  } else if (aiffFile) {
     id3v2 = aiffFile->tag();
-  else if (wavFile)
+  } else if (wavFile) {
 #if TAGLIB_MAJOR_VERSION > 1 || TAGLIB_MINOR_VERSION > 8
     id3v2 = wavFile->ID3v2Tag();
 #else
     id3v2 = wavFile->tag();
 #endif
-  else if (wvFile)
+  } else if (wvFile) {
     ape = wvFile->APETag(false);
-  else if (mpcFile)
+  } else if (mpcFile) {
     ape = mpcFile->APETag(false);
-  else    // This is a catch all to get generic information for other files types (s3m, xm, it, mod, etc)
+  } else {    // This is a catch all to get generic information for other files types (s3m, xm, it, mod, etc)
     generic = file->tag();
+}
 
-  if (file->audioProperties())
+  if (file->audioProperties()) {
     tag.SetDuration(file->audioProperties()->length());
+}
 
   if (asf)
     ParseTag(asf, art, tag);
@@ -1268,8 +1273,9 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
     ParseTag(ape, art, tag);
 
   // art for flac files is outside the tag
-  if (flacFile)
+  if (flacFile) {
     SetFlacArt(flacFile, art, tag);
+}
 
   if (!tag.GetTitle().empty() || !tag.GetArtist().empty() || !tag.GetAlbum().empty())
     tag.SetLoaded();

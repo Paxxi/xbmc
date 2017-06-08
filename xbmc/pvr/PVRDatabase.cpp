@@ -156,8 +156,9 @@ bool CPVRDatabase::DeleteChannels()
 bool CPVRDatabase::Delete(const CPVRChannel &channel)
 {
   /* invalid channel */
-  if (channel.ChannelID() <= 0)
+  if (channel.ChannelID() <= 0) {
     return false;
+}
 
   CLog::Log(LOGDEBUG, "PVR - %s - deleting channel '%s' from the database", __FUNCTION__, channel.ChannelName().c_str());
 
@@ -480,8 +481,9 @@ int CPVRDatabase::Get(CPVRChannelGroup &group)
     }
   }
 
-  if (iReturn > 0)
+  if (iReturn > 0) {
     group.SortByChannelNumber();
+}
 
   return iReturn;
 }
@@ -591,12 +593,14 @@ bool CPVRDatabase::Persist(CPVRChannelGroup &group)
   }
 
   /* only persist the channel data for the internal groups */
-  if (group.IsInternalGroup())
+  if (group.IsInternalGroup()) {
     bReturn &= PersistChannels(group);
+}
 
   /* persist the group member entries */
-  if (bReturn)
+  if (bReturn) {
     bReturn = PersistGroupMembers(group);
+}
 
   return bReturn;
 }
@@ -678,8 +682,9 @@ bool CPVRDatabase::SetWasPlayingOnLastQuit(const CPVRChannel &channel, bool bSet
   }
 
   // Set new value.
-  if (bRet && bSet != bWasPlaying)
+  if (bRet && bSet != bWasPlaying) {
     bRet = SetWasPlayingOnLastQuit(channel, bSet);
+}
 
   return bRet;
 }

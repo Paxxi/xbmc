@@ -43,13 +43,15 @@ bool CCDDADirectory::GetDirectory(const CURL& url, CFileItemList &items)
   // Reads the tracks from an audio cd
   std::string strPath = url.Get();
 
-  if (!g_mediaManager.IsDiscInDrive(strPath))
+  if (!g_mediaManager.IsDiscInDrive(strPath)) {
     return false;
+}
 
   // Get information for the inserted disc
   CCdInfo* pCdInfo = g_mediaManager.GetCdInfo(strPath);
-  if (pCdInfo == nullptr)
+  if (pCdInfo == nullptr) {
     return false;
+}
 
   //  Preload CDDB info
   CMusicDatabase musicdatabase;
@@ -57,16 +59,18 @@ bool CCDDADirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   // If the disc has no tracks, we are finished here.
   int nTracks = pCdInfo->GetTrackCount();
-  if (nTracks <= 0)
+  if (nTracks <= 0) {
     return false;
+}
 
   // Generate fileitems
   for (int i = 1;i <= nTracks;++i)
   {
     // Skip Datatracks for display,
     // but needed to query cddb
-    if (!pCdInfo->IsAudio(i))
+    if (!pCdInfo->IsAudio(i)) {
       continue;
+}
 
     // Format standard cdda item label
     std::string strLabel = StringUtils::Format("Track %2.2i", i);

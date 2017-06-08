@@ -75,8 +75,9 @@ void CGraphicContext::OnSettingChanged(std::shared_ptr<const CSetting> setting)
   const std::string &settingId = setting->GetId();
   if (settingId == CSettings::SETTING_VIDEOSCREEN_FAKEFULLSCREEN)
   {
-    if (IsFullScreenRoot())
+    if (IsFullScreenRoot()) {
       SetVideoResolution(GetVideoResolution(), true);
+}
   }
 }
 
@@ -333,13 +334,15 @@ void CGraphicContext::SetFullScreenVideo(bool bOnOff)
     bool allowDesktopRes = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ADJUSTREFRESHRATE) == ADJUST_REFRESHRATE_ALWAYS;
     if (m_bFullScreenVideo || (!allowDesktopRes && g_application.m_pPlayer->IsPlayingVideo()))
       g_application.m_pPlayer->TriggerUpdateResolution();
-    else if (CDisplaySettings::GetInstance().GetCurrentResolution() > RES_DESKTOP)
+    else if (CDisplaySettings::GetInstance().GetCurrentResolution() > RES_DESKTOP) {
       SetVideoResolution(CDisplaySettings::GetInstance().GetCurrentResolution());
-    else
+    } else {
       SetVideoResolution(RES_DESKTOP);
+}
   }
-  else
+  else {
     SetVideoResolution(RES_WINDOW);
+}
 
   Unlock();
 }
@@ -709,16 +712,18 @@ void CGraphicContext::SetResInfo(RESOLUTION res, const RESOLUTION_INFO& info)
   if(info.dwFlags & D3DPRESENTFLAG_MODE3DSBS)
   {
     curr.Overscan.right  = info.Overscan.right  * 2 + info.iBlanking;
-    if((curr.dwFlags & D3DPRESENTFLAG_MODE3DSBS) == 0)
+    if((curr.dwFlags & D3DPRESENTFLAG_MODE3DSBS) == 0) {
       curr.fPixelRatio  /= 2.0;
+}
   }
 
   if(info.dwFlags & D3DPRESENTFLAG_MODE3DTB)
   {
     curr.Overscan.bottom = info.Overscan.bottom * 2 + info.iBlanking;
     curr.iSubtitles      = info.iSubtitles      * 2 + info.iBlanking;
-    if((curr.dwFlags & D3DPRESENTFLAG_MODE3DTB) == 0)
+    if((curr.dwFlags & D3DPRESENTFLAG_MODE3DTB) == 0) {
       curr.fPixelRatio  *= 2.0;
+}
   }
 }
 
@@ -764,8 +769,9 @@ void CGraphicContext::GetGUIScaling(const RESOLUTION_INFO &res, float &scaleX, f
   else
   {
     scaleX = scaleY = 1.0f;
-    if (matrix)
+    if (matrix) {
       matrix->Reset();
+}
   }
 }
 
@@ -773,9 +779,9 @@ void CGraphicContext::SetScalingResolution(const RESOLUTION_INFO &res, bool need
 {
   Lock();
   m_windowResolution = res;
-  if (needsScaling && m_Resolution != RES_INVALID)
+  if (needsScaling && m_Resolution != RES_INVALID) {
     GetGUIScaling(res, m_guiTransform.scaleX, m_guiTransform.scaleY, &m_guiTransform.matrix);
-  else
+  } else
   {
     m_guiTransform.Reset();
   }
@@ -937,12 +943,15 @@ float CGraphicContext::GetFPS() const
   if (m_Resolution != RES_INVALID)
   {
     RESOLUTION_INFO info = g_graphicsContext.GetResInfo();
-    if (info.fRefreshRate > 0)
+    if (info.fRefreshRate > 0) {
       return info.fRefreshRate;
-    if (m_Resolution == RES_PAL_4x3 || m_Resolution == RES_PAL_16x9)
+}
+    if (m_Resolution == RES_PAL_4x3 || m_Resolution == RES_PAL_16x9) {
       return 50.0f;
-    if (m_Resolution == RES_HDTV_1080i)
+}
+    if (m_Resolution == RES_HDTV_1080i) {
       return 30.0f;
+}
   }
   return 60.0f;
 }
@@ -962,10 +971,11 @@ void CGraphicContext::ToggleFullScreen()
   }
   else
   {
-    if (CDisplaySettings::GetInstance().GetCurrentResolution() > RES_DESKTOP)
+    if (CDisplaySettings::GetInstance().GetCurrentResolution() > RES_DESKTOP) {
       uiRes = CDisplaySettings::GetInstance().GetCurrentResolution();
-    else
-      uiRes = (RESOLUTION) g_Windowing.DesktopResolution(g_Windowing.GetCurrentScreen());
+    } else {
+      uiRes 
+}= (RESOLUTION) g_Windowing.DesktopResolution(g_Windowing.GetCurrentScreen());
   }
 
   CDisplaySettings::GetInstance().SetCurrentResolution(uiRes, true);

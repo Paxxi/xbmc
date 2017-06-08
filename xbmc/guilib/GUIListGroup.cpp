@@ -51,8 +51,9 @@ void CGUIListGroup::AddControl(CGUIControl *control, int position /*= -1*/)
           control->GetControlType() == CGUIControl::GUICONTROL_BORDEREDIMAGE ||
           control->GetControlType() == CGUIControl::GUICONTROL_MULTI_IMAGE ||
           control->GetControlType() == CGUIControl::GUICONTROL_TEXTBOX ||
-          control->GetControlType() == CGUIControl::GUICONTROL_PROGRESS))
+          control->GetControlType() == CGUIControl::GUICONTROL_PROGRESS)) {
       CLog::Log(LOGWARNING, "Trying to add unsupported control type %d", control->GetControlType());
+}
   }
   CGUIControlGroup::AddControl(control, position);
 }
@@ -229,7 +230,8 @@ void CGUIListGroup::SelectItemFromPoint(const CPoint &point)
   for (iControls it = m_children.begin(); it != m_children.end(); ++it)
   {
     CGUIControl *child = *it;
-    if (child->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP)
+    if (child->GetControlType() == CGUIControl::GUICONTROL_LISTGROUP) {
       ((CGUIListGroup *)child)->SelectItemFromPoint(point);
+}
   }
 }

@@ -64,10 +64,11 @@ int CAutoSwitch::GetView(const CFileItemList &vecItems)
 
   default:
     {
-      if(MetadataPercentage(vecItems) > 0.25)
+      if(MetadataPercentage(vecItems) > 0.25) {
         return DEFAULT_VIEW_INFO;
-      else
+      } else {
         return DEFAULT_VIEW_LIST;
+}
     }
     break;
   }
@@ -202,8 +203,9 @@ bool CAutoSwitch::ByFileCount(const CFileItemList& vecItems)
 bool CAutoSwitch::ByFolderThumbPercentage(bool hideParentDirItems, int percent, const CFileItemList &vecItems)
 {
   int numItems = vecItems.Size();
-  if (!hideParentDirItems)
+  if (!hideParentDirItems) {
     numItems--;
+}
   if (numItems <= 0) return false;
 
   int fileCount = vecItems.GetFileCount();
@@ -216,8 +218,9 @@ bool CAutoSwitch::ByFolderThumbPercentage(bool hideParentDirItems, int percent, 
     if (item->m_bIsFolder && item->HasArt("thumb"))
     {
       numThumbs++;
-      if (numThumbs >= 0.01f * percent * (numItems - fileCount))
+      if (numThumbs >= 0.01f * percent * (numItems - fileCount)) {
         return true;
+}
     }
   }
 

@@ -60,8 +60,9 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
     return;
 
   // no need for "all" item when only one item
-  if (items.GetObjectCount() <= 1)
+  if (items.GetObjectCount() <= 1) {
     return;
+}
 
   CVideoDbUrl videoUrl;
   if (!videoUrl.FromString(directoryNode->BuildPath()))

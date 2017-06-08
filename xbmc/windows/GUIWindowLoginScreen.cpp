@@ -114,13 +114,15 @@ bool CGUIWindowLoginScreen::OnMessage(CGUIMessage& message)
 
           if (bOkay)
           {
-            if (iItem >= 0)
+            if (iItem >= 0) {
               LoadProfile((unsigned int)iItem);
+}
           }
           else
           {
-            if (!bCanceled && iItem != 0)
+            if (!bCanceled && iItem != 0) {
               CGUIDialogOK::ShowAndGetInput(CVariant{20068}, CVariant{20117});
+}
           }
         }
       }
@@ -236,16 +238,18 @@ bool CGUIWindowLoginScreen::OnPopupMenu(int iItem)
   CContextButtons choices;
   choices.Add(1, 20067);
 
-  if (iItem == 0 && g_passwordManager.iMasterLockRetriesLeft == 0)
+  if (iItem == 0 && g_passwordManager.iMasterLockRetriesLeft == 0) {
     choices.Add(2, 12334);
+}
 
   int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
   if (choice == 2)
   {
-    if (g_passwordManager.CheckLock(CProfilesManager::GetInstance().GetMasterProfile().getLockMode(),CProfilesManager::GetInstance().GetMasterProfile().getLockCode(),20075))
+    if (g_passwordManager.CheckLock(CProfilesManager::GetInstance().GetMasterProfile().getLockMode(),CProfilesManager::GetInstance().GetMasterProfile().getLockCode(),20075)) {
       g_passwordManager.iMasterLockRetriesLeft = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_MASTERLOCK_MAXRETRIES);
-    else // be inconvenient
+    } else { // be inconvenient
       CApplicationMessenger::GetInstance().PostMsg(TMSG_SHUTDOWN);
+}
 
     return true;
   }
@@ -289,8 +293,9 @@ void CGUIWindowLoginScreen::LoadProfile(unsigned int profile)
   else
   {
     CGUIWindow* pWindow = g_windowManager.GetWindow(WINDOW_HOME);
-    if (pWindow)
+    if (pWindow) {
       pWindow->ResetControlStates();
+}
   }
   g_application.getNetwork().NetworkMessage(CNetwork::SERVICES_UP,1);
 

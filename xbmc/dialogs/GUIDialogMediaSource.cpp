@@ -87,25 +87,26 @@ bool CGUIDialogMediaSource::OnMessage(CGUIMessage& message)
   {
     int iControl = message.GetSenderId();
     int iAction = message.GetParam1();
-    if (iControl == CONTROL_PATH && (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK))
+    if (iControl == CONTROL_PATH && (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)) {
       OnPath(GetSelectedItem());
-    else if (iControl == CONTROL_PATH_BROWSE)
+    } else if (iControl == CONTROL_PATH_BROWSE) {
       OnPathBrowse(GetSelectedItem());
-    else if (iControl == CONTROL_PATH_ADD)
+    } else if (iControl == CONTROL_PATH_ADD) {
       OnPathAdd();
-    else if (iControl == CONTROL_PATH_REMOVE)
+    } else if (iControl == CONTROL_PATH_REMOVE) {
       OnPathRemove(GetSelectedItem());
-    else if (iControl == CONTROL_NAME)
+    } else if (iControl == CONTROL_NAME)
     {
       OnEditChanged(iControl, m_name);
       UpdateButtons();
     }
-    else if (iControl == CONTROL_OK)
+    else if (iControl == CONTROL_OK) {
       OnOK();
-    else if (iControl == CONTROL_CANCEL)
+    } else if (iControl == CONTROL_CANCEL) {
       OnCancel();
-    else
+    } else {
       break;
+}
     return true;
   }
   break;
@@ -121,8 +122,9 @@ bool CGUIDialogMediaSource::OnMessage(CGUIMessage& message)
     {
       HighlightItem(GetSelectedItem());
     }
-    else
+    else {
       HighlightItem(-1);
+}
     break;
   }
   return CGUIDialog::OnMessage(message);
@@ -424,8 +426,9 @@ void CGUIDialogMediaSource::OnCancel()
 
 void CGUIDialogMediaSource::UpdateButtons()
 {
-  if (!m_paths->Size()) // sanity
+  if (!m_paths->Size()) { // sanity
     return;
+}
 
   CONTROL_ENABLE_ON_CONDITION(CONTROL_OK, !m_paths->Get(0)->GetPath().empty() && !m_name.empty());
   CONTROL_ENABLE_ON_CONDITION(CONTROL_PATH_ADD, !m_paths->Get(0)->GetPath().empty());
@@ -529,10 +532,11 @@ void CGUIDialogMediaSource::OnPathRemove(int item)
 {
   m_paths->Remove(item);
   UpdateButtons();
-  if (item >= m_paths->Size())
+  if (item >= m_paths->Size()) {
     HighlightItem(m_paths->Size() - 1);
-  else
+  } else {
     HighlightItem(item);
+}
   if (m_paths->Size() <= 1)
   {
     SET_CONTROL_FOCUS(CONTROL_PATH_ADD, 0);

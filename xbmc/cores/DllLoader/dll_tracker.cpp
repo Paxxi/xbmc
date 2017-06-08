@@ -94,8 +94,9 @@ void tracker_dll_set_addr(DllLoader* pDll, uintptr_t min, uintptr_t max)
 const char* tracker_getdllname(uintptr_t caller)
 {
   DllTrackInfo *track = tracker_get_dlltrackinfo(caller);
-  if(track)
+  if(track) {
     return track->pDll->GetFileName();
+}
   return "";
 }
 

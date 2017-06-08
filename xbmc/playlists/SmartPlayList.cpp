@@ -158,8 +158,9 @@ CSmartPlaylistRule::CSmartPlaylistRule()
 
 int CSmartPlaylistRule::TranslateField(const char *field) const
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
+  for (unsigned int i = 0; i < NUM_FIELDS; i++) {
     if (StringUtils::EqualsNoCase(field, fields[i].string)) return fields[i].field;
+}
   return FieldNone;
 }
 
@@ -208,30 +209,34 @@ std::string CSmartPlaylistRule::TranslateGroup(Field group)
 
 std::string CSmartPlaylistRule::GetLocalizedField(int field)
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
+  for (unsigned int i = 0; i < NUM_FIELDS; i++) {
     if (field == fields[i].field) return g_localizeStrings.Get(fields[i].localizedString);
+}
   return g_localizeStrings.Get(16018);
 }
 
 CDatabaseQueryRule::FIELD_TYPE CSmartPlaylistRule::GetFieldType(int field) const
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
+  for (unsigned int i = 0; i < NUM_FIELDS; i++) {
     if (field == fields[i].field) return fields[i].type;
+}
   return TEXT_FIELD;
 }
 
 bool CSmartPlaylistRule::IsFieldBrowseable(int field)
 {
-  for (unsigned int i = 0; i < NUM_FIELDS; i++)
+  for (unsigned int i = 0; i < NUM_FIELDS; i++) {
     if (field == fields[i].field) return fields[i].browseable;
+}
 
   return false;
 }
 
 bool CSmartPlaylistRule::Validate(const std::string &input, void *data)
 {
-  if (data == nullptr)
+  if (data == nullptr) {
     return true;
+}
 
   CSmartPlaylistRule *rule = (CSmartPlaylistRule*)data;
 
@@ -245,8 +250,9 @@ bool CSmartPlaylistRule::Validate(const std::string &input, void *data)
         break;
     }
   }
-  if (validator == nullptr)
+  if (validator == nullptr) {
     return true;
+}
 
   // split the input into multiple values and validate every value separately
   std::vector<std::string> values = StringUtils::Split(input, RULE_VALUE_SEPARATOR);
@@ -739,8 +745,9 @@ std::string CSmartPlaylistRule::GetBooleanQuery(const std::string &negate, const
   }
   if (strType == "albums")
   {
-    if (m_field == FieldCompilation)
+    if (m_field == FieldCompilation) {
       return negate + GetField(m_field, strType);
+}
   }
   return "";
 }
@@ -751,10 +758,11 @@ CDatabaseQueryRule::SEARCH_OPERATOR CSmartPlaylistRule::GetOperator(const std::s
   if ((strType == "tvshows" || strType == "episodes") && m_field == FieldYear)
   { // special case for premiered which is a date rather than a year
     //! @todo SMARTPLAYLISTS do we really need this, or should we just make this field the premiered date and request a date?
-    if (op == OPERATOR_EQUALS)
+    if (op == OPERATOR_EQUALS) {
       op = OPERATOR_CONTAINS;
-    else if (op == OPERATOR_DOES_NOT_EQUAL)
+    } else if (op == OPERATOR_DOES_NOT_EQUAL) {
       op = OPERATOR_DOES_NOT_CONTAIN;
+}
   }
   return op;
 }
@@ -949,8 +957,9 @@ std::string CSmartPlaylistRule::FormatWhereClause(const std::string &negate, con
 
 std::string CSmartPlaylistRule::GetField(int field, const std::string &type) const
 {
-  if (field >= FieldUnknown && field < FieldMax)
+  if (field >= FieldUnknown && field < FieldMax) {
     return DatabaseUtils::GetField((Field)field, CMediaTypes::FromString(type), DatabaseQueryPartWhere);
+}
   return "";
 }
 
@@ -1064,20 +1073,23 @@ CSmartPlaylist::CSmartPlaylist()
 
 bool CSmartPlaylist::OpenAndReadName(const CURL &url)
 {
-  if (readNameFromPath(url) == nullptr)
+  if (readNameFromPath(url) == nullptr) {
     return false;
+}
 
   return !m_playlistName.empty();
 }
 
 const TiXmlNode* CSmartPlaylist::readName(const TiXmlNode *root)
 {
-  if (root == nullptr)
+  if (root == nullptr) {
     return nullptr;
+}
 
   const TiXmlElement *rootElem = root->ToElement();
-  if (rootElem == nullptr)
+  if (rootElem == nullptr) {
     return nullptr;
+}
 
   if (!root || !StringUtils::EqualsNoCase(root->Value(),"smartplaylist"))
   {
@@ -1146,8 +1158,9 @@ const TiXmlNode* CSmartPlaylist::readNameFromXml(const std::string &xml)
 
 bool CSmartPlaylist::load(const TiXmlNode *root)
 {
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   return LoadFromXML(root);
 }
@@ -1165,8 +1178,9 @@ bool CSmartPlaylist::Load(const std::string &path)
 
 bool CSmartPlaylist::Load(const CVariant &obj)
 {
-  if (!obj.isObject())
+  if (!obj.isObject()) {
     return false;
+}
 
   // load the playlist type
   if (obj.isMember("type") && obj["type"].isString())
@@ -1219,12 +1233,14 @@ bool CSmartPlaylist::LoadFromXml(const std::string &xml)
 
 bool CSmartPlaylist::LoadFromXML(const TiXmlNode *root, const std::string &encoding)
 {
-  if (!root)
+  if (!root) {
     return false;
+}
 
   std::string tmp;
-  if (XMLUtils::GetString(root, "match", tmp))
+  if (XMLUtils::GetString(root, "match", tmp)) {
     m_ruleCombination.SetType(StringUtils::EqualsNoCase(tmp, "all") ? CSmartPlaylistRuleCombination::CombinationAnd : CSmartPlaylistRuleCombination::CombinationOr);
+}
 
   // now the rules
   const TiXmlNode *ruleNode = root->FirstChild("rule");
@@ -1255,12 +1271,14 @@ bool CSmartPlaylist::LoadFromXML(const TiXmlNode *root, const std::string &encod
   if (order && order->FirstChild())
   {
     const char *direction = order->Attribute("direction");
-    if (direction)
+    if (direction) {
       m_orderDirection = StringUtils::EqualsNoCase(direction, "ascending") ? SortOrderAscending : SortOrderDescending;
+}
 
     const char *ignorefolders = order->Attribute("ignorefolders");
-    if (ignorefolders != nullptr)
+    if (ignorefolders != nullptr) {
       m_orderAttributes = StringUtils::EqualsNoCase(ignorefolders, "true") ? SortAttributeIgnoreFolders : SortAttributeNone;
+}
 
     m_orderField = CSmartPlaylistRule::TranslateOrder(order->FirstChild()->Value());
   }
@@ -1273,8 +1291,9 @@ bool CSmartPlaylist::LoadFromJson(const std::string &json)
     return false;
 
   CVariant obj;
-  if (!CJSONVariantParser::Parse(json, obj))
+  if (!CJSONVariantParser::Parse(json, obj)) {
     return false;
+}
 
   return Load(obj);
 }
@@ -1288,8 +1307,9 @@ bool CSmartPlaylist::Save(const std::string &path) const
   TiXmlElement xmlRootElement("smartplaylist");
   xmlRootElement.SetAttribute("type",m_playlistType.c_str());
   TiXmlNode *pRoot = doc.InsertEndChild(xmlRootElement);
-  if (!pRoot)
+  if (!pRoot) {
     return false;
+}
 
   // add the <name> tag
   XMLUtils::SetString(pRoot, "name", m_playlistName);
@@ -1304,16 +1324,18 @@ bool CSmartPlaylist::Save(const std::string &path) const
   if (!m_group.empty())
   {
     TiXmlElement nodeGroup("group");
-    if (m_groupMixed)
+    if (m_groupMixed) {
       nodeGroup.SetAttribute("mixed", "true");
+}
     TiXmlText group(m_group.c_str());
     nodeGroup.InsertEndChild(group);
     pRoot->InsertEndChild(nodeGroup);
   }
 
   // add <limit> tag
-  if (m_limit)
+  if (m_limit) {
     XMLUtils::SetInt(pRoot, "limit", m_limit);
+}
 
   // add <order> tag
   if (m_orderField != SortByNone)
@@ -1321,8 +1343,9 @@ bool CSmartPlaylist::Save(const std::string &path) const
     TiXmlText order(CSmartPlaylistRule::TranslateOrder(m_orderField).c_str());
     TiXmlElement nodeOrder("order");
     nodeOrder.SetAttribute("direction", m_orderDirection == SortOrderDescending ? "descending" : "ascending");
-    if (m_orderAttributes & SortAttributeIgnoreFolders)
+    if (m_orderAttributes & SortAttributeIgnoreFolders) {
       nodeOrder.SetAttribute("ignorefolders", "true");
+}
     nodeOrder.InsertEndChild(order);
     pRoot->InsertEndChild(nodeOrder);
   }
@@ -1331,8 +1354,9 @@ bool CSmartPlaylist::Save(const std::string &path) const
 
 bool CSmartPlaylist::Save(CVariant &obj, bool full /* = true */) const
 {
-  if (obj.type() == CVariant::VariantTypeConstNull)
+  if (obj.type() == CVariant::VariantTypeConstNull) {
     return false;
+}
 
   obj.clear();
   // add "type"
@@ -1369,8 +1393,9 @@ bool CSmartPlaylist::Save(CVariant &obj, bool full /* = true */) const
 bool CSmartPlaylist::SaveAsJson(std::string &json, bool full /* = true */) const
 {
   CVariant xsp(CVariant::VariantTypeObject);
-  if (!Save(xsp, full))
+  if (!Save(xsp, full)) {
     return false;
+}
 
   return CJSONVariantWriter::Write(xsp, json, true) && !json.empty();
 }
@@ -1455,16 +1480,18 @@ void CSmartPlaylist::GetAvailableFields(const std::string &type, std::vector<std
 bool CSmartPlaylist::IsEmpty(bool ignoreSortAndLimit /* = true */) const
 {
   bool empty = m_ruleCombination.empty();
-  if (empty && !ignoreSortAndLimit)
+  if (empty && !ignoreSortAndLimit) {
     empty = m_limit <= 0 && m_orderField == SortByNone && m_orderDirection == SortOrderNone;
+}
 
   return empty;
 }
 
 bool CSmartPlaylist::CheckTypeCompatibility(const std::string &typeLeft, const std::string &typeRight)
 {
-  if (typeLeft == typeRight)
+  if (typeLeft == typeRight) {
     return true;
+}
 
   if (typeLeft == "mixed" &&
      (typeRight == "songs" || typeRight == "musicvideos"))

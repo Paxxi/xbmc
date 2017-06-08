@@ -116,8 +116,9 @@ void CDebugRenderer::CRenderer::Render(int idx)
     if (it->overlay_dvd)
       o = Convert(it->overlay_dvd, it->pts);
 
-    if (!o)
+    if (!o) {
       continue;
+}
 
     COverlayText *text = dynamic_cast<COverlayText*>(o);
     if (text)

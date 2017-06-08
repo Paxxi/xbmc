@@ -76,13 +76,15 @@ void CDVDInputStreamPVRManager::ResetScanTimeout(unsigned int iTimeoutMs)
 bool CDVDInputStreamPVRManager::IsEOF()
 {
   // don't mark as eof while within the scan timeout
-  if (!m_ScanTimeout.IsTimePast())
+  if (!m_ScanTimeout.IsTimePast()) {
     return false;
+}
 
-  if (m_pOtherStream)
+  if (m_pOtherStream) {
     return m_pOtherStream->IsEOF();
-  else
+  } else {
     return m_eof;
+}
 }
 
 bool CDVDInputStreamPVRManager::Open()
@@ -251,12 +253,14 @@ int CDVDInputStreamPVRManager::Read(uint8_t* buf, int buf_size)
   else
   {
     int ret = CServiceBroker::GetPVRManager().Clients()->ReadStream((BYTE*)buf, buf_size);
-    if (ret < 0)
+    if (ret < 0) {
       ret = -1;
+}
 
     /* we currently don't support non completing reads */
-    if( ret == 0 )
+    if( ret == 0 ) {
       m_eof = true;
+}
 
     return ret;
   }
@@ -281,8 +285,9 @@ int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
     int64_t ret = CServiceBroker::GetPVRManager().Clients()->SeekStream(offset, whence);
 
     // if we succeed, we are not eof anymore
-    if( ret >= 0 )
+    if( ret >= 0 ) {
       m_eof = false;
+}
 
     return ret;
   }
@@ -290,23 +295,26 @@ int64_t CDVDInputStreamPVRManager::Seek(int64_t offset, int whence)
 
 int64_t CDVDInputStreamPVRManager::GetLength()
 {
-  if (m_pOtherStream)
+  if (m_pOtherStream) {
     return m_pOtherStream->GetLength();
-  else
-    return CServiceBroker::GetPVRManager().Clients()->GetStreamLength();
+  } else {
+    return 
+}CServiceBroker::GetPVRManager().Clients()->GetStreamLength();
 }
 
 int CDVDInputStreamPVRManager::GetTotalTime()
 {
-  if (!m_isRecording)
+  if (!m_isRecording) {
     return CServiceBroker::GetPVRManager().GetTotalTime();
+}
   return 0;
 }
 
 int CDVDInputStreamPVRManager::GetTime()
 {
-  if (!m_isRecording)
+  if (!m_isRecording) {
     return CServiceBroker::GetPVRManager().GetStartTime();
+}
   return 0;
 }
 
@@ -321,8 +329,9 @@ bool CDVDInputStreamPVRManager::NextChannel(bool preview/* = false*/)
     if (item)
       return CloseAndOpen(item->GetPath());
   }
-  else if (!m_isRecording)
+  else if (!m_isRecording) {
     return CServiceBroker::GetPVRManager().ChannelUp(&newchannel, preview);
+}
   return false;
 }
 
@@ -337,8 +346,9 @@ bool CDVDInputStreamPVRManager::PrevChannel(bool preview/* = false*/)
     if (item)
       return CloseAndOpen(item->GetPath());
   }
-  else if (!m_isRecording)
+  else if (!m_isRecording) {
     return CServiceBroker::GetPVRManager().ChannelDown(&newchannel, preview);
+}
   return false;
 }
 
@@ -396,14 +406,15 @@ CDVDInputStream::ENextStream CDVDInputStreamPVRManager::NextStream()
   m_eof = IsEOF();
 
   CDVDInputStream::ENextStream next;
-  if (m_pOtherStream && ((next = m_pOtherStream->NextStream()) != NEXTSTREAM_NONE))
+  if (m_pOtherStream && ((next = m_pOtherStream->NextStream()) != NEXTSTREAM_NONE)) {
     return next;
-  else if(!m_isRecording)
+  } else if(!m_isRecording)
   {
-    if (m_eof)
+    if (m_eof) {
       return NEXTSTREAM_OPEN;
-    else
+    } else {
       return NEXTSTREAM_RETRY;
+}
   }
   return NEXTSTREAM_NONE;
 }
@@ -472,10 +483,11 @@ bool CDVDInputStreamPVRManager::IsRealtime()
 
 inline CDVDInputStream::IDemux* CDVDInputStreamPVRManager::GetIDemux()
 {
-  if (m_demuxActive)
+  if (m_demuxActive) {
     return this;
-  else
+  } else {
     return nullptr;
+}
 }
 
 bool CDVDInputStreamPVRManager::OpenDemux()

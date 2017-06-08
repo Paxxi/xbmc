@@ -113,8 +113,9 @@ PlayBackRet CApplicationPlayer::OpenFile(const CFileItem& item, const CPlayerOpt
 
     iResult = player->OpenFile(item, options) ? PLAYBACK_OK : PLAYBACK_FAIL;
     // check whether the OpenFile was canceled by either CloseFile or another OpenFile.
-    if (m_iPlayerOPSeq != startingSeq)
+    if (m_iPlayerOPSeq != startingSeq) {
       iResult = PLAYBACK_CANCELED;
+}
 
     // reset caching timers
     m_audioStreamUpdate.SetExpired();
@@ -186,11 +187,13 @@ bool CApplicationPlayer::HasGame() const
 
 int CApplicationPlayer::GetPreferredPlaylist() const
 {
-  if (IsPlayingVideo())
+  if (IsPlayingVideo()) {
     return PLAYLIST_VIDEO;
+}
 
-  if (IsPlayingAudio())
+  if (IsPlayingAudio()) {
     return PLAYLIST_MUSIC;
+}
 
   return PLAYLIST_NONE;
 }
@@ -370,8 +373,9 @@ int CApplicationPlayer::GetSubtitleCount()
 
 int CApplicationPlayer::GetAudioStream()
 {
-  if (!m_audioStreamUpdate.IsTimePast())
+  if (!m_audioStreamUpdate.IsTimePast()) {
     return m_iAudioStream;
+}
 
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -386,8 +390,9 @@ int CApplicationPlayer::GetAudioStream()
 
 int CApplicationPlayer::GetSubtitle()
 {
-  if (!m_subtitleStreamUpdate.IsTimePast())
+  if (!m_subtitleStreamUpdate.IsTimePast()) {
     return m_iSubtitleStream;
+}
 
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -554,8 +559,9 @@ int  CApplicationPlayer::GetAudioStreamCount()
 
 int CApplicationPlayer::GetVideoStream()
 {
-  if (!m_videoStreamUpdate.IsTimePast())
+  if (!m_videoStreamUpdate.IsTimePast()) {
     return m_iVideoStream;
+}
 
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -715,8 +721,9 @@ void CApplicationPlayer::SetPlaySpeed(float speed)
   if (!player)
     return;
 
-  if (!IsPlayingAudio() && !IsPlayingVideo())
+  if (!IsPlayingAudio() && !IsPlayingVideo()) {
     return ;
+}
 
   SetSpeed(speed);
   m_speedUpdate.SetExpired();
@@ -724,8 +731,9 @@ void CApplicationPlayer::SetPlaySpeed(float speed)
 
 float CApplicationPlayer::GetPlaySpeed()
 {
-  if (!m_speedUpdate.IsTimePast())
+  if (!m_speedUpdate.IsTimePast()) {
     return m_fPlaySpeed;
+}
 
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)

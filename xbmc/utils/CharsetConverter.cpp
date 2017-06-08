@@ -323,11 +323,13 @@ template<class INPUT,class OUTPUT>
 bool CCharsetConverter::CInnerConverter::stdConvert(StdConversionType convertType, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/)
 {
   strDest.clear();
-  if (strSource.empty())
+  if (strSource.empty()) {
     return true;
+}
 
-  if (convertType < 0 || convertType >= NumberOfStdConversionTypes)
+  if (convertType < 0 || convertType >= NumberOfStdConversionTypes) {
     return false;
+}
 
   CConverterType& convType = m_stdConversion[convertType];
   CSingleLock converterLock(convType);
@@ -339,8 +341,9 @@ template<class INPUT,class OUTPUT>
 bool CCharsetConverter::CInnerConverter::customConvert(const std::string& sourceCharset, const std::string& targetCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/)
 {
   strDest.clear();
-  if (strSource.empty())
+  if (strSource.empty()) {
     return true;
+}
 
   iconv_t conv = iconv_open(targetCharset.c_str(), sourceCharset.c_str());
   if (conv == NO_ICONV)
@@ -372,8 +375,9 @@ struct charPtrPtrAdapter
 template<class INPUT,class OUTPUT>
 bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar /*= false*/)
 {
-  if (type == NO_ICONV)
+  if (type == NO_ICONV) {
     return false;
+}
 
   //input buffer for iconv() is the buffer from strSource
   size_t      inBufSize  = (strSource.length() + 1) * sizeof(typename INPUT::value_type);
@@ -426,8 +430,9 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
       }
       else if (errno == EILSEQ) //An invalid multibyte sequence has been encountered in the input
       {
-        if (failOnInvalidChar)
+        if (failOnInvalidChar) {
           break;
+}
 
         //skip invalid byte
         inBufStart++;
@@ -465,10 +470,11 @@ bool CCharsetConverter::CInnerConverter::convert(iconv_t type, int multiplier, c
   const typename OUTPUT::size_type sizeInChars = (typename OUTPUT::size_type) (outBufSize - outBytesAvail) / sizeof(typename OUTPUT::value_type);
   typename OUTPUT::const_pointer strPtr = (typename OUTPUT::const_pointer) outBuf;
   /* Make sure that all buffer is assigned and string is stopped at end of buffer */
-  if (strPtr[sizeInChars-1] == 0 && strSource[strSource.length()-1] != 0)
+  if (strPtr[sizeInChars-1] == 0 && strSource[strSource.length()-1] != 0) {
     strDest.assign(strPtr, sizeInChars-1);
-  else
+  } else {
     strDest.assign(strPtr, sizeInChars);
+}
 
   free(outBuf);
 
@@ -616,8 +622,9 @@ std::string CCharsetConverter::getCharsetNameByLabel(const std::string& charsetL
 
 void CCharsetConverter::reset()
 {
-  for (auto & i : CInnerConverter::m_stdConversion)
+  for (auto & i : CInnerConverter::m_stdConversion) {
     i.Reset();
+}
 }
 
 void CCharsetConverter::resetSystemCharset()

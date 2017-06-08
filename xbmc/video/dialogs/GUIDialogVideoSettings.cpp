@@ -177,15 +177,17 @@ void CGUIDialogVideoSettings::OnSettingAction(std::shared_ptr<const CSetting> se
 void CGUIDialogVideoSettings::Save()
 {
   if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE &&
-      !g_passwordManager.CheckSettingLevelLock(::SettingLevelExpert))
+      !g_passwordManager.CheckSettingLevelLock(::SettingLevelExpert)) {
     return;
+}
 
   // prompt user if they are sure
   if (CGUIDialogYesNo::ShowAndGetInput(CVariant(12376), CVariant(12377)))
   { // reset the settings
     CVideoDatabase db;
-    if (!db.Open())
+    if (!db.Open()) {
       return;
+}
     db.EraseVideoSettings();
     db.Close();
 
@@ -375,8 +377,9 @@ void CGUIDialogVideoSettings::AddVideoStreams(std::shared_ptr<CSettingGroup> gro
     return;
 
   m_videoStream = g_application.m_pPlayer->GetVideoStream();
-  if (m_videoStream < 0)
+  if (m_videoStream < 0) {
     m_videoStream = 0;
+}
 
   AddList(group, settingId, 38031, 0, m_videoStream, VideoStreamsOptionFiller, 38031);
 }

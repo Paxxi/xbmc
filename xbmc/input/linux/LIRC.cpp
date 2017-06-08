@@ -66,8 +66,9 @@ CRemoteControl::~CRemoteControl()
 void CRemoteControl::SetEnabled(bool value)
 {
   m_used=value;
-  if (!value)
+  if (!value) {
     CLog::Log(LOGINFO, "LIRC %s: disabled", __FUNCTION__);
+}
 }
 
 void CRemoteControl::Reset()
@@ -88,10 +89,12 @@ void CRemoteControl::Disconnect()
 
   if (m_fd != -1) 
   {
-    if (m_file != nullptr)
+    if (m_file != nullptr) {
       fclose(m_file);
-    if (m_fd != -1)
+}
+    if (m_fd != -1) {
       close(m_fd);
+}
     m_fd = -1;
     m_file = nullptr;
 #ifdef HAVE_INOTIFY
@@ -99,8 +102,9 @@ void CRemoteControl::Disconnect()
       inotify_rm_watch(m_inotify_fd, m_inotify_wd);
       m_inotify_wd = -1;
     }
-    if (m_inotify_fd >= 0)
+    if (m_inotify_fd >= 0) {
       close(m_inotify_fd);
+}
 #endif
 
     m_inReply = false;
@@ -177,8 +181,9 @@ bool CRemoteControl::CheckDevice() {
     return false;
 
 #ifdef HAVE_INOTIFY
-  if (m_inotify_fd < 0 || m_inotify_wd < 0)
+  if (m_inotify_fd < 0 || m_inotify_wd < 0) {
     return true; // inotify wasn't setup for some reason, assume all is well
+}
   int bufsize = sizeof(struct inotify_event) + PATH_MAX;
   char buf[bufsize];
   int ret = read(m_inotify_fd, buf, bufsize);
@@ -200,8 +205,9 @@ void CRemoteControl::Update()
   if (!m_bInitialized || !m_used )
     return;
 
-  if (!CheckDevice())
+  if (!CheckDevice()) {
     return;
+}
 
   uint32_t now = XbmcThreads::SystemClockMillis();
 
@@ -211,8 +217,9 @@ void CRemoteControl::Update()
   {
     {
       CSingleLock lock(m_CS);
-      if (fgets(buf, sizeof(buf), m_file) == nullptr)
+      if (fgets(buf, sizeof(buf), m_file) == nullptr) {
         break;
+}
     }
 
     // Remove the \n
@@ -259,8 +266,9 @@ void CRemoteControl::Update()
 
     char *end = nullptr;
     long repeat = strtol(repeatStr, &end, 16);
-    if (!end || *end != 0)
+    if (!end || *end != 0) {
       CLog::Log(LOGERROR, "LIRC: invalid non-numeric character in expression %s", repeatStr);
+}
     if (repeat == 0)
     {
       CLog::Log(LOGDEBUG, "LIRC: %s - NEW at %d:%s (%s)", __FUNCTION__, now, buf, buttonName);
@@ -372,20 +380,25 @@ bool CRemoteControl::Connect(struct sockaddr_un addr, bool logMessages)
             CLog::Log(LOGINFO, "LIRC %s: successfully started", __FUNCTION__);
 #endif
           }
-          else
+          else {
             CLog::Log(LOGERROR, "LIRC %s: fdopen failed: %s", __FUNCTION__, strerror(errno));
+}
         }
-        else
+        else {
           CLog::Log(LOGERROR, "LIRC %s: fcntl(F_SETFL) failed: %s", __FUNCTION__, strerror(errno));
+}
       }
-      else
+      else {
         CLog::Log(LOGERROR, "LIRC %s: fcntl(F_GETFL) failed: %s", __FUNCTION__, strerror(errno));
+}
     }
-    else if (logMessages)
+    else if (logMessages) {
       CLog::Log(LOGINFO, "LIRC %s: connect failed: %s", __FUNCTION__, strerror(errno));
+}
   }
-  else if (logMessages)
+  else if (logMessages) {
     CLog::Log(LOGINFO, "LIRC %s: socket failed: %s", __FUNCTION__, strerror(errno));
+}
 
   return bResult;
 }

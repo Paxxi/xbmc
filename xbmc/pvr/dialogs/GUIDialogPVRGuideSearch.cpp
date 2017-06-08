@@ -234,8 +234,9 @@ std::string CGUIDialogPVRGuideSearch::GetEditValue(int controlID)
 
 void CGUIDialogPVRGuideSearch::OnSearch()
 {
-  if (!m_searchFilter)
+  if (!m_searchFilter) {
     return;
+}
 
   m_searchFilter->SetSearchTerm(GetEditValue(CONTROL_EDIT_SEARCH));
 
@@ -259,8 +260,9 @@ void CGUIDialogPVRGuideSearch::OnSearch()
 
 void CGUIDialogPVRGuideSearch::Update()
 {
-  if (!m_searchFilter)
+  if (!m_searchFilter) {
     return;
+}
 
   SET_CONTROL_LABEL2(CONTROL_EDIT_SEARCH, m_searchFilter->GetSearchTerm());
   {

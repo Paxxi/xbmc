@@ -68,8 +68,9 @@ void CGUIWindowPVRChannelsBase::GetContextButtons(int itemNumber, CContextButton
 
 bool CGUIWindowPVRChannelsBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return false;
+}
 
   return OnContextButtonManage(m_vecItems->Get(itemNumber), button) ||
       CGUIMediaWindow::OnContextButton(itemNumber, button);
@@ -295,8 +296,9 @@ void CGUIWindowPVRChannelsBase::ShowGroupManager()
 {
   /* Load group manager dialog */
   CGUIDialogPVRGroupManager* pDlgInfo = g_windowManager.GetWindow<CGUIDialogPVRGroupManager>(WINDOW_DIALOG_PVR_GROUP_MANAGER);
-  if (!pDlgInfo)
+  if (!pDlgInfo) {
     return;
+}
 
   pDlgInfo->SetRadio(m_bRadio);
   pDlgInfo->Open();

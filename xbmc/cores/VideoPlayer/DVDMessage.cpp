@@ -63,16 +63,18 @@ bool CDVDMsgGeneralSynchronize::Wait(unsigned int milliseconds, unsigned int sou
   XbmcThreads::EndTime timeout(milliseconds);
 
   m_p->reached |= (source & m_p->sources);
-  if ((m_p->sources & SYNCSOURCE_ANY) && source)
+  if ((m_p->sources & SYNCSOURCE_ANY) && source) {
     m_p->reached |= SYNCSOURCE_ANY;
+}
 
   m_p->condition.notifyAll();
 
   while (m_p->reached != m_p->sources)
   {
     milliseconds = std::min(m_p->timeout.MillisLeft(), timeout.MillisLeft());
-    if (m_p->condition.wait(lock, milliseconds))
+    if (m_p->condition.wait(lock, milliseconds)) {
       continue;
+}
 
     if (m_p->timeout.IsTimePast())
     {
@@ -98,8 +100,9 @@ long CDVDMsgGeneralSynchronize::Release()
   long count = --m_refs;
   m_p->condition.notifyAll();
   lock.Leave();
-  if (count == 0)
+  if (count == 0) {
     delete this;
+}
   return count;
 }
 
@@ -120,8 +123,9 @@ CDVDMsgDemuxerPacket::~CDVDMsgDemuxerPacket()
 
 unsigned int CDVDMsgDemuxerPacket::GetPacketSize()
 {
-  if (m_packet)
+  if (m_packet) {
     return m_packet->iSize;
-  else
+  } else {
     return 0;
+}
 }

@@ -97,8 +97,9 @@ void CGUIDialogPictureInfo::UpdatePictureInfo()
   {
     // we only want to add SLIDE_EXIF_DATE_TIME
     // so we skip the other date formats
-    if (info == SLIDE_EXIF_DATE || info == SLIDE_EXIF_LONG_DATE || info == SLIDE_EXIF_LONG_DATE_TIME )
+    if (info == SLIDE_EXIF_DATE || info == SLIDE_EXIF_LONG_DATE || info == SLIDE_EXIF_LONG_DATE_TIME ) {
       continue;
+}
 
     std::string picInfo = g_infoManager.GetLabel(info);
     if (!picInfo.empty())

@@ -141,8 +141,9 @@ Value &CGUIFontCache<Position, Value>::Lookup(Position &pos,
                                               bool scrolling,
                                               unsigned int nowMillis, bool &dirtyCache)
 {
-  if (m_impl == nullptr)
+  if (m_impl == nullptr) {
     m_impl = new CGUIFontCacheImpl<Position, Value>(this);
+}
 
   return m_impl->Lookup(pos, colors, text, alignment, maxPixelWidth, scrolling, nowMillis, dirtyCache);
 }
@@ -175,10 +176,11 @@ Value &CGUIFontCacheImpl<Position, Value>::Lookup(Position &pos,
 
     // add new entry
     CGUIFontCacheHash<Position> hashgen;
-    if (!entry)
+    if (!entry) {
       entry = new CGUIFontCacheEntry<Position, Value>(*m_parent, key, nowMillis);
-    else
+    } else {
       entry->Assign(key, nowMillis);
+}
     return m_list.Insert(hashgen(key), entry)->second->m_value;
   }
   else
@@ -222,6 +224,7 @@ template void CGUIFontCache<CGUIFontCacheDynamicPosition, CGUIFontCacheDynamicVa
 
 void CVertexBuffer::clear()
 {
-  if (m_font != nullptr)
+  if (m_font != nullptr) {
     m_font->DestroyVertexBuffer(*this);
+}
 }

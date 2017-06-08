@@ -48,8 +48,9 @@ namespace XBMCAddon
     String WsgiInputStreamIterator::read(unsigned long size /* = 0 */) const
     {
       // make sure we don't try to read more data than we have
-      if (size <= 0 || size > m_remaining)
+      if (size <= 0 || size > m_remaining) {
         size = m_remaining;
+}
 
       // remember the current read offset
       size_t offset = static_cast<size_t>(m_offset);
@@ -65,8 +66,9 @@ namespace XBMCAddon
     String WsgiInputStreamIterator::readline(unsigned long size /* = 0 */) const
     {
       // make sure we don't try to read more data than we have
-      if (size <= 0 || size > m_remaining)
+      if (size <= 0 || size > m_remaining) {
         size = m_remaining;
+}
 
       size_t offset = static_cast<size_t>(m_offset);
       size_t pos = m_data.find('\n', offset);
@@ -166,8 +168,9 @@ namespace XBMCAddon
 
     void WsgiInputStream::SetRequest(HTTPPythonRequest* request)
     {
-      if (m_request != nullptr)
+      if (m_request != nullptr) {
         return;
+}
 
       m_request = request;
 

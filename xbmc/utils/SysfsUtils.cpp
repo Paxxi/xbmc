@@ -75,8 +75,9 @@ int SysfsUtils::SetInt(const std::string& path, const int val)
   {
     char bcmd[16];
     sprintf(bcmd, "%d", val);
-    if (write(fd, bcmd, strlen(bcmd)) < 0)
+    if (write(fd, bcmd, strlen(bcmd)) < 0) {
       ret = -1;
+}
     close(fd);
   }
   if (ret)
@@ -92,10 +93,11 @@ int SysfsUtils::GetInt(const std::string& path, int& val)
   if (fd >= 0)
   {
     char bcmd[16];
-    if (read(fd, bcmd, sizeof(bcmd)) < 0)
+    if (read(fd, bcmd, sizeof(bcmd)) < 0) {
       ret = -1;
-    else
+    } else {
       val = strtol(bcmd, nullptr, 16);
+}
 
     close(fd);
   }

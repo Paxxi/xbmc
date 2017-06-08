@@ -85,16 +85,21 @@ CPluginSource::Content CPluginSource::Translate(const std::string &content)
 
 TYPE CPluginSource::FullType() const
 {
-  if (Provides(VIDEO))
+  if (Provides(VIDEO)) {
     return ADDON_VIDEO;
-  if (Provides(AUDIO))
+}
+  if (Provides(AUDIO)) {
     return ADDON_AUDIO;
-  if (Provides(IMAGE))
+}
+  if (Provides(IMAGE)) {
     return ADDON_IMAGE;
-  if (Provides(GAME))
+}
+  if (Provides(GAME)) {
     return ADDON_GAME;
-  if (Provides(EXECUTABLE))
+}
+  if (Provides(EXECUTABLE)) {
     return ADDON_EXECUTABLE;
+}
 
   return CAddon::FullType();
 }

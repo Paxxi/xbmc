@@ -103,8 +103,9 @@ void CDVDSubtitleTagMicroDVD::ConvertLine(CDVDOverlayText* pOverlay, const char*
           strUTF8.replace(pos, 1, "[I]");
           pos += 3;
         }
-        else
-          strUTF8.erase(pos, 1);
+        else {
+          strUTF8.erase
+}(pos, 1);
       }
       else
         machine_status = 2;

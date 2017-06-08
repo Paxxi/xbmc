@@ -131,8 +131,9 @@ bool CGUIWindowSettingsCategory::OnAction(const CAction &action)
     case ACTION_SETTINGS_LEVEL_CHANGE:
     {
       //Test if we can access the new level
-      if (!g_passwordManager.CheckSettingLevelLock(CViewStateSettings::GetInstance().GetNextSettingLevel(), true))
+      if (!g_passwordManager.CheckSettingLevelLock(CViewStateSettings::GetInstance().GetNextSettingLevel(), true)) {
         return false;
+}
       
       CViewStateSettings::GetInstance().CycleSettingLevel();
       CServiceBroker::GetSettings().Save();

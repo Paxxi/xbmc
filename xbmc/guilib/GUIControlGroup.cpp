@@ -124,8 +124,9 @@ void CGUIControlGroup::Render()
     else
       control->DoRender();
   }
-  if (focusedControl)
+  if (focusedControl) {
     focusedControl->DoRender();
+}
   CGUIControl::Render();
   g_graphicsContext.RestoreOrigin();
 }
@@ -180,8 +181,9 @@ bool CGUIControlGroup::OnMessage(CGUIMessage& message)
       m_focusedControl = message.GetControlId();
       SetFocus(true);
       // tell our parent thatwe have focus
-      if (m_parentControl)
+      if (m_parentControl) {
         m_parentControl->OnMessage(message);
+}
       return true;
     }
   case GUI_MSG_SETFOCUS:
@@ -225,8 +227,9 @@ bool CGUIControlGroup::OnMessage(CGUIMessage& message)
       if (!GetControl(message.GetParam1()))
       { // we don't have the new id, so unfocus
         SetFocus(false);
-        if (m_parentControl)
+        if (m_parentControl) {
           m_parentControl->OnMessage(message);
+}
       }
       return true;
     }
@@ -266,8 +269,9 @@ bool CGUIControlGroup::SendControlMessage(CGUIMessage &message)
 {
   CGUIControl *ctrl = GetControl(message.GetControlId(), &m_idCollector);
   // see if a child matches, and send to the child control if so
-  if (ctrl && ctrl->OnMessage(message))
+  if (ctrl && ctrl->OnMessage(message)) {
     return true;
+}
 
   // Unhandled - send to all matching invisible controls as well
   bool handled(false);
@@ -433,10 +437,11 @@ const CGUIControl* CGUIControlGroup::GetControl(int iControl) const
     for (LookupMap::const_iterator i = first; i != last; ++i)
     {
       const CGUIControl *control = i->second;
-      if (control->IsVisible())
+      if (control->IsVisible()) {
         return control;
-      else if (!pPotential)
+      } else if (!pPotential) {
         pPotential = control;
+}
     }
   }
   return pPotential;
@@ -525,8 +530,9 @@ void CGUIControlGroup::AddLookup(CGUIControl *control)
   if (control->GetID())
     m_lookup.insert(m_lookup.upper_bound(control->GetID()), std::make_pair(control->GetID(), control));
   // ensure that our size is what it should be
-  if (m_parentControl)
+  if (m_parentControl) {
     ((CGUIControlGroup *)m_parentControl)->AddLookup(control);
+}
 }
 
 void CGUIControlGroup::RemoveLookup(CGUIControl *control)
@@ -558,8 +564,9 @@ void CGUIControlGroup::RemoveLookup(CGUIControl *control)
       }
     }
   }
-  if (m_parentControl)
+  if (m_parentControl) {
     ((CGUIControlGroup *)m_parentControl)->RemoveLookup(control);
+}
 }
 
 bool CGUIControlGroup::IsValidControl(const CGUIControl *control) const
@@ -581,9 +588,9 @@ bool CGUIControlGroup::InsertControl(CGUIControl *control, const CGUIControl *in
   for (unsigned int i = 0; i < m_children.size(); i++)
   {
     CGUIControl *child = m_children[i];
-    if (child->IsGroup() && ((CGUIControlGroup *)child)->InsertControl(control, insertPoint))
+    if (child->IsGroup() && ((CGUIControlGroup *)child)->InsertControl(control, insertPoint)) {
       return true;
-    else if (child == insertPoint)
+    } else if (child == insertPoint)
     {
       AddControl(control, i);
       return true;
@@ -606,8 +613,9 @@ bool CGUIControlGroup::RemoveControl(const CGUIControl *control)
   for (iControls it = m_children.begin(); it != m_children.end(); ++it)
   {
     CGUIControl *child = *it;
-    if (child->IsGroup() && ((CGUIControlGroup *)child)->RemoveControl(control))
+    if (child->IsGroup() && ((CGUIControlGroup *)child)->RemoveControl(control)) {
       return true;
+}
     if (control == child)
     {
       m_children.erase(it);

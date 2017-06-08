@@ -74,8 +74,9 @@ void CGUIKeyboardFactory::keyTypedCB(CGUIKeyboard *ref, const std::string &typed
 
 bool CGUIKeyboardFactory::SendTextToActiveKeyboard(const std::string &aTextString, bool closeKeyboard /* = false */)
 {
-  if (!g_activeKeyboard)
+  if (!g_activeKeyboard) {
     return false;
+}
   return g_activeKeyboard->SetTextToKeyboard(aTextString, closeKeyboard);
 }
 
@@ -89,10 +90,11 @@ bool CGUIKeyboardFactory::ShowAndGetInput(std::string& aTextString, CVariant hea
   CGUIKeyboard *kb = nullptr;
   //heading can be a string or a localization id
   std::string headingStr;
-  if (heading.isString())
+  if (heading.isString()) {
     headingStr = heading.asString();
-  else if (heading.isInteger() && heading.asInteger())
+  } else if (heading.isInteger() && heading.asInteger()) {
     headingStr = g_localizeStrings.Get((uint32_t)heading.asInteger());
+}
 
 #if defined(TARGET_DARWIN_IOS)
   kb = g_windowManager.GetWindow<CGUIDialogKeyboardTouch>(WINDOW_DIALOG_KEYBOARD_TOUCH);
@@ -208,9 +210,10 @@ int CGUIKeyboardFactory::ShowAndVerifyPassword(std::string& strPassword, const s
   if (!strPassword.empty())
   {
     std::string md5pword2 = XBMC::XBMC_MD5::GetMD5(strUserInput);
-    if (StringUtils::EqualsNoCase(strPassword, md5pword2))
+    if (StringUtils::EqualsNoCase(strPassword, md5pword2)) {
       return 0;     // user entered correct password
-    else return 1;  // user must have entered an incorrect password
+    } else { return 1;  // user must have entered an incorrect password
+}
   }
   else
   {

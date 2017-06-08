@@ -156,8 +156,9 @@ bool CRssManager::Load()
 
       m_mapRssUrls.insert(std::make_pair(iId,set));
     }
-    else
+    else {
       CLog::Log(LOGERROR, "CRssManager: found rss url set with no id in RssFeeds.xml, ignored");
+}
 
     pSet = pSet->NextSiblingElement("set");
   }
@@ -168,8 +169,9 @@ bool CRssManager::Load()
 bool CRssManager::Reload()
 {
   Stop();
-  if (!Load())
+  if (!Load()) {
     return false;
+}
   Start();
 
   return true;

@@ -84,8 +84,9 @@ namespace XBMCAddon
 
     bool WsgiResponse::Finalize(HTTPPythonRequest* request) const
     {
-      if (request == nullptr || !m_called)
+      if (request == nullptr || !m_called) {
         return false;
+}
 
       // copy the response status
       request->responseStatus = m_status;

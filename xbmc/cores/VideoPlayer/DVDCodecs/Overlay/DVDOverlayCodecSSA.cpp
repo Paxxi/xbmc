@@ -46,8 +46,9 @@ CDVDOverlayCodecSSA::~CDVDOverlayCodecSSA()
 bool CDVDOverlayCodecSSA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
 {
   if(hints.codec != AV_CODEC_ID_SSA &&
-     hints.codec != AV_CODEC_ID_ASS)
+     hints.codec != AV_CODEC_ID_ASS) {
     return false;
+}
 
   Dispose();
 
@@ -58,26 +59,31 @@ bool CDVDOverlayCodecSSA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
 
 void CDVDOverlayCodecSSA::Dispose()
 {
-  if(m_libass)
+  if(m_libass) {
     SAFE_RELEASE(m_libass);
+}
 
-  if(m_pOverlay)
+  if(m_pOverlay) {
     SAFE_RELEASE(m_pOverlay);
+}
 }
 
 int CDVDOverlayCodecSSA::Decode(DemuxPacket *pPacket)
 {
-  if(!pPacket)
+  if(!pPacket) {
     return OC_ERROR;
+}
   
   double pts = pPacket->dts != DVD_NOPTS_VALUE ? pPacket->dts : pPacket->pts;
-  if (pts == DVD_NOPTS_VALUE)
+  if (pts == DVD_NOPTS_VALUE) {
     pts = 0;
+}
   uint8_t *data = pPacket->pData;
   int size = pPacket->iSize;
   double duration = pPacket->duration;
-  if(duration == DVD_NOPTS_VALUE)
+  if(duration == DVD_NOPTS_VALUE) {
     duration = 0.0;
+}
 
   if(strncmp((const char*)data, "Dialogue:", 9) == 0)
   {
@@ -111,19 +117,23 @@ int CDVDOverlayCodecSSA::Decode(DemuxPacket *pPacket)
       m_libass->DecodeDemuxPkt((char*)line2.c_str(), line2.length(), beg, end - beg);
 
       /* setup time spanning all dialogs */
-      if(pts == DVD_NOPTS_VALUE || beg < pts)
+      if(pts == DVD_NOPTS_VALUE || beg < pts) {
         pts = beg;
-      if(end - pts > duration)
+}
+      if(end - pts > duration) {
         duration = end - pts;
+}
     }
   }
-  else
+  else {
     m_libass->DecodeDemuxPkt((char*)data, size, pts, duration);
+}
 
   if (m_pOverlay && m_pOverlay->iPTSStartTime == pts)
   {
-    if (m_pOverlay->iPTSStopTime < pts + duration)
+    if (m_pOverlay->iPTSStopTime < pts + duration) {
       m_pOverlay->iPTSStopTime = pts + duration;
+}
     return 0;
   }
 
@@ -132,8 +142,9 @@ int CDVDOverlayCodecSSA::Decode(DemuxPacket *pPacket)
     /* there will only ever be one active, so we 
      * must always make sure any new one overlap
      * include the full duration of the old one */
-    if(m_pOverlay->iPTSStopTime > pts + duration)
+    if(m_pOverlay->iPTSStopTime > pts + duration) {
       duration = m_pOverlay->iPTSStopTime - pts;
+}
     SAFE_RELEASE(m_pOverlay);
   }
 

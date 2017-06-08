@@ -154,8 +154,9 @@ bool CInputCodingTableBaiduPY::GetWordListPage(const std::string& strCode, bool 
   }
   else
   {
-    if (m_api_nomore)
+    if (m_api_nomore) {
       return false;
+}
   }
 
   CSingleLock lock(m_CS);

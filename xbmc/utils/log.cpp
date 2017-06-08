@@ -154,8 +154,9 @@ void CLog::SetLogLevel(int level)
     s_globals.m_logLevel = level;
     CLog::Log(LOGNOTICE, "Log level changed to \"%s\"", logLevelNames[s_globals.m_logLevel + 1]);
   }
-  else
+  else {
     CLog::Log(LOGERROR, "%s: Invalid log level requested: %d", __FUNCTION__, level);
+}
 }
 
 int CLog::GetLogLevel()

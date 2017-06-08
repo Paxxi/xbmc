@@ -205,11 +205,13 @@ void URIUtils::Split(const std::string& strFileNameAndPath,
   {
     char ch = strFileNameAndPath[i];
     // Only break on ':' if it's a drive separator for DOS (ie d:foo)
-    if (ch == '/' || ch == '\\' || (ch == ':' && i == 1)) break;
-    else i--;
+    if (ch == '/' || ch == '\\' || (ch == ':' && i == 1)) { break;
+    } else { i--;
+}
   }
-  if (i == 0)
+  if (i == 0) {
     i--;
+}
 
   // take left including the directory separator
   strPath = strFileNameAndPath.substr(0, i+1);
@@ -221,8 +223,9 @@ void URIUtils::Split(const std::string& strFileNameAndPath,
   while (i > 0)
   {
     char ch = strFileName[i];
-    if (ch == '?') break;
-    else i--;
+    if (ch == '?') { break;
+    } else { i--;
+}
   }
   if (i > 0)
     strFileName = strFileName.substr(0, i);
@@ -314,8 +317,9 @@ bool URIUtils::GetParentPath(const std::string& strPath, std::string& strParent)
   {
     CStackDirectory dir;
     CFileItemList items;
-    if (!dir.GetDirectory(url, items))
+    if (!dir.GetDirectory(url, items)) {
       return false;
+}
     items[0]->m_strDVDLabel = GetDirectory(items[0]->GetPath());
     if (IsProtocol(items[0]->m_strDVDLabel, "rar") || IsProtocol(items[0]->m_strDVDLabel, "zip"))
       GetParentPath(items[0]->m_strDVDLabel, strParent);
@@ -563,8 +567,9 @@ bool URIUtils::PathEquals(std::string path1, std::string path2, bool ignoreTrail
 
 bool URIUtils::IsRemote(const std::string& strFile)
 {
-  if (IsCDDA(strFile) || IsISO9660(strFile))
+  if (IsCDDA(strFile) || IsISO9660(strFile)) {
     return false;
+}
 
   if (IsStack(strFile))
     return IsRemote(CStackDirectory::GetFirstStackedFile(strFile));
@@ -577,18 +582,21 @@ bool URIUtils::IsRemote(const std::string& strFile)
     std::vector<std::string> paths;
     if (CMultiPathDirectory::GetPaths(strFile, paths))
     {
-      for (unsigned int i = 0; i < paths.size(); i++)
+      for (unsigned int i = 0; i < paths.size(); i++) {
         if (IsRemote(paths[i])) return true;
+}
     }
     return false;
   }
 
   CURL url(strFile);
-  if(HasParentInHostname(url))
+  if(HasParentInHostname(url)) {
     return IsRemote(url.GetHostName());
+}
 
-  if (!url.IsLocal())
+  if (!url.IsLocal()) {
     return true;
+}
 
   return false;
 }
@@ -627,18 +635,22 @@ bool URIUtils::IsOnLAN(const std::string& strPath)
   if(IsSpecial(strPath))
     return IsOnLAN(CSpecialProtocol::TranslatePath(strPath));
 
-  if(IsPlugin(strPath))
+  if(IsPlugin(strPath)) {
     return false;
+}
 
-  if(IsUPnP(strPath))
+  if(IsUPnP(strPath)) {
     return true;
+}
 
   CURL url(strPath);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsOnLAN(url.GetHostName());
+}
 
-  if(!IsRemote(strPath))
+  if(!IsRemote(strPath)) {
     return false;
+}
 
   std::string host = url.GetHostName();
 
@@ -678,8 +690,9 @@ bool URIUtils::IsHostOnLAN(const std::string& host, bool offLineCheck)
         addr_match(address, "192.168.0.0", "255.255.0.0") ||
         addr_match(address, "10.0.0.0", "255.0.0.0") ||
         addr_match(address, "172.16.0.0", "255.240.0.0")
-        )
+        ) {
         return true;
+}
     }
     // check if we are on the local subnet
     if (!g_application.getNetwork().GetFirstConnectedInterface())
@@ -707,8 +720,9 @@ bool URIUtils::IsHD(const std::string& strFileName)
   if (IsSpecial(strFileName))
     return IsHD(CSpecialProtocol::TranslatePath(strFileName));
 
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsHD(url.GetHostName());
+}
 
   return url.GetProtocol().empty() || url.IsProtocol("file");
 }
@@ -850,8 +864,9 @@ bool URIUtils::IsSmb(const std::string& strFile)
     return IsSmb(CSpecialProtocol::TranslatePath(strFile));
 
   CURL url(strFile);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsSmb(url.GetHostName());
+}
 
   return IsProtocol(strFile, "smb");
 }
@@ -870,8 +885,9 @@ bool URIUtils::IsFTP(const std::string& strFile)
     return IsFTP(CSpecialProtocol::TranslatePath(strFile));
 
   CURL url(strFile);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsFTP(url.GetHostName());
+}
 
   return IsProtocol(strFile, "ftp") ||
          IsProtocol(strFile, "ftps");
@@ -886,8 +902,9 @@ bool URIUtils::IsHTTP(const std::string& strFile)
     return IsHTTP(CSpecialProtocol::TranslatePath(strFile));
 
   CURL url(strFile);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsHTTP(url.GetHostName());
+}
 
   return IsProtocol(strFile, "http") ||
          IsProtocol(strFile, "https");
@@ -934,8 +951,9 @@ bool URIUtils::IsDAV(const std::string& strFile)
     return IsDAV(CSpecialProtocol::TranslatePath(strFile));
 
   CURL url(strFile);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsDAV(url.GetHostName());
+}
   
   return IsProtocol(strFile, "dav") ||
          IsProtocol(strFile, "davs");
@@ -959,8 +977,9 @@ bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */
   // Special case these
   if (url.IsProtocol("ftp") || url.IsProtocol("ftps")  ||
       url.IsProtocol("dav") || url.IsProtocol("davs")  ||
-      url.IsProtocol("sftp"))
+      url.IsProtocol("sftp")) {
     return bStrictCheck;
+}
 
   std::string protocol = url.GetTranslatedProtocol();
   if (CURL::IsProtocolEqual(protocol, "http")  || CURL::IsProtocolEqual(protocol, "https")  ||
@@ -1015,8 +1034,9 @@ bool URIUtils::IsNfs(const std::string& strFile)
     return IsNfs(CSpecialProtocol::TranslatePath(strFile));
 
   CURL url(strFile);
-  if (HasParentInHostname(url))
+  if (HasParentInHostname(url)) {
     return IsNfs(url.GetHostName());
+}
 
   return IsProtocol(strFile, "nfs");
 }
@@ -1097,8 +1117,9 @@ bool URIUtils::HasSlashAtEnd(const std::string& strFile, bool checkURL /* = fals
   }
   char kar = strFile.c_str()[strFile.size() - 1];
 
-  if (kar == '/' || kar == '\\')
+  if (kar == '/' || kar == '\\') {
     return true;
+}
 
   return false;
 }
@@ -1106,8 +1127,9 @@ bool URIUtils::HasSlashAtEnd(const std::string& strFile, bool checkURL /* = fals
 void URIUtils::RemoveSlashAtEnd(std::string& strFolder)
 {
   // performance optimization. pvr guide items are mass objects, uri never has a slash at end, and this method is quite expensive...
-  if (IsPVRGuideItem(strFolder))
+  if (IsPVRGuideItem(strFolder)) {
     return;
+}
 
   if (IsURL(strFolder))
   {
@@ -1357,8 +1379,9 @@ bool URIUtils::UpdateUrlEncoding(std::string &strFilename)
     UpdateUrlEncoding(hostname);
     url.SetHostName(hostname);
   }
-  else
+  else {
     return false;
+}
 
   std::string newFilename = url.Get();
   if (newFilename == strFilename)

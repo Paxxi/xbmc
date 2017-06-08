@@ -250,17 +250,20 @@ void CGUIDialogAudioSubtitleSettings::OnSettingAction(std::shared_ptr<const CSet
 void CGUIDialogAudioSubtitleSettings::Save()
 {
   if (!g_passwordManager.CheckSettingLevelLock(SettingLevelExpert) &&
-      CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE)
+      CProfilesManager::GetInstance().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE) {
     return;
+}
 
   // prompt user if they are sure
-  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{12376}, CVariant{12377}))
+  if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{12376}, CVariant{12377})) {
     return;
+}
 
   // reset the settings
   CVideoDatabase db;
-  if (!db.Open())
+  if (!db.Open()) {
     return;
+}
 
   db.EraseVideoSettings();
   db.Close();
@@ -426,8 +429,9 @@ void CGUIDialogAudioSubtitleSettings::AddAudioStreams(std::shared_ptr<CSettingGr
     return;
 
   m_audioStream = g_application.m_pPlayer->GetAudioStream();
-  if (m_audioStream < 0)
+  if (m_audioStream < 0) {
     m_audioStream = 0;
+}
 
   AddList(group, settingId, 460, 0, m_audioStream, AudioStreamsOptionFiller, 460);
 }
@@ -438,8 +442,9 @@ void CGUIDialogAudioSubtitleSettings::AddSubtitleStreams(std::shared_ptr<CSettin
     return;
 
   m_subtitleStream = g_application.m_pPlayer->GetSubtitle();
-  if (m_subtitleStream < 0)
+  if (m_subtitleStream < 0) {
     m_subtitleStream = 0;
+}
 
   AddList(group, settingId, 462, 0, m_subtitleStream, SubtitleStreamsOptionFiller, 462);
 }

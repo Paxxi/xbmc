@@ -35,12 +35,14 @@ bool CDVDSubtitleTagSami::Init()
   delete m_tags;
   delete m_tagOptions;
   m_tags = new CRegExp(true);
-  if (!m_tags->RegComp("(<[^>]*>|\\{[^\\}]*\\})"))
+  if (!m_tags->RegComp("(<[^>]*>|\\{[^\\}]*\\})")) {
     return false;
+}
 
   m_tagOptions = new CRegExp(true);
-  if (!m_tagOptions->RegComp("([a-z]+)[ \t]*=[ \t]*(?:[\"'])?([^\"'> ]+)(?:[\"'])?(?:>)?"))
+  if (!m_tagOptions->RegComp("([a-z]+)[ \t]*=[ \t]*(?:[\"'])?([^\"'> ]+)(?:[\"'])?(?:>)?")) {
     return false;
+}
 
   return true;
 }
@@ -225,8 +227,9 @@ void CDVDSubtitleTagSami::LoadHead(CDVDSubtitleStream* samiStream)
   char cLine[1024];
   bool inSTYLE = false;
   CRegExp reg(true);
-  if (!reg.RegComp("\\.([a-z]+)[ \t]*\\{[ \t]*name:([^;]*?);[ \t]*lang:([^;]*?);[ \t]*SAMIType:([^;]*?);[ \t]*\\}"))
+  if (!reg.RegComp("\\.([a-z]+)[ \t]*\\{[ \t]*name:([^;]*?);[ \t]*lang:([^;]*?);[ \t]*SAMIType:([^;]*?);[ \t]*\\}")) {
     return;
+}
 
   while (samiStream->ReadLine(cLine, sizeof(cLine)))
   {

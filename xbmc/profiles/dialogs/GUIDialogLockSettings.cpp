@@ -64,8 +64,9 @@ CGUIDialogLockSettings::~CGUIDialogLockSettings()
 bool CGUIDialogLockSettings::ShowAndGetLock(LockType &lockMode, std::string &password, int header /* = 20091 */)
 {
   CProfile::CLock locks(lockMode, password);
-  if (!ShowAndGetLock(locks, header, false, false))
+  if (!ShowAndGetLock(locks, header, false, false)) {
     return false;
+}
 
   locks.Validate();
   lockMode = locks.mode;
@@ -77,8 +78,9 @@ bool CGUIDialogLockSettings::ShowAndGetLock(LockType &lockMode, std::string &pas
 bool CGUIDialogLockSettings::ShowAndGetLock(CProfile::CLock &locks, int buttonLabel /* = 20091 */, bool conditional /* = false */, bool details /* = true */)
 {
   CGUIDialogLockSettings *dialog = g_windowManager.GetWindow<CGUIDialogLockSettings>(WINDOW_DIALOG_LOCK_SETTINGS);
-  if (dialog == nullptr)
+  if (dialog == nullptr) {
     return false;
+}
 
   dialog->m_locks = locks;
   dialog->m_buttonLabel = buttonLabel;
@@ -87,8 +89,9 @@ bool CGUIDialogLockSettings::ShowAndGetLock(CProfile::CLock &locks, int buttonLa
   dialog->m_details = details;
   dialog->Open();
 
-  if (!dialog->m_changed)
+  if (!dialog->m_changed) {
     return false;
+}
 
   locks = dialog->m_locks;
   return true;
@@ -97,8 +100,9 @@ bool CGUIDialogLockSettings::ShowAndGetLock(CProfile::CLock &locks, int buttonLa
 bool CGUIDialogLockSettings::ShowAndGetUserAndPassword(std::string &user, std::string &password, const std::string &url, bool *saveUserDetails)
 {
   CGUIDialogLockSettings *dialog = g_windowManager.GetWindow<CGUIDialogLockSettings>(WINDOW_DIALOG_LOCK_SETTINGS);
-  if (dialog == nullptr)
+  if (dialog == nullptr) {
     return false;
+}
 
   dialog->m_getUser = true;
   dialog->m_locks.code = password;
@@ -107,8 +111,9 @@ bool CGUIDialogLockSettings::ShowAndGetUserAndPassword(std::string &user, std::s
   dialog->m_saveUserDetails = saveUserDetails;
   dialog->Open();
 
-  if (!dialog->m_changed)
+  if (!dialog->m_changed) {
     return false;
+}
 
   user = dialog->m_user;
   password = dialog->m_locks.code;
@@ -221,9 +226,9 @@ void CGUIDialogLockSettings::SetupView()
   CGUIDialogSettingsManualBase::SetupView();
   
   // set the title
-  if (m_getUser)
+  if (m_getUser) {
     SetHeading(StringUtils::Format(g_localizeStrings.Get(20152).c_str(), CURL::Decode(m_url).c_str()));
-  else
+  } else
   {
     SetHeading(20066);
     setLockCodeLabel();
@@ -295,8 +300,9 @@ void CGUIDialogLockSettings::InitializeSettings()
 
 void CGUIDialogLockSettings::setDetailSettingsEnabled(bool enabled)
 {
-  if (!m_details)
+  if (!m_details) {
     return;
+}
 
   enabled |= !m_conditionalDetails;
   GetSettingControl(SETTING_LOCK_MUSIC)->GetSetting()->SetEnabled(enabled);

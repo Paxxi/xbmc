@@ -76,10 +76,11 @@ bool CAudioDecoder::Init(const CFileItem& file, unsigned int filecache)
                               &m_bitRate, &m_format.m_dataFormat, &m_channel);
 
   m_format.m_sampleRate = sampleRate;
-  if (m_channel)
+  if (m_channel) {
     m_format.m_channelLayout = CAEChannelInfo(m_channel);
-  else
+  } else {
     m_format.m_channelLayout = CAEUtil::GuessChLayout(channels);
+}
 
   return (m_context != nullptr);
 }

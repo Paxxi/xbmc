@@ -112,9 +112,9 @@ bool CGUIWindow::Load(const std::string& strFileName, bool bContainsPath)
   // Find appropriate skin folder + resolution to load from
   std::string strPath;
   std::string strLowerPath;
-  if (bContainsPath)
+  if (bContainsPath) {
     strPath = strFileName;
-  else
+  } else
   {
     // FIXME: strLowerPath needs to eventually go since resToUse can get incorrectly overridden
     std::string strFileNameLower = strFileName;
@@ -165,8 +165,9 @@ bool CGUIWindow::LoadXML(const std::string &strPath, const std::string &strLower
     // store XML for further processing if window's load type is LOAD_EVERY_TIME or a reload is needed
     m_windowXMLRootElement = static_cast<TiXmlElement*>(xmlDoc.RootElement()->Clone());
   }
-  else
-    CLog::Log(LOGDEBUG, "Using already stored xml root node for %s", strPath.c_str());
+  else {
+    CLog
+}::Log(LOGDEBUG, "Using already stored xml root node for %s", strPath.c_str());
 
   return Load(Prepare(m_windowXMLRootElement).get());
 }
@@ -188,8 +189,9 @@ std::unique_ptr<TiXmlElement> CGUIWindow::Prepare(TiXmlElement *pRootElement)
 
 bool CGUIWindow::Load(TiXmlElement *pRootElement)
 {
-  if (!pRootElement)
+  if (!pRootElement) {
     return false;
+}
 
   // set the scaling resolution so that any control creation or initialisation can
   // be done with respect to the correct aspect ratio
@@ -215,8 +217,9 @@ bool CGUIWindow::Load(TiXmlElement *pRootElement)
     else if (strValue == "defaultcontrol" && pChild->FirstChild())
     {
       const char *always = pChild->Attribute("always");
-      if (always && StringUtils::EqualsNoCase(always, "true"))
+      if (always && StringUtils::EqualsNoCase(always, "true")) {
         m_defaultAlways = true;
+}
       m_defaultControl = atoi(pChild->FirstChild()->Value());
     }
     else if(strValue == "menucontrol" && pChild->FirstChild())
@@ -309,10 +312,11 @@ void CGUIWindow::LoadControl(TiXmlElement* pControl, CGUIControlGroup *pGroup, c
       m_height = maxY;
     }
     // if we are in a group, add to the group, else add to our window
-    if (pGroup)
+    if (pGroup) {
       pGroup->AddControl(pGUIControl);
-    else
-      AddControl(pGUIControl);
+    } else {
+      AddControl
+}(pGUIControl);
     // if the new control is a group, then add it's controls
     if (pGUIControl->IsGroup())
     {
@@ -353,8 +357,9 @@ void CGUIWindow::DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregi
   // check if currently focused control can have it
   // and fallback to default control if not
   CGUIControl* focusedControl = GetFocusedControl();
-  if (focusedControl && !focusedControl->CanFocus())
+  if (focusedControl && !focusedControl->CanFocus()) {
     SET_CONTROL_FOCUS(m_defaultControl, 0);
+}
 }
 
 void CGUIWindow::DoRender()
@@ -389,8 +394,9 @@ void CGUIWindow::Close_Internal(bool forceClose /*= false*/, int nextWindowID /*
 {
   CSingleLock lock(g_graphicsContext);
 
-  if (!m_active)
+  if (!m_active) {
     return;
+}
 
   forceClose |= (nextWindowID == WINDOW_FULLSCREEN_VIDEO);
   if (!forceClose && HasAnimation(ANIM_TYPE_WINDOW_CLOSE))
@@ -419,10 +425,11 @@ void CGUIWindow::Close(bool forceClose /*= false*/, int nextWindowID /*= 0*/, bo
     // make sure graphics lock is not held
     CSingleExit leaveIt(g_graphicsContext);
     int param2 = (forceClose ? 0x01 : 0) | (enableSound ? 0x02 : 0);
-    if (bWait)
+    if (bWait) {
       CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_WINDOW_CLOSE, nextWindowID, param2, static_cast<void*>(this));
-    else
+    } else {
       CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_WINDOW_CLOSE, nextWindowID, param2, static_cast<void*>(this));
+}
   }
   else
     Close_Internal(forceClose, nextWindowID, enableSound);
@@ -430,14 +437,16 @@ void CGUIWindow::Close(bool forceClose /*= false*/, int nextWindowID /*= 0*/, bo
 
 bool CGUIWindow::OnAction(const CAction &action)
 {
-  if (action.IsMouse() || action.IsGesture())
+  if (action.IsMouse() || action.IsGesture()) {
     return EVENT_RESULT_UNHANDLED != OnMouseAction(action);
+}
 
   CGUIControl *focusedControl = GetFocusedControl();
   if (focusedControl)
   {
-    if (focusedControl->OnAction(action))
+    if (focusedControl->OnAction(action)) {
       return true;
+}
   }
   else
   {
@@ -671,8 +680,9 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
     }
   case GUI_MSG_MOVE:
     {
-      if (HasID(message.GetSenderId()))
+      if (HasID(message.GetSenderId())) {
         return OnMove(message.GetControlId(), message.GetParam1());
+}
       break;
     }
   case GUI_MSG_SETFOCUS:
@@ -693,8 +703,9 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
         if (!pFocusedControl) pFocusedControl = GetControl(message.GetControlId());
 
         // and focus it
-        if (pFocusedControl)
+        if (pFocusedControl) {
           return pFocusedControl->OnMessage(message);
+}
       }
       return true;
     }
@@ -778,8 +789,9 @@ void CGUIWindow::AllocResources(bool forceLoad /*= FALSE */)
   forceLoad |= NeedLoad() || (m_loadType == LOAD_EVERY_TIME);
 
   // if window is loaded and load is forced we have to free window resources first
-  if (m_windowLoaded && forceLoad)
+  if (m_windowLoaded && forceLoad) {
     FreeResources(true);
+}
 
   if (forceLoad)
   {
@@ -848,8 +860,9 @@ bool CGUIWindow::Initialize()
 {
   if (!g_windowManager.Initialized())
     return false;
-  if (!NeedLoad())
+  if (!NeedLoad()) {
     return true;
+}
   if (g_application.IsCurrentThread())
     AllocResources();
   else
@@ -890,18 +903,20 @@ bool CGUIWindow::CheckAnimation(ANIMATION_TYPE animType)
 
 bool CGUIWindow::IsAnimating(ANIMATION_TYPE animType)
 {
-  if (!m_animationsEnabled)
+  if (!m_animationsEnabled) {
     return false;
-  if (animType == ANIM_TYPE_WINDOW_CLOSE)
+}
+  if (animType == ANIM_TYPE_WINDOW_CLOSE) {
     return m_closing;
+}
   return CGUIControlGroup::IsAnimating(animType);
 }
 
 bool CGUIWindow::Animate(unsigned int currentTime)
 {
-  if (m_animationsEnabled)
+  if (m_animationsEnabled) {
     return CGUIControlGroup::Animate(currentTime);
-  else
+  } else
   {
     m_transform.Reset();
     return false;
@@ -989,8 +1004,9 @@ bool CGUIWindow::OnMove(int fromControl, int moveAction)
     CGUIAction action = control->GetAction(moveAction);
     action.ExecuteActions(nextControl, GetParentID());
     nextControl = action.GetNavigation();
-    if (!nextControl) // 0 isn't valid control id
+    if (!nextControl) { // 0 isn't valid control id
       return false;
+}
     // check our history - if the nextControl is in it, we can't focus it
     for (unsigned int i = 0; i < moveHistory.size(); i++)
     {
@@ -998,12 +1014,14 @@ bool CGUIWindow::OnMove(int fromControl, int moveAction)
         return false; // no control to focus so do nothing
     }
     control = GetFirstFocusableControl(nextControl);
-    if (control)
+    if (control) {
       break;  // found a focusable control
+}
     control = GetControl(nextControl); // grab the next control and try again
   }
-  if (!control)
+  if (!control) {
     return false;   // no control to focus
+}
   // if we get here we have our new control so focus it (and unfocus the current control)
   SET_CONTROL_FOCUS(nextControl, 0);
   return true;

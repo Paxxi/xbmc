@@ -23,12 +23,14 @@
 
 bool CSettingRequirementCondition::Check() const
 {
-  if (m_settingsManager == nullptr)
+  if (m_settingsManager == nullptr) {
     return false;
+}
 
   bool found = m_settingsManager->GetConditions().Check("IsDefined", m_value);
-  if (m_negated)
+  if (m_negated) {
     return !found;
+}
 
   return found;
 }

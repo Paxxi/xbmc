@@ -64,8 +64,9 @@ namespace XBMCAddon
       if (font)
         strFont = font;
 
-      if (_textColor)
+      if (_textColor) {
         sscanf(_textColor, "%x", &textColor);
+}
 
       pGUIControl = nullptr;
     }
@@ -132,8 +133,9 @@ namespace XBMCAddon
       if (font)
         strFont = font;
 
-      if (_textColor)
+      if (_textColor) {
         sscanf(_textColor, "%x", &textColor);
+}
     }
 
     void ControlTextBox::setText(const String& text)
@@ -323,8 +325,9 @@ namespace XBMCAddon
 
       // check if filename exists
       strFileName = filename;
-      if (_colorDiffuse)
+      if (_colorDiffuse) {
         sscanf(_colorDiffuse, "%x", &colorDiffuse);
+}
     }
 
     void ControlImage::setImage(const char* imageFilename, const bool useCache)
@@ -338,8 +341,9 @@ namespace XBMCAddon
 
     void ControlImage::setColorDiffuse(const char* cColorDiffuse)
     {
-      if (cColorDiffuse) sscanf(cColorDiffuse, "%x", &colorDiffuse);
-      else colorDiffuse = 0;
+      if (cColorDiffuse) { sscanf(cColorDiffuse, "%x", &colorDiffuse);
+      } else { colorDiffuse = 0;
+}
 
       LOCKGUI;
       if (pGUIControl)
@@ -352,8 +356,9 @@ namespace XBMCAddon
             (float)dwPosX, (float)dwPosY, (float)dwWidth, (float)dwHeight,
             CTextureInfo(strFileName));
 
-      if (pGUIControl && aspectRatio <= CAspectRatio::AR_KEEP)
+      if (pGUIControl && aspectRatio <= CAspectRatio::AR_KEEP) {
         ((CGUIImage *)pGUIControl)->SetAspectRatio((CAspectRatio::ASPECT_RATIO)aspectRatio);
+}
 
       if (pGUIControl && colorDiffuse)
         ((CGUIImage *)pGUIControl)->SetColorDiffuse(colorDiffuse);
@@ -392,8 +397,9 @@ namespace XBMCAddon
 
     void ControlProgress::setPercent(float pct)
     {
-      if (pGUIControl)
+      if (pGUIControl) {
         ((CGUIProgressControl*)pGUIControl)->SetPercentage(pct);
+}
     }
 
     float ControlProgress::getPercent()
@@ -447,8 +453,9 @@ namespace XBMCAddon
 
     void ControlSlider::setPercent(float pct)
     {
-      if (pGUIControl)
+      if (pGUIControl) {
         ((CGUISliderControl*)pGUIControl)->SetPercentage(pct);
+}
     }
 
     int ControlSlider::getInt()
@@ -692,16 +699,18 @@ namespace XBMCAddon
     {
       DelayedCallGuard dcguard(languageHook);
       LOCKGUI;
-      if (pGUIControl)
+      if (pGUIControl) {
         pGUIControl->SetEnabled(enabled);
+}
     }
 
     void Control::setVisible(bool visible)
     {
       DelayedCallGuard dcguard(languageHook);
       LOCKGUI;
-      if (pGUIControl)
+      if (pGUIControl) {
         pGUIControl->SetVisible(visible);
+}
     }
 
     void Control::setVisibleCondition(const char* visible, bool allowHiddenFocus)
@@ -770,8 +779,9 @@ namespace XBMCAddon
       LOCKGUI;
       dwPosX = x;
       dwPosY = y;
-      if (pGUIControl)
+      if (pGUIControl) {
         pGUIControl->SetPosition((float)dwPosX, (float)dwPosY);
+}
     }
 
     void Control::setWidth(long width)
@@ -779,8 +789,9 @@ namespace XBMCAddon
       DelayedCallGuard dcguard(languageHook);
       LOCKGUI;
       dwWidth = width;
-      if (pGUIControl)
+      if (pGUIControl) {
         pGUIControl->SetWidth((float)dwWidth);
+}
     }
 
     void Control::setHeight(long height)
@@ -788,15 +799,17 @@ namespace XBMCAddon
       DelayedCallGuard dcguard(languageHook);
       LOCKGUI;
       dwHeight = height;
-      if (pGUIControl)
+      if (pGUIControl) {
         pGUIControl->SetHeight((float)dwHeight);
+}
     }
 
     void Control::setNavigation(const Control* up, const Control* down,
                                 const Control* left, const Control* right)
     {
-      if(iControlId == 0)
+      if(iControlId == 0) {
         throw WindowException("Control has to be added to a window first");
+}
 
       {
         LOCKGUI;
@@ -812,49 +825,57 @@ namespace XBMCAddon
 
     void Control::controlUp(const Control* control)
     {
-      if(iControlId == 0)
+      if(iControlId == 0) {
         throw WindowException("Control has to be added to a window first");
+}
 
       {
         LOCKGUI;
-        if (pGUIControl)
+        if (pGUIControl) {
           pGUIControl->SetAction(ACTION_MOVE_UP, control->iControlId);
+}
       }
     }
 
     void Control::controlDown(const Control* control)
     {
-      if(iControlId == 0)
+      if(iControlId == 0) {
         throw WindowException("Control has to be added to a window first");
+}
 
       {
         LOCKGUI;
-        if (pGUIControl)
+        if (pGUIControl) {
           pGUIControl->SetAction(ACTION_MOVE_DOWN, control->iControlId);
+}
       }
     }
 
     void Control::controlLeft(const Control* control)
     {
-      if(iControlId == 0)
+      if(iControlId == 0) {
         throw WindowException("Control has to be added to a window first");
+}
 
       {
         LOCKGUI;
-        if (pGUIControl)
+        if (pGUIControl) {
           pGUIControl->SetAction(ACTION_MOVE_LEFT, control->iControlId);
+}
       }
     }
 
     void Control::controlRight(const Control* control)
     {
-      if(iControlId == 0)
+      if(iControlId == 0) {
         throw WindowException("Control has to be added to a window first");
+}
 
       {
         LOCKGUI;
-        if (pGUIControl)
+        if (pGUIControl) {
           pGUIControl->SetAction(ACTION_MOVE_RIGHT, control->iControlId);
+}
       }
     }
 
@@ -926,11 +947,13 @@ namespace XBMCAddon
       if (font)
         strFont = font;
 
-      if (p_textColor)
+      if (p_textColor) {
         sscanf(p_textColor, "%x", &textColor);
+}
 
-      if (p_disabledColor)
+      if (p_disabledColor) {
         sscanf( p_disabledColor, "%x", &disabledColor );
+}
     }
 
     ControlLabel::~ControlLabel() {}
@@ -1018,8 +1041,9 @@ namespace XBMCAddon
         label,
         strText);
 
-      if (bIsPassword)
+      if (bIsPassword) {
         ((CGUIEditControl *) pGUIControl)->SetInputType(CGUIEditControl::INPUT_TYPE_PASSWORD, 0);
+}
       return pGUIControl;
     }
 
@@ -1087,11 +1111,13 @@ namespace XBMCAddon
       if (font)
         strFont = font;
 
-      if (ctextColor)
+      if (ctextColor) {
         sscanf( ctextColor, "%x", &textColor );
+}
 
-      if (cselectedColor)
+      if (cselectedColor) {
         sscanf( cselectedColor, "%x", &selectedColor );
+}
 
       strTextureButton = cbuttonTexture ? cbuttonTexture :
         XBMCAddonUtils::getDefaultImage((char*)"listcontrol", (char*)"texturenofocus");

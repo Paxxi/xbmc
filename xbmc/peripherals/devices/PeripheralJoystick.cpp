@@ -192,12 +192,14 @@ bool CPeripheralJoystick::OnButtonMotion(unsigned int buttonIndex, bool bPressed
 
       // If button is released, force bHandled to false to notify all handlers.
       // This avoids "sticking".
-      if (!bPressed)
+      if (!bPressed) {
         bHandled = false;
+}
 
       // Once a button is handled, we're done
-      if (bHandled)
+      if (bHandled) {
         break;
+}
     }
   }
 
@@ -229,12 +231,14 @@ bool CPeripheralJoystick::OnHatMotion(unsigned int hatIndex, HAT_STATE state)
 
       // If hat is centered, force bHandled to false to notify all handlers.
       // This avoids "sticking".
-      if (state == HAT_STATE::UNPRESSED)
+      if (state == HAT_STATE::UNPRESSED) {
         bHandled = false;
+}
 
       // Once a hat is handled, we're done
-      if (bHandled)
+      if (bHandled) {
         break;
+}
     }
   }
 
@@ -273,12 +277,14 @@ bool CPeripheralJoystick::OnAxisMotion(unsigned int axisIndex, float position)
 
       // If axis is centered, force bHandled to false to notify all handlers.
       // This avoids "sticking".
-      if (position == static_cast<float>(center))
+      if (position == static_cast<float>(center)) {
         bHandled = false;
+}
 
       // Once an axis is handled, we're done
-      if (bHandled)
+      if (bHandled) {
         break;
+}
     }
   }
 

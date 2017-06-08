@@ -89,8 +89,9 @@ CMediaManager::CMediaManager()
 
 void CMediaManager::Stop()
 {
-  if (m_platformStorage)
+  if (m_platformStorage) {
     m_platformStorage->Stop();
+}
 
   delete m_platformStorage;
   m_platformStorage = nullptr;
@@ -123,8 +124,9 @@ bool CMediaManager::LoadSources()
 
   // load xml file...
   CXBMCTinyXML xmlDoc;
-  if ( !xmlDoc.LoadFile( MEDIA_SOURCES_XML ) )
+  if ( !xmlDoc.LoadFile( MEDIA_SOURCES_XML ) ) {
     return false;
+}
 
   TiXmlElement* pRootElement = xmlDoc.RootElement();
   if ( !pRootElement || strcmpi(pRootElement->Value(), "mediasources") != 0)
@@ -292,8 +294,9 @@ void CMediaManager::AddAutoSource(const CMediaSource &share, bool bAutorun)
   g_windowManager.SendThreadMessage( msg );
 
 #ifdef HAS_DVD_DRIVE
-  if(bAutorun)
+  if(bAutorun) {
     MEDIA_DETECT::CAutorun::ExecuteAutorun(share.strPath);
+}
 #endif
 }
 
@@ -382,8 +385,9 @@ bool CMediaManager::IsAudio(const std::string& devicePath)
 #else
   //! @todo switch all ports to use auto sources
   MEDIA_DETECT::CCdInfo* pInfo = MEDIA_DETECT::CDetectDVDMedia::GetCdInfo();
-  if (pInfo != nullptr && pInfo->IsAudio(1))
+  if (pInfo != nullptr && pInfo->IsAudio(1)) {
     return true;
+}
 #endif
 #endif
   return false;
@@ -466,8 +470,9 @@ CCdInfo* CMediaManager::GetCdInfo(const std::string& devicePath)
 
 bool CMediaManager::RemoveCdInfo(const std::string& devicePath)
 {
-  if(!m_bhasoptical)
+  if(!m_bhasoptical) {
     return false;
+}
 
   std::string strDevice = TranslateDevicePath(devicePath, false);
 
@@ -607,8 +612,9 @@ void CMediaManager::EjectTray( const bool bEject, const char cDriveLetter )
       c_cdio->cdio_eject_media(&cdio);
       c_cdio->cdio_destroy(cdio);
     }
-    else
+    else {
       break;
+}
   }
 #endif
 #endif

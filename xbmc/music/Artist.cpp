@@ -58,8 +58,9 @@ void CArtist::MergeScrapedArtist(const CArtist& source, bool override /* = true 
 bool CArtist::Load(const TiXmlElement *artist, bool append, bool prioritise)
 {
   if (!artist) return false;
-  if (!append)
+  if (!append) {
     Reset();
+}
 
   XMLUtils::GetString(artist,                "name", strArtist);
   XMLUtils::GetString(artist, "musicBrainzArtistID", strMusicBrainzArtistID);
@@ -126,8 +127,9 @@ bool CArtist::Load(const TiXmlElement *artist, bool append, bool prioritise)
       temp << *fanart2;
       fanart.m_xml = temp+fanart.m_xml;
     }
-    else
-      fanart.m_xml << *fanart2;
+    else {
+      fanart
+}.m_xml << *fanart2;
     fanart.Unpack();
   }
 

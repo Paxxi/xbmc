@@ -46,8 +46,9 @@ CWebSocketFrame::CWebSocketFrame(const char* data, uint64_t length)
 {
   reset();
 
-  if (data == nullptr || length < LENGTH_MIN)
+  if (data == nullptr || length < LENGTH_MIN) {
     return;
+}
 
   m_free = false;
   m_data = data;
@@ -121,20 +122,23 @@ CWebSocketFrame::CWebSocketFrame(const char* data, uint64_t length)
     offset += 4;
   }
 
-  if (m_lengthFrame != LENGTH_MIN + offset + m_length)
+  if (m_lengthFrame != LENGTH_MIN + offset + m_length) {
     m_lengthFrame = LENGTH_MIN + offset + m_length;
+}
 
   // Get application data
-  if (m_length > 0)
+  if (m_length > 0) {
     m_applicationData = (char *)(m_data + LENGTH_MIN + offset);
-  else
+  } else {
     m_applicationData = nullptr;
+}
 
   // Unmask the application data if necessary
   if (m_masked)
   {
-    for (uint64_t index = 0; index < m_length; index++)
+    for (uint64_t index = 0; index < m_length; index++) {
       m_applicationData[index] = m_applicationData[index] ^ ((char *)(&m_mask))[index % 4];
+}
   }
 
   m_valid = true;
@@ -145,8 +149,9 @@ CWebSocketFrame::CWebSocketFrame(WebSocketFrameOpcode opcode, const char* data /
 {
   reset();
 
-  if (opcode >= WebSocketUnknownFrame)
+  if (opcode >= WebSocketUnknownFrame) {
     return;
+}
 
   m_free = true;
   m_opcode = opcode;
@@ -162,12 +167,14 @@ CWebSocketFrame::CWebSocketFrame(WebSocketFrameOpcode opcode, const char* data /
   char dataByte = 0;
 
   // Set the FIN flag
-  if (m_final)
+  if (m_final) {
     dataByte |= MASK_FIN;
+}
 
   // Set RSV1 - RSV3 flags
-  if (m_extension != 0)
+  if (m_extension != 0) {
     dataByte |= (m_extension << 4) & MASK_RSV;
+}
 
   // Set opcode flag
   dataByte |= opcode & MASK_OPCODE;
@@ -176,8 +183,9 @@ CWebSocketFrame::CWebSocketFrame(WebSocketFrameOpcode opcode, const char* data /
   dataByte = 0;
 
   // Set MASK flag
-  if (m_masked)
+  if (m_masked) {
     dataByte |= MASK_MASK;
+}
 
   // Set payload length
   if (m_length < 126)
@@ -237,8 +245,9 @@ CWebSocketFrame::CWebSocketFrame(WebSocketFrameOpcode opcode, const char* data /
 
 CWebSocketFrame::~CWebSocketFrame()
 {
-  if (!m_valid)
+  if (!m_valid) {
     return;
+}
 
   if (m_free && m_data != nullptr)
   {
@@ -277,13 +286,15 @@ CWebSocketMessage::~CWebSocketMessage()
 
 bool CWebSocketMessage::AddFrame(const CWebSocketFrame *frame)
 {
-  if (!frame->IsValid() || m_complete)
+  if (!frame->IsValid() || m_complete) {
     return false;
+}
 
-  if (frame->IsFinal())
+  if (frame->IsFinal()) {
     m_complete = true;
-  else
+  } else {
     m_fragmented = true;
+}
 
   m_frames.push_back(frame);
 
@@ -436,8 +447,9 @@ const CWebSocketMessage* CWebSocket::Send(WebSocketFrameOpcode opcode, const cha
   }
 
   msg->AddFrame(frame);
-  if (msg->IsComplete())
+  if (msg->IsComplete()) {
     return msg;
+}
 
   return nullptr;
 }

@@ -109,8 +109,9 @@ JSONRPC_STATUS CFileOperations::GetDirectory(const std::string &method, ITranspo
     if (media == "music")
     {
       JSONRPC_STATUS status = CAudioLibrary::GetAdditionalDetails(parameterObject, items);
-      if (status != OK)
+      if (status != OK) {
         return status;
+}
     }
 
     CFileItemList filteredFiles;
@@ -230,8 +231,9 @@ JSONRPC_STATUS CFileOperations::SetFileDetails(const std::string &method, ITrans
     return InvalidParams;
 
   CVideoDatabase videodatabase;
-  if (!videodatabase.Open())
+  if (!videodatabase.Open()) {
     return InternalError;
+}
 
   int fileId = videodatabase.AddFile(file);
 
@@ -249,8 +251,9 @@ JSONRPC_STATUS CFileOperations::SetFileDetails(const std::string &method, ITrans
   }
   if (!parameterObject["playcount"].isNull())
     playcount = parameterObject["playcount"].asInteger();
-  if (playcount != infos.GetPlayCount() || lastPlayed != infos.m_lastPlayed)
+  if (playcount != infos.GetPlayCount() || lastPlayed != infos.m_lastPlayed) {
     videodatabase.SetPlayCount(CFileItem(infos), playcount, lastPlayed);
+}
 
   CVideoLibrary::UpdateResumePoint(parameterObject, infos, videodatabase);
 

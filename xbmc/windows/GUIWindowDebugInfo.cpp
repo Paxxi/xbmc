@@ -82,8 +82,9 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
   if (now - lastShift > 10)
   {
     yShift *= -1;
-    if (now % 5 == 0)
+    if (now % 5 == 0) {
       xShift *= -1;
+}
     lastShift = now;
     MarkDirtyRegion();
   }
@@ -92,11 +93,13 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
   {
     CGUIFont *font13 = g_fontManager.GetDefaultFont();
     CGUIFont *font13border = g_fontManager.GetDefaultFont(true);
-    if (font13)
+    if (font13) {
       m_layout = new CGUITextLayout(font13, true, 0, font13border);
+}
   }
-  if (!m_layout)
+  if (!m_layout) {
     return;
+}
 
   std::string info;
   if (LOG_LEVEL_DEBUG_FREEMEM <= g_advancedSettings.m_logLevel)

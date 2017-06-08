@@ -95,17 +95,20 @@ bool CSavestate::Serialize(const std::string& path) const
 
   TiXmlElement rootElement(SAVESTATE_XML_ROOT);
   TiXmlNode* root = xmlFile.InsertEndChild(rootElement);
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   TiXmlElement* pElement = root->ToElement();
-  if (!pElement)
+  if (!pElement) {
     return false;
+}
 
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_PATH, m_path);
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_TYPE, CSavestateTranslator::TranslateType(m_type));
-  if (m_type == SAVETYPE::SLOT)
+  if (m_type == SAVETYPE::SLOT) {
     XMLUtils::SetInt(pElement, SAVESTATE_FIELD_SLOT, m_slot);
+}
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_LABEL, m_label);
   XMLUtils::SetLong(pElement, SAVESTATE_FIELD_SIZE, m_size);
   XMLUtils::SetString(pElement, SAVESTATE_FIELD_GAMECLIENT, m_gameClient);

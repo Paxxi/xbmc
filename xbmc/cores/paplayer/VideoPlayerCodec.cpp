@@ -114,8 +114,9 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   if (!m_pInputStream->Open())
   {
     CLog::Log(LOGERROR, "%s: Error opening file %s", __FUNCTION__, strFileToOpen.c_str());
-    if (m_pInputStream)
+    if (m_pInputStream) {
       delete m_pInputStream;
+}
     m_pInputStream = nullptr;
     return false;
   }
@@ -205,8 +206,9 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   {
     BYTE dummy[256];
     int nSize = 256;
-    if (ReadPCM(dummy, nSize, &nSize) == READ_ERROR)
+    if (ReadPCM(dummy, nSize, &nSize) == READ_ERROR) {
       ++nErrors;
+}
 
     m_srcFormat = m_pAudioCodec->GetFormat();
     m_format = m_srcFormat;
@@ -243,8 +245,9 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
     m_channels = m_srcFormat.m_channelLayout.Count();
   }
 
-  if (m_srcFormat.m_sampleRate == 0)
+  if (m_srcFormat.m_sampleRate == 0) {
     m_srcFormat.m_sampleRate = 44100;
+}
 
   m_TotalTime = m_pDemuxer->GetStreamLength();
   m_bitRate = m_pAudioCodec->GetBitRate();
@@ -395,8 +398,9 @@ int VideoPlayerCodec::ReadPCM(BYTE *pBuffer, int size, int *actualsize)
 
   m_nDecodedLen = bytes;
   // scale decoded bytes to destination format
-  if (m_needConvert)
+  if (m_needConvert) {
     m_nDecodedLen *= (m_bitsPerSample>>3) / (m_srcFormat.m_frameSize / m_channels);
+}
 
   *actualsize = (m_nDecodedLen <= size) ? m_nDecodedLen : size;
   if (*actualsize > 0)
@@ -479,8 +483,9 @@ bool VideoPlayerCodec::CanSeek()
 
 bool VideoPlayerCodec::NeedConvert(AEDataFormat fmt)
 {
-  if (fmt == AE_FMT_RAW)
+  if (fmt == AE_FMT_RAW) {
     return false;
+}
 
   switch(fmt)
   {
@@ -524,8 +529,9 @@ CAEStreamInfo::DataType VideoPlayerCodec::GetPassthroughStreamType(AVCodecID cod
 
   bool supports = CServiceBroker::GetActiveAE().SupportsRaw(format);
 
-  if (supports)
+  if (supports) {
     return format.m_streamInfo.m_type;
-  else
+  } else {
     return CAEStreamInfo::DataType::STREAM_TYPE_NULL;
+}
 }

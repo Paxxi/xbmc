@@ -92,8 +92,9 @@ bool CGUIWindowEventLog::OnMessage(CGUIMessage& message)
     {
       // get selected item
       int itemIndex = m_viewControl.GetSelectedItem();
-      if (itemIndex < 0 || itemIndex >= m_vecItems->Size())
+      if (itemIndex < 0 || itemIndex >= m_vecItems->Size()) {
         break;
+}
 
       CFileItemPtr item = m_vecItems->Get(itemIndex);
       int actionId = message.GetParam1();
@@ -135,16 +136,18 @@ bool CGUIWindowEventLog::OnMessage(CGUIMessage& message)
 
 bool CGUIWindowEventLog::OnSelect(int item)
 {
-  if (item < 0 || item >= m_vecItems->Size())
+  if (item < 0 || item >= m_vecItems->Size()) {
     return false;
+}
 
   return OnSelect(m_vecItems->Get(item));
 }
 
 void CGUIWindowEventLog::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (itemNumber < 0 && itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 && itemNumber >= m_vecItems->Size()) {
     return;
+}
 
   CFileItemPtr item = m_vecItems->Get(itemNumber);
   if (item == nullptr)
@@ -163,8 +166,9 @@ void CGUIWindowEventLog::GetContextButtons(int itemNumber, CContextButtons &butt
 
 bool CGUIWindowEventLog::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (itemNumber < 0 && itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 && itemNumber >= m_vecItems->Size()) {
     return false;
+}
 
   CFileItemPtr item = m_vecItems->Get(itemNumber);
   if (item == nullptr)

@@ -45,11 +45,13 @@ CMusicInfoTagLoaderFactory::~CMusicInfoTagLoaderFactory()
 IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CFileItem& item)
 {
   // dont try to read the tags for streams & shoutcast
-  if (item.IsInternetStream())
+  if (item.IsInternetStream()) {
     return nullptr;
+}
 
-  if (item.IsMusicDb())
+  if (item.IsMusicDb()) {
     return new CMusicInfoTagLoaderDatabase();
+}
 
   std::string strExtension = URIUtils::GetExtension(item.GetPath());
   StringUtils::ToLower(strExtension);

@@ -314,16 +314,18 @@ CSMBFile::~CSMBFile()
 
 int64_t CSMBFile::GetPosition()
 {
-  if (m_fd == -1)
+  if (m_fd == -1) {
     return -1;
+}
   CSingleLock lock(smb);
   return smbc_lseek(m_fd, 0, SEEK_CUR);
 }
 
 int64_t CSMBFile::GetLength()
 {
-  if (m_fd == -1)
+  if (m_fd == -1) {
     return -1;
+}
   return m_fileSize;
 }
 
@@ -416,8 +418,9 @@ int CSMBFile::OpenFile(const CURL &url, std::string& strAuth)
     fd = smbc_open(strPath.c_str(), O_RDONLY, 0);
   }
 
-  if (fd >= 0)
+  if (fd >= 0) {
     strAuth = strPath;
+}
 
   return fd;
 }
@@ -442,8 +445,9 @@ bool CSMBFile::Exists(const CURL& url)
 
 int CSMBFile::Stat(struct __stat64* buffer)
 {
-  if (m_fd == -1)
+  if (m_fd == -1) {
     return -1;
+}
 
   struct stat tmpBuffer = {0};
 
@@ -564,8 +568,9 @@ bool CSMBFile::Delete(const CURL& url)
 
   int result = smbc_unlink(strFile.c_str());
 
-  if(result != 0)
+  if(result != 0) {
     CLog::Log(LOGERROR, "%s - Error( %s )", __FUNCTION__, strerror(errno));
+}
 
   return (result == 0);
 }
@@ -579,8 +584,9 @@ bool CSMBFile::Rename(const CURL& url, const CURL& urlnew)
 
   int result = smbc_rename(strFile.c_str(), strFileNew.c_str());
 
-  if(result != 0)
+  if(result != 0) {
     CLog::Log(LOGERROR, "%s - Error( %s )", __FUNCTION__, strerror(errno));
+}
 
   return (result == 0);
 }
@@ -636,8 +642,9 @@ std::string CSMBFile::GetAuthenticatedPath(const CURL &url)
 
 int CSMBFile::IoControl(EIoControl request, void* param)
 {
-  if (request == IOCTRL_SEEK_POSSIBLE)
+  if (request == IOCTRL_SEEK_POSSIBLE) {
     return 1;
+}
 
   if (request == IOCTRL_SET_RETRY)
   {

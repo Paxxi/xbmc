@@ -42,8 +42,9 @@ bool CMusicInfoTagLoaderDatabase::Load(const std::string& strFileName, CMusicInf
   XFILE::MUSICDATABASEDIRECTORY::CDirectoryNode::GetDatabaseInfo(strFileName,param);
 
   CSong song;
-  if (database.GetSong(param.GetSongId(),song))
+  if (database.GetSong(param.GetSongId(),song)) {
     tag.SetSong(song);
+}
 
   database.Close();
 

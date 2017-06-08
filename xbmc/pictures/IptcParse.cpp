@@ -146,8 +146,9 @@ bool CIptcParse::Process (const unsigned char* const Data, const unsigned short 
     short signature = (*pos << 8) + (*(pos+1));
 
     pos += 2;
-    if (signature != 0x1C01 && signature != 0x1C02)
+    if (signature != 0x1C01 && signature != 0x1C02) {
       break;
+}
 
     unsigned char  type = *pos++;
     unsigned short length  = (*pos << 8) + (*(pos+1));

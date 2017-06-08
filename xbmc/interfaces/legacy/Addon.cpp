@@ -187,8 +187,9 @@ namespace XBMCAddon
     {
       DelayedCallGuard dcguard(languageHook);
       ADDON::AddonPtr addon(pAddon);
-      if (UpdateSettingInActiveDialog(id, value))
+      if (UpdateSettingInActiveDialog(id, value)) {
         return true;
+}
 
       if (!addon->UpdateSettingString(id, value))
         throw XBMCAddon::WrongTypeException("Invalid setting type");
@@ -208,36 +209,37 @@ namespace XBMCAddon
 
     String Addon::getAddonInfo(const char* id)
     {
-      if (strcmpi(id, "author") == 0)
+      if (strcmpi(id, "author") == 0) {
         return pAddon->Author();
-      else if (strcmpi(id, "changelog") == 0)
+      } else if (strcmpi(id, "changelog") == 0) {
         return pAddon->ChangeLog();
-      else if (strcmpi(id, "description") == 0)
+      } else if (strcmpi(id, "description") == 0) {
         return pAddon->Description();
-      else if (strcmpi(id, "disclaimer") == 0)
+      } else if (strcmpi(id, "disclaimer") == 0) {
         return pAddon->Disclaimer();
-      else if (strcmpi(id, "fanart") == 0)
+      } else if (strcmpi(id, "fanart") == 0) {
         return pAddon->FanArt();
-      else if (strcmpi(id, "icon") == 0)
+      } else if (strcmpi(id, "icon") == 0) {
         return pAddon->Icon();
-      else if (strcmpi(id, "id") == 0)
+      } else if (strcmpi(id, "id") == 0) {
         return pAddon->ID();
-      else if (strcmpi(id, "name") == 0)
+      } else if (strcmpi(id, "name") == 0) {
         return pAddon->Name();
-      else if (strcmpi(id, "path") == 0)
+      } else if (strcmpi(id, "path") == 0) {
         return pAddon->Path();
-      else if (strcmpi(id, "profile") == 0)
+      } else if (strcmpi(id, "profile") == 0) {
         return pAddon->Profile();
-      else if (strcmpi(id, "stars") == 0)
+      } else if (strcmpi(id, "stars") == 0) {
         return StringUtils::Format("-1");
-      else if (strcmpi(id, "summary") == 0)
+      } else if (strcmpi(id, "summary") == 0) {
         return pAddon->Summary();
-      else if (strcmpi(id, "type") == 0)
+      } else if (strcmpi(id, "type") == 0) {
         return ADDON::CAddonInfo::TranslateType(pAddon->Type());
-      else if (strcmpi(id, "version") == 0)
+      } else if (strcmpi(id, "version") == 0) {
         return pAddon->Version().asString();
-      else
+      } else {
         throw AddonException("'%s' is an invalid Id", id);
+}
     }
   }
 }

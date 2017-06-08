@@ -101,9 +101,11 @@ void CalculateYUVMatrix(TransformMatrix &matrix
   matrix *= TransformMatrix::CreateTranslation(black, black, black);
 
   float (*conv)[4] = (float (*)[4])PickYUVConversionMatrix(flags);
-  for(int row = 0; row < 3; row++)
-    for(int col = 0; col < 4; col++)
+  for(int row = 0; row < 3; row++) {
+    for(int col = 0; col < 4; col++) {
       coef.m[row][col] = conv[col][row];
+}
+}
   coef.identity = false;
 
   if (limited)
@@ -151,9 +153,11 @@ static void CalculateYUVMatrixGL(GLfloat      res[4][4]
   TransformMatrix matrix;
   CalculateYUVMatrix(matrix, flags, format, black, contrast, limited);
 
-  for(int row = 0; row < 3; row++)
-    for(int col = 0; col < 4; col++)
+  for(int row = 0; row < 3; row++) {
+    for(int col = 0; col < 4; col++) {
       res[col][row] = matrix.m[row][col];
+}
+}
 
   res[0][3] = 0.0f;
   res[1][3] = 0.0f;
@@ -193,38 +197,41 @@ BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(bool rect, unsigned flags, EShaderF
   }
 
 #ifdef HAS_GL
-  if(rect)
+  if(rect) {
     m_defines += "#define XBMC_texture_rectangle 1\n";
-  else
+  } else {
     m_defines += "#define XBMC_texture_rectangle 0\n";
 
-  if(g_advancedSettings.m_GLRectangleHack)
+  
+}if(g_advancedSettings.m_GLRectangleHack)
     m_defines += "#define XBMC_texture_rectangle_hack 1\n";
   else
     m_defines += "#define XBMC_texture_rectangle_hack 0\n";
 
   //don't compile in stretch support when it's not needed
-  if (stretch)
+  if (stretch) {
     m_defines += "#define XBMC_STRETCH 1\n";
-  else
+  } else {
     m_defines += "#define XBMC_STRETCH 0\n";
 
-  if (m_format == SHADER_YV12 ||
+  
+}if (m_format == SHADER_YV12 ||
       m_format == SHADER_YV12_10 ||
-      m_format == SHADER_YV12_16)
+      m_format == SHADER_YV12_16) {
     m_defines += "#define XBMC_YV12\n";
-  else if (m_format == SHADER_NV12)
+  } else if (m_format == SHADER_NV12) {
     m_defines += "#define XBMC_NV12\n";
-  else if (m_format == SHADER_YUY2)
+  } else if (m_format == SHADER_YUY2) {
     m_defines += "#define XBMC_YUY2\n";
-  else if (m_format == SHADER_UYVY)
+  } else if (m_format == SHADER_UYVY) {
     m_defines += "#define XBMC_UYVY\n";
-  else if (m_format == SHADER_NV12_RRG)
+  } else if (m_format == SHADER_NV12_RRG) {
     m_defines += "#define XBMC_NV12_RRG\n";
-  else if (m_format == SHADER_YV12)
+  } else if (m_format == SHADER_YV12) {
     m_defines += "#define XBMC_YV12\n";
-  else
+  } else {
     CLog::Log(LOGERROR, "GL: BaseYUV2RGBGLSLShader - unsupported format %d", m_format);
+}
 
   VertexShader()->LoadSource("yuv2rgb_vertex.glsl", m_defines);
 #elif HAS_GLES == 2
@@ -377,8 +384,9 @@ void YUV2RGBBobShader::OnCompiledAndLinked()
 
 bool YUV2RGBBobShader::OnEnabled()
 {
-  if(!BaseYUV2RGBGLSLShader::OnEnabled())
+  if(!BaseYUV2RGBGLSLShader::OnEnabled()) {
     return false;
+}
 
   glUniform1i(m_hField, m_field);
   glUniform1f(m_hStepX, 1.0f / (float)m_width);
@@ -435,12 +443,13 @@ bool YUV2RGBProgressiveShaderARB::OnEnabled()
   GLfloat matrix[4][4];
   CalculateYUVMatrixGL(matrix, m_flags, m_format, m_black, m_contrast, !m_convertFullRange);
 
-  for(int i=0;i<4;i++)
+  for(int i=0;i<4;i++) {
     glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, i
                                , matrix[0][i]
                                , matrix[1][i]
                                , matrix[2][i]
                                , matrix[3][i]);
+}
 
   glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 4,
                                1.0 / m_width, 1.0 / m_height,

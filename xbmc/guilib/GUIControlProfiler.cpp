@@ -152,8 +152,9 @@ void CGUIControlProfilerItem::SaveToXML(TiXmlElement *parent)
     break;
   }
 
-  if (lpszType)
+  if (lpszType) {
     xmlControl->SetAttribute("type", lpszType);
+}
   if (m_controlID != 0)
   {
     std::string str = StringUtils::Format("%u", m_controlID);
@@ -216,14 +217,17 @@ CGUIControlProfilerItem *CGUIControlProfilerItem::FindOrAddControl(CGUIControl *
   for (unsigned int i=0; i<dwSize; ++i)
   {
     CGUIControlProfilerItem *p = m_vecChildren[i];
-    if (p->m_pControl == pControl)
+    if (p->m_pControl == pControl) {
       return p;
-    if (recurse && (p = p->FindOrAddControl(pControl, true)))
+}
+    if (recurse && (p = p->FindOrAddControl(pControl, true))) {
       return p;
+}
   }
 
-  if (pControl->GetParentControl() == m_pControl)
+  if (pControl->GetParentControl() == m_pControl) {
     return AddControl(pControl);
+}
 
   return nullptr;
 }
@@ -284,19 +288,23 @@ CGUIControlProfilerItem *CGUIControlProfiler::FindOrAddControl(CGUIControl *pCon
   {
     // Typically calls come in pairs so the last control we found is probably
     // the one we want again next time
-    if (m_pLastItem->m_pControl == pControl)
+    if (m_pLastItem->m_pControl == pControl) {
       return m_pLastItem;
+}
     // If that control is not a match, usually the one we want is the next
     // sibling of that control, or the parent of that control so check
     // the parent first as it is more convenient
     m_pLastItem = m_pLastItem->m_pParent;
-    if (m_pLastItem && m_pLastItem->m_pControl == pControl)
+    if (m_pLastItem && m_pLastItem->m_pControl == pControl) {
       return m_pLastItem;
+}
     // continued from above, this searches the original control's siblings
-    if (m_pLastItem)
+    if (m_pLastItem) {
       m_pLastItem = m_pLastItem->FindOrAddControl(pControl, false);
-    if (m_pLastItem)
+}
+    if (m_pLastItem) {
       return m_pLastItem;
+}
   }
 
   m_pLastItem = m_ItemHead.FindOrAddControl(pControl, true);

@@ -82,8 +82,9 @@ CRSSDirectory::~CRSSDirectory()
 bool CRSSDirectory::ContainsFiles(const CURL& url)
 {
   CFileItemList items;
-  if(!GetDirectory(url, items))
+  if(!GetDirectory(url, items)) {
     return false;
+}
 
   return items.Size() > 0;
 }
@@ -136,8 +137,9 @@ static void ParseItemMRSS(CFileItem* item, SResources& resources, TiXmlElement* 
     item_child->Attribute("height", &res.height);
     item_child->Attribute("bitrate", &res.bitrate);
     item_child->Attribute("duration", &res.duration);
-    if(item_child->Attribute("fileSize"))
+    if(item_child->Attribute("fileSize")) {
       res.size     = _atoi64(item_child->Attribute("fileSize"));
+}
 
     resources.push_back(res);
     ParseItem(item, resources, item_child, path);
@@ -288,8 +290,9 @@ static void ParseItemRSS(CFileItem* item, SResources& resources, TiXmlElement* i
     res.tag = "rss:enclosure";
     res.path = XMLUtils::GetAttribute(item_child, "url");
     res.mime = XMLUtils::GetAttribute(item_child, "type");
-    if(len)
+    if(len) {
       res.size = _atoi64(len);
+}
 
     resources.push_back(res);
   }
@@ -525,10 +528,11 @@ static void ParseItem(CFileItem* item, TiXmlElement* root, const std::string& pa
     if(best->mime == "application/rss+xml" && StringUtils::StartsWithNoCase(item->GetPath(), "http://"))
       item->SetPath("rss://" + item->GetPath().substr(7));
 
-    if(StringUtils::StartsWithNoCase(item->GetPath(), "rss://"))
+    if(StringUtils::StartsWithNoCase(item->GetPath(), "rss://")) {
       item->m_bIsFolder = true;
-    else
+    } else {
       item->m_bIsFolder = false;
+}
   }
 
   if(!item->m_strTitle.empty())
@@ -589,15 +593,17 @@ bool CRSSDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   TiXmlElement* rssXmlNode = xmlDoc.RootElement();
 
-  if (!rssXmlNode)
+  if (!rssXmlNode) {
     return false;
+}
 
   TiXmlHandle docHandle( &xmlDoc );
   TiXmlElement* channelXmlNode = docHandle.FirstChild( "rss" ).FirstChild( "channel" ).Element();
-  if (channelXmlNode)
+  if (channelXmlNode) {
     ParseItem(&items, channelXmlNode, pathToUrl);
-  else
+  } else {
     return false;
+}
 
   TiXmlElement* child = nullptr;
   for (child = channelXmlNode->FirstChildElement("item"); child; child = child->NextSiblingElement())

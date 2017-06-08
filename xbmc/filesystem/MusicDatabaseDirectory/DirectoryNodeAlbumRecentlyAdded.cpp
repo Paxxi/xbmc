@@ -52,8 +52,9 @@ std::string CDirectoryNodeAlbumRecentlyAdded::GetLocalizedName() const
 bool CDirectoryNodeAlbumRecentlyAdded::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   VECALBUMS albums;
   if (!musicdatabase.GetRecentlyAddedAlbums(albums))

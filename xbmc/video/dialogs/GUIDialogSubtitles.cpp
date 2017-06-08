@@ -403,10 +403,11 @@ void CGUIDialogSubtitles::UpdateStatus(STATUS status)
       label = g_localizeStrings.Get(24107);
       break;
     case SEARCH_COMPLETE:
-      if (!m_subtitles->IsEmpty())
+      if (!m_subtitles->IsEmpty()) {
         label = StringUtils::Format(g_localizeStrings.Get(24108).c_str(), m_subtitles->Size());
-      else
+      } else {
         label = g_localizeStrings.Get(24109);
+}
       break;
     case DOWNLOADING:
       label = g_localizeStrings.Get(24110);
@@ -470,10 +471,11 @@ void CGUIDialogSubtitles::OnDownloadComplete(const CFileItemList *items, const s
      * @todo We need some way to avoid special casing this all over the place
      * for rar/zip (perhaps modify GetDirectory?)
      */
-    if (URIUtils::IsInRAR(strCurrentFile) || URIUtils::IsInZIP(strCurrentFile))
+    if (URIUtils::IsInRAR(strCurrentFile) || URIUtils::IsInZIP(strCurrentFile)) {
       strCurrentFilePath = URIUtils::GetDirectory(CURL(strCurrentFile).GetHostName());
-    else
+    } else {
       strCurrentFilePath = URIUtils::GetDirectory(strCurrentFile);
+}
 
     // Handle stacks
     if (g_application.CurrentFileItem().IsStack() && items->Size() > 1)

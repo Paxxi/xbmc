@@ -104,14 +104,15 @@ void XBPython::Announce(AnnouncementFlag flag, const char *sender, const char *m
   }
   else if (flag & GUI)
   {
-   if (strcmp(message, "OnScreensaverDeactivated") == 0)
+   if (strcmp(message, "OnScreensaverDeactivated") == 0) {
      OnScreensaverDeactivated();
-   else if (strcmp(message, "OnScreensaverActivated") == 0)
+   } else if (strcmp(message, "OnScreensaverActivated") == 0) {
      OnScreensaverActivated();
-   else if (strcmp(message, "OnDPMSDeactivated") == 0)
+   } else if (strcmp(message, "OnDPMSDeactivated") == 0) {
      OnDPMSDeactivated();
-   else if (strcmp(message, "OnDPMSActivated") == 0)
+   } else if (strcmp(message, "OnDPMSActivated") == 0) {
      OnDPMSActivated();
+}
   }
 
   std::string jsonData;
@@ -390,8 +391,9 @@ void XBPython::OnNotification(const std::string &sender, const std::string &meth
 */
 bool XBPython::FileExist(const char* strFile)
 {
-  if (!strFile)
+  if (!strFile) {
     return false;
+}
 
   if (!XFILE::CFile::Exists(strFile))
   {
@@ -403,8 +405,9 @@ bool XBPython::FileExist(const char* strFile)
 
 void XBPython::RegisterExtensionLib(LibraryLoader *pLib)
 {
-  if (!pLib)
+  if (!pLib) {
     return;
+}
 
   CSingleLock lock(m_critSection);
 
@@ -414,8 +417,9 @@ void XBPython::RegisterExtensionLib(LibraryLoader *pLib)
 
 void XBPython::UnregisterExtensionLib(LibraryLoader *pLib)
 {
-  if (!pLib)
+  if (!pLib) {
     return;
+}
 
   CSingleLock lock(m_critSection);
   CLog::Log(LOGDEBUG, "%s, removing %s (0x%p)", __FUNCTION__, pLib->GetName(), (void *)pLib);
@@ -532,8 +536,9 @@ void XBPython::Process()
 
 bool XBPython::OnScriptInitialized(ILanguageInvoker *invoker)
 {
-  if (invoker == nullptr)
+  if (invoker == nullptr) {
     return false;
+}
 
   XBMC_TRACE;
   CLog::Log(LOGINFO, "initializing python engine.");
@@ -593,10 +598,11 @@ bool XBPython::OnScriptInitialized(ILanguageInvoker *invoker)
     CEnvironment::putenv(buf);
 #endif
 
-    if (PyEval_ThreadsInitialized())
+    if (PyEval_ThreadsInitialized()) {
       PyEval_AcquireLock();
-    else
+    } else {
       PyEval_InitThreads();
+}
 
     Py_Initialize();
     PyEval_ReleaseLock();
@@ -608,8 +614,9 @@ bool XBPython::OnScriptInitialized(ILanguageInvoker *invoker)
     char* python_argv[1] = { (char*)"" };
     PySys_SetArgv(1, python_argv);
 
-    if (!(m_mainThreadState = PyThreadState_Get()))
+    if (!(m_mainThreadState = PyThreadState_Get())) {
       CLog::Log(LOGERROR, "Python threadstate is NULL.");
+}
     PyEval_ReleaseLock();
 
     m_bInitialized = true;
@@ -620,11 +627,13 @@ bool XBPython::OnScriptInitialized(ILanguageInvoker *invoker)
 
 void XBPython::OnScriptStarted(ILanguageInvoker *invoker)
 {
-  if (invoker == nullptr)
+  if (invoker == nullptr) {
     return;
+}
 
-  if (!m_bInitialized)
+  if (!m_bInitialized) {
     return;
+}
 
   PyElem inf;
   inf.id        = invoker->GetId();
@@ -639,8 +648,9 @@ void XBPython::OnScriptAbortRequested(ILanguageInvoker *invoker)
   XBMC_TRACE;
 
   long invokerId(-1);
-  if (invoker != nullptr)
+  if (invoker != nullptr) {
     invokerId = invoker->GetId();
+}
 
   LOCK_AND_COPY(std::vector<XBMCAddon::xbmc::Monitor*>, tmp, m_vecMonitorCallbackList);
   for (MonitorCallbackList::iterator it = tmp.begin(); (it != tmp.end()); ++it)
@@ -676,10 +686,11 @@ void XBPython::OnScriptFinalized(ILanguageInvoker *invoker)
   XBMC_TRACE;
   CSingleLock lock(m_critSection);
   // for linux - we never release the library. its loaded and stays in memory.
-  if (m_iDllScriptCounter)
+  if (m_iDllScriptCounter) {
     m_iDllScriptCounter--;
-  else
+  } else {
     CLog::Log(LOGERROR, "Python script counter attempted to become negative");
+}
   m_endtime = XbmcThreads::SystemClockMillis();
 }
 

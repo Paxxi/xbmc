@@ -48,18 +48,20 @@ const char* CJoystickTranslator::HatStateToString(HAT_STATE state)
 
 SEMIAXIS_DIRECTION CJoystickTranslator::PositionToSemiAxisDirection(float position)
 {
-  if      (position > 0) return SEMIAXIS_DIRECTION::POSITIVE;
-  else if (position < 0) return SEMIAXIS_DIRECTION::NEGATIVE;
+  if      (position > 0) { return SEMIAXIS_DIRECTION::POSITIVE;
+  } else if (position < 0) { return SEMIAXIS_DIRECTION::NEGATIVE;
+}
 
   return SEMIAXIS_DIRECTION::ZERO;
 }
 
 ANALOG_STICK_DIRECTION CJoystickTranslator::VectorToAnalogStickDirection(float x, float y)
 {
-  if      (y >= x && y >  -x) return ANALOG_STICK_DIRECTION::UP;
-  else if (y <  x && y >= -x) return ANALOG_STICK_DIRECTION::RIGHT;
-  else if (y <= x && y <  -x) return ANALOG_STICK_DIRECTION::DOWN;
-  else if (y >  x && y <= -x) return ANALOG_STICK_DIRECTION::LEFT;
+  if      (y >= x && y >  -x) { return ANALOG_STICK_DIRECTION::UP;
+  } else if (y <  x && y >= -x) { return ANALOG_STICK_DIRECTION::RIGHT;
+  } else if (y <= x && y <  -x) { return ANALOG_STICK_DIRECTION::DOWN;
+  } else if (y >  x && y <= -x) { return ANALOG_STICK_DIRECTION::LEFT;
+}
 
   return ANALOG_STICK_DIRECTION::UNKNOWN;
 }

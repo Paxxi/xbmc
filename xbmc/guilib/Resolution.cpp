@@ -65,8 +65,9 @@ RESOLUTION CResolutionUtils::ChooseBestResolution(float fps, int width, bool is3
   float weight;
   if (!FindResolutionFromOverride(fps, width, is3D, res, weight, false)) //find a refreshrate from overrides
   {
-    if (!FindResolutionFromOverride(fps, width, is3D, res, weight, true))//if that fails find it from a fallback
+    if (!FindResolutionFromOverride(fps, width, is3D, res, weight, true)) {//if that fails find it from a fallback
       FindResolutionFromFpsMatch(fps, width, is3D, res, weight);//if that fails use automatic refreshrate selection
+}
   }
   CLog::Log(LOGNOTICE, "Display resolution ADJUST : %s (%d) (weight: %.3f)",
             g_graphicsContext.GetResInfo(res).strMode.c_str(), res, weight);
@@ -82,12 +83,14 @@ bool CResolutionUtils::FindResolutionFromOverride(float fps, int width, bool is3
   {
     RefreshOverride& override = g_advancedSettings.m_videoAdjustRefreshOverrides[i];
 
-    if (override.fallback != fallback)
+    if (override.fallback != fallback) {
       continue;
+}
 
     //if we're checking for overrides, check if the fps matches
-    if (!fallback && (fps < override.fpsmin || fps > override.fpsmax))
+    if (!fallback && (fps < override.fpsmin || fps > override.fpsmax)) {
       continue;
+}
 
     for (size_t j = (int)RES_DESKTOP; j < CDisplaySettings::GetInstance().ResolutionInfoSize(); j++)
     {
@@ -196,8 +199,9 @@ RESOLUTION CResolutionUtils::FindClosestResolution(float fps, int width, bool is
   RESOLUTION_INFO curr = g_graphicsContext.GetResInfo(current);
   RESOLUTION orig_res  = CDisplaySettings::GetInstance().GetCurrentResolution();
 
-  if (orig_res <= RES_DESKTOP)
+  if (orig_res <= RES_DESKTOP) {
     orig_res = RES_DESKTOP;
+}
 
   RESOLUTION_INFO orig = g_graphicsContext.GetResInfo(orig_res);
 
@@ -247,8 +251,9 @@ RESOLUTION CResolutionUtils::FindClosestResolution(float fps, int width, bool is
     if (is3D)
     {
       float diff = (info.fRefreshRate - fRefreshRate);
-      if(diff < 0)
+      if(diff < 0) {
         diff *= -1.0f;
+}
 
       if(diff < last_diff)
       {
@@ -291,10 +296,11 @@ RESOLUTION CResolutionUtils::FindClosestResolution(float fps, int width, bool is
   }
 
   // For 3D overwrite weight
-  if (is3D)
+  if (is3D) {
     weight = 0;
-  else
+  } else {
     weight = RefreshWeight(curr.fRefreshRate, fRefreshRate * multiplier);
+}
 
   return current;
 }
@@ -307,10 +313,11 @@ float CResolutionUtils::RefreshWeight(float refresh, float fps)
 
   float weight = 0.0f;
 
-  if (round < 1)
+  if (round < 1) {
     weight = (fps - refresh) / fps;
-  else
+  } else {
     weight = (float)fabs(div / round - 1.0);
+}
 
   // punish higher refreshrates and prefer better matching
   // e.g. 30 fps content at 60 hz is better than
@@ -318,8 +325,9 @@ float CResolutionUtils::RefreshWeight(float refresh, float fps)
   // the content is interlaced at the start, only
   // punish when refreshrate > 60 hz to not have to switch
   // twice for 30i content
-  if (refresh > 60 && round > 1)
+  if (refresh > 60 && round > 1) {
     weight += round / 10000.0;
+}
 
   return weight;
 }

@@ -123,8 +123,9 @@ void CPVRManagerJobQueue::ExecutePendingJobs()
   {
     CSingleLock lock(m_critSection);
 
-    if (m_bStopped)
+    if (m_bStopped) {
       return;
+}
 
     pendingUpdates = std::move(m_pendingUpdates);
     m_triggerEvent.Reset();
@@ -179,8 +180,9 @@ CPVRManager::~CPVRManager(void)
 
 void CPVRManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
 {
-  if (!IsStarted())
+  if (!IsStarted()) {
     return;
+}
 
   if ((flag & (ANNOUNCEMENT::GUI)))
   {
@@ -283,8 +285,9 @@ void CPVRManager::Init()
   //       locks the global graphics mutex, which easily can lead to deadlocks.
   m_progressBar = g_windowManager.GetWindow<CGUIDialogExtendedProgressBar>(WINDOW_DIALOG_EXT_PROGRESS);
 
-  if (!m_progressBar)
+  if (!m_progressBar) {
     CLog::Log(LOGERROR, "CPVRManager - %s - unable to get WINDOW_DIALOG_EXT_PROGRESS!", __FUNCTION__);
+}
 
   // initial check for enabled addons
   // if at least one pvr addon is enabled, PVRManager start up
@@ -330,8 +333,9 @@ void CPVRManager::Stop()
   CSingleLock initLock(m_startStopMutex);
 
   /* check whether the pvrmanager is loaded */
-  if (IsStopped())
+  if (IsStopped()) {
     return;
+}
 
   /* stop playback if needed */
   if (IsPlaying())
@@ -398,8 +402,9 @@ void CPVRManager::SetState(CPVRManager::ManagerState state)
 
   {
     CSingleLock lock(m_managerStateMutex);
-    if (m_managerState == state)
+    if (m_managerState == state) {
       return;
+}
 
     m_managerState = state;
 
@@ -455,8 +460,9 @@ void CPVRManager::Process()
     Sleep(1000);
   }
 
-  if (!IsInitialising())
+  if (!IsInitialising()) {
     return;
+}
 
   SetState(ManagerStateStarted);
 
@@ -560,8 +566,9 @@ void CPVRManager::OnWake()
 
 bool CPVRManager::Load(bool bShowProgress)
 {
-  if (!bShowProgress)
+  if (!bShowProgress) {
     HideProgressDialog();
+}
 
   /* load at least one client */
   while (IsInitialising() && m_addons && !m_addons->HasCreatedClients())
@@ -573,8 +580,9 @@ bool CPVRManager::Load(bool bShowProgress)
   CLog::Log(LOGDEBUG, "PVRManager - %s - active clients found. continue to start", __FUNCTION__);
 
   /* load all channels and groups */
-  if (bShowProgress)
+  if (bShowProgress) {
     ShowProgressDialog(g_localizeStrings.Get(19236), 0); // Loading channels from clients
+}
   if (!m_channelGroups->Load() || !IsInitialising())
     return false;
 
@@ -582,34 +590,40 @@ bool CPVRManager::Load(bool bShowProgress)
   NotifyObservers(ObservableMessageChannelGroupsLoaded);
 
   /* get timers from the backends */
-  if (bShowProgress)
+  if (bShowProgress) {
     ShowProgressDialog(g_localizeStrings.Get(19237), 50); // Loading timers from clients
+}
   m_timers->Load();
 
   /* get recordings from the backend */
-  if (bShowProgress)
+  if (bShowProgress) {
     ShowProgressDialog(g_localizeStrings.Get(19238), 75); // Loading recordings from clients
+}
   m_recordings->Load();
 
-  if (!IsInitialising())
+  if (!IsInitialising()) {
     return false;
+}
 
   /* start the other pvr related update threads */
-  if (bShowProgress)
+  if (bShowProgress) {
     ShowProgressDialog(g_localizeStrings.Get(19239), 85); // Starting background threads
+}
   m_guiInfo->Start();
 
   /* close the progress dialog */
-  if (bShowProgress)
+  if (bShowProgress) {
     HideProgressDialog();
+}
 
   return true;
 }
 
 void CPVRManager::ShowProgressDialog(const std::string &strText, int iProgress)
 {
-  if (!m_progressHandle && m_progressBar)
+  if (!m_progressHandle && m_progressBar) {
     m_progressHandle = m_progressBar->GetHandle(g_localizeStrings.Get(19235)); // PVR manager is starting up
+}
 
   if (m_progressHandle)
   {
@@ -629,8 +643,9 @@ void CPVRManager::HideProgressDialog()
 
 CGUIDialogProgressBarHandle* CPVRManager::ShowProgressDialog(const std::string &strTitle) const
 {
-  if (m_progressBar)
+  if (m_progressBar) {
     return m_progressBar->GetHandle(strTitle);
+}
 
   return nullptr;
 }
@@ -681,8 +696,9 @@ bool CPVRManager::ChannelUpDown(unsigned int *iNewChannelNumber, bool bPreview, 
 
 void CPVRManager::TriggerContinueLastChannel()
 {
-  if (IsStarted())
+  if (IsStarted()) {
     CJobManager::GetInstance().AddJob(new CPVRContinueLastChannelJob(), nullptr);
+}
 }
 
 bool CPVRManager::IsPlaying() const
@@ -763,8 +779,9 @@ void CPVRManager::RestartParentalTimer()
 bool CPVRManager::IsParentalLocked(const CPVRChannelPtr &channel)
 {
   bool bReturn(false);
-  if (!IsStarted())
+  if (!IsStarted()) {
     return bReturn;
+}
   CPVRChannelPtr currentChannel(GetCurrentChannel());
 
   if (// different channel
@@ -814,8 +831,9 @@ CPVRChannelGroupPtr CPVRManager::GetPlayingGroup(bool bRadio /* = false */)
 bool CPVRManager::OpenLiveStream(const CFileItem &fileItem)
 {
   bool bReturn(false);
-  if (!fileItem.HasPVRChannelInfoTag())
+  if (!fileItem.HasPVRChannelInfoTag()) {
     return bReturn;
+}
 
   CLog::Log(LOGDEBUG,"PVRManager - %s - opening live stream on channel '%s'",
       __FUNCTION__, fileItem.GetPVRChannelInfoTag()->ChannelName().c_str());
@@ -901,8 +919,9 @@ void CPVRManager::UpdateCurrentFile()
 bool CPVRManager::UpdateItem(CFileItem& item)
 {
   /* Don't update if a recording is played */
-  if (item.IsPVRRecording())
+  if (item.IsPVRRecording()) {
     return false;
+}
 
   if (!item.IsPVRChannel())
   {
@@ -970,8 +989,9 @@ bool CPVRManager::PerformChannelSwitch(const CPVRChannelPtr &channel, bool bPrev
   assert(channel.get());
 
   // check parental lock state
-  if (IsParentalLocked(channel))
+  if (IsParentalLocked(channel)) {
     return false;
+}
 
   // invalid channel
   if (channel->ClientID() < 0)
@@ -1197,8 +1217,9 @@ bool CPVRManager::CanSystemPowerdown(bool bAskUser /*= true*/) const
                                        CVariant{19696}, // "Cancel"
                                        10000); // timeout value before closing
       }
-      else
+      else {
         bReturn = false; // do not powerdown (busy, but no user interaction requested).
+}
     }
   }
   return bReturn;
@@ -1333,8 +1354,9 @@ void CPVRManager::TriggerChannelGroupsUpdate()
 
 void CPVRManager::TriggerSearchMissingChannelIcons()
 {
-  if (IsStarted())
+  if (IsStarted()) {
     CJobManager::GetInstance().AddJob(new CPVRSearchMissingChannelIconsJob(), nullptr);
+}
 }
 
 void CPVRManager::ConnectionStateChange(CPVRClient *client, std::string connectString, PVR_CONNECTION_STATE state, std::string message)
@@ -1345,8 +1367,9 @@ void CPVRManager::ConnectionStateChange(CPVRClient *client, std::string connectS
 
 bool CPVRManager::CreateChannelEpgs()
 {
-  if (EpgsCreated())
+  if (EpgsCreated()) {
     return true;
+}
 
   bool bEpgsCreated = m_channelGroups->CreateChannelEpgs();
 

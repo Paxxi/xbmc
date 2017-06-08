@@ -52,8 +52,9 @@ void CGLTexture::CreateTextureObject()
 
 void CGLTexture::DestroyTextureObject()
 {
-  if (m_texture)
+  if (m_texture) {
     g_TextureManager.ReleaseHwTexture(m_texture);
+}
 }
 
 void CGLTexture::LoadToGPU()

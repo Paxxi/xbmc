@@ -42,8 +42,9 @@ bool CPasswordManager::AuthenticateURL(CURL &url)
 {
   CSingleLock lock(m_critSection);
 
-  if (!m_loaded)
+  if (!m_loaded) {
     Load();
+}
   std::string lookup(GetLookupPath(url));
   std::map<std::string, std::string>::const_iterator it = m_temporaryCache.find(lookup);
   if (it == m_temporaryCache.end())
@@ -90,8 +91,9 @@ void CPasswordManager::SaveAuthenticatedURL(const CURL &url, bool saveToProfile)
   std::string path = GetLookupPath(url);
   std::string authenticatedPath = url.Get();
 
-  if (!m_loaded)
+  if (!m_loaded) {
     Load();
+}
 
   if (saveToProfile)
   { // write to some random XML file...
@@ -152,8 +154,9 @@ void CPasswordManager::Save() const
   CXBMCTinyXML doc;
   TiXmlElement rootElement("passwords");
   TiXmlNode *root = doc.InsertEndChild(rootElement);
-  if (!root)
+  if (!root) {
     return;
+}
 
   for (std::map<std::string, std::string>::const_iterator i = m_permanentCache.begin(); i != m_permanentCache.end(); ++i)
   {

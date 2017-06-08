@@ -50,8 +50,9 @@ using namespace XFILE;
 
 bool CFileItemHandler::GetField(const std::string &field, const CVariant &info, const CFileItemPtr &item, CVariant &result, bool &fetchedArt, CThumbLoader *thumbLoader /* = NULL */)
 {
-  if (result.isMember(field) && !result[field].empty())
+  if (result.isMember(field) && !result[field].empty()) {
     return true;
+}
 
   // overwrite serialized values
   if (item)
@@ -214,9 +215,9 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
   int start, end;
   HandleLimits(parameterObject, result, size, start, end);
 
-  if (sortLimit)
+  if (sortLimit) {
     Sort(items, parameterObject);
-  else
+  } else
   {
     start = 0;
     end = items.Size();
@@ -230,8 +231,9 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
     else if (items.Get(start)->HasMusicInfoTag())
       thumbLoader = new CMusicThumbLoader();
 
-    if (thumbLoader != nullptr)
+    if (thumbLoader != nullptr) {
       thumbLoader->OnLoaderStart();
+}
   }
 
   std::set<std::string> fields;
@@ -429,8 +431,9 @@ bool CFileItemHandler::FillFileItemList(const CVariant &parameterObject, CFileIt
 void CFileItemHandler::Sort(CFileItemList &items, const CVariant &parameterObject)
 {
   SortDescription sorting;
-  if (!ParseSorting(parameterObject, sorting.sortBy, sorting.sortOrder, sorting.sortAttributes))
+  if (!ParseSorting(parameterObject, sorting.sortBy, sorting.sortOrder, sorting.sortAttributes)) {
     return;
+}
 
   items.Sort(sorting);
 }

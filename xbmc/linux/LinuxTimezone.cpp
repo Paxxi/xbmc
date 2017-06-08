@@ -232,8 +232,9 @@ std::string CLinuxTimezone::GetOSConfiguredTimezone()
        *q = 0;
        p = strrchr(timezoneName,'/');
        *q = '/';
-       if (p)
+       if (p) {
          p++;
+}
      }
      return p;
    }
@@ -243,9 +244,10 @@ std::string CLinuxTimezone::GetOSConfiguredTimezone()
    FILE* fp = fopen("/etc/timezone", "r");
    if (fp)
    {
-      if (fgets(timezoneName, sizeof(timezoneName), fp))
+      if (fgets(timezoneName, sizeof(timezoneName), fp)) {
         timezoneName[strlen(timezoneName)-1] = '\0';
-      fclose(fp);
+      
+}fclose(fp);
    }
 
    return timezoneName;

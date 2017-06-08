@@ -92,14 +92,18 @@ AEStreamHandle* Interface_AudioEngine::AudioEngine_MakeStream(void* kodiBase, Au
 
   /* Translate addon options to kodi's options */
   int kodiOption = 0;
-  if (options & AUDIO_STREAM_FORCE_RESAMPLE)
+  if (options & AUDIO_STREAM_FORCE_RESAMPLE) {
     kodiOption |= AESTREAM_FORCE_RESAMPLE;
-  if (options & AUDIO_STREAM_PAUSED)
+}
+  if (options & AUDIO_STREAM_PAUSED) {
     kodiOption |= AESTREAM_PAUSED;
-  if (options & AUDIO_STREAM_AUTOSTART)
+}
+  if (options & AUDIO_STREAM_AUTOSTART) {
     kodiOption |= AESTREAM_AUTOSTART;
-  if (options & AUDIO_STREAM_BYPASS_ADSP)
+}
+  if (options & AUDIO_STREAM_BYPASS_ADSP) {
     kodiOption |= AESTREAM_BYPASS_ADSP;
+}
 
   return CServiceBroker::GetActiveAE().MakeStream(format, kodiOption);
 }

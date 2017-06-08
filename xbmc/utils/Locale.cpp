@@ -81,8 +81,9 @@ CLocale CLocale::FromString(const std::string& locale)
 
 bool CLocale::operator==(const CLocale& other) const
 {
-  if (!m_valid && !other.m_valid)
+  if (!m_valid && !other.m_valid) {
     return true;
+}
 
   return m_valid == other.m_valid &&
          StringUtils::EqualsNoCase(m_language, other.m_language) &&
@@ -153,10 +154,12 @@ bool CLocale::Matches(const std::string& locale) const
 {
   CLocale other = FromString(locale);
 
-  if (!m_valid && !other.m_valid)
+  if (!m_valid && !other.m_valid) {
     return true;
-  if (!m_valid || !other.m_valid)
+}
+  if (!m_valid || !other.m_valid) {
     return false;
+}
 
   if (!StringUtils::EqualsNoCase(m_language, other.m_language))
     return false;

@@ -92,9 +92,9 @@ bool CKeyboardLayoutManager::Load(const std::string& path /* = "" */)
     while (layoutElement != nullptr)
     {
       CKeyboardLayout layout;
-      if (!layout.Load(layoutElement))
+      if (!layout.Load(layoutElement)) {
         CLog::Log(LOGWARNING, "CKeyboardLayoutManager: failed to load %s", layoutPath.c_str());
-      else if (m_layouts.find(layout.GetIdentifier()) != m_layouts.end())
+      } else if (m_layouts.find(layout.GetIdentifier()) != m_layouts.end())
         CLog::Log(LOGWARNING, "CKeyboardLayoutManager: duplicate layout with identifier \"%s\" in %s", layout.GetIdentifier().c_str(), layoutPath.c_str());
       else
       {

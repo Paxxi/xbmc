@@ -180,8 +180,9 @@ void CAddonSettings::OnSettingAction(std::shared_ptr<const CSetting> setting)
 bool CAddonSettings::Initialize(const CXBMCTinyXML& doc, bool allowEmpty /* = false */)
 {
   CSingleLock lock(m_critical);
-  if (m_initialized)
+  if (m_initialized) {
     return false;
+}
 
   // register custom setting types
   InitializeSettingTypes();
@@ -189,8 +190,9 @@ bool CAddonSettings::Initialize(const CXBMCTinyXML& doc, bool allowEmpty /* = fa
   InitializeControls();
 
   // load the settings definitions
-  if (!InitializeDefinitions(doc) && !allowEmpty)
+  if (!InitializeDefinitions(doc) && !allowEmpty) {
     return false;
+}
 
   GetSettingsManager()->SetInitialized();
 
@@ -202,8 +204,9 @@ bool CAddonSettings::Initialize(const CXBMCTinyXML& doc, bool allowEmpty /* = fa
 bool CAddonSettings::Load(const CXBMCTinyXML& doc)
 {
   CSingleLock lock(m_critical);
-  if (!m_initialized)
+  if (!m_initialized) {
     return false;
+}
 
   CLog::Log(LOGDEBUG, "CAddonSettings[%s]: loading setting values",
     m_addon.lock()->ID().c_str());
@@ -237,8 +240,9 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
 
       // parse the setting value
       std::string settingValue;
-      if (setting->FirstChild())
+      if (setting->FirstChild()) {
         settingValue = setting->FirstChild()->ValueStr();
+}
 
       // add the setting to the map
       settingValues.emplace(std::make_pair(settingId, settingValue));
@@ -260,8 +264,9 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
           setting = setting->NextSibling();
         }
       }
-      else
-        parseSettingValue(category);
+      else {
+        parseSettingValue
+}(category);
 
       category = category->NextSibling();
     }
@@ -304,8 +309,9 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
 bool CAddonSettings::Save(CXBMCTinyXML& doc) const
 {
   CSingleLock lock(m_critical);
-  if (!m_initialized)
+  if (!m_initialized) {
     return false;
+}
 
   if (!SaveValuesToXml(doc))
   {
@@ -402,8 +408,9 @@ bool CAddonSettings::InitializeDefinitions(const CXBMCTinyXML& doc)
 bool CAddonSettings::ParseSettingVersion(const CXBMCTinyXML& doc, uint32_t& version) const
 {
   const TiXmlElement* root = doc.RootElement();
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   if (!StringUtils::EqualsNoCase(root->ValueStr(), SETTING_XML_ROOT))
   {
@@ -420,16 +427,18 @@ bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc
   CLog::Log(LOGDEBUG, "CAddonSettings[%s]: trying to load setting definitions from old format...", m_addon.lock()->ID().c_str());
 
   const TiXmlElement* root = doc.RootElement();
-  if (root == nullptr)
+  if (root == nullptr) {
     return false;
+}
 
   std::shared_ptr<CSettingSection> section = std::make_shared<CSettingSection>(m_addon.lock()->ID(), GetSettingsManager());
 
   std::shared_ptr<CSettingCategory> category;
   const TiXmlElement *categoryElement = root->FirstChildElement("category");
   // add a default category if necessary
-  if (categoryElement == nullptr)
+  if (categoryElement == nullptr) {
     categoryElement = root;
+}
 
   std::set<std::string> settingIds;
   std::set<std::string> actionSettings;
@@ -439,8 +448,9 @@ bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc
   {
     // try to get the category's label
     int categoryLabel = 0;
-    if (categoryElement->QueryIntAttribute("label", &categoryLabel) != TIXML_SUCCESS)
+    if (categoryElement->QueryIntAttribute("label", &categoryLabel) != TIXML_SUCCESS) {
       categoryLabel = 128;
+}
       
     // create the category
     category = std::make_shared<CSettingCategory>(StringUtils::Format("category%u", categoryId), GetSettingsManager());
@@ -583,20 +593,20 @@ bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc
 
         // parse enable status
         const auto conditionEnable = XMLUtils::GetAttribute(settingElement, "enable");
-        if (StringUtils::EqualsNoCase(conditionEnable, "true"))
+        if (StringUtils::EqualsNoCase(conditionEnable, "true")) {
           setting->SetEnabled(true);
-        else if (StringUtils::EqualsNoCase(conditionEnable, "false"))
+        } else if (StringUtils::EqualsNoCase(conditionEnable, "false")) {
           setting->SetEnabled(false);
-        else if (!conditionEnable.empty())
+        } else if (!conditionEnable.empty())
           settingWithConditions.enableCondition = conditionEnable;
 
         // parse visible status
         const auto conditionVisible = XMLUtils::GetAttribute(settingElement, "visible");
-        if (StringUtils::EqualsNoCase(conditionVisible, "true"))
+        if (StringUtils::EqualsNoCase(conditionVisible, "true")) {
           setting->SetVisible(true);
-        else if (StringUtils::EqualsNoCase(conditionVisible, "false"))
+        } else if (StringUtils::EqualsNoCase(conditionVisible, "false")) {
           setting->SetVisible(false);
-        else if (!conditionVisible.empty())
+        } else if (!conditionVisible.empty())
           settingWithConditions.visibleCondition = conditionVisible;
 
         if (!settingWithConditions.enableCondition.empty() || !settingWithConditions.visibleCondition.empty())

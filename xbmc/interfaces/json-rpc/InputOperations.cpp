@@ -63,8 +63,9 @@ JSONRPC_STATUS CInputOperations::SendAction(int actionID, bool wakeScreensaver /
 
 JSONRPC_STATUS CInputOperations::activateWindow(int windowID)
 {
-  if(!handleScreenSaver())
+  if(!handleScreenSaver()) {
     CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTIVATE_WINDOW, windowID, 0);
+}
 
   return ACK;
 }
@@ -75,8 +76,9 @@ JSONRPC_STATUS CInputOperations::SendText(const std::string &method, ITransportL
     return ACK;
 
   CGUIWindow *window = g_windowManager.GetWindow(g_windowManager.GetFocusedWindow());
-  if (!window)
+  if (!window) {
     return ACK;
+}
 
   CGUIMessage msg(GUI_MSG_SET_TEXT, 0, window->GetFocusedControlID());
   msg.SetLabel(parameterObject["text"].asString());

@@ -33,8 +33,9 @@ namespace XBMCAddonUtils
   GuiLock::GuiLock()
   {
     languageHook = XBMCAddon::LanguageHook::GetLanguageHook();
-    if (languageHook)
+    if (languageHook) {
       languageHook->DelayedCallOpen();
+}
 
     g_application.LockFrameMoveGuard();
   }
@@ -43,8 +44,9 @@ namespace XBMCAddonUtils
   {
     g_application.UnlockFrameMoveGuard();
 
-    if (languageHook)
+    if (languageHook) {
       languageHook->DelayedCallClose();
+}
   }
 
   static char defaultImage[1024];

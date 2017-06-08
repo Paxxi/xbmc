@@ -50,8 +50,9 @@ CStopWatch::~CStopWatch()
 
 int64_t CStopWatch::GetTicks() const
 {
-  if (m_useFrameTime)
+  if (m_useFrameTime) {
     return CTimeUtils::GetFrameTime();
+}
 #ifndef TARGET_POSIX
   return CurrentHostCounter();
 #else

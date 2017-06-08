@@ -207,8 +207,9 @@ bool CProfilesManager::Save(const std::string &file) const
   CXBMCTinyXML xmlDoc;
   TiXmlElement xmlRootElement(XML_PROFILES);
   TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (pRoot == nullptr)
+  if (pRoot == nullptr) {
     return false;
+}
 
   XMLUtils::SetInt(pRoot, XML_LAST_LOADED, m_currentProfile);
   XMLUtils::SetBoolean(pRoot, XML_LOGIN_SCREEN, m_usingLoginScreen);
@@ -462,8 +463,9 @@ std::string CProfilesManager::GetUserDataFolder() const
 
 std::string CProfilesManager::GetProfileUserDataFolder() const
 {
-  if (m_currentProfile == 0)
+  if (m_currentProfile == 0) {
     return GetUserDataFolder();
+}
 
   return URIUtils::AddFileToFolder(GetUserDataFolder(), GetCurrentProfile().getDirectory());
 }

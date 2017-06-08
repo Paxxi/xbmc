@@ -121,8 +121,9 @@ bool CPlayListFactory::IsPlaylist(const CFileItem& item)
 */
 
   // online m3u8 files are hls:// -- do not treat as playlist
-  if (item.IsInternetStream() && item.IsType(".m3u8"))
+  if (item.IsInternetStream() && item.IsType(".m3u8")) {
     return false;
+}
 
   if(strMimeType == "audio/x-pn-realaudio"
   || strMimeType == "playlist"

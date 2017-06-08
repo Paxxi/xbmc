@@ -76,8 +76,9 @@ namespace XBMCAddon
     void log(const char* msg, int level)
     {
       // check for a valid loglevel
-      if (level < LOGDEBUG || level > LOGNONE)
+      if (level < LOGDEBUG || level > LOGNONE) {
         level = LOGDEBUG;
+}
       CLog::Log(level, "%s", msg);
     }
 
@@ -96,8 +97,9 @@ namespace XBMCAddon
     void executescript(const char* script)
     {
       XBMC_TRACE;
-      if (! script)
+      if (! script) {
         return;
+}
 
       CApplicationMessenger::GetInstance().PostMsg(TMSG_EXECUTE_SCRIPT, -1, -1, nullptr, script);
     }
@@ -105,8 +107,9 @@ namespace XBMCAddon
     void executebuiltin(const char* function, bool wait /* = false*/)
     {
       XBMC_TRACE;
-      if (! function)
+      if (! function) {
         return;
+}
       if (wait)
         CApplicationMessenger::GetInstance().SendMsg(TMSG_EXECUTE_BUILT_IN, -1, -1, nullptr, function);
       else
@@ -146,12 +149,14 @@ namespace XBMCAddon
           DelayedCallGuard dcguard;
           lh = dcguard.getLanguageHook(); // borrow this
           long nextSleep = endTime.MillisLeft();
-          if (nextSleep > 100)
+          if (nextSleep > 100) {
             nextSleep = 100; // only sleep for 100 millis
+}
           ::Sleep(nextSleep);
         }
-        if (lh != nullptr)
+        if (lh != nullptr) {
           lh->MakePendingCalls();
+}
       }
     }
 
@@ -319,8 +324,9 @@ namespace XBMCAddon
     void playSFX(const char* filename, bool useCached)
     {
       XBMC_TRACE;
-      if (!filename)
+      if (!filename) {
         return;
+}
 
       if (XFILE::CFile::Exists(filename))
       {
@@ -344,8 +350,9 @@ namespace XBMCAddon
     bool getCondVisibility(const char *condition)
     {
       XBMC_TRACE;
-      if (!condition)
+      if (!condition) {
         return false;
+}
 
       bool ret;
       {
@@ -430,11 +437,11 @@ namespace XBMCAddon
 #endif
           StringUtils::Replace(result, "YYYY", "%Y");
         }
-      else if (strcmpi(id, "tempunit") == 0)
+      else if (strcmpi(id, "tempunit") == 0) {
         result = g_langInfo.GetTemperatureUnitString();
-      else if (strcmpi(id, "speedunit") == 0)
+      } else if (strcmpi(id, "speedunit") == 0) {
         result = g_langInfo.GetSpeedUnitString();
-      else if (strcmpi(id, "time") == 0)
+      } else if (strcmpi(id, "time") == 0)
         {
           result = g_langInfo.GetTimeFormat();
           StringUtils::Replace(result, "H", "%H");

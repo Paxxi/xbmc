@@ -59,18 +59,19 @@ bool CGUIDialogFavourites::OnMessage(CGUIMessage &message)
     {
       int item = GetSelectedItem();
       int action = message.GetParam1();
-      if (action == ACTION_SELECT_ITEM || action == ACTION_MOUSE_LEFT_CLICK)
+      if (action == ACTION_SELECT_ITEM || action == ACTION_MOUSE_LEFT_CLICK) {
         OnClick(item);
-      else if (action == ACTION_MOVE_ITEM_UP)
+      } else if (action == ACTION_MOVE_ITEM_UP) {
         OnMoveItem(item, -1);
-      else if (action == ACTION_MOVE_ITEM_DOWN)
+      } else if (action == ACTION_MOVE_ITEM_DOWN) {
         OnMoveItem(item, 1);
-      else if (action == ACTION_CONTEXT_MENU || action == ACTION_MOUSE_RIGHT_CLICK)
+      } else if (action == ACTION_CONTEXT_MENU || action == ACTION_MOUSE_RIGHT_CLICK) {
         OnPopupMenu(item);
-      else if (action == ACTION_DELETE_ITEM)
+      } else if (action == ACTION_DELETE_ITEM) {
         OnDelete(item);
-      else
+      } else {
         return false;
+}
       return true;
     }
   }
@@ -102,8 +103,9 @@ int CGUIDialogFavourites::GetSelectedItem()
 
 void CGUIDialogFavourites::OnClick(int item)
 {
-  if (item < 0 || item >= m_favourites->Size())
+  if (item < 0 || item >= m_favourites->Size()) {
     return;
+}
 
   Close();
 
@@ -114,8 +116,9 @@ void CGUIDialogFavourites::OnClick(int item)
 
 void CGUIDialogFavourites::OnPopupMenu(int item)
 {
-  if (item < 0 || item >= m_favourites->Size())
+  if (item < 0 || item >= m_favourites->Size()) {
     return;
+}
 
   // highlight the item
   (*m_favourites)[item]->Select(true);
@@ -143,17 +146,18 @@ void CGUIDialogFavourites::OnPopupMenu(int item)
   // unhighlight the item
   (*m_favourites)[item]->Select(false);
 
-  if (button == 1)
+  if (button == 1) {
     OnMoveItem(item, -1);
-  else if (button == 2)
+  } else if (button == 2) {
     OnMoveItem(item, 1);
-  else if (button == 3)
+  } else if (button == 3) {
     OnDelete(item);
-  else if (button == 4)
+  } else if (button == 4) {
     OnRename(item);
-  else if (button == 5)
+  } else if (button == 5) {
     OnSetThumb(item);
-  else if (button >= addonItemOffset)
+  } else { if 
+}(button >= addonItemOffset)
     CONTEXTMENU::LoopFrom(*addonItems.at(button - addonItemOffset), itemPtr);
 }
 
@@ -175,8 +179,9 @@ void CGUIDialogFavourites::OnMoveItem(int item, int amount)
 
 void CGUIDialogFavourites::OnDelete(int item)
 {
-  if (item < 0 || item >= m_favourites->Size())
+  if (item < 0 || item >= m_favourites->Size()) {
     return;
+}
   m_favourites->Remove(item);
   m_favouritesService.Save(*m_favourites);
 
@@ -188,8 +193,9 @@ void CGUIDialogFavourites::OnDelete(int item)
 
 void CGUIDialogFavourites::OnRename(int item)
 {
-  if (item < 0 || item >= m_favourites->Size())
+  if (item < 0 || item >= m_favourites->Size()) {
     return;
+}
 
   if (ChooseAndSetNewName((*m_favourites)[item]))
   {
@@ -200,8 +206,9 @@ void CGUIDialogFavourites::OnRename(int item)
 
 void CGUIDialogFavourites::OnSetThumb(int item)
 {
-  if (item < 0 || item >= m_favourites->Size())
+  if (item < 0 || item >= m_favourites->Size()) {
     return;
+}
 
   if (ChooseAndSetNewThumbnail((*m_favourites)[item]))
   {

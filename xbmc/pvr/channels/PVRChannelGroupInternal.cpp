@@ -163,8 +163,9 @@ bool CPVRChannelGroupInternal::RemoveFromGroup(const CPVRChannelPtr &channel)
 {
   assert(channel.get());
 
-  if (!IsGroupMember(channel))
+  if (!IsGroupMember(channel)) {
     return false;
+}
 
   /* check if this channel is currently playing if we are hiding it */
   CPVRChannelPtr currentChannel(CServiceBroker::GetPVRManager().GetCurrentChannel());
@@ -318,8 +319,9 @@ void CPVRChannelGroupInternal::CreateChannelEpg(const CPVRChannelPtr &channel, b
 
 bool CPVRChannelGroupInternal::CreateChannelEpgs(bool bForce /* = false */)
 {
-  if (!CServiceBroker::GetPVRManager().EpgContainer().IsStarted())
+  if (!CServiceBroker::GetPVRManager().EpgContainer().IsStarted()) {
     return false;
+}
   {
     CSingleLock lock(m_critSection);
     for (PVR_CHANNEL_GROUP_MEMBERS::iterator it = m_members.begin(); it != m_members.end(); ++it)
@@ -336,6 +338,7 @@ bool CPVRChannelGroupInternal::CreateChannelEpgs(bool bForce /* = false */)
 
 void CPVRChannelGroupInternal::OnPVRManagerEvent(const PVR::PVREvent& event)
 {
-  if (event == ManagerStarted)
+  if (event == ManagerStarted) {
     CServiceBroker::GetPVRManager().TriggerEpgsCreate();
+}
 }

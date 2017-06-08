@@ -74,8 +74,9 @@ void CAutorun::ExecuteAutorun(const std::string& path, bool bypassSettings, bool
 
   CCdInfo* pInfo = g_mediaManager.GetCdInfo(path);
 
-  if ( pInfo == nullptr )
+  if ( pInfo == nullptr ) {
     return ;
+}
 
   g_application.ResetScreenSaver();
   g_application.WakeUpScreenSaverAndDPMS();  // turn off the screensaver if it's active
@@ -101,8 +102,9 @@ bool CAutorun::PlayDisc(const std::string& path, bool bypassSettings, bool start
   std::string mediaPath;
 
   CCdInfo* pInfo = g_mediaManager.GetCdInfo(path);
-  if (pInfo == nullptr)
+  if (pInfo == nullptr) {
     return false;
+}
 
   if (mediaPath.empty() && pInfo->IsAudio(1))
     mediaPath = "cdda://local/";
@@ -272,14 +274,16 @@ bool CAutorun::RunDisc(IDirectory* pDir, const std::string& strDrive, int& nAdde
             int64_t asize = 0;
             int ecount = 0;
             // calculate average size of elements above 1gb
-            for (int j = 0; j < items.Size(); j++)
+            for (int j = 0; j < items.Size(); j++) {
               if (items[j]->m_dwSize > 1000000000)
               {
                 ecount++;
                 asize = asize + items[j]->m_dwSize;
               }
-            if (ecount > 0)
+}
+            if (ecount > 0) {
               asize = asize / ecount;
+}
             // Put largest files in alphabetical order to top of new list.
             for (int j = 0; j < items.Size(); j++)
               if (items[j]->m_dwSize >= asize)
@@ -397,11 +401,13 @@ bool CAutorun::RunDisc(IDirectory* pDir, const std::string& strDrive, int& nAdde
     {
       if (!bAllowVideo)
       {
-        if (!bypassSettings)
+        if (!bypassSettings) {
           return false;
+}
 
-        if (!g_passwordManager.IsMasterLockUnlocked(true))
+        if (!g_passwordManager.IsMasterLockUnlocked(true)) {
           return false;
+}
       }
       g_playlistPlayer.ClearPlaylist(PLAYLIST_VIDEO);
       g_playlistPlayer.Add(PLAYLIST_VIDEO, itemlist);
@@ -510,8 +516,9 @@ bool CAutorun::CanResumePlayDVD(const std::string& path)
     CVideoDatabase dbs;
     dbs.Open();
     CBookmark bookmark;
-    if (dbs.GetResumeBookMark(strUniqueId, bookmark))
+    if (dbs.GetResumeBookMark(strUniqueId, bookmark)) {
       return true;
+}
   }
   return false;
 }

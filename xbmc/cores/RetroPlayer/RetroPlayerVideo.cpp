@@ -199,8 +199,9 @@ bool CRetroPlayerVideo::GetPicture(const uint8_t* data, unsigned int size, Video
         // Drop frame if requested by the decoder
         const bool bDropped = (picture.iFlags & DVP_FLAG_DROPPED) != 0;
 
-        if (!bDropped)
+        if (!bDropped) {
           bHasPicture = true;
+}
       }
     }
   }

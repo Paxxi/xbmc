@@ -36,15 +36,17 @@ CVariant CDBusUtil::GetVariant(const char *destination, const char *object, cons
 
       if (dbus_message_iter_init(reply, &iter))
       {
-        if (!dbus_message_has_signature(reply, "v"))
+        if (!dbus_message_has_signature(reply, "v")) {
           CLog::Log(LOGERROR, "DBus: wrong signature on Get - should be \"v\" but was %s", dbus_message_iter_get_signature(&iter));
-        else
+        } else {
           result = ParseVariant(&iter);
+}
       }
     }
   }
-  else
+  else {
     CLog::Log(LOGERROR, "DBus: append arguments failed");
+}
 
   return result;
 }
@@ -60,9 +62,9 @@ CVariant CDBusUtil::GetAll(const char *destination, const char *object, const ch
     DBusMessageIter iter;
     if (dbus_message_iter_init(reply, &iter))
     {
-      if (!dbus_message_has_signature(reply, "a{sv}"))
+      if (!dbus_message_has_signature(reply, "a{sv}")) {
         CLog::Log(LOGERROR, "DBus: wrong signature on GetAll - should be \"a{sv}\" but was %s", dbus_message_iter_get_signature(&iter));
-      else
+      } else
       {
         do
         {
@@ -77,8 +79,9 @@ CVariant CDBusUtil::GetAll(const char *destination, const char *object, const ch
               const char * key = nullptr;
 
               dbus_message_iter_get_basic(&dict, &key);
-              if (!dbus_message_iter_next(&dict))
+              if (!dbus_message_iter_next(&dict)) {
                 break;
+}
 
               CVariant value = ParseVariant(&dict);
 
@@ -158,8 +161,9 @@ CVariant CDBusUtil::ParseType(DBusMessageIter *itr)
     do
     {
       CVariant item = ParseType(&array);
-      if (!item.isNull())
+      if (!item.isNull()) {
         value.push_back(item);
+}
     } while (dbus_message_iter_next(&array));
     break;
   }

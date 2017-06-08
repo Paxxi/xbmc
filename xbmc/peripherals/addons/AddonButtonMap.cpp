@@ -73,10 +73,11 @@ bool CAddonButtonMap::Load()
   if (bSuccess && features.empty())
     bSuccess = false;
 
-  if (bSuccess)
+  if (bSuccess) {
     driverMap = CreateLookupTable(features);
-  else
-    CLog::Log(LOGDEBUG, "Failed to load button map for \"%s\"", m_device->DeviceName().c_str());
+  } else {
+    CLog
+}::Log(LOGDEBUG, "Failed to load button map for \"%s\"", m_device->DeviceName().c_str());
 
   {
     CSingleLock lock(m_mutex);
@@ -203,16 +204,18 @@ void CAddonButtonMap::AddAnalogStick(const FeatureName& feature,
   }
 
   const bool bModified = (primitive != CPeripheralAddonTranslator::TranslatePrimitive(analogStick.Primitive(primitiveIndex)));
-  if (bModified)
+  if (bModified) {
     analogStick.SetPrimitive(primitiveIndex, addonPrimitive);
+}
 
   if (auto addon = m_addon.lock())
     addon->MapFeature(m_device, m_strControllerId, analogStick);
 
   // Because each direction is mapped individually, we need to refresh the
   // feature each time a new direction is mapped.
-  if (bModified)
+  if (bModified) {
     Load();
+}
 }
 
 bool CAddonButtonMap::GetAccelerometer(const FeatureName& feature,

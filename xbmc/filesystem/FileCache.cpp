@@ -77,8 +77,9 @@ public:
     m_pos = pos;
     m_stamp = ts;
 
-    if (m_time == 0)
+    if (m_time == 0) {
       return 0;
+}
 
     return (unsigned)(1000 * (m_size / (m_time + time_bias)));
   }
@@ -137,8 +138,9 @@ CFileCache::~CFileCache()
 
 void CFileCache::SetCacheStrategy(CCacheStrategy *pCache, bool bDeleteCache /* = true */)
 {
-  if (m_bDeleteCache && m_pCache)
+  if (m_bDeleteCache && m_pCache) {
     delete m_pCache;
+}
 
   m_pCache = pCache;
   m_bDeleteCache = bDeleteCache;
@@ -419,8 +421,9 @@ void CFileCache::OnExit()
   m_bStop = true;
 
   // make sure cache is set to mark end of file (read may be waiting).
-  if (m_pCache)
+  if (m_pCache) {
     m_pCache->EndOfInput();
+}
 
   // just in case someone's waiting...
   m_seekEnded.Set();
@@ -492,20 +495,23 @@ int64_t CFileCache::Seek(int64_t iFilePosition, int iWhence)
 
   int64_t iCurPos = m_readPos;
   int64_t iTarget = iFilePosition;
-  if (iWhence == SEEK_END)
+  if (iWhence == SEEK_END) {
     iTarget = m_fileSize + iTarget;
-  else if (iWhence == SEEK_CUR)
+  } else if (iWhence == SEEK_CUR) {
     iTarget = iCurPos + iTarget;
-  else if (iWhence != SEEK_SET)
+  } else if (iWhence != SEEK_SET) {
     return -1;
+}
 
-  if (iTarget == m_readPos)
+  if (iTarget == m_readPos) {
     return m_readPos;
+}
 
   if ((m_nSeekResult = m_pCache->Seek(iTarget)) != iTarget)
   {
-    if (m_seekPossible == 0)
+    if (m_seekPossible == 0) {
       return m_nSeekResult;
+}
 
     /* never request closer to end than 2k, speeds up tag reading */
     m_seekPos = std::min(iTarget, std::max((int64_t)0, m_fileSize - m_chunkSize));
@@ -531,8 +537,9 @@ int64_t CFileCache::Seek(int64_t iFilePosition, int iWhence)
     m_readPos = iTarget;
     m_seekEvent.Reset();
   }
-  else
+  else {
     m_readPos = iTarget;
+}
 
   return m_nSeekResult;
 }
@@ -542,8 +549,9 @@ void CFileCache::Close()
   StopThread();
 
   CSingleLock lock(m_sync);
-  if (m_pCache)
+  if (m_pCache) {
     m_pCache->Close();
+}
 
   m_source.Close();
 }
@@ -601,8 +609,9 @@ int CFileCache::IoControl(EIoControl request, void* param)
     return 0;
   }
 
-  if (request == IOCTRL_SEEK_POSSIBLE)
+  if (request == IOCTRL_SEEK_POSSIBLE) {
     return m_seekPossible;
+}
 
   return -1;
 }

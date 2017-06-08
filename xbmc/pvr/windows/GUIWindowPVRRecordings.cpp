@@ -68,8 +68,9 @@ std::string CGUIWindowPVRRecordingsBase::GetDirectoryPath()
 
 void CGUIWindowPVRRecordingsBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return;
+}
   CFileItemPtr pItem = m_vecItems->Get(itemNumber);
 
   if (pItem->IsParentFolder())
@@ -113,8 +114,9 @@ bool CGUIWindowPVRRecordingsBase::OnAction(const CAction &action)
 
 bool CGUIWindowPVRRecordingsBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return false;
+}
   CFileItemPtr pItem = m_vecItems->Get(itemNumber);
 
   return OnContextButtonDeleteAll(pItem.get(), button) ||
@@ -164,12 +166,13 @@ void CGUIWindowPVRRecordingsBase::UpdateButtons()
   int iWatchMode = CMediaSettings::GetInstance().GetWatchedMode("recordings");
   int iStringId = 257; // "Error"
 
-  if (iWatchMode == WatchedModeAll)
+  if (iWatchMode == WatchedModeAll) {
     iStringId = 22015; // "All recordings"
-  else if (iWatchMode == WatchedModeUnwatched)
+  } else if (iWatchMode == WatchedModeUnwatched) {
     iStringId = 16101; // "Unwatched"
-  else if (iWatchMode == WatchedModeWatched)
+  } else if (iWatchMode == WatchedModeWatched) {
     iStringId = 16102; // "Watched"
+}
 
   SET_CONTROL_LABEL(CONTROL_BTNSHOWMODE, g_localizeStrings.Get(iStringId));
 
@@ -338,8 +341,9 @@ bool CGUIWindowPVRRecordingsBase::OnContextButtonDeleteAll(CFileItem *item, CONT
 
 void CGUIWindowPVRRecordingsBase::OnPrepareFileItems(CFileItemList& items)
 {
-  if (items.IsEmpty())
+  if (items.IsEmpty()) {
     return;
+}
 
   CFileItemList files;
   VECFILEITEMS vecItems = items.GetList();

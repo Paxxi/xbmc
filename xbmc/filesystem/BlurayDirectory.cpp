@@ -100,16 +100,18 @@ void CBlurayDirectory::GetTitles(bool main, CFileItemList &items)
       CLog::Log(LOGDEBUG, "CBlurayDirectory - unable to get title %d", i);
       continue;
     }
-    if(t->duration > duration)
+    if(t->duration > duration) {
       duration = t->duration;
+}
 
     buffer.push_back(t);
   }
 
-  if(main)
+  if(main) {
     duration = duration * MAIN_TITLE_LENGTH_PERCENT / 100;
-  else
+  } else {
     duration = 0;
+}
 
   for(std::vector<BLURAY_TITLE_INFO*>::iterator it = buffer.begin(); it != buffer.end(); ++it)
   {
@@ -185,8 +187,9 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     CURL url2 = GetUnderlyingCURL(url);
     CDirectory::CHints hints;
     hints.flags = m_flags;
-    if (!CDirectory::GetDirectory(url2, items, hints))
+    if (!CDirectory::GetDirectory(url2, items, hints)) {
       return false;
+}
   }
 
   items.AddSortMethod(SortByTrackNumber,  554, LABEL_MASKS("%L", "%D", "%L", ""));    // FileName, Duration | Foldername, empty

@@ -89,8 +89,9 @@ void CGUIConfigurationWizard::OnUnfocus(IFeatureButton* button)
 {
   CSingleLock lock(m_stateMutex);
 
-  if (button == m_currentButton)
+  if (button == m_currentButton) {
     Abort(false);
+}
 }
 
 bool CGUIConfigurationWizard::Abort(bool bWait /* = true */)

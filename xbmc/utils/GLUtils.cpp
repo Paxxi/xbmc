@@ -68,28 +68,32 @@ void LogGraphicsInfo()
   const GLubyte *s;
 
   s = glGetString(GL_VENDOR);
-  if (s)
+  if (s) {
     CLog::Log(LOGNOTICE, "GL_VENDOR = %s", s);
-  else
+  } else {
     CLog::Log(LOGNOTICE, "GL_VENDOR = NULL");
+}
 
   s = glGetString(GL_RENDERER);
-  if (s)
+  if (s) {
     CLog::Log(LOGNOTICE, "GL_RENDERER = %s", s);
-  else
+  } else {
     CLog::Log(LOGNOTICE, "GL_RENDERER = NULL");
+}
 
   s = glGetString(GL_VERSION);
-  if (s)
+  if (s) {
     CLog::Log(LOGNOTICE, "GL_VERSION = %s", s);
-  else
+  } else {
     CLog::Log(LOGNOTICE, "GL_VERSION = NULL");
+}
 
   s = glGetString(GL_SHADING_LANGUAGE_VERSION);
-  if (s)
+  if (s) {
     CLog::Log(LOGNOTICE, "GL_SHADING_LANGUAGE_VERSION = %s", s);
-  else
+  } else {
     CLog::Log(LOGNOTICE, "GL_SHADING_LANGUAGE_VERSION = NULL");
+}
 
   //GL_NVX_gpu_memory_info extension
 #define GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX          0x9047
@@ -111,10 +115,11 @@ void LogGraphicsInfo()
   }
 
   s = glGetString(GL_EXTENSIONS);
-  if (s)
+  if (s) {
     CLog::Log(LOGNOTICE, "GL_EXTENSIONS = %s", s);
-  else
+  } else {
     CLog::Log(LOGNOTICE, "GL_EXTENSIONS = NULL");
+}
 
 #else /* !HAS_GL */
   CLog::Log(LOGNOTICE,

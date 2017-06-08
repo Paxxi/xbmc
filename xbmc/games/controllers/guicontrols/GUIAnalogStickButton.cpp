@@ -71,10 +71,11 @@ bool CGUIAnalogStickButton::PromptForInput(CEvent& waitEvent)
   {
     bInterrupted = DoPrompt(strPrompt, strWarn, m_feature.Label(), waitEvent);
 
-    if (!bInterrupted)
+    if (!bInterrupted) {
       m_state = STATE::FINISHED; // Not interrupted, must have timed out
-    else
-      m_state = GetNextState(m_state); // Interrupted by input, proceed
+    } else {
+      m_state 
+}= GetNextState(m_state); // Interrupted by input, proceed
   }
 
   return bInterrupted;

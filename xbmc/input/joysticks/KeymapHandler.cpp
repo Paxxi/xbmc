@@ -132,8 +132,9 @@ void CKeymapHandler::ProcessButtonRelease(unsigned int keyId)
   m_pressedButtons.erase(std::remove(m_pressedButtons.begin(), m_pressedButtons.end(), keyId), m_pressedButtons.end());
 
   // Update last button press if the button was released
-  if (keyId == m_lastButtonPress)
+  if (keyId == m_lastButtonPress) {
     m_lastButtonPress = 0;
+}
 
   // If all buttons are depressed, m_lastButtonPress must be 0
   if (m_pressedButtons.empty() && m_lastButtonPress != 0)
@@ -177,8 +178,9 @@ bool CKeymapHandler::SendDigitalAction(const CAction& action)
         break;
       }
 
-      if (bIsNavigation)
+      if (bIsNavigation) {
         CInputManager::GetInstance().QueueAction(action);
+}
     }
 
     return true;

@@ -46,8 +46,9 @@ CHTTPImageHandler::CHTTPImageHandler(const HTTPRequest &request)
         SetCanBeCached(true);
       }
     }
-    else
+    else {
       responseStatus = MHD_HTTP_NOT_FOUND;
+}
   }
 
   // set the file and the HTTP response status

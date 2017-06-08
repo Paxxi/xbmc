@@ -114,8 +114,9 @@ bool CGUIWindowSettingsScreenCalibration::OnAction(const CAction &action)
   // be eaten/ignored here. Else we will switch to the screencalibration controls
   // which are at that x/y value on each touch/tap/swipe which makes the whole window
   // unusable for touch screens
-  if (action.GetID() == ACTION_MOUSE_MOVE && action.GetAmount(2) == 0 && action.GetAmount(3) == 0)
+  if (action.GetID() == ACTION_MOUSE_MOVE && action.GetAmount(2) == 0 && action.GetAmount(3) == 0) {
     return true;
+}
 
   return CGUIWindow::OnAction(action); // base class to handle basic movement etc.
 }
@@ -240,8 +241,9 @@ void CGUIWindowSettingsScreenCalibration::NextControl()
   }
   // switch to the next control
   m_iControl++;
-  if (m_iControl > CONTROL_PIXEL_RATIO)
+  if (m_iControl > CONTROL_PIXEL_RATIO) {
     m_iControl = CONTROL_TOP_LEFT;
+}
   // enable the new control
   EnableControl(m_iControl);
 }
@@ -411,8 +413,9 @@ void CGUIWindowSettingsScreenCalibration::DoProcess(unsigned int currentTime, CD
 {
   MarkDirtyRegion();
 
-  for (int i = CONTROL_TOP_LEFT; i <= CONTROL_PIXEL_RATIO; i++)
+  for (int i = CONTROL_TOP_LEFT; i <= CONTROL_PIXEL_RATIO; i++) {
     SET_CONTROL_HIDDEN(i);
+}
 
   m_needsScaling = true;
   CGUIWindow::DoProcess(currentTime, dirtyregions);
@@ -426,8 +429,9 @@ void CGUIWindowSettingsScreenCalibration::DoProcess(unsigned int currentTime, CD
   {
     SET_CONTROL_VISIBLE(i);
     CGUIControl *control = GetControl(i);
-    if (control)
+    if (control) {
       control->DoProcess(currentTime, dirtyregions);
+}
   }
   g_graphicsContext.RemoveTransform();
 }

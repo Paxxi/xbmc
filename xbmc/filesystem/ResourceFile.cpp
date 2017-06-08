@@ -45,8 +45,9 @@ bool CResourceFile::TranslatePath(const CURL &url, std::string &translatedPath)
   translatedPath = url.Get();
 
   // only handle resource:// paths
-  if (!url.IsProtocol("resource"))
+  if (!url.IsProtocol("resource")) {
     return false;
+}
 
   // the share name represents an identifier that can be mapped to an addon ID
   std::string addonId = url.GetShareName();

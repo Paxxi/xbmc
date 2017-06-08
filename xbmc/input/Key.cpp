@@ -52,10 +52,11 @@ CKey::CKey(uint32_t buttonCode, unsigned int held)
 CKey::CKey(uint8_t vkey, wchar_t unicode, char ascii, uint32_t modifiers, unsigned int held)
 {
   Reset();
-  if (vkey) // FIXME: This needs cleaning up - should we always use the unicode key where available?
+  if (vkey) { // FIXME: This needs cleaning up - should we always use the unicode key where available?
     m_buttonCode = vkey | KEY_VKEY;
-  else
+  } else {
     m_buttonCode = KEY_UNICODE;
+}
   m_buttonCode |= modifiers;
   m_vkey = vkey;
   m_unicode = unicode;
@@ -145,16 +146,18 @@ bool CKey::FromKeyboard() const
 
 bool CKey::IsAnalogButton() const
 {
-  if ((GetButtonCode() > 261 && GetButtonCode() < 270) || (GetButtonCode() > 279 && GetButtonCode() < 284))
+  if ((GetButtonCode() > 261 && GetButtonCode() < 270) || (GetButtonCode() > 279 && GetButtonCode() < 284)) {
     return true;
+}
 
   return false;
 }
 
 bool CKey::IsIRRemote() const
 {
-  if (GetButtonCode() < 256)
+  if (GetButtonCode() < 256) {
     return true;
+}
   return false;
 }
 
@@ -165,8 +168,9 @@ float CKey::GetRepeat() const
 
 void CKey::SetFromService(bool fromService)
 {
-  if (fromService && (m_buttonCode & KEY_ASCII))
+  if (fromService && (m_buttonCode & KEY_ASCII)) {
     m_unicode = m_buttonCode - KEY_ASCII;
+}
     
   m_fromService = fromService;
 }

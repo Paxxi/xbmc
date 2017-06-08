@@ -59,8 +59,9 @@ CFileDirectoryFactory::~CFileDirectoryFactory()
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.
 IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
 {
-  if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
+  if (url.IsProtocol("stack")) { // disqualify stack as we need to work with each of the parts instead
     return nullptr;
+}
 
   std::string strExtension=URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
@@ -109,8 +110,9 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
             return wrap;
           }
         }
-        else
+        else {
           pItem->m_bIsFolder = true;
+}
 
         delete wrap;
         return nullptr;
@@ -118,11 +120,13 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     }
   }
 
-  if (pItem->IsRSS())
+  if (pItem->IsRSS()) {
     return new CRSSDirectory();
+}
 
-  if (pItem->IsDiscImage())
+  if (pItem->IsDiscImage()) {
     return new CUDFDirectory();
+}
 
 #if defined(TARGET_ANDROID)
   if (url.IsFileType("apk"))
@@ -152,9 +156,9 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
 
     CFileItemList items;
     CDirectory::GetDirectory(zipURL, items, strMask);
-    if (items.Size() == 0) // no files
+    if (items.Size() == 0) { // no files
       pItem->m_bIsFolder = true;
-    else if (items.Size() == 1 && items[0]->m_idepth == 0 && !items[0]->m_bIsFolder)
+    } else if (items.Size() == 1 && items[0]->m_idepth == 0 && !items[0]->m_bIsFolder)
     {
       // one STORED file - collapse it down
       *pItem = *items[0];
@@ -194,8 +198,9 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     CFileItemList items;
     if (pDir->GetDirectory(url, items))
     {
-      if (items.Size() > 1)
+      if (items.Size() > 1) {
         return pDir;
+}
     }
     delete pDir;
     return nullptr;

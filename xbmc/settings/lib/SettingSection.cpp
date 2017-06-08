@@ -35,10 +35,11 @@ template<class T> void addISetting(const TiXmlNode *node, const T &item, std::ve
       // check if there is a "before" or "after" attribute to place the setting at a specific position
       int position = -1; // -1 => end, 0 => before, 1 => after
       const char *positionId = element->Attribute(SETTING_XML_ATTR_BEFORE);
-      if (positionId != nullptr && strlen(positionId) > 0)
+      if (positionId != nullptr && strlen(positionId) > 0) {
         position = 0;
-      else if ((positionId = element->Attribute(SETTING_XML_ATTR_AFTER)) != nullptr && strlen(positionId) > 0)
+      } else if ((positionId = element->Attribute(SETTING_XML_ATTR_AFTER)) != nullptr && strlen(positionId) > 0) {
         position = 1;
+}
 
       if (positionId != nullptr && strlen(positionId) > 0 && position >= 0)
       {

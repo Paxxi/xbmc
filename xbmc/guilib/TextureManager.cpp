@@ -88,8 +88,9 @@ void CTextureArray::Reset()
 
 void CTextureArray::Add(CBaseTexture *texture, int delay)
 {
-  if (!texture)
+  if (!texture) {
     return;
+}
 
   m_textures.push_back(texture);
   m_delays.push_back(delay);
@@ -150,8 +151,9 @@ bool CTextureMap::Release()
 {
   if (!m_texture.m_textures.size())
     return true;
-  if (!m_referenceCount)
+  if (!m_referenceCount) {
     return true;
+}
 
   m_referenceCount--;
   if (!m_referenceCount)
@@ -174,8 +176,9 @@ const CTextureArray& CTextureMap::GetTexture()
 
 void CTextureMap::Dump() const
 {
-  if (!m_referenceCount)
+  if (!m_referenceCount) {
     return;   // nothing to see here
+}
 
   CLog::Log(LOGDEBUG, "{0}: texture:{1} has {2} frames {3} refcount", __FUNCTION__, m_textureName.c_str(),
     m_texture.m_textures.size(), m_referenceCount);
@@ -188,8 +191,9 @@ unsigned int CTextureMap::GetMemoryUsage() const
 
 void CTextureMap::Flush()
 {
-  if (!m_referenceCount)
+  if (!m_referenceCount) {
     FreeTexture();
+}
 }
 
 
@@ -217,8 +221,9 @@ void CTextureMap::Add(CBaseTexture* texture, int delay)
 {
   m_texture.Add(texture, delay);
 
-  if (texture)
+  if (texture) {
     m_memUsage += sizeof(CTexture) + (texture->GetTextureWidth() * texture->GetTextureHeight() * 4);
+}
 }
 
 /************************************************************************/
@@ -243,8 +248,9 @@ bool CGUITextureManager::CanLoad(const std::string &texturePath)
   if (texturePath.empty())
     return false;
 
-  if (!CURL::IsFullPath(texturePath))
+  if (!CURL::IsFullPath(texturePath)) {
     return true;  // assume we have it
+}
 
   // we can't (or shouldn't) be loading from remote paths, so check these
   return URIUtils::IsHD(texturePath);
@@ -262,8 +268,9 @@ bool CGUITextureManager::HasTexture(const std::string &textureName, std::string 
   if (textureName.empty())
     return false;
 
-  if (!CanLoad(textureName))
+  if (!CanLoad(textureName)) {
     return false;
+}
 
   // Check our loaded and bundled textures - we store in bundles using \\.
   std::string bundledName = CTextureBundle::Normalize(textureName);
@@ -332,8 +339,9 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
     }
   }
 
-  if (checkBundleOnly && bundle == -1)
+  if (checkBundleOnly && bundle == -1) {
     return emptyTexture;
+}
 
   //Lock here, we will do stuff that could break rendering
   CSingleLock lock(g_graphicsContext);
@@ -448,8 +456,9 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
   else
   {
     pTexture = CBaseTexture::LoadFromFile(strPath);
-    if (!pTexture)
+    if (!pTexture) {
       return emptyTexture;
+}
     width = pTexture->GetWidth();
     height = pTexture->GetHeight();
   }
@@ -560,8 +569,9 @@ void CGUITextureManager::Dump() const
   for (int i = 0; i < (int)m_vecTextures.size(); ++i)
   {
     const CTextureMap* pMap = m_vecTextures[i];
-    if (!pMap->IsEmpty())
+    if (!pMap->IsEmpty()) {
       pMap->Dump();
+}
   }
 }
 
@@ -626,9 +636,9 @@ void CGUITextureManager::RemoveTexturePath(const std::string &texturePath)
 
 std::string CGUITextureManager::GetTexturePath(const std::string &textureName, bool directory /* = false */)
 {
-  if (CURL::IsFullPath(textureName))
+  if (CURL::IsFullPath(textureName)) {
     return textureName;
-  else
+  } else
   { // texture doesn't include the full path, so check all fallbacks
     CSingleLock lock(m_section);
     for (std::vector<std::string>::iterator it = m_texturePaths.begin(); it != m_texturePaths.end(); ++it)

@@ -167,8 +167,9 @@ namespace XBMCAddon
       // Extract a reference to the function "func_name"
       // from the global dictionary
       PyObject* pyid = PyDict_GetItemString(global_dict, "__xbmcinvokerid__");
-      if (pyid)
+      if (pyid) {
         return PyLong_AsLong(pyid);
+}
       return -1;
     }
 

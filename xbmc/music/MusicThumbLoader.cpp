@@ -65,13 +65,15 @@ bool CMusicThumbLoader::LoadItem(CFileItem* pItem)
 
 bool CMusicThumbLoader::LoadItemCached(CFileItem* pItem)
 {
-  if (pItem->m_bIsShareOrDrive)
+  if (pItem->m_bIsShareOrDrive) {
     return false;
+}
 
   if (pItem->HasMusicInfoTag() && pItem->GetArt().empty())
   {
-    if (FillLibraryArt(*pItem))
+    if (FillLibraryArt(*pItem)) {
       return true;
+}
       
     if (pItem->GetMusicInfoTag()->GetType() == MediaTypeArtist)
       return false; // No fallback
@@ -80,8 +82,9 @@ bool CMusicThumbLoader::LoadItemCached(CFileItem* pItem)
   if (pItem->HasVideoInfoTag() && pItem->GetArt().empty())
   { // music video
     CVideoThumbLoader loader;
-    if (loader.LoadItemCached(pItem))
+    if (loader.LoadItemCached(pItem)) {
       return true;
+}
   }
 
   if (!pItem->HasArt("thumb"))
@@ -138,8 +141,9 @@ bool CMusicThumbLoader::LoadItemCached(CFileItem* pItem)
 
 bool CMusicThumbLoader::LoadItemLookup(CFileItem* pItem)
 {
-  if (pItem->m_bIsShareOrDrive)
+  if (pItem->m_bIsShareOrDrive) {
     return false;
+}
 
   if (pItem->HasMusicInfoTag() && pItem->GetMusicInfoTag()->GetType() == MediaTypeArtist) // No fallback for artist
     return false;
@@ -147,8 +151,9 @@ bool CMusicThumbLoader::LoadItemLookup(CFileItem* pItem)
   if (pItem->HasVideoInfoTag())
   { // music video
     CVideoThumbLoader loader;
-    if (loader.LoadItemLookup(pItem))
+    if (loader.LoadItemLookup(pItem)) {
       return true;
+}
   }
 
   if (!pItem->HasArt("thumb"))

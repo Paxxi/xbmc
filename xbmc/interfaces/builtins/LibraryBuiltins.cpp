@@ -97,8 +97,9 @@ static int ExportLibrary(const std::vector<std::string>& params)
     singleFile = result != HELPERS::DialogResponse::YES;
   }
 
-  if (cancelled)
+  if (cancelled) {
     return -1;
+}
 
   if (!singleFile)
   {
@@ -112,8 +113,9 @@ static int ExportLibrary(const std::vector<std::string>& params)
     }
   }
 
-  if (cancelled)
+  if (cancelled) {
     return -1;
+}
 
   if (thumbs && StringUtils::EqualsNoCase(params[0], "video"))
   {
@@ -127,8 +129,9 @@ static int ExportLibrary(const std::vector<std::string>& params)
     }
   }
 
-  if (cancelled)
+  if (cancelled) {
     return -1;
+}
 
   if (!singleFile)
   {
@@ -142,8 +145,9 @@ static int ExportLibrary(const std::vector<std::string>& params)
     }
   }
 
-  if (cancelled)
+  if (cancelled) {
     return -1;
+}
 
   if (params.size() > 2)
     path=params[2];

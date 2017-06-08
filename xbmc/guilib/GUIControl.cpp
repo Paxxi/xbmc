@@ -109,8 +109,9 @@ void CGUIControl::FreeResources(bool immediately)
     for (unsigned int i = 0; i < m_animations.size(); i++)
     {
       CAnimation &anim = m_animations[i];
-      if (anim.GetType() != ANIM_TYPE_CONDITIONAL)
+      if (anim.GetType() != ANIM_TYPE_CONDITIONAL) {
         anim.ResetAnimation();
+}
     }
     m_bAllocated=false;
   }
@@ -133,8 +134,9 @@ void CGUIControl::DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyreg
   bool changed = (m_controlDirtyState & DIRTY_STATE_CONTROL) != 0 || (m_bInvalidated && IsVisible());
   m_controlDirtyState = 0;
 
-  if (Animate(currentTime))
+  if (Animate(currentTime)) {
     MarkDirtyRegion();
+}
 
   if (IsVisible())
   {
@@ -308,8 +310,9 @@ void CGUIControl::OnPrevControl()
 bool CGUIControl::SendWindowMessage(CGUIMessage &message) const
 {
   CGUIWindow *pWindow = g_windowManager.GetWindow(GetParentID());
-  if (pWindow)
+  if (pWindow) {
     return pWindow->OnMessage(message);
+}
   return g_windowManager.SendMessage(message);
 }
 
@@ -331,10 +334,11 @@ bool CGUIControl::HasFocus() const
 
 void CGUIControl::SetFocus(bool focus)
 {
-  if (m_bHasFocus && !focus)
+  if (m_bHasFocus && !focus) {
     QueueAnimation(ANIM_TYPE_UNFOCUS);
-  else if (!m_bHasFocus && focus)
+  } else if (!m_bHasFocus && focus) {
     QueueAnimation(ANIM_TYPE_FOCUS);
+}
   m_bHasFocus = focus;
 }
 
@@ -357,8 +361,9 @@ bool CGUIControl::OnMessage(CGUIMessage& message)
       {
         // inform our parent window that this has happened
         CGUIMessage message(GUI_MSG_FOCUSED, GetParentID(), GetID());
-        if (m_parentControl)
+        if (m_parentControl) {
           m_parentControl->OnMessage(message);
+}
       }
       return true;
       break;
@@ -367,8 +372,9 @@ bool CGUIControl::OnMessage(CGUIMessage& message)
       {
         SetFocus(false);
         // and tell our parent so it can unfocus
-        if (m_parentControl)
+        if (m_parentControl) {
           m_parentControl->OnMessage(message);
+}
         return true;
       }
       break;
@@ -480,8 +486,9 @@ float CGUIControl::GetHeight() const
 
 void CGUIControl::MarkDirtyRegion(const unsigned int dirtyState)
 {
-  if (!m_controlDirtyState && m_parentControl)
+  if (!m_controlDirtyState && m_parentControl) {
     m_parentControl->MarkDirtyRegion(DIRTY_STATE_CHILD);
+}
 
   m_controlDirtyState |= dirtyState;
 }
@@ -548,8 +555,9 @@ void CGUIControl::SetVisible(bool bVisible, bool setVisState)
   {
     m_forceHidden = !bVisible;
     SetInvalid();
-    if (m_forceHidden)
+    if (m_forceHidden) {
       MarkDirtyRegion();
+}
   }
   if (m_forceHidden)
   { // reset any visible animations that are in process
@@ -576,16 +584,18 @@ EVENT_RESULT CGUIControl::SendMouseEvent(const CPoint &point, const CMouseEvent 
 
   bool handled = OnMouseOver(childPoint);
   EVENT_RESULT ret = OnMouseEvent(childPoint, event);
-  if (ret)
+  if (ret) {
     return ret;
+}
   return (handled && (event.m_id == ACTION_MOUSE_MOVE)) ? EVENT_RESULT_HANDLED : EVENT_RESULT_UNHANDLED;
 }
 
 // override this function to implement custom mouse behaviour
 bool CGUIControl::OnMouseOver(const CPoint &point)
 {
-  if (CInputManager::GetInstance().GetMouseState() != MOUSE_STATE_DRAG)
+  if (CInputManager::GetInstance().GetMouseState() != MOUSE_STATE_DRAG) {
     CInputManager::GetInstance().SetMouseState(MOUSE_STATE_FOCUS);
+}
   if (!CanFocus()) return false;
   if (!HasFocus())
   {
@@ -616,8 +626,9 @@ void CGUIControl::UpdateVisibility(const CGUIListItem *item)
   for (unsigned int i = 0; i < m_animations.size(); i++)
   {
     CAnimation &anim = m_animations[i];
-    if (anim.GetType() == ANIM_TYPE_CONDITIONAL)
+    if (anim.GetType() == ANIM_TYPE_CONDITIONAL) {
       anim.UpdateCondition(item);
+}
   }
   // and check for conditional enabling - note this overrides SetEnabled() from the code currently
   // this may need to be reviewed at a later date
@@ -625,15 +636,18 @@ void CGUIControl::UpdateVisibility(const CGUIListItem *item)
   if (m_enableCondition)
     m_enabled = m_enableCondition->Get(item);
 
-  if (m_enabled != enabled)
+  if (m_enabled != enabled) {
     MarkDirtyRegion();
+}
 
   m_allowHiddenFocus.Update(item);
-  if (UpdateColors())
+  if (UpdateColors()) {
     MarkDirtyRegion();
+}
   // and finally, update our control information (if not pushed)
-  if (!m_pushedUpdates)
+  if (!m_pushedUpdates) {
     UpdateInfo(item);
+}
 }
 
 bool CGUIControl::UpdateColors()
@@ -649,14 +663,16 @@ void CGUIControl::SetInitialVisibility()
     m_visible = m_visibleFromSkinCondition ? VISIBLE : HIDDEN;
   //  CLog::Log(LOGDEBUG, "Set initial visibility for control %i: %s", m_controlID, m_visible == VISIBLE ? "visible" : "hidden");
   }
-  else if (m_visible == DELAYED)
+  else if (m_visible == DELAYED) {
     m_visible = VISIBLE;
+}
   // and handle animation conditions as well
   for (unsigned int i = 0; i < m_animations.size(); i++)
   {
     CAnimation &anim = m_animations[i];
-    if (anim.GetType() == ANIM_TYPE_CONDITIONAL)
+    if (anim.GetType() == ANIM_TYPE_CONDITIONAL) {
       anim.SetInitialCondition();
+}
   }
   // and check for conditional enabling - note this overrides SetEnabled() from the code currently
   // this may need to be reviewed at a later date
@@ -725,16 +741,18 @@ bool CGUIControl::CheckAnimation(ANIMATION_TYPE animType)
       UpdateStates(animType, ANIM_PROCESS_NORMAL, ANIM_STATE_APPLIED);
       return false;
     }
-    if (animType == ANIM_TYPE_WINDOW_OPEN)
+    if (animType == ANIM_TYPE_WINDOW_OPEN) {
       return false;
+}
   }
   return true;
 }
 
 void CGUIControl::QueueAnimation(ANIMATION_TYPE animType)
 {
-  if (!CheckAnimation(animType))
+  if (!CheckAnimation(animType)) {
     return;
+}
 
   MarkDirtyRegion();
 
@@ -767,8 +785,9 @@ CAnimation *CGUIControl::GetAnimation(ANIMATION_TYPE type, bool checkConditions 
     CAnimation &anim = m_animations[i];
     if (anim.GetType() == type)
     {
-      if (!checkConditions || anim.CheckCondition())
+      if (!checkConditions || anim.CheckCondition()) {
         return &anim;
+}
     }
   }
   return nullptr;
@@ -788,25 +807,28 @@ void CGUIControl::UpdateStates(ANIMATION_TYPE type, ANIMATION_PROCESS currentPro
   {
     if (currentProcess == ANIM_PROCESS_REVERSE)
     {
-      if (currentState == ANIM_STATE_APPLIED)
+      if (currentState == ANIM_STATE_APPLIED) {
         m_visible = HIDDEN;
+}
     }
     else if (currentProcess == ANIM_PROCESS_NORMAL)
     {
-      if (currentState == ANIM_STATE_DELAYED)
+      if (currentState == ANIM_STATE_DELAYED) {
         m_visible = DELAYED;
-      else
+      } else {
         m_visible = m_visibleFromSkinCondition ? VISIBLE : HIDDEN;
+}
     }
   }
   else if (type == ANIM_TYPE_HIDDEN)
   {
     if (currentProcess == ANIM_PROCESS_NORMAL)  // a hide animation
     {
-      if (currentState == ANIM_STATE_APPLIED)
+      if (currentState == ANIM_STATE_APPLIED) {
         m_visible = HIDDEN; // finished
-      else
+      } else {
         m_visible = VISIBLE; // have to be visible until we are finished
+}
     }
     else if (currentProcess == ANIM_PROCESS_REVERSE)  // a visible animation
     { // no delay involved here - just make sure it's visible
@@ -817,25 +839,28 @@ void CGUIControl::UpdateStates(ANIMATION_TYPE type, ANIMATION_PROCESS currentPro
   {
     if (currentProcess == ANIM_PROCESS_NORMAL)
     {
-      if (currentState == ANIM_STATE_DELAYED)
+      if (currentState == ANIM_STATE_DELAYED) {
         m_visible = DELAYED; // delayed
-      else
+      } else {
         m_visible = m_visibleFromSkinCondition ? VISIBLE : HIDDEN;
+}
     }
   }
   else if (type == ANIM_TYPE_FOCUS)
   {
     // call the focus function if we have finished a focus animation
     // (buttons can "click" on focus)
-    if (currentProcess == ANIM_PROCESS_NORMAL && currentState == ANIM_STATE_APPLIED)
+    if (currentProcess == ANIM_PROCESS_NORMAL && currentState == ANIM_STATE_APPLIED) {
       OnFocus();
+}
   }
   else if (type == ANIM_TYPE_UNFOCUS)
   {
     // call the unfocus function if we have finished a focus animation
     // (buttons can "click" on focus)
-    if (currentProcess == ANIM_PROCESS_NORMAL && currentState == ANIM_STATE_APPLIED)
+    if (currentProcess == ANIM_PROCESS_NORMAL && currentState == ANIM_STATE_APPLIED) {
       OnUnFocus();
+}
   }
 }
 
@@ -875,17 +900,21 @@ bool CGUIControl::IsAnimating(ANIMATION_TYPE animType)
     CAnimation &anim = m_animations[i];
     if (anim.GetType() == animType)
     {
-      if (anim.GetQueuedProcess() == ANIM_PROCESS_NORMAL)
+      if (anim.GetQueuedProcess() == ANIM_PROCESS_NORMAL) {
         return true;
-      if (anim.GetProcess() == ANIM_PROCESS_NORMAL)
+}
+      if (anim.GetProcess() == ANIM_PROCESS_NORMAL) {
         return true;
+}
     }
     else if (anim.GetType() == -animType)
     {
-      if (anim.GetQueuedProcess() == ANIM_PROCESS_REVERSE)
+      if (anim.GetQueuedProcess() == ANIM_PROCESS_REVERSE) {
         return true;
-      if (anim.GetProcess() == ANIM_PROCESS_REVERSE)
+}
+      if (anim.GetProcess() == ANIM_PROCESS_REVERSE) {
         return true;
+}
     }
   }
   return false;
@@ -934,8 +963,9 @@ void CGUIControl::UpdateControlStats()
   if (m_controlStats)
   {
     ++m_controlStats->nCountTotal;
-    if (IsVisible() && IsVisibleFromSkin())
+    if (IsVisible() && IsVisibleFromSkin()) {
       ++m_controlStats->nCountVisible;
+}
   }
 }
 

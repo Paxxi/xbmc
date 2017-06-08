@@ -97,8 +97,9 @@ bool CGUIWindowPrograms::OnMessage(CGUIMessage& message)
 
 void CGUIWindowPrograms::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
+  if (itemNumber < 0 || itemNumber >= m_vecItems->Size()) {
     return;
+}
   CFileItemPtr item = m_vecItems->Get(itemNumber);
   if (item)
   {
@@ -184,8 +185,9 @@ std::string CGUIWindowPrograms::GetStartFolder(const std::string &dir)
 
 void CGUIWindowPrograms::OnItemInfo(int iItem)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size())
+  if (iItem < 0 || iItem >= m_vecItems->Size()) {
     return;
+}
 
   CFileItemPtr item = m_vecItems->Get(iItem);
   if (!m_vecItems->IsPlugin() && (item->IsPlugin() || item->IsScript()))

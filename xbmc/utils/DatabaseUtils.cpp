@@ -147,8 +147,8 @@ std::string DatabaseUtils::GetField(Field field, const MediaType &mediaType, Dat
   else if (mediaType == MediaTypeMovie)
   {
     std::string result;
-    if (field == FieldId) return "movie_view.idMovie";
-    else if (field == FieldTitle)
+    if (field == FieldId) { return "movie_view.idMovie";
+    } else if (field == FieldTitle)
     {
       // We need some extra logic to get the title value if sorttitle isn't set
       if (queryPart == DatabaseQueryPartOrderBy)
@@ -187,8 +187,8 @@ std::string DatabaseUtils::GetField(Field field, const MediaType &mediaType, Dat
   else if (mediaType == MediaTypeTvShow)
   {
     std::string result;
-    if (field == FieldId) return "tvshow_view.idShow";
-    else if (field == FieldTitle)
+    if (field == FieldId) { return "tvshow_view.idShow";
+    } else if (field == FieldTitle)
     {
       // We need some extra logic to get the title value if sorttitle isn't set
       if (queryPart == DatabaseQueryPartOrderBy)
@@ -462,14 +462,16 @@ std::string DatabaseUtils::BuildLimitClause(int end, int start /* = 0 */)
     if (end > 0)
     {
       end = end - start;
-      if (end < 0)
+      if (end < 0) {
         end = 0;
+}
     }
 
     sql << start << "," << end;
   }
-  else
+  else {
     sql << end;
+}
 
   return sql.str();
 }
@@ -483,85 +485,90 @@ int DatabaseUtils::GetField(Field field, const MediaType &mediaType, bool asInde
 
   if (mediaType == MediaTypeAlbum)
   {
-    if (field == FieldId) return CMusicDatabase::album_idAlbum;
-    else if (field == FieldAlbum) return CMusicDatabase::album_strAlbum;
-    else if (field == FieldArtist || field == FieldAlbumArtist) return CMusicDatabase::album_strArtists;
-    else if (field == FieldGenre) return CMusicDatabase::album_strGenres;
-    else if (field == FieldYear) return CMusicDatabase::album_iYear;
-    else if (field == FieldMoods) return CMusicDatabase::album_strMoods;
-    else if (field == FieldStyles) return CMusicDatabase::album_strStyles;
-    else if (field == FieldThemes) return CMusicDatabase::album_strThemes;
-    else if (field == FieldReview) return CMusicDatabase::album_strReview;
-    else if (field == FieldMusicLabel) return CMusicDatabase::album_strLabel;
-    else if (field == FieldAlbumType) return CMusicDatabase::album_strType;
-    else if (field == FieldRating) return CMusicDatabase::album_fRating;
-    else if (field == FieldVotes) return CMusicDatabase::album_iVotes;
-    else if (field == FieldUserRating) return CMusicDatabase::album_iUserrating;
-    else if (field == FieldPlaycount) return CMusicDatabase::album_iTimesPlayed;
-    else if (field == FieldLastPlayed) return CMusicDatabase::album_dtLastPlayed;
-    else if (field == FieldDateAdded) return CMusicDatabase::album_dtDateAdded;
+    if (field == FieldId) { return CMusicDatabase::album_idAlbum;
+    } else if (field == FieldAlbum) { return CMusicDatabase::album_strAlbum;
+    } else if (field == FieldArtist || field == FieldAlbumArtist) { return CMusicDatabase::album_strArtists;
+    } else if (field == FieldGenre) { return CMusicDatabase::album_strGenres;
+    } else if (field == FieldYear) { return CMusicDatabase::album_iYear;
+    } else if (field == FieldMoods) { return CMusicDatabase::album_strMoods;
+    } else if (field == FieldStyles) { return CMusicDatabase::album_strStyles;
+    } else if (field == FieldThemes) { return CMusicDatabase::album_strThemes;
+    } else if (field == FieldReview) { return CMusicDatabase::album_strReview;
+    } else if (field == FieldMusicLabel) { return CMusicDatabase::album_strLabel;
+    } else if (field == FieldAlbumType) { return CMusicDatabase::album_strType;
+    } else if (field == FieldRating) { return CMusicDatabase::album_fRating;
+    } else if (field == FieldVotes) { return CMusicDatabase::album_iVotes;
+    } else if (field == FieldUserRating) { return CMusicDatabase::album_iUserrating;
+    } else if (field == FieldPlaycount) { return CMusicDatabase::album_iTimesPlayed;
+    } else if (field == FieldLastPlayed) { return CMusicDatabase::album_dtLastPlayed;
+    } else if (field == FieldDateAdded) { return CMusicDatabase::album_dtDateAdded;
+}
   }
   else if (mediaType == MediaTypeSong)
   {
-    if (field == FieldId) return CMusicDatabase::song_idSong;
-    else if (field == FieldTitle) return CMusicDatabase::song_strTitle;
-    else if (field == FieldTrackNumber) return CMusicDatabase::song_iTrack;
-    else if (field == FieldTime) return CMusicDatabase::song_iDuration;
-    else if (field == FieldYear) return CMusicDatabase::song_iYear;
-    else if (field == FieldFilename) return CMusicDatabase::song_strFileName;
-    else if (field == FieldPlaycount) return CMusicDatabase::song_iTimesPlayed;
-    else if (field == FieldStartOffset) return CMusicDatabase::song_iStartOffset;
-    else if (field == FieldEndOffset) return CMusicDatabase::song_iEndOffset;
-    else if (field == FieldLastPlayed) return CMusicDatabase::song_lastplayed;
-    else if (field == FieldRating) return CMusicDatabase::song_rating;
-    else if (field == FieldUserRating) return CMusicDatabase::song_userrating;
-    else if (field == FieldVotes) return CMusicDatabase::song_votes;
-    else if (field == FieldComment) return CMusicDatabase::song_comment;
-    else if (field == FieldMoods) return CMusicDatabase::song_mood;
-    else if (field == FieldAlbum) return CMusicDatabase::song_strAlbum;
-    else if (field == FieldPath) return CMusicDatabase::song_strPath;
-    else if (field == FieldGenre) return CMusicDatabase::song_strGenres;
-    else if (field == FieldArtist || field == FieldAlbumArtist) return CMusicDatabase::song_strArtists;
-    else if (field == FieldDateAdded) return CMusicDatabase::song_dateAdded;
+    if (field == FieldId) { return CMusicDatabase::song_idSong;
+    } else if (field == FieldTitle) { return CMusicDatabase::song_strTitle;
+    } else if (field == FieldTrackNumber) { return CMusicDatabase::song_iTrack;
+    } else if (field == FieldTime) { return CMusicDatabase::song_iDuration;
+    } else if (field == FieldYear) { return CMusicDatabase::song_iYear;
+    } else if (field == FieldFilename) { return CMusicDatabase::song_strFileName;
+    } else if (field == FieldPlaycount) { return CMusicDatabase::song_iTimesPlayed;
+    } else if (field == FieldStartOffset) { return CMusicDatabase::song_iStartOffset;
+    } else if (field == FieldEndOffset) { return CMusicDatabase::song_iEndOffset;
+    } else if (field == FieldLastPlayed) { return CMusicDatabase::song_lastplayed;
+    } else if (field == FieldRating) { return CMusicDatabase::song_rating;
+    } else if (field == FieldUserRating) { return CMusicDatabase::song_userrating;
+    } else if (field == FieldVotes) { return CMusicDatabase::song_votes;
+    } else if (field == FieldComment) { return CMusicDatabase::song_comment;
+    } else if (field == FieldMoods) { return CMusicDatabase::song_mood;
+    } else if (field == FieldAlbum) { return CMusicDatabase::song_strAlbum;
+    } else if (field == FieldPath) { return CMusicDatabase::song_strPath;
+    } else if (field == FieldGenre) { return CMusicDatabase::song_strGenres;
+    } else if (field == FieldArtist || field == FieldAlbumArtist) { return CMusicDatabase::song_strArtists;
+    } else if (field == FieldDateAdded) { return CMusicDatabase::song_dateAdded;
+}
   }
   else if (mediaType == MediaTypeArtist)
   {
-    if (field == FieldId) return CMusicDatabase::artist_idArtist;
-    else if (field == FieldArtist) return CMusicDatabase::artist_strArtist;
-    else if (field == FieldArtistSort) return CMusicDatabase::artist_strSortName;
-    else if (field == FieldGenre) return CMusicDatabase::artist_strGenres;
-    else if (field == FieldMoods) return CMusicDatabase::artist_strMoods;
-    else if (field == FieldStyles) return CMusicDatabase::artist_strStyles;
-    else if (field == FieldInstruments) return CMusicDatabase::artist_strInstruments;
-    else if (field == FieldBiography) return CMusicDatabase::artist_strBiography;
-    else if (field == FieldBorn) return CMusicDatabase::artist_strBorn;
-    else if (field == FieldBandFormed) return CMusicDatabase::artist_strFormed;
-    else if (field == FieldDisbanded) return CMusicDatabase::artist_strDisbanded;
-    else if (field == FieldDied) return CMusicDatabase::artist_strDied;
-    else if (field == FieldDateAdded) return CMusicDatabase::artist_dtDateAdded;
+    if (field == FieldId) { return CMusicDatabase::artist_idArtist;
+    } else if (field == FieldArtist) { return CMusicDatabase::artist_strArtist;
+    } else if (field == FieldArtistSort) { return CMusicDatabase::artist_strSortName;
+    } else if (field == FieldGenre) { return CMusicDatabase::artist_strGenres;
+    } else if (field == FieldMoods) { return CMusicDatabase::artist_strMoods;
+    } else if (field == FieldStyles) { return CMusicDatabase::artist_strStyles;
+    } else if (field == FieldInstruments) { return CMusicDatabase::artist_strInstruments;
+    } else if (field == FieldBiography) { return CMusicDatabase::artist_strBiography;
+    } else if (field == FieldBorn) { return CMusicDatabase::artist_strBorn;
+    } else if (field == FieldBandFormed) { return CMusicDatabase::artist_strFormed;
+    } else if (field == FieldDisbanded) { return CMusicDatabase::artist_strDisbanded;
+    } else if (field == FieldDied) { return CMusicDatabase::artist_strDied;
+    } else if (field == FieldDateAdded) { return CMusicDatabase::artist_dtDateAdded;
+}
   }
   else if (mediaType == MediaTypeMusicVideo)
   {
-    if (field == FieldId) return 0;
-    else if (field == FieldTitle) index = VIDEODB_ID_MUSICVIDEO_TITLE;
-    else if (field == FieldTime) index =  VIDEODB_ID_MUSICVIDEO_RUNTIME;
-    else if (field == FieldDirector) index =  VIDEODB_ID_MUSICVIDEO_DIRECTOR;
-    else if (field == FieldStudio) index =  VIDEODB_ID_MUSICVIDEO_STUDIOS;
-    else if (field == FieldYear) return VIDEODB_DETAILS_MUSICVIDEO_PREMIERED;
-    else if (field == FieldPlot) index =  VIDEODB_ID_MUSICVIDEO_PLOT;
-    else if (field == FieldAlbum) index = VIDEODB_ID_MUSICVIDEO_ALBUM;
-    else if (field == FieldArtist) index =  VIDEODB_ID_MUSICVIDEO_ARTIST;
-    else if (field == FieldGenre) index =  VIDEODB_ID_MUSICVIDEO_GENRE;
-    else if (field == FieldTrackNumber) index =  VIDEODB_ID_MUSICVIDEO_TRACK;
-    else if (field == FieldFilename) return VIDEODB_DETAILS_MUSICVIDEO_FILE;
-    else if (field == FieldPath) return VIDEODB_DETAILS_MUSICVIDEO_PATH;
-    else if (field == FieldPlaycount) return VIDEODB_DETAILS_MUSICVIDEO_PLAYCOUNT;
-    else if (field == FieldLastPlayed) return VIDEODB_DETAILS_MUSICVIDEO_LASTPLAYED;
-    else if (field == FieldDateAdded) return VIDEODB_DETAILS_MUSICVIDEO_DATEADDED;
-    else if (field == FieldUserRating) return VIDEODB_DETAILS_MUSICVIDEO_USER_RATING;
+    if (field == FieldId) { return 0;
+    } else if (field == FieldTitle) { index = VIDEODB_ID_MUSICVIDEO_TITLE;
+    } else if (field == FieldTime) { index =  VIDEODB_ID_MUSICVIDEO_RUNTIME;
+    } else if (field == FieldDirector) { index =  VIDEODB_ID_MUSICVIDEO_DIRECTOR;
+    } else if (field == FieldStudio) { index =  VIDEODB_ID_MUSICVIDEO_STUDIOS;
+    } else if (field == FieldYear) { return VIDEODB_DETAILS_MUSICVIDEO_PREMIERED;
+    } else if (field == FieldPlot) { index =  VIDEODB_ID_MUSICVIDEO_PLOT;
+    } else if (field == FieldAlbum) { index = VIDEODB_ID_MUSICVIDEO_ALBUM;
+    } else if (field == FieldArtist) { index =  VIDEODB_ID_MUSICVIDEO_ARTIST;
+    } else if (field == FieldGenre) { index =  VIDEODB_ID_MUSICVIDEO_GENRE;
+    } else if (field == FieldTrackNumber) { index =  VIDEODB_ID_MUSICVIDEO_TRACK;
+    } else if (field == FieldFilename) { return VIDEODB_DETAILS_MUSICVIDEO_FILE;
+    } else if (field == FieldPath) { return VIDEODB_DETAILS_MUSICVIDEO_PATH;
+    } else if (field == FieldPlaycount) { return VIDEODB_DETAILS_MUSICVIDEO_PLAYCOUNT;
+    } else if (field == FieldLastPlayed) { return VIDEODB_DETAILS_MUSICVIDEO_LASTPLAYED;
+    } else if (field == FieldDateAdded) { return VIDEODB_DETAILS_MUSICVIDEO_DATEADDED;
+    } else if (field == FieldUserRating) { return VIDEODB_DETAILS_MUSICVIDEO_USER_RATING;
+}
 
-    if (index < 0)
+    if (index < 0) {
       return index;
+}
 
     if (asIndex)
     {
@@ -572,35 +579,37 @@ int DatabaseUtils::GetField(Field field, const MediaType &mediaType, bool asInde
   }
   else if (mediaType == MediaTypeMovie)
   {
-    if (field == FieldId) return 0;
-    else if (field == FieldTitle) index = VIDEODB_ID_TITLE;
-    else if (field == FieldSortTitle) index = VIDEODB_ID_SORTTITLE;
-    else if (field == FieldOriginalTitle) index = VIDEODB_ID_ORIGINALTITLE;
-    else if (field == FieldPlot) index = VIDEODB_ID_PLOT;
-    else if (field == FieldPlotOutline) index = VIDEODB_ID_PLOTOUTLINE;
-    else if (field == FieldTagline) index = VIDEODB_ID_TAGLINE;
-    else if (field == FieldVotes) return VIDEODB_DETAILS_MOVIE_VOTES;
-    else if (field == FieldRating) return VIDEODB_DETAILS_MOVIE_RATING;
-    else if (field == FieldWriter) index = VIDEODB_ID_CREDITS;
-    else if (field == FieldYear) return VIDEODB_DETAILS_MOVIE_PREMIERED;
-    else if (field == FieldTime) index = VIDEODB_ID_RUNTIME;
-    else if (field == FieldMPAA) index = VIDEODB_ID_MPAA;
-    else if (field == FieldTop250) index = VIDEODB_ID_TOP250;
-    else if (field == FieldSet) return VIDEODB_DETAILS_MOVIE_SET_NAME;
-    else if (field == FieldGenre) index = VIDEODB_ID_GENRE;
-    else if (field == FieldDirector) index = VIDEODB_ID_DIRECTOR;
-    else if (field == FieldStudio) index = VIDEODB_ID_STUDIOS;
-    else if (field == FieldTrailer) index = VIDEODB_ID_TRAILER;
-    else if (field == FieldCountry) index = VIDEODB_ID_COUNTRY;
-    else if (field == FieldFilename) index = VIDEODB_DETAILS_MOVIE_FILE;
-    else if (field == FieldPath) return VIDEODB_DETAILS_MOVIE_PATH;
-    else if (field == FieldPlaycount) return VIDEODB_DETAILS_MOVIE_PLAYCOUNT;
-    else if (field == FieldLastPlayed) return VIDEODB_DETAILS_MOVIE_LASTPLAYED;
-    else if (field == FieldDateAdded) return VIDEODB_DETAILS_MOVIE_DATEADDED;
-    else if (field == FieldUserRating) return VIDEODB_DETAILS_MOVIE_USER_RATING;
+    if (field == FieldId) { return 0;
+    } else if (field == FieldTitle) { index = VIDEODB_ID_TITLE;
+    } else if (field == FieldSortTitle) { index = VIDEODB_ID_SORTTITLE;
+    } else if (field == FieldOriginalTitle) { index = VIDEODB_ID_ORIGINALTITLE;
+    } else if (field == FieldPlot) { index = VIDEODB_ID_PLOT;
+    } else if (field == FieldPlotOutline) { index = VIDEODB_ID_PLOTOUTLINE;
+    } else if (field == FieldTagline) { index = VIDEODB_ID_TAGLINE;
+    } else if (field == FieldVotes) { return VIDEODB_DETAILS_MOVIE_VOTES;
+    } else if (field == FieldRating) { return VIDEODB_DETAILS_MOVIE_RATING;
+    } else if (field == FieldWriter) { index = VIDEODB_ID_CREDITS;
+    } else if (field == FieldYear) { return VIDEODB_DETAILS_MOVIE_PREMIERED;
+    } else if (field == FieldTime) { index = VIDEODB_ID_RUNTIME;
+    } else if (field == FieldMPAA) { index = VIDEODB_ID_MPAA;
+    } else if (field == FieldTop250) { index = VIDEODB_ID_TOP250;
+    } else if (field == FieldSet) { return VIDEODB_DETAILS_MOVIE_SET_NAME;
+    } else if (field == FieldGenre) { index = VIDEODB_ID_GENRE;
+    } else if (field == FieldDirector) { index = VIDEODB_ID_DIRECTOR;
+    } else if (field == FieldStudio) { index = VIDEODB_ID_STUDIOS;
+    } else if (field == FieldTrailer) { index = VIDEODB_ID_TRAILER;
+    } else if (field == FieldCountry) { index = VIDEODB_ID_COUNTRY;
+    } else if (field == FieldFilename) { index = VIDEODB_DETAILS_MOVIE_FILE;
+    } else if (field == FieldPath) { return VIDEODB_DETAILS_MOVIE_PATH;
+    } else if (field == FieldPlaycount) { return VIDEODB_DETAILS_MOVIE_PLAYCOUNT;
+    } else if (field == FieldLastPlayed) { return VIDEODB_DETAILS_MOVIE_LASTPLAYED;
+    } else if (field == FieldDateAdded) { return VIDEODB_DETAILS_MOVIE_DATEADDED;
+    } else if (field == FieldUserRating) { return VIDEODB_DETAILS_MOVIE_USER_RATING;
+}
 
-    if (index < 0)
+    if (index < 0) {
       return index;
+}
 
     if (asIndex)
     {
@@ -611,28 +620,30 @@ int DatabaseUtils::GetField(Field field, const MediaType &mediaType, bool asInde
   }
   else if (mediaType == MediaTypeTvShow)
   {
-    if (field == FieldId) return 0;
-    else if (field == FieldTitle) index = VIDEODB_ID_TV_TITLE;
-    else if (field == FieldSortTitle) index = VIDEODB_ID_TV_SORTTITLE;
-    else if (field == FieldOriginalTitle) index = VIDEODB_ID_TV_ORIGINALTITLE;
-    else if (field == FieldPlot) index = VIDEODB_ID_TV_PLOT;
-    else if (field == FieldTvShowStatus) index = VIDEODB_ID_TV_STATUS;
-    else if (field == FieldVotes) return VIDEODB_DETAILS_TVSHOW_VOTES;
-    else if (field == FieldRating) return VIDEODB_DETAILS_TVSHOW_RATING;
-    else if (field == FieldYear) index = VIDEODB_ID_TV_PREMIERED;
-    else if (field == FieldGenre) index = VIDEODB_ID_TV_GENRE;
-    else if (field == FieldMPAA) index = VIDEODB_ID_TV_MPAA;
-    else if (field == FieldStudio) index = VIDEODB_ID_TV_STUDIOS;
-    else if (field == FieldPath) return VIDEODB_DETAILS_TVSHOW_PATH;
-    else if (field == FieldDateAdded) return VIDEODB_DETAILS_TVSHOW_DATEADDED;
-    else if (field == FieldLastPlayed) return VIDEODB_DETAILS_TVSHOW_LASTPLAYED;
-    else if (field == FieldNumberOfEpisodes) return VIDEODB_DETAILS_TVSHOW_NUM_EPISODES;
-    else if (field == FieldNumberOfWatchedEpisodes) return VIDEODB_DETAILS_TVSHOW_NUM_WATCHED;
-    else if (field == FieldSeason) return VIDEODB_DETAILS_TVSHOW_NUM_SEASONS;
-    else if (field == FieldUserRating) return VIDEODB_DETAILS_TVSHOW_USER_RATING;
+    if (field == FieldId) { return 0;
+    } else if (field == FieldTitle) { index = VIDEODB_ID_TV_TITLE;
+    } else if (field == FieldSortTitle) { index = VIDEODB_ID_TV_SORTTITLE;
+    } else if (field == FieldOriginalTitle) { index = VIDEODB_ID_TV_ORIGINALTITLE;
+    } else if (field == FieldPlot) { index = VIDEODB_ID_TV_PLOT;
+    } else if (field == FieldTvShowStatus) { index = VIDEODB_ID_TV_STATUS;
+    } else if (field == FieldVotes) { return VIDEODB_DETAILS_TVSHOW_VOTES;
+    } else if (field == FieldRating) { return VIDEODB_DETAILS_TVSHOW_RATING;
+    } else if (field == FieldYear) { index = VIDEODB_ID_TV_PREMIERED;
+    } else if (field == FieldGenre) { index = VIDEODB_ID_TV_GENRE;
+    } else if (field == FieldMPAA) { index = VIDEODB_ID_TV_MPAA;
+    } else if (field == FieldStudio) { index = VIDEODB_ID_TV_STUDIOS;
+    } else if (field == FieldPath) { return VIDEODB_DETAILS_TVSHOW_PATH;
+    } else if (field == FieldDateAdded) { return VIDEODB_DETAILS_TVSHOW_DATEADDED;
+    } else if (field == FieldLastPlayed) { return VIDEODB_DETAILS_TVSHOW_LASTPLAYED;
+    } else if (field == FieldNumberOfEpisodes) { return VIDEODB_DETAILS_TVSHOW_NUM_EPISODES;
+    } else if (field == FieldNumberOfWatchedEpisodes) { return VIDEODB_DETAILS_TVSHOW_NUM_WATCHED;
+    } else if (field == FieldSeason) { return VIDEODB_DETAILS_TVSHOW_NUM_SEASONS;
+    } else if (field == FieldUserRating) { return VIDEODB_DETAILS_TVSHOW_USER_RATING;
+}
 
-    if (index < 0)
+    if (index < 0) {
       return index;
+}
 
     if (asIndex)
     {
@@ -643,33 +654,35 @@ int DatabaseUtils::GetField(Field field, const MediaType &mediaType, bool asInde
   }
   else if (mediaType == MediaTypeEpisode)
   {
-    if (field == FieldId) return 0;
-    else if (field == FieldTitle) index = VIDEODB_ID_EPISODE_TITLE;
-    else if (field == FieldPlot) index = VIDEODB_ID_EPISODE_PLOT;
-    else if (field == FieldVotes) return VIDEODB_DETAILS_EPISODE_VOTES;
-    else if (field == FieldRating) return VIDEODB_DETAILS_EPISODE_RATING;
-    else if (field == FieldWriter) index = VIDEODB_ID_EPISODE_CREDITS;
-    else if (field == FieldAirDate) index = VIDEODB_ID_EPISODE_AIRED;
-    else if (field == FieldTime) index = VIDEODB_ID_EPISODE_RUNTIME;
-    else if (field == FieldDirector) index = VIDEODB_ID_EPISODE_DIRECTOR;
-    else if (field == FieldSeason) index = VIDEODB_ID_EPISODE_SEASON;
-    else if (field == FieldEpisodeNumber) index = VIDEODB_ID_EPISODE_EPISODE;
-    else if (field == FieldUniqueId) index = VIDEODB_ID_EPISODE_IDENT_ID;
-    else if (field == FieldEpisodeNumberSpecialSort) index = VIDEODB_ID_EPISODE_SORTEPISODE;
-    else if (field == FieldSeasonSpecialSort) index = VIDEODB_ID_EPISODE_SORTSEASON;
-    else if (field == FieldFilename) return VIDEODB_DETAILS_EPISODE_FILE;
-    else if (field == FieldPath) return VIDEODB_DETAILS_EPISODE_PATH;
-    else if (field == FieldPlaycount) return VIDEODB_DETAILS_EPISODE_PLAYCOUNT;
-    else if (field == FieldLastPlayed) return VIDEODB_DETAILS_EPISODE_LASTPLAYED;
-    else if (field == FieldDateAdded) return VIDEODB_DETAILS_EPISODE_DATEADDED;
-    else if (field == FieldTvShowTitle) return VIDEODB_DETAILS_EPISODE_TVSHOW_NAME;
-    else if (field == FieldStudio) return VIDEODB_DETAILS_EPISODE_TVSHOW_STUDIO;
-    else if (field == FieldYear) return VIDEODB_DETAILS_EPISODE_TVSHOW_AIRED;
-    else if (field == FieldMPAA) return VIDEODB_DETAILS_EPISODE_TVSHOW_MPAA;
-    else if (field == FieldUserRating) return VIDEODB_DETAILS_EPISODE_USER_RATING;
+    if (field == FieldId) { return 0;
+    } else if (field == FieldTitle) { index = VIDEODB_ID_EPISODE_TITLE;
+    } else if (field == FieldPlot) { index = VIDEODB_ID_EPISODE_PLOT;
+    } else if (field == FieldVotes) { return VIDEODB_DETAILS_EPISODE_VOTES;
+    } else if (field == FieldRating) { return VIDEODB_DETAILS_EPISODE_RATING;
+    } else if (field == FieldWriter) { index = VIDEODB_ID_EPISODE_CREDITS;
+    } else if (field == FieldAirDate) { index = VIDEODB_ID_EPISODE_AIRED;
+    } else if (field == FieldTime) { index = VIDEODB_ID_EPISODE_RUNTIME;
+    } else if (field == FieldDirector) { index = VIDEODB_ID_EPISODE_DIRECTOR;
+    } else if (field == FieldSeason) { index = VIDEODB_ID_EPISODE_SEASON;
+    } else if (field == FieldEpisodeNumber) { index = VIDEODB_ID_EPISODE_EPISODE;
+    } else if (field == FieldUniqueId) { index = VIDEODB_ID_EPISODE_IDENT_ID;
+    } else if (field == FieldEpisodeNumberSpecialSort) { index = VIDEODB_ID_EPISODE_SORTEPISODE;
+    } else if (field == FieldSeasonSpecialSort) { index = VIDEODB_ID_EPISODE_SORTSEASON;
+    } else if (field == FieldFilename) { return VIDEODB_DETAILS_EPISODE_FILE;
+    } else if (field == FieldPath) { return VIDEODB_DETAILS_EPISODE_PATH;
+    } else if (field == FieldPlaycount) { return VIDEODB_DETAILS_EPISODE_PLAYCOUNT;
+    } else if (field == FieldLastPlayed) { return VIDEODB_DETAILS_EPISODE_LASTPLAYED;
+    } else if (field == FieldDateAdded) { return VIDEODB_DETAILS_EPISODE_DATEADDED;
+    } else if (field == FieldTvShowTitle) { return VIDEODB_DETAILS_EPISODE_TVSHOW_NAME;
+    } else if (field == FieldStudio) { return VIDEODB_DETAILS_EPISODE_TVSHOW_STUDIO;
+    } else if (field == FieldYear) { return VIDEODB_DETAILS_EPISODE_TVSHOW_AIRED;
+    } else if (field == FieldMPAA) { return VIDEODB_DETAILS_EPISODE_TVSHOW_MPAA;
+    } else if (field == FieldUserRating) { return VIDEODB_DETAILS_EPISODE_USER_RATING;
+}
 
-    if (index < 0)
+    if (index < 0) {
       return index;
+}
 
     if (asIndex)
     {

@@ -440,8 +440,9 @@ const std::string CSettings::SETTING_GAMES_REWINDTIME = "gamesgeneral.rewindtime
 bool CSettings::Initialize()
 {
   CSingleLock lock(m_critical);
-  if (m_initialized)
+  if (m_initialized) {
     return false;
+}
 
   // register custom setting types
   InitializeSettingTypes();
@@ -454,8 +455,9 @@ bool CSettings::Initialize()
   InitializeConditions();
 
   // load the settings definitions
-  if (!InitializeDefinitions())
+  if (!InitializeDefinitions()) {
     return false;
+}
 
   GetSettingsManager()->SetInitialized();
 
@@ -481,15 +483,18 @@ bool CSettings::Load(const std::string &file)
       !LoadValuesFromXml(xmlDoc, updated))
   {
     CLog::Log(LOGERROR, "CSettings: unable to load settings from %s, creating new default settings", file.c_str());
-    if (!Reset())
+    if (!Reset()) {
       return false;
+}
 
-    if (!Load(file))
+    if (!Load(file)) {
       return false;
+}
   }
   // if the settings had to be updated, we need to save the changes
-  else if (updated)
+  else if (updated) {
     return Save(file);
+}
 
   return true;
 }

@@ -216,8 +216,9 @@ bool CPVRChannelGroups::Update(bool bChannelsOnly /* = false */)
   bool bReturn(true);
 
   // sync groups
-  if (bUpdateAllGroups)
+  if (bUpdateAllGroups) {
     GetGroupsFromClients();
+}
 
   // sync channels in groups
   std::vector<CPVRChannelGroupPtr> groups;
@@ -249,8 +250,9 @@ bool CPVRChannelGroups::LoadUserDefinedChannelGroups()
     GetGroupsFromClients();
     CLog::Log(LOGDEBUG, "CPVRChannelGroups - {0} - {1} new user defined {2} channel groups fetched from clients", __FUNCTION__, (m_groups.size() - iSize), m_bRadio ? "radio" : "TV");
   }
-  else
+  else {
     CLog::Log(LOGDEBUG, "CPVRChannelGroups - %s - 'synchannelgroups' is disabled; skipping groups from clients", __FUNCTION__);
+}
 
   std::vector<CPVRChannelGroupPtr> emptyGroups;
 

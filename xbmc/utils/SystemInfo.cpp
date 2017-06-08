@@ -281,8 +281,9 @@ CSysData::INTERNET_STATE CSysInfoJob::GetInternetState()
 {
   // Internet connection state!
   XFILE::CCurlFile http;
-  if (http.IsInternet())
+  if (http.IsInternet()) {
     return CSysData::CONNECTED;
+}
   return CSysData::DISCONNECTED;
 }
 
@@ -290,8 +291,9 @@ std::string CSysInfoJob::GetMACAddress()
 {
 #if defined(HAS_LINUX_NETWORK) || defined(HAS_WIN32_NETWORK)
   CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
-  if (iface)
+  if (iface) {
     return iface->GetMacAddress();
+}
 #endif
   return "";
 }
@@ -387,10 +389,11 @@ std::string CSysInfo::TranslateInfo(int info) const
   case SYSTEM_TOTALUPTIME:
     return m_info.systemTotalUptime;
   case SYSTEM_INTERNET_STATE:
-    if (m_info.internetState == CSysData::CONNECTED)
+    if (m_info.internetState == CSysData::CONNECTED) {
       return g_localizeStrings.Get(13296);
-    else
+    } else {
       return g_localizeStrings.Get(13297);
+}
   case SYSTEM_BATTERY_LEVEL:
     return m_info.batteryLevel;
   default:
@@ -414,8 +417,9 @@ CSysInfo::~CSysInfo()
 
 bool CSysInfo::Load(const TiXmlNode *settings)
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
   
   const TiXmlElement *pElement = settings->FirstChildElement("general");
   if (pElement)
@@ -426,16 +430,18 @@ bool CSysInfo::Load(const TiXmlNode *settings)
 
 bool CSysInfo::Save(TiXmlNode *settings) const
 {
-  if (settings == nullptr)
+  if (settings == nullptr) {
     return false;
+}
 
   TiXmlNode *generalNode = settings->FirstChild("general");
   if (generalNode == nullptr)
   {
     TiXmlElement generalNodeNew("general");
     generalNode = settings->InsertEndChild(generalNodeNew);
-    if (generalNode == nullptr)
+    if (generalNode == nullptr) {
       return false;
+}
   }
   XMLUtils::SetInt(generalNode, "systemtotaluptime", m_iSystemTimeTotalUp);
 
@@ -479,16 +485,18 @@ bool CSysInfo::GetDiskSpace(std::string drive,int& iTotal, int& iTotalFree, int&
 #elif defined(TARGET_POSIX)
   total = space(drive, ec);
 #endif
-  if (ec.value() != 0)
+  if (ec.value() != 0) {
     return false;
+}
 
   iTotal = static_cast<int>(total.capacity / MB);
   iTotalFree = static_cast<int>(total.free / MB);
   iTotalUsed = iTotal - iTotalFree;
-  if (total.capacity > 0)
+  if (total.capacity > 0) {
     iPercentUsed = static_cast<int>(100.0f * (total.capacity - total.free) / total.capacity + 0.5f);
-  else
+  } else {
     iPercentUsed = 0;
+}
 
   iPercentFree = 100 - iPercentUsed;
 
@@ -814,15 +822,17 @@ CSysInfo::WindowsVersion CSysInfo::m_WinVer = WindowsVersionUnknown;
 
 bool CSysInfo::IsWindowsVersion(WindowsVersion ver)
 {
-  if (ver == WindowsVersionUnknown)
+  if (ver == WindowsVersionUnknown) {
     return false;
+}
   return GetWindowsVersion() == ver;
 }
 
 bool CSysInfo::IsWindowsVersionAtLeast(WindowsVersion ver)
 {
-  if (ver == WindowsVersionUnknown)
+  if (ver == WindowsVersionUnknown) {
     return false;
+}
   return GetWindowsVersion() >= ver;
 }
 
@@ -886,8 +896,9 @@ int CSysInfo::GetKernelBitness()
         kernelBitness = 32;
     }
 #endif
-    if (kernelBitness == -1)
+    if (kernelBitness == -1) {
       kernelBitness = 0; // can't detect
+}
   }
 
   return kernelBitness;
@@ -952,8 +963,9 @@ int CSysInfo::GetXbmcBitness()
 
 bool CSysInfo::HasInternet()
 {
-  if (m_info.internetState != CSysData::UNKNOWN)
+  if (m_info.internetState != CSysData::UNKNOWN) {
     return m_info.internetState == CSysData::CONNECTED;
+}
   return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
 }
 
@@ -1006,10 +1018,11 @@ std::string CSysInfo::GetHddSpaceInfo(int& percent, int drive, bool shortText)
   }
   else
   {
-    if (shortText)
+    if (shortText) {
       strRet = "N/A";
-    else
+    } else {
       strRet = g_localizeStrings.Get(161);
+}
   }
   return strRet;
 }
@@ -1101,9 +1114,10 @@ std::string CSysInfo::GetUserAgent()
     result += " ";
     result += cpuStr;
   }
-  else
+  else {
     result += "Unknown";
-#else
+
+}#else
   result += "Unknown";
 #endif
   result += ")";

@@ -22,11 +22,13 @@
 
 bool CGenericTouchPinchDetector::OnTouchDown(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   m_pointers[index] = pointer;
   return true;
@@ -34,11 +36,13 @@ bool CGenericTouchPinchDetector::OnTouchDown(unsigned int index, const Pointer &
 
 bool CGenericTouchPinchDetector::OnTouchUp(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   // after lifting the primary pointer, the secondary pointer will
   // become the primary pointer in the next event
@@ -50,19 +54,22 @@ bool CGenericTouchPinchDetector::OnTouchUp(unsigned int index, const Pointer &po
 
   m_pointers[index].reset();
 
-  if (!m_pointers[0].valid() && !m_pointers[1].valid())
+  if (!m_pointers[0].valid() && !m_pointers[1].valid()) {
     m_done = true;
+}
 
   return true;
 }
 
 bool CGenericTouchPinchDetector::OnTouchMove(unsigned int index, const Pointer &pointer)
 {
-  if (index >= TOUCH_MAX_POINTERS)
+  if (index >= TOUCH_MAX_POINTERS) {
     return false;
+}
 
-  if (m_done)
+  if (m_done) {
     return true;
+}
 
   // update the internal pointers
   m_pointers[index] = pointer;
@@ -71,8 +78,9 @@ bool CGenericTouchPinchDetector::OnTouchMove(unsigned int index, const Pointer &
   Pointer& secondaryPointer = m_pointers[1];
 
   if (!primaryPointer.valid() || !secondaryPointer.valid() ||
-     (!primaryPointer.moving && !secondaryPointer.moving))
+     (!primaryPointer.moving && !secondaryPointer.moving)) {
     return false;
+}
 
   // calculate zoom/pinch
   CVector primary = primaryPointer.down;

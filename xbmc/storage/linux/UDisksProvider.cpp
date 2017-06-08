@@ -72,13 +72,15 @@ void CUDiskDevice::Update()
   {
     CVariant isRemovable = CDBusUtil::GetVariant("org.freedesktop.UDisks", properties["PartitionSlave"].asString().c_str(), "org.freedesktop.UDisks.Device", "DeviceIsRemovable");
 
-    if ( !isRemovable.isNull() )
+    if ( !isRemovable.isNull() ) {
       m_isRemovable = isRemovable.asBoolean();
-    else
+    } else {
       m_isRemovable = false;
+}
   }
-  else
-    m_isRemovable = properties["DeviceIsRemovable"].asBoolean();
+  else {
+    m_isRemovable 
+}= properties["DeviceIsRemovable"].asBoolean();
 }
 
 bool CUDiskDevice::Mount()
@@ -105,8 +107,9 @@ bool CUDiskDevice::Mount()
 
     return m_isMounted;
   }
-  else
-    CLog::Log(LOGDEBUG, "UDisks: Is not able to mount %s", toString().c_str());
+  else {
+    CLog
+}::Log(LOGDEBUG, "UDisks: Is not able to mount %s", toString().c_str());
 
   return false;
 }
@@ -121,13 +124,15 @@ bool CUDiskDevice::UnMount()
     message.AppendArgument(array, 0);
 
     DBusMessage *reply = message.SendSystem();
-    if (reply)
+    if (reply) {
       m_isMountedByUs = m_isMounted = false;
+}
 
     return !m_isMounted;
   }
-  else
-    CLog::Log(LOGDEBUG, "UDisks: Is not able to unmount %s", toString().c_str());
+  else {
+    CLog
+}::Log(LOGDEBUG, "UDisks: Is not able to unmount %s", toString().c_str());
 
   return false;
 }
@@ -143,12 +148,13 @@ CMediaSource CUDiskDevice::ToMediaShare()
   }
   else
     source.strName = m_Label;
-  if (m_isOptical)
+  if (m_isOptical) {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_DVD;
-  else if (m_isSystemInternal)
+  } else if (m_isSystemInternal) {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
-  else
+  } else {
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_REMOVABLE;
+}
   source.m_ignore = true;
   return source;
 }
@@ -262,12 +268,13 @@ bool CUDisksProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
       if (dbus_message_get_args (msg, nullptr, DBUS_TYPE_OBJECT_PATH, &object, DBUS_TYPE_INVALID))
       {
         result = true;
-        if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceAdded"))
+        if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceAdded")) {
           DeviceAdded(object, callback);
-        else if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceRemoved"))
+        } else if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceRemoved")) {
           DeviceRemoved(object, callback);
-        else if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceChanged"))
+        } else if (dbus_message_is_signal(msg, "org.freedesktop.UDisks", "DeviceChanged")) {
           DeviceChanged(object, callback);
+}
       }
       dbus_message_unref(msg);
     }
@@ -284,17 +291,20 @@ bool CUDisksProvider::HasUDisks()
   dbus_error_init (&error);
   DBusConnection *con = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
 
-  if (con)
+  if (con) {
     message.Send(con, &error);
+}
 
-  if (!dbus_error_is_set(&error))
+  if (!dbus_error_is_set(&error)) {
     hasUDisks = true;
-  else
+  } else {
     CLog::Log(LOGDEBUG, "UDisks: %s - %s", error.name, error.message);
+}
 
   dbus_error_free (&error);
-  if (con)
+  if (con) {
     dbus_connection_unref(con);
+}
 
   return hasUDisks;
 }

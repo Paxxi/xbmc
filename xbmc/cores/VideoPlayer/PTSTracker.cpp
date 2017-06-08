@@ -71,12 +71,14 @@ void CPtsTracker::Add(double pts)
   //save the pts
   m_prevpts = pts;
 
-  if (m_ringfill < DIFFRINGSIZE)
+  if (m_ringfill < DIFFRINGSIZE) {
     m_ringfill++;
+}
 
   //only search for patterns if we have full ringbuffer
-  if (m_ringfill < DIFFRINGSIZE)
+  if (m_ringfill < DIFFRINGSIZE) {
     return;
+}
 
   //get the current pattern in the ringbuffer
   std::vector<double> pattern;
@@ -126,8 +128,9 @@ inline double CPtsTracker::GetDiff(int diffnr)
 {
   //m_ringpos is the last added diff, so if we want to go in the past we have to move back in the ringbuffer
   int pos = m_ringpos - diffnr;
-  if (pos < 0)
+  if (pos < 0) {
     pos += DIFFRINGSIZE;
+}
 
   return m_diffring[pos];
 }
@@ -230,8 +233,9 @@ inline bool CPtsTracker::MatchDifftype(int* diffs1, int* diffs2, int nrdiffs)
 {
   for (int i = 0; i < nrdiffs; i++)
   {
-    if (diffs1[i] != diffs2[i])
+    if (diffs1[i] != diffs2[i]) {
       return false;
+}
   }
   return true;
 }
@@ -277,10 +281,12 @@ double CPtsTracker::CalcFrameDuration()
     for (unsigned int i = 1; i < m_pattern.size(); i++)
     {
       current = m_pattern[i];
-      if (current>currentmax)
+      if (current>currentmax) {
         currentmax = current;
-      if (current<currentmin)
+}
+      if (current<currentmin) {
         currentmin = current;
+}
       frameduration += current;
     }
     frameduration /= m_pattern.size();
@@ -290,25 +296,29 @@ double CPtsTracker::CalcFrameDuration()
     double tempduration = CDVDCodecUtils::NormalizeFrameduration(currentmin, &standard);
     if (m_minframeduration == DVD_NOPTS_VALUE)
     {
-      if (standard)
+      if (standard) {
         m_minframeduration = tempduration;
+}
     }
     else
     {
-      if (standard && (tempduration < m_minframeduration))
+      if (standard && (tempduration < m_minframeduration)) {
         m_minframeduration = tempduration;
+}
     }
 
     tempduration = CDVDCodecUtils::NormalizeFrameduration(currentmax, &standard);
     if (m_maxframeduration == DVD_NOPTS_VALUE)
     {
-      if (standard)
+      if (standard) {
         m_maxframeduration = tempduration;
+}
     }
     else
     {
-      if (standard && (tempduration > m_maxframeduration))
+      if (standard && (tempduration > m_maxframeduration)) {
         m_maxframeduration = tempduration;
+}
     }
 
     //frameduration is not completely correct, use a common one if it's close

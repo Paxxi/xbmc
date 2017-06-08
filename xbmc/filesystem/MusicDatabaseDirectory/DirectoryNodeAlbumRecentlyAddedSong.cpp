@@ -32,8 +32,9 @@ CDirectoryNodeAlbumRecentlyAddedSong::CDirectoryNodeAlbumRecentlyAddedSong(const
 bool CDirectoryNodeAlbumRecentlyAddedSong::GetContent(CFileItemList& items) const
 {
   CMusicDatabase musicdatabase;
-  if (!musicdatabase.Open())
+  if (!musicdatabase.Open()) {
     return false;
+}
 
   std::string strBaseDir=BuildPath();
   bool bSuccess=musicdatabase.GetRecentlyAddedAlbumSongs(strBaseDir, items);

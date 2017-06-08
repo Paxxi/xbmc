@@ -51,8 +51,9 @@ bool CFileCDDA::Open(const CURL& url)
 {
   std::string strURL = url.GetWithoutFilename();
 
-  if (!g_mediaManager.IsDiscInDrive(strURL) || !IsValidFile(url))
+  if (!g_mediaManager.IsDiscInDrive(strURL) || !IsValidFile(url)) {
     return false;
+}
 
   // Open the dvd drive
 #ifdef TARGET_POSIX
@@ -84,17 +85,20 @@ bool CFileCDDA::Open(const CURL& url)
 
 bool CFileCDDA::Exists(const CURL& url)
 {
-  if (!IsValidFile(url))
+  if (!IsValidFile(url)) {
     return false;
+}
 
   int iTrack = GetTrackNum(url);
 
-  if (!Open(url))
+  if (!Open(url)) {
     return false;
+}
 
   int iLastTrack = m_cdio->cdio_get_last_track_num(m_pCdIo);
-  if (iLastTrack == CDIO_INVALID_TRACK)
+  if (iLastTrack == CDIO_INVALID_TRACK) {
     return false;
+}
 
   return (iTrack > 0 && iTrack <= iLastTrack);
 }
@@ -164,8 +168,9 @@ ssize_t CFileCDDA::Read(void* lpBuf, size_t uiBufSize)
 
 int64_t CFileCDDA::Seek(int64_t iFilePosition, int iWhence /*=SEEK_SET*/)
 {
-  if (!m_pCdIo)
+  if (!m_pCdIo) {
     return -1;
+}
 
   lsn_t lsnPosition = (int)iFilePosition / CDIO_CD_FRAMESIZE_RAW;
 
@@ -201,16 +206,18 @@ void CFileCDDA::Close()
 
 int64_t CFileCDDA::GetPosition()
 {
-  if (!m_pCdIo)
+  if (!m_pCdIo) {
     return 0;
+}
 
   return ((int64_t)(m_lsnCurrent -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
 }
 
 int64_t CFileCDDA::GetLength()
 {
-  if (!m_pCdIo)
+  if (!m_pCdIo) {
     return 0;
+}
 
   return ((int64_t)(m_lsnEnd -m_lsnStart)*CDIO_CD_FRAMESIZE_RAW);
 }

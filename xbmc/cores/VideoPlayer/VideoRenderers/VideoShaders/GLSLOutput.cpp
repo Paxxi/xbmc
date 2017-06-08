@@ -58,14 +58,17 @@ GLSLOutput::GLSLOutput(int texunit, bool useDithering, unsigned int ditherDepth,
 std::string GLSLOutput::GetDefines()
 {
   std::string defines;
-  if (m_dither)
+  if (m_dither) {
     defines += "#define XBMC_DITHER\n";
-  if (m_fullRange)
+  
+}if (m_fullRange) {
     defines += "#define XBMC_FULLRANGE\n";
-#ifdef HAS_GL
-  if (m_3DLUT)
+
+}#ifdef HAS_GL
+  if (m_3DLUT) {
     defines += "#define KODI_3DLUT\n";
-#endif //HAS_GL
+
+}#endif //HAS_GL
   return defines;
 }
 

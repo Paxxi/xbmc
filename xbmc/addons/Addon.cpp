@@ -95,11 +95,13 @@ bool CAddon::SettingsLoaded() const
 
 bool CAddon::LoadSettings(bool bForce /* = false */)
 {
-  if (SettingsInitialized() && !bForce)
+  if (SettingsInitialized() && !bForce) {
     return true;
+}
 
-  if (m_loadSettingsFailed)
+  if (m_loadSettingsFailed) {
     return false;
+}
 
   // assume loading settings fails
   m_loadSettingsFailed = true;
@@ -140,8 +142,9 @@ bool CAddon::LoadSettings(bool bForce /* = false */)
 
 bool CAddon::HasUserSettings()
 {
-  if (!LoadSettings())
+  if (!LoadSettings()) {
     return false;
+}
 
   return SettingsLoaded() && m_hasUserSettings;
 }
@@ -153,8 +156,9 @@ bool CAddon::ReloadSettings()
 
 bool CAddon::LoadUserSettings()
 {
-  if (!SettingsInitialized())
+  if (!SettingsInitialized()) {
     return false;
+}
 
   m_hasUserSettings = false;
 
@@ -183,8 +187,9 @@ bool CAddon::HasSettingsToSave() const
 
 void CAddon::SaveSettings()
 {
-  if (!HasSettingsToSave())
+  if (!HasSettingsToSave()) {
     return; // no settings to save
+}
 
   // break down the path into directories
   std::string strAddon = URIUtils::GetDirectory(m_userSettingsPath);
@@ -359,8 +364,9 @@ bool CAddon::SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults /* = fal
 
 bool CAddon::SettingsToXML(CXBMCTinyXML &doc) const
 {
-  if (!SettingsInitialized())
+  if (!SettingsInitialized()) {
     return false;
+}
 
   if (!m_settings->Save(doc))
   {

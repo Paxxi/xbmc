@@ -246,8 +246,9 @@ void CMultiPathDirectory::MergeItems(CFileItemList &items)
 {
   CLog::Log(LOGDEBUG, "CMultiPathDirectory::MergeItems, items = %i", (int)items.Size());
   unsigned int time = XbmcThreads::SystemClockMillis();
-  if (items.Size() == 0)
+  if (items.Size() == 0) {
     return;
+}
   // sort items by label
   // folders are before files in this sort method
   items.Sort(SortByLabel, SortOrderAscending);
@@ -309,8 +310,9 @@ bool CMultiPathDirectory::SupportsWriteFileOperations(const std::string &strPath
 {
   std::vector<std::string> paths;
   GetPaths(strPath, paths);
-  for (unsigned int i = 0; i < paths.size(); ++i)
+  for (unsigned int i = 0; i < paths.size(); ++i) {
     if (CUtil::SupportsWriteFileOperations(paths[i]))
       return true;
+}
   return false;
 }

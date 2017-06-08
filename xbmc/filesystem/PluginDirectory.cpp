@@ -161,8 +161,9 @@ bool CPluginDirectory::StartScript(const std::string& strPath, bool retrievingDi
     std::string scriptName = m_addon->Name();
     success = WaitOnScriptResult(file, id, scriptName, retrievingDir);
   }
-  else
-    CLog::Log(LOGERROR, "Unable to run plugin %s", m_addon->Name().c_str());
+  else {
+    CLog
+}::Log(LOGERROR, "Unable to run plugin %s", m_addon->Name().c_str());
 
   // free our handle
   removeHandle(handle);
@@ -184,8 +185,9 @@ bool CPluginDirectory::GetPluginResult(const std::string& strPath, CFileItem &re
     resultItem.SetPath(newDir.m_fileResult->GetPath());
     resultItem.SetMimeType(newDir.m_fileResult->GetMimeType());
     resultItem.UpdateInfo(*newDir.m_fileResult);
-    if (newDir.m_fileResult->HasVideoInfoTag() && newDir.m_fileResult->GetVideoInfoTag()->GetResumePoint().IsSet())
+    if (newDir.m_fileResult->HasVideoInfoTag() && newDir.m_fileResult->GetVideoInfoTag()->GetResumePoint().IsSet()) {
       resultItem.m_lStartOffset = STARTOFFSET_RESUME; // resume point set in the resume item, so force resume
+}
   }
 
   return success;
@@ -195,8 +197,9 @@ bool CPluginDirectory::AddItem(int handle, const CFileItem *item, int totalItems
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return false;
+}
 
   CFileItemPtr pItem(new CFileItem(*item));
   dir->m_listItems->Add(pItem);
@@ -209,8 +212,9 @@ bool CPluginDirectory::AddItems(int handle, const CFileItemList *items, int tota
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return false;
+}
 
   CFileItemList pItemList;
   pItemList.Copy(*items);
@@ -224,8 +228,9 @@ void CPluginDirectory::EndOfDirectory(int handle, bool success, bool replaceList
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return;
+}
 
   // set cache to disc
   dir->m_listItems->SetCacheToDisc(cacheToDisc ? CFileItemList::CACHE_IF_SLOW : CFileItemList::CACHE_NEVER);
@@ -244,8 +249,9 @@ void CPluginDirectory::AddSortMethod(int handle, SORT_METHOD sortMethod, const s
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return;
+}
 
   //! @todo Add all sort methods and fix which labels go on the right or left
   switch(sortMethod)
@@ -521,8 +527,9 @@ void CPluginDirectory::SetResolvedUrl(int handle, bool success, const CFileItem 
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return;
+}
 
   dir->m_success = success;
   *dir->m_fileResult = *resultItem;
@@ -553,16 +560,18 @@ void CPluginDirectory::SetContent(int handle, const std::string &strContent)
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (dir)
+  if (dir) {
     dir->m_listItems->SetContent(strContent);
+}
 }
 
 void CPluginDirectory::SetProperty(int handle, const std::string &strProperty, const std::string &strValue)
 {
   CSingleLock lock(m_handleLock);
   CPluginDirectory *dir = dirFromHandle(handle);
-  if (!dir)
+  if (!dir) {
     return;
+}
   if (strProperty == "fanart_image")
     dir->m_listItems->SetArt("fanart", strValue);
   else
@@ -576,7 +585,8 @@ void CPluginDirectory::CancelDirectory()
 
 float CPluginDirectory::GetProgress() const
 {
-  if (m_totalItems > 0)
+  if (m_totalItems > 0) {
     return (m_listItems->Size() * 100.0f) / m_totalItems;
+}
   return 0.0f;
 }

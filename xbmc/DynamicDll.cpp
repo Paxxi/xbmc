@@ -45,8 +45,9 @@ DllDynamic::~DllDynamic()
 
 bool DllDynamic::Load()
 {
-  if (m_dll)
+  if (m_dll) {
     return true;
+}
 
   if (!(m_dll=CSectionLoader::LoadDLL(m_strDllName, m_DelayUnload, LoadSymbols())))
     return false;
@@ -75,8 +76,9 @@ bool DllDynamic::CanLoad()
 
 bool DllDynamic::EnableDelayedUnload(bool bOnOff)
 {
-  if (m_dll)
+  if (m_dll) {
     return false;
+}
 
   m_DelayUnload=bOnOff;
 
@@ -85,8 +87,9 @@ bool DllDynamic::EnableDelayedUnload(bool bOnOff)
 
 bool DllDynamic::SetFile(const std::string& strDllName)
 {
-  if (m_dll)
+  if (m_dll) {
     return false;
+}
 
   m_strDllName=strDllName;
   return true;

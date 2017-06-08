@@ -87,8 +87,9 @@ void CGUIControllerWindow::DoProcess(unsigned int currentTime, CDirtyRegionList 
   if (control && bAlphaFaded)
   {
     control->SetFocus(false);
-    if (control->GetControlType() == CGUIControl::GUICONTROL_BUTTON)
+    if (control->GetControlType() == CGUIControl::GUICONTROL_BUTTON) {
       static_cast<CGUIButtonControl*>(control)->SetAlpha(0xFF);
+}
   }
 }
 
@@ -262,26 +263,30 @@ void CGUIControllerWindow::OnDeinitWindow(int nextWindowID)
 
 void CGUIControllerWindow::OnControllerFocused(unsigned int controllerIndex)
 {
-  if (m_controllerList)
+  if (m_controllerList) {
     m_controllerList->OnFocus(controllerIndex);
+}
 }
 
 void CGUIControllerWindow::OnControllerSelected(unsigned int controllerIndex)
 {
-  if (m_controllerList)
+  if (m_controllerList) {
     m_controllerList->OnSelect(controllerIndex);
+}
 }
 
 void CGUIControllerWindow::OnFeatureFocused(unsigned int featureIndex)
 {
-  if (m_featureList)
+  if (m_featureList) {
     m_featureList->OnFocus(featureIndex);
+}
 }
 
 void CGUIControllerWindow::OnFeatureSelected(unsigned int featureIndex)
 {
-  if (m_featureList)
+  if (m_featureList) {
     m_featureList->OnSelect(featureIndex);
+}
 }
 
 void CGUIControllerWindow::UpdateButtons()
@@ -306,8 +311,9 @@ void CGUIControllerWindow::GetMoreControllers()
 
 void CGUIControllerWindow::ResetController()
 {
-  if (m_controllerList)
+  if (m_controllerList) {
     m_controllerList->ResetController();
+}
 }
 
 void CGUIControllerWindow::ShowHelp()

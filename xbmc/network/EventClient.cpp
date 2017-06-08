@@ -129,8 +129,9 @@ void CEventButtonState::Load()
 /************************************************************************/
 bool CEventClient::AddPacket(CEventPacket *packet)
 {
-  if (!packet)
+  if (!packet) {
     return false;
+}
 
   ResetTimeout();
   if ( packet->Size() > 1 )
@@ -224,8 +225,9 @@ bool CEventClient::GetNextAction(CEventAction &action)
 
 bool CEventClient::ProcessPacket(CEventPacket *packet)
 {
-  if (!packet)
+  if (!packet) {
     return false;
+}
 
   bool valid = false;
 
@@ -268,8 +270,9 @@ bool CEventClient::ProcessPacket(CEventPacket *packet)
     break;
   }
 
-  if (valid)
+  if (valid) {
     ResetTimeout();
+}
 
   return valid;
 }
@@ -278,28 +281,32 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
 {
   //! @todo check it last HELO packet was received less than 5 minutes back
   //!       if so, do not show notification of connection.
-  if (Greeted())
+  if (Greeted()) {
     return false;
+}
 
   unsigned char *payload = (unsigned char *)packet->Payload();
   int psize = (int)packet->PayloadSize();
 
   // parse device name
-  if (!ParseString(payload, psize, m_deviceName))
+  if (!ParseString(payload, psize, m_deviceName)) {
     return false;
+}
 
   CLog::Log(LOGNOTICE, "ES: Incoming connection from %s", m_deviceName.c_str());
 
   // icon type
   unsigned char ltype;
-  if (!ParseByte(payload, psize, ltype))
+  if (!ParseByte(payload, psize, ltype)) {
     return false;
+}
   m_eLogoType = (LogoType)ltype;
 
   // client's port (if any)
   unsigned short dport;
-  if (!ParseUInt16(payload, psize, dport))
+  if (!ParseUInt16(payload, psize, dport)) {
     return false;
+}
   m_iRemotePort = (unsigned int)dport;
 
   // 2 x reserved uint32 (8 bytes)
@@ -350,8 +357,9 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
 
 bool CEventClient::OnPacketBYE(CEventPacket *packet)
 {
-  if (!Greeted())
+  if (!Greeted()) {
     return false;
+}
 
   m_bGreeted = false;
   FreePacketQueues();
@@ -371,50 +379,58 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
   unsigned short amount;
 
   // parse the button code
-  if (!ParseUInt16(payload, psize, bcode))
+  if (!ParseUInt16(payload, psize, bcode)) {
     return false;
+}
 
   // parse flags
-  if (!ParseUInt16(payload, psize, flags))
+  if (!ParseUInt16(payload, psize, flags)) {
     return false;
+}
 
   // parse amount
-  if (!ParseUInt16(payload, psize, amount))
+  if (!ParseUInt16(payload, psize, amount)) {
     return false;
+}
 
   // parse the map to use
-  if (!ParseString(payload, psize, map))
+  if (!ParseString(payload, psize, map)) {
     return false;
+}
 
   // parse button name
   if (flags & PTB_USE_NAME)
   {
-    if (!ParseString(payload, psize, button))
+    if (!ParseString(payload, psize, button)) {
       return false;
+}
   }
 
   unsigned int keycode;
-  if(flags & PTB_USE_NAME)
+  if(flags & PTB_USE_NAME) {
     keycode = 0;
-  else if(flags & PTB_VKEY)
+  } else if(flags & PTB_VKEY) {
     keycode = bcode|KEY_VKEY;
-  else if(flags & PTB_UNICODE)
+  } else if(flags & PTB_UNICODE) {
     keycode = bcode|ES_FLAG_UNICODE;
-  else
+  } else {
     keycode = bcode;
+}
 
   float famount = 0;
   bool active = (flags & PTB_DOWN) ? true : false;
 
   if(flags & PTB_USE_AMOUNT)
   {
-    if(flags & PTB_AXIS)
+    if(flags & PTB_AXIS) {
       famount = (float)amount/65535.0f*2.0f-1.0f;
-    else
+    } else {
       famount = (float)amount/65535.0f;
+}
   }
-  else
+  else {
     famount = (active ? 1.0f : 0.0f);
+}
 
   if(flags & PTB_QUEUE)
   {
@@ -527,16 +543,19 @@ bool CEventClient::OnPacketMOUSE(CEventPacket *packet)
   unsigned short mx, my;
 
   // parse flags
-  if (!ParseByte(payload, psize, flags))
+  if (!ParseByte(payload, psize, flags)) {
     return false;
+}
 
   // parse x position
-  if (!ParseUInt16(payload, psize, mx))
+  if (!ParseUInt16(payload, psize, mx)) {
     return false;
+}
 
   // parse x position
-  if (!ParseUInt16(payload, psize, my))
+  if (!ParseUInt16(payload, psize, my)) {
     return false;
+}
 
   {
     CSingleLock lock(m_critSection);
@@ -558,17 +577,20 @@ bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
   std::string title, message;
 
   // parse caption
-  if (!ParseString(payload, psize, title))
+  if (!ParseString(payload, psize, title)) {
     return false;
+}
 
   // parse message
-  if (!ParseString(payload, psize, message))
+  if (!ParseString(payload, psize, message)) {
     return false;
+}
 
   // icon type
   unsigned char ltype;
-  if (!ParseByte(payload, psize, ltype))
+  if (!ParseByte(payload, psize, ltype)) {
     return false;
+}
   m_eLogoType = (LogoType)ltype;
 
   // reserved uint32
@@ -623,10 +645,12 @@ bool CEventClient::OnPacketLOG(CEventPacket *packet)
   std::string logmsg;
   unsigned char ltype;
 
-  if (!ParseByte(payload, psize, ltype))
+  if (!ParseByte(payload, psize, ltype)) {
     return false;
-  if (!ParseString(payload, psize, logmsg))
+}
+  if (!ParseString(payload, psize, logmsg)) {
     return false;
+}
 
   CLog::Log((int)ltype, "%s", logmsg.c_str());
   return true;
@@ -639,10 +663,12 @@ bool CEventClient::OnPacketACTION(CEventPacket *packet)
   std::string actionString;
   unsigned char actionType;
 
-  if (!ParseByte(payload, psize, actionType))
+  if (!ParseByte(payload, psize, actionType)) {
     return false;
-  if (!ParseString(payload, psize, actionString))
+}
+  if (!ParseString(payload, psize, actionString)) {
     return false;
+}
 
   switch(actionType)
   {
@@ -664,12 +690,14 @@ bool CEventClient::OnPacketACTION(CEventPacket *packet)
 
 bool CEventClient::ParseString(unsigned char* &payload, int &psize, std::string& parsedVal)
 {
-  if (psize <= 0)
+  if (psize <= 0) {
     return false;
+}
 
   unsigned char *pos = (unsigned char *)memchr((void*)payload, (int)'\0', psize);
-  if (!pos)
+  if (!pos) {
     return false;
+}
 
   parsedVal = (char*)payload;
   psize -= ((pos - payload) + 1);
@@ -679,8 +707,9 @@ bool CEventClient::ParseString(unsigned char* &payload, int &psize, std::string&
 
 bool CEventClient::ParseByte(unsigned char* &payload, int &psize, unsigned char& parsedVal)
 {
-  if (psize <= 0)
+  if (psize <= 0) {
     return false;
+}
 
   parsedVal = *payload;
   payload++;
@@ -690,8 +719,9 @@ bool CEventClient::ParseByte(unsigned char* &payload, int &psize, unsigned char&
 
 bool CEventClient::ParseUInt32(unsigned char* &payload, int &psize, unsigned int& parsedVal)
 {
-  if (psize < 4)
+  if (psize < 4) {
     return false;
+}
 
   parsedVal = ntohl(*((unsigned int *)payload));
   payload+=4;
@@ -701,8 +731,9 @@ bool CEventClient::ParseUInt32(unsigned char* &payload, int &psize, unsigned int
 
 bool CEventClient::ParseUInt16(unsigned char* &payload, int &psize, unsigned short& parsedVal)
 {
-  if (psize < 2)
+  if (psize < 2) {
     return false;
+}
 
   parsedVal = ntohs(*((unsigned short *)payload));
   payload+=2;
@@ -750,12 +781,13 @@ unsigned int CEventClient::GetButtonCode(std::string& strMapName, bool& isAxis, 
     isAxis = m_currentButton.Axis();
     amount = m_currentButton.Amount();
 
-    if ( ! m_currentButton.Repeat() )
+    if ( ! m_currentButton.Repeat() ) {
       m_currentButton.Reset();
-    else
+    } else
     {
-      if ( ! CheckButtonRepeat(m_currentButton.m_iNextRepeat) )
+      if ( ! CheckButtonRepeat(m_currentButton.m_iNextRepeat) ) {
         bcode = 0;
+}
     }
     return bcode;
   }
@@ -833,8 +865,9 @@ bool CEventClient::CheckButtonRepeat(unsigned int &next)
 bool CEventClient::Alive() const
 {
   // 60 seconds timeout
-  if ( (time(nullptr) - m_lastPing) > 60 )
+  if ( (time(nullptr) - m_lastPing) > 60 ) {
     return false;
+}
   return true;
 }
 

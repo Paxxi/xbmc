@@ -66,8 +66,9 @@ bool CHttpRange::operator!=(const CHttpRange &other) const
 
 uint64_t CHttpRange::GetLength() const
 {
-  if (!IsValid())
+  if (!IsValid()) {
     return 0;
+}
 
   return m_last - m_first + 1;
 }
@@ -104,8 +105,9 @@ CHttpResponseRange::CHttpResponseRange(const void* data, uint64_t length)
 
 bool CHttpResponseRange::operator==(const CHttpResponseRange &other) const
 {
-  if (!CHttpRange::operator==(other))
+  if (!CHttpRange::operator==(other)) {
     return false;
+}
 
   return m_data == other.m_data;
 }
@@ -117,8 +119,9 @@ bool CHttpResponseRange::operator!=(const CHttpResponseRange &other) const
 
 void CHttpResponseRange::SetData(const void* data, uint64_t length)
 {
-  if (length == 0)
+  if (length == 0) {
     return;
+}
 
   m_first = 0;
 
@@ -135,8 +138,9 @@ void CHttpResponseRange::SetData(const void* data, uint64_t firstPosition, uint6
 
 bool CHttpResponseRange::IsValid() const
 {
-  if (!CHttpRange::IsValid())
+  if (!CHttpRange::IsValid()) {
     return false;
+}
 
   return m_data != nullptr;
 }
@@ -211,8 +215,9 @@ bool CHttpRanges::GetTotalRange(CHttpRange& range) const
     return false;
 
   uint64_t firstPosition, lastPosition;
-  if (!GetFirstPosition(firstPosition) || !GetLastPosition(lastPosition))
+  if (!GetFirstPosition(firstPosition) || !GetLastPosition(lastPosition)) {
     return false;
+}
 
   range.SetFirstPosition(firstPosition);
   range.SetLastPosition(lastPosition);
@@ -222,8 +227,9 @@ bool CHttpRanges::GetTotalRange(CHttpRange& range) const
 
 void CHttpRanges::Add(const CHttpRange& range)
 {
-  if (!range.IsValid())
+  if (!range.IsValid()) {
     return;
+}
 
   m_ranges.push_back(range);
 
@@ -297,8 +303,9 @@ bool CHttpRanges::Parse(const std::string& header, uint64_t totalLength)
     }
 
     // nothing defined at all
-    if (!hasStart && !hasEnd)
+    if (!hasStart && !hasEnd) {
       return false;
+}
 
     // make sure that the end position makes sense
     if (hasEnd)
@@ -310,16 +317,19 @@ bool CHttpRanges::Parse(const std::string& header, uint64_t totalLength)
       start = totalLength - end;
       end = lastPossiblePosition;
     }
-    else if (hasStart && !hasEnd)
+    else if (hasStart && !hasEnd) {
       end = lastPossiblePosition;
+}
 
     // make sure the start position makes sense
-    if (start > lastPossiblePosition)
+    if (start > lastPossiblePosition) {
       return false;
+}
 
     // make sure that the start position is smaller or equal to the end position
-    if (end < start)
+    if (end < start) {
       return false;
+}
 
     m_ranges.push_back(CHttpRange(start, end));
   }

@@ -65,9 +65,9 @@ bool CGLContextGLX::Refresh(bool force, int screen, Window glWindow, bool &newCo
   {
     vMask.visualid = XVisualIDFromVisual(winAttr.visual);
     vInfo = XGetVisualInfo(m_dpy, VisualScreenMask | VisualIDMask, &vMask, &availableVisuals);
-    if (!vInfo)
+    if (!vInfo) {
       CLog::Log(LOGWARNING, "Failed to get VisualInfo of visual 0x%x", (unsigned) vMask.visualid);
-    else if(!IsSuitableVisual(vInfo))
+    } else if(!IsSuitableVisual(vInfo))
     {
       CLog::Log(LOGWARNING, "Visual 0x%x of the window is not suitable, looking for another one...",
                 (unsigned) vInfo->visualid);
@@ -76,8 +76,9 @@ bool CGLContextGLX::Refresh(bool force, int screen, Window glWindow, bool &newCo
       vInfo = nullptr;
     }
   }
-  else
+  else {
     CLog::Log(LOGWARNING, "Failed to get window attributes");
+}
 
   /* As per glXMakeCurrent documentation, we have to use the same visual as
      m_glWindow. Since that was not suitable for use, we try to use another
@@ -114,8 +115,9 @@ bool CGLContextGLX::Refresh(bool force, int screen, Window glWindow, bool &newCo
       glXMakeCurrent(m_dpy, glWindow, m_glxContext);
       retVal = true;
     }
-    else
+    else {
       CLog::Log(LOGERROR, "GLX Error: Could not create context");
+}
 
     XFree(vInfo);
   }
@@ -143,20 +145,27 @@ bool CGLContextGLX::IsSuitableVisual(XVisualInfo *vInfo)
 {
   int value;
 
-  if (glXGetConfig(m_dpy, vInfo, GLX_RGBA, &value) || !value)
+  if (glXGetConfig(m_dpy, vInfo, GLX_RGBA, &value) || !value) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_DOUBLEBUFFER, &value) || !value)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_DOUBLEBUFFER, &value) || !value) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_RED_SIZE, &value) || value < 8)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_RED_SIZE, &value) || value < 8) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_GREEN_SIZE, &value) || value < 8)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_GREEN_SIZE, &value) || value < 8) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_BLUE_SIZE, &value) || value < 8)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_BLUE_SIZE, &value) || value < 8) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_ALPHA_SIZE, &value) || value < 8)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_ALPHA_SIZE, &value) || value < 8) {
     return false;
-  if (glXGetConfig(m_dpy, vInfo, GLX_DEPTH_SIZE, &value) || value < 8)
+}
+  if (glXGetConfig(m_dpy, vInfo, GLX_DEPTH_SIZE, &value) || value < 8) {
     return false;
+}
 
   return true;
 }
@@ -164,15 +173,17 @@ bool CGLContextGLX::IsSuitableVisual(XVisualInfo *vInfo)
 void CGLContextGLX::SetVSync(bool enable)
 {
   // turn of current setting first
-  if(m_glXSwapIntervalEXT)
+  if(m_glXSwapIntervalEXT) {
     m_glXSwapIntervalEXT(m_dpy, m_glxWindow, 0);
-  else if(m_glXSwapIntervalMESA)
+  } else if(m_glXSwapIntervalMESA) {
     m_glXSwapIntervalMESA(0);
+}
 
   m_iVSyncErrors = 0;
 
-  if(!enable)
+  if(!enable) {
     return;
+}
 
   if (m_glXSwapIntervalEXT)
   {
@@ -181,18 +192,20 @@ void CGLContextGLX::SetVSync(bool enable)
   }
   if (m_glXSwapIntervalMESA)
   {
-    if(m_glXSwapIntervalMESA(1) == 0)
+    if(m_glXSwapIntervalMESA(1) == 0) {
       m_vsyncMode = 2;
-    else
+    } else {
       CLog::Log(LOGWARNING, "%s - glXSwapIntervalMESA failed", __FUNCTION__);
+}
   }
   if (m_glXWaitVideoSyncSGI && m_glXGetVideoSyncSGI && !m_vsyncMode)
   {
     unsigned int count;
-    if(m_glXGetVideoSyncSGI(&count) == 0)
+    if(m_glXGetVideoSyncSGI(&count) == 0) {
       m_vsyncMode = 3;
-    else
+    } else {
       CLog::Log(LOGWARNING, "%s - glXGetVideoSyncSGI failed, glcontext probably not direct", __FUNCTION__);
+}
   }
 }
 
@@ -202,19 +215,22 @@ void CGLContextGLX::SwapBuffers()
   {
     glFinish();
     unsigned int before = 0, after = 0;
-    if (m_glXGetVideoSyncSGI(&before) != 0)
+    if (m_glXGetVideoSyncSGI(&before) != 0) {
       CLog::Log(LOGERROR, "%s - glXGetVideoSyncSGI - Failed to get current retrace count", __FUNCTION__);
+}
 
     glXSwapBuffers(m_dpy, m_glxWindow);
     glFinish();
 
-    if(m_glXGetVideoSyncSGI(&after) != 0)
+    if(m_glXGetVideoSyncSGI(&after) != 0) {
       CLog::Log(LOGERROR, "%s - glXGetVideoSyncSGI - Failed to get current retrace count", __FUNCTION__);
+}
 
-    if (after == before)
+    if (after == before) {
       m_iVSyncErrors = 1;
-    else
+    } else {
       m_iVSyncErrors--;
+}
 
     if (m_iVSyncErrors > 0)
     {
@@ -234,25 +250,30 @@ void CGLContextGLX::SwapBuffers()
   {
     glFinish();
     unsigned int before = 0, swap = 0, after = 0;
-    if (m_glXGetVideoSyncSGI(&before) != 0)
+    if (m_glXGetVideoSyncSGI(&before) != 0) {
       CLog::Log(LOGERROR, "%s - glXGetVideoSyncSGI - Failed to get current retrace count", __FUNCTION__);
+}
 
-    if(m_glXWaitVideoSyncSGI(2, (before+1)%2, &swap) != 0)
+    if(m_glXWaitVideoSyncSGI(2, (before+1)%2, &swap) != 0) {
       CLog::Log(LOGERROR, "%s - glXWaitVideoSyncSGI - Returned error", __FUNCTION__);
+}
 
     glXSwapBuffers(m_dpy, m_glxWindow);
     glFinish();
 
-    if (m_glXGetVideoSyncSGI(&after) != 0)
+    if (m_glXGetVideoSyncSGI(&after) != 0) {
       CLog::Log(LOGERROR, "%s - glXGetVideoSyncSGI - Failed to get current retrace count", __FUNCTION__);
+}
 
-    if (after == before)
+    if (after == before) {
       CLog::Log(LOGERROR, "%s - glXWaitVideoSyncSGI - Woke up early", __FUNCTION__);
+}
 
-    if (after > before + 1)
+    if (after > before + 1) {
       m_iVSyncErrors++;
-    else
+    } else {
       m_iVSyncErrors = 0;
+}
 
     if (m_iVSyncErrors > 30)
     {
@@ -261,8 +282,9 @@ void CGLContextGLX::SwapBuffers()
       m_iVSyncErrors = 0;
     }
   }
-  else
+  else {
     glXSwapBuffers(m_dpy, m_glxWindow);
+}
 }
 
 void CGLContextGLX::QueryExtensions()
@@ -273,23 +295,27 @@ void CGLContextGLX::QueryExtensions()
 
   CLog::Log(LOGDEBUG, "GLX_EXTENSIONS:%s", m_extensions.c_str());
 
-  if (IsExtSupported("GLX_SGI_video_sync"))
+  if (IsExtSupported("GLX_SGI_video_sync")) {
     m_glXWaitVideoSyncSGI = (int (*)(int, int, unsigned int*))glXGetProcAddress((const GLubyte*)"glXWaitVideoSyncSGI");
-  else
+  } else {
     m_glXWaitVideoSyncSGI = nullptr;
+}
 
-  if (IsExtSupported("GLX_SGI_video_sync"))
+  if (IsExtSupported("GLX_SGI_video_sync")) {
     m_glXGetVideoSyncSGI = (int (*)(unsigned int*))glXGetProcAddress((const GLubyte*)"glXGetVideoSyncSGI");
-  else
+  } else {
     m_glXGetVideoSyncSGI = nullptr;
+}
 
-  if (IsExtSupported("GLX_MESA_swap_control"))
+  if (IsExtSupported("GLX_MESA_swap_control")) {
     m_glXSwapIntervalMESA = (int (*)(int))glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
-  else
+  } else {
     m_glXSwapIntervalMESA = nullptr;
+}
 
-  if (IsExtSupported("GLX_EXT_swap_control"))
+  if (IsExtSupported("GLX_EXT_swap_control")) {
     m_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
-  else
+  } else {
     m_glXSwapIntervalEXT = nullptr;
+}
 }

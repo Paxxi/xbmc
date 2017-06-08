@@ -114,8 +114,9 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
 
     // compute the frame time
     unsigned int frameTime = 0;
-    if (m_lastRenderTime)
+    if (m_lastRenderTime) {
       frameTime = currentTime - m_lastRenderTime;
+}
     if (!frameTime)
       frameTime = (unsigned int)(1000 / g_graphicsContext.GetFPS());
     m_lastRenderTime = currentTime;
@@ -139,8 +140,9 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
       { // keep the last one fading in
         CFadingTexture *texture = m_fadingTextures[m_fadingTextures.size() - 1];
         texture->m_fadeTime += frameTime;
-        if (texture->m_fadeTime > m_crossFadeTime)
+        if (texture->m_fadeTime > m_crossFadeTime) {
           texture->m_fadeTime = m_crossFadeTime;
+}
 
         if (texture->m_texture->SetAlpha(GetFadeLevel(texture->m_fadeTime)))
           MarkDirtyRegion();
@@ -154,8 +156,9 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
     if (m_texture.ReadyToRender() || m_texture.GetFileName().empty())
     { // fade the new one in
       m_currentFadeTime += frameTime;
-      if (m_currentFadeTime > m_crossFadeTime || frameTime == 0) // for if we allocate straight away on creation
+      if (m_currentFadeTime > m_crossFadeTime || frameTime == 0) { // for if we allocate straight away on creation
         m_currentFadeTime = m_crossFadeTime;
+}
     }
     if (m_texture.SetAlpha(GetFadeLevel(m_currentFadeTime)))
       MarkDirtyRegion();

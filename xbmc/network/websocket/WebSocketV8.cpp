@@ -175,10 +175,11 @@ const CWebSocketFrame* CWebSocketV8::close(WebSocketCloseReason reason /* = WebS
   memcpy(data, &iReason, 2);
   message.copy(data + 2, message.size());
 
-  if (m_state == WebSocketStateConnected)
+  if (m_state == WebSocketStateConnected) {
     m_state = WebSocketStateClosing;
-  else
+  } else {
     m_state = WebSocketStateClosed;
+}
 
   CWebSocketFrame* frame = new CWebSocketFrame(WebSocketConnectionClose, data, length);
   delete[] data;
@@ -197,8 +198,9 @@ std::string CWebSocketV8::calculateKey(const std::string &key)
   unsigned int digest[5];
   hash.get_digest(digest);
 
-  for (unsigned int & index : digest)
+  for (unsigned int & index : digest) {
     index = Endian_SwapBE32(index);
+}
 
   return Base64::Encode((const char*)digest, sizeof(digest));
 }

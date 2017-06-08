@@ -41,8 +41,9 @@ bool CUISoundsResource::IsInUse() const
 
 void CUISoundsResource::OnPostInstall(bool update, bool modal)
 {
-  if (IsInUse())
+  if (IsInUse()) {
     g_audioManager.Load();
+}
 }
 
 }

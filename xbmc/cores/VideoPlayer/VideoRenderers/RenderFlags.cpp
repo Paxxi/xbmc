@@ -40,10 +40,11 @@ namespace RenderManager {
       case 3: // RESERVED
       case 2: // UNSPECIFIED
       default:
-        if(width > 1024 || height >= 600)
+        if(width > 1024 || height >= 600) {
           return CONF_FLAGS_YUVCOEF_BT709;
-        else
+        } else {
           return CONF_FLAGS_YUVCOEF_BT601;
+}
         break;
     }
   }

@@ -74,8 +74,9 @@ bool CGUIDialogAddonSettings::ShowForAddon(const ADDON::AddonPtr &addon, bool sa
   if (addon == nullptr)
     return false;
 
-  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER))
+  if (!g_passwordManager.CheckMenuLock(WINDOW_ADDON_BROWSER)) {
     return false;
+}
 
   if (!addon->HasSettings())
   {
@@ -86,8 +87,9 @@ bool CGUIDialogAddonSettings::ShowForAddon(const ADDON::AddonPtr &addon, bool sa
 
   // Create the dialog
   CGUIDialogAddonSettings* dialog = g_windowManager.GetWindow<CGUIDialogAddonSettings>(WINDOW_DIALOG_ADDON_SETTINGS);
-  if (dialog == nullptr)
+  if (dialog == nullptr) {
     return false;
+}
 
   dialog->m_addon = addon;
   dialog->Open();

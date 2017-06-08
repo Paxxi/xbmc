@@ -37,24 +37,27 @@ int64_t CPerformanceSample::m_tmFreq;
 CPerformanceSample::CPerformanceSample(const std::string &statName, bool bCheckWhenDone) : m_statName(statName)
 {
   m_bCheckWhenDone = bCheckWhenDone;
-  if (m_tmFreq == 0LL)
+  if (m_tmFreq == 0LL) {
     m_tmFreq = CurrentHostFrequency();
+}
 
   Reset();
 }
 
 CPerformanceSample::~CPerformanceSample()
 {
-  if (m_bCheckWhenDone)
+  if (m_bCheckWhenDone) {
     CheckPoint();
+}
 }
 
 void CPerformanceSample::Reset()
 {
   m_tmStart = CurrentHostCounter();
 #ifdef TARGET_POSIX
-  if (getrusage(RUSAGE_SELF, &m_usage) == -1)
+  if (getrusage(RUSAGE_SELF, &m_usage) == -1) {
     CLog::Log(LOGERROR,"error %d in getrusage", errno);
+}
 #endif
 }
 
@@ -87,8 +90,9 @@ void CPerformanceSample::CheckPoint()
 
 double CPerformanceSample::GetEstimatedError()
 {
-  if (m_tmFreq == 0LL)
+  if (m_tmFreq == 0LL) {
     m_tmFreq = CurrentHostFrequency();
+}
 
   int64_t tmStart, tmEnd;
   tmStart = CurrentHostCounter();

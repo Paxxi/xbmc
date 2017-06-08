@@ -109,8 +109,9 @@ CDVDInputStream::IDisplayTime* CInputStreamAddon::GetIDisplayTime()
 {
   if (!m_addon)
     return nullptr;
-  if (!m_hasDisplayTime)
+  if (!m_hasDisplayTime) {
     return nullptr;
+}
 
   return this;
 }
@@ -136,8 +137,9 @@ CDVDInputStream::IPosTime* CInputStreamAddon::GetIPosTime()
 {
   if (!m_addon)
     return nullptr;
-  if (!m_hasPosTime)
+  if (!m_hasPosTime) {
     return nullptr;
+}
 
   return this;
 }
@@ -155,18 +157,20 @@ CDVDInputStream::IDemux* CInputStreamAddon::GetIDemux()
 {
   if (!m_addon)
     return nullptr;
-  if (!m_hasDemux)
+  if (!m_hasDemux) {
     return nullptr;
+}
 
   return this;
 }
 
 bool CInputStreamAddon::OpenDemux()
 {
-  if (m_hasDemux)
+  if (m_hasDemux) {
     return true;
-  else
+  } else {
     return false;
+}
 }
 
 DemuxPacket* CInputStreamAddon::ReadDemux()
@@ -227,13 +231,15 @@ bool CInputStreamAddon::SeekTime(double time, bool backward, double* startpts)
 
   if (m_hasPosTime)
   {
-    if (!PosTime(static_cast<int>(time)))
+    if (!PosTime(static_cast<int>(time))) {
       return false;
+}
 
     FlushDemux();
 
-    if(startpts)
+    if(startpts) {
       *startpts = DVD_NOPTS_VALUE;
+}
     return true;
   }
 

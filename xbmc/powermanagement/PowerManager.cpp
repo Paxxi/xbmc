@@ -123,8 +123,9 @@ void CPowerManager::Initialize()
   m_instance = new CWin32PowerSyscall();
 #endif
 
-  if (m_instance == nullptr)
+  if (m_instance == nullptr) {
     m_instance = new CNullPowerSyscall();
+}
 }
 
 void CPowerManager::SetDefaults()
@@ -142,28 +143,31 @@ void CPowerManager::SetDefaults()
     case POWERSTATE_HIBERNATE:
       if (!g_powerManager.CanHibernate())
       {
-        if (g_powerManager.CanSuspend())
+        if (g_powerManager.CanSuspend()) {
           defaultShutdown = POWERSTATE_SUSPEND;
-        else
+        } else {
           defaultShutdown = g_powerManager.CanPowerdown() ? POWERSTATE_SHUTDOWN : POWERSTATE_QUIT;
+}
       }
     break;
     case POWERSTATE_SUSPEND:
       if (!g_powerManager.CanSuspend())
       {
-        if (g_powerManager.CanHibernate())
+        if (g_powerManager.CanHibernate()) {
           defaultShutdown = POWERSTATE_HIBERNATE;
-        else
+        } else {
           defaultShutdown = g_powerManager.CanPowerdown() ? POWERSTATE_SHUTDOWN : POWERSTATE_QUIT;
+}
       }
     break;
     case POWERSTATE_SHUTDOWN:
       if (!g_powerManager.CanPowerdown())
       {
-        if (g_powerManager.CanSuspend())
+        if (g_powerManager.CanSuspend()) {
           defaultShutdown = POWERSTATE_SUSPEND;
-        else
+        } else {
           defaultShutdown = g_powerManager.CanHibernate() ? POWERSTATE_HIBERNATE : POWERSTATE_QUIT;
+}
       }
     break;
   }
@@ -235,8 +239,9 @@ void CPowerManager::ProcessEvents()
 {
   static int nesting = 0;
 
-  if (++nesting == 1)
+  if (++nesting == 1) {
     m_instance->PumpPowerEvents(this);
+}
 
   nesting--;
 }

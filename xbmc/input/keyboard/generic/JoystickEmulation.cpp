@@ -41,8 +41,9 @@ bool CJoystickEmulation::OnKeyPress(const CKey& key)
   bool bHandled = false;
 
   unsigned int buttonIndex = GetButtonIndex(key);
-  if (buttonIndex != 0)
+  if (buttonIndex != 0) {
     bHandled = OnPress(buttonIndex);
+}
 
   return bHandled;
 }
@@ -50,8 +51,9 @@ bool CJoystickEmulation::OnKeyPress(const CKey& key)
 void CJoystickEmulation::OnKeyRelease(const CKey& key)
 {
   unsigned int buttonIndex = GetButtonIndex(key);
-  if (buttonIndex != 0)
+  if (buttonIndex != 0) {
     OnRelease(buttonIndex);
+}
 }
 
 bool CJoystickEmulation::OnPress(unsigned int buttonIndex)

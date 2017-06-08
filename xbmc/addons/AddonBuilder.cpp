@@ -49,8 +49,9 @@ namespace ADDON
 
 std::shared_ptr<IAddon> CAddonBuilder::Build()
 {
-  if (m_built)
+  if (m_built) {
     throw std::logic_error("Already built");
+}
 
   if (m_addonInfo.id.empty())
     return nullptr;

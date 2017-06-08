@@ -129,8 +129,9 @@ void CRepositoryUpdater::CheckForUpdates(const ADDON::RepositoryPtr& repo, bool 
     auto* job = new CRepositoryUpdateJob(repo);
     m_jobs.push_back(job);
     m_doneEvent.Reset();
-    if (showProgress)
+    if (showProgress) {
       SetProgressIndicator(job);
+}
     CJobManager::GetInstance().AddJob(job, this, CJob::PRIORITY_LOW);
   }
   else
@@ -197,8 +198,9 @@ void CRepositoryUpdater::ScheduleUpdate()
   if (CServiceBroker::GetSettings().GetInt(CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_NEVER)
     return;
 
-  if (!CAddonMgr::GetInstance().HasAddons(ADDON_REPOSITORY))
+  if (!CAddonMgr::GetInstance().HasAddons(ADDON_REPOSITORY)) {
     return;
+}
 
   auto prev = LastUpdated();
   auto next = std::max(CDateTime::GetCurrentDateTime(), prev + interval);

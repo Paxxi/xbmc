@@ -72,10 +72,11 @@ bool CActiveAESound::IsPlaying()
 uint8_t** CActiveAESound::InitSound(bool orig, SampleConfig config, int nb_samples)
 {
   CSoundPacket **info;
-  if (orig)
+  if (orig) {
     info = &m_orig_sound;
-  else
+  } else {
     info = &m_dst_sound;
+}
 
   delete *info;
   *info = new CSoundPacket(config, nb_samples);
@@ -88,10 +89,11 @@ uint8_t** CActiveAESound::InitSound(bool orig, SampleConfig config, int nb_sampl
 bool CActiveAESound::StoreSound(bool orig, uint8_t **buffer, int samples, int linesize)
 {
   CSoundPacket **info;
-  if (orig)
+  if (orig) {
     info = &m_orig_sound;
-  else
+  } else {
     info = &m_dst_sound;
+}
 
   if ((*info)->nb_samples + samples > (*info)->max_nb_samples)
   {
@@ -115,10 +117,11 @@ bool CActiveAESound::StoreSound(bool orig, uint8_t **buffer, int samples, int li
 
 CSoundPacket *CActiveAESound::GetSound(bool orig)
 {
-  if (orig)
+  if (orig) {
     return m_orig_sound;
-  else
+  } else {
     return m_dst_sound;
+}
 }
 
 bool CActiveAESound::Prepare()
@@ -157,8 +160,9 @@ int CActiveAESound::Read(void *h, uint8_t* buf, int size)
 int64_t CActiveAESound::Seek(void *h, int64_t pos, int whence)
 {
   CFile* pFile = static_cast<CActiveAESound*>(h)->m_pFile;
-  if(whence == AVSEEK_SIZE)
+  if(whence == AVSEEK_SIZE) {
     return pFile->GetLength();
-  else
+  } else {
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
+}
 }

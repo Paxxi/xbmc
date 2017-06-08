@@ -114,8 +114,9 @@ BOOL   SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTi
   sysTime.tm_isdst = g_timezone.m_IsDST;
 
   // If this is a leap year, and we're past the 28th of Feb, increment tm_yday.
-  if (IsLeapYear(lpSystemTime->wYear) && (sysTime.tm_yday > 58))
+  if (IsLeapYear(lpSystemTime->wYear) && (sysTime.tm_yday > 58)) {
     sysTime.tm_yday++;
+}
 
 #if defined(TARGET_DARWIN)
   CAtomicSpinLock lock(timegm_lock);
@@ -147,12 +148,13 @@ LONG   CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2)
   t2.u.LowPart = lpFileTime2->dwLowDateTime;
   t2.u.HighPart = lpFileTime2->dwHighDateTime;
 
-  if (t1.QuadPart == t2.QuadPart)
+  if (t1.QuadPart == t2.QuadPart) {
      return 0;
-  else if (t1.QuadPart < t2.QuadPart)
+  } else if (t1.QuadPart < t2.QuadPart) {
      return -1;
-  else
+  } else {
      return 1;
+}
 }
 
 BOOL   FileTimeToSystemTime( const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime)
@@ -198,8 +200,9 @@ BOOL   LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFi
 
 BOOL  FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
 
-  if (lpLocalFileTime == nullptr || pTimeT == nullptr)
+  if (lpLocalFileTime == nullptr || pTimeT == nullptr) {
   return false;
+}
 
   ULARGE_INTEGER fileTime;
   fileTime.u.LowPart  = lpLocalFileTime->dwLowDateTime;
@@ -220,8 +223,9 @@ BOOL  FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
 
 BOOL  TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime) {
 
-  if (lpLocalFileTime == nullptr)
+  if (lpLocalFileTime == nullptr) {
   return false;
+}
 
   ULARGE_INTEGER result;
   result.QuadPart = (unsigned long long) timeT * 10000000;

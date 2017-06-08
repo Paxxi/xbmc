@@ -170,8 +170,9 @@ void CDatabase::Split(const std::string& strFileNameAndPath, std::string& strPat
   while (i > 0)
   {
     char ch = strFileNameAndPath[i];
-    if (ch == ':' || ch == '/' || ch == '\\') break;
-    else i--;
+    if (ch == ':' || ch == '/' || ch == '\\') { break;
+    } else { i--;
+}
   }
   strPath = strFileNameAndPath.substr(0, i);
   strFileName = strFileNameAndPath.substr(i);
@@ -518,8 +519,9 @@ bool CDatabase::IsOpen()
 
 void CDatabase::Close()
 {
-  if (m_openCount == 0)
+  if (m_openCount == 0) {
     return;
+}
 
   if (m_openCount > 1)
   {
@@ -540,8 +542,9 @@ void CDatabase::Close()
 
 bool CDatabase::Compress(bool bForce /* =true */)
 {
-  if (!m_sqlite)
+  if (!m_sqlite) {
     return true;
+}
 
   try
   {
@@ -553,13 +556,15 @@ bool CDatabase::Compress(bool bForce /* =true */)
       if (!m_pDS->eof())
       {
         int iCount = m_pDS->fv(0).get_asInt();
-        if (iCount > MAX_COMPRESS_COUNT)
+        if (iCount > MAX_COMPRESS_COUNT) {
           iCount = -1;
+}
         m_pDS->close();
         std::string strSQL=PrepareSQL("update version set iCompressCount=%i\n",++iCount);
         m_pDS->exec(strSQL);
-        if (iCount != 0)
+        if (iCount != 0) {
           return true;
+}
       }
     }
 
@@ -683,8 +688,9 @@ bool CDatabase::BuildSQL(const std::string &strBaseDir, const std::string &strQu
 {
   // parse the base path to get additional filters
   dbUrl.Reset();
-  if (!dbUrl.FromString(strBaseDir) || !GetFilter(dbUrl, filter, sorting))
+  if (!dbUrl.FromString(strBaseDir) || !GetFilter(dbUrl, filter, sorting)) {
     return false;
+}
 
   return BuildSQL(strQuery, filter, strSQL);
 }

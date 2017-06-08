@@ -65,8 +65,9 @@ namespace XBMCAddon
     bool PythonCallbackHandler::shouldRemoveCallback(AddonClass* obj, void* threadState)
     {
       XBMC_TRACE;
-      if (threadState == objectThreadState)
+      if (threadState == objectThreadState) {
         return true;
+}
 
       // we also want to remove the callback if the language hook no longer exists.
       //   this is a belt-and-suspenders cleanup mechanism

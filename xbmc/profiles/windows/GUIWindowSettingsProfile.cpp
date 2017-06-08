@@ -71,8 +71,9 @@ void CGUIWindowSettingsProfile::OnPopupMenu(int iItem)
   // popup the context menu
   CContextButtons choices;
   choices.Add(1, 20092); // Load profile
-  if (iItem > 0)
+  if (iItem > 0) {
     choices.Add(2, 117); // Delete
+}
 
   int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
   if (choice == 1)
@@ -265,8 +266,9 @@ bool CGUIWindowSettingsProfile::GetAutoLoginProfileChoice(int &iProfile)
   dialog->SetSelected(autoLoginProfileId);
   dialog->Open();
 
-  if (dialog->IsButtonPressed() || dialog->GetSelectedItem() < 0)
+  if (dialog->IsButtonPressed() || dialog->GetSelectedItem() < 0) {
     return false; // user cancelled
+}
   iProfile = dialog->GetSelectedItem() - 1;
 
   return true;

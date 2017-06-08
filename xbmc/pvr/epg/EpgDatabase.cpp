@@ -163,8 +163,9 @@ bool CPVREpgDatabase::DeleteEpgEntries(const CDateTime &maxEndTime)
 bool CPVREpgDatabase::Delete(const CPVREpgInfoTag &tag)
 {
   /* tag without a database ID was not persisted */
-  if (tag.BroadcastId() <= 0)
+  if (tag.BroadcastId() <= 0) {
     return false;
+}
 
   Filter filter;
   filter.AppendWhere(PrepareSQL("idBroadcast = %u", tag.BroadcastId()));

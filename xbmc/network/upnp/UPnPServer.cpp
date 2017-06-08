@@ -134,8 +134,9 @@ CUPnPServer::OnScanCompleted(int type)
         for (size_t i = 0; i < ARRAY_SIZE(video_containers); i++)
             UpdateContainer(video_containers[i]);
     }
-    else
+    else {
         return;
+}
     m_scanning = false;
     PropagateUpdates();
 }
@@ -391,13 +392,15 @@ CUPnPServer::Build(CFileItemPtr                  item,
 
     if (object) {
         // remap Root virtualpath://upnproot/ to id "0"
-        if (object->m_ObjectID == "virtualpath://upnproot/")
+        if (object->m_ObjectID == "virtualpath://upnproot/") {
             object->m_ObjectID = "0";
 
         // remap Parent Root virtualpath://upnproot/ to id "0"
-        if (object->m_ParentID == "virtualpath://upnproot/")
+        
+}if (object->m_ParentID == "virtualpath://upnproot/") {
             object->m_ParentID = "0";
-    }
+    
+}}
 
     return object;
 
@@ -416,12 +419,14 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
     int item_id;
     std::string item_type;
 
-    if (strcmp(sender, "xbmc"))
+    if (strcmp(sender, "xbmc")) {
         return;
+}
 
     if (strcmp(message, "OnUpdate") && strcmp(message, "OnRemove")
-        && strcmp(message, "OnScanStarted") && strcmp(message, "OnScanFinished"))
+        && strcmp(message, "OnScanStarted") && strcmp(message, "OnScanFinished")) {
         return;
+}
 
     if (data.isNull()) {
         if (!strcmp(message, "OnScanStarted") || !strcmp(message, "OnCleanStarted")) {
@@ -854,33 +859,37 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
     if (id.StartsWith("musicdb://")) {
         // we browse for all tracks given a genre, artist or album
         if (NPT_String(search_criteria).Find("object.item.audioItem") >= 0) {
-            if (!id.EndsWith("/")) id += "/";
-            NPT_Cardinal count = id.SubString(10).Split("/").GetItemCount();
+            if (!id.EndsWith("/")) { id += "/";
+            
+}NPT_Cardinal count = id.SubString(10).Split("/").GetItemCount();
             // remove extra empty node count
             count = count?count-1:0;
 
             // genre
             if (id.StartsWith("musicdb://genres/")) {
                 // all tracks of all genres
-                if (count == 1)
+                if (count == 1) {
                     id += "-1/-1/-1/";
                 // all tracks of a specific genre
-                else if (count == 2)
+                } else if (count == 2) {
                     id += "-1/-1/";
                 // all tracks of a specific genre of a specific artist
-                else if (count == 3)
+                } else if (count == 3) {
                     id += "-1/";
-            } else if (id.StartsWith("musicdb://artists/")) {
+            
+}} else if (id.StartsWith("musicdb://artists/")) {
                 // all tracks by all artists
-                if (count == 1)
+                if (count == 1) {
                     id += "-1/-1/";
                 // all tracks of a specific artist
-                else if (count == 2)
+                } else if (count == 2) {
                     id += "-1/";
-            } else if (id.StartsWith("musicdb://albums/")) {
+            
+}} else if (id.StartsWith("musicdb://albums/")) {
                 // all albums ?
-                if (count == 1) id += "-1/";
-            }
+                if (count == 1) { id += "-1/";
+            
+}}
         }
         return OnBrowseDirectChildren(action, id, filter, starting_index, requested_count, sort_criteria, context);
     } else if (NPT_String(search_criteria).Find("object.item.audioItem") >= 0) {
@@ -1037,13 +1046,13 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
         int id = -1;
         VIDEODB_CONTENT_TYPE content_type;
-        if ((id = params.GetMovieId()) >= 0 )
+        if ((id = params.GetMovieId()) >= 0 ) {
             content_type = VIDEODB_CONTENT_MOVIES;
-        else if ((id = params.GetEpisodeId()) >= 0 )
+        } else if ((id = params.GetEpisodeId()) >= 0 ) {
             content_type = VIDEODB_CONTENT_EPISODES;
-        else if ((id = params.GetMVideoId()) >= 0 )
+        } else if ((id = params.GetMVideoId()) >= 0 ) {
             content_type = VIDEODB_CONTENT_MUSICVIDEOS;
-        else {
+        } else {
             err = 701;
             msg = "No such object";
             goto failure;
@@ -1064,9 +1073,9 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
             NPT_UInt32 resume;
             NPT_CHECK_LABEL(position.ToInteger32(resume), args);
 
-            if (resume <= 0)
+            if (resume <= 0) {
                 db.ClearBookMarksOfFile(file_path, CBookmark::RESUME);
-            else {
+            } else {
                 CBookmark bookmark;
                 bookmark.timeInSeconds = resume;
                 bookmark.totalTimeInSeconds = resume + 100; // not required to be correct
@@ -1109,10 +1118,11 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
     if (updatelisting) {
         updated.SetPath(path);
-        if (updated.IsVideoDb())
+        if (updated.IsVideoDb()) {
              CUtil::DeleteVideoDatabaseDirectoryCache();
-        else if (updated.IsMusicDb())
+        } else if (updated.IsMusicDb()) {
              CUtil::DeleteMusicDatabaseDirectoryCache();
+}
 
         CFileItemPtr msgItem(new CFileItem(updated));
         CGUIMessage message(GUI_MSG_NOTIFY_ALL, g_windowManager.GetActiveWindow(), 0, GUI_MSG_UPDATE_ITEM, 1, msgItem);
@@ -1243,47 +1253,47 @@ CUPnPServer::SortItems(CFileItemList& items, const char* sort_criteria)
     std::string method = itr->substr(1);
 
     /* resource specific */
-    if (StringUtils::EqualsNoCase(method, "res@duration"))
+    if (StringUtils::EqualsNoCase(method, "res@duration")) {
       sorting.sortBy = SortByTime;
-    else if (StringUtils::EqualsNoCase(method, "res@size"))
+    } else if (StringUtils::EqualsNoCase(method, "res@size")) {
       sorting.sortBy = SortBySize;
-    else if (StringUtils::EqualsNoCase(method, "res@bitrate"))
+    } else if (StringUtils::EqualsNoCase(method, "res@bitrate")) {
       sorting.sortBy = SortByBitrate;
 
     /* dc: */
-    else if (StringUtils::EqualsNoCase(method, "dc:date"))
+    } else if (StringUtils::EqualsNoCase(method, "dc:date")) {
       sorting.sortBy = SortByDate;
-    else if (StringUtils::EqualsNoCase(method, "dc:title"))
+    } else if (StringUtils::EqualsNoCase(method, "dc:title"))
     {
       sorting.sortBy = SortByTitle;
       sorting.sortAttributes = SortAttributeIgnoreArticle;
     }
 
     /* upnp: */
-    else if (StringUtils::EqualsNoCase(method, "upnp:album"))
+    else if (StringUtils::EqualsNoCase(method, "upnp:album")) {
       sorting.sortBy = SortByAlbum;
-    else if (StringUtils::EqualsNoCase(method, "upnp:artist") ||
-             StringUtils::EqualsNoCase(method, "upnp:albumArtist"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:artist") ||
+             StringUtils::EqualsNoCase(method, "upnp:albumArtist")) {
       sorting.sortBy = SortByArtist;
-    else if (StringUtils::EqualsNoCase(method, "upnp:episodeNumber"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:episodeNumber")) {
       sorting.sortBy = SortByEpisodeNumber;
-    else if (StringUtils::EqualsNoCase(method, "upnp:episodeCount"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:episodeCount")) {
       sorting.sortBy = SortByNumberOfEpisodes;
-    else if (StringUtils::EqualsNoCase(method, "upnp:episodeSeason"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:episodeSeason")) {
       sorting.sortBy = SortBySeason;
-    else if (StringUtils::EqualsNoCase(method, "upnp:genre"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:genre")) {
       sorting.sortBy = SortByGenre;
-    else if (StringUtils::EqualsNoCase(method, "upnp:originalTrackNumber"))
+    } else if (StringUtils::EqualsNoCase(method, "upnp:originalTrackNumber")) {
       sorting.sortBy = SortByTrackNumber;
-    else if(StringUtils::EqualsNoCase(method, "upnp:rating"))
+    } else if(StringUtils::EqualsNoCase(method, "upnp:rating")) {
       sorting.sortBy = SortByMPAA;
-    else if (StringUtils::EqualsNoCase(method, "xbmc:rating"))
+    } else if (StringUtils::EqualsNoCase(method, "xbmc:rating")) {
       sorting.sortBy = SortByRating;
-    else if (StringUtils::EqualsNoCase(method, "xbmc:dateadded"))
+    } else if (StringUtils::EqualsNoCase(method, "xbmc:dateadded")) {
       sorting.sortBy = SortByDateAdded;
-    else if (StringUtils::EqualsNoCase(method, "xbmc:votes"))
+    } else if (StringUtils::EqualsNoCase(method, "xbmc:votes")) {
       sorting.sortBy = SortByVotes;
-    else {
+    } else {
       CLog::Log(LOGINFO, "UPnP: unsupported sort criteria '%s' passed", method.c_str());
       continue; // needed so unidentified sort methods don't re-sort by label
     }

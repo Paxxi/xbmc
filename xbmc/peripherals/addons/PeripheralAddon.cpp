@@ -250,8 +250,9 @@ void CPeripheralAddon::UnregisterRemovedDevices(const PeripheralScanResults &res
 
 bool CPeripheralAddon::HasFeature(const PeripheralFeature feature) const
 {
-  if (feature == FEATURE_JOYSTICK)
+  if (feature == FEATURE_JOYSTICK) {
     return m_bProvidesJoysticks;
+}
 
   return false;
 }
@@ -412,8 +413,9 @@ bool CPeripheralAddon::PerformDeviceScan(PeripheralScanResults &results)
 
 bool CPeripheralAddon::ProcessEvents()
 {
-  if (!m_bProvidesJoysticks)
+  if (!m_bProvidesJoysticks) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -486,8 +488,9 @@ bool CPeripheralAddon::ProcessEvents()
 
 bool CPeripheralAddon::SendRumbleEvent(unsigned int peripheralIndex, unsigned int driverIndex, float magnitude)
 {
-  if (!m_bProvidesJoysticks)
+  if (!m_bProvidesJoysticks) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -506,8 +509,9 @@ bool CPeripheralAddon::SendRumbleEvent(unsigned int peripheralIndex, unsigned in
 
 bool CPeripheralAddon::GetJoystickProperties(unsigned int index, CPeripheralJoystick& joystick)
 {
-  if (!m_bProvidesJoysticks)
+  if (!m_bProvidesJoysticks) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -536,8 +540,9 @@ bool CPeripheralAddon::GetFeatures(const CPeripheral* device,
                                    const std::string& strControllerId,
                                    FeatureMap& features)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -581,8 +586,9 @@ bool CPeripheralAddon::MapFeature(const CPeripheral* device,
                                   const std::string& strControllerId,
                                   const ADDON::JoystickFeature& feature)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -611,8 +617,9 @@ bool CPeripheralAddon::MapFeature(const CPeripheral* device,
 
 bool CPeripheralAddon::GetIgnoredPrimitives(const CPeripheral* device, PrimitiveVector& primitives)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -651,8 +658,9 @@ bool CPeripheralAddon::GetIgnoredPrimitives(const CPeripheral* device, Primitive
 
 bool CPeripheralAddon::SetIgnoredPrimitives(const CPeripheral* device, const PrimitiveVector& primitives)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return false;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -681,8 +689,9 @@ bool CPeripheralAddon::SetIgnoredPrimitives(const CPeripheral* device, const Pri
 
 void CPeripheralAddon::SaveButtonMap(const CPeripheral* device)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -705,8 +714,9 @@ void CPeripheralAddon::SaveButtonMap(const CPeripheral* device)
 
 void CPeripheralAddon::RevertButtonMap(const CPeripheral* device)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -726,8 +736,9 @@ void CPeripheralAddon::RevertButtonMap(const CPeripheral* device)
 
 void CPeripheralAddon::ResetButtonMap(const CPeripheral* device, const std::string& strControllerId)
 {
-  if (!m_bProvidesButtonMaps)
+  if (!m_bProvidesButtonMaps) {
     return;
+}
 
   ADDON::Joystick joystickInfo;
   GetJoystickInfo(device, joystickInfo);
@@ -745,11 +756,13 @@ void CPeripheralAddon::ResetButtonMap(const CPeripheral* device, const std::stri
 
 void CPeripheralAddon::PowerOffJoystick(unsigned int index)
 {
-  if (!HasFeature(FEATURE_JOYSTICK))
+  if (!HasFeature(FEATURE_JOYSTICK)) {
     return;
+}
 
-  if (!SupportsFeature(FEATURE_POWER_OFF))
+  if (!SupportsFeature(FEATURE_POWER_OFF)) {
     return;
+}
 
   CSharedLock lock(m_dllSection);
 
@@ -889,8 +902,9 @@ void CPeripheralAddon::cb_trigger_scan(void* kodiInstance)
 
 void CPeripheralAddon::cb_refresh_button_maps(void* kodiInstance, const char* deviceName, const char* controllerId)
 {
-  if (!kodiInstance)
+  if (!kodiInstance) {
     return;
+}
 
   static_cast<CPeripheralAddon*>(kodiInstance)->RefreshButtonMaps(deviceName ? deviceName : "");
 }

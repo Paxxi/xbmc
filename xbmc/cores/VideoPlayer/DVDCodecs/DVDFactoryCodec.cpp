@@ -75,8 +75,9 @@ CDVDVideoCodec* CDVDFactoryCodec::CreateVideoCodec(CDVDStreamInfo &hint, CProces
     {
       return pCodec.release();
     }
-    if (!(hint.codecOptions & CODEC_ALLOW_FALLBACK))
+    if (!(hint.codecOptions & CODEC_ALLOW_FALLBACK)) {
       return nullptr;
+}
   }
 
   std::string value = StringUtils::Format("%d", info.max_buffer_size);

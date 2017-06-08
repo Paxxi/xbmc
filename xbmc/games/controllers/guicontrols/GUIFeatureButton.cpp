@@ -83,8 +83,9 @@ bool CGUIFeatureButton::DoPrompt(const std::string& strPrompt, const std::string
     waitEvent.Reset();
     bInterrupted = waitEvent.WaitMSec(1000); // Wait 1 second
 
-    if (bInterrupted)
+    if (bInterrupted) {
       break;
+}
   }
 
   // Reset label

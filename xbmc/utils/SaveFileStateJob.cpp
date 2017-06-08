@@ -94,15 +94,17 @@ bool CSaveFileStateJob::DoWork()
               ANNOUNCEMENT::CAnnouncementManager::GetInstance().Announce(ANNOUNCEMENT::VideoLibrary, "xbmc", "OnUpdate", data);
             }
           }
-          else
-            videodatabase.UpdateLastPlayed(m_item);
+          else {
+            videodatabase
+}.UpdateLastPlayed(m_item);
 
           if (!m_item.HasVideoInfoTag() || m_item.GetVideoInfoTag()->GetResumePoint().timeInSeconds != m_bookmark.timeInSeconds)
           {
-            if (m_bookmark.timeInSeconds <= 0.0f)
+            if (m_bookmark.timeInSeconds <= 0.0f) {
               videodatabase.ClearBookMarksOfFile(progressTrackingFile, CBookmark::RESUME);
-            else
+            } else {
               videodatabase.AddBookMarkToFile(progressTrackingFile, m_bookmark, CBookmark::RESUME);
+}
             if (m_item.HasVideoInfoTag())
               m_item.GetVideoInfoTag()->SetResumePoint(m_bookmark);
 

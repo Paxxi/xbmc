@@ -123,11 +123,13 @@ bool CLangCodeExpander::Lookup(const std::string& code, std::string& desc)
     return false;
   }
 
-  if (LookupInUserMap(code, desc))
+  if (LookupInUserMap(code, desc)) {
     return true;
+}
 
-  if (LookupInISO639Tables(code, desc))
+  if (LookupInISO639Tables(code, desc)) {
     return true;
+}
 
   return false;
 }
@@ -174,8 +176,9 @@ bool CLangCodeExpander::ConvertToISO6392T(const std::string& strCharCode, std::s
 {
 
   //first search in the user defined map
-  if (LookupUserCode(strCharCode, strISO6392T))
+  if (LookupUserCode(strCharCode, strISO6392T)) {
     return true;
+}
 
   if (strCharCode.size() == 2)
     return g_LangCodeExpander.ConvertISO6391ToISO6392T(strCharCode, strISO6392T, checkWin32Locales);
@@ -277,8 +280,9 @@ bool CLangCodeExpander::ConvertToISO6391(const std::string& lang, std::string& c
     return false;
 
   //first search in the user defined map
-  if (LookupUserCode(lang, code))
+  if (LookupUserCode(lang, code)) {
     return true;
+}
 
   if (lang.length() == 2)
   {
@@ -428,8 +432,9 @@ void CLangCodeExpander::CodeToString(long code, std::string& ret)
   for (unsigned int j = 0; j < 4; j++)
   {
     char c = (char)code & 0xFF;
-    if (c == '\0')
+    if (c == '\0') {
       return;
+}
 
     ret.insert(0, 1, c);
     code >>= 8;
@@ -438,8 +443,9 @@ void CLangCodeExpander::CodeToString(long code, std::string& ret)
 
 bool CLangCodeExpander::CompareFullLanguageNames(const std::string& lang1, const std::string& lang2)
 {
-  if (StringUtils::EqualsNoCase(lang1, lang2))
+  if (StringUtils::EqualsNoCase(lang1, lang2)) {
     return true;
+}
 
   std::string expandedLang1, expandedLang2, code1, code2;
 
@@ -486,8 +492,9 @@ std::vector<std::string> CLangCodeExpander::GetLanguageNames(LANGFORMATS format 
 
 bool CLangCodeExpander::CompareISO639Codes(const std::string& code1, const std::string& code2)
 {
-  if (StringUtils::EqualsNoCase(code1, code2))
+  if (StringUtils::EqualsNoCase(code1, code2)) {
     return true;
+}
 
   std::string expandedLang1;
   if (!Lookup(code1, expandedLang1))
