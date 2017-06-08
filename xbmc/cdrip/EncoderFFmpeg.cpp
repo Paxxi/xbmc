@@ -306,7 +306,8 @@ bool CEncoderFFmpeg::WriteFrame()
     }
     frame = m_ResampledFrame;
   }
-  else frame = m_BufferFrame;
+  else { frame = m_BufferFrame;
+}
 
   encoded = avcodec_encode_audio2(m_CodecCtx, &m_Pkt, frame, &got_output);
 

@@ -368,7 +368,8 @@ void CLangInfo::OnSettingChanged(std::shared_ptr<const CSetting> setting)
     // update the time format
     CServiceBroker::GetSettings().SetString(CSettings::SETTING_LOCALE_TIMEFORMAT, PrepareTimeFormat(GetTimeFormat(), m_use24HourClock));
   }
-  else if (settingId == CSettings::SETTING_LOCALE_TEMPERATUREUNIT)
+  else { if 
+}(settingId == CSettings::SETTING_LOCALE_TEMPERATUREUNIT)
     SetTemperatureUnit(std::static_pointer_cast<const CSettingString>(setting)->GetValue());
   else if (settingId == CSettings::SETTING_LOCALE_SPEEDUNIT)
     SetSpeedUnit(std::static_pointer_cast<const CSettingString>(setting)->GetValue());

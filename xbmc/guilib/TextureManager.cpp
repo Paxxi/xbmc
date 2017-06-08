@@ -261,8 +261,10 @@ bool CGUITextureManager::HasTexture(const std::string &textureName, std::string 
   CSingleLock lock(m_section);
 
   // default values
-  if (bundle) *bundle = -1;
-  if (size) *size = 0;
+  if (bundle) { *bundle = -1;
+}
+  if (size) { *size = 0;
+}
   if (path) *path = textureName;
 
   if (textureName.empty())
@@ -279,7 +281,8 @@ bool CGUITextureManager::HasTexture(const std::string &textureName, std::string 
     CTextureMap *pMap = m_vecTextures[i];
     if (pMap->GetName() == textureName)
     {
-      if (size) *size = 1;
+      if (size) { *size = 1;
+}
       return true;
     }
   }
@@ -288,7 +291,8 @@ bool CGUITextureManager::HasTexture(const std::string &textureName, std::string 
   {
     if (m_TexBundle[i].HasFile(bundledName))
     {
-      if (bundle) *bundle = i;
+      if (bundle) { *bundle = i;
+}
       return true;
     }
   }
@@ -463,7 +467,8 @@ const CTextureArray& CGUITextureManager::Load(const std::string& strTextureName,
     height = pTexture->GetHeight();
   }
 
-  if (!pTexture) return emptyTexture;
+  if (!pTexture) { return emptyTexture;
+}
 
   auto  pMap = new CTextureMap(strTextureName, width, height, 0);
   pMap->Add(pTexture, 100);

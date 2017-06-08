@@ -661,7 +661,8 @@ float CGUISpinControl::GetWidth() const
 bool CGUISpinControl::CanMoveUp(bool bTestReverse)
 {
   // test for reverse...
-  if (bTestReverse && m_bReverse) return CanMoveDown(false);
+  if (bTestReverse && m_bReverse) { return CanMoveDown(false);
+}
 
   switch (m_iType)
   {
@@ -700,7 +701,8 @@ bool CGUISpinControl::CanMoveUp(bool bTestReverse)
 bool CGUISpinControl::CanMoveDown(bool bTestReverse)
 {
   // test for reverse...
-  if (bTestReverse && m_bReverse) return CanMoveUp(false);
+  if (bTestReverse && m_bReverse) { return CanMoveUp(false);
+}
   switch (m_iType)
   {
   case SPIN_CONTROL_TYPE_PAGE:

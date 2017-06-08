@@ -235,7 +235,8 @@ bool CGUIListItem::IsSelected() const
 
 CGUIListItem& CGUIListItem::operator =(const CGUIListItem& item)
 {
-  if (&item == this) return * this;
+  if (&item == this) { return * this;
+}
   m_strLabel2 = item.m_strLabel2;
   m_strLabel = item.m_strLabel;
   m_sortLabel = item.m_sortLabel;
@@ -388,8 +389,10 @@ CGUIListItemLayout *CGUIListItem::GetFocusedLayout()
 
 void CGUIListItem::SetInvalid()
 {
-  if (m_layout) m_layout->SetInvalid();
-  if (m_focusedLayout) m_focusedLayout->SetInvalid();
+  if (m_layout) { m_layout->SetInvalid();
+}
+  if (m_focusedLayout) { m_focusedLayout->SetInvalid();
+}
 }
 
 void CGUIListItem::SetProperty(const std::string &strKey, const CVariant &value)

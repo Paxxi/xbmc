@@ -193,10 +193,14 @@ bool CGraphicContext::SetViewPort(float fx, float fy, float fwidth, float fheigh
   {
     float z = 0;
     ScaleFinalCoords(x[i], y[i], z);
-    if (x[i] < minX) minX = x[i];
-    if (x[i] > maxX) maxX = x[i];
-    if (y[i] < minY) minY = y[i];
-    if (y[i] > maxY) maxY = y[i];
+    if (x[i] < minX) { minX = x[i];
+}
+    if (x[i] > maxX) { maxX = x[i];
+}
+    if (y[i] < minY) { minY = y[i];
+}
+    if (y[i] > maxY) { maxY = y[i];
+}
   }
 
   int newLeft = static_cast<int>(minX + 0.5f);
@@ -216,10 +220,14 @@ bool CGraphicContext::SetViewPort(float fx, float fy, float fwidth, float fheigh
       return false;
     }
     // ok, they intersect, do the intersection
-    if (newLeft < oldLeft) newLeft = oldLeft;
-    if (newTop < oldTop) newTop = oldTop;
-    if (newRight > oldRight) newRight = oldRight;
-    if (newBottom > oldBottom) newBottom = oldBottom;
+    if (newLeft < oldLeft) { newLeft = oldLeft;
+}
+    if (newTop < oldTop) { newTop = oldTop;
+}
+    if (newRight > oldRight) { newRight = oldRight;
+}
+    if (newBottom > oldBottom) { newBottom = oldBottom;
+}
   }
   // check range against screen size
   if (newRight <= 0 || newBottom <= 0 ||
@@ -229,10 +237,14 @@ bool CGraphicContext::SetViewPort(float fx, float fy, float fwidth, float fheigh
     return false;
   }
   // intersection with the screen
-  if (newLeft < 0) newLeft = 0;
-  if (newTop < 0) newTop = 0;
-  if (newRight > m_iScreenWidth) newRight = m_iScreenWidth;
-  if (newBottom > m_iScreenHeight) newBottom = m_iScreenHeight;
+  if (newLeft < 0) { newLeft = 0;
+}
+  if (newTop < 0) { newTop = 0;
+}
+  if (newRight > m_iScreenWidth) { newRight = m_iScreenWidth;
+}
+  if (newBottom > m_iScreenHeight) { newBottom = m_iScreenHeight;
+}
 
   assert(newLeft < newRight);
   assert(newTop < newBottom);
@@ -932,9 +944,12 @@ void CGraphicContext::UpdateCameraPosition(const CPoint &camera, const float &fa
 
 bool CGraphicContext::RectIsAngled(float x1, float y1, float x2, float y2) const
 { // need only test 3 points, as they must be co-planer
-  if (m_finalTransform.matrix.TransformZCoord(x1, y1, 0)) return true;
-  if (m_finalTransform.matrix.TransformZCoord(x2, y2, 0)) return true;
-  if (m_finalTransform.matrix.TransformZCoord(x1, y2, 0)) return true;
+  if (m_finalTransform.matrix.TransformZCoord(x1, y1, 0)) { return true;
+}
+  if (m_finalTransform.matrix.TransformZCoord(x2, y2, 0)) { return true;
+}
+  if (m_finalTransform.matrix.TransformZCoord(x1, y2, 0)) { return true;
+}
   return false;
 }
 

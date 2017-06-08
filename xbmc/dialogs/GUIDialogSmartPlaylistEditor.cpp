@@ -615,7 +615,8 @@ void CGUIDialogSmartPlaylistEditor::OnRuleAdd()
 bool CGUIDialogSmartPlaylistEditor::NewPlaylist(const std::string &type)
 {
   CGUIDialogSmartPlaylistEditor *editor = g_windowManager.GetWindow<CGUIDialogSmartPlaylistEditor>(WINDOW_DIALOG_SMART_PLAYLIST_EDITOR);
-  if (!editor) return false;
+  if (!editor) { return false;
+}
 
   editor->m_path = "";
   editor->m_playlist = CSmartPlaylist();
@@ -628,7 +629,8 @@ bool CGUIDialogSmartPlaylistEditor::NewPlaylist(const std::string &type)
 bool CGUIDialogSmartPlaylistEditor::EditPlaylist(const std::string &path, const std::string &type)
 {
   CGUIDialogSmartPlaylistEditor *editor = g_windowManager.GetWindow<CGUIDialogSmartPlaylistEditor>(WINDOW_DIALOG_SMART_PLAYLIST_EDITOR);
-  if (!editor) return false;
+  if (!editor) { return false;
+}
 
   editor->m_mode = type;
   if (URIUtils::PathEquals(path, CProfilesManager::GetInstance().GetUserDataItem("PartyMode.xsp")))

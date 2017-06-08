@@ -142,8 +142,10 @@ void CGUIDialogProgress::OnWindowLoaded()
 
 void CGUIDialogProgress::SetPercentage(int iPercentage)
 {
-  if (iPercentage < 0) iPercentage = 0;
-  if (iPercentage > 100) iPercentage = 100;
+  if (iPercentage < 0) { iPercentage = 0;
+}
+  if (iPercentage > 100) { iPercentage = 100;
+}
 
   m_percentage = iPercentage;
 }

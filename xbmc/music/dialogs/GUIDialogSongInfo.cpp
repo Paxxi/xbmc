@@ -229,8 +229,10 @@ void CGUIDialogSongInfo::Update()
 
 void CGUIDialogSongInfo::SetUserrating(int userrating)
 {
-  if (userrating < 0) userrating = 0;
-  if (userrating > 10) userrating = 10;
+  if (userrating < 0) { userrating = 0;
+}
+  if (userrating > 10) { userrating = 10;
+}
   if (userrating != m_song->GetMusicInfoTag()->GetUserrating())
   {
     m_song->GetMusicInfoTag()->SetUserrating(userrating);

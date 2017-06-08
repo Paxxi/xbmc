@@ -618,7 +618,8 @@ void CGUITextLayout::CalcTextExtent()
 {
   m_textWidth = 0;
   m_textHeight = 0;
-  if (!m_font) return;
+  if (!m_font) { return;
+}
 
   for (std::vector<CGUIString>::iterator i = m_lines.begin(); i != m_lines.end(); ++i)
   {
@@ -649,7 +650,8 @@ void CGUITextLayout::GetFirstText(vecText &text) const
 float CGUITextLayout::GetTextWidth(const std::wstring &text) const
 {
   // NOTE: Assumes a single line of text
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   vecText utf32;
   AppendToUTF32(text, (m_font->GetStyle() & FONT_STYLE_MASK) << 24, utf32);
   return m_font->GetTextWidth(utf32);
@@ -668,7 +670,8 @@ std::string CGUITextLayout::GetText() const
 
 void CGUITextLayout::DrawText(CGUIFont *font, float x, float y, color_t color, color_t shadowColor, const std::string &text, uint32_t align)
 {
-  if (!font) return;
+  if (!font) { return;
+}
   vecText utf32;
   AppendToUTF32(text, 0, utf32);
   font->DrawText(x, y, color, shadowColor, utf32, align, 0);

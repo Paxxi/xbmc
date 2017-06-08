@@ -223,7 +223,8 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput, bool streaminfo, bool filein
 
   const AVIOInterruptCB int_cb = { interrupt_cb, this };
 
-  if (!pInput) return false;
+  if (!pInput) { return false;
+}
 
   m_pInput = pInput;
   strFile = m_pInput->GetFileName();

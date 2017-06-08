@@ -304,9 +304,12 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItemPtr item, const ScraperPtr &info2, b
 
   ScraperPtr info(info2); // use this as nfo might change it..
 
-  if (!pDlgProgress) return false;
-  if (!pDlgSelect) return false;
-  if (!pDlgInfo) return false;
+  if (!pDlgProgress) { return false;
+}
+  if (!pDlgSelect) { return false;
+}
+  if (!pDlgInfo) { return false;
+}
 
   // 1.  Check for already downloaded information, and if we have it, display our dialog
   //     Return if no Refresh is needed.
@@ -795,7 +798,8 @@ bool CGUIWindowVideoBase::ShowResumeMenu(CFileItem &item)
 
 bool CGUIWindowVideoBase::OnResumeItem(int iItem, const std::string &player)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size()) return true;
+  if (iItem < 0 || iItem >= m_vecItems->Size()) { return true;
+}
   CFileItemPtr item = m_vecItems->Get(iItem);
 
   if (item->m_bIsFolder)

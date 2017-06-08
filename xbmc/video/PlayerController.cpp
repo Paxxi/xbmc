@@ -452,7 +452,8 @@ void CPlayerController::OnSliderChange(void *data, CGUISliderControl *slider)
     std::string strValue = StringUtils::Format("%1.2f",slider->GetFloatValue());
     slider->SetTextValue(strValue);
   }
-  else if (m_sliderAction == ACTION_VOLAMP_UP ||
+  else { if 
+}(m_sliderAction == ACTION_VOLAMP_UP ||
           m_sliderAction == ACTION_VOLAMP_DOWN ||
           m_sliderAction == ACTION_VOLAMP)
     slider->SetTextValue(CGUIDialogAudioSubtitleSettings::FormatDecibel(slider->GetFloatValue()));

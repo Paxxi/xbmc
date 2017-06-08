@@ -300,7 +300,8 @@ void CSlideShowPic::UpdateVertices(float cur_x[4], float cur_y[4], const float n
 
 void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {
-  if (!m_pImage || !m_bIsLoaded || m_bIsFinished) return ;
+  if (!m_pImage || !m_bIsLoaded || m_bIsFinished) { return ;
+}
   color_t alpha = m_alpha;
   if (m_iCounter <= m_transitionStart.length)
   { // do start transition
@@ -311,7 +312,8 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     else if (m_transitionStart.type == FADEIN_FADEOUT)
     { // fade in at 2x speed, then keep solid
       alpha = static_cast<color_t>(static_cast<float>(m_iCounter) / static_cast<float>(m_transitionStart.length) * 255.0f * 2);
-      if (alpha > 255) alpha = 255;
+      if (alpha > 255) { alpha = 255;
+}
     }
     else // m_transitionEffect == TRANSITION_NONE
     {
@@ -417,7 +419,8 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     else if (m_transitionEnd.type == FADEIN_FADEOUT)
     { // keep solid, then fade out at 2x speed
       alpha = static_cast<color_t>(static_cast<float>(m_transitionEnd.length - m_iCounter + m_transitionEnd.start) / static_cast<float>(m_transitionEnd.length) * 255.0f * 2);
-      if (alpha > 255) alpha = 255;
+      if (alpha > 255) { alpha = 255;
+}
     }
     else // m_transitionEffect == TRANSITION_NONE
     {
@@ -531,10 +534,14 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     float maxy = y[0];
     for (int i = 1; i < 4; i++)
     {
-      if (x[i] < minx) minx = x[i];
-      if (x[i] > maxx) maxx = x[i];
-      if (y[i] < miny) miny = y[i];
-      if (y[i] > maxy) maxy = y[i];
+      if (x[i] < minx) { minx = x[i];
+}
+      if (x[i] > maxx) { maxx = x[i];
+}
+      if (y[i] < miny) { miny = y[i];
+}
+      if (y[i] > maxy) { maxy = y[i];
+}
     }
     float w = maxx - minx;
     float h = maxy - miny;
@@ -656,10 +663,14 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   // crop to within the range of our piccy
   for (int i = 0; i < 4; i++)
   {
-    if (ox[i] < fSmallX) ox[i] = fSmallX;
-    if (ox[i] > fSmallX + fSmallWidth) ox[i] = fSmallX + fSmallWidth;
-    if (oy[i] < fSmallY) oy[i] = fSmallY;
-    if (oy[i] > fSmallY + fSmallHeight) oy[i] = fSmallY + fSmallHeight;
+    if (ox[i] < fSmallX) { ox[i] = fSmallX;
+}
+    if (ox[i] > fSmallX + fSmallWidth) { ox[i] = fSmallX + fSmallWidth;
+}
+    if (oy[i] < fSmallY) { oy[i] = fSmallY;
+}
+    if (oy[i] > fSmallY + fSmallHeight) { oy[i] = fSmallY + fSmallHeight;
+}
   }
 
   UpdateVertices(m_ox, m_oy, ox, oy, dirtyregions);
@@ -670,7 +681,8 @@ void CSlideShowPic::Keep()
 {
   // this is called if we need to keep the current pic on screen
   // to wait for the next pic to load
-  if (!m_bDrawNextImage) return ; // don't need to keep pic
+  if (!m_bDrawNextImage) { return ; // don't need to keep pic
+}
   // hold off the start of the next frame
   m_transitionEnd.start = m_iCounter;
 }
@@ -678,7 +690,8 @@ void CSlideShowPic::Keep()
 bool CSlideShowPic::StartTransition()
 {
   // this is called if we need to start transitioning immediately to the new picture
-  if (m_bDrawNextImage) return false; // don't need to do anything as we are already transitioning
+  if (m_bDrawNextImage) { return false; // don't need to do anything as we are already transitioning
+}
   // decrease the number of display frame
   m_transitionEnd.start = m_iCounter;
   m_bTransitionImmediately = true;
@@ -719,8 +732,10 @@ void CSlideShowPic::SetTransitionTime(int iType, int iTime)
 
 void CSlideShowPic::Rotate(float fRotateAngle, bool immediate /* = false */)
 {
-  if (m_bDrawNextImage) return;
-  if (m_transitionTemp.type == TRANSITION_ZOOM) return;
+  if (m_bDrawNextImage) { return;
+}
+  if (m_transitionTemp.type == TRANSITION_ZOOM) { return;
+}
   if (immediate)
   {
     m_fAngle += fRotateAngle;
@@ -746,8 +761,10 @@ void CSlideShowPic::Rotate(float fRotateAngle, bool immediate /* = false */)
 
 void CSlideShowPic::Zoom(float fZoom, bool immediate /* = false */)
 {
-  if (m_bDrawNextImage) return;
-  if (m_transitionTemp.type == TRANSITION_ROTATE) return;
+  if (m_bDrawNextImage) { return;
+}
+  if (m_transitionTemp.type == TRANSITION_ROTATE) { return;
+}
   if (immediate)
   {
     m_fZoomAmount = fZoom;
@@ -778,7 +795,8 @@ void CSlideShowPic::Render()
   Render(m_ax, m_ay, m_pImage, (m_alpha << 24) | 0xFFFFFF);
 
   // now render the image in the top right corner if we're zooming
-  if (m_fZoomAmount == 1.0f || m_bIsComic) return ;
+  if (m_fZoomAmount == 1.0f || m_bIsComic) { return ;
+}
 
   Render(m_bx, m_by, nullptr, PICTURE_VIEW_BOX_BACKGROUND);
   Render(m_sx, m_sy, m_pImage, 0xFFFFFFFF);

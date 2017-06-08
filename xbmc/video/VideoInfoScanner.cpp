@@ -1828,7 +1828,8 @@ namespace VIDEO
   int CVideoInfoScanner::GetPathHash(const CFileItemList &items, std::string &hash)
   {
     // Create a hash based on the filenames, filesize and filedate.  Also count the number of files
-    if (0 == items.Size()) return 0;
+    if (0 == items.Size()) { return 0;
+}
     XBMC::XBMC_MD5 md5state;
     int count = 0;
     for (int i = 0; i < items.Size(); ++i)

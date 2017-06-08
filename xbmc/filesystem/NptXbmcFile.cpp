@@ -161,10 +161,12 @@ NPT_XbmcFileInputStream::Read(void*     buffer,
     // read from the file
     nb_read = m_FileReference->Read(buffer, bytes_to_read);    
     if (nb_read > 0) {
-        if (bytes_read) *bytes_read = (NPT_Size)nb_read;
+        if (bytes_read) { *bytes_read = (NPT_Size)nb_read;
+}
         return NPT_SUCCESS;
     } else {
-        if (bytes_read) *bytes_read = 0;
+        if (bytes_read) { *bytes_read = 0;
+}
         return NPT_ERROR_EOS;
     //} else { // currently no way to indicate failure
     //    if (bytes_read) *bytes_read = 0;
@@ -238,10 +240,12 @@ NPT_XbmcFileOutputStream::Write(const void* buffer,
     nb_written = m_FileReference->Write(buffer, bytes_to_write);    
 
     if (nb_written > 0) {
-        if (bytes_written) *bytes_written = static_cast<NPT_Size>(nb_written);
+        if (bytes_written) { *bytes_written = static_cast<NPT_Size>(nb_written);
+}
         return NPT_SUCCESS;
     } else {
-        if (bytes_written) *bytes_written = 0;
+        if (bytes_written) { *bytes_written = 0;
+}
         return NPT_ERROR_WRITE_FAILED;
     }
 }
@@ -328,7 +332,8 @@ NPT_XbmcFile::Open(NPT_File::OpenMode mode)
         }
 
         delete url;
-        if (!result) return NPT_ERROR_NO_SUCH_FILE;
+        if (!result) { return NPT_ERROR_NO_SUCH_FILE;
+}
     }
 
     // store reference
@@ -523,7 +528,8 @@ NPT_File::GetInfo(const char* path, NPT_FileInfo* info)
     NPT_SetMemory(info, 0, sizeof(*info));
 
     result = CFile::Stat(path, &stat_buffer);
-    if (result !=0) return MapErrno(errno);
+    if (result !=0) { return MapErrno(errno);
+}
     if (info)
     {
       info->m_Size = stat_buffer.st_size;

@@ -71,7 +71,8 @@ extern "C" void tracker_library_free_all(DllTrackInfo* pInfo)
 
       if (!pDll->IsSystemDll())
       {
-        if (strlen(pDll->GetFileName()) > 0) CLog::Log(LOGDEBUG,"  : %s", pDll->GetFileName());
+        if (strlen(pDll->GetFileName()) > 0) { CLog::Log(LOGDEBUG,"  : %s", pDll->GetFileName());
+}
       }
     }
 
@@ -99,7 +100,8 @@ extern "C" HMODULE __stdcall track_LoadLibraryA(LPCSTR file)
 
   DllTrackInfo* pInfo = tracker_get_dlltrackinfo(loc);
   const char* path = nullptr;
-  if (pInfo) path = pInfo->pDll->GetFileName();
+  if (pInfo) { path = pInfo->pDll->GetFileName();
+}
 
   HMODULE hHandle = dllLoadLibraryExtended(file, path);
   tracker_library_track(loc, hHandle);
@@ -113,7 +115,8 @@ extern "C" HMODULE __stdcall track_LoadLibraryExA(LPCSTR lpLibFileName, HANDLE h
 
   DllTrackInfo* pInfo = tracker_get_dlltrackinfo(loc);
   const char* path = nullptr;
-  if (pInfo) path = pInfo->pDll->GetFileName();
+  if (pInfo) { path = pInfo->pDll->GetFileName();
+}
 
   HMODULE hHandle = dllLoadLibraryExExtended(lpLibFileName, hFile, dwFlags, path);
   tracker_library_track(loc, hHandle);

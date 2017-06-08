@@ -326,8 +326,10 @@ void CGUIDialogMusicInfo::OnInitWindow()
 
 void CGUIDialogMusicInfo::SetUserrating(int userrating) const
 {
-  if (userrating < 0) userrating = 0;
-  if (userrating > 10) userrating = 10;
+  if (userrating < 0) { userrating = 0;
+}
+  if (userrating > 10) { userrating = 10;
+}
   if (userrating != m_albumItem->GetMusicInfoTag()->GetUserrating())
   {
     m_albumItem->GetMusicInfoTag()->SetUserrating(userrating);

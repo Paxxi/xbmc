@@ -78,7 +78,8 @@ int CGUIAction::GetNavigation() const
 
 void CGUIAction::SetNavigation(int id)
 {
-  if (id == 0) return;
+  if (id == 0) { return;
+}
   std::string strId = StringUtils::Format("%i", id);
   for (iActions it = m_actions.begin() ; it != m_actions.end() ; ++it)
   {

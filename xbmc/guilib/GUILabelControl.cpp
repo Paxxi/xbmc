@@ -51,7 +51,8 @@ void CGUILabelControl::SetCursorPos(int iPos)
   std::wstring label;
   g_charsetConverter.utf8ToW(labelUTF8, label);
   if (iPos > (int)label.length()) iPos = label.length();
-  if (iPos < 0) iPos = 0;
+  if (iPos < 0) { iPos = 0;
+}
 
   if (m_iCursorPos != iPos)
     MarkDirtyRegion();

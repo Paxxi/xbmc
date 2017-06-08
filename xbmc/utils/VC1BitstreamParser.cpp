@@ -140,7 +140,8 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
         else
         {
           uint8_t pic(0);
-          while (pic < 4 && br.ReadBits(1))++pic;
+          while (pic < 4 && br.ReadBits(1)) {++pic;
+}
           return pic == 2;
         }
         return false;

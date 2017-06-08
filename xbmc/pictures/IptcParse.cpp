@@ -88,7 +88,8 @@
 //--------------------------------------------------------------------------
 bool CIptcParse::Process (const unsigned char* const Data, const unsigned short itemlen, IPTCInfo_t *info)
 {
-  if (!info) return false;
+  if (!info) { return false;
+}
 
   const char IptcSignature1[] = "Photoshop 3.0";
   const char IptcSignature2[] = "8BIM";
@@ -101,12 +102,15 @@ bool CIptcParse::Process (const unsigned char* const Data, const unsigned short 
   unsigned char dataLen = 0;
   memset(info, 0, sizeof(IPTCInfo_t));
 
-  if (itemlen < 25) return false;
+  if (itemlen < 25) { return false;
+}
 
-  if (memcmp(pos, IptcSignature1, strlen(IptcSignature1)-1) != 0) return false;
+  if (memcmp(pos, IptcSignature1, strlen(IptcSignature1)-1) != 0) { return false;
+}
   pos += sizeof(IptcSignature1);          // move data pointer to the next field
 
-  if (memcmp(pos, IptcSignature2, strlen(IptcSignature2)-1) != 0) return false;
+  if (memcmp(pos, IptcSignature2, strlen(IptcSignature2)-1) != 0) { return false;
+}
   pos += sizeof(IptcSignature2)-1;              // move data pointer to the next field
 
   while (memcmp(pos, IptcSignature3, sizeof(IptcSignature3)) != 0) { // loop on valid Photoshop blocks
@@ -121,12 +125,14 @@ bool CIptcParse::Process (const unsigned char* const Data, const unsigned short 
     dataLen = *pos++;
     pos += dataLen; // skip data section
 
-    if (memcmp(pos, IptcSignature2, sizeof(IptcSignature2) - 1) != 0) return false;
+    if (memcmp(pos, IptcSignature2, sizeof(IptcSignature2) - 1) != 0) { return false;
+}
     pos += sizeof(IptcSignature2) - 1; // move data pointer to the next field
   }
 
   pos += sizeof(IptcSignature3);          // move data pointer to the next field
-  if (pos >= maxpos) return false;
+  if (pos >= maxpos) { return false;
+}
 
   // IPTC section found
 
@@ -134,14 +140,16 @@ bool CIptcParse::Process (const unsigned char* const Data, const unsigned short 
   headerLen = *pos++;           // get header length and move data pointer to the next field
   pos += headerLen + 1 - (headerLen % 2);     // move data pointer to the next field (Header is padded to even length, counting the length byte)
 
-  if (pos + 4 >= maxpos) return false;
+  if (pos + 4 >= maxpos) { return false;
+}
 
   pos += 4;                                   // move data pointer to the next field
 
   // Now read IPTC data
   while (pos < (char*)(Data + itemlen-5))
   {
-    if (pos + 5 > maxpos) return false;
+    if (pos + 5 > maxpos) { return false;
+}
 
     short signature = (*pos << 8) + (*(pos+1));
 
@@ -154,7 +162,8 @@ bool CIptcParse::Process (const unsigned char* const Data, const unsigned short 
     unsigned short length  = (*pos << 8) + (*(pos+1));
     pos += 2;                   // Skip tag length
 
-    if (pos + length > maxpos) return false;
+    if (pos + length > maxpos) { return false;
+}
 
     // Process tag here
     char *tag = nullptr;

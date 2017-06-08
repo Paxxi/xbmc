@@ -556,7 +556,8 @@ std::wstring CGUIEditControl::GetDisplayedText() const
       text
 }.append(m_text2.size(), L'*');
   }
-  else if (!m_edit.empty())
+  else { if 
+}(!m_edit.empty())
     text.insert(m_editOffset, m_edit);
   return text;
 }

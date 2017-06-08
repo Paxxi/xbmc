@@ -100,7 +100,8 @@ CMusicInfoTag::~CMusicInfoTag()
 
 const CMusicInfoTag& CMusicInfoTag::operator =(const CMusicInfoTag& tag)
 {
-  if (this == &tag) return * this;
+  if (this == &tag) { return * this;
+}
 
   m_strURL = tag.m_strURL;
   m_artist = tag.m_artist;
@@ -149,16 +150,24 @@ const CMusicInfoTag& CMusicInfoTag::operator =(const CMusicInfoTag& tag)
 
 bool CMusicInfoTag::operator !=(const CMusicInfoTag& tag) const
 {
-  if (this == &tag) return false;
-  if (m_strURL != tag.m_strURL) return true;
-  if (m_strTitle != tag.m_strTitle) return true;
-  if (m_bCompilation != tag.m_bCompilation) return true;
+  if (this == &tag) { return false;
+}
+  if (m_strURL != tag.m_strURL) { return true;
+}
+  if (m_strTitle != tag.m_strTitle) { return true;
+}
+  if (m_bCompilation != tag.m_bCompilation) { return true;
+}
   if (m_artist != tag.m_artist) return true;
   if (m_albumArtist != tag.m_albumArtist) return true;
-  if (m_strAlbum != tag.m_strAlbum) return true;
-  if (m_iDuration != tag.m_iDuration) return true;
-  if (m_iTrack != tag.m_iTrack) return true;
-  if (m_albumReleaseType != tag.m_albumReleaseType) return true;
+  if (m_strAlbum != tag.m_strAlbum) { return true;
+}
+  if (m_iDuration != tag.m_iDuration) { return true;
+}
+  if (m_iTrack != tag.m_iTrack) { return true;
+}
+  if (m_albumReleaseType != tag.m_albumReleaseType) { return true;
+}
   return false;
 }
 

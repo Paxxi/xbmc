@@ -445,7 +445,8 @@ void CGUIDialogKeyboardGeneric::OnClickButton(int iButtonControl)
     {
       Character(pButton->GetDescription());
       // reset the shift keys
-      if (m_bShift) OnShift();
+      if (m_bShift) { OnShift();
+}
     }
   }
 }
@@ -665,7 +666,8 @@ bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback, const
     typedString = pKeyboard->GetText();
     return true;
   }
-  else return false;
+  else { return false;
+}
 }
 
 float CGUIDialogKeyboardGeneric::GetStringWidth(const std::wstring & utf16)

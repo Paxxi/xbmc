@@ -113,7 +113,8 @@ bool CGUIWindowWeather::OnMessage(CGUIMessage& message)
       {
         // Clamp location between 1 and m_maxLocation 
         int v = (g_weatherManager.GetArea() + message.GetParam1() - 1) % m_maxLocation + 1;
-        if (v < 1) v += m_maxLocation;
+        if (v < 1) { v += m_maxLocation;
+}
         SetLocation(v);
         return true;
       }
@@ -138,7 +139,8 @@ void CGUIWindowWeather::UpdateLocations()
 {
   if (!IsActive()) return;
   m_maxLocation = strtol(GetProperty("Locations").asString().c_str(),0,10);
-  if (m_maxLocation < 1) return;
+  if (m_maxLocation < 1) { return;
+}
 
   std::vector< std::pair<std::string, int> > labels;
 

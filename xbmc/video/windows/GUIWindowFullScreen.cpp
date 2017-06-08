@@ -286,7 +286,8 @@ bool CGUIWindowFullScreen::OnMessage(CGUIMessage& message)
     }
   case GUI_MSG_SETFOCUS:
   case GUI_MSG_LOSTFOCUS:
-    if (message.GetSenderId() != WINDOW_FULLSCREEN_VIDEO) return true;
+    if (message.GetSenderId() != WINDOW_FULLSCREEN_VIDEO) { return true;
+}
     break;
   }
 

@@ -84,7 +84,8 @@ bool CGameInfoTag::operator==(const CGameInfoTag& tag) const
       if (m_genres           != tag.m_genres)           return false;
       if (m_strDeveloper     != tag.m_strDeveloper)     return false;
       if (m_strOverview      != tag.m_strOverview)      return false;
-      if (m_year             != tag.m_year)             return false;
+      if (m_year             != tag.m_year) {             return false;
+}
       if (m_strID            != tag.m_strID)            return false;
       if (m_strRegion        != tag.m_strRegion)        return false;
       if (m_strPublisher     != tag.m_strPublisher)     return false;

@@ -146,7 +146,8 @@ namespace XBMCAddon
       int iPlayListSize = size();
 
       long pos = i;
-      if (pos < 0) pos += iPlayListSize;
+      if (pos < 0) { pos += iPlayListSize;
+}
 
       if (pos < 0 || pos >= iPlayListSize) {
         throw PlayListException("array out of bound");

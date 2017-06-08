@@ -329,8 +329,10 @@ void CGUIProgressControl::UpdateInfo(const CGUIListItem *item)
         m_fPercent = static_cast<float>(value);
 }
 
-      if (m_fPercent < 0.0f) m_fPercent = 0.0f;
-      if (m_fPercent > 100.0f) m_fPercent = 100.0f;
+      if (m_fPercent < 0.0f) { m_fPercent = 0.0f;
+}
+      if (m_fPercent > 100.0f) { m_fPercent = 100.0f;
+}
     }
   }
 }

@@ -78,10 +78,12 @@ bool CGUIDialogPVRRadioRDSInfo::OnMessage(CGUIMessage& message)
     else if (iControl == SPIN_CONTROL_INFO)
     {
       CGUISpinControl *spin = (CGUISpinControl *)GetControl(SPIN_CONTROL_INFO);
-      if (!spin) return true;
+      if (!spin) { return true;
+}
 
       CGUITextBox *textbox = (CGUITextBox *)GetControl(TEXT_INFO);
-      if (!textbox) return true;
+      if (!textbox) { return true;
+}
 
       PVR::CPVRRadioRDSInfoTagPtr currentRDS = g_application.CurrentFileItem().GetPVRRadioRDSInfoTag();
       switch (spin->GetValue())
@@ -302,11 +304,13 @@ void CGUIDialogPVRRadioRDSInfo::OnInitWindow()
   PVR::CPVRRadioRDSInfoTagPtr currentRDS = g_application.CurrentFileItem().GetPVRRadioRDSInfoTag();
 
   CGUISpinControl *spin = (CGUISpinControl *)GetControl(SPIN_CONTROL_INFO);
-  if (!spin) return;
+  if (!spin) { return;
+}
   spin->Clear();
 
   CGUITextBox *textbox = (CGUITextBox *)GetControl(TEXT_INFO);
-  if (!textbox) return;
+  if (!textbox) { return;
+}
 
   if (currentRDS->GetInfoNews().size())
   {

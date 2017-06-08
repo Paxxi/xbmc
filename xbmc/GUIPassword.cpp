@@ -133,7 +133,8 @@ bool CGUIPassword::CheckStartUpLock()
   std::string strHeader = g_localizeStrings.Get(20075);
   if (iMasterLockRetriesLeft == -1)
     iMasterLockRetriesLeft = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_MASTERLOCK_MAXRETRIES);
-  if (g_passwordManager.iMasterLockRetriesLeft == 0) g_passwordManager.iMasterLockRetriesLeft = 1;
+  if (g_passwordManager.iMasterLockRetriesLeft == 0) { g_passwordManager.iMasterLockRetriesLeft = 1;
+}
   std::string strPassword = CProfilesManager::GetInstance().GetMasterProfile().getLockCode();
   if (CProfilesManager::GetInstance().GetMasterProfile().getLockMode() == 0) {
     iVerifyPasswordResult = 0;

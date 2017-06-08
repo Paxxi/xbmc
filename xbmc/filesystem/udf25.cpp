@@ -58,7 +58,8 @@ static int Unicodedecode( uint8_t *data, int len, char *target )
   int p = 1, i = 0;
 
   if( ( data[ 0 ] == 8 ) || ( data[ 0 ] == 16 ) ) { do {
-    if( data[ 0 ] == 16 ) p++;  /* Ignore MSB of unicode16 */
+    if( data[ 0 ] == 16 ) { p++;  /* Ignore MSB of unicode16 */
+}
     if( p < len ) {
       target[ i++ ] = data[ p++ ];
     }
@@ -173,7 +174,8 @@ static int UDFLogVolume( uint8_t *data, char *VolumeDescriptor )
   uint32_t lbsize;
   Unicodedecode(&data[84], 128, VolumeDescriptor);
   lbsize = GETN4(212);  /* should be 2048 */
-  if (lbsize != DVD_VIDEO_LB_LEN) return 1;
+  if (lbsize != DVD_VIDEO_LB_LEN) { return 1;
+}
   return 0;
 }
 
@@ -474,7 +476,8 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
     c->lb_num * sizeof(struct lbudf));
     */
     if(tmp == nullptr) {
-      if(c->lbs) free(c->lbs);
+      if(c->lbs) { free(c->lbs);
+}
       c->lb_num = 0;
       return 0;
     }
@@ -500,7 +503,8 @@ int udf25::SetUDFCache(UDFCacheType type, uint32_t nr, void *data)
       c->map_num * sizeof(struct icbmap));
     */
     if(tmp == nullptr) {
-      if(c->maps) free(c->maps);
+      if(c->maps) { free(c->maps);
+}
       c->map_num = 0;
       return 0;
     }
@@ -661,7 +665,8 @@ int udf25::UDFGetAVDP( struct avdp_t *avdp)
     }
     if (TagID != 2) {
       /* Not an anchor */
-      if( terminate ) return 0; /* Final try failed */
+      if( terminate ) { return 0; /* Final try failed */
+}
 
       if( lastsector ) {
         /* We already found the last sector.  Try #3, alternative
@@ -1035,7 +1040,8 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
   if(!(GetUDFCache(PartitionCache, 0, &partition) &&
        GetUDFCache(RootICBCache, 0, &RootICB))) {
     /* Find partition, 0 is the standard location for DVD Video.*/
-    if( !UDFFindPartition(0, &partition ) ) return nullptr;
+    if( !UDFFindPartition(0, &partition ) ) { return nullptr;
+}
     SetUDFCache(PartitionCache, 0, &partition);
 
     /* Find root dir ICB */
@@ -1103,7 +1109,8 @@ UDF_FILE udf25::UDFFindFile( const char* filename, uint64_t *filesize )
 
   /* Allocate a new UDF_FILE and return it. */
   result = reinterpret_cast<struct FileAD *>( malloc(sizeof(*result)));
-  if (!result) return nullptr;
+  if (!result) { return nullptr;
+}
 
   memcpy(result, &File, sizeof(*result));
   return result;
@@ -1302,7 +1309,8 @@ udf_dirent_t *udf25::ReadDir( udf_dir_t *dirp )
 
 int udf25::CloseDir( udf_dir_t *dirp )
 {
-  if (!dirp) return 0;
+  if (!dirp) { return 0;
+}
 
   free(dirp);
 

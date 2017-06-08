@@ -371,7 +371,8 @@ namespace PythonBindings
     PyTypeObject* typeObj = pytype == nullptr ? const_cast<PyTypeObject*>(&(typeInfo->pythonType)) : pytype;
 
     PyHolder* self = reinterpret_cast<PyHolder*>(typeObj->tp_alloc(typeObj,0));
-    if (!self) return nullptr;
+    if (!self) { return nullptr;
+}
     self->magicNumber = XBMC_PYTHON_TYPE_MAGIC_NUMBER;
     self->typeInfo = typeInfo;
     self->pSelf = api;

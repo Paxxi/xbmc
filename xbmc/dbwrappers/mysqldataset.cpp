@@ -68,7 +68,8 @@ Dataset* MysqlDatabase::CreateDataset() const {
 }
 
 int MysqlDatabase::status() {
-  if (active == false) return DB_CONNECTION_NONE;
+  if (active == false) { return DB_CONNECTION_NONE;
+}
   return DB_CONNECTION_OK;
 }
 
@@ -466,7 +467,8 @@ int MysqlDatabase::query_with_reconnect(const char* query) {
 
 long MysqlDatabase::nextid(const char* sname) {
   CLog::Log(LOGDEBUG,"MysqlDatabase::nextid for %s",sname);
-  if (!active) return DB_UNEXPECTED_RESULT;
+  if (!active) { return DB_UNEXPECTED_RESULT;
+}
   const char* seq_table = "sys_seq";
   int id;/*,nrow,ncol;*/
   MYSQL_RES* res;
@@ -485,7 +487,8 @@ long MysqlDatabase::nextid(const char* sname) {
       id = 1;
       sprintf(sqlcmd, "insert into %s (nextid,seq_name) values (%d,'%s')", seq_table, id, sname);
       mysql_free_result(res);
-      if ((last_err = query_with_reconnect(sqlcmd)) != 0) return DB_UNEXPECTED_RESULT;
+      if ((last_err = query_with_reconnect(sqlcmd)) != 0) { return DB_UNEXPECTED_RESULT;
+}
       return id;
     }
     else
@@ -498,7 +501,8 @@ long MysqlDatabase::nextid(const char* sname) {
       CLog::Log(LOGINFO, "Next id is [%.*s] ", static_cast<int>(lengths[0]), row[0]);
       sprintf(sqlcmd, "update %s set nextid=%d where seq_name = '%s'", seq_table, id, sname);
       mysql_free_result(res);
-      if ((last_err = query_with_reconnect(sqlcmd)) != 0) return DB_UNEXPECTED_RESULT;
+      if ((last_err = query_with_reconnect(sqlcmd)) != 0) { return DB_UNEXPECTED_RESULT;
+}
       return id;
     }
   }
@@ -821,9 +825,11 @@ void MysqlDatabase::mysqlVXPrintf(
       int amt;
       bufpt = const_cast<char *>(fmt);
       amt = 1;
-      while( (c=(*++fmt))!='%' && c!=0 ) amt++;
+      while( (c=(*++fmt))!='%' && c!=0 ) { amt++;
+}
       isLike = mysqlStrAccumAppend(pAccum, bufpt, amt);
-      if( c==0 ) break;
+      if( c==0 ) { break;
+}
     }
     if( (c=(*++fmt))==0 ){
       mysqlStrAccumAppend(pAccum, "%", 1);
@@ -869,7 +875,8 @@ void MysqlDatabase::mysqlVXPrintf(
       c = *++fmt;
       if( c=='*' ){
         precision = va_arg(ap,int);
-        if( precision<0 ) precision = -precision;
+        if( precision<0 ) { precision = -precision;
+}
         c = *++fmt;
       }else{
         while( c>='0' && c<='9' ){
@@ -970,7 +977,8 @@ void MysqlDatabase::mysqlVXPrintf(
           }
           prefix = 0;
         }
-        if( longvalue==0 ) flag_alternateform = 0;
+        if( longvalue==0 ) { flag_alternateform = 0;
+}
         if( flag_zeropad && precision<width-(prefix!=0) ){
           precision = width-(prefix!=0);
         }
@@ -989,12 +997,14 @@ void MysqlDatabase::mysqlVXPrintf(
         for(idx=precision-length; idx>0; idx--){
           *(--bufpt) = '0';                             /* Zero pad */
         }
-        if( prefix ) *(--bufpt) = prefix;               /* Add sign */
+        if( prefix ) { *(--bufpt) = prefix;               /* Add sign */
+}
         if( flag_alternateform && infop->prefix ){      /* Add "0" or "0x" */
           const char *pre;
           char x;
           pre = &aPrefix[infop->prefix];
-          for(; (x=(*pre))!=0; pre++) *(--bufpt) = x;
+          for(; (x=(*pre))!=0; pre++) { *(--bufpt) = x;
+}
         }
         length = static_cast<int>(&buf[etBUFSIZE-1]-bufpt);
         bufpt[length] = 0;
@@ -1003,8 +1013,10 @@ void MysqlDatabase::mysqlVXPrintf(
       case etEXP:
       case etGENERIC:
         realvalue = va_arg(ap,double);
-        if( precision<0 ) precision = 6;         /* Set default precision */
-        if( precision>etBUFSIZE/2-10 ) precision = etBUFSIZE/2-10;
+        if( precision<0 ) { precision = 6;         /* Set default precision */
+}
+        if( precision>etBUFSIZE/2-10 ) { precision = etBUFSIZE/2-10;
+}
         if( realvalue<0.0 ){
           realvalue = -realvalue;
           prefix = '-';
@@ -1014,10 +1026,12 @@ void MysqlDatabase::mysqlVXPrintf(
           } else {                         prefix = 0;
 }
         }
-        if( xtype==etGENERIC && precision>0 ) precision--;
+        if( xtype==etGENERIC && precision>0 ) { precision--;
+}
         /* It makes more sense to use 0.5 */
         for(idx=precision, rounder=0.5; idx>0; idx--, rounder*=0.1){}
-        if( xtype==etFLOAT ) realvalue += rounder;
+        if( xtype==etFLOAT ) { realvalue += rounder;
+}
         /* Normalize realvalue to within 10.0 > realvalue >= 1.0 */
         exp = 0;
 #if 0
@@ -1101,7 +1115,8 @@ void MysqlDatabase::mysqlVXPrintf(
         }
         /* Remove trailing zeros and the "." if no digits follow the "." */
         if( flag_rtz && flag_dp ){
-          while( bufpt[-1]=='0' ) *(--bufpt) = 0;
+          while( bufpt[-1]=='0' ) { *(--bufpt) = 0;
+}
           //ASSERT( bufpt>buf );
           if( bufpt[-1]=='.' ){
             if( flag_altform2 ){
@@ -1161,7 +1176,8 @@ void MysqlDatabase::mysqlVXPrintf(
         c = va_arg(ap,int);
         buf[0] = static_cast<char>(c);
         if( precision>=0 ){
-          for(idx=1; idx<precision; idx++) buf[idx] = static_cast<char>(c);
+          for(idx=1; idx<precision; idx++) { buf[idx] = static_cast<char>(c);
+}
           length = precision;
         }else{
           length =1;
@@ -1195,9 +1211,11 @@ void MysqlDatabase::mysqlVXPrintf(
         const char *escarg = arg.c_str();
 
         isnull = escarg==nullptr;
-        if( isnull ) escarg = (xtype==etSQLESCAPE2 ? "NULL" : "(NULL)");
+        if( isnull ) { escarg = (xtype==etSQLESCAPE2 ? "NULL" : "(NULL)");
+}
         k = precision;
-        for(i=0; k!=0 && (ch=escarg[i])!=0; i++, k--);
+        for(i=0; k!=0 && (ch=escarg[i])!=0; i++, k--) {;
+}
         needQuote = !isnull && xtype==etSQLESCAPE2;
         n = i*2 + 1 + needQuote*2;
         if( n>etBUFSIZE ){
@@ -1210,10 +1228,12 @@ void MysqlDatabase::mysqlVXPrintf(
           bufpt = buf;
         }
         j = 0;
-        if( needQuote ) bufpt[j++] = q;
+        if( needQuote ) { bufpt[j++] = q;
+}
         k = i;
         j += mysql_real_escape_string(conn, bufpt, escarg, k);
-        if( needQuote ) bufpt[j++] = q;
+        if( needQuote ) { bufpt[j++] = q;
+}
         bufpt[j] = 0;
         length = j;
         /* The precision in %q and %Q means how many input characters to
@@ -1398,10 +1418,12 @@ MYSQL* MysqlDataset::handle(){
 void MysqlDataset::make_query(StringList &_sql) {
   std::string query;
   int result = 0;
-  if (db == nullptr) throw DbErrors("No Database Connection");
+  if (db == nullptr) { throw DbErrors("No Database Connection");
+}
   try
   {
-    if (autocommit) db->start_transaction();
+    if (autocommit) { db->start_transaction();
+}
 
     for (std::list<std::string>::iterator i =_sql.begin(); i!=_sql.end(); ++i)
     {
@@ -1413,7 +1435,8 @@ void MysqlDataset::make_query(StringList &_sql) {
       }
     } // end of for
 
-    if (db->in_transaction() && autocommit) db->commit_transaction();
+    if (db->in_transaction() && autocommit) { db->commit_transaction();
+}
 
     active = true;
     ds_state = dsSelect;
@@ -1422,7 +1445,8 @@ void MysqlDataset::make_query(StringList &_sql) {
   } // end of try
   catch(...)
   {
-    if (db->in_transaction()) db->rollback_transaction();
+    if (db->in_transaction()) { db->rollback_transaction();
+}
     throw;
   }
 
@@ -1510,7 +1534,8 @@ static size_t ci_find(const std::string& where, const std::string& what)
 }
 
 int MysqlDataset::exec(const std::string &sql) {
-  if (!handle()) throw DbErrors("No Database Connection");
+  if (!handle()) { throw DbErrors("No Database Connection");
+}
   std::string qry = sql;
   int res = 0;
   exec_res.clear();
@@ -1560,7 +1585,8 @@ const void* MysqlDataset::getExecRes() {
 }
 
 bool MysqlDataset::query(const std::string &query) {
-  if(!handle()) throw DbErrors("No Database Connection");
+  if(!handle()) { throw DbErrors("No Database Connection");
+}
   std::string qry = query;
   int fs = qry.find("select");
   int fS = qry.find("SELECT");
@@ -1635,13 +1661,15 @@ bool MysqlDataset::query(const std::string &query) {
         case MYSQL_TYPE_STRING:
         case MYSQL_TYPE_VAR_STRING:
         case MYSQL_TYPE_VARCHAR:
-          if (row[i] != nullptr) v.set_asString((const char *)row[i] );
+          if (row[i] != nullptr) { v.set_asString((const char *)row[i] );
+}
           break;
         case MYSQL_TYPE_TINY_BLOB:
         case MYSQL_TYPE_MEDIUM_BLOB:
         case MYSQL_TYPE_LONG_BLOB:
         case MYSQL_TYPE_BLOB:
-          if (row[i] != nullptr) v.set_asString((const char *)row[i]);
+          if (row[i] != nullptr) { v.set_asString((const char *)row[i]);
+}
           break;
         case MYSQL_TYPE_NULL:
         default:
@@ -1754,7 +1782,8 @@ bool MysqlDataset::seek(int pos) {
 }
 
 int64_t MysqlDataset::lastinsertid() {
-  if (!handle()) throw DbErrors("No Database Connection");
+  if (!handle()) { throw DbErrors("No Database Connection");
+}
   return mysql_insert_id(handle());
 }
 

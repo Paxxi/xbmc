@@ -1956,7 +1956,8 @@ void CLinuxRendererGL::DeleteYV12Texture(int index)
   YUVFIELDS &fields = m_buffers[index].fields;
   GLuint    *pbo    = m_buffers[index].pbo;
 
-  if( fields[FIELD_FULL][0].id == 0 ) return;
+  if( fields[FIELD_FULL][0].id == 0 ) { return;
+}
 
   /* finish up all textures, and delete them */
   for(auto & field : fields)
@@ -2217,7 +2218,8 @@ void CLinuxRendererGL::DeleteNV12Texture(int index)
   YUVFIELDS &fields = m_buffers[index].fields;
   GLuint    *pbo    = m_buffers[index].pbo;
 
-  if( fields[FIELD_FULL][0].id == 0 ) return;
+  if( fields[FIELD_FULL][0].id == 0 ) { return;
+}
 
   // finish up all textures, and delete them
   for(auto & field : fields)
@@ -2316,7 +2318,8 @@ void CLinuxRendererGL::DeleteYUV422PackedTexture(int index)
   YUVFIELDS &fields = m_buffers[index].fields;
   GLuint    *pbo    = m_buffers[index].pbo;
 
-  if( fields[FIELD_FULL][0].id == 0 ) return;
+  if( fields[FIELD_FULL][0].id == 0 ) { return;
+}
 
   // finish up all textures, and delete them
   for(auto & field : fields)

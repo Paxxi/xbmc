@@ -559,7 +559,8 @@ void CGUIDialogSmartPlaylistRule::OnDeinitWindow(int nextWindowID)
 bool CGUIDialogSmartPlaylistRule::EditRule(CSmartPlaylistRule &rule, const std::string& type)
 {
   CGUIDialogSmartPlaylistRule *editor = g_windowManager.GetWindow<CGUIDialogSmartPlaylistRule>(WINDOW_DIALOG_SMART_PLAYLIST_RULE);
-  if (!editor) return false;
+  if (!editor) { return false;
+}
 
   editor->m_rule = rule;
   editor->m_type = type;

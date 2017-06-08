@@ -150,7 +150,8 @@ struct iso_dirtree *iso9660::ReadRecursiveDirFromSector( DWORD sector, const cha
   {
     while ( point->next )
     {
-      if (strcmp(path, point->path) == 0) return nullptr;
+      if (strcmp(path, point->path) == 0) { return nullptr;
+}
       point = point->next;
     }
   }
@@ -574,7 +575,8 @@ void iso9660::Reset()
   while ( m_paths )
   {
     nextpath = m_paths->next;
-    if (m_paths->path) free(m_paths->path);
+    if (m_paths->path) { free(m_paths->path);
+}
 
     free (m_paths);
     m_paths = nextpath;
@@ -582,8 +584,10 @@ void iso9660::Reset()
   for (int i = 0; i < (int)m_vecDirsAndFiles.size(); ++i)
   {
     struct iso_dirtree* pDir = m_vecDirsAndFiles[i];
-    if (pDir->path) free(pDir->path);
-    if (pDir->name) free(pDir->name);
+    if (pDir->path) { free(pDir->path);
+}
+    if (pDir->name) { free(pDir->name);
+}
     free(pDir);
   }
   m_vecDirsAndFiles.erase(m_vecDirsAndFiles.begin(), m_vecDirsAndFiles.end());
@@ -651,7 +655,8 @@ struct iso_dirtree *iso9660::FindFolder( char *Folder )
 //******************************************************************************************************************
 HANDLE iso9660::FindFirstFile( char *szLocalFolder, WIN32_FIND_DATA *wfdFile )
 {
-  if (m_info.ISO_HANDLE == nullptr) return static_cast<HANDLE>(nullptr);
+  if (m_info.ISO_HANDLE == nullptr) { return static_cast<HANDLE>(nullptr);
+}
   memset( wfdFile, 0, sizeof(WIN32_FIND_DATA));
 
   m_searchpointer = FindFolder( szLocalFolder );
@@ -719,7 +724,8 @@ int iso9660::FindNextFile( HANDLE szLocalFolder, WIN32_FIND_DATA *wfdFile )
 bool iso9660::FindClose( HANDLE szLocalFolder )
 {
   m_searchpointer = nullptr;
-  if (m_info.Curr_dir_cache) free(m_info.Curr_dir_cache);
+  if (m_info.Curr_dir_cache) { free(m_info.Curr_dir_cache);
+}
   m_info.Curr_dir_cache = nullptr;
   return true;
 }
@@ -741,9 +747,11 @@ std::string iso9660::GetThinText(BYTE* strTxt, int iLen )
 //************************************************************************************
 HANDLE iso9660::OpenFile(const char *filename)
 {
-  if (m_info.ISO_HANDLE == nullptr) return INVALID_HANDLE_VALUE;
+  if (m_info.ISO_HANDLE == nullptr) { return INVALID_HANDLE_VALUE;
+}
   HANDLE hContext = AllocFileContext();
-  if (hContext == INVALID_HANDLE_VALUE) return hContext;
+  if (hContext == INVALID_HANDLE_VALUE) { return hContext;
+}
 
   iso9660::isofile* pContext = GetFileContext(hContext);
   if (!pContext) {
@@ -950,7 +958,8 @@ long iso9660::ReadFile(HANDLE hFile, uint8_t *pBuffer, long lSize)
   long iBytesRead = 0;
   DWORD sectorSize = 2048;
   iso9660::isofile* pContext = GetFileContext(hFile);
-  if (!pContext) return -1;
+  if (!pContext) { return -1;
+}
 
   if ( pContext->m_bUseMode2 ) {
     sectorSize = MODE2_DATA_SIZE;
@@ -993,14 +1002,16 @@ long iso9660::ReadFile(HANDLE hFile, uint8_t *pBuffer, long lSize)
       break;
     }
   }
-  if (iBytesRead == 0) return -1;
+  if (iBytesRead == 0) { return -1;
+}
   return iBytesRead;
 }
 //************************************************************************************
 int64_t iso9660::Seek(HANDLE hFile, int64_t lOffset, int whence)
 {
   iso9660::isofile* pContext = GetFileContext(hFile);
-  if (!pContext) return -1;
+  if (!pContext) { return -1;
+}
 
   int64_t dwFilePos = pContext->m_dwFilePos;
   switch (whence)
@@ -1037,7 +1048,8 @@ int64_t iso9660::Seek(HANDLE hFile, int64_t lOffset, int whence)
 int64_t iso9660::GetFileSize(HANDLE hFile)
 {
   iso9660::isofile* pContext = GetFileContext(hFile);
-  if (!pContext) return -1;
+  if (!pContext) { return -1;
+}
   return pContext->m_dwFileSize;
 }
 
@@ -1045,7 +1057,8 @@ int64_t iso9660::GetFileSize(HANDLE hFile)
 int64_t iso9660::GetFilePosition(HANDLE hFile)
 {
   iso9660::isofile* pContext = GetFileContext(hFile);
-  if (!pContext) return -1;
+  if (!pContext) { return -1;
+}
   return pContext->m_dwFilePos;
 }
 
@@ -1055,7 +1068,8 @@ void iso9660::FreeFileContext(HANDLE hFile)
   intptr_t iFile = (intptr_t)hFile;
   if (iFile >= 1 && iFile < MAX_ISO_FILES)
   {
-    if (m_isoFiles[iFile ]) delete m_isoFiles[iFile ];
+    if (m_isoFiles[iFile ]) { delete m_isoFiles[iFile ];
+}
     m_isoFiles[iFile ] = nullptr;
   }
 }

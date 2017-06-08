@@ -958,7 +958,8 @@ bool CVideoDatabase::SetPathHash(const std::string &path, const std::string &has
     if (NULL == m_pDS.get()) return false;
 
     int idPath = AddPath(path);
-    if (idPath < 0) return false;
+    if (idPath < 0) { return false;
+}
 
     std::string strSQL=PrepareSQL("update path set strHash='%s' where idPath=%ld", hash.c_str(), idPath);
     m_pDS->exec(strSQL);
@@ -1985,7 +1986,8 @@ bool CVideoDatabase::GetMovieInfo(const std::string& strFilenameAndPath, CVideoI
     if (idMovie < 0) {
       idMovie = GetMovieId(strFilenameAndPath);
 }
-    if (idMovie < 0) return false;
+    if (idMovie < 0) { return false;
+}
 
     std::string sql = PrepareSQL("select * from movie_view where idMovie=%i", idMovie);
     if (!m_pDS->query(sql))
@@ -2011,7 +2013,8 @@ bool CVideoDatabase::GetTvShowInfo(const std::string& strPath, CVideoInfoTag& de
     if (idTvShow < 0) {
       idTvShow = GetTvShowId(strPath);
 }
-    if (idTvShow < 0) return false;
+    if (idTvShow < 0) { return false;
+}
 
     std::string sql = PrepareSQL("SELECT * FROM tvshow_view WHERE idShow=%i GROUP BY idShow", idTvShow);
     if (!m_pDS->query(sql))
@@ -2112,7 +2115,8 @@ bool CVideoDatabase::GetEpisodeInfo(const std::string& strFilenameAndPath, CVide
     if (idEpisode < 0) {
       idEpisode = GetEpisodeId(strFilenameAndPath);
 }
-    if (idEpisode < 0) return false;
+    if (idEpisode < 0) { return false;
+}
 
     std::string sql = PrepareSQL("select * from episode_view where idEpisode=%i",idEpisode);
     if (!m_pDS->query(sql))
@@ -2137,7 +2141,8 @@ bool CVideoDatabase::GetMusicVideoInfo(const std::string& strFilenameAndPath, CV
     if (idMVideo < 0) {
       idMVideo = GetMusicVideoId(strFilenameAndPath);
 }
-    if (idMVideo < 0) return false;
+    if (idMVideo < 0) { return false;
+}
 
     std::string sql = PrepareSQL("select * from musicvideo_view where idMVideo=%i", idMVideo);
     if (!m_pDS->query(sql))
@@ -2997,7 +3002,8 @@ void CVideoDatabase::GetFilePathById(int idMovie, std::string &filePath, VIDEODB
     if (NULL == m_pDB.get()) return ;
     if (NULL == m_pDS.get()) return ;
 
-    if (idMovie < 0) return ;
+    if (idMovie < 0) { return ;
+}
 
     std::string strSQL;
     if (iType == VIDEODB_CONTENT_MOVIES)
@@ -3048,7 +3054,8 @@ void CVideoDatabase::GetBookMarksForFile(const std::string& strFilenameAndPath, 
     else
     {
       int idFile = GetFileId(strFilenameAndPath);
-      if (idFile < 0) return ;
+      if (idFile < 0) { return ;
+}
       if (!bAppend)
         bookmarks.erase(bookmarks.begin(), bookmarks.end());
       if (NULL == m_pDB.get()) return ;
@@ -3192,7 +3199,8 @@ void CVideoDatabase::ClearBookMarkOfFile(const std::string& strFilenameAndPath, 
   try
   {
     int idFile = GetFileId(strFilenameAndPath);
-    if (idFile < 0) return ;
+    if (idFile < 0) { return ;
+}
     if (NULL == m_pDB.get()) return ;
     if (NULL == m_pDS.get()) return ;
 
@@ -4282,7 +4290,8 @@ bool CVideoDatabase::GetVideoSettings(int idFile, CVideoSettings &settings)
 {
   try
   {
-    if (idFile < 0) return false;
+    if (idFile < 0) { return false;
+}
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
@@ -5410,7 +5419,8 @@ void CVideoDatabase::UpdateFanart(const CFileItem &item, VIDEODB_CONTENT_TYPE ty
 {
   if (NULL == m_pDB.get()) return;
   if (NULL == m_pDS.get()) return;
-  if (!item.HasVideoInfoTag() || item.GetVideoInfoTag()->m_iDbId < 0) return;
+  if (!item.HasVideoInfoTag() || item.GetVideoInfoTag()->m_iDbId < 0) { return;
+}
 
   std::string exec;
   if (type == VIDEODB_CONTENT_TVSHOWS)
@@ -6974,7 +6984,8 @@ bool CVideoDatabase::GetEpisodesNav(const std::string& strBaseDir, CFileItemList
     else if (idActor != -1)
       videoUrl.AddOption("actorid", idActor);
   }
-  else if (idYear != -1)
+  else { if 
+}(idYear != -1)
     videoUrl.AddOption("year", idYear);
   
   if (idDirector != -1)
@@ -9435,7 +9446,8 @@ void CVideoDatabase::ImportFromXML(const std::string &path)
       return;
 
     TiXmlElement *root = xmlDoc.RootElement();
-    if (!root) return;
+    if (!root) { return;
+}
 
     progress = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
     if (progress)

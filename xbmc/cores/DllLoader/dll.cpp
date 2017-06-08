@@ -124,10 +124,14 @@ extern "C" HMODULE __stdcall dllLoadLibraryExExtended(LPCSTR lpLibFileName, HAND
   char strFlags[512];
   strFlags[0] = '\0';
 
-  if (dwFlags & DONT_RESOLVE_DLL_REFERENCES) strcat(strFlags, "\n - DONT_RESOLVE_DLL_REFERENCES");
-  if (dwFlags & LOAD_IGNORE_CODE_AUTHZ_LEVEL) strcat(strFlags, "\n - LOAD_IGNORE_CODE_AUTHZ_LEVEL");
-  if (dwFlags & LOAD_LIBRARY_AS_DATAFILE) strcat(strFlags, "\n - LOAD_LIBRARY_AS_DATAFILE");
-  if (dwFlags & LOAD_WITH_ALTERED_SEARCH_PATH) strcat(strFlags, "\n - LOAD_WITH_ALTERED_SEARCH_PATH");
+  if (dwFlags & DONT_RESOLVE_DLL_REFERENCES) { strcat(strFlags, "\n - DONT_RESOLVE_DLL_REFERENCES");
+}
+  if (dwFlags & LOAD_IGNORE_CODE_AUTHZ_LEVEL) { strcat(strFlags, "\n - LOAD_IGNORE_CODE_AUTHZ_LEVEL");
+}
+  if (dwFlags & LOAD_LIBRARY_AS_DATAFILE) { strcat(strFlags, "\n - LOAD_LIBRARY_AS_DATAFILE");
+}
+  if (dwFlags & LOAD_WITH_ALTERED_SEARCH_PATH) { strcat(strFlags, "\n - LOAD_WITH_ALTERED_SEARCH_PATH");
+}
 
   CLog::Log(LOGDEBUG, "LoadLibraryExA called with flags: %s", strFlags);
 
@@ -150,7 +154,8 @@ extern "C" BOOL __stdcall dllFreeLibrary(HINSTANCE hLibModule)
   }
 
   // to make sure systems dlls are never deleted
-  if (dllhandle->IsSystemDll()) return 1;
+  if (dllhandle->IsSystemDll()) { return 1;
+}
 
   DllLoaderContainer::ReleaseModule(dllhandle);
 
@@ -244,7 +249,8 @@ extern "C" HMODULE WINAPI dllGetModuleHandleA(LPCSTR lpModuleName)
   auto  strModuleName = new char[strlen(lpModuleName) + 5];
   strcpy(strModuleName, lpModuleName);
 
-  if (strrchr(strModuleName, '.') == nullptr) strcat(strModuleName, ".dll");
+  if (strrchr(strModuleName, '.') == nullptr) { strcat(strModuleName, ".dll");
+}
 
   //CLog::Log(LOGDEBUG, "GetModuleHandleA(%s) .. looking up", lpModuleName);
 

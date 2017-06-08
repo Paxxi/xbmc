@@ -171,7 +171,8 @@ void CJSONVariantParserHandler::PushObject(CVariant variant)
     temp->push_back(variant);
     m_parse.push_back(&(*temp)[temp->size() - 1]);
   }
-  else if (m_parse.empty())
+  else { if 
+}(m_parse.empty())
     m_parse.push_back(new CVariant(variant));
 
   if (variant.isObject()) {

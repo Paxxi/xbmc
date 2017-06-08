@@ -52,7 +52,8 @@ bool CDVDInputStreamMemory::Open()
 // close file and reset everything
 void CDVDInputStreamMemory::Close()
 {
-  if (m_pData) delete[] m_pData;
+  if (m_pData) { delete[] m_pData;
+}
   m_pData = nullptr;
   m_iDataSize = 0;
   m_iDataPos = 0;
@@ -64,7 +65,8 @@ int CDVDInputStreamMemory::Read(uint8_t* buf, int buf_size)
 {
   int iBytesToCopy = buf_size;
   int iBytesLeft = m_iDataSize - m_iDataPos;
-  if (iBytesToCopy > iBytesLeft) iBytesToCopy = iBytesLeft;
+  if (iBytesToCopy > iBytesLeft) { iBytesToCopy = iBytesLeft;
+}
 
   if (iBytesToCopy > 0)
   {

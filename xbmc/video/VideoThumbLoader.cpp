@@ -585,7 +585,8 @@ void CVideoThumbLoader::OnJobComplete(unsigned int jobID, bool success, CJob* jo
 
 void CVideoThumbLoader::DetectAndAddMissingItemData(CFileItem &item)
 {
-  if (item.m_bIsFolder) return;
+  if (item.m_bIsFolder) { return;
+}
 
   if (item.HasVideoInfoTag())
   {

@@ -399,7 +399,8 @@ extern "C"
 
   int dllputs(const char* szLine)
   {
-    if (!szLine[0]) return EOF;
+    if (!szLine[0]) { return EOF;
+}
     if (szLine[strlen(szLine) - 1] != '\n') {
       CLog::Log(LOGDEBUG,"  msg: %s", szLine);
     } else {
@@ -1009,7 +1010,8 @@ extern "C"
 
     // locate next free directory
     int iDirSlot=0;
-    while ((iDirSlot<MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1)) iDirSlot++;
+    while ((iDirSlot<MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1)) { iDirSlot++;
+}
     if (iDirSlot >= MAX_OPEN_DIRS)
     {
       CLog::Log(LOGDEBUG, "Dll: Max open dirs reached");
@@ -1136,7 +1138,8 @@ extern "C"
           return pszString;
         }
       }
-      else return nullptr; //eof
+      else { return nullptr; //eof
+}
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1355,7 +1358,8 @@ extern "C"
       {
         return 0;
       }
-      else return -1;
+      else { return -1;
+}
     }
     else if (!IS_STD_STREAM(stream))
     {
@@ -1998,7 +2002,8 @@ extern "C"
 
   int dll_mkdir(const char* dir)
   {
-    if (!dir) return -1;
+    if (!dir) { return -1;
+}
 
     // Make sure the slashes are correct & translate the path
     std::string strPath = CUtil::ValidatePath(CSpecialProtocol::TranslatePath(dir));

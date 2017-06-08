@@ -108,7 +108,8 @@ extern "C" size_t write_callback(char *buffer,
                size_t nitems,
                void *userp)
 {
-  if(userp == nullptr) return 0;
+  if(userp == nullptr) { return 0;
+}
 
   CCurlFile::CReadState *state = (CCurlFile::CReadState *)userp;
   return state->WriteCallback(buffer, size, nitems);
@@ -119,7 +120,8 @@ extern "C" size_t read_callback(char *buffer,
                size_t nitems,
                void *userp)
 {
-  if(userp == nullptr) return 0;
+  if(userp == nullptr) { return 0;
+}
 
   CCurlFile::CReadState *state = (CCurlFile::CReadState *)userp;
   return state->ReadCallback(buffer, size, nitems);
@@ -1312,7 +1314,8 @@ int64_t CCurlFile::Seek(int64_t iFilePosition, int iWhence)
   }
 
   // We can't seek beyond EOF
-  if (m_state->m_fileSize && nextPos > m_state->m_fileSize) return -1;
+  if (m_state->m_fileSize && nextPos > m_state->m_fileSize) { return -1;
+}
 
   if(m_state->Seek(nextPos)) {
     return nextPos;
@@ -1388,13 +1391,15 @@ int64_t CCurlFile::Seek(int64_t iFilePosition, int iWhence)
 
 int64_t CCurlFile::GetLength()
 {
-  if (!m_opened) return 0;
+  if (!m_opened) { return 0;
+}
   return m_state->m_fileSize;
 }
 
 int64_t CCurlFile::GetPosition()
 {
-  if (!m_opened) return 0;
+  if (!m_opened) { return 0;
+}
   return m_state->m_filePos;
 }
 

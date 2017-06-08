@@ -45,7 +45,8 @@ bool DPMSSupport::CheckValidMode(PowerSavingMode mode)
 
 const char* DPMSSupport::GetModeName(PowerSavingMode mode)
 {
-  if (!CheckValidMode(mode)) return nullptr;
+  if (!CheckValidMode(mode)) { return nullptr;
+}
   return MODE_NAMES[mode];
 }
 
@@ -69,7 +70,8 @@ DPMSSupport::DPMSSupport()
 
 bool DPMSSupport::IsModeSupported(PowerSavingMode mode) const
 {
-  if (!CheckValidMode(mode)) return false;
+  if (!CheckValidMode(mode)) { return false;
+}
   for (size_t i = 0; i < m_supportedModes.size(); i++)
   {
     if (m_supportedModes[i] == mode) return true;
@@ -79,7 +81,8 @@ bool DPMSSupport::IsModeSupported(PowerSavingMode mode) const
 
 bool DPMSSupport::EnablePowerSaving(PowerSavingMode mode)
 {
-  if (!CheckValidMode(mode)) return false;
+  if (!CheckValidMode(mode)) { return false;
+}
   if (!IsModeSupported(mode))
   {
     CLog::Log(LOGERROR, "DPMS: power-saving mode %s is not supported",
@@ -87,7 +90,8 @@ bool DPMSSupport::EnablePowerSaving(PowerSavingMode mode)
     return false;
   }
 
-  if (!PlatformSpecificEnablePowerSaving(mode)) return false;
+  if (!PlatformSpecificEnablePowerSaving(mode)) { return false;
+}
 
   CLog::Log(LOGINFO, "DPMS: enabled power-saving mode %s",
             GetModeName(mode));
@@ -96,7 +100,8 @@ bool DPMSSupport::EnablePowerSaving(PowerSavingMode mode)
 
 bool DPMSSupport::DisablePowerSaving()
 {
-  if (!PlatformSpecificDisablePowerSaving()) return false;
+  if (!PlatformSpecificDisablePowerSaving()) { return false;
+}
   CLog::Log(LOGINFO, "DPMS: disabled power-saving");
   return true;
 }
@@ -130,7 +135,8 @@ static const CARD16 X_DPMS_MODES[] =
 void DPMSSupport::PlatformSpecificInit()
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == nullptr) return;
+  if (dpy == nullptr) { return;
+}
 
   int event_base, error_base;   // we ignore these
   if (!DPMSQueryExtension(dpy, &event_base, &error_base)) {
@@ -153,7 +159,8 @@ void DPMSSupport::PlatformSpecificInit()
 bool DPMSSupport::PlatformSpecificEnablePowerSaving(PowerSavingMode mode)
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == nullptr) return false;
+  if (dpy == nullptr) { return false;
+}
 
   // This is not needed on my ATI Radeon, but the docs say that DPMSForceLevel
   // after a DPMSDisable (from SDL) should not normally work.
@@ -168,7 +175,8 @@ bool DPMSSupport::PlatformSpecificEnablePowerSaving(PowerSavingMode mode)
 bool DPMSSupport::PlatformSpecificDisablePowerSaving()
 {
   Display* dpy = g_Windowing.GetDisplay();
-  if (dpy == nullptr) return false;
+  if (dpy == nullptr) { return false;
+}
 
   DPMSForceLevel(dpy, DPMSModeOn);
   DPMSDisable(dpy);

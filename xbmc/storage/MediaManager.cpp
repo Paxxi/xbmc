@@ -160,7 +160,8 @@ bool CMediaManager::SaveSources()
   CXBMCTinyXML xmlDoc;
   TiXmlElement xmlRootElement("mediasources");
   TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (!pRoot) return false;
+  if (!pRoot) { return false;
+}
 
   TiXmlElement networkNode("network");
   TiXmlNode *pNetworkNode = pRoot->InsertEndChild(networkNode);

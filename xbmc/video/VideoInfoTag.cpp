@@ -104,13 +104,15 @@ void CVideoInfoTag::Reset()
 
 bool CVideoInfoTag::Save(TiXmlNode *node, const std::string &tag, bool savePathInfo, const TiXmlElement *additionalNode)
 {
-  if (!node) return false;
+  if (!node) { return false;
+}
 
   // we start with a <tag> tag
   TiXmlElement movieElement(tag.c_str());
   TiXmlNode *movie = node->InsertEndChild(movieElement);
 
-  if (!movie) return false;
+  if (!movie) { return false;
+}
 
   XMLUtils::SetString(movie, "title", m_strTitle);
   if (!m_strOriginalTitle.empty())

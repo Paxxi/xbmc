@@ -231,8 +231,10 @@ void CBaseRenderer::CalcNormalRenderRect(float offsetX, float offsetY, float wid
   // allow a certain error to maximize size of render area
   float fCorrection = width / height / outputFrameRatio - 1.0f;
   float fAllowed    = CServiceBroker::GetSettings().GetInt(CSettings::SETTING_VIDEOPLAYER_ERRORINASPECT) * 0.01f;
-  if(fCorrection >   fAllowed) fCorrection =   fAllowed;
-  if(fCorrection < - fAllowed) fCorrection = - fAllowed;
+  if(fCorrection >   fAllowed) { fCorrection =   fAllowed;
+}
+  if(fCorrection < - fAllowed) { fCorrection = - fAllowed;
+}
 
   outputFrameRatio *= 1.0f + fCorrection;
 

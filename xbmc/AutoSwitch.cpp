@@ -168,7 +168,8 @@ bool CAutoSwitch::ByThumbPercent(bool bHideParentDirItems, int iPercent, const C
     iNumItems--;
   }
 
-  if (iNumItems <= 0) return false;
+  if (iNumItems <= 0) { return false;
+}
 
   for (int i = 0; i < vecItems.Size(); i++)
   {
@@ -192,7 +193,8 @@ bool CAutoSwitch::ByThumbPercent(bool bHideParentDirItems, int iPercent, const C
 /// \param iPercent Percent of non-default thumbs to autoswitch on
 bool CAutoSwitch::ByFileCount(const CFileItemList& vecItems)
 {
-  if (vecItems.Size() == 0) return false;
+  if (vecItems.Size() == 0) { return false;
+}
   float fPercent = static_cast<float>(vecItems.GetFileCount()) / vecItems.Size();
   return (fPercent > 0.25);
 }
@@ -206,10 +208,12 @@ bool CAutoSwitch::ByFolderThumbPercentage(bool hideParentDirItems, int percent, 
   if (!hideParentDirItems) {
     numItems--;
 }
-  if (numItems <= 0) return false;
+  if (numItems <= 0) { return false;
+}
 
   int fileCount = vecItems.GetFileCount();
-  if (fileCount > 0.25f * numItems) return false;
+  if (fileCount > 0.25f * numItems) { return false;
+}
 
   int numThumbs = 0;
   for (int i = 0; i < vecItems.Size(); i++)

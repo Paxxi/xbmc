@@ -159,7 +159,8 @@ CSmartPlaylistRule::CSmartPlaylistRule()
 int CSmartPlaylistRule::TranslateField(const char *field) const
 {
   for (unsigned int i = 0; i < NUM_FIELDS; i++) {
-    if (StringUtils::EqualsNoCase(field, fields[i].string)) return fields[i].field;
+    if (StringUtils::EqualsNoCase(field, fields[i].string)) { return fields[i].field;
+}
 }
   return FieldNone;
 }
@@ -210,7 +211,8 @@ std::string CSmartPlaylistRule::TranslateGroup(Field group)
 std::string CSmartPlaylistRule::GetLocalizedField(int field)
 {
   for (unsigned int i = 0; i < NUM_FIELDS; i++) {
-    if (field == fields[i].field) return g_localizeStrings.Get(fields[i].localizedString);
+    if (field == fields[i].field) { return g_localizeStrings.Get(fields[i].localizedString);
+}
 }
   return g_localizeStrings.Get(16018);
 }
@@ -218,7 +220,8 @@ std::string CSmartPlaylistRule::GetLocalizedField(int field)
 CDatabaseQueryRule::FIELD_TYPE CSmartPlaylistRule::GetFieldType(int field) const
 {
   for (unsigned int i = 0; i < NUM_FIELDS; i++) {
-    if (field == fields[i].field) return fields[i].type;
+    if (field == fields[i].field) { return fields[i].type;
+}
 }
   return TEXT_FIELD;
 }
@@ -226,7 +229,8 @@ CDatabaseQueryRule::FIELD_TYPE CSmartPlaylistRule::GetFieldType(int field) const
 bool CSmartPlaylistRule::IsFieldBrowseable(int field)
 {
   for (unsigned int i = 0; i < NUM_FIELDS; i++) {
-    if (field == fields[i].field) return fields[i].browseable;
+    if (field == fields[i].field) { return fields[i].browseable;
+}
 }
 
   return false;

@@ -110,14 +110,16 @@ ssize_t CISOFile::Read(void *lpBuf, size_t uiBufSize)
 //*********************************************************************************************
 void CISOFile::Close()
 {
-  if (!m_bOpened) return ;
+  if (!m_bOpened) { return ;
+}
   m_isoReader.CloseFile( m_hFile);
 }
 
 //*********************************************************************************************
 int64_t CISOFile::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   int64_t lNewPos = m_isoReader.Seek(m_hFile, iFilePosition, iWhence);
   if(lNewPos >= 0)
     m_cache.Clear();
@@ -127,14 +129,16 @@ int64_t CISOFile::Seek(int64_t iFilePosition, int iWhence)
 //*********************************************************************************************
 int64_t CISOFile::GetLength()
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   return m_isoReader.GetFileSize(m_hFile);
 }
 
 //*********************************************************************************************
 int64_t CISOFile::GetPosition()
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   return m_isoReader.GetFilePosition(m_hFile);
 }
 

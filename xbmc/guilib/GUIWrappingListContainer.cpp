@@ -165,7 +165,8 @@ int CGUIWrappingListContainer::GetSelectedItem() const
   {
     int numItems = (int)(m_items.size() - m_extraItems);
     int correctOffset = (GetOffset() + GetCursor()) % numItems;
-    if (correctOffset < 0) correctOffset += numItems;
+    if (correctOffset < 0) { correctOffset += numItems;
+}
     return correctOffset;
   }
   return 0;

@@ -143,7 +143,8 @@ bool CGUIFixedListContainer::GetOffsetRange(int &minOffset, int &maxOffset) cons
 
 void CGUIFixedListContainer::ValidateOffset()
 {
-  if (!m_layout) return;
+  if (!m_layout) { return;
+}
   // ensure our fixed cursor position is valid
   if (m_fixedCursor >= m_itemsPerPage) {
     m_fixedCursor = m_itemsPerPage - 1;

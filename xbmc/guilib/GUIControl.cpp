@@ -409,13 +409,15 @@ bool CGUIControl::OnMessage(CGUIMessage& message)
 bool CGUIControl::CanFocus() const
 {
   if (!IsVisible() && !m_allowHiddenFocus) return false;
-  if (IsDisabled()) return false;
+  if (IsDisabled()) { return false;
+}
   return true;
 }
 
 bool CGUIControl::IsVisible() const
 {
-  if (m_forceHidden) return false;
+  if (m_forceHidden) { return false;
+}
   return m_visible == VISIBLE;
 }
 
@@ -565,7 +567,8 @@ void CGUIControl::SetVisible(bool bVisible, bool setVisState)
     {
 //        CLog::Log(LOGDEBUG, "Resetting visible animation on control %i (we are %s)", m_controlID, m_visible ? "visible" : "hidden");
       CAnimation *visibleAnim = GetAnimation(ANIM_TYPE_VISIBLE);
-      if (visibleAnim) visibleAnim->ResetAnimation();
+      if (visibleAnim) { visibleAnim->ResetAnimation();
+}
     }
   }
 }
@@ -596,7 +599,8 @@ bool CGUIControl::OnMouseOver(const CPoint &point)
   if (CInputManager::GetInstance().GetMouseState() != MOUSE_STATE_DRAG) {
     CInputManager::GetInstance().SetMouseState(MOUSE_STATE_FOCUS);
 }
-  if (!CanFocus()) return false;
+  if (!CanFocus()) { return false;
+}
   if (!HasFocus())
   {
     CGUIMessage msg(GUI_MSG_SETFOCUS, GetParentID(), GetID());
@@ -763,17 +767,20 @@ void CGUIControl::QueueAnimation(ANIMATION_TYPE animType)
   if (reverseAnim && reverseAnim->IsReversible() && (reverseAnim->GetState() == ANIM_STATE_IN_PROCESS || reverseAnim->GetState() == ANIM_STATE_DELAYED))
   {
     reverseAnim->QueueAnimation(ANIM_PROCESS_REVERSE);
-    if (forwardAnim) forwardAnim->ResetAnimation();
+    if (forwardAnim) { forwardAnim->ResetAnimation();
+}
   }
   else if (forwardAnim)
   {
     forwardAnim->QueueAnimation(ANIM_PROCESS_NORMAL);
-    if (reverseAnim) reverseAnim->ResetAnimation();
+    if (reverseAnim) { reverseAnim->ResetAnimation();
+}
   }
   else
   { // hidden and visible animations delay the change of state.  If there is no animations
     // to perform, then we should just change the state straightaway
-    if (reverseAnim) reverseAnim->ResetAnimation();
+    if (reverseAnim) { reverseAnim->ResetAnimation();
+}
     UpdateStates(animType, ANIM_PROCESS_NORMAL, ANIM_STATE_APPLIED);
   }
 }

@@ -74,24 +74,42 @@ unsigned int CAEEncoderFFmpeg::BuildChannelLayout(const int64_t ffmap, CAEChanne
 {
   /* build the channel layout and count the channels */
   layout.Reset();
-  if (ffmap & AV_CH_FRONT_LEFT           ) layout += AE_CH_FL  ;
-  if (ffmap & AV_CH_FRONT_RIGHT          ) layout += AE_CH_FR  ;
-  if (ffmap & AV_CH_FRONT_CENTER         ) layout += AE_CH_FC  ;
-  if (ffmap & AV_CH_LOW_FREQUENCY        ) layout += AE_CH_LFE ;
-  if (ffmap & AV_CH_BACK_LEFT            ) layout += AE_CH_BL  ;
-  if (ffmap & AV_CH_BACK_RIGHT           ) layout += AE_CH_BR  ;
-  if (ffmap & AV_CH_FRONT_LEFT_OF_CENTER ) layout += AE_CH_FLOC;
-  if (ffmap & AV_CH_FRONT_RIGHT_OF_CENTER) layout += AE_CH_FROC;
-  if (ffmap & AV_CH_BACK_CENTER          ) layout += AE_CH_BC  ;
-  if (ffmap & AV_CH_SIDE_LEFT            ) layout += AE_CH_SL  ;
-  if (ffmap & AV_CH_SIDE_RIGHT           ) layout += AE_CH_SR  ;
-  if (ffmap & AV_CH_TOP_CENTER           ) layout += AE_CH_TC  ;
-  if (ffmap & AV_CH_TOP_FRONT_LEFT       ) layout += AE_CH_TFL ;
-  if (ffmap & AV_CH_TOP_FRONT_CENTER     ) layout += AE_CH_TFC ;
-  if (ffmap & AV_CH_TOP_FRONT_RIGHT      ) layout += AE_CH_TFR ;
-  if (ffmap & AV_CH_TOP_BACK_LEFT        ) layout += AE_CH_TBL ;
-  if (ffmap & AV_CH_TOP_BACK_CENTER      ) layout += AE_CH_TBC ;
-  if (ffmap & AV_CH_TOP_BACK_RIGHT       ) layout += AE_CH_TBR ;
+  if (ffmap & AV_CH_FRONT_LEFT           ) { layout += AE_CH_FL  ;
+}
+  if (ffmap & AV_CH_FRONT_RIGHT          ) { layout += AE_CH_FR  ;
+}
+  if (ffmap & AV_CH_FRONT_CENTER         ) { layout += AE_CH_FC  ;
+}
+  if (ffmap & AV_CH_LOW_FREQUENCY        ) { layout += AE_CH_LFE ;
+}
+  if (ffmap & AV_CH_BACK_LEFT            ) { layout += AE_CH_BL  ;
+}
+  if (ffmap & AV_CH_BACK_RIGHT           ) { layout += AE_CH_BR  ;
+}
+  if (ffmap & AV_CH_FRONT_LEFT_OF_CENTER ) { layout += AE_CH_FLOC;
+}
+  if (ffmap & AV_CH_FRONT_RIGHT_OF_CENTER) { layout += AE_CH_FROC;
+}
+  if (ffmap & AV_CH_BACK_CENTER          ) { layout += AE_CH_BC  ;
+}
+  if (ffmap & AV_CH_SIDE_LEFT            ) { layout += AE_CH_SL  ;
+}
+  if (ffmap & AV_CH_SIDE_RIGHT           ) { layout += AE_CH_SR  ;
+}
+  if (ffmap & AV_CH_TOP_CENTER           ) { layout += AE_CH_TC  ;
+}
+  if (ffmap & AV_CH_TOP_FRONT_LEFT       ) { layout += AE_CH_TFL ;
+}
+  if (ffmap & AV_CH_TOP_FRONT_CENTER     ) { layout += AE_CH_TFC ;
+}
+  if (ffmap & AV_CH_TOP_FRONT_RIGHT      ) { layout += AE_CH_TFR ;
+}
+  if (ffmap & AV_CH_TOP_BACK_LEFT        ) { layout += AE_CH_TBL ;
+}
+  if (ffmap & AV_CH_TOP_BACK_CENTER      ) { layout += AE_CH_TBC ;
+}
+  if (ffmap & AV_CH_TOP_BACK_RIGHT       ) { layout += AE_CH_TBR ;
+}
 
   return layout.Count();
 }

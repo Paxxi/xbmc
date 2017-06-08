@@ -162,7 +162,8 @@ void CGUIResizeControl::UpdateSpeed(int nDirection)
   if (nDirection == m_nDirection)
   { // accelerate
     m_fSpeed += m_fAcceleration;
-    if (m_fSpeed > m_fMaxSpeed) m_fSpeed = m_fMaxSpeed;
+    if (m_fSpeed > m_fMaxSpeed) { m_fSpeed = m_fMaxSpeed;
+}
   }
   else
   { // reset direction and speed
@@ -207,10 +208,14 @@ void CGUIResizeControl::Resize(float x, float y)
   float width = m_width + x;
   float height = m_height + y;
   // check if we are within the bounds
-  if (width < m_x1) width = m_x1;
-  if (height < m_y1) height = m_y1;
-  if (width > m_x2) width = m_x2;
-  if (height > m_y2) height = m_y2;
+  if (width < m_x1) { width = m_x1;
+}
+  if (height < m_y1) { height = m_y1;
+}
+  if (width > m_x2) { width = m_x2;
+}
+  if (height > m_y2) { height = m_y2;
+}
   // ok, now set the default size of the resize control
   SetWidth(width);
   SetHeight(height);

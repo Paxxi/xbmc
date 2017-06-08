@@ -151,7 +151,8 @@ CFileItemPtr CGUIMediaWindow::GetCurrentListItem(int offset)
   if (!m_vecItems->Size() || item < 0)
     return CFileItemPtr();
   item = (item + offset) % m_vecItems->Size();
-  if (item < 0) item += m_vecItems->Size();
+  if (item < 0) { item += m_vecItems->Size();
+}
   return m_vecItems->Get(item);
 }
 
@@ -287,7 +288,8 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
       {
         int iItem = m_viewControl.GetSelectedItem();
         int iAction = message.GetParam1();
-        if (iItem < 0) break;
+        if (iItem < 0) { break;
+}
         if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)
         {
           OnSelect(iItem);
@@ -946,7 +948,8 @@ void CGUIMediaWindow::OnCacheFileItems(CFileItemList &items)
  */
 bool CGUIMediaWindow::OnClick(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return true;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return true;
+}
   CFileItemPtr pItem = m_vecItems->Get(iItem);
 
   if (pItem->IsParentFolder())
@@ -1546,7 +1549,8 @@ void CGUIMediaWindow::UpdateFileList()
 
 void CGUIMediaWindow::OnDeleteItem(int iItem)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size()) return;
+  if ( iItem < 0 || iItem >= m_vecItems->Size()) { return;
+}
   CFileItemPtr item = m_vecItems->Get(iItem);
 
   if (item->IsPlayList())
@@ -1566,7 +1570,8 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
 
 void CGUIMediaWindow::OnRenameItem(int iItem)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size()) return;
+  if ( iItem < 0 || iItem >= m_vecItems->Size()) { return;
+}
 
   if (CProfilesManager::GetInstance().GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && CProfilesManager::GetInstance().GetCurrentProfile().filesLocked()) {
     if (!g_passwordManager.IsMasterLockUnlocked(true)) {

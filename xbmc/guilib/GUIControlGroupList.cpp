@@ -565,7 +565,8 @@ EVENT_RESULT CGUIControlGroupList::OnMouseEvent(const CPoint &point, const CMous
     for (ciControls it = m_children.begin(); it != m_children.end(); ++it)
     {
       CGUIControl *control = *it;
-      if (!control->IsVisible()) continue;
+      if (!control->IsVisible()) { continue;
+}
       float nextOffset = offset + Size(control) + m_itemGap;
       if (event.m_id == ACTION_MOUSE_WHEEL_DOWN && nextOffset > m_scroller.GetValue() && m_scroller.GetValue() < m_totalSize - Size()) // past our current offset
       {
@@ -608,9 +609,11 @@ float CGUIControlGroupList::GetTotalSize() const
   for (ciControls it = m_children.begin(); it != m_children.end(); ++it)
   {
     CGUIControl *control = *it;
-    if (!control->IsVisible()) continue;
+    if (!control->IsVisible()) { continue;
+}
     totalSize += Size(control) + m_itemGap;
   }
-  if (totalSize > 0) totalSize -= m_itemGap;
+  if (totalSize > 0) { totalSize -= m_itemGap;
+}
   return totalSize;
 }

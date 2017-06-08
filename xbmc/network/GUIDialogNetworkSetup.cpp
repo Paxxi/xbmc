@@ -131,7 +131,8 @@ void CGUIDialogNetworkSetup::OnSettingAction(std::shared_ptr<const CSetting> set
 bool CGUIDialogNetworkSetup::ShowAndGetNetworkAddress(std::string &path)
 {
   CGUIDialogNetworkSetup *dialog = g_windowManager.GetWindow<CGUIDialogNetworkSetup>(WINDOW_DIALOG_NETWORK_SETUP);
-  if (!dialog) return false;
+  if (!dialog) { return false;
+}
   dialog->Initialize();
   dialog->SetPath(path);
   dialog->Open();

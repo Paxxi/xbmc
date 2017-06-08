@@ -250,7 +250,8 @@ public:
         if (item.GetVideoInfoTag()->GetResumePoint().timeInSeconds != bookmark.timeInSeconds) {
             CLog::Log(LOGDEBUG, "UPNP: Updating resume point for item %s", path.c_str());
             long time = static_cast<long>(bookmark.timeInSeconds);
-            if (time < 0) time = 0;
+            if (time < 0) { time = 0;
+}
             curr_value.Append(NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>",
                                                  static_cast<long>(item.GetVideoInfoTag()->GetResumePoint().timeInSeconds)));
             curr_value += "<xbmc:lastPlayerState>";
@@ -263,8 +264,10 @@ public:
         }
         if (updatePlayCount) {
             CLog::Log(LOGDEBUG, "UPNP: Marking video item %s as watched", path.c_str());
-            if (!curr_value.IsEmpty()) curr_value.Append(",");
-            if (!new_value.IsEmpty()) new_value.Append(",");
+            if (!curr_value.IsEmpty()) { curr_value.Append(",");
+}
+            if (!new_value.IsEmpty()) { new_value.Append(",");
+}
             curr_value.Append("<upnp:playCount>0</upnp:playCount>");
             new_value.Append("<upnp:playCount>1</upnp:playCount>");
         }

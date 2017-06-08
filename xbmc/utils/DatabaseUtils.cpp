@@ -156,7 +156,8 @@ std::string DatabaseUtils::GetField(Field field, const MediaType &mediaType, Dat
       else
         result = StringUtils::Format("movie_view.c%02d", VIDEODB_ID_TITLE);
     }
-    else if (field == FieldPlot) result = StringUtils::Format("movie_view.c%02d", VIDEODB_ID_PLOT);
+    else { if 
+}(field == FieldPlot) result = StringUtils::Format("movie_view.c%02d", VIDEODB_ID_PLOT);
     else if (field == FieldPlotOutline) result = StringUtils::Format("movie_view.c%02d", VIDEODB_ID_PLOTOUTLINE);
     else if (field == FieldTagline) result = StringUtils::Format("movie_view.c%02d", VIDEODB_ID_TAGLINE);
     else if (field == FieldVotes) return "movie_view.votes";
@@ -196,7 +197,8 @@ std::string DatabaseUtils::GetField(Field field, const MediaType &mediaType, Dat
       else
         result = StringUtils::Format("tvshow_view.c%02d", VIDEODB_ID_TV_TITLE);
     }
-    else if (field == FieldPlot) result = StringUtils::Format("tvshow_view.c%02d", VIDEODB_ID_TV_PLOT);
+    else { if 
+}(field == FieldPlot) result = StringUtils::Format("tvshow_view.c%02d", VIDEODB_ID_TV_PLOT);
     else if (field == FieldTvShowStatus) result = StringUtils::Format("tvshow_view.c%02d", VIDEODB_ID_TV_STATUS);
     else if (field == FieldVotes) return "tvshow_view.votes";
     else if (field == FieldRating) return "tvshow_view.rating";

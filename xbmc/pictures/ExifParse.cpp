@@ -596,7 +596,8 @@ void CExifParse::ProcessDir(const unsigned char* const DirStart,
         // rotated to portrait format.
         {
           int a = static_cast<int>(ConvertAnyFormat(ValuePtr, Format));
-          if (m_ExifImageWidth < a) m_ExifImageWidth = a;
+          if (m_ExifImageWidth < a) { m_ExifImageWidth = a;
+}
         }
       break;
 

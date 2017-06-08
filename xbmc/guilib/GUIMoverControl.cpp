@@ -174,7 +174,8 @@ void CGUIMoverControl::UpdateSpeed(int nDirection)
   if (nDirection == m_nDirection)
   { // accelerate
     m_fSpeed += m_fAcceleration;
-    if (m_fSpeed > m_fMaxSpeed) m_fSpeed = m_fMaxSpeed;
+    if (m_fSpeed > m_fMaxSpeed) { m_fSpeed = m_fMaxSpeed;
+}
   }
   else
   { // reset direction and speed
@@ -221,10 +222,14 @@ void CGUIMoverControl::Move(int iX, int iY)
   int iLocX = m_iLocationX + iX;
   int iLocY = m_iLocationY + iY;
   // check if we are within the bounds
-  if (iLocX < m_iX1) iLocX = m_iX1;
-  if (iLocY < m_iY1) iLocY = m_iY1;
-  if (iLocX > m_iX2) iLocX = m_iX2;
-  if (iLocY > m_iY2) iLocY = m_iY2;
+  if (iLocX < m_iX1) { iLocX = m_iX1;
+}
+  if (iLocY < m_iY1) { iLocY = m_iY1;
+}
+  if (iLocX > m_iX2) { iLocX = m_iX2;
+}
+  if (iLocY > m_iY2) { iLocY = m_iY2;
+}
   // ok, now set the location of the mover
   SetLocation(iLocX, iLocY);
 }

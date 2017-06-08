@@ -122,7 +122,8 @@ void CDVDInputStreamFile::Close()
 
 int CDVDInputStreamFile::Read(uint8_t* buf, int buf_size)
 {
-  if(!m_pFile) return -1;
+  if(!m_pFile) { return -1;
+}
 
   ssize_t ret = m_pFile->Read(buf, buf_size);
 
@@ -140,7 +141,8 @@ int CDVDInputStreamFile::Read(uint8_t* buf, int buf_size)
 
 int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
 {
-  if(!m_pFile) return -1;
+  if(!m_pFile) { return -1;
+}
 
   if(whence == SEEK_POSSIBLE) {
     return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, nullptr);
@@ -149,7 +151,8 @@ int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
   int64_t ret = m_pFile->Seek(offset, whence);
 
   /* if we succeed, we are not eof anymore */
-  if( ret >= 0 ) m_eof = false;
+  if( ret >= 0 ) { m_eof = false;
+}
 
   return ret;
 }

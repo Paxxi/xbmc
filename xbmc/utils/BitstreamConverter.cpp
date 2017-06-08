@@ -1045,7 +1045,8 @@ const int CBitstreamConverter::avc_parse_nal_units(AVIOContext *pb, const uint8_
   nal_start = avc_find_startcode(p, end);
 
   for (;;) {
-    while (nal_start < end && !*(nal_start++));
+    while (nal_start < end && !*(nal_start++)) {;
+}
     if (nal_start == end) {
       break;
 }
@@ -1161,7 +1162,8 @@ bool CBitstreamConverter::mpeg2_sequence_header(const uint8_t *data, const uint3
   nal_start = avc_find_startcode(p, end);
   while (nal_start < end)
   {
-    while (!*(nal_start++));
+    while (!*(nal_start++)) {;
+}
     nal_end = avc_find_startcode(nal_start, end);
     if (*nal_start == 0xB3)
     {

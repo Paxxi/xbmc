@@ -779,7 +779,8 @@ void CWakeOnAccess::SaveToXML()
   CXBMCTinyXML xmlDoc;
   TiXmlElement xmlRootElement("onaccesswakeup");
   TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (!pRoot) return;
+  if (!pRoot) { return;
+}
 
   XMLUtils::SetInt(pRoot, "netinittimeout", m_netinit_sec);
   XMLUtils::SetInt(pRoot, "netsettletime", m_netsettle_ms);

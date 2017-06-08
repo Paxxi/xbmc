@@ -389,7 +389,8 @@ unsigned int CBaseTexture::PadPow2(unsigned int x)
 
 bool CBaseTexture::SwapBlueRed(unsigned char *pixels, unsigned int height, unsigned int pitch, unsigned int elements, unsigned int offset)
 {
-  if (!pixels) return false;
+  if (!pixels) { return false;
+}
   unsigned char *dst = pixels;
   for (unsigned int y = 0; y < height; y++)
   {

@@ -99,8 +99,10 @@ bool CGUIDialogMusicOSD::OnAction(const CAction &action)
 
         int userrating = dialog->GetSelectedItem();
 
-        if (userrating < 0) userrating = 0;
-        if (userrating > 10) userrating = 10;
+        if (userrating < 0) { userrating = 0;
+}
+        if (userrating > 10) { userrating = 10;
+}
         if (userrating != track->GetMusicInfoTag()->GetUserrating())
         {
           track->GetMusicInfoTag()->SetUserrating(userrating);

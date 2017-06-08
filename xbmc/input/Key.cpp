@@ -90,7 +90,8 @@ void CKey::Reset()
 
 CKey& CKey::operator=(const CKey& key)
 {
-  if (&key == this) return * this;
+  if (&key == this) { return * this;
+}
   m_leftTrigger  = key.m_leftTrigger;
   m_rightTrigger = key.m_rightTrigger;
   m_leftThumbX   = key.m_leftThumbX;

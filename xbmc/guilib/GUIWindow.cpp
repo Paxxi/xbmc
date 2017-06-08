@@ -368,7 +368,8 @@ void CGUIWindow::DoRender()
   // app thread to finish AllocResources(), as dynamic resources (images in particular)
   // will try and be allocated from 2 different threads, which causes nasty things
   // to occur.
-  if (!m_bAllocated) return;
+  if (!m_bAllocated) { return;
+}
 
   g_graphicsContext.SetRenderingResolution(m_coordsRes, m_needsScaling);
 
@@ -376,7 +377,8 @@ void CGUIWindow::DoRender()
   CGUIControlGroup::DoRender();
   g_graphicsContext.RemoveTransform();
 
-  if (CGUIControlProfiler::IsRunning()) CGUIControlProfiler::Instance().EndFrame();
+  if (CGUIControlProfiler::IsRunning()) { CGUIControlProfiler::Instance().EndFrame();
+}
 }
 
 void CGUIWindow::AfterRender()
@@ -607,7 +609,8 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
   case GUI_MSG_WINDOW_INIT:
     {
       CLog::Log(LOGDEBUG, "------ Window Init (%s) ------", GetProperty("xmlfile").c_str());
-      if (m_dynamicResourceAlloc || !m_bAllocated) AllocResources();
+      if (m_dynamicResourceAlloc || !m_bAllocated) { AllocResources();
+}
       OnInitWindow();
       return true;
     }
@@ -618,7 +621,8 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
       CLog::Log(LOGDEBUG, "------ Window Deinit (%s) ------", GetProperty("xmlfile").c_str());
       OnDeinitWindow(message.GetParam1());
       // now free the window
-      if (m_dynamicResourceAlloc) FreeResources();
+      if (m_dynamicResourceAlloc) { FreeResources();
+}
       return true;
     }
     break;
@@ -762,7 +766,8 @@ bool CGUIWindow::OnMessage(CGUIMessage& message)
             control->OnMessage(msg);
           }
         }
-        else if (message.GetParam1() == GUI_MSG_STATE_CHANGED)
+        else { if 
+}(message.GetParam1() == GUI_MSG_STATE_CHANGED)
           MarkDirtyRegion(DIRTY_STATE_CHILD); //Don't force an dirtyRect, we don't know if / what has changed.
       }
     }
@@ -832,7 +837,8 @@ void CGUIWindow::FreeResources(bool forceUnload /*= FALSE */)
   CGUIControlGroup::FreeResources();
   //g_TextureManager.Dump();
   // unload the skin
-  if (m_loadType == LOAD_EVERY_TIME || forceUnload) ClearAll();
+  if (m_loadType == LOAD_EVERY_TIME || forceUnload) { ClearAll();
+}
   if (forceUnload)
   {
     delete m_windowXMLRootElement;

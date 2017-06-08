@@ -459,7 +459,8 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const std::string &initial)
       m_ip[i] = static_cast<uint8_t>(atoi(blocks[i].c_str()));
     }
   }
-  else if (m_mode == INPUT_NUMBER || m_mode == INPUT_PASSWORD)
+  else { if 
+}(m_mode == INPUT_NUMBER || m_mode == INPUT_PASSWORD)
     m_number = initial;
 }
 
@@ -493,7 +494,8 @@ std::string CGUIDialogNumeric::GetOutputString() const
 bool CGUIDialogNumeric::ShowAndGetSeconds(std::string &timeString, const std::string &heading)
 {
   CGUIDialogNumeric *pDialog = g_windowManager.GetWindow<CGUIDialogNumeric>(WINDOW_DIALOG_NUMERIC);
-  if (!pDialog) return false;
+  if (!pDialog) { return false;
+}
   int seconds = StringUtils::TimeStringToSeconds(timeString);
   SYSTEMTIME time = {0};
   time.wHour = seconds / 3600;
@@ -514,7 +516,8 @@ bool CGUIDialogNumeric::ShowAndGetSeconds(std::string &timeString, const std::st
 bool CGUIDialogNumeric::ShowAndGetTime(SYSTEMTIME &time, const std::string &heading)
 {
   CGUIDialogNumeric *pDialog = g_windowManager.GetWindow<CGUIDialogNumeric>(WINDOW_DIALOG_NUMERIC);
-  if (!pDialog) return false;
+  if (!pDialog) { return false;
+}
   pDialog->SetMode(INPUT_TIME, time);
   pDialog->SetHeading(heading);
   pDialog->Open();
@@ -528,7 +531,8 @@ bool CGUIDialogNumeric::ShowAndGetTime(SYSTEMTIME &time, const std::string &head
 bool CGUIDialogNumeric::ShowAndGetDate(SYSTEMTIME &date, const std::string &heading)
 {
   CGUIDialogNumeric *pDialog = g_windowManager.GetWindow<CGUIDialogNumeric>(WINDOW_DIALOG_NUMERIC);
-  if (!pDialog) return false;
+  if (!pDialog) { return false;
+}
   pDialog->SetMode(INPUT_DATE, date);
   pDialog->SetHeading(heading);
   pDialog->Open();
@@ -542,7 +546,8 @@ bool CGUIDialogNumeric::ShowAndGetDate(SYSTEMTIME &date, const std::string &head
 bool CGUIDialogNumeric::ShowAndGetIPAddress(std::string &IPAddress, const std::string &heading)
 {
   CGUIDialogNumeric *pDialog = g_windowManager.GetWindow<CGUIDialogNumeric>(WINDOW_DIALOG_NUMERIC);
-  if (!pDialog) return false;
+  if (!pDialog) { return false;
+}
   pDialog->SetMode(INPUT_IP_ADDRESS, IPAddress);
   pDialog->SetHeading(heading);
   pDialog->Open();

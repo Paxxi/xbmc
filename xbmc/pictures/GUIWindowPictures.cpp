@@ -270,7 +270,8 @@ bool CGUIWindowPictures::Update(const std::string &strDirectory, bool updateFilt
 
 bool CGUIWindowPictures::OnClick(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return true;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return true;
+}
   CFileItemPtr pItem = m_vecItems->Get(iItem);
 
   if (pItem->IsCBZ() || pItem->IsCBR())
@@ -314,7 +315,8 @@ bool CGUIWindowPictures::OnPlayMedia(int iItem, const std::string &player)
 
 bool CGUIWindowPictures::ShowPicture(int iItem, bool startSlideShow)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return false;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return false;
+}
   CFileItemPtr pItem = m_vecItems->Get(iItem);
   std::string strPicture = pItem->GetPath();
 

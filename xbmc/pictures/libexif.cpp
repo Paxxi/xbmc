@@ -16,7 +16,8 @@ extern "C" {
 
 bool process_jpeg(const char *filename, ExifInfo_t *exifInfo, IPTCInfo_t *iptcInfo)
 {
-  if (!exifInfo || !iptcInfo) return false;
+  if (!exifInfo || !iptcInfo) { return false;
+}
   CJpegParse jpeg;
   memset(exifInfo, 0, sizeof(ExifInfo_t));
   memset(iptcInfo, 0, sizeof(IPTCInfo_t));

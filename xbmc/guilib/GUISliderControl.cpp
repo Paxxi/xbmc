@@ -252,8 +252,10 @@ void CGUISliderControl::Move(int iNumSteps)
     {
       float &value = m_floatValues[m_currentSelector];
       value += m_fInterval * iNumSteps;
-      if (value < m_fStart) value = m_fStart;
-      if (value > m_fEnd) value = m_fEnd;
+      if (value < m_fStart) { value = m_fStart;
+}
+      if (value > m_fEnd) { value = m_fEnd;
+}
       if (m_floatValues[0] > m_floatValues[1])
       {
         float valueLower = m_floatValues[0];
@@ -268,8 +270,10 @@ void CGUISliderControl::Move(int iNumSteps)
     {
       int &value = m_intValues[m_currentSelector];
       value += m_iInterval * iNumSteps;
-      if (value < m_iStart) value = m_iStart;
-      if (value > m_iEnd) value = m_iEnd;
+      if (value < m_iStart) { value = m_iStart;
+}
+      if (value > m_iEnd) { value = m_iEnd;
+}
       if (m_intValues[0] > m_intValues[1])
       {
         int valueLower = m_intValues[0];
@@ -285,8 +289,10 @@ void CGUISliderControl::Move(int iNumSteps)
     {
       float &value = m_percentValues[m_currentSelector];
       value += m_iInterval * iNumSteps;
-      if (value < 0) value = 0;
-      if (value > 100) value = 100;
+      if (value < 0) { value = 0;
+}
+      if (value > 100) { value = 100;
+}
       if (m_percentValues[0] > m_percentValues[1])
       {
         float valueLower = m_percentValues[0];
@@ -573,8 +579,10 @@ void CGUISliderControl::SetFromPosition(const CPoint &point, bool guessSelector 
   else
     fPercent = (m_guiBackground.GetYPosition() + m_guiBackground.GetHeight() - point.y) / m_guiBackground.GetHeight();
 
-  if (fPercent < 0) fPercent = 0;
-  if (fPercent > 1) fPercent = 1;
+  if (fPercent < 0) { fPercent = 0;
+}
+  if (fPercent > 1) { fPercent = 1;
+}
 
   if (m_rangeSelection && guessSelector)
   {

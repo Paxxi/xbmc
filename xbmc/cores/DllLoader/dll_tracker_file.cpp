@@ -102,7 +102,8 @@ extern "C"
     uintptr_t loc = (uintptr_t)_ReturnAddress();
 
     int fd = dll_open(sFileName, iMode);
-    if (fd >= 0) tracker_file_track(loc, fd, FILE_XBMC_OPEN, sFileName);
+    if (fd >= 0) { tracker_file_track(loc, fd, FILE_XBMC_OPEN, sFileName);
+}
     return fd;
   }
 
@@ -119,7 +120,8 @@ extern "C"
     uintptr_t loc = (uintptr_t)_ReturnAddress();
 
     FILE* fd = dll_fopen(sFileName, mode);
-    if (fd) tracker_file_track(loc, (uintptr_t)fd, FILE_XBMC_FOPEN, sFileName);
+    if (fd) { tracker_file_track(loc, (uintptr_t)fd, FILE_XBMC_FOPEN, sFileName);
+}
     return fd;
   }
 

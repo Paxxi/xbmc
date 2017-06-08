@@ -219,10 +219,14 @@ namespace XBMCAddon
         XBMCAddonUtils::getDefaultImage((char*)"button", (char*)"texturenofocus");
 
       if (font) strFont = font;
-      if (_textColor) sscanf( _textColor, "%x", &textColor );
-      if (_disabledColor) sscanf( _disabledColor, "%x", &disabledColor );
-      if (_shadowColor) sscanf( _shadowColor, "%x", &shadowColor );
-      if (_focusedColor) sscanf( _focusedColor, "%x", &focusedColor );
+      if (_textColor) { sscanf( _textColor, "%x", &textColor );
+}
+      if (_disabledColor) { sscanf( _disabledColor, "%x", &disabledColor );
+}
+      if (_shadowColor) { sscanf( _shadowColor, "%x", &shadowColor );
+}
+      if (_focusedColor) { sscanf( _focusedColor, "%x", &focusedColor );
+}
     }
 
     void ControlButton::setLabel(const String& label,
@@ -236,10 +240,14 @@ namespace XBMCAddon
       if (!label.empty()) strText = label;
       if (!label2.empty()) strText2 = label2;
       if (font) strFont = font;
-      if (_textColor) sscanf(_textColor, "%x", &textColor);
-      if (_disabledColor) sscanf( _disabledColor, "%x", &disabledColor );
-      if (_shadowColor) sscanf(_shadowColor, "%x", &shadowColor);
-      if (_focusedColor) sscanf(_focusedColor, "%x", &focusedColor);
+      if (_textColor) { sscanf(_textColor, "%x", &textColor);
+}
+      if (_disabledColor) { sscanf( _disabledColor, "%x", &disabledColor );
+}
+      if (_shadowColor) { sscanf(_shadowColor, "%x", &shadowColor);
+}
+      if (_focusedColor) { sscanf(_focusedColor, "%x", &focusedColor);
+}
 
       if (pGUIControl)
       {
@@ -252,7 +260,8 @@ namespace XBMCAddon
 
     void ControlButton::setDisabledColor(const char* color)
     {
-      if (color) sscanf(color, "%x", &disabledColor);
+      if (color) { sscanf(color, "%x", &disabledColor);
+}
 
       if (pGUIControl)
       {
@@ -576,10 +585,14 @@ namespace XBMCAddon
       }
 
       if (font) strFont = font;
-      if (_textColor) sscanf( _textColor, "%x", &textColor );
-      if (_disabledColor) sscanf( _disabledColor, "%x", &disabledColor );
-      if (_shadowColor) sscanf( _shadowColor, "%x", &shadowColor );
-      if (_focusedColor) sscanf( _focusedColor, "%x", &focusedColor );
+      if (_textColor) { sscanf( _textColor, "%x", &textColor );
+}
+      if (_disabledColor) { sscanf( _disabledColor, "%x", &disabledColor );
+}
+      if (_shadowColor) { sscanf( _shadowColor, "%x", &shadowColor );
+}
+      if (_focusedColor) { sscanf( _focusedColor, "%x", &focusedColor );
+}
     }
 
     void ControlRadioButton::setSelected(bool selected)
@@ -613,10 +626,14 @@ namespace XBMCAddon
     {
       if (!label.empty()) strText = label;
       if (font) strFont = font;
-      if (_textColor) sscanf(_textColor, "%x", &textColor);
-      if (_disabledColor) sscanf( _disabledColor, "%x", &disabledColor );
-      if (_shadowColor) sscanf(_shadowColor, "%x", &shadowColor);
-      if (_focusedColor) sscanf(_focusedColor, "%x", &focusedColor);
+      if (_textColor) { sscanf(_textColor, "%x", &textColor);
+}
+      if (_disabledColor) { sscanf( _disabledColor, "%x", &disabledColor );
+}
+      if (_shadowColor) { sscanf(_shadowColor, "%x", &shadowColor);
+}
+      if (_focusedColor) { sscanf(_focusedColor, "%x", &focusedColor);
+}
 
       if (pGUIControl)
       {
@@ -1018,8 +1035,10 @@ namespace XBMCAddon
         XBMCAddonUtils::getDefaultImage((char*)"edit", (char*)"texturenofocus");
 
       if (font) strFont = font;
-      if (_textColor) sscanf( _textColor, "%x", &textColor );
-      if (_disabledColor) sscanf( _disabledColor, "%x", &disabledColor );
+      if (_textColor) { sscanf( _textColor, "%x", &textColor );
+}
+      if (_disabledColor) { sscanf( _disabledColor, "%x", &disabledColor );
+}
     }
 
     CGUIControl* ControlEdit::Create()

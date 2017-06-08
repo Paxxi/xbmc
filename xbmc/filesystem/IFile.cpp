@@ -45,7 +45,8 @@ int IFile::Stat(struct __stat64* buffer)
 }
 bool IFile::ReadString(char *szLine, int iLineLength)
 {
-  if(Seek(0, SEEK_CUR) < 0) return false;
+  if(Seek(0, SEEK_CUR) < 0) { return false;
+}
 
   int64_t iFilePos = GetPosition();
   int iBytesRead = Read( (unsigned char*)szLine, iLineLength - 1);

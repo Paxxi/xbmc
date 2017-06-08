@@ -154,8 +154,10 @@ bool GUIScrollBarControl::Move(int numSteps)
     return false;
 
   m_offset += numSteps * m_pageSize;
-  if (m_offset > m_numItems - m_pageSize) m_offset = m_numItems - m_pageSize;
-  if (m_offset < 0) m_offset = 0;
+  if (m_offset > m_numItems - m_pageSize) { m_offset = m_numItems - m_pageSize;
+}
+  if (m_offset < 0) { m_offset = 0;
+}
   CGUIMessage message(GUI_MSG_NOTIFY_ALL, GetParentID(), GetID(), GUI_MSG_PAGE_CHANGE, m_offset);
   SendWindowMessage(message);
   SetInvalid();
@@ -245,7 +247,8 @@ bool GUIScrollBarControl::UpdateBarSize()
     // and the position
     percent = (m_numItems == m_pageSize) ? 0 : static_cast<float>(m_offset) / (m_numItems - m_pageSize);
     float nibPos = (GetHeight() - nibSize) * percent;
-    if (nibPos < 0) nibPos = 0;
+    if (nibPos < 0) { nibPos = 0;
+}
     if (nibPos > GetHeight() - nibSize) nibPos = GetHeight() - nibSize;
 
     changed |= m_guiBarNoFocus.SetPosition(GetXPosition(), GetYPosition() + nibPos);
@@ -269,7 +272,8 @@ bool GUIScrollBarControl::UpdateBarSize()
     // and the position
     percent = (m_numItems == m_pageSize) ? 0 : static_cast<float>(m_offset) / (m_numItems - m_pageSize);
     float nibPos = (GetWidth() - nibSize) * percent;
-    if (nibPos < 0) nibPos = 0;
+    if (nibPos < 0) { nibPos = 0;
+}
     if (nibPos > GetWidth() - nibSize) nibPos = GetWidth() - nibSize;
 
     changed |= m_guiBarNoFocus.SetPosition(GetXPosition() + nibPos, GetYPosition());
@@ -288,8 +292,10 @@ void GUIScrollBarControl::SetFromPosition(const CPoint &point)
     fPercent = (point.y - m_guiBackground.GetYPosition() - 0.5f*m_guiBarFocus.GetHeight()) / (m_guiBackground.GetHeight() - m_guiBarFocus.GetHeight());
   else
     fPercent = (point.x - m_guiBackground.GetXPosition() - 0.5f*m_guiBarFocus.GetWidth()) / (m_guiBackground.GetWidth() - m_guiBarFocus.GetWidth());
-  if (fPercent < 0) fPercent = 0;
-  if (fPercent > 1) fPercent = 1;
+  if (fPercent < 0) { fPercent = 0;
+}
+  if (fPercent > 1) { fPercent = 1;
+}
 
   int offset = static_cast<int>(floor(fPercent * (m_numItems - m_pageSize) + 0.5f));
 

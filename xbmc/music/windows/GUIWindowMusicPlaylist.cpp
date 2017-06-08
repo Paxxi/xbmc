@@ -346,7 +346,8 @@ void CGUIWindowMusicPlayList::ClearPlayList()
 
 void CGUIWindowMusicPlayList::RemovePlayListItem(int iItem)
 {
-  if (iItem < 0 || iItem > m_vecItems->Size()) return;
+  if (iItem < 0 || iItem > m_vecItems->Size()) { return;
+}
 
   // The current playing song can't be removed
   if (g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_MUSIC && g_application.m_pPlayer->IsPlayingAudio()
@@ -628,7 +629,8 @@ bool CGUIWindowMusicPlayList::OnContextButton(int itemNumber, CONTEXT_BUTTON but
 
 void CGUIWindowMusicPlayList::OnMove(int iItem, int iAction)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size()) return;
+  if (iItem < 0 || iItem >= m_vecItems->Size()) { return;
+}
 
   bool bRestart = m_musicInfoLoader.IsLoading();
   if (bRestart)
@@ -642,8 +644,10 @@ void CGUIWindowMusicPlayList::OnMove(int iItem, int iAction)
 
 void CGUIWindowMusicPlayList::MoveItem(int iStart, int iDest)
 {
-  if (iStart < 0 || iStart >= m_vecItems->Size()) return;
-  if (iDest < 0 || iDest >= m_vecItems->Size()) return;
+  if (iStart < 0 || iStart >= m_vecItems->Size()) { return;
+}
+  if (iDest < 0 || iDest >= m_vecItems->Size()) { return;
+}
 
   // default to move up
   int iAction = ACTION_MOVE_ITEM_UP;

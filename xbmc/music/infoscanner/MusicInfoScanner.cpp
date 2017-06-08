@@ -993,7 +993,8 @@ void CMusicInfoScanner::FindArtForAlbums(VECALBUMS &albums, const std::string &p
 int CMusicInfoScanner::GetPathHash(const CFileItemList &items, std::string &hash)
 {
   // Create a hash based on the filenames, filesize and filedate.  Also count the number of files
-  if (0 == items.Size()) return 0;
+  if (0 == items.Size()) { return 0;
+}
   XBMC::XBMC_MD5 md5state;
   int count = 0;
   for (int i = 0; i < items.Size(); ++i)
@@ -1150,7 +1151,8 @@ INFO_RET CMusicInfoScanner::DownloadAlbumInfo(const CAlbum& album, const ADDON::
       scraper.GetAlbums().clear();
       scraper.GetAlbums().push_back(albumNfo);
     }
-    else if (result != CNfoFile::PARTIAL_NFO)
+    else { if 
+}(result != CNfoFile::PARTIAL_NFO)
       CLog::Log(LOGERROR,"Unable to find an url in nfo file: %s", strNfo.c_str());
   }
 

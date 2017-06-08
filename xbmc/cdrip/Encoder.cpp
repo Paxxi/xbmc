@@ -57,7 +57,8 @@ int64_t CEncoder::SeekCallback(void *opaque, int64_t position, int whence)
 
 bool CEncoder::Init(const char* strFile, int iInChannels, int iInRate, int iInBits)
 {
-  if (strFile == nullptr) return false;
+  if (strFile == nullptr) { return false;
+}
 
   m_dwWriteBufferPointer = 0;
   m_impl->m_strFile = strFile;
@@ -154,7 +155,8 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
     if (dwBytesRemaining > WRITEBUFFER_SIZE)
     {
       // data is not going to fit in our buffer, just write it to disk
-      if (FileWrite(pbtRemaining, dwBytesRemaining) == -1) return -1;
+      if (FileWrite(pbtRemaining, dwBytesRemaining) == -1) { return -1;
+}
       return iBytes;
     }
     else
@@ -171,7 +173,8 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
 int CEncoder::FlushStream()
 {
   int iResult;
-  if (m_dwWriteBufferPointer == 0) return 0;
+  if (m_dwWriteBufferPointer == 0) { return 0;
+}
 
   iResult = FileWrite(m_btWriteBuffer, m_dwWriteBufferPointer);
   m_dwWriteBufferPointer = 0;

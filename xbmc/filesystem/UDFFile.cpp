@@ -82,7 +82,8 @@ ssize_t CUDFFile::Read(void *lpBuf, size_t uiBufSize)
 //*********************************************************************************************
 void CUDFFile::Close()
 {
-  if (!m_bOpened) return ;
+  if (!m_bOpened) { return ;
+}
   m_udfIsoReaderLocal.CloseFile( m_hFile);
   m_bOpened = false;
 }
@@ -90,7 +91,8 @@ void CUDFFile::Close()
 //*********************************************************************************************
 int64_t CUDFFile::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   int64_t lNewPos = m_udfIsoReaderLocal.Seek(m_hFile, iFilePosition, iWhence);
   return lNewPos;
 }
@@ -98,14 +100,16 @@ int64_t CUDFFile::Seek(int64_t iFilePosition, int iWhence)
 //*********************************************************************************************
 int64_t CUDFFile::GetLength()
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   return m_udfIsoReaderLocal.GetFileSize(m_hFile);
 }
 
 //*********************************************************************************************
 int64_t CUDFFile::GetPosition()
 {
-  if (!m_bOpened) return -1;
+  if (!m_bOpened) { return -1;
+}
   return m_udfIsoReaderLocal.GetFilePosition(m_hFile);
 }
 

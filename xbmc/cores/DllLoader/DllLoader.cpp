@@ -94,7 +94,8 @@ DllLoader::DllLoader(const char *sDll, bool bTrack, bool bSystemDll, bool bLoadS
   }
 
   DllLoaderContainer::RegisterDll(this);
-  if (m_bTrack) tracker_dll_add(this);
+  if (m_bTrack) { tracker_dll_add(this);
+}
   m_bLoadSymbols=bLoadSymbols;
 
   m_bUnloadSymbols=false;
@@ -122,7 +123,8 @@ DllLoader::~DllLoader()
     LoadedList* entry = m_pDlls;
     m_pDlls = entry->pNext;
     LibraryLoader* lib = entry->pDll;
-    if (entry->pDll) DllLoaderContainer::ReleaseModule(lib);
+    if (entry->pDll) { DllLoaderContainer::ReleaseModule(lib);
+}
     delete entry;
   }
 
@@ -135,7 +137,8 @@ DllLoader::~DllLoader()
     Restore_LDT_Keeper(m_ldt_fs);
 #endif
   }
-  if (m_bTrack) tracker_dll_free(this);
+  if (m_bTrack) { tracker_dll_free(this);
+}
 
   ImportDirTable = nullptr;
 
@@ -237,7 +240,8 @@ void DllLoader::PrintImportTable(ImportDirTable_t *ImportDirTable)
     CLog::Log(LOGDEBUG, "\n");
     Imp++;
   }
-  if (!HavePrinted) CLog::Log(LOGDEBUG, "None.");
+  if (!HavePrinted) { CLog::Log(LOGDEBUG, "None.");
+}
 }
 
 void DllLoader::PrintExportTable(ExportDirTable_t *ExportDirTable)
@@ -300,7 +304,8 @@ int DllLoader::ResolveImports()
       const char* FileName=ResolveReferencedDll(Name);
       //  If possible use the dll name WITH path to resolve exports. We could have loaded
       //  a dll with the same name as another dll but from a different directory
-      if (FileName) Name=FileName;
+      if (FileName) { Name=FileName;
+}
 
       unsigned long *Table = reinterpret_cast<unsigned long*>(RVA2Data(Imp->ImportLookupTable_RVA));
       unsigned long *Addr = reinterpret_cast<unsigned long*>(RVA2Data(Imp->ImportAddressTable_RVA));
@@ -644,29 +649,44 @@ bool DllLoader::Load()
     if (dispatch_rva == 0x124C30)
     {
       CLog::Log(LOGINFO, "QuickTime5 DLLs found\n");
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x19e842)[i] = 0x90; // make_new_region ?
-      for (i = 0;i < 28;i++) ((BYTE*)base + 0x19e86d)[i] = 0x90; // call__call_CreateCompatibleDC ?
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x19e898)[i] = 0x90; // jmp_to_call_loadbitmap ?
-      for (i = 0;i < 9;i++) ((BYTE*)base + 0x19e8ac)[i] = 0x90; // call__calls_OLE_shit ?
-      for (i = 0;i < 106;i++) ((BYTE*)base + 0x261B10)[i] = 0x90; // disable threads
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x19e842)[i] = 0x90; // make_new_region ?
+}
+      for (i = 0;i < 28;i++) { ((BYTE*)base + 0x19e86d)[i] = 0x90; // call__call_CreateCompatibleDC ?
+}
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x19e898)[i] = 0x90; // jmp_to_call_loadbitmap ?
+}
+      for (i = 0;i < 9;i++) { ((BYTE*)base + 0x19e8ac)[i] = 0x90; // call__calls_OLE_shit ?
+}
+      for (i = 0;i < 106;i++) { ((BYTE*)base + 0x261B10)[i] = 0x90; // disable threads
+}
     }
     else if (dispatch_rva == 0x13B330)
     {
       CLog::Log(LOGINFO, "QuickTime6 DLLs found\n");
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x2730CC)[i] = 0x90; // make_new_region
-      for (i = 0;i < 28;i++) ((BYTE*)base + 0x2730f7)[i] = 0x90; // call__call_CreateCompatibleDC
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x273122)[i] = 0x90; // jmp_to_call_loadbitmap
-      for (i = 0;i < 9;i++) ((BYTE*)base + 0x273131)[i] = 0x90; // call__calls_OLE_shit
-      for (i = 0;i < 96;i++) ((BYTE*)base + 0x2AC852)[i] = 0x90; // disable threads
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x2730CC)[i] = 0x90; // make_new_region
+}
+      for (i = 0;i < 28;i++) { ((BYTE*)base + 0x2730f7)[i] = 0x90; // call__call_CreateCompatibleDC
+}
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x273122)[i] = 0x90; // jmp_to_call_loadbitmap
+}
+      for (i = 0;i < 9;i++) { ((BYTE*)base + 0x273131)[i] = 0x90; // call__calls_OLE_shit
+}
+      for (i = 0;i < 96;i++) { ((BYTE*)base + 0x2AC852)[i] = 0x90; // disable threads
+}
     }
     else if (dispatch_rva == 0x13C3E0)
     {
       CLog::Log(LOGINFO, "QuickTime6.3 DLLs found\n");
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x268F6C)[i] = 0x90; // make_new_region
-      for (i = 0;i < 28;i++) ((BYTE*)base + 0x268F97)[i] = 0x90; // call__call_CreateCompatibleDC
-      for (i = 0;i < 5;i++) ((BYTE*)base + 0x268FC2)[i] = 0x90; // jmp_to_call_loadbitmap
-      for (i = 0;i < 9;i++) ((BYTE*)base + 0x268FD1)[i] = 0x90; // call__calls_OLE_shit
-      for (i = 0;i < 96;i++) ((BYTE*)base + 0x2B4722)[i] = 0x90; // disable threads
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x268F6C)[i] = 0x90; // make_new_region
+}
+      for (i = 0;i < 28;i++) { ((BYTE*)base + 0x268F97)[i] = 0x90; // call__call_CreateCompatibleDC
+}
+      for (i = 0;i < 5;i++) { ((BYTE*)base + 0x268FC2)[i] = 0x90; // jmp_to_call_loadbitmap
+}
+      for (i = 0;i < 9;i++) { ((BYTE*)base + 0x268FD1)[i] = 0x90; // call__calls_OLE_shit
+}
+      for (i = 0;i < 96;i++) { ((BYTE*)base + 0x2B4722)[i] = 0x90; // disable threads
+}
     }
     else
     {

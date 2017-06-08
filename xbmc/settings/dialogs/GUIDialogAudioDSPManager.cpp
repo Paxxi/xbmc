@@ -234,7 +234,8 @@ bool CGUIDialogAudioDSPManager::OnClickListAvailable(CGUIMessage &message)
   int iItem = m_availableViewControl.GetSelectedItem();
 
   /* Check file item is in list range and get his pointer */
-  if (iItem < 0 || iItem >= m_availableItems[m_iCurrentType]->Size()) return true;
+  if (iItem < 0 || iItem >= m_availableItems[m_iCurrentType]->Size()) { return true;
+}
 
   /* Process actions */
   if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_MOUSE_RIGHT_CLICK)
@@ -256,7 +257,8 @@ bool CGUIDialogAudioDSPManager::OnClickListActive(CGUIMessage &message)
     int iItem = m_activeViewControl.GetSelectedItem();
 
     /* Check file item is in list range and get his pointer */
-    if (iItem < 0 || iItem >= m_activeItems[m_iCurrentType]->Size()) return true;
+    if (iItem < 0 || iItem >= m_activeItems[m_iCurrentType]->Size()) { return true;
+}
 
     /* Process actions */
     if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_LEFT_CLICK || iAction == ACTION_MOUSE_RIGHT_CLICK)

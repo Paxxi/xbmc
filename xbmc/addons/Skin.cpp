@@ -208,11 +208,15 @@ struct closestRes
   bool operator()(const RESOLUTION_INFO &i, const RESOLUTION_INFO &j)
   {
     float diff = fabs(i.DisplayRatio() - m_target.DisplayRatio()) - fabs(j.DisplayRatio() - m_target.DisplayRatio());
-    if (diff < 0) return true;
-    if (diff > 0) return false;
+    if (diff < 0) { return true;
+}
+    if (diff > 0) { return false;
+}
     diff = fabs((float)i.iHeight - m_target.iHeight) - fabs((float)j.iHeight - m_target.iHeight);
-    if (diff < 0) return true;
-    if (diff > 0) return false;
+    if (diff < 0) { return true;
+}
+    if (diff > 0) { return false;
+}
     return fabs((float)i.iWidth - m_target.iWidth) < fabs((float)j.iWidth - m_target.iWidth);
   }
   RESOLUTION_INFO m_target;

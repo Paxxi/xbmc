@@ -361,7 +361,8 @@ void CGUITextBox::ScrollToOffset(int offset, bool autoScroll)
 
 void CGUITextBox::SetAutoScrolling(const TiXmlNode *node)
 {
-  if (!node) return;
+  if (!node) { return;
+}
   const TiXmlElement *scroll = node->FirstChildElement("autoscroll");
   if (scroll)
   {

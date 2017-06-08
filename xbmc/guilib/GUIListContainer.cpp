@@ -138,7 +138,8 @@ bool CGUIListContainer::MoveUp(bool wrapAround)
     if (!m_items.empty())
     { // move 2 last item in list, and set our container moving up
       int offset = m_items.size() - m_itemsPerPage;
-      if (offset < 0) offset = 0;
+      if (offset < 0) { offset = 0;
+}
       SetCursor(m_items.size() - offset - 1);
       ScrollToOffset(offset);
       SetContainerMoving(-1);
@@ -184,13 +185,15 @@ void CGUIListContainer::Scroll(int amount)
   {
     offset = m_items.size() - m_itemsPerPage;
   }
-  if (offset < 0) offset = 0;
+  if (offset < 0) { offset = 0;
+}
   ScrollToOffset(offset);
 }
 
 void CGUIListContainer::ValidateOffset()
 {
-  if (!m_layout) return;
+  if (!m_layout) { return;
+}
   // first thing is we check the range of our offset
   // don't validate offset if we are scrolling in case the tween image exceed <0, 1> range
   int minOffset, maxOffset;
@@ -209,8 +212,10 @@ void CGUIListContainer::ValidateOffset()
 
 void CGUIListContainer::SetCursor(int cursor)
 {
-  if (cursor > m_itemsPerPage - 1) cursor = m_itemsPerPage - 1;
-  if (cursor < 0) cursor = 0;
+  if (cursor > m_itemsPerPage - 1) { cursor = m_itemsPerPage - 1;
+}
+  if (cursor < 0) { cursor = 0;
+}
   if (!m_wasReset)
     SetContainerMoving(cursor - GetCursor());
   CGUIBaseContainer::SetCursor(cursor);

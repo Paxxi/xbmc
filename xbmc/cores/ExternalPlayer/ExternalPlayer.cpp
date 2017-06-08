@@ -215,7 +215,8 @@ void CExternalPlayer::Process()
 }
         }
         CLog::Log(LOGINFO, "%s: File matched:'%s' (RE='%s',Rep='%s') new filename:'%s'.", __FUNCTION__, strMatch.c_str(), strPat.c_str(), strRep.c_str(), mainFile.c_str());
-        if (bStop) break;
+        if (bStop) { break;
+}
       }
     }
   }

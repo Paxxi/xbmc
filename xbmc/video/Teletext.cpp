@@ -1396,35 +1396,47 @@ void CTeletextDecoder::DoFlashing(int startrow)
         switch (flashattr.flashing &0x1c) // Flash Rate
         {
           case 0x00 :  // 1 Hz
-            if (flashphase>500) doflash = true;
+            if (flashphase>500) { doflash = true;
+}
             break;
           case 0x04 :  // 2 Hz  Phase 1
-            if (flashphase<250) doflash = true;
+            if (flashphase<250) { doflash = true;
+}
             break;
           case 0x08 :  // 2 Hz  Phase 2
-            if (flashphase>=250 && flashphase<500) doflash = true;
+            if (flashphase>=250 && flashphase<500) { doflash = true;
+}
             break;
           case 0x0c :  // 2 Hz  Phase 3
-            if (flashphase>=500 && flashphase<750) doflash = true;
+            if (flashphase>=500 && flashphase<750) { doflash = true;
+}
             break;
           case 0x10 :  // incremental flash
             incflash++;
-            if (incflash>3) incflash = 1;
+            if (incflash>3) { incflash = 1;
+}
             switch (incflash)
             {
-              case 1: if (flashphase<250) doflash = true; break;
-              case 2: if (flashphase>=250 && flashphase<500) doflash = true;break;
-              case 3: if (flashphase>=500 && flashphase<750) doflash = true;
+              case 1: if (flashphase<250) { doflash = true; 
+}break;
+              case 2: if (flashphase>=250 && flashphase<500) { doflash = true;
+}break;
+              case 3: if (flashphase>=500 && flashphase<750) { doflash = true;
+}
             }
             break;
           case 0x14 :  // decremental flash
             decflash--;
-            if (decflash<1) decflash = 3;
+            if (decflash<1) { decflash = 3;
+}
             switch (decflash)
             {
-              case 1: if (flashphase<250) doflash = true; break;
-              case 2: if (flashphase>=250 && flashphase<500) doflash = true;break;
-              case 3: if (flashphase>=500 && flashphase<750) doflash = true;
+              case 1: if (flashphase<250) { doflash = true; 
+}break;
+              case 2: if (flashphase>=250 && flashphase<500) { doflash = true;
+}break;
+              case 3: if (flashphase>=500 && flashphase<750) { doflash = true;
+}
             }
             break;
 
@@ -1433,20 +1445,25 @@ void CTeletextDecoder::DoFlashing(int startrow)
         switch (flashattr.flashing &0x03) // Flash Mode
         {
           case 0x01 :  // normal Flashing
-            if (doflash) flashattr.fg = flashattr.bg;
+            if (doflash) { flashattr.fg = flashattr.bg;
+}
             break;
           case 0x02 :  // inverted Flashing
             doflash = !doflash;
-            if (doflash) flashattr.fg = flashattr.bg;
+            if (doflash) { flashattr.fg = flashattr.bg;
+}
             break;
           case 0x03 :  // color Flashing
-            if (doflash) flashattr.fg = flashattr.fg + (flashattr.fg > 7 ? (-8) : 8);
+            if (doflash) { flashattr.fg = flashattr.fg + (flashattr.fg > 7 ? (-8) : 8);
+}
             break;
 
         }
         RenderCharFB(flashchar, &flashattr);
-        if (flashattr.doublew) col++;
-        if (flashattr.doubleh) dhset = 1;
+        if (flashattr.doublew) { col++;
+}
+        if (flashattr.doubleh) { dhset = 1;
+}
 
         m_updateTexture = true;
       }
@@ -2010,7 +2027,8 @@ void CTeletextDecoder::FillBorder(color_t Color)
 
 void CTeletextDecoder::FillRect(color_t *buffer, int xres, int x, int y, int w, int h, color_t Color)
 {
-  if (!buffer) return;
+  if (!buffer) { return;
+}
 
   color_t *p = buffer + x + y * xres;
 
@@ -2026,7 +2044,8 @@ void CTeletextDecoder::FillRect(color_t *buffer, int xres, int x, int y, int w, 
 
 void CTeletextDecoder::DrawVLine(color_t *lfb, int xres, int x, int y, int l, color_t color)
 {
-  if (!lfb) return;
+  if (!lfb) { return;
+}
   color_t *p = lfb + x + y * xres;
 
   for ( ; l > 0 ; l--)
@@ -2038,7 +2057,8 @@ void CTeletextDecoder::DrawVLine(color_t *lfb, int xres, int x, int y, int l, co
 
 void CTeletextDecoder::DrawHLine(color_t *lfb, int xres,int x, int y, int l, color_t color)
 {
-  if (!lfb) return;
+  if (!lfb) { return;
+}
   if (l > 0) {
     SDL_memset4(lfb + x + y * xres, color, l);
 }
@@ -2050,7 +2070,8 @@ void CTeletextDecoder::RenderDRCS(int xres,
                                  unsigned char *ax, /* array[0..12] of x-offsets, array[0..10] of y-offsets for each pixel */
                                  color_t fgcolor, color_t bgcolor)
 {
-  if (d == nullptr) return;
+  if (d == nullptr) { return;
+}
 
   unsigned char *ay = ax + 13; /* array[0..10] of y-offsets for each pixel */
 
@@ -2090,7 +2111,8 @@ void CTeletextDecoder::RenderDRCS(int xres,
 
 void CTeletextDecoder::FillRectMosaicSeparated(color_t *lfb, int xres,int x, int y, int w, int h, color_t fgcolor, color_t bgcolor, int set)
 {
-  if (!lfb) return;
+  if (!lfb) { return;
+}
   FillRect(lfb,xres,x, y, w, h, bgcolor);
   if (set)
   {
@@ -2273,7 +2295,8 @@ void CTeletextDecoder::RenderCharIntern(TextRenderInfo_t* RenderInfo, int Char, 
   int curfontwidth2         = GetCurFontWidth();
   m_RenderInfo.PosX        -= t;
   int alphachar             = RenderChar(m_TextureBuffer+(yoffset)*m_RenderInfo.Width, m_RenderInfo.Width, Char, &m_RenderInfo.PosX, m_RenderInfo.PosY, Attribute, zoom > 0, curfontwidth, curfontwidth2, m_RenderInfo.FontHeight, m_RenderInfo.TranspMode, m_RenderInfo.axdrcs, m_Ascender);
-  if (alphachar <= 0) return;
+  if (alphachar <= 0) { return;
+}
 
   if (zoom && Attribute->doubleh) {
     factor = 4;
@@ -2380,7 +2403,8 @@ void CTeletextDecoder::RenderCharIntern(TextRenderInfo_t* RenderInfo, int Char, 
   if (m_Ascender - m_sBit->top + m_RenderInfo.TTFShiftY + he > m_RenderInfo.FontHeight) {
     he = m_RenderInfo.FontHeight - m_Ascender + m_sBit->top - m_RenderInfo.TTFShiftY; /* limit char height to defined/calculated FontHeight */
 }
-  if (he < 0) he = m_RenderInfo.FontHeight;
+  if (he < 0) { he = m_RenderInfo.FontHeight;
+}
 
   p = m_TextureBuffer + m_RenderInfo.PosX + (yoffset + m_RenderInfo.PosY + Row) * m_RenderInfo.Width; /* running pointer into framebuffer */
   for (Row = he; Row; Row--) /* row counts up, but down may be a little faster :) */
@@ -3161,7 +3185,8 @@ TextPageinfo_t* CTeletextDecoder::DecodePage(bool showl25,             // 1=deco
             } else if (charset == C_G0S) {
               charset = previous_charset = C_G0P;
 }
-          } else esc_pending = 1;
+          } else { esc_pending = 1;
+}
           break;
 
         case black_background:
@@ -3426,7 +3451,8 @@ void CTeletextDecoder::Eval_l25(unsigned char* PageChar, TextPageAttr_t *PageAtr
                 ct--;
                 type = (p[18*40+5] >> 2*ct) & 0x03;
 
-                if (type == 0) continue;
+                if (type == 0) { continue;
+}
                   obj[(type-1)*(tstart)+ct*4  ] = 3 * ((p[18*40+7+ct*2] >> 1) & 0x03) + type; //triplet
                   obj[(type-1)*(tstart)+ct*4+1] = ((p[18*40+7+ct*2] & 0x08) >> 3) + 1       ; //packet
                   obj[(type-1)*(tstart)+ct*4+2] = p[18*40+6+ct*2] & 0x0f                    ; //subp
@@ -3457,7 +3483,8 @@ void CTeletextDecoder::Eval_l25(unsigned char* PageChar, TextPageAttr_t *PageAtr
                 ct--;
                 type = (p[opop+5] >> 2*ct) & 0x03;
 
-                if (type == 0) continue;
+                if (type == 0) { continue;
+}
                   obj[(type-1)*(tstart)+(ct+2)*4  ] = 3 * ((p[opop+7+ct*2] >> 1) & 0x03) + type; //triplet
                   obj[(type-1)*(tstart)+(ct+2)*4+1] = ((p[opop+7+ct*2] & 0x08) >> 3) + 1       ; //packet
                   obj[(type-1)*(tstart)+(ct+2)*4+2] = p[opop+6+ct*2]                           ; //subp
@@ -3546,7 +3573,8 @@ void CTeletextDecoder::Eval_l25(unsigned char* PageChar, TextPageAttr_t *PageAtr
     {
       for (int i = 0; i < 25*40; i++)
       {
-        if (PageAtrb[i].concealed) PageAtrb[i].fg = PageAtrb[i].bg;
+        if (PageAtrb[i].concealed) { PageAtrb[i].fg = PageAtrb[i].bg;
+}
       }
     }
   } /* is_dec(page) */
@@ -3753,7 +3781,8 @@ int CTeletextDecoder::Eval_Triplet(int iOData, TextCachedPage_t *pstCachedPage,
       /* ignore */
       break;
     case 0x07:
-      if ((iData & 0x60) != 0) break; // reserved data field
+      if ((iData & 0x60) != 0) { break; // reserved data field
+}
       if (*endcol < 0) /* passive object */
       {
         attrPassive->flashing=iData & 0x1f;
@@ -3807,7 +3836,8 @@ int CTeletextDecoder::Eval_Triplet(int iOData, TextCachedPage_t *pstCachedPage,
         attrPassive->doubleh = dh;
         attrPassive->doublew = dw;
         attrPassive->boxwin = bw;
-        if (bw) attrPassive->IgnoreAtBlackBgSubst = 0;
+        if (bw) { attrPassive->IgnoreAtBlackBgSubst = 0;
+}
         if (sep)
         {
           if (attrPassive->charset == C_G1C) {
@@ -3858,7 +3888,8 @@ int CTeletextDecoder::Eval_Triplet(int iOData, TextCachedPage_t *pstCachedPage,
           p->doublew = dw;
           p->doubleh = dh;
           p->boxwin = bw;
-          if (bw) p->IgnoreAtBlackBgSubst = 0;
+          if (bw) { p->IgnoreAtBlackBgSubst = 0;
+}
           p++;
           c++;
           c1++;

@@ -462,7 +462,8 @@ bool CPVRChannel::SetStreamURL(const std::string &strStreamURL)
 
 void CPVRChannel::UpdatePath(CPVRChannelGroupInternal* group)
 {
-  if (!group) return;
+  if (!group) { return;
+}
 
   std::string strFileNameAndPath;
   CSingleLock lock(m_critSection);

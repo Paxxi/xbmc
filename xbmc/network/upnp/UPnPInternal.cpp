@@ -265,7 +265,8 @@ PopulateObjectFromTag(CMusicInfoTag&         tag,
 }object.m_MiscInfo.last_time = tag.GetLastPlayed().GetAsW3CDateTime().c_str();
     object.m_MiscInfo.play_count = tag.GetPlayCount();
 
-    if (resource) resource->m_Duration = tag.GetDuration();
+    if (resource) { resource->m_Duration = tag.GetDuration();
+}
 
     return NPT_SUCCESS;
 }
@@ -430,7 +431,8 @@ BuildObject(CFileItem&                    item,
         }
 
         // duration of zero is invalid
-        if (resource.m_Duration == 0) resource.m_Duration = -1;
+        if (resource.m_Duration == 0) { resource.m_Duration = -1;
+}
 
         // Set the resource file size
         resource.m_Size = item.m_dwSize;
@@ -592,7 +594,8 @@ BuildObject(CFileItem&                    item,
     if (object->m_Title.IsEmpty()) {
         if (!item.GetLabel().empty()) {
             std::string title = item.GetLabel();
-            if (item.IsPlayList() || !item.m_bIsFolder) URIUtils::RemoveExtension(title);
+            if (item.IsPlayList() || !item.m_bIsFolder) { URIUtils::RemoveExtension(title);
+}
             object->m_Title = title.c_str();
         }
     }

@@ -186,10 +186,12 @@ void CPlayList::Insert(const CFileItemPtr &item, int iPosition /* = -1 */)
 
 void CPlayList::DecrementOrder(int iOrder)
 {
-  if (iOrder < 0) return;
+  if (iOrder < 0) { return;
+}
 
   // it was the last item so do nothing
-  if (iOrder == size()) return;
+  if (iOrder == size()) { return;
+}
 
   // fix all items with an order greater than the removed iOrder
   ivecItems it;
@@ -208,7 +210,8 @@ void CPlayList::DecrementOrder(int iOrder)
 
 void CPlayList::IncrementOrder(int iPosition, int iOrder)
 {
-  if (iOrder < 0) return;
+  if (iOrder < 0) { return;
+}
 
   // fix all items with an order equal or greater to the added iOrder at iPos
   ivecItems it;
@@ -499,7 +502,8 @@ bool CPlayList::Expand(int position)
 
 void CPlayList::UpdateItem(const CFileItem *item)
 {
-  if (!item) return;
+  if (!item) { return;
+}
 
   for (ivecItems it = m_vecItems.begin(); it != m_vecItems.end(); ++it)
   {

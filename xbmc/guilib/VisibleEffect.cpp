@@ -63,7 +63,8 @@ CAnimEffect::CAnimEffect(const CAnimEffect &src)
 
 CAnimEffect& CAnimEffect::operator=(const CAnimEffect &src)
 {
-  if (&src == this) return *this;
+  if (&src == this) { return *this;
+}
 
   m_matrix = src.m_matrix;
   m_effect = src.m_effect;
@@ -164,10 +165,14 @@ CFadeEffect::CFadeEffect(const TiXmlElement *node, bool reverseDefaults) : CAnim
   }
   node->QueryFloatAttribute("start", &m_startAlpha);
   node->QueryFloatAttribute("end", &m_endAlpha);
-  if (m_startAlpha > 100.0f) m_startAlpha = 100.0f;
-  if (m_endAlpha > 100.0f) m_endAlpha = 100.0f;
-  if (m_startAlpha < 0) m_startAlpha = 0;
-  if (m_endAlpha < 0) m_endAlpha = 0;
+  if (m_startAlpha > 100.0f) { m_startAlpha = 100.0f;
+}
+  if (m_endAlpha > 100.0f) { m_endAlpha = 100.0f;
+}
+  if (m_startAlpha < 0) { m_startAlpha = 0;
+}
+  if (m_endAlpha < 0) { m_endAlpha = 0;
+}
 }
 
 CFadeEffect::CFadeEffect(float start, float end, unsigned int delay, unsigned int length) : CAnimEffect(delay, length, EFFECT_TYPE_FADE)
@@ -385,7 +390,8 @@ CAnimation::~CAnimation()
 
 CAnimation &CAnimation::operator =(const CAnimation &src)
 {
-  if (this == &src) return *this; // same
+  if (this == &src) { return *this; // same
+}
   m_type = src.m_type;
   m_reversible = src.m_reversible;
   m_condition = src.m_condition;
@@ -733,7 +739,8 @@ CScroller::CScroller(const CScroller& right)
 
 CScroller& CScroller::operator=(const CScroller &right)
 {
-  if (&right == this) return *this;
+  if (&right == this) { return *this;
+}
 
   m_scrollValue = right.m_scrollValue;
   m_delta = right.m_delta;

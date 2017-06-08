@@ -334,7 +334,8 @@ bool CGUIFontTTFBase::Load(const std::string& strFilename, float height, float a
 
   // cache the ellipses width
   Character *ellipse = GetCharacter(L'.');
-  if (ellipse) m_ellipsesWidth = ellipse->advance;
+  if (ellipse) { m_ellipsesWidth = ellipse->advance;
+}
 
   return true;
 }
@@ -598,7 +599,8 @@ float CGUIFontTTFBase::GetTextWidthInternal(vecText::const_iterator start, vecTe
 float CGUIFontTTFBase::GetCharWidthInternal(character_t ch)
 {
   Character *c = GetCharacter(ch);
-  if (c) return c->advance;
+  if (c) { return c->advance;
+}
   return 0;
 }
 
@@ -680,7 +682,8 @@ CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
   // must End() as we can't render text to our texture during a Begin(), End() block
   unsigned int nestedBeginCount = m_nestedBeginCount;
   m_nestedBeginCount = 1;
-  if (nestedBeginCount) End();
+  if (nestedBeginCount) { End();
+}
   if (!CacheCharacter(letter, style, m_char + low))
   { // unable to cache character - try clearing them all out and starting over
     CLog::Log(LOGDEBUG, "%s: Unable to cache character.  Clearing character cache of %i characters", __FUNCTION__, m_numChars);
@@ -689,12 +692,14 @@ CGUIFontTTFBase::Character* CGUIFontTTFBase::GetCharacter(character_t chr)
     if (!CacheCharacter(letter, style, m_char + low))
     {
       CLog::Log(LOGERROR, "%s: Unable to cache character (out of memory?)", __FUNCTION__);
-      if (nestedBeginCount) Begin();
+      if (nestedBeginCount) { Begin();
+}
       m_nestedBeginCount = nestedBeginCount;
       return nullptr;
     }
   }
-  if (nestedBeginCount) Begin();
+  if (nestedBeginCount) { Begin();
+}
   m_nestedBeginCount = nestedBeginCount;
 
   // fixup quick access

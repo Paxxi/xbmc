@@ -108,7 +108,8 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const std::string &method, ITranspor
         if (!installed.isBoolean() || (installed.isBoolean() && !installed.asBoolean()))
           CAddonMgr::GetInstance().GetInstallableAddons(typeAddons, *typeIt);
       }
-      else if (enabled.asBoolean() && (!installed.isBoolean() || installed.asBoolean())) //Enabled
+      else { if 
+}(enabled.asBoolean() && (!installed.isBoolean() || installed.asBoolean())) //Enabled
         CAddonMgr::GetInstance().GetAddons(typeAddons, *typeIt);
       else if (!installed.isBoolean() || installed.asBoolean())
         CAddonMgr::GetInstance().GetDisabledAddons(typeAddons, *typeIt);

@@ -3133,10 +3133,14 @@ bool CMusicDatabase::CleanupOrphanedItems()
   // paths aren't cleaned up here - they're cleaned up in RemoveSongsFromPath()
   if (NULL == m_pDB.get()) return false;
   if (NULL == m_pDS.get()) return false;
-  if (!CleanupAlbums()) return false;
-  if (!CleanupArtists()) return false;
-  if (!CleanupGenres()) return false;
-  if (!CleanupRoles()) return false;
+  if (!CleanupAlbums()) { return false;
+}
+  if (!CleanupArtists()) { return false;
+}
+  if (!CleanupGenres()) { return false;
+}
+  if (!CleanupRoles()) { return false;
+}
   return true;
 }
 
@@ -3298,8 +3302,10 @@ bool CMusicDatabase::LookupCDDBInfo(bool bRequery/*=false*/)
     CGUIDialogProgress* pDialogProgress = g_windowManager.GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
     CGUIDialogSelect *pDlgSelect = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
 
-    if (!pDialogProgress) return false;
-    if (!pDlgSelect) return false;
+    if (!pDialogProgress) { return false;
+}
+    if (!pDlgSelect) { return false;
+}
 
     // Show progress dialog if we have to connect to freedb.org
     pDialogProgress->SetHeading(CVariant{255}); //CDDB
@@ -5632,7 +5638,8 @@ bool CMusicDatabase::SetPathHash(const std::string &path, const std::string &has
 }
     }
     int idPath = AddPath(path);
-    if (idPath < 0) return false;
+    if (idPath < 0) { return false;
+}
 
     std::string strSQL=PrepareSQL("update path set strHash='%s' where idPath=%ld", hash.c_str(), idPath);
     m_pDS->exec(strSQL);
@@ -5788,7 +5795,8 @@ bool CMusicDatabase::SetSongUserrating(const std::string &filePath, int userrati
     if (NULL == m_pDS.get()) return false;
 
     int songID = GetSongIDFromPath(filePath);
-    if (-1 == songID) return false;
+    if (-1 == songID) { return false;
+}
 
     std::string sql = PrepareSQL("UPDATE song SET userrating='%i' WHERE idSong = %i", userrating, songID);
     m_pDS->exec(sql);
@@ -5808,7 +5816,8 @@ bool CMusicDatabase::SetAlbumUserrating(const int idAlbum, int userrating)
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
-    if (-1 == idAlbum) return false;
+    if (-1 == idAlbum) { return false;
+}
 
     std::string sql = PrepareSQL("UPDATE album SET iUserrating='%i' WHERE idAlbum = %i", userrating, idAlbum);
     m_pDS->exec(sql);
@@ -5830,7 +5839,8 @@ bool CMusicDatabase::SetSongVotes(const std::string &filePath, int votes)
     if (NULL == m_pDS.get()) return false;
 
     int songID = GetSongIDFromPath(filePath);
-    if (-1 == songID) return false;
+    if (-1 == songID) { return false;
+}
 
     std::string sql = PrepareSQL("UPDATE song SET votes='%i' WHERE idSong = %i", votes, songID);
     m_pDS->exec(sql);
@@ -6290,7 +6300,8 @@ void CMusicDatabase::ImportFromXML(const std::string &xmlFile)
 }
 
     TiXmlElement *root = xmlDoc.RootElement();
-    if (!root) return;
+    if (!root) { return;
+}
 
     if (progress)
     {

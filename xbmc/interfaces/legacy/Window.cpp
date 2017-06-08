@@ -296,7 +296,8 @@ namespace XBMCAddon
         ((ControlButton*)pControl)->focusedColor  = li.focusedColor;
         ((ControlButton*)pControl)->textColor  = li.textColor;
         ((ControlButton*)pControl)->shadowColor   = li.shadowColor;
-        if (li.font) ((ControlButton*)pControl)->strFont = li.font->GetFontName();
+        if (li.font) { ((ControlButton*)pControl)->strFont = li.font->GetFontName();
+}
         ((ControlButton*)pControl)->align = li.align;
         break;
       case CGUIControl::GUICONTROL_LABEL:
@@ -342,7 +343,8 @@ namespace XBMCAddon
         ((ControlRadioButton*)pControl)->focusedColor  = li.focusedColor;
         ((ControlRadioButton*)pControl)->textColor  = li.textColor;
         ((ControlRadioButton*)pControl)->shadowColor   = li.shadowColor;
-        if (li.font) ((ControlRadioButton*)pControl)->strFont = li.font->GetFontName();
+        if (li.font) { ((ControlRadioButton*)pControl)->strFont = li.font->GetFontName();
+}
         ((ControlRadioButton*)pControl)->align = li.align;
         break;
       case CGUIControl::GUICONTROL_EDIT:
@@ -353,7 +355,8 @@ namespace XBMCAddon
         // note: conversion from infocolors -> plain colors here
         ((ControlEdit*)pControl)->disabledColor = li.disabledColor;
         ((ControlEdit*)pControl)->textColor  = li.textColor;
-        if (li.font) ((ControlEdit*)pControl)->strFont = li.font->GetFontName();
+        if (li.font) { ((ControlEdit*)pControl)->strFont = li.font->GetFontName();
+}
         ((ControlButton*)pControl)->align = li.align;
         break;
       default:
@@ -651,7 +654,8 @@ namespace XBMCAddon
     void Window::clearProperty(const char* key)
     {
       XBMC_TRACE;
-      if (!key) return;
+      if (!key) { return;
+}
       SingleLockWithDelayGuard gslock(g_graphicsContext,languageHook);
 
       std::string lowerKey = key;

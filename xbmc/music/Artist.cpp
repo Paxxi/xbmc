@@ -57,7 +57,8 @@ void CArtist::MergeScrapedArtist(const CArtist& source, bool override /* = true 
 
 bool CArtist::Load(const TiXmlElement *artist, bool append, bool prioritise)
 {
-  if (!artist) return false;
+  if (!artist) { return false;
+}
   if (!append) {
     Reset();
 }
@@ -138,13 +139,15 @@ bool CArtist::Load(const TiXmlElement *artist, bool append, bool prioritise)
 
 bool CArtist::Save(TiXmlNode *node, const std::string &tag, const std::string& strPath)
 {
-  if (!node) return false;
+  if (!node) { return false;
+}
 
   // we start with a <tag> tag
   TiXmlElement artistElement(tag.c_str());
   TiXmlNode *artist = node->InsertEndChild(artistElement);
 
-  if (!artist) return false;
+  if (!artist) { return false;
+}
 
   XMLUtils::SetString(artist,                      "name", strArtist);
   XMLUtils::SetString(artist,       "musicBrainzArtistID", strMusicBrainzArtistID);

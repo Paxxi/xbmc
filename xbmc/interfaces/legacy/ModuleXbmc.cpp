@@ -450,7 +450,8 @@ namespace XBMCAddon
           StringUtils::Replace(result, "ss", "%S");
           StringUtils::Replace(result, "xx", "%p");
         }
-      else if (strcmpi(id, "meridiem") == 0)
+      else { if 
+}(strcmpi(id, "meridiem") == 0)
         result = StringUtils::Format("%s/%s",
                                      g_langInfo.GetMeridiemSymbol(MeridiemSymbolAM).c_str(),
                                      g_langInfo.GetMeridiemSymbol(MeridiemSymbolPM).c_str());

@@ -184,11 +184,13 @@ void CGUIDialogContextMenu::SetPosition(float posX, float posY)
   if (posY + GetHeight() > m_coordsRes.iHeight) {
     posY = m_coordsRes.iHeight - GetHeight();
 }
-  if (posY < 0) posY = 0;
+  if (posY < 0) { posY = 0;
+}
   if (posX + GetWidth() > m_coordsRes.iWidth) {
     posX = m_coordsRes.iWidth - GetWidth();
 }
-  if (posX < 0) posX = 0;
+  if (posX < 0) { posX = 0;
+}
   CGUIDialog::SetPosition(posX, posY);
 }
 
@@ -287,7 +289,8 @@ bool CGUIDialogContextMenu::OnContextButton(const std::string &type, const CFile
   
   // the rest of the operations require a valid share
   CMediaSource *share = GetShare(type, item.get());
-  if (!share) return false;
+  if (!share) { return false;
+}
   switch (button)
   {
   case CONTEXT_BUTTON_EDIT_SOURCE:

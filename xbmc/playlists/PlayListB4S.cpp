@@ -70,15 +70,18 @@ bool CPlayListB4S::LoadData(std::istream& stream)
   }
 
   TiXmlElement* pRootElement = xmlDoc.RootElement();
-  if (!pRootElement ) return false;
+  if (!pRootElement ) { return false;
+}
 
   TiXmlElement* pPlayListElement = pRootElement->FirstChildElement("playlist");
-  if (!pPlayListElement ) return false;
+  if (!pPlayListElement ) { return false;
+}
   m_strPlayListName = XMLUtils::GetAttribute(pPlayListElement, "label");
 
   TiXmlElement* pEntryElement = pPlayListElement->FirstChildElement("entry");
 
-  if (!pEntryElement) return false;
+  if (!pEntryElement) { return false;
+}
   while (pEntryElement)
   {
     std::string strFileName = XMLUtils::GetAttribute(pEntryElement, "Playstring");

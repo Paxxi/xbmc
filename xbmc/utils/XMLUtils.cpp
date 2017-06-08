@@ -28,7 +28,8 @@
 bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& hexValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   return sscanf(pNode->FirstChild()->Value(), "%x", &hexValue) == 1;
 }
 
@@ -36,7 +37,8 @@ bool XMLUtils::GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& 
 bool XMLUtils::GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& uintValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   uintValue = atol(pNode->FirstChild()->Value());
   return true;
 }
@@ -45,8 +47,10 @@ bool XMLUtils::GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t 
 {
   if (GetUInt(pRootNode, strTag, value))
   {
-    if (value < min) value = min;
-    if (value > max) value = max;
+    if (value < min) { value = min;
+}
+    if (value > max) { value = max;
+}
     return true;
   }
   return false;
@@ -55,7 +59,8 @@ bool XMLUtils::GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t 
 bool XMLUtils::GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLongValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   lLongValue = atol(pNode->FirstChild()->Value());
   return true;
 }
@@ -63,7 +68,8 @@ bool XMLUtils::GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLo
 bool XMLUtils::GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   iIntValue = atoi(pNode->FirstChild()->Value());
   return true;
 }
@@ -72,8 +78,10 @@ bool XMLUtils::GetInt(const TiXmlNode* pRootNode, const char* strTag, int &value
 {
   if (GetInt(pRootNode, strTag, value))
   {
-    if (value < min) value = min;
-    if (value > max) value = max;
+    if (value < min) { value = min;
+}
+    if (value > max) { value = max;
+}
     return true;
   }
   return false;
@@ -82,7 +90,8 @@ bool XMLUtils::GetInt(const TiXmlNode* pRootNode, const char* strTag, int &value
 bool XMLUtils::GetDouble(const TiXmlNode *root, const char *tag, double &value)
 {
   const TiXmlNode* node = root->FirstChild(tag);
-  if (!node || !node->FirstChild()) return false;
+  if (!node || !node->FirstChild()) { return false;
+}
   value = atof(node->FirstChild()->Value());
   return true;
 }
@@ -90,7 +99,8 @@ bool XMLUtils::GetDouble(const TiXmlNode *root, const char *tag, double &value)
 bool XMLUtils::GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& value)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   value = static_cast<float>(atof(pNode->FirstChild()->Value()));
   return true;
 }
@@ -99,8 +109,10 @@ bool XMLUtils::GetFloat(const TiXmlNode* pRootElement, const char *tagName, floa
 {
   if (GetFloat(pRootElement, tagName, fValue))
   { // check range
-    if (fValue < fMin) fValue = fMin;
-    if (fValue > fMax) fValue = fMax;
+    if (fValue < fMin) { fValue = fMin;
+}
+    if (fValue > fMax) { fValue = fMax;
+}
     return true;
   }
   return false;
@@ -109,7 +121,8 @@ bool XMLUtils::GetFloat(const TiXmlNode* pRootElement, const char *tagName, floa
 bool XMLUtils::GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& bBoolValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag );
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   std::string strEnabled = pNode->FirstChild()->ValueStr();
   StringUtils::ToLower(strEnabled);
   if (strEnabled == "off" || strEnabled == "no" || strEnabled == "disabled" || strEnabled == "false" || strEnabled == "0" )
@@ -126,7 +139,8 @@ bool XMLUtils::GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& 
 bool XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement) { return false;
+}
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();
@@ -151,7 +165,8 @@ std::string XMLUtils::GetString(const TiXmlNode* pRootNode, const char* strTag)
 bool XMLUtils::HasChild(const TiXmlNode* pRootNode, const char* strTag)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement) { return false;
+}
   const TiXmlNode* pNode = pElement->FirstChild();
   return (pNode != nullptr);
 }
@@ -225,7 +240,8 @@ bool XMLUtils::GetStringArray(const TiXmlNode* pRootNode, const char* strTag, st
 bool XMLUtils::GetPath(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue)
 {
   const TiXmlElement* pElement = pRootNode->FirstChildElement(strTag);
-  if (!pElement) return false;
+  if (!pElement) { return false;
+}
 
   const char* encoded = pElement->Attribute("urlencoded");
   const TiXmlNode* pNode = pElement->FirstChild();

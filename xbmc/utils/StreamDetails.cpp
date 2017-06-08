@@ -212,7 +212,8 @@ CStreamDetails& CStreamDetails::operator=(const CStreamDetails &that)
 
 bool CStreamDetails::operator ==(const CStreamDetails &right) const
 {
-  if (this == &right) return true;
+  if (this == &right) { return true;
+}
 
   if (GetVideoStreamCount()    != right.GetVideoStreamCount() ||
       GetAudioStreamCount()    != right.GetAudioStreamCount() ||
@@ -249,7 +250,8 @@ bool CStreamDetails::operator ==(const CStreamDetails &right) const
 
 bool CStreamDetails::operator !=(const CStreamDetails &right) const
 {
-  if (this == &right) return false;
+  if (this == &right) { return false;
+}
 
   return !(*this == right);
 }

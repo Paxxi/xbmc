@@ -1036,7 +1036,8 @@ std::string StringUtils::SizeToString(int64_t size)
     else
       strLabel = StringUtils::Format("%.2lf %cB", s, prefixes[i - 1]);
   }
-  else if (s >= 100.0)
+  else { if 
+}(s >= 100.0)
     strLabel = StringUtils::Format("%.1lf %cB", s, prefixes[i]);
   else
     strLabel = StringUtils::Format("%.2lf %cB", s, prefixes[i]);

@@ -95,7 +95,8 @@ void CGUIBaseContainer::Process(unsigned int currentTime, CDirtyRegionList &dirt
     UpdateLayout();
 }
 
-  if (!m_layout || !m_focusedLayout) return;
+  if (!m_layout || !m_focusedLayout) { return;
+}
 
   UpdateScrollOffset(currentTime);
 
@@ -153,7 +154,8 @@ void CGUIBaseContainer::Process(unsigned int currentTime, CDirtyRegionList &dirt
 
 void CGUIBaseContainer::ProcessItem(float posX, float posY, CGUIListItemPtr& item, bool focused, unsigned int currentTime, CDirtyRegionList &dirtyregions)
 {
-  if (!m_focusedLayout || !m_layout) return;
+  if (!m_focusedLayout || !m_layout) { return;
+}
 
   // set the origin
   g_graphicsContext.SetOrigin(posX, posY);
@@ -206,7 +208,8 @@ void CGUIBaseContainer::ProcessItem(float posX, float posY, CGUIListItemPtr& ite
 
 void CGUIBaseContainer::Render()
 {
-  if (!m_layout || !m_focusedLayout) return;
+  if (!m_layout || !m_focusedLayout) { return;
+}
 
   int offset = (int)floorf(m_scroller.GetValue() / m_layout->Size(m_orientation));
 
@@ -276,7 +279,8 @@ void CGUIBaseContainer::Render()
 
 void CGUIBaseContainer::RenderItem(float posX, float posY, CGUIListItem *item, bool focused)
 {
-  if (!m_focusedLayout || !m_layout) return;
+  if (!m_focusedLayout || !m_layout) { return;
+}
 
   // set the origin
   g_graphicsContext.SetOrigin(posX, posY);
@@ -1066,7 +1070,8 @@ inline float CGUIBaseContainer::Size() const
 int CGUIBaseContainer::ScrollCorrectionRange() const
 {
   int range = m_itemsPerPage / 4;
-  if (range <= 0) range = 1;
+  if (range <= 0) { range = 1;
+}
   return range;
 }
 
@@ -1100,7 +1105,8 @@ void CGUIBaseContainer::ScrollToOffset(int offset)
 
 void CGUIBaseContainer::SetAutoScrolling(const TiXmlNode *node)
 {
-  if (!node) return;
+  if (!node) { return;
+}
   const TiXmlElement *scroll = node->FirstChildElement("autoscroll");
   if (scroll)
   {
@@ -1225,7 +1231,8 @@ void CGUIBaseContainer::FreeMemory(int keepStart, int keepEnd)
 
 bool CGUIBaseContainer::InsideLayout(const CGUIListItemLayout *layout, const CPoint &point) const
 {
-  if (!layout) return false;
+  if (!layout) { return false;
+}
   if ((m_orientation == VERTICAL && (layout->Size(HORIZONTAL) > 1) && point.x > layout->Size(HORIZONTAL)) ||
       (m_orientation == HORIZONTAL && (layout->Size(VERTICAL) > 1)&& point.y > layout->Size(VERTICAL)))
     return false;

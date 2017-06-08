@@ -572,8 +572,10 @@ bool CUtil::ExcludeFileOrFolder(const std::string& strFileOrFolder, const std::v
 void CUtil::GetFileAndProtocol(const std::string& strURL, std::string& strDir)
 {
   strDir = strURL;
-  if (!URIUtils::IsRemote(strURL)) return ;
-  if (URIUtils::IsDVD(strURL)) return ;
+  if (!URIUtils::IsRemote(strURL)) { return ;
+}
+  if (URIUtils::IsDVD(strURL)) { return ;
+}
 
   CURL url(strURL);
   strDir = StringUtils::Format("%s://%s", url.GetProtocol().c_str(), url.GetFileName().c_str());
@@ -904,7 +906,8 @@ bool CUtil::CreateDirectoryEx(const std::string& strPath)
   // Creates the directory and subdirectories if needed.
 
   // return true if directory already exist
-  if (CDirectory::Exists(strPath)) return true;
+  if (CDirectory::Exists(strPath)) { return true;
+}
 
   // we currently only allow HD and smb and nfs paths
   if (!URIUtils::IsHD(strPath) && !URIUtils::IsSmb(strPath) && !URIUtils::IsNfs(strPath))
@@ -925,7 +928,8 @@ bool CUtil::CreateDirectoryEx(const std::string& strPath)
   }
 
   // was the final destination directory successfully created ?
-  if (!CDirectory::Exists(strPath)) return false;
+  if (!CDirectory::Exists(strPath)) { return false;
+}
   return true;
 }
 

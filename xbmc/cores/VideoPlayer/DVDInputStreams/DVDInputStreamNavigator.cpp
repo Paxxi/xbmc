@@ -157,9 +157,12 @@ bool CDVDInputStreamNavigator::Open()
   language_subtitle[2] = '\0';
 
   // set language settings in case they are not set in xbmc's configuration
-  if (language_menu[0] == '\0') strcpy(language_menu, "en");
-  if (language_audio[0] == '\0') strcpy(language_audio, "en");
-  if (language_subtitle[0] == '\0') strcpy(language_subtitle, "en");
+  if (language_menu[0] == '\0') { strcpy(language_menu, "en");
+}
+  if (language_audio[0] == '\0') { strcpy(language_audio, "en");
+}
+  if (language_subtitle[0] == '\0') { strcpy(language_subtitle, "en");
+}
 
   // set default language settings
   if (m_dll.dvdnav_menu_language_select(m_dvdnav, (char*)language_menu) != DVDNAV_STATUS_OK)
@@ -238,7 +241,8 @@ bool CDVDInputStreamNavigator::Open()
 
 void CDVDInputStreamNavigator::Close()
 {
-  if (!m_dvdnav) return;
+  if (!m_dvdnav) { return;
+}
 
   // finish off by closing the dvdnav device
   if (m_dll.dvdnav_close(m_dvdnav) != DVDNAV_STATUS_OK)
@@ -260,7 +264,8 @@ void CDVDInputStreamNavigator::Close()
 
 int CDVDInputStreamNavigator::Read(uint8_t* buf, int buf_size)
 {
-  if (!m_dvdnav || m_bEOF) return 0;
+  if (!m_dvdnav || m_bEOF) { return 0;
+}
   if (buf_size < DVD_VIDEO_BLOCKSIZE)
   {
     CLog::Log(LOGERROR, "CDVDInputStreamNavigator: buffer size is to small, %d bytes, should be 2048 bytes", buf_size);
@@ -714,7 +719,8 @@ void CDVDInputStreamNavigator::ActivateButton()
 
 void CDVDInputStreamNavigator::SelectButton(int iButton)
 {
-  if (!m_dvdnav) return;
+  if (!m_dvdnav) { return;
+}
   m_dll.dvdnav_button_select(m_dvdnav, m_dll.dvdnav_get_current_nav_pci(m_dvdnav), iButton);
 }
 
@@ -769,7 +775,8 @@ void CDVDInputStreamNavigator::CheckButtons()
 
 int CDVDInputStreamNavigator::GetTotalButtons()
 {
-  if (!m_dvdnav) return 0;
+  if (!m_dvdnav) { return 0;
+}
 
   pci_t* pci = m_dll.dvdnav_get_current_nav_pci(m_dvdnav);
 
@@ -865,7 +872,8 @@ void CDVDInputStreamNavigator::SkipStill()
 
 void CDVDInputStreamNavigator::SkipWait()
 {
-  if (!m_dvdnav) return ;
+  if (!m_dvdnav) { return ;
+}
   m_dll.dvdnav_wait_skip(m_dvdnav);
 }
 
@@ -973,12 +981,15 @@ void CDVDInputStreamNavigator::SetSubtitleStreamName(DVDNavStreamInfo &info, con
 
 int CDVDInputStreamNavigator::GetSubTitleStreamCount()
 {
-  if (!m_dvdnav) return 0;
+  if (!m_dvdnav) { return 0;
+}
 
   vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
 
-  if (!vm) return 0;
-  if (!vm->state.pgc) return 0;
+  if (!vm) { return 0;
+}
+  if (!vm->state.pgc) { return 0;
+}
 
   if (vm->state.domain == VTS_DOMAIN)
   {
@@ -1129,12 +1140,15 @@ DVDNavAudioStreamInfo CDVDInputStreamNavigator::GetAudioStreamInfo(const int iId
 
 int CDVDInputStreamNavigator::GetAudioStreamCount()
 {
-  if (!m_dvdnav) return 0;
+  if (!m_dvdnav) { return 0;
+}
 
   vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
 
-  if (!vm) return 0;
-  if (!vm->state.pgc) return 0;
+  if (!vm) { return 0;
+}
+  if (!vm->state.pgc) { return 0;
+}
 
   if (vm->state.domain == VTS_DOMAIN)
   {
@@ -1206,7 +1220,8 @@ bool CDVDInputStreamNavigator::GetCurrentButtonInfo(CDVDOverlaySpu* pOverlayPict
   int color[2][4];
   dvdnav_highlight_area_t hl;
 
-  if (!m_dvdnav) return false;
+  if (!m_dvdnav) { return false;
+}
 
   int iButton = GetCurrentButton();
 
@@ -1440,8 +1455,10 @@ int CDVDInputStreamNavigator::ConvertAudioStreamId_XBMCToExternal(int id)
     int stream = -1;
     for (int i = 0; i < 8; i++)
     {
-      if (vm->state.pgc->audio_control[i] & (1<<15)) stream++;
-      if (stream == id) return i;
+      if (vm->state.pgc->audio_control[i] & (1<<15)) { stream++;
+}
+      if (stream == id) { return i;
+}
     }
   }
   else if(id == 0) {
@@ -1453,12 +1470,16 @@ int CDVDInputStreamNavigator::ConvertAudioStreamId_XBMCToExternal(int id)
 
 int CDVDInputStreamNavigator::ConvertAudioStreamId_ExternalToXBMC(int id)
 {
-  if  (!m_dvdnav) return -1;
+  if  (!m_dvdnav) { return -1;
+}
   vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
 
-  if (!vm) return -1;
-  if (!vm->state.pgc) return -1;
-  if (id < 0) return -1;
+  if (!vm) { return -1;
+}
+  if (!vm->state.pgc) { return -1;
+}
+  if (id < 0) { return -1;
+}
 
   if( vm->state.domain == VTS_DOMAIN )
   {
@@ -1475,7 +1496,8 @@ int CDVDInputStreamNavigator::ConvertAudioStreamId_ExternalToXBMC(int id)
       int stream = -1;
       for (int i = 0; i <= id; i++)
       {
-        if (vm->state.pgc->audio_control[i] & (1<<15)) stream++;
+        if (vm->state.pgc->audio_control[i] & (1<<15)) { stream++;
+}
       }
       return stream;
     }
@@ -1516,8 +1538,10 @@ int CDVDInputStreamNavigator::ConvertSubtitleStreamId_XBMCToExternal(int id)
     int stream = -1;
     for (int i = 0; i < 32; i++)
     {
-      if (vm->state.pgc->subp_control[i] & (1<<31)) stream++;
-      if (stream == id) return i;
+      if (vm->state.pgc->subp_control[i] & (1<<31)) { stream++;
+}
+      if (stream == id) { return i;
+}
     }
   }
   else if(id == 0) {
@@ -1529,12 +1553,16 @@ int CDVDInputStreamNavigator::ConvertSubtitleStreamId_XBMCToExternal(int id)
 
 int CDVDInputStreamNavigator::ConvertSubtitleStreamId_ExternalToXBMC(int id)
 {
-  if  (!m_dvdnav) return -1;
+  if  (!m_dvdnav) { return -1;
+}
   vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
 
-  if (!vm) return -1;
-  if (!vm->state.pgc) return -1;
-  if (id < 0) return -1;
+  if (!vm) { return -1;
+}
+  if (!vm->state.pgc) { return -1;
+}
+  if (id < 0) { return -1;
+}
 
   if( vm->state.domain == VTS_DOMAIN )
   {
@@ -1551,7 +1579,8 @@ int CDVDInputStreamNavigator::ConvertSubtitleStreamId_ExternalToXBMC(int id)
       int stream = -1;
       for (int i = 0; i <= id; i++)
       {
-        if (vm->state.pgc->subp_control[i] & (1<<31)) stream++;
+        if (vm->state.pgc->subp_control[i] & (1<<31)) { stream++;
+}
       }
       return stream;
     }
@@ -1614,7 +1643,8 @@ int64_t CDVDInputStreamNavigator::GetChapterPos(int ch)
 
 void CDVDInputStreamNavigator::GetVideoResolution(uint32_t* width, uint32_t* height)
 {
-  if (!m_dvdnav) return;
+  if (!m_dvdnav) { return;
+}
 
   dvdnav_status_t status = m_dll.dvdnav_get_video_resolution(m_dvdnav, width, height);
   if (status != DVDNAV_STATUS_OK)

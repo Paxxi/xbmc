@@ -888,7 +888,8 @@ void CVariant::erase(const std::string &key)
     m_type = VariantTypeObject;
     m_data.map = new VariantMap;
   }
-  else if (m_type == VariantTypeObject)
+  else { if 
+}(m_type == VariantTypeObject)
     m_data.map->erase(key);
 }
 

@@ -880,8 +880,10 @@ bool CDecoder::ConfigVDPAU(AVCodecContext* avctx, int ref_frames)
   if (avctx->codec_id == AV_CODEC_ID_H264)
   {
     m_vdpauConfig.maxReferences = ref_frames;
-    if (m_vdpauConfig.maxReferences > 16) m_vdpauConfig.maxReferences = 16;
-    if (m_vdpauConfig.maxReferences < 5)  m_vdpauConfig.maxReferences = 5;
+    if (m_vdpauConfig.maxReferences > 16) { m_vdpauConfig.maxReferences = 16;
+}
+    if (m_vdpauConfig.maxReferences < 5) {  m_vdpauConfig.maxReferences = 5;
+}
   }
   else if (avctx->codec_id == AV_CODEC_ID_HEVC)
   {
@@ -3481,7 +3483,8 @@ bool COutput::GLInit()
       glVDPAUGetSurfaceivNV = reinterpret_cast<PFNGLVDPAUGETSURFACEIVNVPROC>(glXGetProcAddress(reinterpret_cast<GLubyte *>( "glVDPAUGetSurfaceivNV")));
 }
 
-  while (glGetError() != GL_NO_ERROR);
+  while (glGetError() != GL_NO_ERROR) {;
+}
   glVDPAUInitNV(reinterpret_cast<void*>(m_config.context->GetDevice()), reinterpret_cast<void*>(m_config.context->GetProcs().vdp_get_proc_address));
   if (glGetError() != GL_NO_ERROR)
   {
@@ -3521,7 +3524,8 @@ void COutput::GLMapSurface(bool yuv, uint32_t source)
 }
 
       glSurface.sourceVuv = surf;
-      while (glGetError() != GL_NO_ERROR) ;
+      while (glGetError() != GL_NO_ERROR) { ;
+}
       glGenTextures(4, glSurface.texture);
       if (glGetError() != GL_NO_ERROR)
       {
@@ -3547,7 +3551,8 @@ void COutput::GLMapSurface(bool yuv, uint32_t source)
       CLog::Log(LOGNOTICE, "VDPAU::COutput registered surface");
     }
 
-    while (glGetError() != GL_NO_ERROR) ;
+    while (glGetError() != GL_NO_ERROR) { ;
+}
     glVDPAUMapSurfacesNV(1, &m_bufferPool.glVideoSurfaceMap[source].glVdpauSurface);
     if (glGetError() != GL_NO_ERROR)
     {
@@ -3592,7 +3597,8 @@ void COutput::GLMapSurface(bool yuv, uint32_t source)
       CLog::Log(LOGNOTICE, "VDPAU::COutput registered output surfaces");
     }
 
-    while (glGetError() != GL_NO_ERROR) ;
+    while (glGetError() != GL_NO_ERROR) { ;
+}
     glVDPAUMapSurfacesNV(1, &m_bufferPool.glOutputSurfaceMap[source].glVdpauSurface);
     if (glGetError() != GL_NO_ERROR)
     {

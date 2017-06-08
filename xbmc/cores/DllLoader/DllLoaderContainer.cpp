@@ -84,8 +84,10 @@ LibraryLoader* DllLoaderContainer::GetModule(const char* sName)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != nullptr; i++)
   {
-    if (stricmp(m_dlls[i]->GetName(), sName) == 0) return m_dlls[i];
-    if (!m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetFileName(), sName) == 0) return m_dlls[i];
+    if (stricmp(m_dlls[i]->GetName(), sName) == 0) { return m_dlls[i];
+}
+    if (!m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetFileName(), sName) == 0) { return m_dlls[i];
+}
   }
 
   return nullptr;
@@ -95,7 +97,8 @@ LibraryLoader* DllLoaderContainer::GetModule(HMODULE hModule)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != nullptr; i++)
   {
-    if (m_dlls[i]->GetHModule() == hModule) return m_dlls[i];
+    if (m_dlls[i]->GetHModule() == hModule) { return m_dlls[i];
+}
   }
   return nullptr;
 }
@@ -278,7 +281,8 @@ bool DllLoaderContainer::IsSystemDll(const char* sName)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != nullptr; i++)
   {
-    if (m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetName(), sName) == 0) return true;
+    if (m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetName(), sName) == 0) { return true;
+}
   }
 
   return false;
@@ -291,7 +295,8 @@ int DllLoaderContainer::GetNrOfModules()
 
 LibraryLoader* DllLoaderContainer::GetModule(int iPos)
 {
-  if (iPos < m_iNrOfDlls) return m_dlls[iPos];
+  if (iPos < m_iNrOfDlls) { return m_dlls[iPos];
+}
   return nullptr;
 }
 
@@ -322,7 +327,8 @@ void DllLoaderContainer::UnRegisterDll(LibraryLoader* pDll)
       bool bRemoved = false;
       for (int i = 0; i < m_iNrOfDlls && m_dlls[i]; i++)
       {
-        if (m_dlls[i] == pDll) bRemoved = true;
+        if (m_dlls[i] == pDll) { bRemoved = true;
+}
         if (bRemoved && i + 1 < m_iNrOfDlls)
         {
           m_dlls[i] = m_dlls[i + 1];

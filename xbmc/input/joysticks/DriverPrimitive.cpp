@@ -88,32 +88,44 @@ bool CDriverPrimitive::operator==(const CDriverPrimitive& rhs) const
 
 bool CDriverPrimitive::operator<(const CDriverPrimitive& rhs) const
 {
-  if (m_type < rhs.m_type) return true;
-  if (m_type > rhs.m_type) return false;
+  if (m_type < rhs.m_type) { return true;
+}
+  if (m_type > rhs.m_type) { return false;
+}
 
   // Driver index is common to all valid primitives
   if (m_type != UNKNOWN)
   {
-    if (m_driverIndex < rhs.m_driverIndex) return true;
-    if (m_driverIndex > rhs.m_driverIndex) return false;
+    if (m_driverIndex < rhs.m_driverIndex) { return true;
+}
+    if (m_driverIndex > rhs.m_driverIndex) { return false;
+}
   }
 
   if (m_type == HAT)
   {
-    if (m_hatDirection < rhs.m_hatDirection) return true;
-    if (m_hatDirection > rhs.m_hatDirection) return false;
+    if (m_hatDirection < rhs.m_hatDirection) { return true;
+}
+    if (m_hatDirection > rhs.m_hatDirection) { return false;
+}
   }
 
   if (m_type == SEMIAXIS)
   {
-    if (m_center < rhs.m_center) return true;
-    if (m_center > rhs.m_center) return false;
+    if (m_center < rhs.m_center) { return true;
+}
+    if (m_center > rhs.m_center) { return false;
+}
 
-    if (m_semiAxisDirection < rhs.m_semiAxisDirection) return true;
-    if (m_semiAxisDirection > rhs.m_semiAxisDirection) return false;
+    if (m_semiAxisDirection < rhs.m_semiAxisDirection) { return true;
+}
+    if (m_semiAxisDirection > rhs.m_semiAxisDirection) { return false;
+}
 
-    if (m_range < rhs.m_range) return true;
-    if (m_range > rhs.m_range) return false;
+    if (m_range < rhs.m_range) { return true;
+}
+    if (m_range > rhs.m_range) { return false;
+}
   }
 
   return false;

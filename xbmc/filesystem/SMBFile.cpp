@@ -429,7 +429,8 @@ bool CSMBFile::Exists(const CURL& url)
 {
   // we can't open files like smb://file.f or smb://server/file.f
   // if a file matches the if below return false, it can't exist on a samba share.
-  if (!IsValidFile(url.GetFileName())) return false;
+  if (!IsValidFile(url.GetFileName())) { return false;
+}
 
   smb.Init();
   std::string strFileName = GetAuthenticatedPath(url);
@@ -439,7 +440,8 @@ bool CSMBFile::Exists(const CURL& url)
   CSingleLock lock(smb);
   int iResult = smbc_stat(strFileName.c_str(), &info);
 
-  if (iResult < 0) return false;
+  if (iResult < 0) { return false;
+}
   return true;
 }
 
@@ -471,7 +473,8 @@ int CSMBFile::Stat(const CURL& url, struct __stat64* buffer)
 
 int CSMBFile::Truncate(int64_t size)
 {
-  if (m_fd == -1) return 0;
+  if (m_fd == -1) { return 0;
+}
 /* 
  * This would force us to be dependant on SMBv3.2 which is GPLv3
  * This is only used by the TagLib writers, which are not currently in use
@@ -523,7 +526,8 @@ ssize_t CSMBFile::Read(void *lpBuf, size_t uiBufSize)
 
 int64_t CSMBFile::Seek(int64_t iFilePosition, int iWhence)
 {
-  if (m_fd == -1) return -1;
+  if (m_fd == -1) { return -1;
+}
 
   CSingleLock lock(smb); // Init not called since it has to be "inited" by now
   smb.SetActivityTime();
@@ -598,7 +602,8 @@ bool CSMBFile::OpenForWrite(const CURL& url, bool bOverWrite)
   Close();
   // we can't open files like smb://file.f or smb://server/file.f
   // if a file matches the if below return false, it can't exist on a samba share.
-  if (!IsValidFile(url.GetFileName())) return false;
+  if (!IsValidFile(url.GetFileName())) { return false;
+}
 
   std::string strFileName = GetAuthenticatedPath(url);
   CSingleLock lock(smb);

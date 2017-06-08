@@ -207,10 +207,14 @@ HAT_STATE CPeripheralAddonTranslator::TranslateHatState(JOYSTICK_STATE_HAT state
 {
   HAT_STATE translatedState = HAT_STATE::UNPRESSED;
 
-  if (state & JOYSTICK_STATE_HAT_UP)    translatedState |= HAT_STATE::UP;
-  if (state & JOYSTICK_STATE_HAT_DOWN)  translatedState |= HAT_STATE::DOWN;
-  if (state & JOYSTICK_STATE_HAT_RIGHT) translatedState |= HAT_STATE::RIGHT;
-  if (state & JOYSTICK_STATE_HAT_LEFT)  translatedState |= HAT_STATE::LEFT;
+  if (state & JOYSTICK_STATE_HAT_UP) {    translatedState |= HAT_STATE::UP;
+}
+  if (state & JOYSTICK_STATE_HAT_DOWN) {  translatedState |= HAT_STATE::DOWN;
+}
+  if (state & JOYSTICK_STATE_HAT_RIGHT) { translatedState |= HAT_STATE::RIGHT;
+}
+  if (state & JOYSTICK_STATE_HAT_LEFT) {  translatedState |= HAT_STATE::LEFT;
+}
 
   return translatedState;
 }

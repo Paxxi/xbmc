@@ -1429,7 +1429,8 @@ void CApplication::OnSettingChanged(std::shared_ptr<const CSetting> setting)
       CApplicationMessenger::GetInstance().PostMsg(TMSG_MEDIA_RESTART);
     }
   }
-  else if (StringUtils::EqualsNoCase(settingId, CSettings::SETTING_MUSICPLAYER_REPLAYGAINTYPE))
+  else { if 
+}(StringUtils::EqualsNoCase(settingId, CSettings::SETTING_MUSICPLAYER_REPLAYGAINTYPE))
     m_replayGainSettings.iType = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
   else if (StringUtils::EqualsNoCase(settingId, CSettings::SETTING_MUSICPLAYER_REPLAYGAINPREAMP))
     m_replayGainSettings.iPreAmp = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
@@ -2557,7 +2558,8 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
   case TMSG_PICTURE_SHOW:
   {
     CGUIWindowSlideShow *pSlideShow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-    if (!pSlideShow) return;
+    if (!pSlideShow) { return;
+}
 
     // stop playing file
     if (g_application.m_pPlayer->IsPlayingVideo()) g_application.StopPlaying();
@@ -2606,7 +2608,8 @@ void CApplication::OnApplicationMessage(ThreadMessage* pMsg)
   case TMSG_PICTURE_SLIDESHOW:
   {
     CGUIWindowSlideShow *pSlideShow = g_windowManager.GetWindow<CGUIWindowSlideShow>(WINDOW_SLIDESHOW);
-    if (!pSlideShow) return;
+    if (!pSlideShow) { return;
+}
 
     if (g_application.m_pPlayer->IsPlayingVideo())
       g_application.StopPlaying();
@@ -2708,7 +2711,8 @@ void CApplication::FrameMove(bool processEvents, bool processGUI)
     float frameTime = m_frameTime.GetElapsedSeconds();
     m_frameTime.StartZero();
     // never set a frametime less than 2 fps to avoid problems when debugging and on breaks
-    if( frameTime > 0.5 ) frameTime = 0.5;
+    if( frameTime > 0.5 ) { frameTime = 0.5;
+}
 
     if (processGUI && m_renderGUI)
     {
@@ -4085,7 +4089,8 @@ void CApplication::CheckScreenSaverAndDPMS()
     return;
   }
 
-  if (!maybeScreensaver && !maybeDPMS) return;  // Nothing to do.
+  if (!maybeScreensaver && !maybeDPMS) { return;  // Nothing to do.
+}
 
   // See if we need to reset timer.
   // * Are we playing a video and it is not paused?

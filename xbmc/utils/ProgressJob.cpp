@@ -191,7 +191,8 @@ void CProgressJob::MarkFinished()
       m_progress = nullptr;
     }
   }
-  else if (m_progressDialog != NULL && m_autoClose)
+  else { if 
+}(m_progressDialog != NULL && m_autoClose)
     m_progressDialog->Close();
 }
 

@@ -138,7 +138,8 @@ CPVREpgInfoTag::~CPVREpgInfoTag()
 
 bool CPVREpgInfoTag::operator ==(const CPVREpgInfoTag& right) const
 {
-  if (this == &right) return true;
+  if (this == &right) { return true;
+}
 
   bool bChannelMatch(false);
   {
@@ -177,7 +178,8 @@ bool CPVREpgInfoTag::operator ==(const CPVREpgInfoTag& right) const
 
 bool CPVREpgInfoTag::operator !=(const CPVREpgInfoTag& right) const
 {
-  if (this == &right) return false;
+  if (this == &right) { return false;
+}
 
   return !(*this == right);
 }

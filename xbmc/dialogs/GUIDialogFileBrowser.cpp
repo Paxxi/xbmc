@@ -185,7 +185,8 @@ bool CGUIDialogFileBrowser::OnMessage(CGUIMessage& message)
       {
         int iItem = m_viewControl.GetSelectedItem();
         int iAction = message.GetParam1();
-        if (iItem < 0) break;
+        if (iItem < 0) { break;
+}
         CFileItemPtr pItem = (*m_vecItems)[iItem];
         if ((iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK) &&
            (!m_multipleSelection || pItem->m_bIsShareOrDrive || pItem->m_bIsFolder))
@@ -529,7 +530,8 @@ void CGUIDialogFileBrowser::FrameMove()
 
 void CGUIDialogFileBrowser::OnClick(int iItem)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return ;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return ;
+}
   CFileItemPtr pItem = (*m_vecItems)[iItem];
   std::string strPath = pItem->GetPath();
 
@@ -840,7 +842,8 @@ bool CGUIDialogFileBrowser::ShowAndGetSource(std::string &path, bool allowNetwor
 
   // Create a new filebrowser window
   auto browser = new CGUIDialogFileBrowser();
-  if (!browser) return false;
+  if (!browser) { return false;
+}
 
   // Add it to our window manager
   g_windowManager.AddUniqueInstance(browser);
@@ -1021,7 +1024,8 @@ CFileItemPtr CGUIDialogFileBrowser::GetCurrentListItem(int offset)
   if (item < 0 || !m_vecItems->Size()) return CFileItemPtr();
 
   item = (item + offset) % m_vecItems->Size();
-  if (item < 0) item += m_vecItems->Size();
+  if (item < 0) { item += m_vecItems->Size();
+}
   return (*m_vecItems)[item];
 }
 

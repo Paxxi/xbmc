@@ -523,7 +523,8 @@ int64_t CNFSFile::GetPosition()
   uint64_t offset = 0;
   CSingleLock lock(gNfsConnection);
   
-  if (gNfsConnection.GetNfsContext() == nullptr || m_pFileHandle == nullptr) return 0;
+  if (gNfsConnection.GetNfsContext() == nullptr || m_pFileHandle == nullptr) { return 0;
+}
   
   ret = gNfsConnection.GetImpl()->nfs_lseek(gNfsConnection.GetNfsContext(), m_pFileHandle, 0, SEEK_CUR, &offset);
   
@@ -536,7 +537,8 @@ int64_t CNFSFile::GetPosition()
 
 int64_t CNFSFile::GetLength()
 {
-  if (m_pFileHandle == nullptr) return 0;
+  if (m_pFileHandle == nullptr) { return 0;
+}
   return m_fileSize;
 }
 
@@ -678,7 +680,8 @@ int64_t CNFSFile::Seek(int64_t iFilePosition, int iWhence)
   uint64_t offset = 0;
 
   CSingleLock lock(gNfsConnection);  
-  if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) return -1;
+  if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) { return -1;
+}
   
  
   ret = gNfsConnection.GetImpl()->nfs_lseek(m_pNfsContext, m_pFileHandle, iFilePosition, iWhence, &offset);
@@ -695,7 +698,8 @@ int CNFSFile::Truncate(int64_t iSize)
   int ret = 0;
   
   CSingleLock lock(gNfsConnection);  
-  if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) return -1;
+  if (m_pFileHandle == nullptr || m_pNfsContext == nullptr) { return -1;
+}
   
   
   ret = gNfsConnection.GetImpl()->nfs_ftruncate(m_pNfsContext, m_pFileHandle, iSize);
@@ -826,7 +830,8 @@ bool CNFSFile::OpenForWrite(const CURL& url, bool bOverWrite)
   int ret = 0;
   // we can't open files like nfs://file.f or nfs://server/file.f
   // if a file matches the if below return false, it can't exist on a nfs share.
-  if (!IsValidFile(url.GetFileName())) return false;
+  if (!IsValidFile(url.GetFileName())) { return false;
+}
   
   Close();
   CSingleLock lock(gNfsConnection);

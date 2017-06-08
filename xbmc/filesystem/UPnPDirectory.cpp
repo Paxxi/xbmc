@@ -298,7 +298,8 @@ CUPnPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         // this will make us go back to the sources list
         PLT_MediaObjectListReference list;
         NPT_Result res = upnp->m_MediaBrowser->BrowseSync(device, object_id, list);
-        if (NPT_FAILED(res)) goto failure;
+        if (NPT_FAILED(res)) { goto failure;
+}
 
         // empty list is ok
         if (list.IsNull()) goto cleanup;

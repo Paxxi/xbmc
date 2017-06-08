@@ -109,7 +109,8 @@ bool CDVDOverlayCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &optio
       */
       // if tried all possibilities, then read newline char and move to next line
       ptr = strchr(ptr, '\n');
-      if (ptr != nullptr) ptr++;
+      if (ptr != nullptr) { ptr++;
+}
     } 
     while (ptr != nullptr && ptr <= parse_extra + parse_extrasize);
 

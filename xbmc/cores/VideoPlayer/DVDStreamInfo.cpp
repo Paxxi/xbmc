@@ -47,7 +47,8 @@ void CDVDStreamInfo::Clear()
   filename.clear();
   dvd = false;
 
-  if( extradata && extrasize ) free(extradata);
+  if( extradata && extrasize ) { free(extradata);
+}
 
   extradata = nullptr;
   extrasize = 0;
@@ -92,10 +93,12 @@ bool CDVDStreamInfo::Equal(const CDVDStreamInfo& right, bool withextradata)
 
   if( withextradata )
   {
-    if( extrasize != right.extrasize ) return false;
+    if( extrasize != right.extrasize ) { return false;
+}
     if( extrasize )
     {
-      if( memcmp(extradata, right.extradata, extrasize) != 0 ) return false;
+      if( memcmp(extradata, right.extradata, extrasize) != 0 ) { return false;
+}
     }
   }
 
@@ -148,7 +151,8 @@ void CDVDStreamInfo::Assign(const CDVDStreamInfo& right, bool withextradata)
   filename = right.filename;
   dvd = right.dvd;
 
-  if( extradata && extrasize ) free(extradata);
+  if( extradata && extrasize ) { free(extradata);
+}
 
   if( withextradata && right.extrasize )
   {

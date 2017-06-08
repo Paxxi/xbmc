@@ -248,16 +248,26 @@ int CTagLoaderTagLib::POPMtoXBMC(int popm)
   //   3=128, 3.5=186, 4=196, 4.5=242, 5=255
   //   Note 1 star written as 1 while half a star is 13, a higher value
   // Accommodate these mapped values in a scale from 0-255
-  if (popm == 0) return 0;
-  if (popm == 1) return 2;
-  if (popm < 23) return 1;
-  if (popm < 32) return 2;
-  if (popm < 64) return 3;
-  if (popm < 96) return 4;
-  if (popm < 128) return 5;
-  if (popm < 160) return 6;
-  if (popm < 196) return 7;
-  if (popm < 224) return 8;
+  if (popm == 0) { return 0;
+}
+  if (popm == 1) { return 2;
+}
+  if (popm < 23) { return 1;
+}
+  if (popm < 32) { return 2;
+}
+  if (popm < 64) { return 3;
+}
+  if (popm < 96) { return 4;
+}
+  if (popm < 128) { return 5;
+}
+  if (popm < 160) { return 6;
+}
+  if (popm < 196) { return 7;
+}
+  if (popm < 224) { return 8;
+}
   if (popm < 255) { return 9;
   } else { return 10;
 }

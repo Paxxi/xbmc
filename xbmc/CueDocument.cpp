@@ -392,7 +392,8 @@ bool CCueDocument::Parse(CueReader& reader, const std::string& strFile)
     {
       m_strGenre = ExtractInfo(strLine.substr(9));
     }
-    else if (StringUtils::StartsWithNoCase(strLine, "REM REPLAYGAIN_ALBUM_GAIN"))
+    else { if 
+}(StringUtils::StartsWithNoCase(strLine, "REM REPLAYGAIN_ALBUM_GAIN"))
       m_albumReplayGain.SetGain(strLine.substr(26));
     else if (StringUtils::StartsWithNoCase(strLine, "REM REPLAYGAIN_ALBUM_PEAK"))
       m_albumReplayGain.SetPeak(strLine.substr(26));

@@ -383,7 +383,8 @@ void CGUIWindowSlideShow::Process(unsigned int currentTime, CDirtyRegionList &re
   if (m_bSlideShow && !m_bPause && !g_application.IsInScreenSaver())
     g_application.ResetScreenSaver();
   int iSlides = m_slides.size();
-  if (!iSlides) return ;
+  if (!iSlides) { return ;
+}
 
   // if we haven't processed yet, we should mark the whole screen
   if (!HasProcessed())

@@ -249,7 +249,8 @@ void CAlbum::MergeScrapedAlbum(const CAlbum& source, bool override /* = true */)
   {
     artistCredits = source.artistCredits;
   }
-  else if (source.artistCredits.size() > artistCredits.size())
+  else { if 
+}(source.artistCredits.size() > artistCredits.size())
     artistCredits.insert(artistCredits.end(), source.artistCredits.begin()+artistCredits.size(), source.artistCredits.end());
   if (!strMusicBrainzAlbumID.empty())
   {
@@ -397,7 +398,8 @@ bool CAlbum::operator<(const CAlbum &a) const
 
 bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
 {
-  if (!album) return false;
+  if (!album) { return false;
+}
   if (!append) {
     Reset();
 }
@@ -561,13 +563,15 @@ bool CAlbum::Load(const TiXmlElement *album, bool append, bool prioritise)
 
 bool CAlbum::Save(TiXmlNode *node, const std::string &tag, const std::string& strPath)
 {
-  if (!node) return false;
+  if (!node) { return false;
+}
 
   // we start with a <tag> tag
   TiXmlElement albumElement(tag.c_str());
   TiXmlNode *album = node->InsertEndChild(albumElement);
 
-  if (!album) return false;
+  if (!album) { return false;
+}
 
   XMLUtils::SetString(album,                    "title", strAlbum);
   XMLUtils::SetString(album,       "musicBrainzAlbumID", strMusicBrainzAlbumID);

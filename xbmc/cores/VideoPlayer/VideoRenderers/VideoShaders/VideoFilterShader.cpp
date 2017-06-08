@@ -212,7 +212,8 @@ void ConvolutionFilterShader::OnCompiledAndLinked()
 
   VerifyGLState();
 
-  if (m_glslOutput) m_glslOutput->OnCompiledAndLinked(ProgramHandle());
+  if (m_glslOutput) { m_glslOutput->OnCompiledAndLinked(ProgramHandle());
+}
 }
 
 bool ConvolutionFilterShader::OnEnabled()
@@ -227,13 +228,15 @@ bool ConvolutionFilterShader::OnEnabled()
   glUniform2f(m_hStepXY, m_stepX, m_stepY);
   glUniform1f(m_hStretch, m_stretch);
   VerifyGLState();
-  if (m_glslOutput) m_glslOutput->OnEnabled();
+  if (m_glslOutput) { m_glslOutput->OnEnabled();
+}
   return true;
 }
 
 void ConvolutionFilterShader::OnDisabled()
 {
-  if (m_glslOutput) m_glslOutput->OnDisabled();
+  if (m_glslOutput) { m_glslOutput->OnDisabled();
+}
 }
 
 void ConvolutionFilterShader::Free()
@@ -242,7 +245,8 @@ void ConvolutionFilterShader::Free()
     glDeleteTextures(1, &m_kernelTex1);
 }
   m_kernelTex1 = 0;
-  if (m_glslOutput) m_glslOutput->Free();
+  if (m_glslOutput) { m_glslOutput->Free();
+}
   BaseVideoFilterShader::Free();
 }
 

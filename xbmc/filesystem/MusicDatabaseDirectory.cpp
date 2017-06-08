@@ -233,14 +233,22 @@ bool CMusicDatabaseDirectory::GetLabel(const std::string& strDirectory, std::str
 bool CMusicDatabaseDirectory::ContainsSongs(const std::string &path)
 {
   MUSICDATABASEDIRECTORY::NODE_TYPE type = GetDirectoryChildType(path);
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SINGLES) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_COMPILATIONS_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_TOP100_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG_TOP100) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_SONG) return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SINGLES) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_COMPILATIONS_SONGS) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_TOP100_SONGS) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG_TOP100) { return true;
+}
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_SONG) { return true;
+}
   return false;
 }
 

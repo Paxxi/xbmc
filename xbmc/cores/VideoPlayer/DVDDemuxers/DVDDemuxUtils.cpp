@@ -37,7 +37,8 @@ void CDVDDemuxUtils::FreeDemuxPacket(DemuxPacket* pPacket)
   if (pPacket)
   {
     try {
-      if (pPacket->pData) _aligned_free(pPacket->pData);
+      if (pPacket->pData) { _aligned_free(pPacket->pData);
+}
       delete pPacket;
     }
     catch(...) {
@@ -49,7 +50,8 @@ void CDVDDemuxUtils::FreeDemuxPacket(DemuxPacket* pPacket)
 DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
 {
   auto  pPacket = new DemuxPacket;
-  if (!pPacket) return nullptr;
+  if (!pPacket) { return nullptr;
+}
 
   try
   {

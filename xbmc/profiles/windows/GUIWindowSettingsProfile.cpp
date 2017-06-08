@@ -235,7 +235,8 @@ void CGUIWindowSettingsProfile::OnInitWindow()
 bool CGUIWindowSettingsProfile::GetAutoLoginProfileChoice(int &iProfile)
 {
   CGUIDialogSelect *dialog = g_windowManager.GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
-  if (!dialog) return false;
+  if (!dialog) { return false;
+}
 
   // add items
   // "Last used profile" option comes first, so up indices by 1

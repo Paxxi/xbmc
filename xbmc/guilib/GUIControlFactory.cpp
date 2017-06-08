@@ -133,7 +133,8 @@ CGUIControlFactory::~CGUIControlFactory()
 bool CGUIControlFactory::GetIntRange(const TiXmlNode* pRootNode, const char* strTag, int& iMinValue, int& iMaxValue, int& iIntervalValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   iMinValue = atoi(pNode->FirstChild()->Value());
   const char* maxValue = strchr(pNode->FirstChild()->Value(), ',');
   if (maxValue)
@@ -155,7 +156,8 @@ bool CGUIControlFactory::GetIntRange(const TiXmlNode* pRootNode, const char* str
 bool CGUIControlFactory::GetFloatRange(const TiXmlNode* pRootNode, const char* strTag, float& fMinValue, float& fMaxValue, float& fIntervalValue)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   fMinValue = static_cast<float>(atof(pNode->FirstChild()->Value()));
   const char* maxValue = strchr(pNode->FirstChild()->Value(), ',');
   if (maxValue)
@@ -192,7 +194,8 @@ float CGUIControlFactory::ParsePosition(const char* pos, const float parentSize)
 bool CGUIControlFactory::GetPosition(const TiXmlNode *node, const char* strTag, const float parentSize, float& value)
 {
   const TiXmlElement* pNode = node->FirstChildElement(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
 
   value = ParsePosition(pNode->FirstChild()->Value(), parentSize);
   return true;
@@ -201,12 +204,14 @@ bool CGUIControlFactory::GetPosition(const TiXmlNode *node, const char* strTag, 
 bool CGUIControlFactory::GetDimension(const TiXmlNode *pRootNode, const char* strTag, const float parentSize, float &value, float &min)
 {
   const TiXmlElement* pNode = pRootNode->FirstChildElement(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
   if (0 == strnicmp("auto", pNode->FirstChild()->Value(), 4))
   { // auto-width - at least min must be set
     value = ParsePosition(pNode->Attribute("max"), parentSize);
     min = ParsePosition(pNode->Attribute("min"), parentSize);
-    if (!min) min = 1;
+    if (!min) { min = 1;
+}
     return true;
   }
   value = ParsePosition(pNode->FirstChild()->Value(), parentSize);
@@ -346,15 +351,18 @@ bool CGUIControlFactory::GetInfoTexture(const TiXmlNode* pRootNode, const char* 
 bool CGUIControlFactory::GetTexture(const TiXmlNode* pRootNode, const char* strTag, CTextureInfo &image)
 {
   const TiXmlElement* pNode = pRootNode->FirstChildElement(strTag);
-  if (!pNode) return false;
+  if (!pNode) { return false;
+}
   const char *border = pNode->Attribute("border");
   if (border)
     GetRectFromString(border, image.border);
   image.orientation = 0;
   const char *flipX = pNode->Attribute("flipx");
-  if (flipX && strcmpi(flipX, "true") == 0) image.orientation = 1;
+  if (flipX && strcmpi(flipX, "true") == 0) { image.orientation = 1;
+}
   const char *flipY = pNode->Attribute("flipy");
-  if (flipY && strcmpi(flipY, "true") == 0) image.orientation = 3 - image.orientation;  // either 3 or 2
+  if (flipY && strcmpi(flipY, "true") == 0) { image.orientation = 3 - image.orientation;  // either 3 or 2
+}
   image.diffuse = XMLUtils::GetAttribute(pNode, "diffuse");
   image.diffuseColor.Parse(XMLUtils::GetAttribute(pNode, "colordiffuse"), 0);
   const char *background = pNode->Attribute("background");
@@ -388,7 +396,8 @@ void CGUIControlFactory::GetRectFromString(const std::string &string, CRect &rec
 bool CGUIControlFactory::GetAlignment(const TiXmlNode* pRootNode, const char* strTag, uint32_t& alignment)
 {
   const TiXmlNode* pNode = pRootNode->FirstChild(strTag);
-  if (!pNode || !pNode->FirstChild()) return false;
+  if (!pNode || !pNode->FirstChild()) { return false;
+}
 
   std::string strAlign = pNode->FirstChild()->Value();
   if (strAlign == "right" || strAlign == "bottom") alignment = XBFONT_RIGHT;
@@ -420,7 +429,8 @@ bool CGUIControlFactory::GetAlignmentY(const TiXmlNode* pRootNode, const char* s
 bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode* control, std::string &condition, std::string &allowHiddenFocus)
 {
   const TiXmlElement* node = control->FirstChildElement("visible");
-  if (!node) return false;
+  if (!node) { return false;
+}
   std::vector<std::string> conditions;
   while (node)
   {
@@ -855,7 +865,8 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   XMLUtils::GetFloat(pControlNode, "textoffsetx", labelInfo.offsetX);
   XMLUtils::GetFloat(pControlNode, "textoffsety", labelInfo.offsetY);
   int angle = 0;  // use the negative angle to compensate for our vertically flipped cartesian plane
-  if (XMLUtils::GetInt(pControlNode, "angle", angle)) labelInfo.angle = static_cast<float>(-angle);
+  if (XMLUtils::GetInt(pControlNode, "angle", angle)) { labelInfo.angle = static_cast<float>(-angle);
+}
   std::string strFont;
   if (XMLUtils::GetString(pControlNode, "font", strFont))
     labelInfo.font = g_fontManager.GetFont(strFont);

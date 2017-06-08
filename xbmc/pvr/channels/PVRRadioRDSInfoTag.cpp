@@ -126,16 +126,26 @@ bool CPVRRadioRDSInfoTag::operator==(const CPVRRadioRDSInfoTag &right) const
 
 bool CPVRRadioRDSInfoTag::operator !=(const CPVRRadioRDSInfoTag& tag) const
 {
-  if (this == &tag) return false;
-  if (m_strLanguage != tag.m_strLanguage) return true;
-  if (m_strCountry != tag.m_strCountry) return true;
-  if (m_strTitle != tag.m_strTitle) return true;
-  if (m_strBand != tag.m_strBand) return true;
-  if (m_strArtist != tag.m_strArtist) return true;
-  if (m_strComposer != tag.m_strComposer) return true;
-  if (m_strConductor != tag.m_strConductor) return true;
-  if (m_strAlbum != tag.m_strAlbum) return true;
-  if (m_iAlbumTracknumber != tag.m_iAlbumTracknumber) return true;
+  if (this == &tag) { return false;
+}
+  if (m_strLanguage != tag.m_strLanguage) { return true;
+}
+  if (m_strCountry != tag.m_strCountry) { return true;
+}
+  if (m_strTitle != tag.m_strTitle) { return true;
+}
+  if (m_strBand != tag.m_strBand) { return true;
+}
+  if (m_strArtist != tag.m_strArtist) { return true;
+}
+  if (m_strComposer != tag.m_strComposer) { return true;
+}
+  if (m_strConductor != tag.m_strConductor) { return true;
+}
+  if (m_strAlbum != tag.m_strAlbum) { return true;
+}
+  if (m_iAlbumTracknumber != tag.m_iAlbumTracknumber) { return true;
+}
   if (m_strInfoNews != tag.m_strInfoNews) return true;
   if (m_strInfoNewsLocal != tag.m_strInfoNewsLocal) return true;
   if (m_strInfoSport != tag.m_strInfoSport) return true;
@@ -143,25 +153,40 @@ bool CPVRRadioRDSInfoTag::operator !=(const CPVRRadioRDSInfoTag& tag) const
   if (m_strInfoWeather != tag.m_strInfoWeather) return true;
   if (m_strInfoLottery != tag.m_strInfoLottery) return true;
   if (m_strInfoOther != tag.m_strInfoOther) return true;
-  if (m_strProgStyle != tag.m_strProgStyle) return true;
-  if (m_strProgHost != tag.m_strProgHost) return true;
-  if (m_strProgStation != tag.m_strProgStation) return true;
-  if (m_strProgWebsite != tag.m_strProgWebsite) return true;
-  if (m_strProgNow != tag.m_strProgNow) return true;
-  if (m_strProgNext != tag.m_strProgNext) return true;
-  if (m_strPhoneHotline != tag.m_strPhoneHotline) return true;
-  if (m_strEMailHotline != tag.m_strEMailHotline) return true;
-  if (m_strPhoneStudio != tag.m_strPhoneStudio) return true;
-  if (m_strEMailStudio != tag.m_strEMailStudio) return true;
-  if (m_strSMSStudio != tag.m_strSMSStudio) return true;
-  if (m_strRadioStyle != tag.m_strRadioStyle) return true;
+  if (m_strProgStyle != tag.m_strProgStyle) { return true;
+}
+  if (m_strProgHost != tag.m_strProgHost) { return true;
+}
+  if (m_strProgStation != tag.m_strProgStation) { return true;
+}
+  if (m_strProgWebsite != tag.m_strProgWebsite) { return true;
+}
+  if (m_strProgNow != tag.m_strProgNow) { return true;
+}
+  if (m_strProgNext != tag.m_strProgNext) { return true;
+}
+  if (m_strPhoneHotline != tag.m_strPhoneHotline) { return true;
+}
+  if (m_strEMailHotline != tag.m_strEMailHotline) { return true;
+}
+  if (m_strPhoneStudio != tag.m_strPhoneStudio) { return true;
+}
+  if (m_strEMailStudio != tag.m_strEMailStudio) { return true;
+}
+  if (m_strSMSStudio != tag.m_strSMSStudio) { return true;
+}
+  if (m_strRadioStyle != tag.m_strRadioStyle) { return true;
+}
   if (m_strInfoHoroscope != tag.m_strInfoHoroscope) return true;
   if (m_strInfoCinema != tag.m_strInfoCinema) return true;
-  if (m_strComment != tag.m_strComment) return true;
+  if (m_strComment != tag.m_strComment) { return true;
+}
   if (m_strEditorialStaff != tag.m_strEditorialStaff) return true;
 
-  if (m_bHaveRadiotext != tag.m_bHaveRadiotext) return true;
-  if (m_bHaveRadiotextPlus != tag.m_bHaveRadiotextPlus) return true;
+  if (m_bHaveRadiotext != tag.m_bHaveRadiotext) { return true;
+}
+  if (m_bHaveRadiotextPlus != tag.m_bHaveRadiotextPlus) { return true;
+}
 
   return false;
 }

@@ -228,7 +228,8 @@ void CGUIWindowLoginScreen::Update()
 
 bool CGUIWindowLoginScreen::OnPopupMenu(int iItem)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return false;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return false;
+}
 
   CFileItemPtr pItem = m_vecItems->Get(iItem);
   bool bSelect = pItem->IsSelected();
@@ -271,7 +272,8 @@ CFileItemPtr CGUIWindowLoginScreen::GetCurrentListItem(int offset)
   if (item < 0 || !m_vecItems->Size()) return CFileItemPtr();
 
   item = (item + offset) % m_vecItems->Size();
-  if (item < 0) item += m_vecItems->Size();
+  if (item < 0) { item += m_vecItems->Size();
+}
   return m_vecItems->Get(item);
 }
 

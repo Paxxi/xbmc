@@ -94,7 +94,8 @@ void CAddonStatusHandler::Process()
   if (m_status == ADDON_STATUS_NEED_RESTART)
   {
     CGUIDialogOK* pDialog = g_windowManager.GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
-    if (!pDialog) return;
+    if (!pDialog) { return;
+}
 
     pDialog->SetHeading(CVariant{heading});
     pDialog->SetLine(1, CVariant{24074});
@@ -106,7 +107,8 @@ void CAddonStatusHandler::Process()
   else if ((m_status == ADDON_STATUS_NEED_SETTINGS) || (m_status == ADDON_STATUS_NEED_SAVEDSETTINGS))
   {
     CGUIDialogYesNo* pDialogYesNo = g_windowManager.GetWindow<CGUIDialogYesNo>(WINDOW_DIALOG_YES_NO);
-    if (!pDialogYesNo) return;
+    if (!pDialogYesNo) { return;
+}
 
     pDialogYesNo->SetHeading(CVariant{heading});
     pDialogYesNo->SetLine(1, CVariant{24070});

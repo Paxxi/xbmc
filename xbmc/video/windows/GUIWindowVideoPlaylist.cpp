@@ -329,7 +329,8 @@ void CGUIWindowVideoPlaylist::UpdateButtons()
 
 bool CGUIWindowVideoPlaylist::OnPlayMedia(int iItem, const std::string &player)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return false;
+  if ( iItem < 0 || iItem >= m_vecItems->Size() ) { return false;
+}
   if (g_partyModeManager.IsEnabled()) {
     g_partyModeManager.Play(iItem);
   } else
@@ -531,14 +532,17 @@ bool CGUIWindowVideoPlaylist::OnContextButton(int itemNumber, CONTEXT_BUTTON but
 
 void CGUIWindowVideoPlaylist::OnMove(int iItem, int iAction)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size()) return;
+  if (iItem < 0 || iItem >= m_vecItems->Size()) { return;
+}
   MoveCurrentPlayListItem(iItem, iAction);
 }
 
 void CGUIWindowVideoPlaylist::MoveItem(int iStart, int iDest)
 {
-  if (iStart < 0 || iStart >= m_vecItems->Size()) return;
-  if (iDest < 0 || iDest >= m_vecItems->Size()) return;
+  if (iStart < 0 || iStart >= m_vecItems->Size()) { return;
+}
+  if (iDest < 0 || iDest >= m_vecItems->Size()) { return;
+}
 
   // default to move up
   int iAction = ACTION_MOVE_ITEM_UP;

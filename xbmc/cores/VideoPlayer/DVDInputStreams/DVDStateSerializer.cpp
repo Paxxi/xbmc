@@ -216,7 +216,8 @@ bool CDVDStateSerializer::XMLToDVDState( dvd_state_t *state, const std::string &
 }
 
   TiXmlHandle hRoot( xmlDoc.RootElement() );
-  if( strcmp( hRoot.Element()->Value(), "navstate" ) != 0 ) return false;
+  if( strcmp( hRoot.Element()->Value(), "navstate" ) != 0 ) { return false;
+}
 
   TiXmlElement *element = nullptr;
   TiXmlText *text = nullptr;

@@ -6047,7 +6047,8 @@ std::string CGUIInfoManager::GetLabel(int info, int contextWindow, std::string *
         strLabel = URIUtils::GetParentPath(strLabel);
       strLabel = URIUtils::GetParentPath(strLabel);
     }
-    else if (info == PLAYER_FILENAME)
+    else { if 
+}(info == PLAYER_FILENAME)
       strLabel = URIUtils::GetFileName(strLabel);
     break;
   case PLAYER_TITLE:
@@ -8373,7 +8374,8 @@ const std::string CGUIInfoManager::GetMusicPlaylistInfo(const GUIInfo& info)
     std::string strPosition = StringUtils::Format("%i", index + 1);
     return strPosition;
   }
-  else if (info.m_info == MUSICPLAYER_COVER)
+  else { if 
+}(info.m_info == MUSICPLAYER_COVER)
     return playlistItem->GetArt("thumb");
   return GetMusicTagLabel(info.m_info, playlistItem.get());
 }
@@ -9110,7 +9112,8 @@ int64_t CGUIInfoManager::GetPlayTime() const
   if (g_application.m_pPlayer->IsPlaying())
   {
     int64_t lPTS = (int64_t)(g_application.GetTime() * 1000);
-    if (lPTS < 0) lPTS = 0;
+    if (lPTS < 0) { lPTS = 0;
+}
     return lPTS;
   }
   return 0;
@@ -10657,7 +10660,8 @@ std::string CGUIInfoManager::GetItemImage(const CFileItem *item, int info, std::
 
 bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
 {
-  if (!item) return false;
+  if (!item) { return false;
+}
   if (condition >= LISTITEM_PROPERTY_START && condition - LISTITEM_PROPERTY_START < (int)m_listitemProperties.size())
   { // grab the property
     std::string property = m_listitemProperties[condition - LISTITEM_PROPERTY_START];
@@ -10885,7 +10889,8 @@ void CGUIInfoManager::ResetCurrentSlide()
 bool CGUIInfoManager::CheckWindowCondition(CGUIWindow *window, int condition) const
 {
   // check if it satisfies our condition
-  if (!window) return false;
+  if (!window) { return false;
+}
   if ((condition & WINDOW_CONDITION_HAS_LIST_ITEMS) && !window->HasListItems()) {
     return false;
 }

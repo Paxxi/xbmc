@@ -174,7 +174,8 @@ void CWeatherJob::LoadLocalizedToken()
       uint32_t id = PODoc.GetEntryID();
       PODoc.ParseEntry(ISSOURCELANG);
 
-      if (id > LOCALIZED_TOKEN_LASTID2) break;
+      if (id > LOCALIZED_TOKEN_LASTID2) { break;
+}
       if ((LOCALIZED_TOKEN_FIRSTID  <= id && id <= LOCALIZED_TOKEN_LASTID)  ||
           (LOCALIZED_TOKEN_FIRSTID2 <= id && id <= LOCALIZED_TOKEN_LASTID2) ||
           (LOCALIZED_TOKEN_FIRSTID3 <= id && id <= LOCALIZED_TOKEN_LASTID3) ||

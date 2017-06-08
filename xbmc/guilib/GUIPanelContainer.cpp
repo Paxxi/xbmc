@@ -44,7 +44,8 @@ void CGUIPanelContainer::Process(unsigned int currentTime, CDirtyRegionList &dir
   if (m_bInvalidated)
     UpdateLayout();
 
-  if (!m_layout || !m_focusedLayout) return;
+  if (!m_layout || !m_focusedLayout) { return;
+}
 
   UpdateScrollOffset(currentTime);
 
@@ -100,7 +101,8 @@ void CGUIPanelContainer::Process(unsigned int currentTime, CDirtyRegionList &dir
 
 void CGUIPanelContainer::Render()
 {
-  if (!m_layout || !m_focusedLayout) return;
+  if (!m_layout || !m_focusedLayout) { return;
+}
 
   int offset = (int)(m_scroller.GetValue() / m_layout->Size(m_orientation));
 
@@ -395,13 +397,15 @@ void CGUIPanelContainer::Scroll(int amount)
   {
     offset = (static_cast<int>(GetRows()) - m_itemsPerPage) * m_itemsPerRow;
   }
-  if (offset < 0) offset = 0;
+  if (offset < 0) { offset = 0;
+}
   ScrollToOffset(offset);
 }
 
 void CGUIPanelContainer::ValidateOffset()
 {
-  if (!m_layout) return;
+  if (!m_layout) { return;
+}
   // first thing is we check the range of our offset
   // don't validate offset if we are scrolling in case the tween image exceed <0, 1> range
   if (GetOffset() > (int)GetRows() - m_itemsPerPage || (!m_scroller.IsScrolling() && m_scroller.GetValue() > ((int)GetRows() - m_itemsPerPage) * m_layout->Size(m_orientation)))
@@ -419,8 +423,10 @@ void CGUIPanelContainer::ValidateOffset()
 void CGUIPanelContainer::SetCursor(int cursor)
 {
   // +1 to ensure we're OK if we have a half item
-  if (cursor > (m_itemsPerPage + 1)*m_itemsPerRow - 1) cursor = (m_itemsPerPage + 1)*m_itemsPerRow - 1;
-  if (cursor < 0) cursor = 0;
+  if (cursor > (m_itemsPerPage + 1)*m_itemsPerRow - 1) { cursor = (m_itemsPerPage + 1)*m_itemsPerRow - 1;
+}
+  if (cursor < 0) { cursor = 0;
+}
   if (!m_wasReset)
     SetContainerMoving(cursor - GetCursor());
   CGUIBaseContainer::SetCursor(cursor);
@@ -430,7 +436,8 @@ void CGUIPanelContainer::CalculateLayout()
 {
   GetCurrentLayouts();
 
-  if (!m_layout || !m_focusedLayout) return;
+  if (!m_layout || !m_focusedLayout) { return;
+}
   // calculate the number of items to display
   if (m_orientation == HORIZONTAL)
   {
@@ -442,8 +449,10 @@ void CGUIPanelContainer::CalculateLayout()
     m_itemsPerRow = static_cast<int>(m_width / m_layout->Size(HORIZONTAL));
     m_itemsPerPage = static_cast<int>(m_height / m_layout->Size(VERTICAL));
   }
-  if (m_itemsPerRow < 1) m_itemsPerRow = 1;
-  if (m_itemsPerPage < 1) m_itemsPerPage = 1;
+  if (m_itemsPerRow < 1) { m_itemsPerRow = 1;
+}
+  if (m_itemsPerPage < 1) { m_itemsPerPage = 1;
+}
 
   // ensure that the scroll offset is a multiple of our size
   m_scroller.SetValue(GetOffset() * m_layout->Size(m_orientation));

@@ -284,7 +284,8 @@ int CGUIWindowMusicPlaylistEditor::GetCurrentPlaylistItem()
 
 void CGUIWindowMusicPlaylistEditor::OnDeletePlaylistItem(int item)
 {
-  if (item < 0) return;
+  if (item < 0) { return;
+}
   m_playlist->Remove(item);
   UpdatePlaylist();
   // select the next item
@@ -294,7 +295,8 @@ void CGUIWindowMusicPlaylistEditor::OnDeletePlaylistItem(int item)
 
 void CGUIWindowMusicPlaylistEditor::OnMovePlaylistItem(int item, int direction)
 {
-  if (item < 0) return;
+  if (item < 0) { return;
+}
   if (item + direction >= m_playlist->Size() || item + direction < 0) {
     return;
 }

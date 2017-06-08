@@ -196,7 +196,8 @@ CUPnPServer::PropagateUpdates()
 
 failed:
     // should attempt to start eventing on a failure
-    if (service) service->PauseEventing(false);
+    if (service) { service->PauseEventing(false);
+}
     CLog::Log(LOGERROR, "UPNP: Unable to propagate updates");
 }
 
@@ -306,7 +307,8 @@ CUPnPServer::Build(CFileItemPtr                  item,
                     MUSICDATABASEDIRECTORY::CDirectoryNode::GetDatabaseInfo((const char*)path, params);
 
                     CMusicDatabase db;
-                    if (!db.Open() ) return nullptr;
+                    if (!db.Open() ) { return nullptr;
+}
 
                     if (params.GetSongId() >= 0 ) {
                         CSong song;
@@ -345,7 +347,8 @@ CUPnPServer::Build(CFileItemPtr                  item,
                     VIDEODATABASEDIRECTORY::CDirectoryNode::GetDatabaseInfo((const char*)path, params);
 
                     CVideoDatabase db;
-                    if (!db.Open() ) return nullptr;
+                    if (!db.Open() ) { return nullptr;
+}
 
                     if (params.GetMovieId() >= 0 )
                         db.GetMovieInfo((const char*)path, *item->GetVideoInfoTag(), params.GetMovieId());
@@ -452,7 +455,8 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
         if (flag == VideoLibrary) {
             if(item_type == MediaTypeEpisode) {
                 CVideoDatabase db;
-                if (!db.Open()) return;
+                if (!db.Open()) { return;
+}
                 int show_id = db.GetTvShowForEpisode(item_id);
                 int season_id = db.GetSeasonForEpisode(item_id);
                 UpdateContainer(StringUtils::Format("videodb://tvshows/titles/%d/", show_id));
@@ -477,7 +481,8 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
             // high? would need to check if slow clients even cache at all anyway
             CMusicDatabase db;
             CAlbum album;
-            if (!db.Open()) return;
+            if (!db.Open()) { return;
+}
             if (db.GetAlbumFromSong(item_id, album)) {
                 UpdateContainer(StringUtils::Format("musicdb://albums/%ld", album.idAlbum));
                 UpdateContainer("musicdb://songs/");
@@ -831,7 +836,8 @@ FindSubCriteria(NPT_String criteria, const char* name)
             criteria.TrimLeft("= ");
             if (criteria.GetLength()>0 && criteria[0] == '\"') {
                 search = criteria.Find("\"", 1);
-                if (search > 0) result = criteria.SubString(1, search-1);
+                if (search > 0) { result = criteria.SubString(1, search-1);
+}
             }
         }
     }

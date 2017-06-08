@@ -996,7 +996,8 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
 
     setting = settingList;
   }
-  else if (!addonIds.empty())
+  else { if 
+}(!addonIds.empty())
     settingAddon->SetDefault(addonIds.front());
 
   auto control = std::make_shared<CSettingControlButton>();

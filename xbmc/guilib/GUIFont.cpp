@@ -96,7 +96,8 @@ std::string& CGUIFont::GetFontName()
 void CGUIFont::DrawText( float x, float y, const vecColors &colors, color_t shadowColor,
                 const vecText &text, uint32_t alignment, float maxPixelWidth)
 {
-  if (!m_font) return;
+  if (!m_font) { return;
+}
 
   bool clip = maxPixelWidth > 0;
   if (clip && ClippedRegionIsEmpty(x, y, maxPixelWidth, alignment)) {
@@ -107,7 +108,8 @@ void CGUIFont::DrawText( float x, float y, const vecColors &colors, color_t shad
   vecColors renderColors;
   for (unsigned int i = 0; i < colors.size(); i++)
     renderColors.push_back(g_graphicsContext.MergeAlpha(colors[i] ? colors[i] : m_textColor));
-  if (!shadowColor) shadowColor = m_shadowColor;
+  if (!shadowColor) { shadowColor = m_shadowColor;
+}
   if (shadowColor)
   {
     shadowColor = g_graphicsContext.MergeAlpha(shadowColor);
@@ -174,8 +176,10 @@ bool CGUIFont::UpdateScrollInfo(const vecText &text, CScrollInfo &scrollInfo)
 void CGUIFont::DrawScrollingText(float x, float y, const vecColors &colors, color_t shadowColor,
                 const vecText &text, uint32_t alignment, float maxWidth, const CScrollInfo &scrollInfo)
 {
-  if (!m_font) return;
-  if (!shadowColor) shadowColor = m_shadowColor;
+  if (!m_font) { return;
+}
+  if (!shadowColor) { shadowColor = m_shadowColor;
+}
 
   if (!text.size() || ClippedRegionIsEmpty(x, y, maxWidth, alignment))
     return; // nothing to render
@@ -251,51 +255,59 @@ bool CGUIFont::ClippedRegionIsEmpty(float x, float y, float width, uint32_t alig
 
 float CGUIFont::GetTextWidth( const vecText &text )
 {
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   CSingleLock lock(g_graphicsContext);
   return m_font->GetTextWidthInternal(text.begin(), text.end()) * g_graphicsContext.GetGUIScaleX();
 }
 
 float CGUIFont::GetCharWidth( character_t ch )
 {
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   CSingleLock lock(g_graphicsContext);
   return m_font->GetCharWidthInternal(ch) * g_graphicsContext.GetGUIScaleX();
 }
 
 float CGUIFont::GetTextHeight(int numLines) const
 {
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   return m_font->GetTextHeight(m_lineSpacing, numLines) * g_graphicsContext.GetGUIScaleY();
 }
 
 float CGUIFont::GetTextBaseLine() const
 {
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   return m_font->GetTextBaseLine() * g_graphicsContext.GetGUIScaleY();
 }
 
 float CGUIFont::GetLineHeight() const
 {
-  if (!m_font) return 0;
+  if (!m_font) { return 0;
+}
   return m_font->GetLineHeight(m_lineSpacing) * g_graphicsContext.GetGUIScaleY();
 }
 
 float CGUIFont::GetScaleFactor() const
 {
-  if (!m_font) return 1.0f;
+  if (!m_font) { return 1.0f;
+}
   return m_font->GetFontHeight() / m_origHeight;
 }
 
 void CGUIFont::Begin()
 {
-  if (!m_font) return;
+  if (!m_font) { return;
+}
   m_font->Begin();
 }
 
 void CGUIFont::End()
 {
-  if (!m_font) return;
+  if (!m_font) { return;
+}
   m_font->End();
 }
 

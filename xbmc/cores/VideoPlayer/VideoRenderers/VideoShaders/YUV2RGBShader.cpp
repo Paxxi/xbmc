@@ -283,7 +283,8 @@ void BaseYUV2RGBGLSLShader::OnCompiledAndLinked()
   m_hStep    = glGetUniformLocation(ProgramHandle(), "m_step");
   VerifyGLState();
 
-  if (m_glslOutput) m_glslOutput->OnCompiledAndLinked(ProgramHandle());
+  if (m_glslOutput) { m_glslOutput->OnCompiledAndLinked(ProgramHandle());
+}
 }
 
 bool BaseYUV2RGBGLSLShader::OnEnabled()
@@ -306,18 +307,21 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
   glUniform1f(m_hAlpha, m_alpha);
 #endif
   VerifyGLState();
-  if (m_glslOutput) m_glslOutput->OnEnabled();
+  if (m_glslOutput) { m_glslOutput->OnEnabled();
+}
   return true;
 }
 
 void BaseYUV2RGBGLSLShader::OnDisabled()
 {
-  if (m_glslOutput) m_glslOutput->OnDisabled();
+  if (m_glslOutput) { m_glslOutput->OnDisabled();
+}
 }
 
 void BaseYUV2RGBGLSLShader::Free()
 {
-  if (m_glslOutput) m_glslOutput->Free();
+  if (m_glslOutput) { m_glslOutput->Free();
+}
 }
 //////////////////////////////////////////////////////////////////////
 // BaseYUV2RGBGLSLShader - base class for GLSL YUV2RGB shaders

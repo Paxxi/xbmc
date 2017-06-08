@@ -71,7 +71,8 @@ bool CPlayListWPL::LoadData(std::istream& stream)
   }
 
   TiXmlElement* pRootElement = xmlDoc.RootElement();
-  if (!pRootElement ) return false;
+  if (!pRootElement ) { return false;
+}
 
   TiXmlElement* pHeadElement = pRootElement->FirstChildElement("head");
   if (pHeadElement )
@@ -82,14 +83,17 @@ bool CPlayListWPL::LoadData(std::istream& stream)
   }
 
   TiXmlElement* pBodyElement = pRootElement->FirstChildElement("body");
-  if (!pBodyElement ) return false;
+  if (!pBodyElement ) { return false;
+}
 
   TiXmlElement* pSeqElement = pBodyElement->FirstChildElement("seq");
-  if (!pSeqElement ) return false;
+  if (!pSeqElement ) { return false;
+}
 
   TiXmlElement* pMediaElement = pSeqElement->FirstChildElement("media");
 
-  if (!pMediaElement) return false;
+  if (!pMediaElement) { return false;
+}
   while (pMediaElement)
   {
     std::string strFileName = XMLUtils::GetAttribute(pMediaElement, "src");

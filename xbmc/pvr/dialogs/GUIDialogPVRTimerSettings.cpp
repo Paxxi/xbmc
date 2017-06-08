@@ -631,7 +631,8 @@ void CGUIDialogPVRTimerSettings::Save()
     m_timerInfoTag->SetStartFromLocalTime(m_startLocalTime);
     m_timerInfoTag->SetEndFromLocalTime(m_endLocalTime);
   }
-  else if (!m_bStartAnyTime)
+  else { if 
+}(!m_bStartAnyTime)
     m_timerInfoTag->SetStartFromLocalTime(m_startLocalTime);
   else if (!m_bEndAnyTime)
     m_timerInfoTag->SetEndFromLocalTime(m_endLocalTime);

@@ -39,9 +39,12 @@ CAudioSettings::CAudioSettings()
 
 bool CAudioSettings::operator!=(const CAudioSettings &right) const
 {
-  if (m_MasterStreamType      != right.m_MasterStreamType)      return true;
-  if (m_MasterStreamTypeSel   != right.m_MasterStreamTypeSel)   return true;
-  if (memcmp(m_MasterModes, right.m_MasterModes, sizeof(m_MasterModes))) return true;
+  if (m_MasterStreamType      != right.m_MasterStreamType) {      return true;
+}
+  if (m_MasterStreamTypeSel   != right.m_MasterStreamTypeSel) {   return true;
+}
+  if (memcmp(m_MasterModes, right.m_MasterModes, sizeof(m_MasterModes))) { return true;
+}
 
   return false;
 }

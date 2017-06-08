@@ -2318,8 +2318,10 @@ static void UpdateLimits(double& minimum, double& maximum, double dts)
   if(dts == DVD_NOPTS_VALUE) {
     return;
 }
-  if(minimum == DVD_NOPTS_VALUE || minimum > dts) minimum = dts;
-  if(maximum == DVD_NOPTS_VALUE || maximum < dts) maximum = dts;
+  if(minimum == DVD_NOPTS_VALUE || minimum > dts) { minimum = dts;
+}
+  if(maximum == DVD_NOPTS_VALUE || maximum < dts) { maximum = dts;
+}
 }
 
 bool CVideoPlayer::CheckContinuity(CCurrentStream& current, DemuxPacket* pPacket)
@@ -2535,7 +2537,8 @@ void CVideoPlayer::OnExit()
     SetCaching(CACHESTATE_DONE);
 
     // close each stream
-    if (!m_bAbortRequest) CLog::Log(LOGNOTICE, "VideoPlayer: eof, waiting for queues to empty");
+    if (!m_bAbortRequest) { CLog::Log(LOGNOTICE, "VideoPlayer: eof, waiting for queues to empty");
+}
     CloseStream(m_CurrentAudio,    !m_bAbortRequest);
     CloseStream(m_CurrentVideo,    !m_bAbortRequest);
 

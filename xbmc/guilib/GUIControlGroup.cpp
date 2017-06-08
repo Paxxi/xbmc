@@ -449,9 +449,11 @@ const CGUIControl* CGUIControlGroup::GetControl(int iControl) const
 
 int CGUIControlGroup::GetFocusedControlID() const
 {
-  if (m_focusedControl) return m_focusedControl;
+  if (m_focusedControl) { return m_focusedControl;
+}
   CGUIControl *control = GetFocusedControl();
-  if (control) return control->GetID();
+  if (control) { return control->GetID();
+}
   return 0;
 }
 
@@ -490,7 +492,8 @@ CGUIControl *CGUIControlGroup::GetFocusedControl() const
 // in the case of id == 0, we don't match id
 CGUIControl *CGUIControlGroup::GetFirstFocusableControl(int id)
 {
-  if (!CanFocus()) return nullptr;
+  if (!CanFocus()) { return nullptr;
+}
   if (id && id == (int) GetID()) return this; // we're focusable and they want us
   for (auto *pControl : m_children)
   {
@@ -508,7 +511,8 @@ CGUIControl *CGUIControlGroup::GetFirstFocusableControl(int id)
 
 void CGUIControlGroup::AddControl(CGUIControl *control, int position /* = -1*/)
 {
-  if (!control) return;
+  if (!control) { return;
+}
   if (position < 0 || position > (int)m_children.size())
     position = (int)m_children.size();
   m_children.insert(m_children.begin() + position, control);

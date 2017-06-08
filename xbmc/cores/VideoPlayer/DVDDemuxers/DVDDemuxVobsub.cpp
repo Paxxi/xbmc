@@ -192,7 +192,8 @@ bool CDVDDemuxVobsub::ParseDelay(SState& state, char* line)
   int h,m,s,ms;
   bool negative = false;
 
-  while(*line == ' ') line++;
+  while(*line == ' ') { line++;
+}
   if(*line == '-')
   {
 	  line++;
@@ -212,16 +213,19 @@ bool CDVDDemuxVobsub::ParseId(SState& state, char* line)
 {
   std::unique_ptr<CStream> stream(new CStream(this));
 
-  while(*line == ' ') line++;
+  while(*line == ' ') { line++;
+}
   strncpy(stream->language, line, 2);
   stream->language[2] = '\0';
   line+=2;
 
-  while(*line == ' ' || *line == ',') line++;
+  while(*line == ' ' || *line == ',') { line++;
+}
   if (strncmp("index:", line, 6) == 0)
   {
     line+=6;
-    while(*line == ' ') line++;
+    while(*line == ' ') { line++;
+}
     stream->uniqueId = atoi(line);
   }
   else {
@@ -253,7 +257,8 @@ bool CDVDDemuxVobsub::ParseTimestamp(SState& state, char* line)
   int h,m,s,ms;
   STimestamp timestamp;
 
-  while(*line == ' ') line++;
+  while(*line == ' ') { line++;
+}
   if(sscanf(line, "%d:%d:%d:%d, filepos:%" PRIx64, &h, &m, &s, &ms, &timestamp.pos) != 5) {
     return false;
 }

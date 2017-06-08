@@ -257,7 +257,8 @@ std::string CGUIWindowMusicNav::GetQuickpathName(const std::string& strPath) con
 
 bool CGUIWindowMusicNav::OnClick(int iItem, const std::string &player /* = "" */)
 {
-  if (iItem < 0 || iItem >= m_vecItems->Size()) return false;
+  if (iItem < 0 || iItem >= m_vecItems->Size()) { return false;
+}
 
   CFileItemPtr item = m_vecItems->Get(iItem);
   if (StringUtils::StartsWith(item->GetPath(), "musicsearch://"))

@@ -540,8 +540,10 @@ bool CGUIWindowFileManager::Update(int iList, const std::string &strDirectory)
 
 void CGUIWindowFileManager::OnClick(int iList, int iItem)
 {
-  if ( iList < 0 || iList >= 2) return ;
-  if ( iItem < 0 || iItem >= m_vecItems[iList]->Size() ) return ;
+  if ( iList < 0 || iList >= 2) { return ;
+}
+  if ( iItem < 0 || iItem >= m_vecItems[iList]->Size() ) { return ;
+}
 
   CFileItemPtr pItem = m_vecItems[iList]->Get(iItem);
   if (pItem->GetPath() == "add" && pItem->GetLabel() == g_localizeStrings.Get(1026)) // 'add source button' in empty root
@@ -910,8 +912,10 @@ bool CGUIWindowFileManager::CanRename(int iList)
 {
   //! @todo Renaming of shares (requires writing to sources.xml)
   //! this might be able to be done via the webserver code stuff...
-  if (m_Directory[iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[iList]->IsReadOnly()) return false;
+  if (m_Directory[iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[iList]->IsReadOnly()) { return false;
+}
 
   return true;
 }
@@ -921,33 +925,44 @@ bool CGUIWindowFileManager::CanCopy(int iList)
   // can't copy if the destination is not writeable, or if the source is a share!
   //! @todo Perhaps if the source is removeable media (DVD/CD etc.) we could
   //! put ripping/backup in here.
-  if (!CUtil::SupportsReadFileOperations(m_Directory[iList]->GetPath())) return false;
-  if (m_Directory[iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[1 - iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[1 -iList]->IsReadOnly()) return false;
+  if (!CUtil::SupportsReadFileOperations(m_Directory[iList]->GetPath())) { return false;
+}
+  if (m_Directory[iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[1 - iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[1 -iList]->IsReadOnly()) { return false;
+}
   return true;
 }
 
 bool CGUIWindowFileManager::CanMove(int iList)
 {
   // can't move if the destination is not writeable, or if the source is a share or not writeable!
-  if (m_Directory[0]->IsVirtualDirectoryRoot() || m_Directory[0]->IsReadOnly()) return false;
-  if (m_Directory[1]->IsVirtualDirectoryRoot() || m_Directory[1]->IsReadOnly()) return false;
+  if (m_Directory[0]->IsVirtualDirectoryRoot() || m_Directory[0]->IsReadOnly()) { return false;
+}
+  if (m_Directory[1]->IsVirtualDirectoryRoot() || m_Directory[1]->IsReadOnly()) { return false;
+}
   return true;
 }
 
 bool CGUIWindowFileManager::CanDelete(int iList)
 {
-  if (m_Directory[iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[iList]->IsReadOnly()) return false;
+  if (m_Directory[iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[iList]->IsReadOnly()) { return false;
+}
   return true;
 }
 
 bool CGUIWindowFileManager::CanNewFolder(int iList)
 {
-  if (m_Directory[iList]->IsVirtualDirectoryRoot()) return false;
-  if (m_Directory[iList]->IsReadOnly()) return false;
+  if (m_Directory[iList]->IsVirtualDirectoryRoot()) { return false;
+}
+  if (m_Directory[iList]->IsReadOnly()) { return false;
+}
   return true;
 }
 
@@ -968,7 +983,8 @@ int CGUIWindowFileManager::GetFocusedList() const
 
 void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven /* = true */)
 {
-  if (list < 0 || list >= 2) return ;
+  if (list < 0 || list >= 2) { return ;
+}
   bool bDeselect = SelectItem(list, item);
   // calculate the position for our menu
   float posX = 200;
@@ -1008,7 +1024,8 @@ void CGUIWindowFileManager::OnPopupMenu(int list, int item, bool bContextDriven 
   // popup the context menu
 
   bool showEntry = false;
-  if (item >= m_vecItems[list]->Size()) item = -1;
+  if (item >= m_vecItems[list]->Size()) { item = -1;
+}
   if (item >= 0)
     showEntry=(!pItem->IsParentFolder() || (pItem->IsParentFolder() && m_vecItems[list]->GetSelectedCount()>0));
 
@@ -1164,7 +1181,8 @@ int64_t CGUIWindowFileManager::CalculateFolderSize(const std::string &strDirecto
     if (items[i]->m_bIsFolder && !items[i]->IsParentFolder()) // folder
     {
       int64_t folderSize = CalculateFolderSize(items[i]->GetPath(), pProgress);
-      if (folderSize < 0) return -1;
+      if (folderSize < 0) { return -1;
+}
       totalSize += folderSize;
     }
     else // file

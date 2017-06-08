@@ -452,7 +452,8 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
 
     if (pMsgTarget)
     {
-      if (pMsgTarget->OnMessage( message )) handled = true;
+      if (pMsgTarget->OnMessage( message )) { handled = true;
+}
     }
   }
 
@@ -522,12 +523,14 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
           message.GetControlId() == window->GetID() ||
           message.GetSenderId() == 0 )
       {
-        if (window->OnMessage(message)) handled = true;
+        if (window->OnMessage(message)) { handled = true;
+}
       }
     }
     else
     {
-      if (window->OnMessage(message)) handled = true;
+      if (window->OnMessage(message)) { handled = true;
+}
     }
   }
   return handled;
@@ -1487,7 +1490,8 @@ bool CGUIWindowManager::IsWindowActive(int id, bool ignoreClosing /* = true */) 
 {
   // mask out multiple instances of the same window
   id &= WINDOW_ID_MASK;
-  if ((GetActiveWindow() & WINDOW_ID_MASK) == id) return true;
+  if ((GetActiveWindow() & WINDOW_ID_MASK) == id) { return true;
+}
   // run through the dialogs
   CSingleLock lock(g_graphicsContext);
   for (const auto& window : m_activeDialogs)

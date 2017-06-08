@@ -40,7 +40,8 @@ CGUIWindowPointer::~CGUIWindowPointer(void)
 
 void CGUIWindowPointer::SetPointer(int pointer)
 {
-  if (m_pointer == pointer) return;
+  if (m_pointer == pointer) { return;
+}
   // set the new pointer visible
   CGUIControl *pControl = GetControl(pointer);
   if (pControl)
@@ -48,7 +49,8 @@ void CGUIWindowPointer::SetPointer(int pointer)
     pControl->SetVisible(true);
     // disable the old pointer
     pControl = GetControl(m_pointer);
-    if (pControl) pControl->SetVisible(false);
+    if (pControl) { pControl->SetVisible(false);
+}
     // set pointer to the new one
     m_pointer = pointer;
   }

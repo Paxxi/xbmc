@@ -139,11 +139,16 @@ GAME_KEY_MOD CGameClientTranslator::GetModifiers(CKey::Modifier modifier)
 {
   unsigned int mods = GAME_KEY_MOD_NONE;
 
-  if (modifier & CKey::MODIFIER_CTRL)  mods |= GAME_KEY_MOD_CTRL;
-  if (modifier & CKey::MODIFIER_SHIFT) mods |= GAME_KEY_MOD_SHIFT;
-  if (modifier & CKey::MODIFIER_ALT)   mods |= GAME_KEY_MOD_ALT;
-  if (modifier & CKey::MODIFIER_RALT)  mods |= GAME_KEY_MOD_RALT;
-  if (modifier & CKey::MODIFIER_META)  mods |= GAME_KEY_MOD_META;
+  if (modifier & CKey::MODIFIER_CTRL) {  mods |= GAME_KEY_MOD_CTRL;
+}
+  if (modifier & CKey::MODIFIER_SHIFT) { mods |= GAME_KEY_MOD_SHIFT;
+}
+  if (modifier & CKey::MODIFIER_ALT) {   mods |= GAME_KEY_MOD_ALT;
+}
+  if (modifier & CKey::MODIFIER_RALT) {  mods |= GAME_KEY_MOD_RALT;
+}
+  if (modifier & CKey::MODIFIER_META) {  mods |= GAME_KEY_MOD_META;
+}
 
   return static_cast<GAME_KEY_MOD>(mods);
 }

@@ -1412,7 +1412,8 @@ std::string CDateTime::GetAsLocalizedDate(const std::string &strFormat) const
       else // Day of week string
       {
         int wday = dateTime.wDayOfWeek;
-        if (wday < 1 || wday > 7) wday = 7;
+        if (wday < 1 || wday > 7) { wday = 7;
+}
         str = g_localizeStrings.Get((c =='d' ? 40 : 10) + wday);
       }
       strOut+=str;
@@ -1444,7 +1445,8 @@ std::string CDateTime::GetAsLocalizedDate(const std::string &strFormat) const
       else // Month string
       {
         int wmonth = dateTime.wMonth;
-        if (wmonth < 1 || wmonth > 12) wmonth = 12;
+        if (wmonth < 1 || wmonth > 12) { wmonth = 12;
+}
         str = g_localizeStrings.Get((c =='m' ? 50 : 20) + wmonth);
       }
       strOut+=str;
@@ -1550,7 +1552,8 @@ int CDateTime::MonthStringToMonthNum(const std::string& month)
   const char* abr_months[] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
 
   int i = 0;
-  for (; i < 12 && !StringUtils::EqualsNoCase(month, months[i]) && !StringUtils::EqualsNoCase(month, abr_months[i]); i++);
+  for (; i < 12 && !StringUtils::EqualsNoCase(month, months[i]) && !StringUtils::EqualsNoCase(month, abr_months[i]); i++) {;
+}
   i++;
 
   return i;

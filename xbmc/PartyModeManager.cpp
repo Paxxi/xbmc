@@ -729,7 +729,8 @@ void CPartyModeManager::GetRandomSelection(std::vector< std::pair<int,int> >& in
 
 bool CPartyModeManager::IsEnabled(PartyModeContext context /* = PARTYMODECONTEXT_UNKNOWN */) const
 {
-  if (!m_bEnabled) return false;
+  if (!m_bEnabled) { return false;
+}
   if (context == PARTYMODECONTEXT_VIDEO) {
     return m_bIsVideo;
 }

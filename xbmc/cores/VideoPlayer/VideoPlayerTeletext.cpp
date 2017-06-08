@@ -305,7 +305,8 @@ void CDVDTeletextData::Process()
             /* get packet and magazine number */
             packet_number = b1>>3 | b2<<1;
             magazine      = dehamming[vtxt_row[0]] & 7;
-            if (!magazine) magazine = 8;
+            if (!magazine) { magazine = 8;
+}
 
             if (packet_number == 0 && m_TXTCache.CurrentPage[magazine] != -1 && m_TXTCache.CurrentSubPage[magazine] != -1)
               SavePage(m_TXTCache.CurrentPage[magazine], m_TXTCache.CurrentSubPage[magazine], pagedata[magazine]);

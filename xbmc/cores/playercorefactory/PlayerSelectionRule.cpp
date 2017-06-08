@@ -95,8 +95,10 @@ int CPlayerSelectionRule::GetTristate(const char* szValue)
 {
   if (szValue)
   {
-    if (stricmp(szValue, "true") == 0) return 1;
-    if (stricmp(szValue, "false") == 0) return 0;
+    if (stricmp(szValue, "true") == 0) { return 1;
+}
+    if (stricmp(szValue, "false") == 0) { return 0;
+}
   }
   return -1;
 }

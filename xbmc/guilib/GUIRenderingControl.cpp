@@ -53,8 +53,10 @@ bool CGUIRenderingControl::InitCallback(IRenderingCallback *callback)
   float y = g_graphicsContext.ScaleFinalYCoord(GetXPosition(), GetYPosition());
   float w = g_graphicsContext.ScaleFinalXCoord(GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) - x;
   float h = g_graphicsContext.ScaleFinalYCoord(GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) - y;
-  if (x < 0) x = 0;
-  if (y < 0) y = 0;
+  if (x < 0) { x = 0;
+}
+  if (y < 0) { y = 0;
+}
   if (x + w > g_graphicsContext.GetWidth()) w = g_graphicsContext.GetWidth() - x;
   if (y + h > g_graphicsContext.GetHeight()) h = g_graphicsContext.GetHeight() - y;
 
@@ -113,7 +115,8 @@ void CGUIRenderingControl::FreeResources(bool immediately)
 {
   CSingleLock lock(m_rendering);
 
-  if (!m_callback) return;
+  if (!m_callback) { return;
+}
 
   g_graphicsContext.CaptureStateBlock(); //! @todo locking
   m_callback->Stop();

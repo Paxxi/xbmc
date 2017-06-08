@@ -147,7 +147,8 @@ bool CGUIListItemLayout::CheckCondition()
 
 void CGUIListItemLayout::LoadControl(TiXmlElement *child, CGUIControlGroup *group)
 {
-  if (!group) return;
+  if (!group) { return;
+}
 
   CRect rect(group->GetXPosition(), group->GetYPosition(), group->GetXPosition() + group->GetWidth(), group->GetYPosition() + group->GetHeight());
 

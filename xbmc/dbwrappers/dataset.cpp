@@ -229,7 +229,8 @@ void Dataset::refresh() {
     open();
     seek(row);
   }
-  else open();		
+  else { open();		
+}
 }
 
 
@@ -246,8 +247,10 @@ void Dataset::next() {
     if (frecno<num_rows()-1) {
       frecno++;
       feof = false;
-    } else feof = true;
-    if (num_rows()<=0) fbof = feof = true;
+    } else { feof = true;
+}
+    if (num_rows()<=0) { fbof = feof = true;
+}
   }
 }
 
@@ -257,8 +260,10 @@ void Dataset::prev() {
     if (frecno) {
       frecno--;
       fbof = false;
-    } else fbof = true;
-    if (num_rows()<=0) fbof = feof = true;
+    } else { fbof = true;
+}
+    if (num_rows()<=0) { fbof = feof = true;
+}
   }
 }
 
@@ -309,7 +314,8 @@ void Dataset::post() {
 
 
 void Dataset::deletion() {
-  if (ds_state == dsSelect) make_deletion();
+  if (ds_state == dsSelect) { make_deletion();
+}
 }
 
 
@@ -322,7 +328,8 @@ bool Dataset::set_field_value(const char *f_name, const field_value &value) {
 			     found = true;
 	}
 }
-      if (!found) throw DbErrors("Field not found: %s",f_name);
+      if (!found) { throw DbErrors("Field not found: %s",f_name);
+}
     return true;
   }
   throw DbErrors("Not in Insert or Edit state");

@@ -188,7 +188,8 @@ bool CGUIDialogPVRChannelManager::OnClickListChannels(CGUIMessage &message)
     int iItem = m_viewControl.GetSelectedItem();
 
     /* Check file item is in list range and get his pointer */
-    if (iItem < 0 || iItem >= m_channelItems->Size()) return true;
+    if (iItem < 0 || iItem >= m_channelItems->Size()) { return true;
+}
 
     /* Process actions */
     if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_CONTEXT_MENU || iAction == ACTION_MOUSE_RIGHT_CLICK)
@@ -597,7 +598,8 @@ bool CGUIDialogPVRChannelManager::OnPopupMenu(int iItem)
 bool CGUIDialogPVRChannelManager::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
   /* Check file item is in list range and get his pointer */
-  if (itemNumber < 0 || itemNumber >= m_channelItems->Size()) return false;
+  if (itemNumber < 0 || itemNumber >= m_channelItems->Size()) { return false;
+}
 
   CFileItemPtr pItem = m_channelItems->Get(itemNumber);
   if (!pItem)
@@ -658,7 +660,8 @@ bool CGUIDialogPVRChannelManager::OnContextButton(int itemNumber, CONTEXT_BUTTON
 void CGUIDialogPVRChannelManager::SetData(int iItem)
 {
   /* Check file item is in list range and get his pointer */
-  if (iItem < 0 || iItem >= m_channelItems->Size()) return;
+  if (iItem < 0 || iItem >= m_channelItems->Size()) { return;
+}
 
   CFileItemPtr pItem = m_channelItems->Get(iItem);
   if (!pItem)

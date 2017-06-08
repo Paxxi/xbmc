@@ -51,7 +51,8 @@ void CGUIViewControl::Reset()
 
 void CGUIViewControl::AddView(const CGUIControl *control)
 {
-  if (!control || !control->IsContainer()) return;
+  if (!control || !control->IsContainer()) { return;
+}
   m_allViews.push_back((CGUIControl *)control);
 }
 
@@ -147,7 +148,8 @@ void CGUIViewControl::SetItems(CFileItemList &items)
 
 void CGUIViewControl::UpdateContents(const CGUIControl *control, int currentItem) const
 {
-  if (!control || !m_fileItems) return;
+  if (!control || !m_fileItems) { return;
+}
   CGUIMessage msg(GUI_MSG_LABEL_BIND, m_parentWindow, control->GetID(), currentItem, 0, m_fileItems);
   g_windowManager.SendMessage(msg, m_parentWindow);
 }
