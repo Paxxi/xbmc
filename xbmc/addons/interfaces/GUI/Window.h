@@ -62,9 +62,9 @@ namespace ADDON
     static void set_callbacks(void* kodiBase,
                               void* handle,
                               void* clienthandle,
-                              bool (*CBInit)(void*),
-                              bool (*CBFocus)(void*, int),
-                              bool (*CBClick)(void*, int),
+                              bool (*CBOnInit)(void*),
+                              bool (*CBOnFocus)(void*, int),
+                              bool (*CBOnClick)(void*, int),
                               bool (*CBOnAction)(void*, int),
                               void (*CBGetContextButtons)(void* , int, gui_context_menu_pair*, unsigned int*),
                               bool (*CBOnContextButton)(void*, int, unsigned int));

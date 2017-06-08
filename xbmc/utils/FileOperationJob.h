@@ -43,7 +43,7 @@ public:
   CFileOperationJob(FileAction action, CFileItemList & items,
                     const std::string& strDestFile,
                     bool displayProgress = false,
-                    int errorHeading = 0, int errorLine = 0);
+                    int heading = 0, int line = 0);
 
   static std::string GetActionString(FileAction action);
 

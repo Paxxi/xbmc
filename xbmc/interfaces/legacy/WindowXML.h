@@ -351,7 +351,7 @@ namespace XBMCAddon
       ///
       setContainerProperty(...);
 #else
-      SWIGHIDDENVIRTUAL void setContainerProperty(const String &strProperty, const String &strValue);
+      SWIGHIDDENVIRTUAL void setContainerProperty(const String &key, const String &value);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -401,7 +401,7 @@ namespace XBMCAddon
       ///
       setContent(...);
 #else
-      SWIGHIDDENVIRTUAL void setContent(const String &strValue);
+      SWIGHIDDENVIRTUAL void setContent(const String &value);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -434,7 +434,7 @@ namespace XBMCAddon
       SWIGHIDDENVIRTUAL void      FreeResources(bool forceUnLoad = false);
       SWIGHIDDENVIRTUAL bool      OnClick(int iItem);
       SWIGHIDDENVIRTUAL bool      OnDoubleClick(int iItem);
-      SWIGHIDDENVIRTUAL void      Process(unsigned int currentTime, CDirtyRegionList &dirtyregions);
+      SWIGHIDDENVIRTUAL void      Process(unsigned int currentTime, CDirtyRegionList &regions);
 
       SWIGHIDDENVIRTUAL bool IsMediaWindow() const { XBMC_TRACE; return m_isMedia; };
 
@@ -447,7 +447,7 @@ namespace XBMCAddon
 
     protected:
       // CGUIWindow
-      SWIGHIDDENVIRTUAL bool     LoadXML(const String &strPath, const String &strPathLower);
+      SWIGHIDDENVIRTUAL bool     LoadXML(const String &strPath, const String &strLowerPath);
 
       // CGUIMediaWindow
       SWIGHIDDENVIRTUAL void     GetContextButtons(int itemNumber, CContextButtons &buttons);
@@ -549,7 +549,7 @@ namespace XBMCAddon
       SWIGHIDDENVIRTUAL bool    OnAction(const CAction &action);
       SWIGHIDDENVIRTUAL void    OnDeinitWindow(int nextWindowID);
 
-      SWIGHIDDENVIRTUAL bool    LoadXML(const String &strPath, const String &strPathLower);
+      SWIGHIDDENVIRTUAL bool    LoadXML(const String &strPath, const String &strLowerPath);
 
       SWIGHIDDENVIRTUAL inline void show() { XBMC_TRACE; WindowDialogMixin::show(); }
       SWIGHIDDENVIRTUAL inline void close() { XBMC_TRACE; WindowDialogMixin::close(); }

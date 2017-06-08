@@ -41,6 +41,6 @@ namespace XFILE
     virtual bool Exists(const CURL& url) { return true; }
     virtual bool AllowAll() const { return true; }
 
-    static CFileItemPtr EventToFileItem(const EventPtr& activity);
+    static CFileItemPtr EventToFileItem(const EventPtr& eventItem);
   };
 }

@@ -43,7 +43,7 @@ public:
   virtual int GetNrOfStreams() const override;
   virtual std::string GetFileName() override {return "";};
 
-  DemuxPacket* Read(DemuxPacket *packet);
+  DemuxPacket* Read(DemuxPacket *pSrcPacket);
   static void Handler(int service, void *userdata);
 
 protected:

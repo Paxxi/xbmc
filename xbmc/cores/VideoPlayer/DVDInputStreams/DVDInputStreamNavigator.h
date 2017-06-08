@@ -173,7 +173,7 @@ public:
 
 protected:
 
-  int ProcessBlock(uint8_t* buffer, int* read);
+  int ProcessBlock(uint8_t* dest_buffer, int* read);
 
   /**
    * XBMC     : the audio stream id we use in xbmc

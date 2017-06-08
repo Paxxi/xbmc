@@ -63,7 +63,7 @@ namespace EVENTSERVER
     void StopServer(bool bWait);
 
     // get events
-    unsigned int GetButtonCode(std::string& strMapName, bool& isAxis, float& amount, bool &isJoystick);
+    unsigned int GetButtonCode(std::string& strMapName, bool& isAxis, float& fAmount, bool &isJoystick);
     bool ExecuteNextAction();
     bool GetMousePos(float &x, float &y);
     int GetNumberOfClients();
@@ -72,7 +72,7 @@ namespace EVENTSERVER
     CEventServer();
     void Cleanup();
     void Run();
-    void ProcessPacket(SOCKETS::CAddress& addr, int packetSize);
+    void ProcessPacket(SOCKETS::CAddress& addr, int pSize);
     void ProcessEvents();
     void RefreshClients();
 

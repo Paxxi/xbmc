@@ -82,7 +82,7 @@ public:
   void getDiskArtist(std::string& strdisk_artist) const;
   void getDiskTitle(std::string& strdisk_title) const;
   const std::string& getTrackExtended(int track) const;
-  uint32_t calc_disc_id(int nr_of_tracks, toc cdtoc[]);
+  uint32_t calc_disc_id(int tot_trks, toc cdtoc[]);
   const std::string& getInexactArtist(int select) const;
   const std::string& getInexactTitle(int select) const;
   bool queryCache( uint32_t discid );
@@ -132,7 +132,7 @@ protected:
    \param untrimmedText original text to trim and convert
    \return a utf8 version of the trimmed text
    */
-  std::string TrimToUTF8(const std::string &untrimmed);
+  std::string TrimToUTF8(const std::string &untrimmedText);
 
   std::string m_cddb_ip_address;
   std::string cCacheDir;

@@ -509,7 +509,7 @@ namespace XBMCAddon
       ///
       controlUp(...);
 #else
-      virtual void controlUp(const Control* up);
+      virtual void controlUp(const Control* control);
 #endif
 
       // controlDown() Method
@@ -770,9 +770,9 @@ namespace XBMCAddon
     {
     public:
       ControlLabel(long x, long y, long width, long height, const String& label,
-                  const char* font = NULL, const char* textColor = NULL, 
-                  const char* disabledColor = NULL,
-                  long alignment = XBFONT_LEFT, 
+                  const char* font = NULL, const char* p_textColor = NULL, 
+                  const char* p_disabledColor = NULL,
+                  long p_alignment = XBFONT_LEFT, 
                   bool hasPath = false, long angle = 0);
 
       virtual ~ControlLabel();
@@ -920,8 +920,8 @@ namespace XBMCAddon
     {
     public:
       ControlEdit(long x, long y, long width, long height, const String& label,
-                  const char* font = NULL, const char* textColor = NULL, 
-                  const char* disabledColor = NULL,
+                  const char* font = NULL, const char* _textColor = NULL, 
+                  const char* _disabledColor = NULL,
                   long _alignment = XBFONT_LEFT, const char* focusTexture = NULL,
                   const char* noFocusTexture = NULL, bool isPassword = false);
 
@@ -1128,9 +1128,9 @@ namespace XBMCAddon
 
     public:
       ControlList(long x, long y, long width, long height, const char* font = NULL,
-                  const char* textColor = NULL, const char* buttonTexture = NULL,
-                  const char* buttonFocusTexture = NULL,
-                  const char* selectedColor = NULL,
+                  const char* ctextColor = NULL, const char* cbuttonTexture = NULL,
+                  const char* cbuttonFocusTexture = NULL,
+                  const char* cselectedColor = NULL,
                   long _imageWidth=10, long _imageHeight=10, long _itemTextXOffset = CONTROL_TEXT_OFFSET_X,
                   long _itemTextYOffset = CONTROL_TEXT_OFFSET_Y, long _itemHeight = 27, long _space = 2, 
                   long _alignmentY = XBFONT_CENTER_Y);
@@ -1555,7 +1555,7 @@ namespace XBMCAddon
       ///
       setStaticContent(...);
 #else
-      virtual void setStaticContent(const ListItemList* items);
+      virtual void setStaticContent(const ListItemList* pitems);
 #endif
 
 #ifndef SWIG
@@ -1657,7 +1657,7 @@ namespace XBMCAddon
     public:
       ControlFadeLabel(long x, long y, long width, long height, 
                        const char* font = NULL, 
-                       const char* textColor = NULL, 
+                       const char* _textColor = NULL, 
                        long _alignment = XBFONT_LEFT);
 
       // addLabel() Method
@@ -1786,7 +1786,7 @@ namespace XBMCAddon
     public:
       ControlTextBox(long x, long y, long width, long height, 
                      const char* font = NULL, 
-                     const char* textColor = NULL);
+                     const char* _textColor = NULL);
 
       // SetText() Method
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -1887,7 +1887,7 @@ namespace XBMCAddon
       ///
       scroll(...);
 #else
-      virtual void scroll(long id);
+      virtual void scroll(long position);
 #endif
 
       // autoScroll() Method
@@ -1976,8 +1976,8 @@ namespace XBMCAddon
     {
     public:
       ControlImage(long x, long y, long width, long height, 
-                   const char* filename, long aspectRatio = 0,
-                   const char* colorDiffuse = NULL);
+                   const char* filename, long aRatio = 0,
+                   const char* _colorDiffuse = NULL);
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
       ///
@@ -2031,7 +2031,7 @@ namespace XBMCAddon
       ///
       setColorDiffuse(...);
 #else
-      virtual void setColorDiffuse(const char* hexString);
+      virtual void setColorDiffuse(const char* cColorDiffuse);
 #endif
 
 #ifndef SWIG
@@ -2268,12 +2268,12 @@ namespace XBMCAddon
     public:
       ControlButton(long x, long y, long width, long height, const String& label,
                     const char* focusTexture = NULL, const char* noFocusTexture = NULL, 
-                    long textOffsetX = CONTROL_TEXT_OFFSET_X, 
-                    long textOffsetY = CONTROL_TEXT_OFFSET_Y, 
+                    long _textOffsetX = CONTROL_TEXT_OFFSET_X, 
+                    long _textOffsetY = CONTROL_TEXT_OFFSET_Y, 
                     long alignment = (XBFONT_LEFT | XBFONT_CENTER_Y), 
-                    const char* font = NULL, const char* textColor = NULL,
-                    const char* disabledColor = NULL, long angle = 0,
-                    const char* shadowColor = NULL, const char* focusedColor = NULL);
+                    const char* font = NULL, const char* _textColor = NULL,
+                    const char* _disabledColor = NULL, long angle = 0,
+                    const char* _shadowColor = NULL, const char* _focusedColor = NULL);
 
       // setLabel() Method
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -2310,10 +2310,10 @@ namespace XBMCAddon
 #else
       virtual void setLabel(const String& label = emptyString, 
                             const char* font = NULL,
-                            const char* textColor = NULL,
-                            const char* disabledColor = NULL,
-                            const char* shadowColor = NULL,
-                            const char* focusedColor = NULL,
+                            const char* _textColor = NULL,
+                            const char* _disabledColor = NULL,
+                            const char* _shadowColor = NULL,
+                            const char* _focusedColor = NULL,
                             const String& label2 = emptyString);
 #endif
 
@@ -2559,12 +2559,12 @@ namespace XBMCAddon
                          const char* focusOnTexture = NULL, const char* noFocusOnTexture = NULL,
                          const char* focusOffTexture = NULL, const char* noFocusOffTexture = NULL,
                          const char* focusTexture = NULL, const char* noFocusTexture = NULL,
-                         long textOffsetX = CONTROL_TEXT_OFFSET_X, 
-                         long textOffsetY = CONTROL_TEXT_OFFSET_Y, 
-                         long _alignment = (XBFONT_LEFT | XBFONT_CENTER_Y), 
-                         const char* font = NULL, const char* textColor = NULL,
-                         const char* disabledColor = NULL, long angle = 0,
-                         const char* shadowColor = NULL, const char* focusedColor = NULL,
+                         long _textOffsetX = CONTROL_TEXT_OFFSET_X, 
+                         long _textOffsetY = CONTROL_TEXT_OFFSET_Y, 
+                         long alignment = (XBFONT_LEFT | XBFONT_CENTER_Y), 
+                         const char* font = NULL, const char* _textColor = NULL,
+                         const char* _disabledColor = NULL, long angle = 0,
+                         const char* _shadowColor = NULL, const char* _focusedColor = NULL,
                          const char* disabledOnTexture = NULL, const char* disabledOffTexture = NULL);
 
       // setSelected() Method
@@ -2664,10 +2664,10 @@ namespace XBMCAddon
 #else
       virtual void setLabel(const String& label = emptyString, 
                             const char* font = NULL,
-                            const char* textColor = NULL,
-                            const char* disabledColor = NULL,
-                            const char* shadowColor = NULL,
-                            const char* focusedColor = NULL,
+                            const char* _textColor = NULL,
+                            const char* _disabledColor = NULL,
+                            const char* _shadowColor = NULL,
+                            const char* _focusedColor = NULL,
                             const String& label2 = emptyString);
 #endif
 

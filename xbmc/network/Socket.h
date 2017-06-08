@@ -203,7 +203,7 @@ namespace SOCKETS
     bool Bind(bool localOnly, int port, int range=0);
     bool Connect() { return false; }
     bool Listen(int timeout);
-    int  SendTo(const CAddress& addr, const int datasize, const void* data);
+    int  SendTo(const CAddress& addr, const int datasize, const void* buffer);
     int  Read(CAddress& addr, const int buffersize, void *buffer);
     bool Broadcast(const CAddress& addr, const int datasize, const void* data)
     {
@@ -242,7 +242,7 @@ namespace SOCKETS
   public:
     CSocketListener();
     void         AddSocket(CBaseSocket *);
-    bool         Listen(int timeoutMs); // in ms, -1=>never timeout, 0=>poll
+    bool         Listen(int timeout); // in ms, -1=>never timeout, 0=>poll
     void         Clear();
     CBaseSocket* GetFirstReadySocket();
     CBaseSocket* GetNextReadySocket();

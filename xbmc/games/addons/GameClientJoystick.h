@@ -44,7 +44,7 @@ namespace GAME
      * \param controller The game controller which is used (for controller mapping).
      * \param dllStruct The emulator or game to which the events are sent.
      */
-    CGameClientJoystick(CGameClient* addon, int port, const ControllerPtr& controller, const KodiToAddonFuncTable_Game* dllStruct);
+    CGameClientJoystick(CGameClient* gameClient, int port, const ControllerPtr& controller, const KodiToAddonFuncTable_Game* dllStruct);
 
     virtual ~CGameClientJoystick() = default;
 

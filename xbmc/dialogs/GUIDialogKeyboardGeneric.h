@@ -71,7 +71,7 @@ class CGUIDialogKeyboardGeneric : public CGUIDialog, public CGUIKeyboard
     void SetEditText(const std::string& text);
     float GetStringWidth(const std::wstring& utf16);
     void ChangeWordList(int direct);  // direct: 0 - first page, 1 - next page, -1 - prev page
-    void ShowWordList(int which); // which: 0 - current page, 1 - next page, -1 -prev page
+    void ShowWordList(int direct); // which: 0 - current page, 1 - next page, -1 -prev page
     bool CodingCharacter(const std::string &ch);
     void NormalCharacter(const std::string &ch);
 

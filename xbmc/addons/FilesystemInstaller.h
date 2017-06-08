@@ -37,7 +37,7 @@ public:
    */
   bool InstallToFilesystem(const std::string& archive, const std::string& addonId);
 
-  bool UnInstallFromFilesystem(const std::string& addonPath);
+  bool UnInstallFromFilesystem(const std::string& addonFolder);
 
 private:
   static bool UnpackArchive(std::string path, const std::string& dest);

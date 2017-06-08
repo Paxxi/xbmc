@@ -238,9 +238,9 @@ public:
   void SetAnimations(const std::vector<CAnimation> &animations);
   const std::vector<CAnimation> &GetAnimations() const { return m_animations; };
 
-  virtual void QueueAnimation(ANIMATION_TYPE anim);
-  virtual bool IsAnimating(ANIMATION_TYPE anim);
-  virtual bool HasAnimation(ANIMATION_TYPE anim);
+  virtual void QueueAnimation(ANIMATION_TYPE animType);
+  virtual bool IsAnimating(ANIMATION_TYPE animType);
+  virtual bool HasAnimation(ANIMATION_TYPE type);
   CAnimation *GetAnimation(ANIMATION_TYPE type, bool checkConditions = true);
   virtual void ResetAnimation(ANIMATION_TYPE type);
   virtual void ResetAnimations();

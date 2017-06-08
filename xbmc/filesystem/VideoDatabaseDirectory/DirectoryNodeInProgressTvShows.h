@@ -28,7 +28,7 @@ namespace XFILE
     class CDirectoryNodeInProgressTvShows : public CDirectoryNode
     {
     public:
-      CDirectoryNodeInProgressTvShows(const std::string& strEntryName, CDirectoryNode* pParent);
+      CDirectoryNodeInProgressTvShows(const std::string& strName, CDirectoryNode* pParent);
     protected:
       virtual NODE_TYPE GetChildType() const;
       virtual bool GetContent(CFileItemList& items) const;

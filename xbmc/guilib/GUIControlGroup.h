@@ -59,15 +59,15 @@ public:
 
   virtual void SetInitialVisibility();
 
-  virtual bool IsAnimating(ANIMATION_TYPE anim);
-  virtual bool HasAnimation(ANIMATION_TYPE anim);
-  virtual void QueueAnimation(ANIMATION_TYPE anim);
-  virtual void ResetAnimation(ANIMATION_TYPE anim);
+  virtual bool IsAnimating(ANIMATION_TYPE animType);
+  virtual bool HasAnimation(ANIMATION_TYPE animType);
+  virtual void QueueAnimation(ANIMATION_TYPE animType);
+  virtual void ResetAnimation(ANIMATION_TYPE animType);
   virtual void ResetAnimations();
 
   int GetFocusedControlID() const;
   CGUIControl *GetFocusedControl() const;
-  const CGUIControl *GetControl(int id) const;
+  const CGUIControl *GetControl(int iControl) const;
   CGUIControl *GetControl(int id, std::vector<CGUIControl*> *idCollector = nullptr);
   virtual CGUIControl *GetFirstFocusableControl(int id);
 

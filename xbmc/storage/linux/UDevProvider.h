@@ -48,7 +48,7 @@ public:
   virtual bool PumpDriveChangeEvents(IStorageEventsCallback *callback);
 
 private:
-  void GetDisks(VECSOURCES& devices, bool removable);
+  void GetDisks(VECSOURCES& disks, bool removable);
 
   struct udev         *m_udev;
   struct udev_monitor *m_udevMon;

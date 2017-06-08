@@ -32,11 +32,11 @@ class XMLUtils
 public:
   static bool HasChild(const TiXmlNode* pRootNode, const char* strTag);
 
-  static bool GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& dwHexValue);
-  static bool GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& dwUIntValue);
+  static bool GetHex(const TiXmlNode* pRootNode, const char* strTag, uint32_t& hexValue);
+  static bool GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& uintValue);
   static bool GetLong(const TiXmlNode* pRootNode, const char* strTag, long& lLongValue);
   static bool GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& value);
-  static bool GetDouble(const TiXmlNode* pRootNode, const char* strTag, double &value);
+  static bool GetDouble(const TiXmlNode* root, const char* tag, double &value);
   static bool GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue);
   static bool GetBoolean(const TiXmlNode* pRootNode, const char* strTag, bool& bBoolValue);
   
@@ -73,12 +73,12 @@ public:
    \param value [out] the resulting string. Remains untouched if no <tag> is available, else is appended (or cleared based on the clear parameter).
    \param clear       if true, clears the string prior to adding tags, if tags are available. Defaults to false.
    */
-  static bool GetAdditiveString(const TiXmlNode* rootNode, const char* tag, const std::string& separator, std::string& value, bool clear = false);
+  static bool GetAdditiveString(const TiXmlNode* pRootNode, const char* strTag, const std::string& strSeparator, std::string& strStringValue, bool clear = false);
   static bool GetStringArray(const TiXmlNode* rootNode, const char* tag, std::vector<std::string>& arrayValue, bool clear = false, const std::string& separator = "");
   static bool GetPath(const TiXmlNode* pRootNode, const char* strTag, std::string& strStringValue);
-  static bool GetFloat(const TiXmlNode* pRootNode, const char* strTag, float& value, const float min, const float max);
-  static bool GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& dwUIntValue, const uint32_t min, const uint32_t max);
-  static bool GetInt(const TiXmlNode* pRootNode, const char* strTag, int& iIntValue, const int min, const int max);
+  static bool GetFloat(const TiXmlNode* pRootElement, const char* tagName, float& fValue, const float fMin, const float fMax);
+  static bool GetUInt(const TiXmlNode* pRootNode, const char* strTag, uint32_t& value, const uint32_t min, const uint32_t max);
+  static bool GetInt(const TiXmlNode* pRootNode, const char* strTag, int& value, const int min, const int max);
   static bool GetDate(const TiXmlNode* pRootNode, const char* strTag, CDateTime& date);
   static bool GetDateTime(const TiXmlNode* pRootNode, const char* strTag, CDateTime& dateTime);
   /*! \brief Fetch a std::string copy of an attribute, if it exists.  Cannot distinguish between empty and non-existent attributes.
@@ -96,7 +96,7 @@ public:
   static void SetBoolean(TiXmlNode* pRootNode, const char *strTag, bool value);
   static void SetHex(TiXmlNode* pRootNode, const char *strTag, uint32_t value);
   static void SetPath(TiXmlNode* pRootNode, const char *strTag, const std::string& strValue);
-  static void SetLong(TiXmlNode* pRootNode, const char *strTag, long iValue);
+  static void SetLong(TiXmlNode* pRootNode, const char *strTag, long value);
   static void SetDate(TiXmlNode* pRootNode, const char *strTag, const CDateTime& date);
   static void SetDateTime(TiXmlNode* pRootNode, const char *strTag, const CDateTime& dateTime);
 

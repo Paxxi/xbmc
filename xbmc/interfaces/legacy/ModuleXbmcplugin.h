@@ -77,7 +77,7 @@ namespace XBMCAddon
     ///
     addDirectoryItem(...);
 #else
-    bool addDirectoryItem(int handle, const String& url, const XBMCAddon::xbmcgui::ListItem* listitem,
+    bool addDirectoryItem(int handle, const String& url, const XBMCAddon::xbmcgui::ListItem* listItem,
                           bool isFolder = false, int totalItems = 0);
 #endif
 
@@ -178,7 +178,7 @@ namespace XBMCAddon
     ///
     setResolvedUrl(...);
 #else
-    void setResolvedUrl(int handle, bool succeeded, const XBMCAddon::xbmcgui::ListItem* listitem);
+    void setResolvedUrl(int handle, bool succeeded, const XBMCAddon::xbmcgui::ListItem* listItem);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -265,7 +265,7 @@ namespace XBMCAddon
     ///
     addSortMethod(...);
 #else
-    void addSortMethod(int handle, int sortMethod, const String& label2Mask = emptyString);
+    void addSortMethod(int handle, int sortMethod, const String& clabel2Mask = emptyString);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

@@ -72,7 +72,7 @@ public:
   virtual ~CDVDMessageQueue();
 
   void Init();
-  void Flush(CDVDMsg::Message message = CDVDMsg::DEMUXER_PACKET);
+  void Flush(CDVDMsg::Message type = CDVDMsg::DEMUXER_PACKET);
   void Abort();
   void End();
 

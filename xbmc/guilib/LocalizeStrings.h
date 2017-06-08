@@ -61,7 +61,7 @@ public:
   bool LoadSkinStrings(const std::string& path, const std::string& language);
   bool LoadAddonStrings(const std::string& path, const std::string& language, const std::string& addonId);
   void ClearSkinStrings();
-  const std::string& Get(uint32_t code) const;
+  const std::string& Get(uint32_t dwCode) const;
   std::string GetAddonString(const std::string& addonId, uint32_t code);
   void Clear();
 

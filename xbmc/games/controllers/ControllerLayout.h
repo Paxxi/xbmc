@@ -44,9 +44,9 @@ public:
   const std::vector<CControllerFeature>& Features(void) const { return m_features; }
 
   unsigned int FeatureCount(KODI::JOYSTICK::FEATURE_TYPE type = KODI::JOYSTICK::FEATURE_TYPE::UNKNOWN,
-                            KODI::JOYSTICK::INPUT_TYPE buttonType = KODI::JOYSTICK::INPUT_TYPE::UNKNOWN) const;
+                            KODI::JOYSTICK::INPUT_TYPE inputType = KODI::JOYSTICK::INPUT_TYPE::UNKNOWN) const;
 
-  bool Deserialize(const TiXmlElement* pLayoutElement, const CController* controller);
+  bool Deserialize(const TiXmlElement* pElement, const CController* controller);
 
 private:
   unsigned int m_label;

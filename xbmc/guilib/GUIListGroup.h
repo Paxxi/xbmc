@@ -49,7 +49,7 @@ public:
 
   void EnlargeWidth(float difference);
   void EnlargeHeight(float difference);
-  void SetFocusedItem(unsigned int subfocus);
+  void SetFocusedItem(unsigned int focus);
   unsigned int GetFocusedItem() const;
   bool MoveLeft();
   bool MoveRight();

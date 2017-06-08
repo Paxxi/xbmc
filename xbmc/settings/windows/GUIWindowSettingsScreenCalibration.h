@@ -35,7 +35,7 @@ public:
   virtual void FrameMove();
   virtual void DoRender();
   virtual void AllocResources(bool forceLoad = false);
-  virtual void FreeResources(bool forceUnLoad = false);
+  virtual void FreeResources(bool forceUnload = false);
 
 protected:
   unsigned int FindCurrentResolution();

@@ -186,7 +186,7 @@ public:
   int64_t GetFilePosition(HANDLE hFile);
   int64_t Seek(HANDLE hFile, int64_t lOffset, int whence);
   HANDLE OpenFile( const char* filename );
-  long ReadFile(HANDLE fd, uint8_t *pBuffer, long lSize);
+  long ReadFile(HANDLE hFile, uint8_t *pBuffer, long lSize);
   void CloseFile(HANDLE hFile);
   void Reset();
   void Scan();

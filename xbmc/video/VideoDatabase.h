@@ -478,13 +478,13 @@ public:
    \param items CFileItemList to fetch the playcounts for
    \sa GetPlayCount, SetPlayCount, IncrementPlayCount
    */
-  bool GetPlayCounts(const std::string &path, CFileItemList &items);
+  bool GetPlayCounts(const std::string &strPath, CFileItemList &items);
 
   void UpdateMovieTitle(int idMovie, const std::string& strNewMovieTitle, VIDEODB_CONTENT_TYPE iType=VIDEODB_CONTENT_MOVIES);
   bool UpdateVideoSortTitle(int idDb, const std::string& strNewSortTitle, VIDEODB_CONTENT_TYPE iType = VIDEODB_CONTENT_MOVIES);
 
   bool HasMovieInfo(const std::string& strFilenameAndPath);
-  bool HasTvShowInfo(const std::string& strFilenameAndPath);
+  bool HasTvShowInfo(const std::string& strPath);
   bool HasEpisodeInfo(const std::string& strFilenameAndPath);
   bool HasMusicVideoInfo(const std::string& strFilenameAndPath);
 
@@ -512,7 +512,7 @@ public:
   int GetPathId(const std::string& strPath);
   int GetTvShowId(const std::string& strPath);
   int GetEpisodeId(const std::string& strFilenameAndPath, int idEpisode=-1, int idSeason=-1); // idEpisode, idSeason are used for multipart episodes as hints
-  int GetSeasonId(int idShow, int season);
+  int GetSeasonId(int showID, int season);
 
   void GetEpisodesByFile(const std::string& strFilenameAndPath, std::vector<CVideoInfoTag>& episodes);
 
@@ -554,7 +554,7 @@ public:
   void DeleteSeason(int idSeason, bool bKeepId = false);
   void DeleteEpisode(int idEpisode, bool bKeepId = false);
   void DeleteEpisode(const std::string& strFilenameAndPath, bool bKeepId = false);
-  void DeleteMusicVideo(int idMusicVideo, bool bKeepId = false);
+  void DeleteMusicVideo(int idMVideo, bool bKeepId = false);
   void DeleteMusicVideo(const std::string& strFilenameAndPath, bool bKeepId = false);
   void DeleteDetailsForTvShow(int idTvShow);
   void DeleteDetailsForTvShow(const std::string& strPath);
@@ -588,7 +588,7 @@ public:
    \param filePath filepath to set the settings for
    \sa GetVideoSettings
    */
-  void SetVideoSettings(const std::string &filePath, const CVideoSettings &settings);
+  void SetVideoSettings(const std::string &strFilenameAndPath, const CVideoSettings &setting);
 
   /**
    * Erases settings for all files beginning with the specified path. Defaults 
@@ -616,7 +616,7 @@ public:
   CVideoInfoTag GetDetailsByTypeAndId(VIDEODB_CONTENT_TYPE type, int id);
 
   // scraper settings
-  void SetScraperForPath(const std::string& filePath, const ADDON::ScraperPtr& info, const VIDEO::SScanSettings& settings);
+  void SetScraperForPath(const std::string& filePath, const ADDON::ScraperPtr& scraper, const VIDEO::SScanSettings& settings);
   ADDON::ScraperPtr GetScraperForPath(const std::string& strPath);
   ADDON::ScraperPtr GetScraperForPath(const std::string& strPath, VIDEO::SScanSettings& settings);
 
@@ -681,9 +681,9 @@ public:
   int GetMatchingMusicVideo(const std::string& strArtist, const std::string& strAlbum = "", const std::string& strTitle = "");
 
   // searching functions
-  void GetMoviesByActor(const std::string& strActor, CFileItemList& items);
-  void GetTvShowsByActor(const std::string& strActor, CFileItemList& items);
-  void GetEpisodesByActor(const std::string& strActor, CFileItemList& items);
+  void GetMoviesByActor(const std::string& name, CFileItemList& items);
+  void GetTvShowsByActor(const std::string& name, CFileItemList& items);
+  void GetEpisodesByActor(const std::string& name, CFileItemList& items);
 
   void GetMusicVideosByArtist(const std::string& strArtist, CFileItemList& items);
   void GetMusicVideosByAlbum(const std::string& strAlbum, CFileItemList& items);
@@ -750,7 +750,7 @@ public:
    \param url - full path of the file to add.
    \return id of the file, -1 if it could not be added.
    */
-  int AddFile(const std::string& url);
+  int AddFile(const std::string& strFileNameAndPath);
 
   /*! \brief Add a file to the database, if necessary
    Works for both videodb:// items and normal fileitems
@@ -834,10 +834,10 @@ public:
   bool GetTvShowSeasonArt(int mediaId, std::map<int, std::map<std::string, std::string> > &seasonArt);
   bool GetArtTypes(const MediaType &mediaType, std::vector<std::string> &artTypes);
 
-  int AddTag(const std::string &tag);
-  void AddTagToItem(int idItem, int idTag, const std::string &type);
-  void RemoveTagFromItem(int idItem, int idTag, const std::string &type);
-  void RemoveTagsFromItem(int idItem, const std::string &type);
+  int AddTag(const std::string &name);
+  void AddTagToItem(int media_id, int tag_id, const std::string &type);
+  void RemoveTagFromItem(int media_id, int tag_id, const std::string &type);
+  void RemoveTagsFromItem(int media_id, const std::string &type);
 
   virtual bool GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription &sorting);
 
@@ -867,14 +867,14 @@ protected:
    \param url full path to the file
    \return id of the file, -1 if it is not in the db.
    */
-  int GetFileId(const std::string& url);
+  int GetFileId(const std::string& strFilenameAndPath);
 
   int AddToTable(const std::string& table, const std::string& firstField, const std::string& secondField, const std::string& value);
   int UpdateRatings(int mediaId, const char *mediaType, const RatingMap& values, const std::string& defaultRating);
   int AddRatings(int mediaId, const char *mediaType, const RatingMap& values, const std::string& defaultRating);
   int UpdateUniqueIDs(int mediaId, const char *mediaType, const CVideoInfoTag& details);
   int AddUniqueIDs(int mediaId, const char *mediaType, const CVideoInfoTag& details);
-  int AddActor(const std::string& strActor, const std::string& thumbURL, const std::string &thumb = "");
+  int AddActor(const std::string& name, const std::string& thumbURLs, const std::string &thumb = "");
 
   int AddTvShow();
   int AddMusicVideo(const std::string& strFilenameAndPath);
@@ -893,7 +893,7 @@ protected:
    \param show the details of the show to check for.
    \return the show id if found, else -1.
    */
-  int GetMatchingTvShow(const CVideoInfoTag &show);
+  int GetMatchingTvShow(const CVideoInfoTag &details);
 
   // link functions - these two do all the work
   void AddLinkToActor(int mediaId, const char *mediaType, int actorId, const std::string &role, int order);
@@ -930,7 +930,7 @@ protected:
 private:
   virtual void CreateTables();
   virtual void CreateAnalytics();
-  virtual void UpdateTables(int version);
+  virtual void UpdateTables(int iVersion);
   void CreateLinkIndex(const char *table);
   void CreateForeignLinkIndex(const char *table, const char *foreignkey);
 

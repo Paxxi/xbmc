@@ -36,7 +36,7 @@ public:
 
   // specialization of IDirectory
   virtual DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ALWAYS; };
-  virtual bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  virtual bool GetDirectory(const CURL& urlOrig, CFileItemList& items) override;
 
   // specialization of IFileDirectory
   virtual bool ContainsFiles(const CURL& url) override;

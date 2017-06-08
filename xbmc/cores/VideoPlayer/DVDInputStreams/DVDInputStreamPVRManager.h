@@ -58,7 +58,7 @@ public:
   virtual bool IsRealtime() override;
 
   bool IsOtherStreamHack(void);
-  bool SelectChannelByNumber(unsigned int iChannel);
+  bool SelectChannelByNumber(unsigned int iChannelNumber);
   bool SelectChannel(const PVR::CPVRChannelPtr &channel);
   bool NextChannel(bool preview = false);
   bool PrevChannel(bool preview = false);
@@ -100,8 +100,8 @@ public:
   virtual CDemuxStream* GetStream(int iStreamId) const override;
   virtual std::vector<CDemuxStream*> GetStreams() const override;
   virtual int GetNrOfStreams() const override;
-  virtual void SetSpeed(int iSpeed) override;
-  virtual bool SeekTime(double time, bool backward = false, double* startpts = NULL) override;
+  virtual void SetSpeed(int Speed) override;
+  virtual bool SeekTime(double timems, bool backwards = false, double* startpts = NULL) override;
   virtual void AbortDemux() override;
   virtual void FlushDemux() override;
   virtual void EnableStream(int iStreamId, bool enable) override {};

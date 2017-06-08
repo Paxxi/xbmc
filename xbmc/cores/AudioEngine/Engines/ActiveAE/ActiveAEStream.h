@@ -174,9 +174,9 @@ public:
   virtual void SetResampleMode(int mode);
   virtual void RegisterAudioCallback(IAudioCallback* pCallback);
   virtual void UnRegisterAudioCallback();
-  virtual void FadeVolume(float from, float to, unsigned int time);
+  virtual void FadeVolume(float from, float target, unsigned int time);
   virtual bool IsFading();
-  virtual void RegisterSlave(IAEStream *stream);
+  virtual void RegisterSlave(IAEStream *slave);
   virtual bool HasDSP();
 
 protected:

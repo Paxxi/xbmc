@@ -60,7 +60,7 @@ namespace ADDON
     static char* get_icon_image(void* kodiBase, void* handle);
     static void set_icon_image(void* kodiBase, void* handle, const char* image);
     static char* get_art(void* kodiBase, void* handle, const char* type);
-    static void set_art(void* kodiBase, void* handle, const char* type, const char* image);
+    static void set_art(void* kodiBase, void* handle, const char* type, const char* label);
     static char* get_path(void* kodiBase, void* handle);
     static void set_path(void* kodiBase, void* handle, const char* path);
     static char* get_property(void* kodiBase, void* handle, const char* key);

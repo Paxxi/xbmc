@@ -46,7 +46,7 @@ namespace PERIPHERALS
   class CEventRateHandle
   {
   public:
-    CEventRateHandle(double rateHz, IEventRateCallback* callback);
+    CEventRateHandle(double RateHz, IEventRateCallback* callback);
 
     ~CEventRateHandle(void) { }
 

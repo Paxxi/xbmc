@@ -71,7 +71,7 @@ public:
   virtual void SetLabel(const std::string& strLabel);
   const std::string& GetLabel() const;
 
-  void SetLabel2(const std::string& strLabel);
+  void SetLabel2(const std::string& strLabel2);
   const std::string& GetLabel2() const;
 
   void SetIconImage(const std::string& strIcon);

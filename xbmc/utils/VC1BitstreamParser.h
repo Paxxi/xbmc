@@ -34,7 +34,7 @@ public:
   inline bool IsIFrame(const uint8_t *buf, int buf_size);
 
 protected:
-  bool vc1_parse_frame(const uint8_t *buf, const uint8_t *buf_end, bool sequenceOnly);
+  bool vc1_parse_frame(const uint8_t *buf, const uint8_t *buf_end, bool sequence_only);
 private:
   uint8_t m_Profile;
   uint8_t m_MaxBFrames;

@@ -57,8 +57,8 @@ public:
   static bool AddItems(int handle, const CFileItemList *items, int totalItems);
   static void EndOfDirectory(int handle, bool success, bool replaceListing, bool cacheToDisc);
   static void AddSortMethod(int handle, SORT_METHOD sortMethod, const std::string &label2Mask);
-  static std::string GetSetting(int handle, const std::string &key);
-  static void SetSetting(int handle, const std::string &key, const std::string &value);
+  static std::string GetSetting(int handle, const std::string &strID);
+  static void SetSetting(int handle, const std::string &strID, const std::string &value);
   static void SetContent(int handle, const std::string &strContent);
   static void SetProperty(int handle, const std::string &strProperty, const std::string &strValue);
   static void SetResolvedUrl(int handle, bool success, const CFileItem* resultItem);

@@ -75,7 +75,7 @@ namespace XBMCAddon
     private:
       int iPlayList;
 
-      void playStream(const String& item = emptyString, const XBMCAddon::xbmcgui::ListItem* listitem = NULL, bool windowed = false);
+      void playStream(const String& item = emptyString, const XBMCAddon::xbmcgui::ListItem* plistitem = NULL, bool windowed = false);
       void playPlaylist(const PlayList* playlist = NULL,
                         bool windowed = false, int startpos=-1);
       void playCurrent(bool windowed = false);
@@ -89,7 +89,7 @@ namespace XBMCAddon
       // Construct a Player proxying the given generated binding. The 
       //  construction of a Player needs to identify whether or not any 
       //  callbacks will be executed asynchronously or not.
-      Player(int playerCore = 0);
+      Player(int _playerCore = 0);
       virtual ~Player(void);
 #endif
 
@@ -457,7 +457,7 @@ namespace XBMCAddon
       ///
       seekTime(...);
 #else
-      void seekTime(double seekTime);
+      void seekTime(double pTime);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
@@ -471,7 +471,7 @@ namespace XBMCAddon
       ///
       setSubtitles(...);
 #else
-      void setSubtitles(const char* subtitleFile);
+      void setSubtitles(const char* cLine);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

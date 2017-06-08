@@ -130,7 +130,7 @@ namespace XBMCAddon
       ///
       load(...);
 #else
-      bool load(const char* filename);
+      bool load(const char* cFileName);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

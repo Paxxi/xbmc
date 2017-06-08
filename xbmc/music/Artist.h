@@ -82,7 +82,7 @@ public:
    \param prioritise if appending, whether additive tags should be prioritised (i.e. replace or prepend) over existing values. Defaults to false.
    \sa CVideoInfoTag::Load
    */
-  bool Load(const TiXmlElement *element, bool append = false, bool prioritise = false);
+  bool Load(const TiXmlElement *artist, bool append = false, bool prioritise = false);
   bool Save(TiXmlNode *node, const std::string &tag, const std::string& strPath);
 
   void SetDateAdded(const std::string& strDateAdded);

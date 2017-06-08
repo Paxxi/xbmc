@@ -83,7 +83,7 @@ public:
   void UnregisterPythonPlayerCallBack(IPlayerCallback* pCallback);
   void RegisterPythonMonitorCallBack(XBMCAddon::xbmc::Monitor* pCallback);
   void UnregisterPythonMonitorCallBack(XBMCAddon::xbmc::Monitor* pCallback);
-  void OnSettingsChanged(const std::string &strings);
+  void OnSettingsChanged(const std::string &ID);
   void OnScreensaverActivated();
   void OnScreensaverDeactivated();
   void OnDPMSActivated();

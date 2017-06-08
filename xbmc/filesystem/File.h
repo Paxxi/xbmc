@@ -146,8 +146,8 @@ public:
   * @return zero of success, -1 otherwise.
   */
   static int  Stat(const CURL& file, struct __stat64* buffer);
-  static bool Rename(const CURL& file, const CURL& urlNew);
-  static bool Copy(const CURL& file, const CURL& dest, XFILE::IFileCallback* pCallback = NULL, void* pContext = NULL);
+  static bool Rename(const CURL& file, const CURL& newFile);
+  static bool Copy(const CURL& url2, const CURL& dest, XFILE::IFileCallback* pCallback = NULL, void* pContext = NULL);
   static bool SetHidden(const CURL& file, bool hidden);
 
   // string interface

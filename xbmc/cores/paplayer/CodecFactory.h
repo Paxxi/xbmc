@@ -29,7 +29,7 @@ class CodecFactory
 public:
   CodecFactory() {}
   virtual ~CodecFactory() {}
-  static ICodec* CreateCodec(const std::string &type);
+  static ICodec* CreateCodec(const std::string &strFileType);
   static ICodec* CreateCodecDemux(const CFileItem& file, unsigned int filecache);
 };
 

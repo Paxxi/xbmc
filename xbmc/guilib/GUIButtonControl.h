@@ -42,7 +42,7 @@ public:
   CGUIButtonControl(int parentID, int controlID,
                     float posX, float posY, float width, float height,
                     const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus,
-                    const CLabelInfo &label, bool wrapMultiline = false);
+                    const CLabelInfo &labelInfo, bool wrapMultiline = false);
 
   virtual ~CGUIButtonControl(void);
   virtual CGUIButtonControl *Clone() const { return new CGUIButtonControl(*this); };
@@ -56,8 +56,8 @@ public:
   virtual void DynamicResourceAlloc(bool bOnOff);
   virtual void SetInvalid();
   virtual void SetPosition(float posX, float posY);
-  virtual void SetLabel(const std::string & aLabel);
-  virtual void SetLabel2(const std::string & aLabel2);
+  virtual void SetLabel(const std::string & label);
+  virtual void SetLabel2(const std::string & label2);
   void SetClickActions(const CGUIAction& clickActions) { m_clickActions = clickActions; };
   const CGUIAction &GetClickActions() const { return m_clickActions; };
   void SetFocusActions(const CGUIAction& focusActions) { m_focusActions = focusActions; };

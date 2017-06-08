@@ -319,7 +319,7 @@ namespace PVR
      * @param tag The recording to start playing.
      * @return True if the stream was opened successfully, false otherwise.
      */
-    bool OpenStream(const CPVRRecordingPtr &tag);
+    bool OpenStream(const CPVRRecordingPtr &channel);
 
     /*!
      * @brief Get the recordings that is currently playing.
@@ -581,7 +581,7 @@ namespace PVR
      * @param iClientId The ID of the client to get the menu entries for. Get the menu for the active channel if iClientId < 0.
      * @return True if the client has any menu hooks, false otherwise.
      */
-    bool HasMenuHooks(int iClientId, PVR_MENUHOOK_CAT cat);
+    bool HasMenuHooks(int iClientID, PVR_MENUHOOK_CAT cat);
 
     //@}
 

@@ -37,7 +37,7 @@ namespace GAME
                             //protected CThread
   {
   public:
-    CRetroPlayerVideo(CRenderManager& m_renderManager, CProcessInfo& m_processInfo);
+    CRetroPlayerVideo(CRenderManager& renderManager, CProcessInfo& processInfo);
 
     virtual ~CRetroPlayerVideo();
 

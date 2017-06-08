@@ -59,7 +59,7 @@ protected:
   int FlushStream();
 
   static int WriteCallback(void *opaque, uint8_t *data, int size);
-  static int64_t SeekCallback(void *opaque, int64_t offset, int whence);
+  static int64_t SeekCallback(void *opaque, int64_t position, int whence);
 
   std::shared_ptr<IEncoder> m_impl;
 

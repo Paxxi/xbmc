@@ -89,9 +89,9 @@ protected:
   virtual int                 TranslateField(const char *field) const=0;
   virtual std::string         TranslateField(int field) const=0;
   std::string                 ValidateParameter(const std::string &parameter) const;
-  virtual std::string         FormatParameter(const std::string &negate, const std::string &oper, const CDatabase &db, const std::string &type) const;
+  virtual std::string         FormatParameter(const std::string &operatorString, const std::string &param, const CDatabase &db, const std::string &type) const;
   virtual std::string         FormatWhereClause(const std::string &negate, const std::string &oper, const std::string &param,
-                                                const CDatabase &db, const std::string &type) const;
+                                                const CDatabase &db, const std::string &strType) const;
   virtual SEARCH_OPERATOR     GetOperator(const std::string &type) const { return m_operator; };
   virtual std::string         GetOperatorString(SEARCH_OPERATOR op) const;
   virtual std::string         GetBooleanQuery(const std::string &negate, const std::string &strType) const { return ""; }

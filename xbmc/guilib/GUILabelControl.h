@@ -58,7 +58,7 @@ public:
   void ShowCursor(bool bShow = true);
   void SetCursorPos(int iPos);
   int GetCursorPos() const { return m_iCursorPos;};
-  void SetInfo(const CGUIInfoLabel&labelInfo);
+  void SetInfo(const CGUIInfoLabel&infoLabel);
   void SetWidthControl(float minWidth, bool bScroll);
   void SetAlignment(uint32_t align);
   void SetHighlight(unsigned int start, unsigned int end);

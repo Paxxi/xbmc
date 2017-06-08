@@ -105,7 +105,7 @@ namespace PVR
      * @param iDatabaseId The new channel ID
      * @return True if the something changed, false otherwise.
      */
-    bool SetChannelID(int iDatabaseId);
+    bool SetChannelID(int iChannelId);
 
     /*!
      * @return The channel number used by XBMC by the currently active group.

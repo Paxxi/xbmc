@@ -49,7 +49,7 @@ public:
   std::string GetSelectedItemPath() const;
   void SetFocused();
 
-  bool HasControl(int controlID) const;
+  bool HasControl(int viewControlID) const;
   int GetNextViewMode(int direction = 1) const;
   int GetViewModeNumber(int number) const;
   int GetViewModeCount() const;

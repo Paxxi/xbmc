@@ -90,7 +90,7 @@ private:
 
   private:
     int ProcessRequest( std::string& responseHeader,
-                        std::string& response);
+                        std::string& responseBody);
 
     void ComposeAuthRequestAnswer(std::string& responseHeader, std::string& responseBody);
     bool checkAuthorization(const std::string& authStr, const std::string& method, const std::string& uri);

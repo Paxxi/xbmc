@@ -135,7 +135,7 @@ public:
    \param baseDir [in] If non-empty, the given directory is searched instead of the skin's directory.  Defaults to empty.
    \return path to the XML file
    */
-  std::string GetSkinPath(const std::string& file, RESOLUTION_INFO *res = NULL, const std::string& baseDir = "") const;
+  std::string GetSkinPath(const std::string& strFile, RESOLUTION_INFO *res = NULL, const std::string& strBaseDir = "") const;
 
   /*! \brief Return whether skin debugging is enabled
    \return true if skin debugging (set via <debugging>true</debugging> in addon.xml) is enabled.

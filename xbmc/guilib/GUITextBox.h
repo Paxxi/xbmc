@@ -58,7 +58,7 @@ public:
   void SetPageControl(int pageControl);
 
   virtual bool CanFocus() const;
-  void SetInfo(const CGUIInfoLabel &info);
+  void SetInfo(const CGUIInfoLabel &infoLabel);
   void SetAutoScrolling(const TiXmlNode *node);
   void SetAutoScrolling(int delay, int time, int repeatTime, const std::string &condition = "");
   void ResetAutoScrolling();

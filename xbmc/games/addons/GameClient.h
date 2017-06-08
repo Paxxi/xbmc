@@ -105,7 +105,7 @@ public:
   // Input callbacks
   bool OpenPort(unsigned int port);
   void ClosePort(unsigned int port);
-  bool ReceiveInputEvent(const game_input_event& eventStruct);
+  bool ReceiveInputEvent(const game_input_event& event);
 
   // Input functions
   bool AcceptsInput(void) const;

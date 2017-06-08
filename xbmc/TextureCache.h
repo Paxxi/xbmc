@@ -67,7 +67,7 @@ public:
    \return cached url of this image
    \sa GetCachedImage
    */ 
-  std::string CheckCachedImage(const std::string &image, bool &needsRecaching);
+  std::string CheckCachedImage(const std::string &url, bool &needsRecaching);
 
   /*! \brief Cache image (if required) using a background job
 
@@ -78,7 +78,7 @@ public:
    \param image url of the image to cache
    \sa CacheImage
    */
-  void BackgroundCacheImage(const std::string &image);
+  void BackgroundCacheImage(const std::string &url);
 
   /*! \brief Cache an image to image cache, optionally return the texture
 
@@ -106,19 +106,19 @@ public:
    \return true if the image is cached, false otherwise
    \sa ClearCachedImage
    */
-  bool HasCachedImage(const std::string &image);
+  bool HasCachedImage(const std::string &url);
 
   /*! \brief clear the cached version of the given image
    \param image url of the image
    \sa GetCachedImage
    */
-  void ClearCachedImage(const std::string &image, bool deleteSource = false);
+  void ClearCachedImage(const std::string &url, bool deleteSource = false);
 
   /*! \brief clear the cached version of the image with given id
    \param database id of the image
    \sa GetCachedImage
    */
-  bool ClearCachedImage(int textureID);
+  bool ClearCachedImage(int id);
 
   /*! \brief retrieve a cache file (relative to the cache path) to associate with the given image, excluding extension
    Use GetCachedPath(GetCacheFile(url)+extension) for the full path to the file.
@@ -145,7 +145,7 @@ public:
    \param details the texture details to add
    \return true if we successfully added to the database, false otherwise.
    */
-  bool AddCachedTexture(const std::string &image, const CTextureDetails &details);
+  bool AddCachedTexture(const std::string &url, const CTextureDetails &details);
 
   /*! \brief Export a (possibly) cached image to a file
    \param image url of the original image
@@ -166,7 +166,7 @@ private:
    \param image url of the image
    \return true if this is a cached image, false otherwise.
    */
-  bool IsCachedImage(const std::string &image) const;
+  bool IsCachedImage(const std::string &url) const;
 
   /*! \brief retrieve the cached version of the given image (if it exists)
    \param image url of the image
@@ -191,8 +191,8 @@ private:
    \param cacheFile [out] url of the cached original (if available)
    \return true if we had a cached version of this image, false otherwise.
    */
-  bool ClearCachedTexture(const std::string &url, std::string &cacheFile);
-  bool ClearCachedTexture(int textureID, std::string &cacheFile);
+  bool ClearCachedTexture(const std::string &url, std::string &cachedURL);
+  bool ClearCachedTexture(int id, std::string &cachedURL);
 
   /*! \brief Increment the use count of a texture
    Stores locally before calling CTextureDatabase::IncrementUseCount via a CUseCountJob

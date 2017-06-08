@@ -132,7 +132,7 @@ public:
    bool WakeOnLan(const char *mac);
 
    // Return true if host replies to ping
-   bool PingHost(unsigned long host, unsigned short port, unsigned int timeout_ms = 2000, bool readability_check = false);
+   bool PingHost(unsigned long ipaddr, unsigned short port, unsigned int timeOutMs = 2000, bool readability_check = false);
    virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000) = 0;
 
    // Get/set the nameserver(s)

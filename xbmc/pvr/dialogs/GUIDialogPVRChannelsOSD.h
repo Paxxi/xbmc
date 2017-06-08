@@ -55,7 +55,7 @@ namespace PVR
     CGUIControl *GetFirstFocusableControl(int id) override;
 
   private:
-    void GotoChannel(int iItem);
+    void GotoChannel(int item);
     void ShowInfo(int item);
     void Clear();
     void Update();

@@ -444,7 +444,7 @@ protected:
   /**
    * one of the DVD_PLAYSPEED defines
    */
-  void SetPlaySpeed(int iSpeed);
+  void SetPlaySpeed(int speed);
 
   enum ECacheState
   {
@@ -460,7 +460,7 @@ protected:
   int64_t GetTotalTimeInMsec();
 
   double GetQueueTime();
-  bool GetCachingTimes(double& play_left, double& cache_left, double& file_offset);
+  bool GetCachingTimes(double& level, double& delay, double& offset);
 
   void FlushBuffers(double pts, bool accurate, bool sync);
 
@@ -474,7 +474,7 @@ protected:
   bool CheckPlayerInit(CCurrentStream& current);
   void UpdateCorrection(DemuxPacket* pkt, double correction);
   void UpdateTimestamps(CCurrentStream& current, DemuxPacket* pPacket);
-  IDVDStreamPlayer* GetStreamPlayer(unsigned int player);
+  IDVDStreamPlayer* GetStreamPlayer(unsigned int target);
   void SendPlayerMessage(CDVDMsg* pMsg, unsigned int target);
 
   bool ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream);
@@ -492,7 +492,7 @@ protected:
   void UpdateApplication(double timeout);
   void UpdatePlayState(double timeout);
   void UpdateStreamInfos();
-  void GetGeneralInfo(std::string& strVideoInfo);
+  void GetGeneralInfo(std::string& strGeneralInfo);
 
   double m_UpdateApplication;
 

@@ -361,7 +361,7 @@ class CFileItemList;
 class CGUIMessage
 {
 public:
-  CGUIMessage(int dwMsg, int senderID, int controlID, int param1 = 0, int param2 = 0);
+  CGUIMessage(int msg, int senderID, int controlID, int param1 = 0, int param2 = 0);
   CGUIMessage(int msg, int senderID, int controlID, int param1, int param2, CFileItemList* item);
   CGUIMessage(int msg, int senderID, int controlID, int param1, int param2, const CGUIListItemPtr &item);
   CGUIMessage(const CGUIMessage& msg);
@@ -377,7 +377,7 @@ public:
   int GetSenderId() const;
   void SetParam1(int param1);
   void SetParam2(int param2);
-  void SetPointer(void* pointer);
+  void SetPointer(void* lpVoid);
   void SetLabel(const std::string& strLabel);
   void SetLabel(int iString);               // for convenience - looks up in strings.xml
   const std::string& GetLabel() const;

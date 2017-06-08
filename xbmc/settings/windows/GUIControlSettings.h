@@ -176,7 +176,7 @@ private:
 class CGUIControlEditSetting : public CGUIControlBaseSetting
 {
 public:
-  CGUIControlEditSetting(CGUIEditControl* pButton, int id, std::shared_ptr<CSetting> pSetting, ILocalizer* localizer);
+  CGUIControlEditSetting(CGUIEditControl* pEdit, int id, std::shared_ptr<CSetting> pSetting, ILocalizer* localizer);
   virtual ~CGUIControlEditSetting();
 
   virtual CGUIControl* GetControl() { return (CGUIControl*)m_pEdit; }

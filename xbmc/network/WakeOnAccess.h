@@ -31,7 +31,7 @@ class CWakeOnAccess : private IJobCallback, public ISettingCallback, public ISet
 public:
   static CWakeOnAccess &GetInstance();
 
-  bool WakeUpHost (const CURL& fileUrl);
+  bool WakeUpHost (const CURL& url);
   bool WakeUpHost (const std::string& hostName, const std::string& customMessage);
 
   void QueueMACDiscoveryForAllRemotes();
@@ -73,7 +73,7 @@ private:
   typedef std::vector<WakeUpEntry> EntriesVector;
   EntriesVector m_entries;
   CCriticalSection m_entrylist_protect;
-  bool FindOrTouchHostEntry (const std::string& hostName, WakeUpEntry& server);
+  bool FindOrTouchHostEntry (const std::string& hostName, WakeUpEntry& result);
   void TouchHostEntry (const std::string& hostName);
 
   unsigned int m_netinit_sec, m_netsettle_ms; //time to wait for network connection

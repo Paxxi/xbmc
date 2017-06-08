@@ -49,7 +49,7 @@ namespace PVR
     CGUIViewControl m_viewControl;
 
   private:
-    void ShowInfo(int iItem);
+    void ShowInfo(int item);
     void Clear();
 
     CPVRChannelPtr m_channel;

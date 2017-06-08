@@ -420,7 +420,7 @@ public:
   virtual ~CDecoder();
 
   virtual bool Open (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0) override;
-  virtual CDVDVideoCodec::VCReturn Decode (AVCodecContext* avctx, AVFrame* frame);
+  virtual CDVDVideoCodec::VCReturn Decode (AVCodecContext* avctx, AVFrame* pFrame);
   virtual bool GetPicture(AVCodecContext* avctx, VideoPicture* picture) override;
   virtual void Reset() override;
   virtual void Close();
@@ -531,7 +531,7 @@ public:
   virtual ~CVppPostproc();
   bool PreInit(CVaapiConfig &config, SDiMethods *methods = NULL);
   bool Init(EINTERLACEMETHOD method);
-  bool AddPicture(CVaapiDecodedPicture &inPic);
+  bool AddPicture(CVaapiDecodedPicture &pic);
   bool Filter(CVaapiProcessedPicture &outPic);
   void ClearRef(VASurfaceID surf);
   void Flush();

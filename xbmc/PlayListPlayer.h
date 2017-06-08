@@ -63,7 +63,7 @@ public:
    \param offset The offset from the current entry (defaults to 1, i.e. the next entry).
    \param autoPlay Whether we should start playing if not already (defaults to false).
    */
-  bool PlayNext(int offset = 1, bool autoPlay = false);
+  bool PlayNext(int offset = 1, bool bAutoPlay = false);
 
   /*! \brief Play the previous entry in the current playlist
    \sa PlayNext
@@ -82,7 +82,7 @@ public:
    \param replace whether this item should replace the currently playing item. See CApplication::PlayFile (defaults to false).
    \param playPreviousOnFail whether to go back to the previous item if playback fails (default to false)
    */
-  bool Play(int index, std::string player, bool replace = false, bool playPreviousOnFail = false);
+  bool Play(int iSong, std::string player, bool bAutoPlay = false, bool bPlayPrevious = false);
 
   /*! \brief Returns the index of the current item in active playlist.
    \return Current item in the active playlist.
@@ -94,7 +94,7 @@ public:
    \param index item index in playlist. Set only if the index is within the range of the current playlist.
    \sa GetCurrentSong
    */
-  void SetCurrentSong(int index);
+  void SetCurrentSong(int iSong);
 
   int GetNextSong();
   
@@ -108,7 +108,7 @@ public:
    \param playList Values can be PLAYLIST_NONE, PLAYLIST_MUSIC or PLAYLIST_VIDEO
    \sa GetCurrentPlaylist
    */
-  void SetCurrentPlaylist(int playlist);
+  void SetCurrentPlaylist(int iPlaylist);
 
   /*! \brief Get the currently active playlist
    \return PLAYLIST_NONE, PLAYLIST_MUSIC or PLAYLIST_VIDEO
@@ -121,7 +121,7 @@ public:
    \return A reference to the CPlayList object.
    \sa GetCurrentPlaylist
    */
-  CPlayList& GetPlaylist(int playlist);
+  CPlayList& GetPlaylist(int iPlaylist);
   const CPlayList& GetPlaylist(int iPlaylist) const;
 
   /*! \brief Removes any item from all playlists located on a removable share
@@ -145,7 +145,7 @@ public:
    \param notify notify the user with a Toast notification (defaults to false)
    \sa IsShuffled
    */
-  void SetShuffle(int playlist, bool shuffle, bool notify = false);
+  void SetShuffle(int iPlaylist, bool bYesNo, bool bNotify = false);
   
   /*! \brief Return whether a playlist is shuffled.
    If partymode is enabled, this always returns false.
@@ -167,7 +167,7 @@ public:
    \param notify notify the user with a Toast notification
    \sa GetRepeat
    */
-  void SetRepeat(int iPlaylist, REPEAT_STATE state, bool notify = false);
+  void SetRepeat(int iPlaylist, REPEAT_STATE state, bool bNotify = false);
   REPEAT_STATE GetRepeat(int iPlaylist) const;
 
   // add items via the playlist player
@@ -188,13 +188,13 @@ protected:
    \param playlist Playlist to be query
    \return true if the given playlist is set to repeat all, false otherwise.
    */
-  bool Repeated(int playlist) const;
+  bool Repeated(int iPlaylist) const;
 
   /*! \brief Returns true if the given is set to repeat one
    \param playlist Playlist to be query
    \return true if the given playlist is set to repeat one, false otherwise.
    */
-  bool RepeatedOne(int playlist) const;
+  bool RepeatedOne(int iPlaylist) const;
 
   void ReShuffle(int iPlaylist, int iPosition);
 

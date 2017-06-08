@@ -42,6 +42,6 @@ namespace XFILE
     static bool GetLabel(const std::string& strDirectory, std::string& strLabel);
     static std::string GetIcon(const std::string& strDirectory);
     bool ContainsMovies(const std::string &path);
-    static bool CanCache(const std::string &path);
+    static bool CanCache(const std::string &strPath);
   };
 }

@@ -44,7 +44,7 @@ public:
    std::vector<std::string> GetTimezonesByCountry(const std::string& country);
    std::string GetCountryByTimezone(const std::string& timezone);
 
-   void SetTimezone(std::string timezone);
+   void SetTimezone(std::string timezoneName);
    int m_IsDST;
 
    static void SettingOptionsTimezoneCountriesFiller(std::shared_ptr<const CSetting> setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data);

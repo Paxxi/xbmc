@@ -32,7 +32,7 @@ public:
   CDVDOverlayContainer();
   virtual ~CDVDOverlayContainer();
 
-  void Add(CDVDOverlay* pPicture); // add a overlay to the fifo
+  void Add(CDVDOverlay* pOverlay); // add a overlay to the fifo
 
   VecOverlays* GetOverlays(); // get the first overlay in this fifo
   bool ContainsOverlayType(DVDOverlayType type);

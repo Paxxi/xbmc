@@ -60,7 +60,7 @@ namespace ADDON
     static bool is_canceled(void* kodiBase, void* handle);
     static void set_percentage(void* kodiBase, void* handle, int percentage);
     static int get_percentage(void* kodiBase, void* handle);
-    static void show_progress_bar(void* kodiBase, void* handle, bool bOnOff);
+    static void show_progress_bar(void* kodiBase, void* handle, bool onOff);
     static void set_progress_max(void* kodiBase, void* handle, int max);
     static void set_progress_advance(void* kodiBase, void* handle, int nSteps);
     static bool abort(void* kodiBase, void* handle);

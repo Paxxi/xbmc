@@ -62,7 +62,7 @@ public:
   
   void Update();
 protected:
-  void GotoBookmark(int iItem);
+  void GotoBookmark(int item);
   void ClearBookmarks();
   static bool AddEpisodeBookmark();
   static bool AddBookmark(CVideoInfoTag *tag=NULL);

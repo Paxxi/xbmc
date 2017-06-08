@@ -42,7 +42,7 @@ namespace PythonBindings
    * is simply a std::string instantiated with the default constructor.
    */
   void PyXBMCGetUnicodeString(std::string& buf, PyObject* pObject, bool coerceToString = false,
-                              const char* pos = "unknown", 
+                              const char* argumentName = "unknown", 
                               const char* methodname = "unknown");
 
   struct TypeInfo
@@ -138,7 +138,7 @@ namespace PythonBindings
    * if pythonType is NULL then the type is inferred using the class metadata 
    * stored in the AddonClass instance 'api'.
    */
-  PyObject* makePythonInstance(XBMCAddon::AddonClass* api, PyTypeObject* pythonType, bool incrementRefCount);
+  PyObject* makePythonInstance(XBMCAddon::AddonClass* api, PyTypeObject* pytype, bool incrementRefCount);
 
   /**
    * This method allows for conversion of the native api Type to the Python type.

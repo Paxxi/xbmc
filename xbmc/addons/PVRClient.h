@@ -141,7 +141,7 @@ namespace PVR
      * @param pProperties The properties.
      * @return PVR_ERROR_NO_ERROR if the properties have been fetched successfully.
      */
-    PVR_ERROR GetStreamProperties(PVR_STREAM_PROPERTIES *pProperties);
+    PVR_ERROR GetStreamProperties(PVR_STREAM_PROPERTIES *props);
 
     /*!
      * @return The name reported by the backend.
@@ -289,7 +289,7 @@ namespace PVR
      * @param bRadio True to get the radio channels, false to get the TV channels.
      * @return PVR_ERROR_NO_ERROR if the list has been fetched successfully.
      */
-    PVR_ERROR GetChannels(CPVRChannelGroup &channels, bool bRadio);
+    PVR_ERROR GetChannels(CPVRChannelGroup &channels, bool radio);
 
     //@}
     /** @name PVR recording methods */
@@ -683,7 +683,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the channel groups list
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_channel_group(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP* entry);
+    static void cb_transfer_channel_group(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP* group);
 
     /*!
      * @brief Transfer a channel group member entry from the add-on to Kodi. The channel will be added to the group if the group can be found.
@@ -691,7 +691,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the channel group members list
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_channel_group_member(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP_MEMBER* entry);
+    static void cb_transfer_channel_group_member(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP_MEMBER* member);
 
     /*!
      * @brief Transfer an EPG tag from the add-on to Kodi
@@ -699,7 +699,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the EPG data
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_epg_entry(void* kodiInstance, const ADDON_HANDLE handle, const EPG_TAG* entry);
+    static void cb_transfer_epg_entry(void* kodiInstance, const ADDON_HANDLE handle, const EPG_TAG* epgentry);
 
     /*!
      * @brief Transfer a channel entry from the add-on to Kodi
@@ -707,7 +707,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the channel list
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_channel_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL* entry);
+    static void cb_transfer_channel_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_CHANNEL* channel);
 
     /*!
      * @brief Transfer a timer entry from the add-on to Kodi
@@ -715,7 +715,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the timers list
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_timer_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_TIMER* entry);
+    static void cb_transfer_timer_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_TIMER* timer);
 
     /*!
      * @brief Transfer a recording entry from the add-on to Kodi
@@ -723,7 +723,7 @@ namespace PVR
      * @param handle The handle parameter that Kodi used when requesting the recordings list
      * @param entry The entry to transfer to Kodi
      */
-    static void cb_transfer_recording_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_RECORDING* entry);
+    static void cb_transfer_recording_entry(void* kodiInstance, const ADDON_HANDLE handle, const PVR_RECORDING* recording);
 
     /*!
      * @brief Add or replace a menu hook for the context menu for this add-on

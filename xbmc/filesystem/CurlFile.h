@@ -154,7 +154,7 @@ namespace XFILE
       };
 
     protected:
-      void ParseAndCorrectUrl(CURL &url);
+      void ParseAndCorrectUrl(CURL &url2);
       void SetCommonOptions(CReadState* state);
       void SetRequestHeaders(CReadState* state);
       void SetCorrectHeaders(CReadState* state);

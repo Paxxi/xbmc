@@ -37,7 +37,7 @@ namespace PVR
   {
   public:
     CGUIEPGGridContainer(int parentID, int controlID, float posX, float posY, float width, float height,
-                         ORIENTATION orientation, int scrollTime, int preloadItems, int minutesPerPage,
+                         ORIENTATION orientation, int scrollTime, int preloadItems, int timeBlocks,
                          int rulerUnit, const CTextureInfo& progressIndicatorTexture);
     CGUIEPGGridContainer(const CGUIEPGGridContainer &other);
 

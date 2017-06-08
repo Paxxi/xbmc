@@ -80,7 +80,7 @@ public:
   bool Compress(bool bForce=true);
   void Interrupt();
 
-  bool Open(const DatabaseSettings &db);
+  bool Open(const DatabaseSettings &settings);
 
   void BeginTransaction();
   virtual bool CommitTransaction();
@@ -173,7 +173,7 @@ public:
   virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl);
   virtual bool BuildSQL(const std::string &strBaseDir, const std::string &strQuery, Filter &filter, std::string &strSQL, CDbUrl &dbUrl, SortDescription &sorting);
 
-  bool Connect(const std::string &dbName, const DatabaseSettings &db, bool create);
+  bool Connect(const std::string &dbName, const DatabaseSettings &dbSettings, bool create);
 
 protected:
   friend class CDatabaseManager;

@@ -102,7 +102,7 @@ namespace PVR
      * @param item the directory
      * @return true if all recordings were deleted
      */
-    bool DeleteDirectory(const CFileItem &item);
+    bool DeleteDirectory(const CFileItem &directory);
     bool DeleteRecording(const CFileItem &item);
 
     /**

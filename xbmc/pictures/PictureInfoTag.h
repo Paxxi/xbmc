@@ -100,7 +100,7 @@ public:
   virtual void Archive(CArchive& ar);
   virtual void Serialize(CVariant& value) const;
   virtual void ToSortable(SortItem& sortable, Field field) const;
-  const CPictureInfoTag& operator=(const CPictureInfoTag& item);
+  const CPictureInfoTag& operator=(const CPictureInfoTag& right);
   const std::string GetInfo(int info) const;
 
   bool Loaded() const { return m_isLoaded; };

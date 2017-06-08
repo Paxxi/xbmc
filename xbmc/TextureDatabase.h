@@ -41,10 +41,10 @@ protected:
   virtual std::string         TranslateField(int field) const;
   virtual std::string         GetField(int field, const std::string& type) const;
   virtual FIELD_TYPE          GetFieldType(int field) const;
-  virtual std::string         FormatParameter(const std::string &negate,
-                                              const std::string &oper,
+  virtual std::string         FormatParameter(const std::string &operatorString,
+                                              const std::string &param,
                                               const CDatabase &db,
-                                              const std::string &type) const;
+                                              const std::string &strType) const;
 };
 
 class CTextureUtils
@@ -74,11 +74,11 @@ public:
   virtual ~CTextureDatabase();
   virtual bool Open();
 
-  bool GetCachedTexture(const std::string &originalURL, CTextureDetails &details);
-  bool AddCachedTexture(const std::string &originalURL, const CTextureDetails &details);
-  bool SetCachedTextureValid(const std::string &originalURL, bool updateable);
-  bool ClearCachedTexture(const std::string &originalURL, std::string &cacheFile);
-  bool ClearCachedTexture(int textureID, std::string &cacheFile);
+  bool GetCachedTexture(const std::string &url, CTextureDetails &details);
+  bool AddCachedTexture(const std::string &url, const CTextureDetails &details);
+  bool SetCachedTextureValid(const std::string &url, bool updateable);
+  bool ClearCachedTexture(const std::string &url, std::string &cacheFile);
+  bool ClearCachedTexture(int id, std::string &cacheFile);
   bool IncrementUseCount(const CTextureDetails &details);
 
   /*! \brief Invalidate a previously cached texture
@@ -86,7 +86,7 @@ public:
    next texture load it will be re-cached.
    \param url texture path
    */
-  bool InvalidateCachedTexture(const std::string &originalURL);
+  bool InvalidateCachedTexture(const std::string &url);
 
   /*! \brief Get a texture associated with the given path
    Used for retrieval of previously discovered images to save

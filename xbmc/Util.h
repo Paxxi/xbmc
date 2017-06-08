@@ -67,7 +67,7 @@ public:
   static bool IsTVRecording(const std::string& strFile);
   static bool ExcludeFileOrFolder(const std::string& strFileOrFolder, const std::vector<std::string>& regexps);
   static void GetFileAndProtocol(const std::string& strURL, std::string& strDir);
-  static int GetDVDIfoTitle(const std::string& strPathFile);
+  static int GetDVDIfoTitle(const std::string& strFile);
 
   static bool IsPicture(const std::string& strFile);
 
@@ -119,7 +119,7 @@ public:
   static std::string MakeLegalPath(const std::string &strPath, int LegalType=LEGAL_WIN32_COMPAT);
 #else
   static std::string MakeLegalFileName(const std::string &strFile, int LegalType=LEGAL_NONE);
-  static std::string MakeLegalPath(const std::string &strPath, int LegalType=LEGAL_NONE);
+  static std::string MakeLegalPath(const std::string &strPathAndFile, int LegalType=LEGAL_NONE);
 #endif
   static std::string ValidatePath(const std::string &path, bool bFixDoubleSlashes = false); ///< return a validated path, with correct directory separators.
   
@@ -142,7 +142,7 @@ public:
    */
   static void SplitParams(const std::string &paramString, std::vector<std::string> &parameters);
   static void SplitExecFunction(const std::string &execString, std::string &function, std::vector<std::string> &parameters);
-  static int GetMatchingSource(const std::string& strPath, VECSOURCES& VECSOURCES, bool& bIsSourceName);
+  static int GetMatchingSource(const std::string& strPath1, VECSOURCES& VECSOURCES, bool& bIsSourceName);
   static std::string TranslateSpecialSource(const std::string &strSpecial);
   static void DeleteDirectoryCache(const std::string &prefix = "");
   static void DeleteMusicDatabaseDirectoryCache();
@@ -152,7 +152,7 @@ public:
 
   static void GetSkinThemes(std::vector<std::string>& vecTheme);
   static void GetRecursiveListing(const std::string& strPath, CFileItemList& items, const std::string& strMask, unsigned int flags = 0 /* DIR_FLAG_DEFAULTS */);
-  static void GetRecursiveDirsListing(const std::string& strPath, CFileItemList& items, unsigned int flags = 0 /* DIR_FLAG_DEFAULTS */);
+  static void GetRecursiveDirsListing(const std::string& strPath, CFileItemList& item, unsigned int flags = 0 /* DIR_FLAG_DEFAULTS */);
   static void ForceForwardSlashes(std::string& strPath);
 
   static double AlbumRelevance(const std::string& strAlbumTemp1, const std::string& strAlbum1, const std::string& strArtistTemp1, const std::string& strArtist1);

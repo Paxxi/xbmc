@@ -48,7 +48,7 @@ public:
     , releaseType(Album)
   {};
   bool operator<(const CAlbum &a) const;
-  void MergeScrapedAlbum(const CAlbum& album, bool override = true);
+  void MergeScrapedAlbum(const CAlbum& source, bool override = true);
 
   void Reset()
   {

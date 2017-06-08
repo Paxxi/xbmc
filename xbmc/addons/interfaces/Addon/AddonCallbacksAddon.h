@@ -84,11 +84,11 @@ public:
   static bool CreateDirectory(const void* addonData, const char *strPath);
   static bool DirectoryExists(const void* addonData, const char *strPath);
   static bool RemoveDirectory(const void* addonData, const char *strPath);
-  static bool GetDirectory(const void* addondata, const char* strPath, const char* mask, VFSDirEntry** items, unsigned int* num_items);
-  static void FreeDirectory(const void* addondata, VFSDirEntry* items, unsigned int num_items);
+  static bool GetDirectory(const void* addonData, const char* strPath, const char* mask, VFSDirEntry** items, unsigned int* num_items);
+  static void FreeDirectory(const void* addonData, VFSDirEntry* items, unsigned int num_items);
   static void* CURLCreate(const void* addonData, const char* strURL);
-  static bool CURLAddOption(const void* addonData, void* curl, XFILE::CURLOPTIONTYPE type, const char* name, const char * value);
-  static bool CURLOpen(const void* addonData, void* curl, unsigned int flags);
+  static bool CURLAddOption(const void* addonData, void* file, XFILE::CURLOPTIONTYPE type, const char* name, const char * value);
+  static bool CURLOpen(const void* addonData, void* file, unsigned int flags);
 
 private:
   ADDON::CAddon* m_addon; /*!< the addon */

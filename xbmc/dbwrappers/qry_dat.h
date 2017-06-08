@@ -81,8 +81,8 @@ public:
   field_value(const char c);
   field_value(const short s);
   field_value(const unsigned short us);
-  field_value(const int l);
-  field_value(const unsigned int ul);
+  field_value(const int i);
+  field_value(const unsigned int ui);
   field_value(const float f);
   field_value(const double d);
   field_value(const int64_t i);
@@ -181,8 +181,8 @@ public:
   void set_asChar(const char c);
   void set_asShort(const short s);
   void set_asUShort(const unsigned short us);
-  void set_asInt(const int l);
-  void set_asUInt(const unsigned int l);
+  void set_asInt(const int i);
+  void set_asUInt(const unsigned int ui);
   void set_asFloat(const float f);
   void set_asDouble(const double d);
   void set_asInt64(const int64_t i);

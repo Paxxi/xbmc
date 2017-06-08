@@ -42,8 +42,8 @@ public:
   CSectionLoader(void);
   virtual ~CSectionLoader(void);
 
-  static LibraryLoader* LoadDLL(const std::string& strSection, bool bDelayUnload=true, bool bLoadSymbols=false);
-  static void UnloadDLL(const std::string& strSection);
+  static LibraryLoader* LoadDLL(const std::string& dllname, bool bDelayUnload=true, bool bLoadSymbols=false);
+  static void UnloadDLL(const std::string& dllname);
   static void UnloadDelayed();
   void UnloadAll();
 

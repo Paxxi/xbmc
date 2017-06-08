@@ -162,7 +162,7 @@ namespace PVR
      * @brief Update an old version of the database.
      * @param version The version to update the database from.
      */
-    void UpdateTables(int version) override;
+    void UpdateTables(int iVersion) override;
 
     int GetMinSchemaVersion() const override { return 4; }
   };

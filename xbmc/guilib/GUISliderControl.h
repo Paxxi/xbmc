@@ -56,7 +56,7 @@ public:
     RangeSelectorUpper = 1
   } RangeSelector;
 
-  CGUISliderControl(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& backGroundTexture, const CTextureInfo& mibTexture, const CTextureInfo& nibTextureFocus, int iType, ORIENTATION orientation);
+  CGUISliderControl(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& backGroundTexture, const CTextureInfo& nibTexture, const CTextureInfo& nibTextureFocus, int iType, ORIENTATION orientation);
   virtual ~CGUISliderControl(void);
   virtual CGUISliderControl *Clone() const { return new CGUISliderControl(*this); };
 
@@ -77,7 +77,7 @@ public:
   void SetRangeSelector(RangeSelector selector);
   void SwitchRangeSelector();
   void SetInfo(int iInfo);
-  void SetPercentage(float iPercent, RangeSelector selector = RangeSelectorLower, bool updateCurrent = false);
+  void SetPercentage(float percent, RangeSelector selector = RangeSelectorLower, bool updateCurrent = false);
   float GetPercentage(RangeSelector selector = RangeSelectorLower) const;
   void SetIntValue(int iValue, RangeSelector selector = RangeSelectorLower, bool updateCurrent = false);
   int GetIntValue(RangeSelector selector = RangeSelectorLower) const;

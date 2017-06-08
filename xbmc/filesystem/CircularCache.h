@@ -39,7 +39,7 @@ public:
     virtual size_t GetMaxWriteSize(const size_t& iRequestSize) ;
     virtual int WriteToCache(const char *buf, size_t len) ;
     virtual int ReadFromCache(char *buf, size_t len) ;
-    virtual int64_t WaitForData(unsigned int minimum, unsigned int iMillis) ;
+    virtual int64_t WaitForData(unsigned int minimum, unsigned int millis) ;
 
     virtual int64_t Seek(int64_t pos) ;
     virtual bool Reset(int64_t pos, bool clearAnyway=true) ;

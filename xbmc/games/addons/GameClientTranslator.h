@@ -51,7 +51,7 @@ namespace GAME
      * \param memory The memory type to translate.
      * \return Translated memory type.
      */
-    static const char* ToString(GAME_MEMORY error);
+    static const char* ToString(GAME_MEMORY memory);
 
     /*!
      * \brief Translate pixel format (Game API to FFMPEG).

@@ -67,7 +67,7 @@ public:
                     std::string& strPath, std::string& strFileName);
   static std::vector<std::string> SplitPath(const std::string& strPath);
 
-  static void GetCommonPath(std::string& strPath, const std::string& strPath2);
+  static void GetCommonPath(std::string& strParent, const std::string& strPath);
   static std::string GetParentPath(const std::string& strPath);
   static bool GetParentPath(const std::string& strPath, std::string& strParent);
 
@@ -120,7 +120,7 @@ public:
   static bool PathEquals(std::string path1, std::string path2, bool ignoreTrailingSlash = false, bool ignoreURLOptions = false);
 
   static bool IsAddonsPath(const std::string& strFile);
-  static bool IsSourcesPath(const std::string& strFile);
+  static bool IsSourcesPath(const std::string& strPath);
   static bool IsCDDA(const std::string& strFile);
   static bool IsDAV(const std::string& strFile);
   static bool IsDOSPath(const std::string &path);
@@ -143,8 +143,8 @@ public:
   static bool IsMusicDb(const std::string& strFile);
   static bool IsNfs(const std::string& strFile);
   static bool IsOnDVD(const std::string& strFile);
-  static bool IsOnLAN(const std::string& strFile);
-  static bool IsHostOnLAN(const std::string& hostName, bool offLineCheck = false);
+  static bool IsOnLAN(const std::string& strPath);
+  static bool IsHostOnLAN(const std::string& host, bool offLineCheck = false);
   static bool IsPlugin(const std::string& strFile);
   static bool IsScript(const std::string& strFile);
   static bool IsRAR(const std::string& strFile);
@@ -159,7 +159,7 @@ public:
   static bool IsZIP(const std::string& strFile);
   static bool IsArchive(const std::string& strFile);
   static bool IsBluray(const std::string& strFile);
-  static bool IsAndroidApp(const std::string& strFile);
+  static bool IsAndroidApp(const std::string& path);
   static bool IsLibraryFolder(const std::string& strFile);
   static bool IsLibraryContent(const std::string& strFile);
   static bool IsPVRChannel(const std::string& strFile);

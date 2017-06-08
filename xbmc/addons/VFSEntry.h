@@ -56,7 +56,7 @@ namespace ADDON
     int Stat(const CURL& url, struct __stat64* buffer);
     ssize_t Read(void* ctx, void* lpBuf, size_t uiBufSize);
     ssize_t Write(void* ctx, void* lpBuf, size_t uiBufSize);
-    int64_t Seek(void* ctx, int64_t iFilePosition, int iWhence = SEEK_SET);
+    int64_t Seek(void* ctx, int64_t position, int whence = SEEK_SET);
     int Truncate(void* ctx, int64_t size);
     void Close(void* ctx);
     int64_t GetPosition(void* ctx);
@@ -73,7 +73,7 @@ namespace ADDON
     void ClearOutIdle();
     void DisconnectAll();
 
-    bool ContainsFiles(const CURL& path, CFileItemList& items);
+    bool ContainsFiles(const CURL& url, CFileItemList& items);
 
     const std::string& GetProtocols() const { return m_protocols; }
     const std::string& GetExtensions() const { return m_extensions; }
@@ -192,22 +192,22 @@ namespace ADDON
     //! \param[in] url URL to file to list.
     //! \param items List of items in file.
     //! \return True if listing succeeded, false otherwise.
-    virtual bool GetDirectory(const CURL& strPath, CFileItemList& items);
+    virtual bool GetDirectory(const CURL& url, CFileItemList& items);
 
     //! \brief Check if directory exists.
     //! \param[in] url URL to check.
-    virtual bool Exists(const CURL& strPath);
+    virtual bool Exists(const CURL& url);
 
     //! \brief Delete directory.
     //! \param[in] url URL to delete.
-    virtual bool Remove(const CURL& strPath);
+    virtual bool Remove(const CURL& url);
 
     //! \brief Create directory.
     //! \param[in] url URL to delete.
-    virtual bool Create(const CURL& strPath);
+    virtual bool Create(const CURL& url);
 
     //! \brief Static helper for doing a keyboard callback.
-    static bool DoGetKeyboardInput(void* context, const char* heading,
+    static bool DoGetKeyboardInput(void* ctx, const char* heading,
                                    char** input);
 
     //! \brief Get keyboard input.

@@ -196,10 +196,10 @@ public:
                  const CDateTime& dtLastPlayed, float rating, int userrating, int votes, const ReplayGain& replayGain);
 
   //// Misc Song
-  bool GetSongByFileName(const std::string& strFileName, CSong& song, int startOffset = 0);
-  bool GetSongsByPath(const std::string& strPath, MAPSONGS& songs, bool bAppendToMap = false);
+  bool GetSongByFileName(const std::string& strFileNameAndPath, CSong& song, int startOffset = 0);
+  bool GetSongsByPath(const std::string& strPath1, MAPSONGS& songs, bool bAppendToMap = false);
   bool Search(const std::string& search, CFileItemList &items);
-  bool RemoveSongsFromPath(const std::string &path, MAPSONGS& songs, bool exact=true);
+  bool RemoveSongsFromPath(const std::string &path1, MAPSONGS& songs, bool exact=true);
   bool SetSongUserrating(const std::string &filePath, int userrating);
   bool SetSongVotes(const std::string &filePath, int votes);
   int  GetSongByArtistAndAlbumAndTitle(const std::string& strArtist, const std::string& strAlbum, const std::string& strTitle);
@@ -274,7 +274,7 @@ public:
   bool InsideScannedPath(const std::string& path);
 
   //// Misc Album
-  int  GetAlbumIdByPath(const std::string& path);
+  int  GetAlbumIdByPath(const std::string& strPath);
   bool GetAlbumFromSong(int idSong, CAlbum &album);
   int  GetAlbumByName(const std::string& strAlbum, const std::string& strArtist="");
   int  GetAlbumByName(const std::string& strAlbum, const std::vector<std::string>& artist);
@@ -319,18 +319,18 @@ public:
   /////////////////////////////////////////////////
   // Paths
   /////////////////////////////////////////////////
-  int AddPath(const std::string& strPath);
+  int AddPath(const std::string& strPath1);
 
   bool GetPaths(std::set<std::string> &paths);
   bool SetPathHash(const std::string &path, const std::string &hash);
   bool GetPathHash(const std::string &path, std::string &hash);
   bool GetAlbumPath(int idAlbum, std::string &path);
-  bool GetArtistPath(int idArtist, std::string &path);
+  bool GetArtistPath(int idArtist, std::string &basePath);
 
   /////////////////////////////////////////////////
   // Genres
   /////////////////////////////////////////////////
-  int AddGenre(const std::string& strGenre);
+  int AddGenre(const std::string& strGenre1);
   std::string GetGenreById(int id);
   int GetGenreByName(const std::string& strGenre);
 
@@ -368,15 +368,15 @@ public:
   /////////////////////////////////////////////////
   bool GetTop100(const std::string& strBaseDir, CFileItemList& items);
   bool GetTop100Albums(VECALBUMS& albums);
-  bool GetTop100AlbumSongs(const std::string& strBaseDir, CFileItemList& item);
+  bool GetTop100AlbumSongs(const std::string& strBaseDir, CFileItemList& items);
 
   /////////////////////////////////////////////////
   // Recently added
   /////////////////////////////////////////////////
   bool GetRecentlyAddedAlbums(VECALBUMS& albums, unsigned int limit=0);
-  bool GetRecentlyAddedAlbumSongs(const std::string& strBaseDir, CFileItemList& item, unsigned int limit=0);
+  bool GetRecentlyAddedAlbumSongs(const std::string& strBaseDir, CFileItemList& items, unsigned int limit=0);
   bool GetRecentlyPlayedAlbums(VECALBUMS& albums);
-  bool GetRecentlyPlayedAlbumSongs(const std::string& strBaseDir, CFileItemList& item);
+  bool GetRecentlyPlayedAlbumSongs(const std::string& strBaseDir, CFileItemList& items);
 
   /////////////////////////////////////////////////
   // Compilations
@@ -424,7 +424,7 @@ public:
   /////////////////////////////////////////////////
   // Scraper
   /////////////////////////////////////////////////
-  bool SetScraperForPath(const std::string& strPath, const ADDON::ScraperPtr& info);
+  bool SetScraperForPath(const std::string& strPath, const ADDON::ScraperPtr& scraper);
   bool GetScraperForPath(const std::string& strPath, ADDON::ScraperPtr& info, const ADDON::TYPE &type);
   
   /*! \brief Check whether a given scraper is in use.
@@ -456,7 +456,7 @@ public:
   /////////////////////////////////////////////////
   // Art
   /////////////////////////////////////////////////
-  bool SaveAlbumThumb(int idAlbum, const std::string &thumb);
+  bool SaveAlbumThumb(int idAlbum, const std::string &strThumb);
   /*! \brief Sets art for a database item.
    Sets a single piece of art for a database item.
    \param mediaId the id in the media (song/artist/album) table.
@@ -580,7 +580,7 @@ private:
   virtual void UpdateTables(int version);
   bool SearchArtists(const std::string& search, CFileItemList &artists);
   bool SearchAlbums(const std::string& search, CFileItemList &albums);
-  bool SearchSongs(const std::string& strSearch, CFileItemList &songs);
+  bool SearchSongs(const std::string& search, CFileItemList &items);
   int GetSongIDFromPath(const std::string &filePath);
 
   bool m_translateBlankArtist;

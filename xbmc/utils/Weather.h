@@ -101,7 +101,7 @@ public:
   const CWeatherInfo &GetInfo() const;
 private:
   void LocalizeOverview(std::string &str);
-  void LocalizeOverviewToken(std::string &str);
+  void LocalizeOverviewToken(std::string &token);
   void LoadLocalizedToken();
   static int ConvertSpeed(int speed);
 

@@ -129,7 +129,7 @@ protected:
   std::string m_strFilename;
 
   // Stuff for pre-rendering for speed
-  inline Character *GetCharacter(character_t letter);
+  inline Character *GetCharacter(character_t chr);
   bool CacheCharacter(wchar_t letter, uint32_t style, Character *ch);
   void RenderCharacter(float posX, float posY, const Character *ch, color_t color, bool roundX, std::vector<SVertex> &vertices);
   void ClearCharacterCache();

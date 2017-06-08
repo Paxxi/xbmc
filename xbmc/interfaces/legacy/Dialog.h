@@ -407,9 +407,9 @@ namespace XBMCAddon
       ///
       browseSingle(...);
 #else
-      String browseSingle(int type, const String& heading, const String& shares,
-                          const String& mask = emptyString, bool useThumbs = false, 
-                          bool treatAsFolder = false, 
+      String browseSingle(int type, const String& heading, const String& s_shares,
+                          const String& maskparam = emptyString, bool useThumbs = false, 
+                          bool useFileDirectories = false, 
                           const String& defaultt = emptyString );
 #endif
 
@@ -496,7 +496,7 @@ namespace XBMCAddon
       ///
       numeric(...);
 #else
-      String numeric(int type, const String& heading, const String& defaultt = emptyString);
+      String numeric(int inputtype, const String& heading, const String& defaultt = emptyString);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

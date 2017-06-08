@@ -36,7 +36,7 @@ public:
   /*! \brief set the current progress of the busy operation
    \param progress a percentage of progress
    */
-  void SetProgress(float progress);
+  void SetProgress(float percent);
 
   bool IsCanceled() { return m_bCanceled; }
 

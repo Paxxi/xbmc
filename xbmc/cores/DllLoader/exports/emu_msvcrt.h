@@ -85,7 +85,7 @@ extern "C"
   char *dll_fullpath(char *absPath, const char *relPath, size_t maxLength);
   FILE *dll_popen(const char *command, const char *mode);
   int dll_pclose(FILE *stream);
-  FILE* dll_fdopen(int i, const char* file);
+  FILE* dll_fdopen(int fd, const char* mode);
   int dll_open(const char* szFileName, int iMode);
   int dll_read(int fd, void* buffer, unsigned int uiSize);
   int dll_write(int fd, const void* buffer, unsigned int uiSize);
@@ -102,7 +102,7 @@ extern "C"
   int dll_findnext64i32(intptr_t f, _finddata64i32_t* data);
   void dll__security_error_handler(int code, void *data);
 #endif
-  DIR *dll_opendir(const char *filename);
+  DIR *dll_opendir(const char *file);
   struct dirent *dll_readdir(DIR *dirp);
   int dll_closedir(DIR *dirp);
   void dll_rewinddir(DIR *dirp);
@@ -166,9 +166,9 @@ extern "C"
   char*** dll___p__environ();
   FILE* dll_freopen(const char *path, const char *mode, FILE *stream);
   int dll_fscanf(FILE *stream, const char *format , ...);
-  void dll_flockfile(FILE *file);
-  int dll_ftrylockfile(FILE *file);
-  void dll_funlockfile(FILE *file);
+  void dll_flockfile(FILE *stream);
+  int dll_ftrylockfile(FILE *stream);
+  void dll_funlockfile(FILE *stream);
   int dll_fstat64(int fd, struct __stat64 *buf);
 #ifdef TARGET_WINDOWS
   int dll_fstat64i32(int fd, struct _stat64i32 *buffer);

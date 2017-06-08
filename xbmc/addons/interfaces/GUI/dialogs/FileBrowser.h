@@ -71,7 +71,7 @@ namespace ADDON
                                            const char* mask, const char* heading,
                                            const char* path_in, char** path_out,
                                            bool use_thumbs, bool use_file_directories,
-                                           bool singleList);
+                                           bool single_list);
 
     static bool show_and_get_file_list(void* kodiBase, const char* shares, 
                                        const char* mask, const char* heading, 
@@ -79,8 +79,8 @@ namespace ADDON
                                        bool use_thumbs, bool use_file_directories);
 
     static bool show_and_get_source(void* kodiBase, const char* path_in, char** path_out,
-                                    bool allow_network_shares, const char* additional_share, 
-                                    const char* type);
+                                    bool allowNetworkShares, const char* additionalShare, 
+                                    const char* strType);
 
     static bool show_and_get_image(void* kodiBase, const char* shares, const char* heading,
                                    const char* path_in, char** path_out);

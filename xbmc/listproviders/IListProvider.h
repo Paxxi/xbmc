@@ -42,7 +42,7 @@ public:
    \param parentID id of parent window for context.
    \return the list provider, NULL if none.
    */
-  static IListProvider *Create(const TiXmlNode *parent, int parentID);
+  static IListProvider *Create(const TiXmlNode *node, int parentID);
 
   /*! \brief Factory to create list providers.  Cannot create a multi-provider.
    \param content the TiXmlNode for the content to create.

@@ -47,7 +47,7 @@ public:
   virtual ssize_t Read(void* lpBuf, size_t uiBufSize);
   virtual int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET);
   virtual void Close();
-  int IoControl(EIoControl request, void* param);
+  int IoControl(EIoControl control, void* payload);
 
   void Process();
 protected:

@@ -104,7 +104,7 @@ public:
    */
   bool Configure(VideoPicture& picture, float fps, unsigned flags, unsigned int orientation, int buffers = 0);
 
-  int AddVideoPicture(VideoPicture& picture);
+  int AddVideoPicture(VideoPicture& pic);
 
   /**
    * Called by video player to flip render buffers

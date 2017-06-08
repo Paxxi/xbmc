@@ -42,7 +42,7 @@ public:
   CAudioSinkAE(CDVDClock *clock);
   ~CAudioSinkAE();
 
-  void SetVolume(float fVolume);
+  void SetVolume(float volume);
   void SetDynamicRangeCompression(long drc);
   void Pause();
   void Resume();

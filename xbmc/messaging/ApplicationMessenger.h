@@ -380,7 +380,7 @@ public:
    * \param windowID optional window to send the message to (defaults to no specified window).
    * \param waitResult whether to wait for the result (defaults to false).
    */
-  void SendGUIMessage(const CGUIMessage &msg, int windowID = WINDOW_INVALID, bool waitResult=false);
+  void SendGUIMessage(const CGUIMessage &message, int windowID = WINDOW_INVALID, bool waitResult=false);
 
   /*!
    * \brief This should be called any class implementing \sa IMessageTarget before it
@@ -407,7 +407,7 @@ private:
   CApplicationMessenger const& operator=(CApplicationMessenger const&) = delete;
   ~CApplicationMessenger();
 
-  int SendMsg(ThreadMessage&& msg, bool wait);
+  int SendMsg(ThreadMessage&& message, bool wait);
   void ProcessMessage(ThreadMessage *pMsg);
 
   std::queue<ThreadMessage*> m_vecMessages; /*!< queue for regular messages */

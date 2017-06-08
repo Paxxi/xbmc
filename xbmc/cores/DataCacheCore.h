@@ -60,7 +60,7 @@ public:
   int GetAudioBitsPerSample();
 
   // render info
-  void SetRenderClockSync(bool enabled);
+  void SetRenderClockSync(bool enable);
   bool IsRenderClockSync();
 
   // player states

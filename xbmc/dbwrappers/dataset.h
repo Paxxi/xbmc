@@ -123,8 +123,8 @@ public:
   virtual const char *getErrorMsg(void) { return error.c_str(); }
 	
   virtual int connect(bool create) { return DB_COMMAND_OK; }
-  virtual int connectFull( const char *newDb, const char *newHost=NULL,
-                      const char *newLogin=NULL, const char *newPasswd=NULL,const char *newPort=NULL,
+  virtual int connectFull( const char *newHost, const char *newPort=NULL,
+                      const char *newDb=NULL, const char *newLogin=NULL,const char *newPasswd=NULL,
                       const char *newKey=NULL, const char *newCert=NULL, const char *newCA=NULL, 
                       const char *newCApath=NULL, const char *newCiphers=NULL, bool newCompression = false);
   virtual void disconnect(void) { active = false; }
@@ -261,7 +261,7 @@ protected:
   void parse_sql(std::string &sql);
 
 /* Returns old field value (for :OLD) */
-  virtual const field_value f_old(const char *f);
+  virtual const field_value f_old(const char *f_name);
 
 public:
 
@@ -464,7 +464,7 @@ public:
 
 /*add a new value to select_sql*/
   void set_select_sql(const char *sel_sql);
-  void set_select_sql(const std::string &select_sql);
+  void set_select_sql(const std::string &sel_sql);
 /*add a new value to update_sql*/
   void add_update_sql(const char *upd_sql);
   void add_update_sql(const std::string &upd_sql);

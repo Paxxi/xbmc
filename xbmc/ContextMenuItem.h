@@ -63,7 +63,7 @@ class CContextMenuItem : public IContextMenuItem
 public:
   std::string GetLabel(const CFileItem& item) const  override { return m_label; }
   bool IsVisible(const CFileItem& item) const override ;
-  bool IsParentOf(const CContextMenuItem& menuItem) const;
+  bool IsParentOf(const CContextMenuItem& other) const;
   bool IsGroup() const override ;
   bool Execute(const CFileItemPtr& item) const override;
   bool operator==(const CContextMenuItem& other) const;

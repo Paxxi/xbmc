@@ -194,7 +194,7 @@ public:
   int64_t Seek(HANDLE hFile, int64_t lOffset, int whence);
   bool   Open(const char *isofile);
   HANDLE OpenFile( const char* filename );
-  long ReadFile(HANDLE fd, unsigned char *pBuffer, long lSize);
+  long ReadFile(HANDLE hFile, unsigned char *pBuffer, long lSize);
   void CloseFile(HANDLE hFile);
 
   udf_dir_t *OpenDir( const char *subdir );

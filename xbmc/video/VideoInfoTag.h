@@ -292,7 +292,7 @@ private:
    \param prioritise whether additive tags should be replaced (or prepended) by the content of the tags, or appended to.
    \sa Load
    */
-  void ParseNative(const TiXmlElement* element, bool prioritise);
+  void ParseNative(const TiXmlElement* movie, bool prioritise);
 
   std::string m_strDefaultRating;
   std::string m_strDefaultUniqueID;

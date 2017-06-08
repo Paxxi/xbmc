@@ -183,8 +183,8 @@ public:
   bool SetFromDateString(const std::string &date);
   bool SetFromDBDate(const std::string &date);
   bool SetFromDBTime(const std::string &time);
-  bool SetFromW3CDate(const std::string &date);
-  bool SetFromW3CDateTime(const std::string &date, bool ignoreTimezone = false);
+  bool SetFromW3CDate(const std::string &dateTime);
+  bool SetFromW3CDateTime(const std::string &dateTime, bool ignoreTimezone = false);
   bool SetFromUTCDateTime(const CDateTime &dateTime);
   bool SetFromUTCDateTime(const time_t &dateTime);
   bool SetFromRFC1123DateTime(const std::string &dateTime);

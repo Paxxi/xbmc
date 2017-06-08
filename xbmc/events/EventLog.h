@@ -41,21 +41,21 @@ public:
 
   Events Get() const;
   Events Get(EventLevel level, bool includeHigherLevels = false) const;
-  EventPtr Get(const std::string& eventIdentifier) const;
+  EventPtr Get(const std::string& eventPtrIdentifier) const;
 
-  void Add(const EventPtr& event);
-  void Add(const EventPtr& event, bool withNotification, bool withSound = true);
-  void AddWithNotification(const EventPtr& event,
+  void Add(const EventPtr& eventPtr);
+  void Add(const EventPtr& eventPtr, bool withNotification, bool withSound = true);
+  void AddWithNotification(const EventPtr& eventPtr,
                            unsigned int displayTime = NOTIFICATION_DISPLAY_TIME,
                            unsigned int messageTime = NOTIFICATION_MESSAGE_TIME,
                            bool withSound = true);
-  void AddWithNotification(const EventPtr& event, bool withSound);
-  void Remove(const EventPtr& event);
-  void Remove(const std::string& eventIdentifier);
+  void AddWithNotification(const EventPtr& eventPtr, bool withSound);
+  void Remove(const EventPtr& eventPtr);
+  void Remove(const std::string& eventPtrIdentifier);
   void Clear();
   void Clear(EventLevel level, bool includeHigherLevels = false);
 
-  bool Execute(const std::string& eventIdentifier);
+  bool Execute(const std::string& eventPtrIdentifier);
 
   std::string EventLevelToString(EventLevel level);
   EventLevel EventLevelFromString(const std::string& level);
@@ -71,7 +71,7 @@ protected:
   virtual void OnSettingAction(std::shared_ptr<const CSetting> setting) override;
 
 private:
-  void SendMessage(const EventPtr& event, int message);
+  void SendMessage(const EventPtr& eventPtr, int message);
 
   typedef std::vector<EventPtr> EventsList;
   typedef std::map<std::string, EventPtr> EventsMap;

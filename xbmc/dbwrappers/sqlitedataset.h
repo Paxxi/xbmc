@@ -83,7 +83,7 @@ public:
 /* \brief drop all extra analytics from database */
   virtual int drop_analytics(void);
 
-  virtual long nextid(const char* seq_name);
+  virtual long nextid(const char* sname);
 
 /* virtual methods for transaction */
 

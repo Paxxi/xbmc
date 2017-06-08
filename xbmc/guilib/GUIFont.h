@@ -136,7 +136,7 @@ public:
                  const vecText &text, uint32_t alignment, float maxPixelWidth);
 
   void DrawScrollingText( float x, float y, const vecColors &colors, color_t shadowColor,
-                 const vecText &text, uint32_t alignment, float maxPixelWidth, const CScrollInfo &scrollInfo);
+                 const vecText &text, uint32_t alignment, float maxWidth, const CScrollInfo &scrollInfo);
 
   bool UpdateScrollInfo(const vecText &text, CScrollInfo &scrollInfo);
 

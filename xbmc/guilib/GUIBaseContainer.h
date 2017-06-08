@@ -117,7 +117,7 @@ protected:
   virtual bool GetOffsetRange(int &minOffset, int &maxOffset) const;
   virtual void ValidateOffset();
   virtual int  CorrectOffset(int offset, int cursor) const;
-  virtual void UpdateLayout(bool refreshAllItems = false);
+  virtual void UpdateLayout(bool updateAllItems = false);
   virtual void SetPageControlRange();
   virtual void UpdatePageControl(int offset);
   virtual void CalculateLayout();

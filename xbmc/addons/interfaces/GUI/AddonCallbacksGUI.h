@@ -108,7 +108,7 @@ public:
   static void         Control_Slider_SetPercentage(void *addonData, GUIHANDLE handle, float fPercent);
   static float        Control_Slider_GetPercentage(void *addonData, GUIHANDLE handle);
   static void         Control_Slider_SetFloatRange(void *addonData, GUIHANDLE handle, float fStart, float fEnd);
-  static void         Control_Slider_SetFloatValue(void *addonData, GUIHANDLE handle, float fValue);
+  static void         Control_Slider_SetFloatValue(void *addonData, GUIHANDLE handle, float iValue);
   static float        Control_Slider_GetFloatValue(void *addonData, GUIHANDLE handle);
   static void         Control_Slider_SetFloatInterval(void *addonData, GUIHANDLE handle, float fInterval);
 
@@ -143,17 +143,17 @@ public:
   static void         RenderAddon_MarkDirty(void *addonData, GUIHANDLE handle);
 
   static bool         Dialog_Keyboard_ShowAndGetInput(char &aTextString, unsigned int iMaxStringSize, bool allowEmptyResult, unsigned int autoCloseMs);
-  static bool         Dialog_Keyboard_ShowAndGetInputWithHead(char &aTextString, unsigned int iMaxStringSize, const char *heading, bool allowEmptyResult, bool hiddenInput, unsigned int autoCloseMs);
+  static bool         Dialog_Keyboard_ShowAndGetInputWithHead(char &aTextString, unsigned int iMaxStringSize, const char *strHeading, bool allowEmptyResult, bool hiddenInput, unsigned int autoCloseMs);
   static bool         Dialog_Keyboard_ShowAndGetNewPassword(char &strNewPassword, unsigned int iMaxStringSize, unsigned int autoCloseMs);
-  static bool         Dialog_Keyboard_ShowAndGetNewPasswordWithHead(char &newPassword, unsigned int iMaxStringSize, const char *strHeading, bool allowEmptyResult, unsigned int autoCloseMs);
+  static bool         Dialog_Keyboard_ShowAndGetNewPasswordWithHead(char &strNewPassword, unsigned int iMaxStringSize, const char *strHeading, bool allowEmptyResult, unsigned int autoCloseMs);
   static bool         Dialog_Keyboard_ShowAndVerifyNewPassword(char &strNewPassword, unsigned int iMaxStringSize, unsigned int autoCloseMs);
-  static bool         Dialog_Keyboard_ShowAndVerifyNewPasswordWithHead(char &strNewPassword, unsigned int iMaxStringSize, const char *strHeading, bool allowEmpty, unsigned int autoCloseMs);
+  static bool         Dialog_Keyboard_ShowAndVerifyNewPasswordWithHead(char &strNewPassword, unsigned int iMaxStringSize, const char *strHeading, bool allowEmptyResult, unsigned int autoCloseMs);
   static int          Dialog_Keyboard_ShowAndVerifyPassword(char &strPassword, unsigned int iMaxStringSize, const char *strHeading, int iRetries, unsigned int autoCloseMs);
   static bool         Dialog_Keyboard_ShowAndGetFilter(char &aTextString, unsigned int iMaxStringSize, bool searching, unsigned int autoCloseMs);
   static bool         Dialog_Keyboard_SendTextToActiveKeyboard(const char *aTextString, bool closeKeyboard);
   static bool         Dialog_Keyboard_isKeyboardActivated();
 
-  static bool         Dialog_Numeric_ShowAndVerifyNewPassword(char &strNewPasswor, unsigned int iMaxStringSized);
+  static bool         Dialog_Numeric_ShowAndVerifyNewPassword(char &strNewPassword, unsigned int iMaxStringSize);
   static int          Dialog_Numeric_ShowAndVerifyPassword(char &strPassword, unsigned int iMaxStringSize, const char *strHeading, int iRetries);
   static bool         Dialog_Numeric_ShowAndVerifyInput(char &strPassword, unsigned int iMaxStringSize, const char *strHeading, bool bGetUserInput);
   static bool         Dialog_Numeric_ShowAndGetTime(tm &time, const char *strHeading);

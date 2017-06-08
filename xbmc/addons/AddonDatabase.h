@@ -35,7 +35,7 @@ public:
   virtual bool Open();
 
   /*! @deprecated: use CAddonMgr::FindInstallableById */
-  bool GetAddon(const std::string& addonID, ADDON::AddonPtr& addon);
+  bool GetAddon(const std::string& id, ADDON::AddonPtr& addon);
 
   /*! \brief Get an addon with a specific version and repository. */
   bool GetAddon(const std::string& addonID, const ADDON::AddonVersion& version, const std::string& repoId, ADDON::AddonPtr& addon);
@@ -51,7 +51,7 @@ public:
   std::pair<ADDON::AddonVersion, std::string> GetAddonVersion(const std::string &id);
 
   /*! Returns all addons in the repositories with id `addonId`. */
-  bool FindByAddonId(const std::string& addonId, ADDON::VECADDONS& addons);
+  bool FindByAddonId(const std::string& addonId, ADDON::VECADDONS& result);
 
   bool UpdateRepositoryContent(const std::string& repositoryId, const ADDON::AddonVersion& version,
       const std::string& checksum, const std::vector<ADDON::AddonPtr>& addons);
@@ -68,7 +68,7 @@ public:
   /*! Get addons across all repositories */
   bool GetRepositoryContent(ADDON::VECADDONS& addons);
 
-  bool SetLastChecked(const std::string& id, const ADDON::AddonVersion& version, const std::string& timestamp);
+  bool SetLastChecked(const std::string& id, const ADDON::AddonVersion& version, const std::string& time);
 
   /*!
    \brief Retrieve the time a repository was last checked and the version it was for
@@ -77,7 +77,7 @@ public:
    */
   std::pair<CDateTime, ADDON::AddonVersion> LastChecked(const std::string& id);
 
-  bool Search(const std::string& search, ADDON::VECADDONS& items);
+  bool Search(const std::string& search, ADDON::VECADDONS& addons);
 
   /*! \brief Disable an addon.
    Sets a flag that this addon has been disabled.  If disabled, it is usually still available on disk.

@@ -73,14 +73,14 @@ struct CMarkUnWatched : CStaticContextMenuAction
 struct CResume : IContextMenuItem
 {
   std::string GetLabel(const CFileItem& item) const override;
-  bool IsVisible(const CFileItem& item) const override;
-  bool Execute(const CFileItemPtr& _item) const override;
+  bool IsVisible(const CFileItem& itemIn) const override;
+  bool Execute(const CFileItemPtr& itemIn) const override;
 };
 
 struct CPlay : IContextMenuItem
 {
-  std::string GetLabel(const CFileItem& item) const override;
-  bool IsVisible(const CFileItem& item) const override;
-  bool Execute(const CFileItemPtr& _item) const override;
+  std::string GetLabel(const CFileItem& itemIn) const override;
+  bool IsVisible(const CFileItem& itemIn) const override;
+  bool Execute(const CFileItemPtr& itemIn) const override;
 };
 }

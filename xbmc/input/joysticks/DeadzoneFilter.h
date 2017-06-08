@@ -72,7 +72,7 @@ namespace JOYSTICK
      * \param settingName The setting corresponding to the given feature
      * \return True if the feature is an analog stick and the peripheral has the setting
      */
-    bool GetDeadzone(unsigned int axisIndex, float& result, const char* featureName, const char* settingName);
+    bool GetDeadzone(unsigned int axisIndex, float& deadzone, const char* featureName, const char* settingName);
 
     /*!
      * \brief Utility function to calculate the deadzone

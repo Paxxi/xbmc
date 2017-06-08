@@ -510,7 +510,7 @@ namespace PVR
      * @brief Publish an event
      * @param state the event
      */
-    void PublishEvent(PVREvent state);
+    void PublishEvent(PVREvent event);
 
     /*!
      * @brief Show an extended progress bar dialog.

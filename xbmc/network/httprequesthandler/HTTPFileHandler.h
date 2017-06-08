@@ -47,7 +47,7 @@ protected:
 
   void SetCanHandleRanges(bool canHandleRanges) { m_canHandleRanges = canHandleRanges; }
   void SetCanBeCached(bool canBeCached) { m_canBeCached = canBeCached; }
-  void SetLastModifiedDate(const struct __stat64 *buffer);
+  void SetLastModifiedDate(const struct __stat64 *statBuffer);
 
 private:
   std::string m_url;

@@ -62,7 +62,7 @@ namespace ADDON
     bool CanInit() { return true; }
     void DeInit();
     void Destroy();
-    bool Load(const std::string& strFileName,
+    bool Load(const std::string& fileName,
               MUSIC_INFO::CMusicInfoTag& tag,
               MUSIC_INFO::EmbeddedArt *art = NULL);
     int GetTrackCount(const std::string& strPath);

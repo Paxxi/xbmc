@@ -88,7 +88,7 @@ namespace XBMCAddon
     ///
     deleteFile(...);
 #else
-    bool deleteFile(const String& file);
+    bool deleteFile(const String& strSource);
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS

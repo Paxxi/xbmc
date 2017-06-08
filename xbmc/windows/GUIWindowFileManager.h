@@ -55,7 +55,7 @@ protected:
   void UpdateControl(int iList, int item);
   bool Update(int iList, const std::string &strDirectory); //???
   void OnStart(CFileItem *pItem, const std::string &player);
-  bool SelectItem(int iList, int &item);
+  bool SelectItem(int list, int &item);
   void ClearFileItems(int iList);
   void OnClick(int iList, int iItem);
   void OnMark(int iList, int iItem);
@@ -69,7 +69,7 @@ protected:
   void OnNewFolder(int iList);
   void Refresh();
   void Refresh(int iList);
-  int GetSelectedItem(int iList);
+  int GetSelectedItem(int iControl);
   bool HaveDiscOrConnection( std::string& strPath, int iDriveType );
   void GetDirectoryHistoryString(const CFileItem* pItem, std::string& strHistoryString);
   bool GetDirectory(int iList, const std::string &strDirectory, CFileItemList &items);
@@ -81,7 +81,7 @@ protected:
   bool CanMove(int iList);
   bool CanDelete(int iList);
   bool CanNewFolder(int iList);
-  void OnPopupMenu(int iList, int iItem, bool bContextDriven = true);
+  void OnPopupMenu(int list, int item, bool bContextDriven = true);
   void ShowShareErrorMessage(CFileItem* pItem);
   void UpdateItemCounts();
 

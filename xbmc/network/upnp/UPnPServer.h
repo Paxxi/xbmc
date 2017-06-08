@@ -57,7 +57,7 @@ public:
                                               const char*                   sort_criteria,
                                               const PLT_HttpRequestContext& context);
     virtual NPT_Result OnSearchContainer(PLT_ActionReference&          action,
-                                         const char*                   container_id,
+                                         const char*                   object_id,
                                          const char*                   search_criteria,
                                          const char*                   filter,
                                          NPT_UInt32                    starting_index,
@@ -75,7 +75,7 @@ public:
     virtual NPT_Result ServeFile(const NPT_HttpRequest&              request,
                                  const NPT_HttpRequestContext& context,
                                  NPT_HttpResponse&             response,
-                                 const NPT_String&             file_path);
+                                 const NPT_String&             md5);
 
     // PLT_DeviceHost methods
     virtual NPT_Result ProcessGetSCPD(PLT_Service*                  service,
@@ -112,7 +112,7 @@ private:
     PLT_MediaObject* Build(CFileItemPtr                  item,
                            bool                          with_count,
                            const PLT_HttpRequestContext& context,
-                           NPT_Reference<CThumbLoader>&  thumbLoader,
+                           NPT_Reference<CThumbLoader>&  thumb_loader,
                            const char*                   parent_id = NULL);
     NPT_Result       BuildResponse(PLT_ActionReference&          action,
                                    CFileItemList&                items,

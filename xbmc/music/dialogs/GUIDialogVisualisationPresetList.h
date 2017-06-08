@@ -41,6 +41,6 @@ protected:
   void OnSelect(int idx) override;
 
 private:
-  void SetVisualisation(ADDON::CVisualisation *addon);
+  void SetVisualisation(ADDON::CVisualisation *vis);
   ADDON::CVisualisation* m_viz;
 };

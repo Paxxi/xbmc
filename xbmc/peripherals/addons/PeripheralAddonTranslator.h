@@ -54,6 +54,6 @@ namespace PERIPHERALS
     static KODI::JOYSTICK::FEATURE_TYPE TranslateFeatureType(JOYSTICK_FEATURE_TYPE type);
     static JOYSTICK_FEATURE_TYPE        TranslateFeatureType(KODI::JOYSTICK::FEATURE_TYPE type);
 
-    static ADDON::DriverPrimitive Opposite(const ADDON::DriverPrimitive& semiaxis);
+    static ADDON::DriverPrimitive Opposite(const ADDON::DriverPrimitive& primitive);
   };
 }

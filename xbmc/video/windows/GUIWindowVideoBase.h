@@ -109,13 +109,13 @@ protected:
    \param item the selected item
    \return true if the action is performed, false otherwise
    */
-  bool OnItemInfo(int item);
+  bool OnItemInfo(int iItem);
   /*! \brief perform a given action on a file
    \param item the selected item
    \param action the action to perform
    \return true if the action is performed, false otherwise
    */
-  bool OnFileAction(int item, int action, std::string player);
+  bool OnFileAction(int iItem, int action, std::string player);
 
   void OnRestartItem(int iItem, const std::string &player = "");
   bool OnResumeItem(int iItem, const std::string &player = "");
@@ -124,7 +124,7 @@ protected:
   virtual bool OnPlayAndQueueMedia(const CFileItemPtr &item, std::string player = "") override;
   void LoadPlayList(const std::string& strPlayList, int iPlayList = PLAYLIST_VIDEO);
 
-  bool ShowIMDB(CFileItemPtr item, const ADDON::ScraperPtr& content, bool fromDB);
+  bool ShowIMDB(CFileItemPtr item, const ADDON::ScraperPtr& info2, bool fromDB);
 
   void AddItemToPlayList(const CFileItemPtr &pItem, CFileItemList &queuedItems);
 
@@ -136,7 +136,7 @@ protected:
 
   static bool StackingAvailable(const CFileItemList &items);
 
-  bool OnPlayStackPart(int item);
+  bool OnPlayStackPart(int iItem);
 
   CGUIDialogProgress* m_dlgProgress;
   CVideoDatabase m_database;

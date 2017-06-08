@@ -48,7 +48,7 @@ public:
   virtual bool HasVideo() const { return false; }
   virtual bool HasAudio() const { return false; }
   virtual void Seek(bool bPlus, bool bLargeStep, bool bChapterOverride);
-  virtual void SeekPercentage(float fPercent = 0);
+  virtual void SeekPercentage(float percent = 0);
   virtual float GetPercentage();
   virtual void SetVolume(float volume);
   virtual void GetAudioInfo(std::string& strAudioInfo) {};
@@ -62,7 +62,7 @@ public:
   virtual void GetChapterName(std::string& strChapterName)     { return; }
   virtual int  SeekChapter(int iChapter)                       { return -1; }
 
-  virtual void SeekTime(int64_t iTime = 0);
+  virtual void SeekTime(int64_t ms = 0);
   virtual int64_t GetTime();
   virtual int64_t GetTotalTime();
   virtual void SetSpeed(float speed = 0) override;

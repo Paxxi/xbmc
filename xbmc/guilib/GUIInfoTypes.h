@@ -103,7 +103,7 @@ public:
    \param fallback if non-NULL, is set to an alternate value to use should the actual value be not appropriate. Defaults to NULL.
    \return label (or image).
    */
-  const std::string &GetItemLabel(const CGUIListItem *item, bool preferImage = false, std::string *fallback = NULL) const;
+  const std::string &GetItemLabel(const CGUIListItem *item, bool preferImages = false, std::string *fallback = NULL) const;
 
   bool IsConstant() const;
   bool IsEmpty() const;

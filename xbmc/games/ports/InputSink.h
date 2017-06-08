@@ -29,7 +29,7 @@ namespace GAME
   class CInputSink : public KODI::JOYSTICK::IInputHandler
   {
   public:
-    CInputSink(CGameClient &m_gameClient);
+    CInputSink(CGameClient &gameClient);
 
     virtual ~CInputSink() = default;
 

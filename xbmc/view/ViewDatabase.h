@@ -30,8 +30,8 @@ public:
   virtual ~CViewDatabase();
   virtual bool Open();
 
-  bool GetViewState(const std::string &path, int windowID, CViewState &state, const std::string &skin);
-  bool SetViewState(const std::string &path, int windowID, const CViewState &state, const std::string &skin);
+  bool GetViewState(const std::string &path, int window, CViewState &state, const std::string &skin);
+  bool SetViewState(const std::string &path, int window, const CViewState &state, const std::string &skin);
   bool ClearViewStates(int windowID);
 
 protected:

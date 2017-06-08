@@ -90,7 +90,7 @@ namespace ADDON
      \param enabledOnly whether we only want enabled addons - set to false to allow both enabled and disabled addons - defaults to true.
      \return true if an addon matching the id of the given type is available and is enabled (if enabledOnly is true).
      */
-    bool GetAddon(const std::string &id, AddonPtr &addon, const TYPE &type = ADDON_UNKNOWN, bool enabledOnly = true);
+    bool GetAddon(const std::string &str, AddonPtr &addon, const TYPE &type = ADDON_UNKNOWN, bool enabledOnly = true);
 
     bool HasAddons(const TYPE &type);
 
@@ -118,7 +118,7 @@ namespace ADDON
     bool GetInstallableAddons(VECADDONS& addons, const TYPE &type);
 
     /*! Get the installable addon with the highest version. */
-    bool FindInstallableById(const std::string& addonId, AddonPtr& addon);
+    bool FindInstallableById(const std::string& addonId, AddonPtr& result);
 
     void AddToUpdateableAddons(AddonPtr &pAddon);
     void RemoveFromUpdateableAddons(AddonPtr &pAddon);    
@@ -148,10 +148,10 @@ namespace ADDON
     void OnPostUnInstall(const std::string& id);
 
     /*! \brief Disable an addon. Returns true on success, false on failure. */
-    bool DisableAddon(const std::string& ID);
+    bool DisableAddon(const std::string& id);
 
     /*! \brief Enable an addon. Returns true on success, false on failure. */
-    bool EnableAddon(const std::string& ID);
+    bool EnableAddon(const std::string& id);
 
     /* \brief Check whether an addon has been disabled via DisableAddon.
      In case the disabled cache does not know about the current state the database routine will be used.
@@ -205,7 +205,7 @@ namespace ADDON
      \param result [out] returned list of elements.
      \return true if the configuration element is present and the list of elements is non-empty
      */
-    bool GetExtElements(cp_cfg_element_t *base, const char *path, ELEMENTS &result);
+    bool GetExtElements(cp_cfg_element_t *base, const char *path, ELEMENTS &elements);
 
     /*! \brief Retrieve a list of strings from a given configuration element
      Assumes the configuration element or attribute contains a whitespace separated list of values (eg xs:list schema).
@@ -228,7 +228,7 @@ namespace ADDON
      \param addon [out] returned addon.
      \return true if addon is set, false otherwise.
      */
-    bool LoadAddonDescription(const std::string &path, AddonPtr &addon);
+    bool LoadAddonDescription(const std::string &directory, AddonPtr &addon);
 
     /*! \brief Parse a repository XML file for addons and load their descriptors
      A repository XML is essentially a concatenated list of addon descriptors.
@@ -266,7 +266,7 @@ namespace ADDON
      \param info the plugin descriptor
      \return true if the addon is supported, false otherwise.
      */
-    static bool PlatformSupportsAddon(const cp_plugin_info_t *info);
+    static bool PlatformSupportsAddon(const cp_plugin_info_t *plugin);
 
     bool GetAddonsInternal(const TYPE &type, VECADDONS &addons, bool enabledOnly);
     bool EnableSingle(const std::string& id);

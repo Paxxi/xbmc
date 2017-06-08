@@ -86,13 +86,13 @@ class CGUITextureBase
 {
 public:
   CGUITextureBase(float posX, float posY, float width, float height, const CTextureInfo& texture);
-  CGUITextureBase(const CGUITextureBase &left);
+  CGUITextureBase(const CGUITextureBase &right);
   virtual ~CGUITextureBase(void);
 
   bool Process(unsigned int currentTime);
   void Render();
 
-  void DynamicResourceAlloc(bool bOnOff);
+  void DynamicResourceAlloc(bool allocateDynamically);
   bool AllocResources();
   void FreeResources(bool immediately = false);
   void SetInvalid();
@@ -100,7 +100,7 @@ public:
   bool SetVisible(bool visible);
   bool SetAlpha(unsigned char alpha);
   bool SetDiffuseColor(color_t color);
-  bool SetPosition(float x, float y);
+  bool SetPosition(float posX, float posY);
   bool SetWidth(float width);
   bool SetHeight(float height);
   bool SetFileName(const std::string &filename);
@@ -127,7 +127,7 @@ protected:
   void LoadDiffuseImage();
   bool AllocateOnDemand();
   bool UpdateAnimFrame(unsigned int currentTime);
-  void Render(float left, float top, float bottom, float right, float u1, float v1, float u2, float v2, float u3, float v3);
+  void Render(float left, float top, float right, float bottom, float u1, float v1, float u2, float v2, float u3, float v3);
   static void OrientateTexture(CRect &rect, float width, float height, int orientation);
   void ResetAnimState();
 

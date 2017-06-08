@@ -101,7 +101,7 @@ public:
   void SetVideoResolution(RESOLUTION res, bool forceUpdate = false);
   RESOLUTION GetVideoResolution() const;
   void ResetOverscan(RESOLUTION res, OVERSCAN &overscan);
-  void ResetOverscan(RESOLUTION_INFO &resinfo);
+  void ResetOverscan(RESOLUTION_INFO &res);
   void ResetScreenParameters(RESOLUTION res);
   void Lock() { lock(); }
   void Unlock() { unlock(); }
@@ -192,7 +192,7 @@ public:
   void RestoreClipRegion();
   void ApplyHardwareTransform();
   void RestoreHardwareTransform();
-  void ClipRect(CRect &vertex, CRect &texture, CRect *diffuse = NULL);
+  void ClipRect(CRect &vertex, CRect &texture, CRect *texture2 = NULL);
   CRect GetClipRegion();
   inline void AddGUITransform()
   {

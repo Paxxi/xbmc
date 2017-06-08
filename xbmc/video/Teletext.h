@@ -88,8 +88,8 @@ private:
   void FillTrapez(color_t *lfb, int xres,int x0, int y0, int l0, int xoffset1, int h, int l1, color_t color);
   void FlipHorz(color_t *lfb, int xres,int x, int y, int w, int h);
   void FlipVert(color_t *lfb, int xres,int x, int y, int w, int h);
-  int ShapeCoord(int param, int curfontwidth, int curfontheight);
-  void DrawShape(color_t *lfb, int xres, int x, int y, int shapenumber, int curfontwidth, int fontheight, int curfontheight, color_t fgcolor, color_t bgcolor, bool clear);
+  int ShapeCoord(int param, int curfontwidth, int curFontHeight);
+  void DrawShape(color_t *lfb, int xres, int x, int y, int shapenumber, int curfontwidth, int FontHeight, int curFontHeight, color_t fgcolor, color_t bgcolor, bool clear);
   void RenderDRCS(int xres,
                   unsigned char *s,          /* pointer to char data, parity undecoded */
                   color_t *d,                  /* pointer to frame buffer of top left pixel */
@@ -105,7 +105,7 @@ private:
                  bool zoom,                 // 1= character will be rendered in double height
                  int curfontwidth,          // rendering width of character
                  int curfontwidth2,         // rendering width of next character (needed for doublewidth)
-                 int fontheight,            // height of character
+                 int FontHeight,            // height of character
                  bool transpmode,           // 1= transparent display
                  unsigned char *axdrcs,     // width and height of DRCS-chars
                  int Ascender);
@@ -114,19 +114,19 @@ private:
                              TextPageAttr_t *PageAtrb,  // attribute buffer, min 25*40
                              bool HintMode,             // 1=show hidden information
                              bool showflof);            // 1=decode FLOF-line
-  void Eval_l25(unsigned char* page_char, TextPageAttr_t *PageAtrb, bool HintMode);
+  void Eval_l25(unsigned char* PageChar, TextPageAttr_t *PageAtrb, bool HintMode);
   void Eval_Object(int iONr, TextCachedPage_t *pstCachedPage,
                    unsigned char *pAPx, unsigned char *pAPy,
                    unsigned char *pAPx0, unsigned char *pAPy0,
-                   tObjType ObjType, unsigned char* pagedata, unsigned char* page_char, TextPageAttr_t* PageAtrb);
+                   tObjType ObjType, unsigned char* pagedata, unsigned char* PageChar, TextPageAttr_t* PageAtrb);
   void Eval_NumberedObject(int p, int s, int packet, int triplet, int high,
                            unsigned char *pAPx, unsigned char *pAPy,
-                           unsigned char *pAPx0, unsigned char *pAPy0, unsigned char* page_char, TextPageAttr_t* PageAtrb);
+                           unsigned char *pAPx0, unsigned char *pAPy0, unsigned char* PageChar, TextPageAttr_t* PageAtrb);
   int Eval_Triplet(int iOData, TextCachedPage_t *pstCachedPage,
                    unsigned char *pAPx, unsigned char *pAPy,
                    unsigned char *pAPx0, unsigned char *pAPy0,
                    unsigned char *drcssubp, unsigned char *gdrcssubp,
-                   signed char *endcol, TextPageAttr_t *attrPassive, unsigned char* pagedata, unsigned char* page_char, TextPageAttr_t* PageAtrb);
+                   signed char *endcol, TextPageAttr_t *attrPassive, unsigned char* pagedata, unsigned char* PageChar, TextPageAttr_t* PageAtrb);
   int iTripletNumber2Data(int iONr, TextCachedPage_t *pstCachedPage, unsigned char* pagedata);
   int SetNational(unsigned char sec);
   int NextHex(int i);

@@ -178,7 +178,7 @@ public:
   void SetInitialCondition();
 
 private:
-  void Calculate(const CPoint &point);
+  void Calculate(const CPoint &center);
   void AddEffect(const std::string &type, const TiXmlElement *node, const CRect &rect);
 
   enum ANIM_REPEAT { ANIM_REPEAT_NONE = 0, ANIM_REPEAT_PULSE, ANIM_REPEAT_LOOP };
@@ -218,7 +218,7 @@ class CScroller
 public:
   CScroller(unsigned int duration = 200, std::shared_ptr<Tweener> tweener = std::shared_ptr<Tweener>());
   CScroller(const CScroller& right);
-  CScroller& operator=(const CScroller &src);
+  CScroller& operator=(const CScroller &right);
   ~CScroller();
 
   /**

@@ -60,7 +60,7 @@ namespace XFILE
     static CFileItemPtr FileItemFromAddon(const ADDON::AddonPtr &addon, const std::string& path, bool folder = false);
   
     /*! \brief Returns true if `path` is a path or subpath of the repository directory, otherwise false */
-    static bool IsRepoDirectory(const CURL& path);
+    static bool IsRepoDirectory(const CURL& url);
 
   private:
     bool GetSearchResults(const CURL& path, CFileItemList &items);

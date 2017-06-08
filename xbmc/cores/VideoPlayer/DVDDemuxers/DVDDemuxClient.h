@@ -41,8 +41,8 @@ public:
   void Abort() override;
   void Flush() override;
   DemuxPacket* Read() override;
-  bool SeekTime(double time, bool backwards = false, double* startpts = NULL) override;
-  void SetSpeed(int iSpeed) override;
+  bool SeekTime(double timems, bool backwards = false, double* startpts = NULL) override;
+  void SetSpeed(int speed) override;
   int GetStreamLength() override { return 0; }
   CDemuxStream* GetStream(int iStreamId) const override;
   std::vector<CDemuxStream*> GetStreams() const override;
@@ -54,7 +54,7 @@ public:
 
 protected:
   void RequestStreams();
-  bool ParsePacket(DemuxPacket* pPacket);
+  bool ParsePacket(DemuxPacket* pkt);
   void DisposeStream(int iStreamId);
   void DisposeStreams();
   std::shared_ptr<CDemuxStream> GetStreamInternal(int iStreamId);

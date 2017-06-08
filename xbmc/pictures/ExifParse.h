@@ -7,7 +7,7 @@ class CExifParse
   public:
     CExifParse  ();
    ~CExifParse  (void)      {}
-    bool        Process     (const unsigned char* const Data, const unsigned short length, ExifInfo_t *info);
+    bool        Process     (const unsigned char* const ExifSection, const unsigned short length, ExifInfo_t *info);
     static int  Get16       (const void* const Short, const bool motorolaOrder=true);
     static int  Get32       (const void* const Long,  const bool motorolaOrder=true);
 
@@ -33,6 +33,6 @@ class CExifParse
     void    GetLatLong          (const unsigned int Format,
                                  const unsigned char* ValuePtr,
                                  const int ComponentSize,
-                                 char *latlongString);
+                                 char *latLongString);
 };
 

@@ -152,7 +152,7 @@ protected:
   void UpdateSettingControl(BaseSettingControlPtr pSettingControl);
   void SetControlLabel(int controlId, const CVariant &label);
 
-  BaseSettingControlPtr GetSettingControl(const std::string &setting);
+  BaseSettingControlPtr GetSettingControl(const std::string &strSetting);
   BaseSettingControlPtr GetSettingControl(int controlId);
   
   CGUIControl* AddSeparator(float width, int &iControlID);

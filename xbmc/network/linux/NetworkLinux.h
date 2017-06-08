@@ -43,7 +43,7 @@ public:
    virtual std::string GetMacAddress(void);
    virtual void GetMacAddressRaw(char rawMac[6]);
 
-   virtual bool GetHostMacAddress(unsigned long host, std::string& mac);
+   virtual bool GetHostMacAddress(unsigned long host_ip, std::string& mac);
 
    virtual std::string GetCurrentIPAddress();
    virtual std::string GetCurrentNetmask();
@@ -75,7 +75,7 @@ public:
    virtual CNetworkInterface* GetFirstConnectedInterface(void);        
     
    // Ping remote host
-   virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000);
+   virtual bool PingHost(unsigned long remote_ip, unsigned int timeout_ms = 2000);
 
    // Get/set the nameserver(s)
    virtual std::vector<std::string> GetNameServers(void);
@@ -85,7 +85,7 @@ public:
 
 private:
    int GetSocket() { return m_sock; }
-   void GetMacAddress(const std::string& interfaceName, char macAddrRaw[6]);
+   void GetMacAddress(const std::string& interfaceName, char rawMac[6]);
    void queryInterfaceList();
    std::vector<CNetworkInterface*> m_interfaces;
    int m_sock;

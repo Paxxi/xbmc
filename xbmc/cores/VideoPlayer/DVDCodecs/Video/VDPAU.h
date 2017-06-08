@@ -562,7 +562,7 @@ public:
   virtual ~CDecoder();
 
   virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0);
-  virtual CDVDVideoCodec::VCReturn Decode    (AVCodecContext* avctx, AVFrame* frame);
+  virtual CDVDVideoCodec::VCReturn Decode    (AVCodecContext* avctx, AVFrame* pFrame);
   virtual bool GetPicture(AVCodecContext* avctx, VideoPicture* picture);
   virtual void Reset();
   virtual void Close();
@@ -575,7 +575,7 @@ public:
   virtual void SetCodecControl(int flags);
 
   bool Supports(VdpVideoMixerFeature feature);
-  static bool IsVDPAUFormat(AVPixelFormat fmt);
+  static bool IsVDPAUFormat(AVPixelFormat format);
 
   static void FFReleaseBuffer(void *opaque, uint8_t *data);
   static int FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags);
@@ -595,8 +595,8 @@ protected:
   long ReleasePicReference();
 
   static void ReadFormatOf( AVCodecID codec
-                          , VdpDecoderProfile &decoder_profile
-                          , VdpChromaType     &chroma_type);
+                          , VdpDecoderProfile &vdp_decoder_profile
+                          , VdpChromaType     &vdp_chroma_type);
 
   // OnLostDevice triggers transition from all states to LOST
   // internal errors trigger transition from OPEN to RESET

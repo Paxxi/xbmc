@@ -137,10 +137,10 @@ public:
   void SetVotes(int votes);
   void SetListeners(int listeners);
   void SetPlayCount(int playcount);
-  void SetLastPlayed(const std::string& strLastPlayed);
-  void SetLastPlayed(const CDateTime& strLastPlayed);
-  void SetDateAdded(const std::string& strDateAdded);
-  void SetDateAdded(const CDateTime& strDateAdded);
+  void SetLastPlayed(const std::string& lastplayed);
+  void SetLastPlayed(const CDateTime& lastplayed);
+  void SetDateAdded(const std::string& dateAdded);
+  void SetDateAdded(const CDateTime& dateAdded);
   void SetCompilation(bool compilation);
   void SetCoverArtInfo(size_t size, const std::string &mimeType);
   void SetReplayGain(const ReplayGain& aGain);
@@ -176,7 +176,7 @@ public:
   bool HasContributors() const { return !m_musicRoles.empty(); }
 
   virtual void Archive(CArchive& ar);
-  virtual void Serialize(CVariant& ar) const;
+  virtual void Serialize(CVariant& value) const;
   virtual void ToSortable(SortItem& sortable, Field field) const;
 
   void Clear();

@@ -129,7 +129,7 @@ public:
    */
   bool EvaluateBool(const std::string &expression, int context = 0, const CGUIListItemPtr &item = nullptr);
 
-  int TranslateString(const std::string &strCondition);
+  int TranslateString(const std::string &condition);
 
   /*! \brief Get integer value of info.
    \param value int reference to pass value of given info

@@ -54,8 +54,8 @@ public:
   const std::string& GetSelectedItem(const std::string& strDirectory) const;
   void RemoveSelectedItem(const std::string& strDirectory);
 
-  void AddPath(const std::string& strPath, const std::string &m_strFilterPath = "");
-  void AddPathFront(const std::string& strPath, const std::string &m_strFilterPath = "");
+  void AddPath(const std::string& strPath, const std::string &strFilterPath = "");
+  void AddPathFront(const std::string& strPath, const std::string &strFilterPath = "");
   std::string GetParentPath(bool filter = false);
   std::string RemoveParentPath(bool filter = false);
   void ClearPathHistory();

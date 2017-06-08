@@ -155,27 +155,27 @@ protected:
   virtual void DeleteTexture(int index);
   virtual bool CreateTexture(int index);
 
-  bool UploadYV12Texture(int index);
+  bool UploadYV12Texture(int source);
   void DeleteYV12Texture(int index);
   bool CreateYV12Texture(int index);
 
-  bool UploadNV12Texture(int index);
+  bool UploadNV12Texture(int source);
   void DeleteNV12Texture(int index);
   bool CreateNV12Texture(int index);
 
-  bool UploadYUV422PackedTexture(int index);
+  bool UploadYUV422PackedTexture(int source);
   void DeleteYUV422PackedTexture(int index);
   bool CreateYUV422PackedTexture(int index);
 
   void CalculateTextureSourceRects(int source, int num_planes);
 
   // renderers
-  void RenderToFBO(int renderBuffer, int field, bool weave = false);
+  void RenderToFBO(int index, int field, bool weave = false);
   void RenderFromFBO();
-  void RenderSinglePass(int renderBuffer, int field); // single pass glsl renderer
-  void RenderSoftware(int renderBuffer, int field);   // single pass s/w yuv2rgb renderer
-  void RenderRGB(int renderBuffer, int field);      // render using vdpau/vaapi hardware
-  void RenderProgressiveWeave(int renderBuffer, int field); // render using vdpau hardware
+  void RenderSinglePass(int index, int field); // single pass glsl renderer
+  void RenderSoftware(int index, int field);   // single pass s/w yuv2rgb renderer
+  void RenderRGB(int index, int field);      // render using vdpau/vaapi hardware
+  void RenderProgressiveWeave(int index, int field); // render using vdpau hardware
 
   // hooks for HwDec Renderered
   virtual bool LoadShadersHook() { return false; };

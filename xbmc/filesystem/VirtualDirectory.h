@@ -43,7 +43,7 @@ namespace XFILE
     }
 
     bool IsSource(const std::string& strPath, VECSOURCES *sources = NULL, std::string *name = NULL) const;
-    bool IsInSource(const std::string& strPath) const;
+    bool IsInSource(const std::string& path) const;
 
     inline const CMediaSource& operator [](const int index) const
     {
@@ -55,7 +55,7 @@ namespace XFILE
       return m_vecSources[index];
     }
 
-    void GetSources(VECSOURCES &sources) const;
+    void GetSources(VECSOURCES &shares) const;
 
     void AllowNonLocalSources(bool allow) { m_allowNonLocalSources = allow; };
 

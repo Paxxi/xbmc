@@ -104,7 +104,7 @@ public:
   CFileItem(const std::string& strPath, bool bIsFolder);
   CFileItem(const CSong& song);
   CFileItem(const CSong& song, const MUSIC_INFO::CMusicInfoTag& music);
-  CFileItem(const CURL &path, const CAlbum& album);
+  CFileItem(const CURL &url, const CAlbum& album);
   CFileItem(const std::string &path, const CAlbum& album);
   CFileItem(const CArtist& artist);
   CFileItem(const CGenre& genre);
@@ -430,7 +430,7 @@ public:
    \param useFolderNames whether we're using foldernames for lookups
    \return the base movie folder
    */
-  std::string GetBaseMoviePath(bool useFolderNames) const;
+  std::string GetBaseMoviePath(bool bUseFolderNames) const;
 
   // Gets the user thumb, if it exists
   std::string GetUserMusicThumb(bool alwaysCheckRemote = false, bool fallbackToFolder = false) const;
@@ -659,7 +659,7 @@ public:
   bool IsEmpty() const;
   void Append(const CFileItemList& itemlist);
   void Assign(const CFileItemList& itemlist, bool append = false);
-  bool Copy  (const CFileItemList& item, bool copyItems = true);
+  bool Copy  (const CFileItemList& items, bool copyItems = true);
   void Reserve(int iCount);
   void Sort(SortBy sortBy, SortOrder sortOrder, SortAttribute sortAttributes = SortAttributeNone);
   /* \brief Sorts the items based on the given sorting options

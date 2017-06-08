@@ -37,7 +37,7 @@ public:
   virtual void Save(const std::string& strFileName) const {};
 
   void Add(CPlayList& playlist);
-  void Add(const CFileItemPtr &pItem);
+  void Add(const CFileItemPtr &item);
   void Add(CFileItemList& items);
 
   // for Party Mode
@@ -85,7 +85,7 @@ protected:
   typedef std::vector <CFileItemPtr>::iterator ivecItems;
 
 private:
-  void Add(const CFileItemPtr& item, int iPosition, int iOrderOffset);
+  void Add(const CFileItemPtr& item, int iPosition, int iOrder);
   void DecrementOrder(int iOrder);
   void IncrementOrder(int iPosition, int iOrder);
 

@@ -39,7 +39,7 @@ class CVideoDatabase;
 class CThumbExtractor : public CJob
 {
 public:
-  CThumbExtractor(const CFileItem& item, const std::string& listpath, bool thumb, const std::string& strTarget="", int64_t pos = -1, bool fillStreamDetails = true);
+  CThumbExtractor(const CFileItem& item, const std::string& listpath, bool thumb, const std::string& target="", int64_t pos = -1, bool fillStreamDetails = true);
   virtual ~CThumbExtractor();
 
   /*!

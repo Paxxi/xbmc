@@ -36,7 +36,7 @@ public:
   unsigned int GetSize() const;
   unsigned char *GetData() const;
 
-  bool ReadFile(const std::string &file);
+  bool ReadFile(const std::string &inputFile);
 
 private:
   void Allocate(unsigned int width, unsigned int height, unsigned int format);

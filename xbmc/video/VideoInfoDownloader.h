@@ -53,7 +53,7 @@ public:
    \param pProgress progress bar to update as we go. If NULL we run on thread, if non-NULL we run off thread.
    \return 1 on success, -1 on a scraper-specific error, 0 on some other error
    */
-  int FindMovie(const std::string& strMovie, MOVIELIST& movielist, CGUIDialogProgress *pProgress = NULL);
+  int FindMovie(const std::string& strMovie, MOVIELIST& movieList, CGUIDialogProgress *pProgress = NULL);
 
   /*! \brief Fetch art URLs for an item with our scraper
    \param details the video info tag structure to fill with art.
@@ -63,7 +63,7 @@ public:
 
   bool GetDetails(const CScraperUrl& url, CVideoInfoTag &movieDetails, CGUIDialogProgress *pProgress = NULL);
   bool GetEpisodeDetails(const CScraperUrl& url, CVideoInfoTag &movieDetails, CGUIDialogProgress *pProgress = NULL);
-  bool GetEpisodeList(const CScraperUrl& url, VIDEO::EPISODELIST& details, CGUIDialogProgress *pProgress = NULL);
+  bool GetEpisodeList(const CScraperUrl& url, VIDEO::EPISODELIST& movieDetails, CGUIDialogProgress *pProgress = NULL);
 
   static void ShowErrorDialog(const ADDON::CScraperError &sce);
 

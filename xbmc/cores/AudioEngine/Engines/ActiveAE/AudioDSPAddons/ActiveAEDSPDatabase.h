@@ -192,7 +192,7 @@ namespace ActiveAE
     /*!
      * @brief Sets the settings for a particular used file
      */
-    void SetActiveDSPSettings(const CFileItem &item, const CAudioSettings &settings);
+    void SetActiveDSPSettings(const CFileItem &item, const CAudioSettings &setting);
 
     /*!
      * @brief EraseActiveDSPSettings() Erases the dsp Settings table and reconstructs it

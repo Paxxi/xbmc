@@ -97,8 +97,8 @@ public:
   CStreamDetails(const CStreamDetails &that);
   ~CStreamDetails() { Reset(); };
   CStreamDetails& operator=(const CStreamDetails &that);
-  bool operator ==(const CStreamDetails &that) const;
-  bool operator !=(const CStreamDetails &that) const;
+  bool operator ==(const CStreamDetails &right) const;
+  bool operator !=(const CStreamDetails &right) const;
 
   static std::string VideoDimsToResolutionDescription(int iWidth, int iHeight);
   static std::string VideoAspectToAspectDescription(float fAspect);

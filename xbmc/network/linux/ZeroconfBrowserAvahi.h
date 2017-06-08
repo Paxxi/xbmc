@@ -54,9 +54,9 @@ class CZeroconfBrowserAvahi : public CZeroconfBrowser
 
     /// avahi callbacks
     ///@{
-    static void clientCallback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UNUSED void * userdata);
+    static void clientCallback(AvahiClient *fp_client, AvahiClientState f_state, AVAHI_GCC_UNUSED void * fp_data);
     static void browseCallback(
-                               AvahiServiceBrowser *b,
+                               AvahiServiceBrowser *browser,
                                AvahiIfIndex interface,
                                AvahiProtocol protocol,
                                AvahiBrowserEvent event,
@@ -64,7 +64,7 @@ class CZeroconfBrowserAvahi : public CZeroconfBrowser
                                const char *type,
                                const char *domain,
                                AVAHI_GCC_UNUSED AvahiLookupResultFlags flags,
-                               void* userdata);
+                               void* fp_data);
     static void resolveCallback(
                          AvahiServiceResolver *r,
                          AvahiIfIndex interface,

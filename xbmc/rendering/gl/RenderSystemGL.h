@@ -40,7 +40,7 @@ public:
   bool ClearBuffers(color_t color) override;
   bool IsExtSupported(const char* extension) override;
 
-  void SetVSync(bool vsync);
+  void SetVSync(bool enable);
   void ResetVSync() { m_bVsyncInit = false; }
 
   void SetViewPort(CRect& viewPort) override;
@@ -54,7 +54,7 @@ public:
 
   void SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor = 0.0f) override;
 
-  void ApplyHardwareTransform(const TransformMatrix &matrix) override;
+  void ApplyHardwareTransform(const TransformMatrix &finalMatrix) override;
   void RestoreHardwareTransform() override;
   void SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW view) override;
   bool SupportsStereo(RENDER_STEREO_MODE mode) const override;

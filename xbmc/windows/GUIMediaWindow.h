@@ -79,7 +79,7 @@ protected:
    \return true if the action is handled, false otherwise.
    */
   virtual bool OnSelect(int item);
-  virtual bool OnPopupMenu(int iItem);
+  virtual bool OnPopupMenu(int itemIdx);
 
   virtual void GetContextButtons(int itemNumber, CContextButtons &buttons);
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button);
@@ -125,7 +125,7 @@ protected:
    \return true if the given path can contain a "filter" parameter otherwise false
    */
   virtual bool CanContainFilter(const std::string &strDirectory) const { return false; }
-  virtual void UpdateFilterPath(const std::string &strDirector, const CFileItemList &items, bool updateFilterPath);
+  virtual void UpdateFilterPath(const std::string &strDirectory, const CFileItemList &items, bool updateFilterPath);
   virtual bool Filter(bool advanced = true);
 
   /* \brief Called on response to a GUI_MSG_FILTER_ITEMS message
@@ -170,7 +170,7 @@ protected:
   /*! \brief Translate the folder to start in from the given quick path
    \param url the folder the user wants
    \return the resulting path */
-  virtual std::string GetStartFolder(const std::string &url);
+  virtual std::string GetStartFolder(const std::string &dir);
 
   /*! \brief Utility method to remove the given parameter from a path/URL
    \param strDirectory Path/URL from which to remove the given parameter

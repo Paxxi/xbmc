@@ -43,7 +43,7 @@ public:
     Action action;
   };
 
-  bool ReadEditDecisionLists(const std::string& strMovie, const float fFramesPerSecond, const int iHeight);
+  bool ReadEditDecisionLists(const std::string& strMovie, const float fFrameRate, const int iHeight);
   void Clear();
 
   bool HasCut() const;
@@ -75,8 +75,8 @@ private:
   bool ReadBeyondTV(const std::string& strMovie);
   bool ReadPvr(const std::string& strMovie);
 
-  bool AddCut(Cut& NewCut);
-  bool AddSceneMarker(const int sceneMarker);
+  bool AddCut(Cut& cut);
+  bool AddSceneMarker(const int iSceneMarker);
 
   void MergeShortCommBreaks();
 };

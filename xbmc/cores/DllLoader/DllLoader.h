@@ -66,14 +66,14 @@ typedef struct _LoadedList
 class DllLoader : public CoffLoader, public LibraryLoader
 {
 public:
-  DllLoader(const char *dll, bool track = false, bool bSystemDll = false, bool bLoadSymbols = false, Export* exports = NULL);
+  DllLoader(const char *sDll, bool bTrack = false, bool bSystemDll = false, bool bLoadSymbols = false, Export* exps = NULL);
   virtual ~DllLoader();
 
   virtual bool Load();
   virtual void Unload();
 
-  virtual int ResolveExport(const char*, void** ptr, bool logging = true);
-  virtual int ResolveOrdinal(unsigned long ordinal, void** ptr);
+  virtual int ResolveExport(const char*, void** pAddr, bool logging = true);
+  virtual int ResolveOrdinal(unsigned long ordinal, void** pAddr);
   virtual bool HasSymbols() { return m_bLoadSymbols && !m_bUnloadSymbols; }
   virtual bool IsSystemDll() { return m_bSystemDll; }
   virtual HMODULE GetHModule() { return (HMODULE)hModule; }

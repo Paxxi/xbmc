@@ -92,7 +92,7 @@ public:
    * @brief Mark an observable changed.
    * @param bSetTo True to mark the observable changed, false to mark it as unchanged.
    */
-  virtual void SetChanged(bool bSetTo = true);
+  virtual void SetChanged(bool SetTo = true);
 
   /*!
    * @brief Check whether this observable is being observed by an observer.

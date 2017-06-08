@@ -37,7 +37,7 @@ namespace XFILE
      \param path the library:// path to parse
      \return path to the XML file or directory corresponding to this path
      */
-    std::string GetNode(const CURL& path);
+    std::string GetNode(const CURL& url);
 
     /*! \brief load the XML file and return a pointer to the <node> root element.
      Checks visible attribute and only returns non-NULL for valid nodes that should be visible.

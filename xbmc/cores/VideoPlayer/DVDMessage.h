@@ -141,7 +141,7 @@ public:
 
   // waits until all threads waiting, released the object
   // if abort is set somehow
-  bool Wait(unsigned int ms, unsigned int source);
+  bool Wait(unsigned int milliseconds, unsigned int source);
   void Wait(std::atomic<bool>& abort, unsigned int source);
 
 private:

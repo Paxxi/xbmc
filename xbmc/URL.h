@@ -42,7 +42,7 @@ public:
   bool operator==(const std::string &url) const { return Get() == url; }
 
   void Reset();
-  void Parse(const std::string& strURL);
+  void Parse(const std::string& strURL1);
   void SetFileName(const std::string& strFileName);
   void SetHostName(const std::string& strHostName)
   {

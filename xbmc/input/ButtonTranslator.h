@@ -115,7 +115,7 @@ public:
    \param window id of the window
    \return name of the window, or an empty string if not found
    */
-  static std::string TranslateWindow(int window);
+  static std::string TranslateWindow(int windowID);
 
   static bool TranslateActionString(const char *szAction, int &action);
 
@@ -149,7 +149,7 @@ private:
 
   static uint32_t TranslateAppCommand(const char *szButton);
 
-  void MapWindowActions(TiXmlNode *pWindow, int wWindowID);
+  void MapWindowActions(TiXmlNode *pWindow, int windowID);
   void MapAction(uint32_t buttonCode, const char *szAction, unsigned int holdtimeMs, buttonMap &map);
   void MapCustomControllerActions(int windowID, TiXmlNode *pCustomController);
 

@@ -335,7 +335,7 @@ namespace ActiveAE
      * standard addon settings dialog as option to it
      * see kodi_adsp_types.h for available types
      */
-    bool HaveMenuHooks(AE_DSP_MENUHOOK_CAT cat, int iAddonId = -1);
+    bool HaveMenuHooks(AE_DSP_MENUHOOK_CAT cat, int iDSPAddonID = -1);
 
     /*!
      * @brief Get the menu hooks for a dsp addon.

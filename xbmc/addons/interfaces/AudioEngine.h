@@ -50,7 +50,7 @@ namespace ADDON
     * @param[in] sinkFormat sink data format. For more details see AudioEngineFormat.
     * @return Returns true on success, else false.
     */
-    static bool AudioEngine_GetCurrentSinkFormat(void* kodiBase, AudioEngineFormat *sinkFormat);
+    static bool AudioEngine_GetCurrentSinkFormat(void* kodiBase, AudioEngineFormat *format);
 
     /**
     * Returns the amount of space available in the stream

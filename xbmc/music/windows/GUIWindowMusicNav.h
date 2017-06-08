@@ -47,7 +47,7 @@ protected:
   virtual void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
   virtual bool OnClick(int iItem, const std::string &player = "") override;
-  virtual std::string GetStartFolder(const std::string &url) override;
+  virtual std::string GetStartFolder(const std::string &dir) override;
 
   bool GetSongsFromPlayList(const std::string& strPlayList, CFileItemList &items);
   std::string GetQuickpathName(const std::string& strPath) const;

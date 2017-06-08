@@ -119,7 +119,7 @@ public:
 #endif
 
   BLURAY_TITLE_INFO* GetTitleLongest();
-  BLURAY_TITLE_INFO* GetTitleFile(const std::string& name);
+  BLURAY_TITLE_INFO* GetTitleFile(const std::string& filename);
 
   void ProcessEvent();
 

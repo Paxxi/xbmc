@@ -56,7 +56,7 @@ namespace XFILE
     void ClearSubPaths(const std::string& strPath);
     void Clear();
     void AddFile(const std::string& strFile);
-    bool FileExists(const std::string& strPath, bool& bInCache);
+    bool FileExists(const std::string& strFile, bool& bInCache);
 #ifdef _DEBUG
     void PrintStats() const;
 #endif
@@ -68,7 +68,7 @@ namespace XFILE
     std::map<std::string, CDir*> m_cache;
     typedef std::map<std::string, CDir*>::iterator iCache;
     typedef std::map<std::string, CDir*>::const_iterator ciCache;
-    void Delete(iCache i);
+    void Delete(iCache it);
 
     CCriticalSection m_cs;
 

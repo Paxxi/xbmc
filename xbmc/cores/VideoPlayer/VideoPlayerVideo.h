@@ -88,7 +88,7 @@ public:
   std::string GetPlayerInfo() override;
   int GetVideoBitrate() override;
   std::string GetStereoMode() override;
-  void SetSpeed(int iSpeed) override;
+  void SetSpeed(int speed) override;
 
   // classes
   CDVDOverlayContainer* m_pOverlayContainer;

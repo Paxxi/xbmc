@@ -61,7 +61,7 @@ namespace ADDON
 class CScraper;
 typedef std::shared_ptr<CScraper> ScraperPtr;
 
-std::string TranslateContent(const CONTENT_TYPE &content, bool pretty=false);
+std::string TranslateContent(const CONTENT_TYPE &type, bool pretty=false);
 CONTENT_TYPE TranslateContent(const std::string &string);
 TYPE ScraperTypeFromContent(const CONTENT_TYPE &content);
 

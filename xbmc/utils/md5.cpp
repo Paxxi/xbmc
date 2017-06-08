@@ -23,9 +23,9 @@
 
 typedef unsigned char md5byte;
 
-static void MD5Init(struct MD5Context *context);
-static void MD5Update(struct MD5Context *context, md5byte const *buf, unsigned len);
-static void MD5Final(unsigned char digest[16], struct MD5Context *context);
+static void MD5Init(struct MD5Context *ctx);
+static void MD5Update(struct MD5Context *ctx, md5byte const *buf, unsigned len);
+static void MD5Final(unsigned char digest[16], struct MD5Context *ctx);
 static void MD5Transform(uint32_t buf[4], uint32_t const in[16]);
 
 

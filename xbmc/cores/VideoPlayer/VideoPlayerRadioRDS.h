@@ -67,7 +67,7 @@ protected:
 
 private:
   void ResetRDSCache();
-  void ProcessUECP(const unsigned char *Data, unsigned int Length);
+  void ProcessUECP(const unsigned char *data, unsigned int len);
 
   inline unsigned int DecodePI(uint8_t *msgElement);
   inline unsigned int DecodePS(uint8_t *msgElement);

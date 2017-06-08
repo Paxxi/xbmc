@@ -51,7 +51,7 @@ private:
 public:
   virtual ~CPVRRadioRDSInfoTag();
 
-  bool operator ==(const CPVRRadioRDSInfoTag& tag) const;
+  bool operator ==(const CPVRRadioRDSInfoTag& right) const;
   bool operator !=(const CPVRRadioRDSInfoTag& tag) const;
 
   void Archive(CArchive& ar) override;
@@ -119,7 +119,7 @@ public:
   void SetInfoSport(const std::string& strSport);
   const std::string GetInfoSport() const;
 
-  void SetInfoStock(const std::string& strSport);
+  void SetInfoStock(const std::string& strStock);
   const std::string GetInfoStock() const;
 
   void SetInfoWeather(const std::string& strWeather);

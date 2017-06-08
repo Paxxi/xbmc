@@ -78,7 +78,7 @@ public:
   void Delete(int id);
   void ActivateWindow(int iWindowID, const std::string &strPath = "");
   void ForceActivateWindow(int iWindowID, const std::string &strPath = "");
-  void ChangeActiveWindow(int iNewID, const std::string &strPath = "");
+  void ChangeActiveWindow(int newWindow, const std::string &strPath = "");
   void ActivateWindow(int iWindowID, const std::vector<std::string>& params, bool swappingWindows = false, bool force = false);
   void PreviousWindow();
 

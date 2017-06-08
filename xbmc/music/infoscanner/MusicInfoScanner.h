@@ -146,7 +146,7 @@ public:
    \param albumInfo [in/out] a CMusicAlbumInfo struct which will be populated with the output of the scraper
    \param pDialog [in] a progress dialog which this and downstream functions can update with status, if required
    */
-  INFO_RET DownloadAlbumInfo(const CAlbum& album, const ADDON::ScraperPtr& scraper, MUSIC_GRABBER::CMusicAlbumInfo& albumInfo, CGUIDialogProgress* pDialog = NULL);
+  INFO_RET DownloadAlbumInfo(const CAlbum& album, const ADDON::ScraperPtr& info, MUSIC_GRABBER::CMusicAlbumInfo& albumInfo, CGUIDialogProgress* pDialog = NULL);
 
   /*! \brief Using the scrapers download metadata for an artist
    Given a CAlbum style struct containing some data about an artist, query

@@ -77,7 +77,7 @@ public:
    \param url location of the image
    \return a hash string for this image
    */
-  bool CacheTexture(CBaseTexture **texture = NULL);
+  bool CacheTexture(CBaseTexture **out_texture = NULL);
 
   static bool ResizeTexture(const std::string &url, uint8_t* &result, size_t &result_size);
 

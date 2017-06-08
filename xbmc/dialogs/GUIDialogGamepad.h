@@ -38,7 +38,7 @@ public:
   static bool ShowAndGetInput(std::string& aTextString, const std::string& dlgHeading, bool bHideUserInput);
   static bool ShowAndVerifyNewPassword(std::string& strNewPassword);
   static int ShowAndVerifyPassword(std::string& strPassword, const std::string& dlgHeading, int iRetries);
-  static bool ShowAndVerifyInput(std::string& strPassword, const std::string& dlgHeading, const std::string& dlgLine0, const std::string& dlgLine1, const std::string& dlgLine2, bool bGetUserInput, bool bHideInputChars);
+  static bool ShowAndVerifyInput(std::string& strToVerify, const std::string& dlgHeading, const std::string& dlgLine0, const std::string& dlgLine1, const std::string& dlgLine2, bool bGetUserInput, bool bHideInputChars);
 protected:
   virtual bool OnAction(const CAction &action);
   virtual void OnInitWindow();

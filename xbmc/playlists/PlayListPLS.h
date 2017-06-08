@@ -32,7 +32,7 @@ class CPlayListPLS :
 public:
   CPlayListPLS(void);
   virtual ~CPlayListPLS(void);
-  virtual bool Load(const std::string& strFileName);
+  virtual bool Load(const std::string& strFile);
   virtual void Save(const std::string& strFileName) const;
   virtual bool Resize(std::vector<int>::size_type newSize);
 };

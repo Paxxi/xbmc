@@ -40,7 +40,7 @@ public:
   void Reset();
   int  Add(const std::string& strLabel);
   int  Add(const CFileItem& item);
-  void SetItems(const CFileItemList& items);
+  void SetItems(const CFileItemList& pList);
   const CFileItemPtr GetSelectedFileItem() const;
   int GetSelectedItem() const;
   const std::vector<int>& GetSelectedItems() const;
@@ -55,7 +55,7 @@ public:
   void SetMultiSelection(bool multiSelection);
 
 protected:
-  CGUIDialogSelect(int windowid);
+  CGUIDialogSelect(int windowId);
   virtual CGUIControl *GetFirstFocusableControl(int id) override;
   virtual void OnWindowLoaded() override;
   virtual void OnInitWindow() override;

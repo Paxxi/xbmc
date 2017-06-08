@@ -76,7 +76,7 @@ namespace ADDON
     std::string GetPresetName();
     bool GetPresetList(std::vector<std::string>& vecpresets);
     bool GetSubModuleList(std::vector<std::string>& vecmodules);
-    static std::string GetFriendlyName(const std::string& vis, const std::string& module);
+    static std::string GetFriendlyName(const std::string& strVisz, const std::string& strSubModule);
     void Destroy();
 
   private:

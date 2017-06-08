@@ -35,7 +35,7 @@ public:
   static VideoPicture* AllocatePicture(int iWidth, int iHeight);
   static void FreePicture(VideoPicture* pPicture);
   static bool CopyPicture(VideoPicture* pDst, VideoPicture* pSrc);
-  static bool CopyPicture(YV12Image* pDst, VideoPicture *pSrc);
+  static bool CopyPicture(YV12Image* pImage, VideoPicture *pSrc);
   
   static VideoPicture* ConvertToNV12Picture(VideoPicture *pSrc);
   static VideoPicture* ConvertToYUV422PackedPicture(VideoPicture *pSrc, ERenderFormat format);
@@ -47,6 +47,6 @@ public:
   static double NormalizeFrameduration(double frameduration, bool *match = NULL);
 
   static ERenderFormat EFormatFromPixfmt(int fmt);
-  static AVPixelFormat PixfmtFromEFormat(ERenderFormat format);
+  static AVPixelFormat PixfmtFromEFormat(ERenderFormat fmt);
 };
 

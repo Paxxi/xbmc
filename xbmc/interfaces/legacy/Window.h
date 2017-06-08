@@ -61,7 +61,7 @@ namespace XBMCAddon
 #ifndef SWIG
       Action(const CAction& caction) { setFromCAction(caction); }
 
-      void setFromCAction(const CAction& caction);
+      void setFromCAction(const CAction& action);
 
       long id;
       float fAmount1;
