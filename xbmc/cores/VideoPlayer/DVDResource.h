@@ -22,6 +22,8 @@
 
 #include <assert.h>
 #include <atomic>
+#include <functional>
+#include <memory>
 
 template<typename T> struct IDVDResourceCounted
 {
@@ -47,3 +49,24 @@ template<typename T> struct IDVDResourceCounted
   }
   std::atomic<long> m_refs;
 };
+
+template<typename T>
+struct DVDResourceCountedDeleter
+{
+  void operator() (T* resource)
+  {
+    if (resource)
+      resource->Release();
+  }
+};
+
+template<typename T>
+using unique_resource = std::unique_ptr<T, DVDResourceCountedDeleter<T>>;
+
+template<typename T, typename ...Args>
+unique_resource<T> make_unique_resource(Args&& ...args)
+{
+  auto ur = new T(std::forward<Args>(args)...);
+  ur->Aquire();
+  return unique_resource<T>(ur, DVDResourceCountedDeleter<T>());
+}
