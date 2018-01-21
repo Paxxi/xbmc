@@ -60,7 +60,10 @@ public:
 typedef std::map<std::string, CRating> RatingMap;
 
 class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
-{
+{ 
+  friend std::string GetDetails(const CVideoInfoTag& tag, int index);
+  friend void SetDetail(CVideoInfoTag& tag, int index, std::string& value);
+
 public:
   CVideoInfoTag() { Reset(); };
   void Reset();

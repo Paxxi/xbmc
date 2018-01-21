@@ -2193,48 +2193,277 @@ bool CVideoDatabase::GetFileInfo(const std::string& strFilenameAndPath, CVideoIn
   return false;
 }
 
-std::string CVideoDatabase::GetValueString(const CVideoInfoTag &details, int min, int max, const SDbTableOffsets *offsets) const
+std::string GetDetails(const CVideoInfoTag& tag, int index)
+{
+  switch (index)
+  {
+  case VIDEODB_ID_TV_TITLE:
+  case VIDEODB_ID_TITLE:
+  case VIDEODB_ID_EPISODE_TITLE:
+  case VIDEODB_ID_MUSICVIDEO_TITLE:
+    return tag.m_strTitle;
+  case VIDEODB_ID_TV_PLOT:
+  case VIDEODB_ID_PLOT:
+  case VIDEODB_ID_EPISODE_PLOT:
+  case VIDEODB_ID_MUSICVIDEO_PLOT:
+    return tag.m_strPlot;
+  case VIDEODB_ID_PLOTOUTLINE:
+    return tag.m_strPlotOutline;
+  case VIDEODB_ID_TAGLINE:
+    return tag.m_strTagLine;
+  case VIDEODB_ID_TV_THUMBURL:
+  case VIDEODB_ID_THUMBURL:
+  case VIDEODB_ID_EPISODE_THUMBURL:
+  case VIDEODB_ID_MUSICVIDEO_THUMBURL:
+    return tag.m_strPictureURL.m_xml;
+  case VIDEODB_ID_TV_SORTTITLE:
+  case VIDEODB_ID_SORTTITLE:
+    return tag.m_strSortTitle;
+  case VIDEODB_ID_TV_MPAA:
+  case VIDEODB_ID_MPAA:
+    return tag.m_strMPAARating;
+  case VIDEODB_ID_TV_ORIGINALTITLE:
+  case VIDEODB_ID_ORIGINALTITLE:
+  case VIDEODB_ID_EPISODE_ORIGINALTITLE:
+    return tag.m_strOriginalTitle;
+  case VIDEODB_ID_TV_THUMBURL_SPOOF:
+  case VIDEODB_ID_THUMBURL_SPOOF:
+  case VIDEODB_ID_EPISODE_THUMBURL_SPOOF:
+  case VIDEODB_ID_MUSICVIDEO_THUMBURL_SPOOF:
+    return tag.m_strPictureURL.m_spoof;
+  case VIDEODB_ID_TRAILER:
+    return tag.m_strTrailer;
+  case VIDEODB_ID_TV_FANART:
+  case VIDEODB_ID_FANART:
+    return tag.m_fanart.m_xml;
+  case VIDEODB_ID_BASEPATH:
+  case VIDEODB_ID_EPISODE_BASEPATH:
+  case VIDEODB_ID_MUSICVIDEO_BASEPATH:
+    return tag.m_basePath;
+  case VIDEODB_ID_TV_STATUS:
+    return tag.m_strStatus;
+  case VIDEODB_ID_TV_EPISODEGUIDE:
+    return tag.m_strEpisodeGuide;
+  case VIDEODB_ID_EPISODE_PRODUCTIONCODE:
+    return tag.m_strProductionCode;
+  case VIDEODB_ID_MUSICVIDEO_ALBUM:
+    return tag.m_strAlbum;
+  case VIDEODB_ID_TV_RATING_ID:
+  case VIDEODB_ID_RATING_ID:
+  case VIDEODB_ID_EPISODE_RATING_ID:
+    return std::to_string(tag.m_iIdRating);
+  case VIDEODB_ID_TV_IDENT_ID:
+  case VIDEODB_ID_IDENT_ID:
+  case VIDEODB_ID_EPISODE_IDENT_ID:
+    return std::to_string(tag.m_iIdUniqueID);
+  case VIDEODB_ID_RUNTIME:
+  case VIDEODB_ID_EPISODE_RUNTIME:
+  case VIDEODB_ID_MUSICVIDEO_RUNTIME:
+    return std::to_string(tag.m_duration);
+  case VIDEODB_ID_TOP250:
+    return std::to_string(tag.m_iTop250);
+  case VIDEODB_ID_PARENTPATHID:
+  case VIDEODB_ID_EPISODE_PARENTPATHID:
+  case VIDEODB_ID_MUSICVIDEO_PARENTPATHID:
+    return std::to_string(tag.m_parentPathID);
+  case VIDEODB_ID_EPISODE_SEASON:
+    return std::to_string(tag.m_iSeason);
+  case VIDEODB_ID_EPISODE_EPISODE:
+    return std::to_string(tag.m_iEpisode);
+  case VIDEODB_ID_EPISODE_SORTSEASON:
+    return std::to_string(tag.m_iSpecialSortSeason);
+  case VIDEODB_ID_EPISODE_SORTEPISODE:
+    return std::to_string(tag.m_iSpecialSortEpisode);
+  case VIDEODB_ID_EPISODE_BOOKMARK:
+    return std::to_string(tag.m_iBookmarkId);
+  case VIDEODB_ID_MUSICVIDEO_TRACK:
+    return std::to_string(tag.m_iTrack);
+  case VIDEODB_ID_CREDITS:
+  case VIDEODB_ID_EPISODE_CREDITS:
+    return StringUtils::Join(tag.m_writingCredits, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_TV_GENRE:
+  case VIDEODB_ID_GENRE:
+    return StringUtils::Join(tag.m_genre, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_DIRECTOR:
+  case VIDEODB_ID_EPISODE_DIRECTOR:
+  case VIDEODB_ID_MUSICVIDEO_DIRECTOR:
+    return StringUtils::Join(tag.m_director, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_TV_STUDIOS:
+  case VIDEODB_ID_STUDIOS:
+  case VIDEODB_ID_MUSICVIDEO_STUDIOS:
+    return StringUtils::Join(tag.m_studio, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_COUNTRY:
+    return StringUtils::Join(tag.m_country, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_MUSICVIDEO_ARTIST:
+    return StringUtils::Join(tag.m_artist, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_MUSICVIDEO_GENRE:
+    return StringUtils::Join(tag.m_genre, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_TV_PREMIERED:
+    return tag.m_premiered.GetAsDBDate();
+  case VIDEODB_ID_EPISODE_AIRED:
+    return tag.m_firstAired.GetAsDBDate();
+  }
+
+  assert(false);
+  return std::string();
+}
+
+void SetDetail(CVideoInfoTag& tag, int index, std::string& value)
+{
+  switch (index)
+  {
+  case VIDEODB_ID_TV_TITLE:
+  case VIDEODB_ID_TITLE:
+  case VIDEODB_ID_EPISODE_TITLE:
+  case VIDEODB_ID_MUSICVIDEO_TITLE:
+    tag.m_strTitle = value;
+    break;
+  case VIDEODB_ID_TV_PLOT:
+  case VIDEODB_ID_PLOT:
+  case VIDEODB_ID_EPISODE_PLOT:
+  case VIDEODB_ID_MUSICVIDEO_PLOT:
+    tag.m_strPlot = value;
+    break;
+  case VIDEODB_ID_PLOTOUTLINE:
+    tag.m_strPlotOutline = value;
+    break;
+  case VIDEODB_ID_TAGLINE:
+    tag.m_strTagLine = value;
+    break;
+  case VIDEODB_ID_TV_THUMBURL:
+  case VIDEODB_ID_THUMBURL:
+  case VIDEODB_ID_EPISODE_THUMBURL:
+  case VIDEODB_ID_MUSICVIDEO_THUMBURL:
+    tag.m_strPictureURL.m_xml = value;
+    break;
+  case VIDEODB_ID_TV_SORTTITLE:
+  case VIDEODB_ID_SORTTITLE:
+    tag.m_strSortTitle = value;
+    break;
+  case VIDEODB_ID_TV_MPAA:
+  case VIDEODB_ID_MPAA:
+    tag.m_strMPAARating = value;
+    break;
+  case VIDEODB_ID_TV_ORIGINALTITLE:
+  case VIDEODB_ID_ORIGINALTITLE:
+  case VIDEODB_ID_EPISODE_ORIGINALTITLE:
+    tag.m_strOriginalTitle = value;
+    break;
+  case VIDEODB_ID_TV_THUMBURL_SPOOF:
+  case VIDEODB_ID_THUMBURL_SPOOF:
+  case VIDEODB_ID_EPISODE_THUMBURL_SPOOF:
+  case VIDEODB_ID_MUSICVIDEO_THUMBURL_SPOOF:
+    tag.m_strPictureURL.m_spoof = value;
+    break;
+  case VIDEODB_ID_TRAILER:
+    tag.m_strTrailer = value;
+    break;
+  case VIDEODB_ID_TV_FANART:
+  case VIDEODB_ID_FANART:
+    tag.m_fanart.m_xml = value;
+  case VIDEODB_ID_BASEPATH:
+  case VIDEODB_ID_EPISODE_BASEPATH:
+  case VIDEODB_ID_MUSICVIDEO_BASEPATH:
+    tag.m_basePath = value;
+  case VIDEODB_ID_TV_STATUS:
+    tag.m_strStatus = value;
+  case VIDEODB_ID_TV_EPISODEGUIDE:
+    tag.m_strEpisodeGuide = value;;
+    break;
+  case VIDEODB_ID_EPISODE_PRODUCTIONCODE:
+    tag.m_strProductionCode = value;
+    break;
+  case VIDEODB_ID_MUSICVIDEO_ALBUM:
+    tag.m_strAlbum = value;
+    break;
+  case VIDEODB_ID_TV_RATING_ID:
+  case VIDEODB_ID_RATING_ID:
+  case VIDEODB_ID_EPISODE_RATING_ID:
+    tag.m_iIdRating = std::stoi(value);
+    break;
+  case VIDEODB_ID_TV_IDENT_ID:
+  case VIDEODB_ID_IDENT_ID:
+  case VIDEODB_ID_EPISODE_IDENT_ID:
+    tag.m_iIdUniqueID = std::stoi(value);
+    break;
+  case VIDEODB_ID_RUNTIME:
+  case VIDEODB_ID_EPISODE_RUNTIME:
+  case VIDEODB_ID_MUSICVIDEO_RUNTIME:
+    tag.m_duration = std::stoi(value);
+    break;
+  case VIDEODB_ID_TOP250:
+    tag.m_iTop250 = std::stoi(value);
+    break;
+  case VIDEODB_ID_PARENTPATHID:
+  case VIDEODB_ID_EPISODE_PARENTPATHID:
+  case VIDEODB_ID_MUSICVIDEO_PARENTPATHID:
+    tag.m_parentPathID = std::stoi(value);
+    break;
+  case VIDEODB_ID_EPISODE_SEASON:
+    tag.m_iSeason = std::stoi(value);
+    break;
+  case VIDEODB_ID_EPISODE_EPISODE:
+    tag.m_iEpisode = std::stoi(value);
+    break;
+  case VIDEODB_ID_EPISODE_SORTSEASON:
+    tag.m_iSpecialSortSeason = std::stoi(value);
+    break;
+  case VIDEODB_ID_EPISODE_SORTEPISODE:
+    tag.m_iSpecialSortEpisode = std::stoi(value);
+    break;
+  case VIDEODB_ID_EPISODE_BOOKMARK:
+    tag.m_iBookmarkId = std::stoi(value);
+    break;
+  case VIDEODB_ID_MUSICVIDEO_TRACK:
+    tag.m_iTrack = std::stoi(value);
+    break;
+  case VIDEODB_ID_CREDITS:
+  case VIDEODB_ID_EPISODE_CREDITS:
+    tag.m_writingCredits = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_TV_GENRE:
+  case VIDEODB_ID_GENRE:
+    tag.m_genre = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_DIRECTOR:
+  case VIDEODB_ID_EPISODE_DIRECTOR:
+  case VIDEODB_ID_MUSICVIDEO_DIRECTOR:
+    tag.m_director = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+  case VIDEODB_ID_TV_STUDIOS:
+  case VIDEODB_ID_STUDIOS:
+  case VIDEODB_ID_MUSICVIDEO_STUDIOS:
+    tag.m_studio = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_COUNTRY:
+    tag.m_country = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_MUSICVIDEO_ARTIST:
+    tag.m_artist = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_MUSICVIDEO_GENRE:
+    tag.m_genre = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
+    break;
+  case VIDEODB_ID_TV_PREMIERED:
+    tag.m_premiered.FromDBDate(value);
+    break;
+  case VIDEODB_ID_EPISODE_AIRED:
+    tag.m_firstAired.FromDBDate(value);
+    break;
+  }
+}
+
+std::string CVideoDatabase::GetValueString(const CVideoInfoTag &details, int min, int max) const
 {
   std::vector<std::string> conditions;
+  conditions.reserve(max - min);
+
   for (int i = min + 1; i < max; ++i)
   {
-    switch (offsets[i].type)
-    {
-    case VIDEODB_TYPE_STRING:
-      conditions.emplace_back(PrepareSQL("c%02d='%s'", i, ((std::string*)(((char*)&details)+offsets[i].offset))->c_str()));
-      break;
-    case VIDEODB_TYPE_INT:
-      conditions.emplace_back(PrepareSQL("c%02d='%i'", i, *(int*)(((char*)&details)+offsets[i].offset)));
-      break;
-    case VIDEODB_TYPE_COUNT:
-      {
-        int value = *(int*)(((char*)&details)+offsets[i].offset);
-        if (value)
-          conditions.emplace_back(PrepareSQL("c%02d=%i", i, value));
-        else
-          conditions.emplace_back(PrepareSQL("c%02d=NULL", i));
-      }
-      break;
-    case VIDEODB_TYPE_BOOL:
-      conditions.emplace_back(PrepareSQL("c%02d='%s'", i, *(bool*)(((char*)&details)+offsets[i].offset)?"true":"false"));
-      break;
-    case VIDEODB_TYPE_FLOAT:
-      conditions.emplace_back(PrepareSQL("c%02d='%f'", i, *(float*)(((char*)&details)+offsets[i].offset)));
-      break;
-    case VIDEODB_TYPE_STRINGARRAY:
-      conditions.emplace_back(PrepareSQL("c%02d='%s'", i, StringUtils::Join(*((std::vector<std::string>*)(((char*)&details)+offsets[i].offset)),
-                                                                          g_advancedSettings.m_videoItemSeparator).c_str()));
-      break;
-    case VIDEODB_TYPE_DATE:
-      conditions.emplace_back(PrepareSQL("c%02d='%s'", i, ((CDateTime*)(((char*)&details)+offsets[i].offset))->GetAsDBDate().c_str()));
-      break;
-    case VIDEODB_TYPE_DATETIME:
-      conditions.emplace_back(PrepareSQL("c%02d='%s'", i, ((CDateTime*)(((char*)&details)+offsets[i].offset))->GetAsDBDateTime().c_str()));
-      break;
-    case VIDEODB_TYPE_UNUSED: // Skip the unused field to avoid populating unused data
-      continue;
-    }
+    auto detail = GetDetails(details, i);
+    if (!detail.empty())
+      conditions.emplace_back(PrepareSQL("c%02d='%s'", i - min, details));
   }
+
   return StringUtils::Join(conditions, ",");
 }
 
@@ -2365,7 +2594,7 @@ int CVideoDatabase::SetDetailsForMovie(const std::string& strFilenameAndPath, CV
     }
     // update our movie table (we know it was added already above)
     // and insert the new row
-    std::string sql = "UPDATE movie SET " + GetValueString(details, VIDEODB_ID_MIN, VIDEODB_ID_MAX, DbMovieOffsets);
+    std::string sql = "UPDATE movie SET " + GetValueString(details, VIDEODB_ID_MIN, VIDEODB_ID_MAX);
     if (idSet > 0)
       sql += PrepareSQL(", idSet = %i", idSet);
     else
@@ -2466,7 +2695,7 @@ int CVideoDatabase::UpdateDetailsForMovie(int idMovie, CVideoInfoTag& details, c
     }
 
     // and update the movie table
-    std::string sql = "UPDATE movie SET " + GetValueString(details, VIDEODB_ID_MIN, VIDEODB_ID_MAX, DbMovieOffsets);
+    std::string sql = "UPDATE movie SET " + GetValueString(details, VIDEODB_ID_MIN, VIDEODB_ID_MAX);
     if (idSet > 0)
       sql += PrepareSQL(", idSet = %i", idSet);
     else if (idSet < 0)
@@ -2629,7 +2858,7 @@ bool CVideoDatabase::UpdateDetailsForTvShow(int idTvShow, CVideoInfoTag &details
   }
 
   // and insert the new row
-  std::string sql = "UPDATE tvshow SET " + GetValueString(details, VIDEODB_ID_TV_MIN, VIDEODB_ID_TV_MAX, DbTvShowOffsets);
+  std::string sql = "UPDATE tvshow SET " + GetValueString(details, VIDEODB_ID_TV_MIN, VIDEODB_ID_TV_MAX);
   if (details.m_iUserRating > 0 && details.m_iUserRating < 11)
     sql += PrepareSQL(", userrating = %i", details.m_iUserRating);
   else
@@ -2774,7 +3003,7 @@ int CVideoDatabase::SetDetailsForEpisode(const std::string& strFilenameAndPath, 
       m_pDS->close();
     }
     // and insert the new row
-    std::string sql = "UPDATE episode SET " + GetValueString(details, VIDEODB_ID_EPISODE_MIN, VIDEODB_ID_EPISODE_MAX, DbEpisodeOffsets);
+    std::string sql = "UPDATE episode SET " + GetValueString(details, VIDEODB_ID_EPISODE_MIN, VIDEODB_ID_EPISODE_MAX);
     if (details.m_iUserRating > 0 && details.m_iUserRating < 11)
       sql += PrepareSQL(", userrating = %i", details.m_iUserRating);
     else
@@ -2862,7 +3091,7 @@ int CVideoDatabase::SetDetailsForMusicVideo(const std::string& strFilenameAndPat
 
     // update our movie table (we know it was added already above)
     // and insert the new row
-    std::string sql = "UPDATE musicvideo SET " + GetValueString(details, VIDEODB_ID_MUSICVIDEO_MIN, VIDEODB_ID_MUSICVIDEO_MAX, DbMusicVideoOffsets);
+    std::string sql = "UPDATE musicvideo SET " + GetValueString(details, VIDEODB_ID_MUSICVIDEO_MIN, VIDEODB_ID_MUSICVIDEO_MAX);
     if (details.m_iUserRating > 0 && details.m_iUserRating < 11)
       sql += PrepareSQL(", userrating = %i", details.m_iUserRating);
     else
@@ -3620,47 +3849,15 @@ void CVideoDatabase::DeleteTag(int idTag, VIDEODB_CONTENT_TYPE mediaType)
   }
 }
 
-void CVideoDatabase::GetDetailsFromDB(std::unique_ptr<Dataset> &pDS, int min, int max, const SDbTableOffsets *offsets, CVideoInfoTag &details, int idxOffset)
+void CVideoDatabase::GetDetailsFromDB(std::unique_ptr<Dataset> &pDS, int min, int max, CVideoInfoTag &details, int idxOffset)
 {
-  GetDetailsFromDB(pDS->get_sql_record(), min, max, offsets, details, idxOffset);
+  GetDetailsFromDB(pDS->get_sql_record(), min, max, details, idxOffset);
 }
 
-void CVideoDatabase::GetDetailsFromDB(const dbiplus::sql_record* const record, int min, int max, const SDbTableOffsets *offsets, CVideoInfoTag &details, int idxOffset)
+void CVideoDatabase::GetDetailsFromDB(const dbiplus::sql_record* const record, int min, int max, CVideoInfoTag &details, int idxOffset)
 {
   for (int i = min + 1; i < max; i++)
-  {
-    switch (offsets[i].type)
-    {
-    case VIDEODB_TYPE_STRING:
-      *(std::string*)(((char*)&details)+offsets[i].offset) = record->at(i+idxOffset).get_asString();
-      break;
-    case VIDEODB_TYPE_INT:
-    case VIDEODB_TYPE_COUNT:
-      *(int*)(((char*)&details)+offsets[i].offset) = record->at(i+idxOffset).get_asInt();
-      break;
-    case VIDEODB_TYPE_BOOL:
-      *(bool*)(((char*)&details)+offsets[i].offset) = record->at(i+idxOffset).get_asBool();
-      break;
-    case VIDEODB_TYPE_FLOAT:
-      *(float*)(((char*)&details)+offsets[i].offset) = record->at(i+idxOffset).get_asFloat();
-      break;
-    case VIDEODB_TYPE_STRINGARRAY:
-    {
-      std::string value = record->at(i+idxOffset).get_asString();
-      if (!value.empty())
-        *(std::vector<std::string>*)(((char*)&details)+offsets[i].offset) = StringUtils::Split(value, g_advancedSettings.m_videoItemSeparator);
-      break;
-    }
-    case VIDEODB_TYPE_DATE:
-      ((CDateTime*)(((char*)&details)+offsets[i].offset))->SetFromDBDate(record->at(i+idxOffset).get_asString());
-      break;
-    case VIDEODB_TYPE_DATETIME:
-      ((CDateTime*)(((char*)&details)+offsets[i].offset))->SetFromDBDateTime(record->at(i+idxOffset).get_asString());
-      break;
-    case VIDEODB_TYPE_UNUSED: // Skip the unused field to avoid populating unused data
-      continue;
-    }
-  }
+    SetDetail(details, i, record->at(i - min + idxOffset).get_asString());
 }
 
 DWORD movieTime = 0;
@@ -3849,7 +4046,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
   DWORD time = XbmcThreads::SystemClockMillis();
   int idMovie = record->at(0).get_asInt();
 
-  GetDetailsFromDB(record, VIDEODB_ID_MIN, VIDEODB_ID_MAX, DbMovieOffsets, details);
+  GetDetailsFromDB(record, VIDEODB_ID_MIN, VIDEODB_ID_MAX, details);
 
   details.m_iDbId = idMovie;
   details.m_type = MediaTypeMovie;
@@ -3937,7 +4134,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
   DWORD time = XbmcThreads::SystemClockMillis();
   int idTvShow = record->at(0).get_asInt();
 
-  GetDetailsFromDB(record, VIDEODB_ID_TV_MIN, VIDEODB_ID_TV_MAX, DbTvShowOffsets, details, 1);
+  GetDetailsFromDB(record, VIDEODB_ID_TV_MIN, VIDEODB_ID_TV_MAX, details, 1);
   details.m_bHasPremiered = details.m_premiered.IsValid();
   details.m_iDbId = idTvShow;
   details.m_type = MediaTypeTvShow;
@@ -4010,7 +4207,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
   DWORD time = XbmcThreads::SystemClockMillis();
   int idEpisode = record->at(0).get_asInt();
 
-  GetDetailsFromDB(record, VIDEODB_ID_EPISODE_MIN, VIDEODB_ID_EPISODE_MAX, DbEpisodeOffsets, details);
+  GetDetailsFromDB(record, VIDEODB_ID_EPISODE_MIN, VIDEODB_ID_EPISODE_MAX, details);
   details.m_iDbId = idEpisode;
   details.m_type = MediaTypeEpisode;
   details.m_iFileId = record->at(VIDEODB_DETAILS_FILEID).get_asInt();
@@ -4077,7 +4274,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record*
   unsigned int time = XbmcThreads::SystemClockMillis();
   int idMVideo = record->at(0).get_asInt();
 
-  GetDetailsFromDB(record, VIDEODB_ID_MUSICVIDEO_MIN, VIDEODB_ID_MUSICVIDEO_MAX, DbMusicVideoOffsets, details);
+  GetDetailsFromDB(record, VIDEODB_ID_MUSICVIDEO_MIN, VIDEODB_ID_MUSICVIDEO_MAX, details);
   details.m_iDbId = idMVideo;
   details.m_type = MediaTypeMusicVideo;
   
